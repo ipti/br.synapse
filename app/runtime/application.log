@@ -1,0 +1,23 @@
+2012/04/18 12:28:43 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "D:\IPTI\Projetos\synapse.ipti.org.br\assets" is invalid. Please make sure the directory exists and is writable by the Web server process.' in D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CAssetManager.php:116
+Stack trace:
+#0 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CAssetManager.php(101): CAssetManager->setBasePath('D:\IPTI\Projeto...')
+#1 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CAssetManager.php(219): CAssetManager->getBasePath()
+#2 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CClientScript.php(449): CAssetManager->publish('D:\wamp\bin\php...')
+#3 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CClientScript.php(486): CClientScript->getCoreScriptUrl()
+#4 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CClientScript.php(302): CClientScript->getPackageBaseUrl('jquery')
+#5 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CClientScript.php(195): CClientScript->renderCoreScripts()
+#6 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(352): CClientScript->render('<!DOCTYPE html ...')
+#7 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(789): CController->processOutput('<!DOCTYPE html ...')
+#8 D:\IPTI\Projetos\synapse.ipti.org.br\app\controllers\SiteController.php(66): CController->render('contact', Array)
+#9 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\actions\CInlineAction.php(50): SiteController->actionContact()
+#10 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(309): CInlineAction->runWithParams(Array)
+#11 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(287): CController->runAction(Object(CInlineAction))
+#12 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#13 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(276): CController->run('contact')
+#14 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(135): CWebApplication->runController('site/contact')
+#15 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\base\CApplication.php(162): CWebApplication->processRequest()
+#16 D:\IPTI\Projetos\synapse.ipti.org.br\index.php(13): CApplication->run()
+#17 {main}
+REQUEST_URI=/activity/index.php?r=site/contact
+HTTP_REFERER=http://tag.ipti.org.br/activity/index.php?r=site/page&view=about
+---
