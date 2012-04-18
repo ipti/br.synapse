@@ -37,3 +37,61 @@ Stack trace:
 #3 {main}
 REQUEST_URI=/activity/index.php?r=guii
 ---
+2012/04/18 14:20:12 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\auth\CAccessControlFilter.php:157
+Stack trace:
+#0 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\auth\CAccessControlFilter.php(120): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(292): CFilterChain->run()
+#6 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(276): CController->run('admin')
+#8 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(135): CWebApplication->runController('user/admin')
+#9 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\base\CApplication.php(162): CWebApplication->processRequest()
+#10 D:\IPTI\Projetos\synapse.ipti.org.br\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/activity/index.php?r=user/admin
+HTTP_REFERER=http://tag.ipti.org.br/activity/index.php?r=user/index
+---
+2012/04/18 14:20:24 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\auth\CAccessControlFilter.php:157
+Stack trace:
+#0 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\auth\CAccessControlFilter.php(120): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(292): CFilterChain->run()
+#6 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(276): CController->run('admin')
+#8 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(135): CWebApplication->runController('user/admin')
+#9 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\base\CApplication.php(162): CWebApplication->processRequest()
+#10 D:\IPTI\Projetos\synapse.ipti.org.br\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/activity/index.php?r=user/admin
+HTTP_REFERER=http://tag.ipti.org.br/activity/index.php?r=user/index
+---
+2012/04/18 19:12:06 [error] [exception.CException] exception 'CException' with message 'The asset "/rsc/css/form.css" to be published does not exist.' in D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CAssetManager.php:239
+Stack trace:
+#0 D:\IPTI\Projetos\synapse.ipti.org.br\themes\classic\views\layouts\editor.php(9): CAssetManager->publish('/rsc/css/form.c...')
+#1 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CBaseController.php(127): require('D:\IPTI\Projeto...')
+#2 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CBaseController.php(96): CBaseController->renderInternal('D:\IPTI\Projeto...', Array, true)
+#3 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(785): CBaseController->renderFile('D:\IPTI\Projeto...', Array, true)
+#4 D:\IPTI\Projetos\synapse.ipti.org.br\app\controllers\UserController.php(78): CController->render('create', Array)
+#5 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\actions\CInlineAction.php(50): UserController->actionCreate()
+#6 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(309): CInlineAction->runWithParams(Array)
+#7 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#8 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CFilter.php(41): CFilterChain->run()
+#9 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(1146): CFilter->filter(Object(CFilterChain))
+#10 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#11 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#12 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(292): CFilterChain->run()
+#13 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(276): CController->run('create')
+#15 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\web\CWebApplication.php(135): CWebApplication->runController('user/create')
+#16 D:\wamp\bin\php\php5.3.10\includes\common\yii\latest\base\CApplication.php(162): CWebApplication->processRequest()
+#17 D:\IPTI\Projetos\synapse.ipti.org.br\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/activity/index.php?r=user/create
+HTTP_REFERER=http://tag.ipti.org.br/activity/index.php?r=site/login
+---
