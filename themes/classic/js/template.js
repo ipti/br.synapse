@@ -5,7 +5,9 @@ function editor () {
     this.countPage = 0;
     this.countQuestion = new Array();
     this.countTasks = new Array();
+    this.countPieces = new Array();
     this.currentQuest = 'pg0_q0';
+    this.currentTask = 'pg0_q0_t0';
     
     this.buildHtml = function(t){
         switch (t){
@@ -25,9 +27,16 @@ function editor () {
                 break;
             case 'addTask':
                 var taskID = this.currentQuest+'_t'+this.countTasks[this.currentQuest];
+                this.countPieces[taskID] = 0;
                 var htmAddTask = '<li class="task" id="'+taskID+'"> <button class="delTask">DelTask</button></li>';
                 this.countTasks[this.currentQuest] =  this.countTasks[this.currentQuest]+1;
                 return htmAddTask;
+                break;
+           case 'addText':
+                var pieceID = this.currentTask+'_p'+this.countPieces[this.currentTask];
+                var htmAddText = '<font class="text" id="'+pieceID+'">TEXTO INSERIDO</font>';
+                this.countPieces[this.currentTask] =  this.countPieces[this.currentTask]+1;
+                return htmAddText;
                 break;
                 
         }

@@ -19,6 +19,7 @@
         <script>
             var newEditor = new editor();
             $(function() {
+                
                 $('.canvas').pajinate({
                         items_per_page : 1,
                         nav_label_first : '<<',
@@ -48,22 +49,26 @@
                         editor : newEditor
                     });
                 });
+                $("#addtext").click(function(){
+                    var id = newEditor.currentTask;
+                    $('#'+id).append(newEditor.buildHtml('addText'));
+                    $( ".text" ).draggable({ containment: '#'+id, scroll: true });
+                });
                 $("#addquestion").click(function(){
                     var id = newEditor.currentPageId;
-                    alert(id);
-                    $('#pg'+id).append(newEditor.buildHtml('addQuest'));
+                    $('#'+id).append(newEditor.buildHtml('addQuest'));
                 })
-                $(".page").live("click",(function(){
+                /*$(".page").live("click",(function(){
                     //alert(newEditor.currentPageId);
                     $('.page').removeClass('activePage');
                     //newEditor.currentPageId = $(this).attr('id');
                     $(this).addClass('active');
                 }));
-                $(".tasklist").live("click",(function(){
+                /* $(".tasklist").live("click",(function(){
                     $('.tasklist').removeClass('active');
                     $(this).addClass('active');
                     newEditor.currentQuest = $(this).attr('id');
-                }));
+                }));*/
                 $(".addTask").live("click",(function(){
                     var id = $(this).attr('id');
                     id = id.replace("tsk_", "");
@@ -75,7 +80,6 @@
                     var id = $(this).attr('id');
                     $(this).addClass('active');
                     newEditor.currentTask = id;
-                    alert(id);
                 });
             });
         </script>
