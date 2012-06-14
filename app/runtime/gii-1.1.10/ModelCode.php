@@ -1,6 +1,6 @@
 <?php
 return array (
-  'template' => 'default',
+  'template' => 'yvj',
   'tablePrefix' => '',
   'modelPath' => 'application.models',
   'baseClass' => 'CActiveRecord',
