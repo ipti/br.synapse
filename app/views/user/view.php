@@ -1,26 +1,41 @@
 <?php
-$this->breadcrumbs=array(
-	'Users'=>array('index'),
-	$model->id,
+$this->breadcrumbs = array(
+    'Users' => array('index'),
+    $model->name,
 );
-
-$this->menu=array(
-	array('label'=>'List User', 'url'=>array('index')),
-	array('label'=>'Create User', 'url'=>array('create')),
-	array('label'=>'Update User', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete User', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage User', 'url'=>array('admin')),
+$contextDesc = Yii::t('default', 'Available actions that may be taken on User.');
+$this->menu = array(
+    array('label' => Yii::t('default', 'Create a new User'), 'url' => array('create'), 'description' => Yii::t('default', 'This action create a new User')),
+    array('label' => Yii::t('default', 'List User'), 'url' => array('index'), 'description' => Yii::t('default', 'This action list all Users, you can search, delete and update')),
 );
 ?>
-
-<h1>View User #<?php echo $model->id; ?></h1>
-
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'username',
-		'password',
-		'email',
-	),
-)); ?>
+<div id="mainPage" class="main">
+    <div class="twoColumn">
+        <div class="columnone" style="padding-right: 1em">
+            <div class="panelGroup form">
+                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View User # ' . $model->ID . ' :') ?></div></div>
+                <div class="panelGroupBody">
+                    <?php
+                    $this->widget('zii.widgets.CDetailView', array(
+                        'data' => $model,
+                        'attributes' => array(
+                            'ID',
+                            'name',
+                            'login',
+                            array(
+                                'name' => 'sysID',
+                                'value' => $model->sys->name,
+                            ),
+                            'email',
+                            'password',
+                             array('name'=>'Classes', 'value'=> $listClass),
+                        ),
+                    ));
+                    ?>
+                </div>   
+            </div>
+        </div>
+        <div class="columntwo">
+<?php echo $this->renderPartial('////common/defaultcontext', array('contextDesc' => $contextDesc)); ?>        </div>
+    </div>
+</div>
