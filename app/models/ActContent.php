@@ -1,29 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "act_content".
  *
- * The followings are the available columns in table 'user':
+ * The followings are the available columns in table 'act_content':
  * @property integer $ID
- * @property string $name
- * @property string $login
- * @property integer $sysID
- * @property string $email
- * @property string $password
+ * @property integer $contentParent
+ * @property integer $disciplineID
+ * @property string $description
  *
  * The followings are the available model relations:
- * @property PeformanceUser[] $peformanceUsers
- * @property PerfomanceCobjectCache[] $perfomanceCobjectCaches
- * @property PerformancePiecesetCache[] $performancePiecesetCaches
- * @property UserSystem $sys
- * @property UserUserclass[] $userUserclasses
+ * @property ActContent $contentParent0
+ * @property ActContent[] $actContents
+ * @property ActDiscipline $discipline
+ * @property ActGoalContent[] $actGoalContents
+ * @property ActScript[] $actScripts
+ * @property ActScriptContent[] $actScriptContents
  */
-class User extends CActiveRecord
+class ActContent extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return User the static model class
+	 * @return ActContent the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -35,7 +34,7 @@ class User extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'user';
+		return 'act_content';
 	}
 
 	/**
@@ -46,13 +45,11 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, login, sysID', 'required'),
-			array('sysID', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>60),
-			array('email, password', 'length', 'max'=>255),
+			array('disciplineID, description', 'required'),
+			array('contentParent, disciplineID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, login, sysID, email, password', 'safe', 'on'=>'search'),
+			array('ID, contentParent, disciplineID, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,11 +61,12 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'peformanceUsers' => array(self::HAS_MANY, 'PeformanceUser', 'userID'),
-			'perfomanceCobjectCaches' => array(self::HAS_MANY, 'PerfomanceCobjectCache', 'userID'),
-			'performancePiecesetCaches' => array(self::HAS_MANY, 'PerformancePiecesetCache', 'userID'),
-			'sys' => array(self::BELONGS_TO, 'UserSystem', 'sysID'),
-			'userUserclasses' => array(self::HAS_MANY, 'UserUserclass', 'userID'),
+			'contentParent0' => array(self::BELONGS_TO, 'ActContent', 'contentParent'),
+			'actContents' => array(self::HAS_MANY, 'ActContent', 'contentParent'),
+			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'disciplineID'),
+			'actGoalContents' => array(self::HAS_MANY, 'ActGoalContent', 'contentID'),
+			'actScripts' => array(self::HAS_MANY, 'ActScript', 'contentParentID'),
+			'actScriptContents' => array(self::HAS_MANY, 'ActScriptContent', 'contentID'),
 		);
 	}
 
@@ -79,11 +77,9 @@ class User extends CActiveRecord
 	{
 		return array(
 			'ID' => Yii::t('default', 'ID'),
-			'name' => Yii::t('default', 'Name'),
-			'login' => Yii::t('default', 'Login'),
-			'sysID' => Yii::t('default', 'Sys'),
-			'email' => Yii::t('default', 'Email'),
-			'password' => Yii::t('default', 'Password'),
+			'contentParent' => Yii::t('default', 'Content Parent'),
+			'disciplineID' => Yii::t('default', 'Discipline'),
+			'description' => Yii::t('default', 'Description'),
 		);
 	}
 
@@ -99,11 +95,9 @@ class User extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('ID',$this->ID);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('login',$this->login,true);
-		$criteria->compare('sysID',$this->sysID);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('password',$this->password,true);
+		$criteria->compare('contentParent',$this->contentParent);
+		$criteria->compare('disciplineID',$this->disciplineID);
+		$criteria->compare('description',$this->description,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -1,29 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "user_userclass".
  *
- * The followings are the available columns in table 'user':
+ * The followings are the available columns in table 'user_userclass':
  * @property integer $ID
- * @property string $name
- * @property string $login
- * @property integer $sysID
- * @property string $email
- * @property string $password
+ * @property integer $userID
+ * @property integer $classID
  *
  * The followings are the available model relations:
- * @property PeformanceUser[] $peformanceUsers
- * @property PerfomanceCobjectCache[] $perfomanceCobjectCaches
- * @property PerformancePiecesetCache[] $performancePiecesetCaches
- * @property UserSystem $sys
- * @property UserUserclass[] $userUserclasses
+ * @property Userclass $class
+ * @property User $user
  */
-class User extends CActiveRecord
+class UserUserclass extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return User the static model class
+	 * @return UserUserclass the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -35,7 +29,7 @@ class User extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'user';
+		return 'user_userclass';
 	}
 
 	/**
@@ -46,13 +40,11 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, login, sysID', 'required'),
-			array('sysID', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>60),
-			array('email, password', 'length', 'max'=>255),
+			array('userID, classID', 'required'),
+			array('userID, classID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, login, sysID, email, password', 'safe', 'on'=>'search'),
+			array('ID, userID, classID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,11 +56,8 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'peformanceUsers' => array(self::HAS_MANY, 'PeformanceUser', 'userID'),
-			'perfomanceCobjectCaches' => array(self::HAS_MANY, 'PerfomanceCobjectCache', 'userID'),
-			'performancePiecesetCaches' => array(self::HAS_MANY, 'PerformancePiecesetCache', 'userID'),
-			'sys' => array(self::BELONGS_TO, 'UserSystem', 'sysID'),
-			'userUserclasses' => array(self::HAS_MANY, 'UserUserclass', 'userID'),
+			'class' => array(self::BELONGS_TO, 'Userclass', 'classID'),
+			'user' => array(self::BELONGS_TO, 'User', 'userID'),
 		);
 	}
 
@@ -79,11 +68,8 @@ class User extends CActiveRecord
 	{
 		return array(
 			'ID' => Yii::t('default', 'ID'),
-			'name' => Yii::t('default', 'Name'),
-			'login' => Yii::t('default', 'Login'),
-			'sysID' => Yii::t('default', 'Sys'),
-			'email' => Yii::t('default', 'Email'),
-			'password' => Yii::t('default', 'Password'),
+			'userID' => Yii::t('default', 'User'),
+			'classID' => Yii::t('default', 'Class'),
 		);
 	}
 
@@ -99,11 +85,8 @@ class User extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('ID',$this->ID);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('login',$this->login,true);
-		$criteria->compare('sysID',$this->sysID);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('password',$this->password,true);
+		$criteria->compare('userID',$this->userID);
+		$criteria->compare('classID',$this->classID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
