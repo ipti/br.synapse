@@ -19,7 +19,7 @@ return array(
     ),
     'modules' => array(
         // uncomment the following to enable the Gii tool
-
+        'import',
         'gii' => array(
             'class' => 'system.gii.GiiModule',
             'generatorPaths' => array(
@@ -58,6 +58,14 @@ return array(
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',
+        ),
+        'db2' => array(
+            'connectionString' => 'pgsql:host=localhost;port=5432;dbname=SYNAPSE',
+            'emulatePrepare' => true,
+            'username' => 'postgres',
+            'password' => 'postgres',
+            'charset' => 'utf8',
+            'class'   => 'CDbConnection' 
         ),
         'errorHandler' => array(
             // use 'site/error' action to display errors
