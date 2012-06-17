@@ -61,9 +61,10 @@ class CobjectController extends Controller {
         if (isset($_POST['Cobject'])) {
             $model->attributes = $_POST['Cobject'];
             if ($model->save()) {
+                $metadata->cobjectID = $model->ID;
+                $metadata->atrributes = $_POST['CobjectData'];
                 if ($metadata->validate()) {
                     $metadata = new CobjectData($model->ID);
-                    $metadata->atrributes = $_POST['CobjectData'];
                     Yii::app()->user->setFlash('success', Yii::t('default', 'Cobject Created Successful:'));
                     $this->redirect(array('index'));
                 }
