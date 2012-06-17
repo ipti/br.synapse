@@ -7,6 +7,7 @@
  * @property integer $ID
  * @property string $name
  * @property integer $modalityParent
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property ActGoalModality[] $actGoalModalities
@@ -42,11 +43,11 @@ class ActModality extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('modalityParent', 'numerical', 'integerOnly'=>true),
+			array('modalityParent, oldID', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>90),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, modalityParent', 'safe', 'on'=>'search'),
+			array('ID, name, modalityParent, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,6 +74,7 @@ class ActModality extends CActiveRecord
 			'ID' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
 			'modalityParent' => Yii::t('default', 'Modality Parent'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -90,6 +92,7 @@ class ActModality extends CActiveRecord
 		$criteria->compare('ID',$this->ID);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('modalityParent',$this->modalityParent);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -8,10 +8,11 @@
  * @property string $name
  * @property integer $degreeID
  * @property integer $disciplineID
+ * @property integer $oldID
  *
  * The followings are the available model relations:
- * @property ActDiscipline $discipline
  * @property ActDegree $degree
+ * @property ActDiscipline $discipline
  * @property ActGoalContent[] $actGoalContents
  * @property ActGoalMatrix[] $actGoalMatrixes
  * @property ActGoalModality[] $actGoalModalities
@@ -46,11 +47,10 @@ class ActGoal extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, degreeID, disciplineID', 'required'),
-			array('degreeID, disciplineID', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>60),
+			array('degreeID, disciplineID, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, degreeID, disciplineID', 'safe', 'on'=>'search'),
+			array('ID, name, degreeID, disciplineID, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,8 +62,8 @@ class ActGoal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'disciplineID'),
 			'degree' => array(self::BELONGS_TO, 'ActDegree', 'degreeID'),
+			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'disciplineID'),
 			'actGoalContents' => array(self::HAS_MANY, 'ActGoalContent', 'goalID'),
 			'actGoalMatrixes' => array(self::HAS_MANY, 'ActGoalMatrix', 'goalID'),
 			'actGoalModalities' => array(self::HAS_MANY, 'ActGoalModality', 'goalID'),
@@ -81,6 +81,7 @@ class ActGoal extends CActiveRecord
 			'name' => Yii::t('default', 'Name'),
 			'degreeID' => Yii::t('default', 'Degree'),
 			'disciplineID' => Yii::t('default', 'Discipline'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -99,6 +100,7 @@ class ActGoal extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('degreeID',$this->degreeID);
 		$criteria->compare('disciplineID',$this->disciplineID);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -10,6 +10,8 @@
  * @property integer $typeParent
  * @property string $validator
  * @property string $label
+ * @property string $htmlSource
+ * @property string $htmlType
  *
  * The followings are the available model relations:
  * @property Cobject[] $cobjects
@@ -53,11 +55,11 @@ class CommonType extends CActiveRecord
 			array('context, name', 'required'),
 			array('typeParent', 'numerical', 'integerOnly'=>true),
 			array('context', 'length', 'max'=>30),
-			array('name, label', 'length', 'max'=>45),
-			array('validator', 'safe'),
+			array('name, label, htmlType', 'length', 'max'=>45),
+			array('validator, htmlSource', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, context, name, typeParent, validator, label', 'safe', 'on'=>'search'),
+			array('ID, context, name, typeParent, validator, label, htmlSource, htmlType', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -93,6 +95,8 @@ class CommonType extends CActiveRecord
 			'typeParent' => Yii::t('default', 'Type Parent'),
 			'validator' => Yii::t('default', 'Validator'),
 			'label' => Yii::t('default', 'Label'),
+			'htmlSource' => Yii::t('default', 'Html Source'),
+			'htmlType' => Yii::t('default', 'Html Type'),
 		);
 	}
 
@@ -113,6 +117,8 @@ class CommonType extends CActiveRecord
 		$criteria->compare('typeParent',$this->typeParent);
 		$criteria->compare('validator',$this->validator,true);
 		$criteria->compare('label',$this->label,true);
+		$criteria->compare('htmlSource',$this->htmlSource,true);
+		$criteria->compare('htmlType',$this->htmlType,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

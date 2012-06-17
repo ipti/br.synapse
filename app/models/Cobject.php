@@ -8,6 +8,7 @@
  * @property integer $typeID
  * @property integer $templateID
  * @property integer $themeID
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property CobjectTemplate $template
@@ -47,10 +48,10 @@ class Cobject extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('typeID, templateID, themeID', 'required'),
-			array('typeID, templateID, themeID', 'numerical', 'integerOnly'=>true),
+			array('typeID, templateID, themeID, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, typeID, templateID, themeID', 'safe', 'on'=>'search'),
+			array('ID, typeID, templateID, themeID, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,6 +83,7 @@ class Cobject extends CActiveRecord
 			'typeID' => Yii::t('default', 'Type'),
 			'templateID' => Yii::t('default', 'Template'),
 			'themeID' => Yii::t('default', 'Theme'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -100,6 +102,7 @@ class Cobject extends CActiveRecord
 		$criteria->compare('typeID',$this->typeID);
 		$criteria->compare('templateID',$this->templateID);
 		$criteria->compare('themeID',$this->themeID);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

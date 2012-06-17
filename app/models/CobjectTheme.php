@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'cobject_theme':
  * @property integer $ID
  * @property string $name
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property Cobject[] $cobjects
@@ -39,10 +40,11 @@ class CobjectTheme extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
+			array('oldID', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name', 'safe', 'on'=>'search'),
+			array('ID, name, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class CobjectTheme extends CActiveRecord
 		return array(
 			'ID' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -82,6 +85,7 @@ class CobjectTheme extends CActiveRecord
 
 		$criteria->compare('ID',$this->ID);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

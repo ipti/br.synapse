@@ -6,6 +6,10 @@
  * The followings are the available columns in table 'cobject_template':
  * @property integer $ID
  * @property string $name
+ * @property string $code
+ * @property integer $oldID
+ * @property integer $oldIDFormat
+ * @property integer $oldIDInterative
  *
  * The followings are the available model relations:
  * @property Cobject[] $cobjects
@@ -39,11 +43,13 @@ class CobjectTemplate extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
+			array('name, code', 'required'),
+			array('oldID, oldIDFormat, oldIDInterative', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
+			array('code', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name', 'safe', 'on'=>'search'),
+			array('ID, name, code, oldID, oldIDFormat, oldIDInterative', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +74,10 @@ class CobjectTemplate extends CActiveRecord
 		return array(
 			'ID' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
+			'code' => Yii::t('default', 'Code'),
+			'oldID' => Yii::t('default', 'Old'),
+			'oldIDFormat' => Yii::t('default', 'Old Idformat'),
+			'oldIDInterative' => Yii::t('default', 'Old Idinterative'),
 		);
 	}
 
@@ -84,6 +94,10 @@ class CobjectTemplate extends CActiveRecord
 
 		$criteria->compare('ID',$this->ID);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('code',$this->code,true);
+		$criteria->compare('oldID',$this->oldID);
+		$criteria->compare('oldIDFormat',$this->oldIDFormat);
+		$criteria->compare('oldIDInterative',$this->oldIDInterative);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

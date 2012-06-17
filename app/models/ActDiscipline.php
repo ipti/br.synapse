@@ -6,9 +6,11 @@
  * The followings are the available columns in table 'act_discipline':
  * @property integer $ID
  * @property string $name
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property ActContent[] $actContents
+ * @property ActGoal[] $actGoals
  * @property ActMatrix[] $actMatrixes
  * @property ActScript[] $actScripts
  * @property Cobjectblock[] $cobjectblocks
@@ -42,10 +44,11 @@ class ActDiscipline extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
+			array('oldID', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name', 'safe', 'on'=>'search'),
+			array('ID, name, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,6 +61,7 @@ class ActDiscipline extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'actContents' => array(self::HAS_MANY, 'ActContent', 'disciplineID'),
+			'actGoals' => array(self::HAS_MANY, 'ActGoal', 'disciplineID'),
 			'actMatrixes' => array(self::HAS_MANY, 'ActMatrix', 'disciplineID'),
 			'actScripts' => array(self::HAS_MANY, 'ActScript', 'disciplineID'),
 			'cobjectblocks' => array(self::HAS_MANY, 'Cobjectblock', 'disciplineID'),
@@ -72,6 +76,7 @@ class ActDiscipline extends CActiveRecord
 		return array(
 			'ID' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -88,6 +93,7 @@ class ActDiscipline extends CActiveRecord
 
 		$criteria->compare('ID',$this->ID);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

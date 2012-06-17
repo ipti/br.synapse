@@ -10,6 +10,7 @@
  * @property integer $year
  * @property integer $grade
  * @property integer $degreeParent
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property ActDegree $degreeParent0
@@ -47,11 +48,11 @@ class ActDegree extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, stage, year, grade', 'required'),
-			array('stage, year, grade, degreeParent', 'numerical', 'integerOnly'=>true),
+			array('stage, year, grade, degreeParent, oldID', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, stage, year, grade, degreeParent', 'safe', 'on'=>'search'),
+			array('ID, name, stage, year, grade, degreeParent, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +84,7 @@ class ActDegree extends CActiveRecord
 			'year' => Yii::t('default', 'Year'),
 			'grade' => Yii::t('default', 'Grade'),
 			'degreeParent' => Yii::t('default', 'Degree Parent'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -103,6 +105,7 @@ class ActDegree extends CActiveRecord
 		$criteria->compare('year',$this->year);
 		$criteria->compare('grade',$this->grade);
 		$criteria->compare('degreeParent',$this->degreeParent);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
