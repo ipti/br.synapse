@@ -60,7 +60,7 @@ class CobjectData extends CActiveRecord {
                 }
             }
         } else {
-
+            $type = CommonType::model()->findByAttributes(array('name' => $name));
             $data = CobjectMetadata::model()->findByAttributes(array('typeID' => $type->ID, 'cobjectID' => $this->cobjectID));
             if (isset($data)) {
                 $data->value = $value;
