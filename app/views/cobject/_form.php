@@ -23,7 +23,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php echo $form->dropDownList($model, 'templateID', CHtml::listData(CobjectTemplate::model()->findAll(), 'ID', 'name')); ?>
             <?php echo $form->error($model, 'templateID'); ?>
         </div>
-        
+
         <div class="formField">
             <?php echo $form->labelEx($model, 'themeID'); ?>
             <?php echo $form->dropDownList($model, 'themeID', CHtml::listData(CobjectTheme::model()->findAll(), 'ID', 'name')); ?>
@@ -34,15 +34,38 @@ $form = $this->beginWidget('CActiveForm', array(
 <div class="panelGroup form">
     <div class="panelGroupHeader"><div><?php echo Yii::t('default', 'Cobject Metadata') ?></div></div>
     <div class="panelGroupBody">
-        <?php 
+        <?php
         $types = CommonType::model()->findAllByAttributes(array('context' => 'CobjectData'));
-        foreach ($types as $type){ ?>
-        <div class="formField">
-            <?php echo $form->labelEx($metadata, $type->name); ?>
-            <?php echo $form->textField($metadata, $type->name); ?>
-            <?php echo $form->error($metadata, $type->name); ?>
-        </div>
-        <?php } ?>
+        foreach ($types as $type) {
+            $comp = "";
+            $comp .= '<div class="formField">';
+            $comp .= $form->labelEx($metadata, $type->name);
+            switch ($type->htmlType) {
+                case 'textfield':
+                    $comp .= $form->textField($metadata, $type->name);
+                    break;
+                case 'dropdown':
+                    eval("\$comp .= \$form->dropDownList(\$metadata, \$type->name, $type->htmlSource);");
+                    //$comp .= $form->dropDownList($metadata, $type->name, eval($type->htmlSource));
+                    break;
+                case 'textarea':
+                    $comp .= $form->textArea($metadata, $type->name);
+                    break;
+                case 'radio':
+                    $comp .= $form->radioButtonList($metadata, $type->name, eval($type->htmlSource));
+                    break;
+                case 'checkbox':
+                    $comp .= $form->checkBoxList($metadata, $type->name, eval($type->htmlSource));
+                    break;
+                default:
+                    break;
+            }
+            $comp .= $form->error($metadata, $type->name);
+            $comp .= '</div>';
+        }
+        echo $comp;
+        ?>
+
     </div>
 </div>
 <div class="formField buttonWizardBar">
