@@ -10,8 +10,8 @@
  * @property integer $libraryID
  *
  * The followings are the available model relations:
- * @property Library $library
  * @property CommonProperty $property
+ * @property Library $library
  */
 class LibraryProperty extends CActiveRecord
 {
@@ -41,8 +41,8 @@ class LibraryProperty extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ID, propertyID, value, libraryID', 'required'),
-			array('ID, propertyID, libraryID', 'numerical', 'integerOnly'=>true),
+			array('propertyID, value, libraryID', 'required'),
+			array('propertyID, libraryID', 'numerical', 'integerOnly'=>true),
 			array('value', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -58,8 +58,8 @@ class LibraryProperty extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'library' => array(self::BELONGS_TO, 'Library', 'libraryID'),
 			'property' => array(self::BELONGS_TO, 'CommonProperty', 'propertyID'),
+			'library' => array(self::BELONGS_TO, 'Library', 'libraryID'),
 		);
 	}
 

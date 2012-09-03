@@ -41,8 +41,9 @@ class EditorPieceelementProperty extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('propertyID, value, pieceElementID', 'required'),
+			array('propertyID, pieceElementID', 'required'),
 			array('propertyID, pieceElementID', 'numerical', 'integerOnly'=>true),
+			array('value', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('ID, propertyID, value, pieceElementID', 'safe', 'on'=>'search'),

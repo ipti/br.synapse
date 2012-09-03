@@ -10,6 +10,7 @@
  * @property integer $width
  * @property integer $height
  * @property integer $order
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property Cobject $cobject
@@ -43,11 +44,11 @@ class EditorScreen extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cobjectID', 'required'),
-			array('cobjectID, number, width, height, order', 'numerical', 'integerOnly'=>true),
+			array('cobjectID, oldID', 'required'),
+			array('cobjectID, number, width, height, order, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, cobjectID, number, width, height, order', 'safe', 'on'=>'search'),
+			array('ID, cobjectID, number, width, height, order, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +77,7 @@ class EditorScreen extends CActiveRecord
 			'width' => Yii::t('default', 'Width'),
 			'height' => Yii::t('default', 'Height'),
 			'order' => Yii::t('default', 'Order'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -96,6 +98,7 @@ class EditorScreen extends CActiveRecord
 		$criteria->compare('width',$this->width);
 		$criteria->compare('height',$this->height);
 		$criteria->compare('order',$this->order);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

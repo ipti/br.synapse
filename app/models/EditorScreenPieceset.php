@@ -45,7 +45,7 @@ class EditorScreenPieceset extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('screenID, piecesetID, piecesetParent, templateID', 'required'),
+			array('screenID, piecesetID, templateID', 'required'),
 			array('screenID, piecesetID, piecesetParent, position, templateID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

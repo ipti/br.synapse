@@ -8,6 +8,7 @@
  * @property string $name
  * @property string $description
  * @property integer $typeID
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property CommonType $type
@@ -43,12 +44,13 @@ class EditorPiece extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, description, typeID', 'required'),
-			array('typeID', 'numerical', 'integerOnly'=>true),
+			array('typeID, oldID', 'required'),
+			array('typeID, oldID', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, description, typeID', 'safe', 'on'=>'search'),
+			array('ID, name, description, typeID, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -77,6 +79,7 @@ class EditorPiece extends CActiveRecord
 			'name' => Yii::t('default', 'Name'),
 			'description' => Yii::t('default', 'Description'),
 			'typeID' => Yii::t('default', 'Type'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -95,6 +98,7 @@ class EditorPiece extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('typeID',$this->typeID);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

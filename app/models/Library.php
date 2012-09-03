@@ -4,11 +4,12 @@
  * This is the model class for table "library".
  *
  * The followings are the available columns in table 'library':
- * @property integer $id
+ * @property integer $ID
  * @property integer $typeID
  * @property string $table_archive
  *
  * The followings are the available model relations:
+ * @property CommonType $type
  * @property LibraryProperty[] $libraryProperties
  */
 class Library extends CActiveRecord
@@ -39,12 +40,12 @@ class Library extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id', 'required'),
-			array('id, typeID', 'numerical', 'integerOnly'=>true),
+			array('typeID', 'required'),
+			array('typeID', 'numerical', 'integerOnly'=>true),
 			array('table_archive', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, typeID, table_archive', 'safe', 'on'=>'search'),
+			array('ID, typeID, table_archive', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,6 +57,7 @@ class Library extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'type' => array(self::BELONGS_TO, 'CommonType', 'typeID'),
 			'libraryProperties' => array(self::HAS_MANY, 'LibraryProperty', 'libraryID'),
 		);
 	}
@@ -66,7 +68,7 @@ class Library extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => Yii::t('default', 'ID'),
+			'ID' => Yii::t('default', 'ID'),
 			'typeID' => Yii::t('default', 'Type'),
 			'table_archive' => Yii::t('default', 'Table Archive'),
 		);
@@ -83,7 +85,7 @@ class Library extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$criteria->compare('ID',$this->ID);
 		$criteria->compare('typeID',$this->typeID);
 		$criteria->compare('table_archive',$this->table_archive,true);
 
@@ -91,4 +93,8 @@ class Library extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+        
+        public function getid(){
+            return $this->ID;
+        }
 }

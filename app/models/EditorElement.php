@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'editor_element':
  * @property integer $ID
  * @property integer $typeID
+ * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property CommonType $type
@@ -41,11 +42,11 @@ class EditorElement extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('typeID', 'required'),
-			array('typeID', 'numerical', 'integerOnly'=>true),
+			array('typeID, oldID', 'required'),
+			array('typeID, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, typeID', 'safe', 'on'=>'search'),
+			array('ID, typeID, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +73,7 @@ class EditorElement extends CActiveRecord
 		return array(
 			'ID' => Yii::t('default', 'ID'),
 			'typeID' => Yii::t('default', 'Type'),
+			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -88,6 +90,7 @@ class EditorElement extends CActiveRecord
 
 		$criteria->compare('ID',$this->ID);
 		$criteria->compare('typeID',$this->typeID);
+		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
