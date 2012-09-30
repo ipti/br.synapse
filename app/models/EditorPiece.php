@@ -63,7 +63,7 @@ class EditorPiece extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'type' => array(self::BELONGS_TO, 'CommonType', 'typeID'),
-			'editorPieceElements' => array(self::HAS_MANY, 'EditorPieceElement', 'pieceID'),
+			'editorPieceElements' => array(self::HAS_MANY, 'EditorPieceElement', 'pieceID','order'=>'position ASC'),
 			'editorPiecesetPieces' => array(self::HAS_MANY, 'EditorPiecesetPiece', 'pieceID'),
 			'peformanceUsers' => array(self::HAS_MANY, 'PeformanceUser', 'pieceID'),
 		);

@@ -29,6 +29,8 @@
 .theme .tasklist .task{display:block;border:1px dotted #999;padding:10px;margin:10px 0px;min-height:20px;}
 .theme .tasklist .delTask{border:0px; background:url('<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_activity_deltask.png');margin-bottom:-16px; float:right; position:relative; top:0; display:block; right: 0px; height:16px; width:16px;text-indent:-9999px;}
 .active{border-color: red !important;}
+
+.enum font{}
 .page_link{visibility:hidden}
 .ellipse{
     float: left;
@@ -137,4 +139,5 @@
 .content li, .alt_content li, .content > p{
     padding: 5px
 }
+#nextButton{width: 200px;margin:0 auto;display:block;}
 

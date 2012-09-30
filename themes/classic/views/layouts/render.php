@@ -16,7 +16,7 @@
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery/jquery.ui.droppable.js"></script>
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/render.js"></script>
     </head>
-    <body class="theme">
+    <body class="theme" >
         <script>
             var newRender = new render();
             $(function() {
@@ -25,7 +25,7 @@
                     data:{op:'start'},//data for throwing the expected url
                     type:"POST",
                     dataType:"json",// you can also specify for the result for json or xml
-                    success:function(response){newRender.startRender(response);$('#rclassys').trigger('change');$('#rdiscipline').trigger('change');},
+                    success:function(response){newRender.startRender(response);$('#rclassys').trigger('change');$('#rdiscipline').trigger('change');$('#rblockscript select').trigger('change');},
                     error:function(){
                     }
                 });
@@ -33,14 +33,26 @@
                 $('#previous').on('click',function(){
                     
                 });
+                $('#rblockscript').change(function(){
+                    $('.blockscript').hide();
+                    v = $("#rblockscript select").val();
+                    $('#'+v).show();
+                });
                 $('#rdiscipline').change(function(){
                     $('.rscripts').hide();
+                    $('.rblocks').hide();
                     v = $("select#rdiscipline").val();
                     newRender.disciplineID = v;
                     $('#rscript'+v).show();
+                    $('#rblock'+v).show();
                 });
                 $('.start').click(function(){
+                    newRender.typeID = $('#typeID').val();
+                    newRender.atdID = $('#atdID').val();
                     newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
+                    newRender.classID = $('#classID').val();
+                    newRender.userID = $('select#student'+newRender.classID).val();
+                    $('#userID').val(newRender.userID);
                     $('.prerender').hide();
                     $('.waiting').show();
                     loadActs();
@@ -49,7 +61,7 @@
             function loadActs(){
                 $.ajax({
                     url:"/render/json",//this is the request page of ajax
-                    data:{op:'render',script:newRender.scriptID},//data for throwing the expected url
+                    data:{op:'render',script:newRender.scriptID,userID:newRender.userID,classID:newRender.classID},//data for throwing the expected url
                     type:"POST",
                     dataType:"json",// you can also specify for the result for json or xml
                     success:function(response){$('body').css('background','#fff');newRender.loadJson2(response); $('.waiting').hide();$('.render').show();newRender.paginate()},
@@ -70,7 +82,8 @@
                 .prerender label{display:block;clear:both;height:20px;}
                 .prerender font{float:left;width:120px;height:20px;text-align:right;margin-right:5px; line-height: 20px;}
                 .start{display:block;clear:both;margin:0 auto}
-                .waiting{display:none;}           
+                .waiting{display:none;}
+                #nextButton{text-align:center;font-size:30px;color:green;display:block;margin:20px auto;cursor:pointer}
             </style>
             <div class="prerender">
                 <div class="innerborder">
@@ -78,25 +91,45 @@
                     <form>
                         <label>
                             <font>Tipo de Atendimento:</font>
-                            <select>
-                                <option>AVALIAÇÃO</option>
-                                <option>TREINO</option>
-                                <option>LIVRE</option>
+                            <select id="atdID">
+                                <option value="avaliacao">AVALIAÇÃO</option>
+                                <option value="treino">TREINO</option>
+                                <option value="livre">LIVRE</option>
+                            </select>
+                        </label>
+                        <label id="rblockscript">
+                            <font>Bloco/Roteiro:</font>
+                            <select id="typeID">
+                                <option value="rscript">ROTEIRO</option>
+                                <option value="rblock">BLOCO</option>
                             </select>
                         </label>
                         <label id="rdiscipline">
                             <font>Disciplina:</font>
                         </label>
-                        <label id="rscript">
+                        
+                        <!--<label id="rlevels">
+                            <font>Nível:</font>
+                        </label>
+                        <label id="robjective">
+                            <font>Objetivo:</font>
+                        </label>-->
+                        <label class="blockscript" id="rblock">
+                            <font>Bloco:</font>
+                        </label>
+                        <label class="blockscript" id="rscript">
                             <font>Roteiro:</font>
                         </label>
-                        <label>
+                        <label id="rtheme">
+                            <font>Tema:</font>
+                        </label>
+                        <!--<label>
                             <font>Seguir a matriz:</font>
                             <select>
                                 <option>SIM</option>
                                 <option>NÃO</option>
                             </select>
-                        </label>
+                        </label>-->
                         <label id="rclasses">
                             <font>Turma:</font>
                         </label>
@@ -111,10 +144,17 @@
                             <input name="password" value="" type="password"/>
                         </label>
                         <input class="start" type="button" value="iniciar atendimento">
+                        <input type="hidden" id="classID"/>
+                        <input type="hidden" id="userID"/>
                     </form>
                 </div>
             </div>
-            <div class="waiting"><font style="font-size:50px;margin:200px auto;display:block; text-align: center">Carregando...</font></div>
+            <div class="waiting">
+                <div style="font-size:31px;margin:200px auto;display:block; text-align: center">
+                    <font>Carregando...</font>
+                    <img style="margin:0 auto;" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_loading.gif"/>
+                </div>
+            </div>
             <div class="render">
                 <div class="activities"></div>
             </div>

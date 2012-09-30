@@ -3,25 +3,19 @@
  * and open the template in the editor.
  */
 
-function corretAnswer(){
-    $('.currentScreen').next().prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
-    $('.currentScreen').hide();$('.currentScreen').next().show();$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-    $('#message').fadeOut(3000,function(){$('#message').remove();});
-    //ajax pra atualizar desempenho.
-}
-function wrongAnswer(){
-    $('.currentScreen').next().prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
-    $('.currentScreen').hide();$('.currentScreen').next().show();$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-    $('#message').fadeOut(3000,function(){$('#message').remove();});
-    
-    //ajax pra atualizar desempenho.
-}
+
             
 function render () {
     var html;
     this.templateType;
     this.disciplineID;
     this.scriptID;
+    this.classID;
+    this.userID;
+    this.typeID;
+    this.atdID;
+    this.ctCorrect = 0;
+    this.ctWrong = 0;
     this.startRender = function (response){
         if(typeof(response.disciplines) != "undefined"){
             this.loadDisciplines(response.disciplines);
@@ -29,6 +23,110 @@ function render () {
         if(typeof(response.classes) != "undefined"){
             this.loadClasses(response.classes);
         }
+        if(typeof(response.themes) != "undefined"){
+            this.loadThemes(response.themes);
+        }
+        if(typeof(response.levels) != "undefined"){
+            this.loadLevels(response.levels);
+        }
+    }
+    this.correctAnswer =  function(){
+        var pieceID = $(this).parent().parent().parent().parent().attr('id');
+        var elementID = $(this).attr('id');
+        var userID = $('#userID').val();
+        $.ajax({
+            url:"/render/json",
+            data:{
+                op:'answer',
+                pieceID:pieceID,
+                elementID:elementID,
+                userID:userID,
+                value:'Acerto'
+            },
+            type:"POST",
+            dataType:"json",
+            success:function(response){
+            },
+            error:function(){
+            }
+        });
+        $(this).off('click').css('cursor','auto');
+        $(this).css('opacity','0.5');
+        newRender.ctCorrect = newRender.ctCorrect+1;
+        $('.ctCorrect').text(newRender.ctCorrect);
+        if(newRender.atdID == "avaliacao"){
+            $('.currentScreen .eclick').off('click').css('cursor','auto');
+            nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
+                $('.currentScreen').hide();
+                $('.currentScreen').next().show();
+                $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+            });
+            $('.currentScreen').append(nextScreen);
+        }
+       
+        $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
+        //$('.currentScreen').hide();
+        //$('.currentScreen').next().show();
+        //$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+        $('#message').fadeOut(3000,function(){
+            $('#message').remove();
+        });
+    }
+    this.wrongAnswer = function(){
+        var pieceID = $(this).parent().parent().parent().parent().attr('id');
+        var elementID = $(this).attr('id');
+        var userID = $('#userID').val();
+        $.ajax({
+            url:"/render/json",
+            data:{
+                op:'answer',
+                pieceID:pieceID,
+                elementID:elementID,
+                userID:userID,
+                value:'Erro'
+            },
+            type:"POST",
+            dataType:"json",
+            success:function(response){
+            },
+            error:function(){
+            }
+        });
+        $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
+        //$('.currentScreen').hide();
+        //$('.currentScreen').next().show();
+        //$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+        $(this).off('click').css('cursor','auto');
+        $(this).css('opacity','0.5');
+        newRender.ctWrong = newRender.ctWrong+1;
+        $('.ctWrong').text(newRender.ctWrong);
+        if(newRender.atdID == "avaliacao"){
+            $('.currentScreen .eclick').off('click').css('opacity','0.5').css('cursor','auto');
+            nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
+                $('.currentScreen').hide();
+                $('.currentScreen').next().show();
+                $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+            });
+            $('.currentScreen').append(nextScreen);
+        }
+        $('#message').fadeOut(3000,function(){
+            $('#message').remove();
+        });
+    }
+    
+    this.loadThemes = function(themes){
+        htmContent = $('<select id="rtheme"></select>');
+        $.each(themes, function(i, theme) {
+            htmContent.append('<option value="'+theme.ID+'">'+theme.name+'</option>');
+        });
+        $('#rtheme').append(htmContent);
+    }
+    this.loadLevels = function(levels){
+        htmContent = $('<select style="width:150px;" id="rlevels"></select>');
+        $.each(levels, function(i, level) {
+            htmContent.append('<option value="'+level.ID+'">'+level.name+'</option>');
+        });
+        $('#rlevels').append(htmContent);
     }
     this.loadDisciplines = function(disciplines){
         htmContent = $('<select id="rdiscipline"></select>');
@@ -41,6 +139,13 @@ function render () {
                 });
                 $('#rscript').append(htmScript);
             }
+            if(typeof(discipline.blocks) != "undefined"){
+                htmScript = $('<select class="rblocks" id="rblock'+discipline.ID+'"></select>');
+                $.each(discipline.blocks, function(i, block) {
+                    htmScript.append('<option value="'+block.ID+'">'+block.name+'</option>');
+                });
+                $('#rblock').append(htmScript);
+            }
         });
         $('#rdiscipline').append(htmContent);
     }
@@ -48,6 +153,7 @@ function render () {
         htmContent = $('<select id="rclassys"></select>').change(function(){
             $('.students,.tutors').hide();
             v = $("select#rclassys").val();
+            $('#classID').val(v);
             $('#student'+v+','+'#tutor'+v).show();
         });
         $.each(classes, function(i, classy) {
@@ -75,6 +181,12 @@ function render () {
         }
     }
     this.loadJson2 = function(response){
+        if(this.atdID ==  'Avaliacao'){
+            
+        }
+        //alert(this.atdID);
+        //alert(classID);
+        //alert(userID);
         var parent = this;
         var fullHtm = $('<div id="paginate"></div>');
         if(typeof(response.contents) != "undefined"){
@@ -92,9 +204,21 @@ function render () {
                                     $.each(cobject.screens, function(i, screen) {
                                         htmScreen = $('<div class="screen" id="SCR'+screen.ID+'"></div>');
                                         infoScreen = $('<div class="screenInfo"></div>');
-                                        infoScreen.append('<span id="infoAct"><label><strong>Atividade:</strong>Nº'+cobject.oldID+'-'+cobject.template_code+'-'+cobject.theme+'</label><label><strong>Conteúdo:</strong> '+content.description+'</label><label><strong>Objetivo:</strong> '+goal.name+'</label><label><strong>Tela:</strong> '+screen.ID+'</label></span>');
-                                        nextScreen = $('<span id="next"></span>').on('click',function(){$('.currentScreen').hide();$('.currentScreen').next().show();$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');});
-                                        prevScreen = $('<span id="previous"></span>').on('click',function(){$('.currentScreen').hide();$('.currentScreen').prev().show();$('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');});
+                                        infoScreen.append('<span id="infoAct"><label><strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">0</span>/Erros:<span class="ctWrong">0</span>)</label><label><strong>Atividade:</strong>Nº'+cobject.oldID+'-'+cobject.template_code+'-'+cobject.theme+'-'+screen.ID+'</label><label><strong>Conteúdo:</strong> '+content.description+'</label><label><strong>Objetivo:</strong> '+goal.name+'</label></span>');
+                                        nextScreen = $('<span id="next">»</span>').on('click',function(){
+                                            $('.currentScreen').hide();
+                                            $('.currentScreen').next().show();
+                                            $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+                                        });
+                                        prevScreen = $('<span id="previous">«</span>').on('click',function(){
+                                            $('.currentScreen').hide();
+                                            $('.currentScreen').prev().show();
+                                            $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
+                                        });
+                                        if(parent.atdID == "avaliacao"){
+                                            prevScreen.hide();
+                                            nextScreen.hide();     
+                                        }
                                         infoScreen.append(nextScreen);
                                         infoScreen.prepend(prevScreen);
                                         infoScreen.append('<span class="clear"></span>');
@@ -118,7 +242,7 @@ function render () {
     }
     this.paginate = function(){
         //pega o usuário, consulta e ve onde parou e start do ponto, se não do começo
-        $('.screen').first().slideDown();
+        $('.screen').first().fadeIn('slow');
         $('.screen').first().addClass('currentScreen');
     }
     this.loadContents = function(contents){
@@ -199,6 +323,9 @@ function render () {
                     case 'MEHW':
                         htmPiece.append(parent.loadElements(piece.elements,template));
                         break;
+                    case 'AEVC':
+                        htmPiece.append(parent.loadElements(piece.elements,template));
+                        break;
                 //depois checar o tipo na peça pode ser que seja doubleclick
                 }
                 htmPieces.append(htmPiece);
@@ -219,6 +346,14 @@ function render () {
                 htmEnum = $('<ul class="elements enum"></ul>');
                 htmOptions = $('<ul class="elements options"></ul>')
                 break;
+            case 'AEVC':
+                htmEnum = $('<ul class="elements enum"></ul>');
+                htmOptions = $('<ul class="elements options"></ul>')
+                break;
+            case 'AEHC':
+                htmEnum = $('<ul class="elements enum"></ul>');
+                htmOptions = $('<ul class="elements options"></ul>')
+                break;
         }
         $.each(elements, function(i, element) {
             blockElement = $('<li class="element"></li>');
@@ -233,10 +368,12 @@ function render () {
                 case 'phrase':
                     htmElement = $('<font></font>');
                     break;
+                case 'word':
+                    htmElement = $('<font></font>');
+                    break;
                 case 'number':
                     htmElement = $('<font></font>');
                     break;
-                            
                 case 'paragraph':
                     htmElement = $('<font></font>');
                     break; 
@@ -335,6 +472,12 @@ function render () {
                                     case 'MEHW':
                                         htmEnum.append(blockElement.append(htmElement));
                                         break;
+                                    case 'AEVC':
+                                        htmEnum.append(blockElement.append(htmElement));
+                                        break;
+                                    case 'AEHC':
+                                        htmEnum.append(blockElement.append(htmElement));
+                                        break;
                                 }
                                 break;
                             case 'Acerto':
@@ -342,7 +485,18 @@ function render () {
                                     case 'AEHDD':
                                         break;
                                     case 'MEHW':
-                                        htmElement.on('click',corretAnswer);
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.correctAnswer);
+                                        htmOptions.append(blockElement.append(htmElement));
+                                        break;
+                                    case 'AEVC':
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.correctAnswer);
+                                        htmOptions.append(blockElement.append(htmElement));
+                                        break;
+                                    case 'AEHC':
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.correctAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
                                 }
@@ -352,7 +506,18 @@ function render () {
                                     case 'AEHDD':
                                         break;
                                     case 'MEHW':
-                                        htmElement.on('click',wrongAnswer);
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.wrongAnswer);
+                                        htmOptions.append(blockElement.append(htmElement));
+                                        break;
+                                    case 'AEVC':
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.wrongAnswer);
+                                        htmOptions.append(blockElement.append(htmElement));
+                                        break;
+                                    case 'AEHC':
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.wrongAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
                                 }
@@ -368,6 +533,14 @@ function render () {
                 htmFinal.append(htmDrag);
                 break;
             case 'MEHW':
+                htmFinal.append(htmEnum);
+                htmFinal.append(htmOptions);
+                break;
+            case 'AEVC':
+                htmFinal.append(htmEnum);
+                htmFinal.append(htmOptions);
+                break;
+            case 'AEHC':
                 htmFinal.append(htmEnum);
                 htmFinal.append(htmOptions);
                 break;

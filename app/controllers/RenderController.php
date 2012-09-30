@@ -43,19 +43,28 @@ class RenderController extends Controller {
             $json = array();
             $disciplines = ActDiscipline::model()->findAll();
             $classes = Userclass::model()->findAll();
+            $themes = CobjectTheme::model()->findAll();
+            $levels = ActDegree::model()->findAllByAttributes(array(),"grade !=0");
+            
             $a = -1;
             foreach ($disciplines as $discipline) {
                 $a++;
                 $json['disciplines'][$a] = $discipline->attributes;
                 $scripts = ActScript::model()->findAllByAttributes(array('disciplineID' => $discipline->ID));
-                $rscript = array();
-                $b = -1;
+                $blocks = Cobjectblock::model()->findAllByAttributes(array('disciplineID' => $discipline->ID));
+                $rscript = $rblock = array();
+                $b = $c = -1;
                 foreach ($scripts as $script) {
                     $b++;
                     $rscript[$b] = $script->attributes;
                     $rscript[$b]['name'] = $script->contentParent->description;
                 }
+                foreach ($blocks as $block) {
+                    $c++;
+                    $rblock[$b] = $block->attributes;
+                }
                 $json['disciplines'][$a]['scripts'] = @$rscript;
+                $json['disciplines'][$a]['blocks'] = @$rblock;
             }
             $aa = -1;
             foreach ($classes as $class) {
@@ -71,17 +80,43 @@ class RenderController extends Controller {
                 $json['classes'][$aa]['students'] = @$rstudents;
                 $json['classes'][$aa]['tutors'] = @$tutors;
             }
+            foreach($themes as $theme){
+                $json['themes'][] = $theme->attributes;
+            }
+            foreach($levels as $level){
+                $json['levels'][] = $level->attributes;
+            }
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');
             echo json_encode($json);
             exit;
+        }elseif(@$_POST['op'] == 'answer'){
+            $pieceID = str_replace("PIECE", '',$_POST['pieceID']);
+            $elementID = str_replace("EP", '',$_POST['elementID']);
+            $userID = $_POST['userID'];
+            $value = $_POST['value'];
+            $peformance = new PeformanceUser();
+            $peformance->userID = $userID;
+            $peformance->pieceElementID = $elementID;
+            $peformance->pieceID = $pieceID;
+            $peformance->value = $value;
+            $peformance->iscorrect = 1;
+            $peformance->save();
+            var_dump($peformance->errors);
+            exit();
         }
         $script = ActScript::model()->findByAttributes(array('ID' => $_POST['script']));
         $json = array();
-        //lembra de excluir os conteudos exclude e include
+        $userID = $_POST['userID'];
+        $classID = $_POST['classID'];
+        $user = User::model()->findByPk($userID);
         $contents = ActContent::model()->findAllByAttributes(array('contentParent' => $script->contentParentID));
+        //@todo lembra de excluir os conteudos exclude e include
         $x = -1;
+        $json['userID'] = $userID;
+        $json['userName'] = $user->name;
+        $json['classID'] = $classID;
         foreach ($contents as $content) {
             $x++;
             $json['contents'][$x] = $content->attributes;
@@ -94,7 +129,7 @@ class RenderController extends Controller {
                 $cobjects = CobjectMetadata::model()->findAllByAttributes(array('typeID' => $type->ID, 'value' => $goal->goal->ID));
                 $z = -1;
                 foreach ($cobjects as $cobject) {
-                    //com base no tema filtrar
+                    //@todo com base no tema filtrar
                     $z++;
                     $json['contents'][$x]['goals'][$y]['cobjects'][$z] = $cobject->cobject->attributes;
                     $json['contents'][$x]['goals'][$y]['cobjects'][$z]['template'] = $cobject->cobject->template->name;
@@ -140,7 +175,7 @@ class RenderController extends Controller {
                                       foreach ($element->element->editorElementAliases as $alias){
                                       $gproperties[] = array('type'=>$alias->type->name,'value'=>$gproperty->value);
                                       } */
-                                    $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['code'] = 'EP' . $element->element->ID;
+                                    $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['code'] = 'EP' . $element->ID;
                                     $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['elementProperties'] = $properties;
                                     $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['events'] = $events;
                                     $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['generalProperties'] = $gproperties;

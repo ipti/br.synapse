@@ -1,28 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "editor_piece_element".
+ * This is the model class for table "peformance_user".
  *
- * The followings are the available columns in table 'editor_piece_element':
+ * The followings are the available columns in table 'peformance_user':
  * @property integer $ID
  * @property integer $pieceID
- * @property integer $elementID
- * @property integer $position
- * @property integer $oldID
+ * @property integer $pieceElementID
+ * @property integer $userID
+ * @property string $date
+ * @property string $value
+ * @property integer $iscorrect
  *
  * The followings are the available model relations:
- * @property EditorEvents[] $editorEvents
- * @property EditorElement $element
+ * @property User $user
+ * @property EditorPieceElement $pieceElement
  * @property EditorPiece $piece
- * @property EditorPieceelementProperty[] $editorPieceelementProperties
- * @property PeformanceUser[] $peformanceUsers
  */
-class EditorPieceElement extends CActiveRecord
+class PeformanceUser extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return EditorPieceElement the static model class
+	 * @return PeformanceUser the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -34,7 +34,7 @@ class EditorPieceElement extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'editor_piece_element';
+		return 'peformance_user';
 	}
 
 	/**
@@ -45,11 +45,12 @@ class EditorPieceElement extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pieceID, elementID, position, oldID', 'required'),
-			array('pieceID, elementID, position, oldID', 'numerical', 'integerOnly'=>true),
+			array('pieceID, pieceElementID, userID', 'required'),
+			array('pieceID, pieceElementID, userID, iscorrect', 'numerical', 'integerOnly'=>true),
+			array('date, value', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, pieceID, elementID, position, oldID', 'safe', 'on'=>'search'),
+			array('ID, pieceID, pieceElementID, userID, date, value, iscorrect', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,11 +62,9 @@ class EditorPieceElement extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'editorEvents' => array(self::HAS_MANY, 'EditorEvents', 'pieceElementID'),
-			'element' => array(self::BELONGS_TO, 'EditorElement', 'elementID'),
+			'user' => array(self::BELONGS_TO, 'User', 'userID'),
+			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'pieceElementID'),
 			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'pieceID'),
-			'editorPieceelementProperties' => array(self::HAS_MANY, 'EditorPieceelementProperty', 'pieceElementID'),
-			'peformanceUsers' => array(self::HAS_MANY, 'PeformanceUser', 'pieceElementID'),
 		);
 	}
 
@@ -77,9 +76,11 @@ class EditorPieceElement extends CActiveRecord
 		return array(
 			'ID' => Yii::t('default', 'ID'),
 			'pieceID' => Yii::t('default', 'Piece'),
-			'elementID' => Yii::t('default', 'Element'),
-			'position' => Yii::t('default', 'Position'),
-			'oldID' => Yii::t('default', 'Old'),
+			'pieceElementID' => Yii::t('default', 'Piece Element'),
+			'userID' => Yii::t('default', 'User'),
+			'date' => Yii::t('default', 'Date'),
+			'value' => Yii::t('default', 'Value'),
+			'iscorrect' => Yii::t('default', 'Iscorrect'),
 		);
 	}
 
@@ -96,9 +97,11 @@ class EditorPieceElement extends CActiveRecord
 
 		$criteria->compare('ID',$this->ID);
 		$criteria->compare('pieceID',$this->pieceID);
-		$criteria->compare('elementID',$this->elementID);
-		$criteria->compare('position',$this->position);
-		$criteria->compare('oldID',$this->oldID);
+		$criteria->compare('pieceElementID',$this->pieceElementID);
+		$criteria->compare('userID',$this->userID);
+		$criteria->compare('date',$this->date,true);
+		$criteria->compare('value',$this->value,true);
+		$criteria->compare('iscorrect',$this->iscorrect);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

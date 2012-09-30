@@ -90,13 +90,22 @@
 img{display:block;}
 h1,h2,h3,h4,h5{display:none;}
 h6{text-align:right;font-size:12px;display:none}
-.enum li{display:block;}
+.enum li{display:block;margin:10px}
+.options li font{font-size:32px;padding:20px;}
+font.eclick{cursor:pointer}
+font.eclick:hover{text-decoration: underline;border:1px dotted #000}
 .options li{float:left;}
 #paginate{background:#fff}
 .screenInfo{display:block;padding:10px;background:#eee;margin-bottom:10px}
 .screenInfo label{font-size:11px;display:block;}
 .screen{display:none;}
 #infoAct,#previous{float:left;}
-#next,#previous{height:44px;width:56px;background:#ccc;}
+#infoAct label{color:#666}
+#infoAct{margin-left:10px;}
+#infoAct strong{float:left;width:55px;}
+#next,#previous{height:44px;width:56px;font-size: 80px; line-height:30px;color: #ccc;cursor: pointer}
+#next:hover,#previous:hover{color:#666}
 #next{float:right}
+#nextButton{width: 200px;margin:0 auto;display:block;}
 #message{position:relative !important;margin-bottom:-50px !important;z-index: 1;top:20px;}
+.
