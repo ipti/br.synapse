@@ -14,6 +14,7 @@ function render () {
     this.userID;
     this.typeID;
     this.atdID;
+    this.lastClick = -1;
     this.ctCorrect = 0;
     this.ctWrong = 0;
     this.startRender = function (response){
@@ -28,6 +29,89 @@ function render () {
         }
         if(typeof(response.levels) != "undefined"){
             this.loadLevels(response.levels);
+        }
+    }
+    this.matchElement = function(){
+        //alert(newRender.lastClick);
+        if(newRender.lastClick != -1){
+            var group = $('#'+newRender.lastClick).attr('group');
+            if(group == $(this).attr('group')){
+                var pieceID = $(this).parent().parent().parent().parent().attr('id');
+                var elementID = $(this).attr('id');
+                var userID = $('#userID').val();
+                $.ajax({
+                    url:"/render/json",
+                    data:{
+                        op:'answer',
+                        pieceID:pieceID,
+                        elementID:elementID,
+                        userID:userID,
+                        value:'Acerto'
+                    },
+                    type:"POST",
+                    dataType:"json",
+                    success:function(response){
+                    },
+                    error:function(){
+                    }
+                });
+                newRender.ctCorrect = newRender.ctCorrect+1;
+                $('.ctCorrect').text(newRender.ctCorrect);
+                $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
+                $('#message').fadeOut(3000,function(){
+                    $('#message').remove();
+                });
+            }else{
+                var pieceID = $(this).parent().parent().parent().parent().attr('id');
+                var elementID = $(this).attr('id');
+                var userID = $('#userID').val();
+                $.ajax({
+                    url:"/render/json",
+                    data:{
+                        op:'answer',
+                        pieceID:pieceID,
+                        elementID:elementID,
+                        userID:userID,
+                        value:'Erro'
+                    },
+                    type:"POST",
+                    dataType:"json",
+                    success:function(response){
+                    },
+                    error:function(){
+                    }
+                });
+                newRender.ctWrong = newRender.ctWrong+1;
+                $('.ctWrong').text(newRender.ctWrong);
+                $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
+                $('#message').fadeOut(3000,function(){
+                    $('#message').remove();
+                });
+            }
+            $(this).off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+            var ID = $('#'+newRender.lastClick).parent().parent().attr('ID');
+            $('.'+ID+' li').css('opacity','1');
+            $('.'+ID+' .ielement').on('click',newRender.matchElement);
+            $('#'+newRender.lastClick).css('border','none').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+            newRender.lastClick = -1;
+            if($('.currentScreen .ielement').length == 0){
+                if(newRender.atdID == "avaliacao"){
+                    nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
+                        $('.currentScreen').hide();
+                        $('.currentScreen').next().show();
+                        $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+                    });
+                    $('.currentScreen').append(nextScreen);
+                }
+            }
+        }else{
+            var classID = $(this).parent().parent().attr('ID');
+            $('.'+classID+' li').css('opacity','0.3');
+            $(this).parent().css('opacity','0.9');
+            $('.'+classID+' .ielement').css('border','none');
+            $('.'+classID+' .ielement').off('click');
+            $(this).css('border','1px dotted #000');
+            newRender.lastClick = $(this).attr('ID');
         }
     }
     this.correctAnswer =  function(){
@@ -65,12 +149,13 @@ function render () {
         }
        
         $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
-        //$('.currentScreen').hide();
-        //$('.currentScreen').next().show();
-        //$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
         $('#message').fadeOut(3000,function(){
             $('#message').remove();
         });
+    //$('.currentScreen').hide();
+    //$('.currentScreen').next().show();
+    //$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+        
     }
     this.wrongAnswer = function(){
         var pieceID = $(this).parent().parent().parent().parent().attr('id');
@@ -320,20 +405,25 @@ function render () {
                     case 'AEHDD':
                         htmPiece.append(parent.loadElements(piece.elements,template));
                         break;
+                    case 'PRHW':
+                        htmPiece.append(parent.loadElements(piece.elements,template));
+                        break;
                     case 'MEHW':
                         htmPiece.append(parent.loadElements(piece.elements,template));
                         break;
                     case 'AEVC':
                         htmPiece.append(parent.loadElements(piece.elements,template));
                         break;
-                //depois checar o tipo na peça pode ser que seja doubleclick
+                    case 'AEHC':
+                        htmPiece.append(parent.loadElements(piece.elements,template));
+                        break;
                 }
                 htmPieces.append(htmPiece);
             }
         });
         return htmPieces;
     };
-                
+    
     this.loadElements = function(elements,template){
         var parent = this;
         htmFinal = $('<div class="blockElements"></div>');
@@ -346,13 +436,17 @@ function render () {
                 htmEnum = $('<ul class="elements enum"></ul>');
                 htmOptions = $('<ul class="elements options"></ul>')
                 break;
+            case 'PRHW':
+                htmEnum = $('<ul class="elements enum"></ul>');
+                htmOptions = $('<ul class="elements options"></ul>')
+                break;
             case 'AEVC':
                 htmEnum = $('<ul class="elements enum"></ul>');
                 htmOptions = $('<ul class="elements options"></ul>')
                 break;
             case 'AEHC':
-                htmEnum = $('<ul class="elements enum"></ul>');
-                htmOptions = $('<ul class="elements options"></ul>')
+                htmPair = $('<ul id="pairs" class="elements pairs"></ul>');
+                htmGroup = $('<ul id="groups" class="elements groups"></ul>')
                 break;
         }
         $.each(elements, function(i, element) {
@@ -381,6 +475,7 @@ function render () {
                     htmElement = $('<font></font>');
                     break;
             }
+            htmElement.addClass('ielement');
             if(typeof(element.events) != "undefined"){
                 $.each(element.events, function(i, event) {
                     htmElement.on(String(event.event),eval(String(event.action)));
@@ -407,6 +502,9 @@ function render () {
             if(typeof(element.elementProperties) != "undefined"){
                 $.each(element.elementProperties, function(i, property) {
                     switch (property.name){
+                        case 'group':
+                            htmElement.attr(property.name,property.value);
+                            break;
                         case 'font-size':
                             htmElement.css(property.name,property.value);
                             break;
@@ -472,11 +570,16 @@ function render () {
                                     case 'MEHW':
                                         htmEnum.append(blockElement.append(htmElement));
                                         break;
+                                    case 'PRHW':
+                                        htmEnum.append(blockElement.append(htmElement));
+                                        break;
                                     case 'AEVC':
                                         htmEnum.append(blockElement.append(htmElement));
                                         break;
                                     case 'AEHC':
-                                        htmEnum.append(blockElement.append(htmElement));
+                                        htmElement.addClass('pclick');
+                                        htmElement.on('click',parent.matchElement);
+                                        htmPair.append(blockElement.append(htmElement));
                                         break;
                                 }
                                 break;
@@ -489,15 +592,20 @@ function render () {
                                         htmElement.on('click',parent.correctAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
+                                    case 'PRHW':
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.correctAnswer);
+                                        htmOptions.append(blockElement.append(htmElement));
+                                        break;
                                     case 'AEVC':
                                         htmElement.addClass('eclick');
                                         htmElement.on('click',parent.correctAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
                                     case 'AEHC':
-                                        htmElement.addClass('eclick');
-                                        htmElement.on('click',parent.correctAnswer);
-                                        htmOptions.append(blockElement.append(htmElement));
+                                        htmElement.addClass('gclick');
+                                        htmElement.on('click',parent.matchElement);
+                                        htmGroup.append(blockElement.append(htmElement));
                                         break;
                                 }
                                 break;
@@ -506,6 +614,11 @@ function render () {
                                     case 'AEHDD':
                                         break;
                                     case 'MEHW':
+                                        htmElement.addClass('eclick');
+                                        htmElement.on('click',parent.wrongAnswer);
+                                        htmOptions.append(blockElement.append(htmElement));
+                                        break;
+                                    case 'PRHW':
                                         htmElement.addClass('eclick');
                                         htmElement.on('click',parent.wrongAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
@@ -536,13 +649,25 @@ function render () {
                 htmFinal.append(htmEnum);
                 htmFinal.append(htmOptions);
                 break;
+            case 'PRHW':
+                htmFinal.append(htmEnum);
+                htmFinal.append(htmOptions);
+                break;
             case 'AEVC':
                 htmFinal.append(htmEnum);
                 htmFinal.append(htmOptions);
                 break;
             case 'AEHC':
-                htmFinal.append(htmEnum);
-                htmFinal.append(htmOptions);
+                htmPair2 = $('<ul id="pairs" class="elements pairs"></ul>');
+                htmGroup2 = $('<ul id="groups" class="elements groups"></ul>');
+                htmPair2.append(htmPair.find('li').sort(function(){
+                    return Math.round(Math.random())-0.5;
+                }));
+                htmGroup2.append(htmGroup.find('li').sort(function(){
+                    return Math.round(Math.random())-0.5;
+                }))
+                htmFinal.append(htmPair2.append('<li style="clear:both;display:block"></li>'));
+                htmFinal.append(htmGroup2.append('<li style="clear:both;display:block"></li>'));
                 break;
         }
         return htmFinal.append('<span style="display:block;clear:both"></span>');
