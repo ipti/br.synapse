@@ -3,6 +3,15 @@
 class DefaultController extends Controller {
 
     public function actionIndex() {
+        /*SELECT * FROM cobject_cobjectblock a
+join cobject b on(a.cobjectID=b.ID)
+join cobject_metadata c on(c.cobjectID=b.ID and c.typeID=6)
+join act_goal d on(d.ID=c.value)
+join act_goal_content e on(d.ID=e.goalID)
+join act_content f on(f.ID=e.contentID)*/
+        /*SELECT a.cobjectID,c.value as goalID,e.contentID FROM cobject_cobjectblock a
+                join cobject_metadata c on(c.cobjectID=a.cobjectID and c.typeID=6)
+                join act_goal_content e on(e.goalID=c.value)
         /*DELETE FROM `library_property`;
 DELETE FROM `library`;
 DELETE FROM `editor_pieceelement_property`;
