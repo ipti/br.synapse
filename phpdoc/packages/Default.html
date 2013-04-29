@@ -1,0 +1,673 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » Default</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu"></ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">523</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-map-marker"></i> Packages</li>
+<li>
+<a href="../packages/Default.html" title="Default"><i class="icon-folder-open"></i>Default</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-class"></i> Classes</li>
+<li><a href="#ContextMenu" title="">ContextMenu</a></li>
+<li><a href="#Controller" title="Controller is the customized base controller class.">Controller</a></li>
+<li><a href="#PhpStringParser" title="">PhpStringParser</a></li>
+<li><a href="#UserIdentity" title="UserIdentity represents the data needed to identity a user.">UserIdentity</a></li>
+<li><a href="#ActContentController" title="Controller is the customized base controller class.">ActContentController</a></li>
+<li><a href="#ActDegreeController" title="Controller is the customized base controller class.">ActDegreeController</a></li>
+<li><a href="#ActDisciplineController" title="Controller is the customized base controller class.">ActDisciplineController</a></li>
+<li><a href="#ActGoalController" title="Controller is the customized base controller class.">ActGoalController</a></li>
+<li><a href="#ActMatrixController" title="Controller is the customized base controller class.">ActMatrixController</a></li>
+<li><a href="#ActModalityController" title="Controller is the customized base controller class.">ActModalityController</a></li>
+<li><a href="#ActScriptController" title="Controller is the customized base controller class.">ActScriptController</a></li>
+<li><a href="#ActSkillController" title="Controller is the customized base controller class.">ActSkillController</a></li>
+<li><a href="#AssetsController" title="Controller is the customized base controller class.">AssetsController</a></li>
+<li><a href="#CobjectblockController" title="Controller is the customized base controller class.">CobjectblockController</a></li>
+<li><a href="#CobjectController" title="Controller is the customized base controller class.">CobjectController</a></li>
+<li><a href="#CobjectTemplateController" title="Controller is the customized base controller class.">CobjectTemplateController</a></li>
+<li><a href="#CobjectThemeController" title="Controller is the customized base controller class.">CobjectThemeController</a></li>
+<li><a href="#CommonPropertyController" title="Controller is the customized base controller class.">CommonPropertyController</a></li>
+<li><a href="#CommonTypeController" title="Controller is the customized base controller class.">CommonTypeController</a></li>
+<li><a href="#EditorController" title="Controller is the customized base controller class.">EditorController</a></li>
+<li><a href="#PersonController" title="Controller is the customized base controller class.">PersonController</a></li>
+<li><a href="#RenderController" title="Controller is the customized base controller class.">RenderController</a></li>
+<li><a href="#SiteController" title="Controller is the customized base controller class.">SiteController</a></li>
+<li><a href="#UserclassController" title="Controller is the customized base controller class.">UserclassController</a></li>
+<li><a href="#UserController" title="Controller is the customized base controller class.">UserController</a></li>
+<li><a href="#UserSystemController" title="Controller is the customized base controller class.">UserSystemController</a></li>
+<li><a href="#ActContent" title='This is the model class for table "act_content".'>ActContent</a></li>
+<li><a href="#ActDegree" title='This is the model class for table "act_degree".'>ActDegree</a></li>
+<li><a href="#ActDiscipline" title='This is the model class for table "act_discipline".'>ActDiscipline</a></li>
+<li><a href="#ActGoal" title='This is the model class for table "act_goal".'>ActGoal</a></li>
+<li><a href="#ActGoalContent" title='This is the model class for table "act_goal_content".'>ActGoalContent</a></li>
+<li><a href="#ActGoalMatrix" title='This is the model class for table "act_goal_matrix".'>ActGoalMatrix</a></li>
+<li><a href="#ActGoalModality" title='This is the model class for table "act_goal_modality".'>ActGoalModality</a></li>
+<li><a href="#ActGoalSkill" title='This is the model class for table "act_goal_skill".'>ActGoalSkill</a></li>
+<li><a href="#ActMatrix" title='This is the model class for table "act_matrix".'>ActMatrix</a></li>
+<li><a href="#ActModality" title='This is the model class for table "act_modality".'>ActModality</a></li>
+<li><a href="#ActScript" title='This is the model class for table "act_script".'>ActScript</a></li>
+<li><a href="#ActScriptContent" title='This is the model class for table "act_script_content".'>ActScriptContent</a></li>
+<li><a href="#ActSkill" title='This is the model class for table "act_skill".'>ActSkill</a></li>
+<li><a href="#Cobject" title='This is the model class for table "cobject".'>Cobject</a></li>
+<li><a href="#Cobjectblock" title='This is the model class for table "cobjectblock".'>Cobjectblock</a></li>
+<li><a href="#CobjectCobjectblock" title='This is the model class for table "cobject_cobjectblock".'>CobjectCobjectblock</a></li>
+<li><a href="#CobjectData" title='This is the model class for table "cobject_metadata".'>CobjectData</a></li>
+<li><a href="#CobjectMetadata" title='This is the model class for table "cobject_metadata".'>CobjectMetadata</a></li>
+<li><a href="#CobjectTemplate" title='This is the model class for table "cobject_template".'>CobjectTemplate</a></li>
+<li><a href="#CobjectTheme" title='This is the model class for table "cobject_theme".'>CobjectTheme</a></li>
+<li><a href="#CommonProperty" title='This is the model class for table "common_property".'>CommonProperty</a></li>
+<li><a href="#CommonType" title='This is the model class for table "common_type".'>CommonType</a></li>
+<li><a href="#ContactForm" title="ContactForm class.">ContactForm</a></li>
+<li><a href="#EditorElement" title='This is the model class for table "editor_element".'>EditorElement</a></li>
+<li><a href="#EditorElementAlias" title='This is the model class for table "editor_element_alias".'>EditorElementAlias</a></li>
+<li><a href="#EditorElementProperty" title='This is the model class for table "editor_element_property".'>EditorElementProperty</a></li>
+<li><a href="#EditorEvents" title='This is the model class for table "editor_events".'>EditorEvents</a></li>
+<li><a href="#EditorPiece" title='This is the model class for table "editor_piece".'>EditorPiece</a></li>
+<li><a href="#EditorPieceElement" title='This is the model class for table "editor_piece_element".'>EditorPieceElement</a></li>
+<li><a href="#EditorPieceelementProperty" title='This is the model class for table "editor_pieceelement_property".'>EditorPieceelementProperty</a></li>
+<li><a href="#EditorPieceset" title='This is the model class for table "editor_pieceset".'>EditorPieceset</a></li>
+<li><a href="#EditorPiecesetPiece" title='This is the model class for table "editor_pieceset_piece".'>EditorPiecesetPiece</a></li>
+<li><a href="#EditorScreen" title='This is the model class for table "editor_screen".'>EditorScreen</a></li>
+<li><a href="#EditorScreenPieceset" title='This is the model class for table "editor_screen_pieceset".'>EditorScreenPieceset</a></li>
+<li><a href="#Library" title='This is the model class for table "library".'>Library</a></li>
+<li><a href="#LibraryProperty" title='This is the model class for table "library_property".'>LibraryProperty</a></li>
+<li><a href="#LoginForm" title="LoginForm class.">LoginForm</a></li>
+<li><a href="#Organization" title='This is the model class for table "organization".'>Organization</a></li>
+<li><a href="#PeformanceUser" title='This is the model class for table "peformance_user".'>PeformanceUser</a></li>
+<li><a href="#Person" title='This is the model class for table "person".'>Person</a></li>
+<li><a href="#Personage" title='This is the model class for table "personage".'>Personage</a></li>
+<li><a href="#Unity" title='This is the model class for table "unity".'>Unity</a></li>
+<li><a href="#Userclass" title='This is the model class for table "userclass".'>Userclass</a></li>
+<li><a href="#UserclassMatrix" title='This is the model class for table "userclass_matrix".'>UserclassMatrix</a></li>
+<li><a href="#UserSystem" title='This is the model class for table "user_system".'>UserSystem</a></li>
+<li><a href="#UserUserclass" title='This is the model class for table "user_userclass".'>UserUserclass</a></li>
+<li><a href="#DefaultController" title="Controller is the customized base controller class.">DefaultController</a></li>
+<li><a href="#ImportModule" title="">ImportModule</a></li>
+</ul>
+</div>
+<div class="span8 package-contents">
+<ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
+</li>
+<li class="active"><a href="../packages/Default.html">Default</a></li>
+</ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<a name="ActContent" id="ActContent"></a><div class="element ajax clickable class" href="../classes/ActContent.html">
+<h1>ActContent<a href="../classes/ActContent.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_content".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActContent.html" class="more">« More »</a>
+</div>
+<a name="ActContentController" id="ActContentController"></a><div class="element ajax clickable class" href="../classes/ActContentController.html">
+<h1>ActContentController<a href="../classes/ActContentController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActContentController.html" class="more">« More »</a>
+</div>
+<a name="ActDegree" id="ActDegree"></a><div class="element ajax clickable class" href="../classes/ActDegree.html">
+<h1>ActDegree<a href="../classes/ActDegree.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_degree".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActDegree.html" class="more">« More »</a>
+</div>
+<a name="ActDegreeController" id="ActDegreeController"></a><div class="element ajax clickable class" href="../classes/ActDegreeController.html">
+<h1>ActDegreeController<a href="../classes/ActDegreeController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActDegreeController.html" class="more">« More »</a>
+</div>
+<a name="ActDiscipline" id="ActDiscipline"></a><div class="element ajax clickable class" href="../classes/ActDiscipline.html">
+<h1>ActDiscipline<a href="../classes/ActDiscipline.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_discipline".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActDiscipline.html" class="more">« More »</a>
+</div>
+<a name="ActDisciplineController" id="ActDisciplineController"></a><div class="element ajax clickable class" href="../classes/ActDisciplineController.html">
+<h1>ActDisciplineController<a href="../classes/ActDisciplineController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActDisciplineController.html" class="more">« More »</a>
+</div>
+<a name="ActGoal" id="ActGoal"></a><div class="element ajax clickable class" href="../classes/ActGoal.html">
+<h1>ActGoal<a href="../classes/ActGoal.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_goal".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActGoal.html" class="more">« More »</a>
+</div>
+<a name="ActGoalContent" id="ActGoalContent"></a><div class="element ajax clickable class" href="../classes/ActGoalContent.html">
+<h1>ActGoalContent<a href="../classes/ActGoalContent.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_goal_content".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActGoalContent.html" class="more">« More »</a>
+</div>
+<a name="ActGoalController" id="ActGoalController"></a><div class="element ajax clickable class" href="../classes/ActGoalController.html">
+<h1>ActGoalController<a href="../classes/ActGoalController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActGoalController.html" class="more">« More »</a>
+</div>
+<a name="ActGoalMatrix" id="ActGoalMatrix"></a><div class="element ajax clickable class" href="../classes/ActGoalMatrix.html">
+<h1>ActGoalMatrix<a href="../classes/ActGoalMatrix.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_goal_matrix".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActGoalMatrix.html" class="more">« More »</a>
+</div>
+<a name="ActGoalModality" id="ActGoalModality"></a><div class="element ajax clickable class" href="../classes/ActGoalModality.html">
+<h1>ActGoalModality<a href="../classes/ActGoalModality.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_goal_modality".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActGoalModality.html" class="more">« More »</a>
+</div>
+<a name="ActGoalSkill" id="ActGoalSkill"></a><div class="element ajax clickable class" href="../classes/ActGoalSkill.html">
+<h1>ActGoalSkill<a href="../classes/ActGoalSkill.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_goal_skill".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActGoalSkill.html" class="more">« More »</a>
+</div>
+<a name="ActMatrix" id="ActMatrix"></a><div class="element ajax clickable class" href="../classes/ActMatrix.html">
+<h1>ActMatrix<a href="../classes/ActMatrix.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_matrix".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActMatrix.html" class="more">« More »</a>
+</div>
+<a name="ActMatrixController" id="ActMatrixController"></a><div class="element ajax clickable class" href="../classes/ActMatrixController.html">
+<h1>ActMatrixController<a href="../classes/ActMatrixController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActMatrixController.html" class="more">« More »</a>
+</div>
+<a name="ActModality" id="ActModality"></a><div class="element ajax clickable class" href="../classes/ActModality.html">
+<h1>ActModality<a href="../classes/ActModality.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_modality".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActModality.html" class="more">« More »</a>
+</div>
+<a name="ActModalityController" id="ActModalityController"></a><div class="element ajax clickable class" href="../classes/ActModalityController.html">
+<h1>ActModalityController<a href="../classes/ActModalityController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActModalityController.html" class="more">« More »</a>
+</div>
+<a name="ActScript" id="ActScript"></a><div class="element ajax clickable class" href="../classes/ActScript.html">
+<h1>ActScript<a href="../classes/ActScript.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_script".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActScript.html" class="more">« More »</a>
+</div>
+<a name="ActScriptContent" id="ActScriptContent"></a><div class="element ajax clickable class" href="../classes/ActScriptContent.html">
+<h1>ActScriptContent<a href="../classes/ActScriptContent.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_script_content".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActScriptContent.html" class="more">« More »</a>
+</div>
+<a name="ActScriptController" id="ActScriptController"></a><div class="element ajax clickable class" href="../classes/ActScriptController.html">
+<h1>ActScriptController<a href="../classes/ActScriptController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActScriptController.html" class="more">« More »</a>
+</div>
+<a name="ActSkill" id="ActSkill"></a><div class="element ajax clickable class" href="../classes/ActSkill.html">
+<h1>ActSkill<a href="../classes/ActSkill.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "act_skill".</p>
+<div class="details collapse"></div>
+<a href="../classes/ActSkill.html" class="more">« More »</a>
+</div>
+<a name="ActSkillController" id="ActSkillController"></a><div class="element ajax clickable class" href="../classes/ActSkillController.html">
+<h1>ActSkillController<a href="../classes/ActSkillController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ActSkillController.html" class="more">« More »</a>
+</div>
+<a name="AssetsController" id="AssetsController"></a><div class="element ajax clickable class" href="../classes/AssetsController.html">
+<h1>AssetsController<a href="../classes/AssetsController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/AssetsController.html" class="more">« More »</a>
+</div>
+<a name="Cobject" id="Cobject"></a><div class="element ajax clickable class" href="../classes/Cobject.html">
+<h1>Cobject<a href="../classes/Cobject.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "cobject".</p>
+<div class="details collapse"></div>
+<a href="../classes/Cobject.html" class="more">« More »</a>
+</div>
+<a name="CobjectCobjectblock" id="CobjectCobjectblock"></a><div class="element ajax clickable class" href="../classes/CobjectCobjectblock.html">
+<h1>CobjectCobjectblock<a href="../classes/CobjectCobjectblock.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "cobject_cobjectblock".</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectCobjectblock.html" class="more">« More »</a>
+</div>
+<a name="CobjectController" id="CobjectController"></a><div class="element ajax clickable class" href="../classes/CobjectController.html">
+<h1>CobjectController<a href="../classes/CobjectController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectController.html" class="more">« More »</a>
+</div>
+<a name="CobjectData" id="CobjectData"></a><div class="element ajax clickable class" href="../classes/CobjectData.html">
+<h1>CobjectData<a href="../classes/CobjectData.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "cobject_metadata".</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectData.html" class="more">« More »</a>
+</div>
+<a name="CobjectMetadata" id="CobjectMetadata"></a><div class="element ajax clickable class" href="../classes/CobjectMetadata.html">
+<h1>CobjectMetadata<a href="../classes/CobjectMetadata.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "cobject_metadata".</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectMetadata.html" class="more">« More »</a>
+</div>
+<a name="CobjectTemplate" id="CobjectTemplate"></a><div class="element ajax clickable class" href="../classes/CobjectTemplate.html">
+<h1>CobjectTemplate<a href="../classes/CobjectTemplate.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "cobject_template".</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectTemplate.html" class="more">« More »</a>
+</div>
+<a name="CobjectTemplateController" id="CobjectTemplateController"></a><div class="element ajax clickable class" href="../classes/CobjectTemplateController.html">
+<h1>CobjectTemplateController<a href="../classes/CobjectTemplateController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectTemplateController.html" class="more">« More »</a>
+</div>
+<a name="CobjectTheme" id="CobjectTheme"></a><div class="element ajax clickable class" href="../classes/CobjectTheme.html">
+<h1>CobjectTheme<a href="../classes/CobjectTheme.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "cobject_theme".</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectTheme.html" class="more">« More »</a>
+</div>
+<a name="CobjectThemeController" id="CobjectThemeController"></a><div class="element ajax clickable class" href="../classes/CobjectThemeController.html">
+<h1>CobjectThemeController<a href="../classes/CobjectThemeController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectThemeController.html" class="more">« More »</a>
+</div>
+<a name="Cobjectblock" id="Cobjectblock"></a><div class="element ajax clickable class" href="../classes/Cobjectblock.html">
+<h1>Cobjectblock<a href="../classes/Cobjectblock.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "cobjectblock".</p>
+<div class="details collapse"></div>
+<a href="../classes/Cobjectblock.html" class="more">« More »</a>
+</div>
+<a name="CobjectblockController" id="CobjectblockController"></a><div class="element ajax clickable class" href="../classes/CobjectblockController.html">
+<h1>CobjectblockController<a href="../classes/CobjectblockController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/CobjectblockController.html" class="more">« More »</a>
+</div>
+<a name="CommonProperty" id="CommonProperty"></a><div class="element ajax clickable class" href="../classes/CommonProperty.html">
+<h1>CommonProperty<a href="../classes/CommonProperty.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "common_property".</p>
+<div class="details collapse"></div>
+<a href="../classes/CommonProperty.html" class="more">« More »</a>
+</div>
+<a name="CommonPropertyController" id="CommonPropertyController"></a><div class="element ajax clickable class" href="../classes/CommonPropertyController.html">
+<h1>CommonPropertyController<a href="../classes/CommonPropertyController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/CommonPropertyController.html" class="more">« More »</a>
+</div>
+<a name="CommonType" id="CommonType"></a><div class="element ajax clickable class" href="../classes/CommonType.html">
+<h1>CommonType<a href="../classes/CommonType.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "common_type".</p>
+<div class="details collapse"></div>
+<a href="../classes/CommonType.html" class="more">« More »</a>
+</div>
+<a name="CommonTypeController" id="CommonTypeController"></a><div class="element ajax clickable class" href="../classes/CommonTypeController.html">
+<h1>CommonTypeController<a href="../classes/CommonTypeController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/CommonTypeController.html" class="more">« More »</a>
+</div>
+<a name="ContactForm" id="ContactForm"></a><div class="element ajax clickable class" href="../classes/ContactForm.html">
+<h1>ContactForm<a href="../classes/ContactForm.html">¶</a>
+</h1>
+<p class="short_description">ContactForm class.</p>
+<div class="details collapse"></div>
+<a href="../classes/ContactForm.html" class="more">« More »</a>
+</div>
+<a name="ContextMenu" id="ContextMenu"></a><div class="element ajax clickable class" href="../classes/ContextMenu.html">
+<h1>ContextMenu<a href="../classes/ContextMenu.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/ContextMenu.html" class="more">« More »</a>
+</div>
+<a name="Controller" id="Controller"></a><div class="element ajax clickable class" href="../classes/Controller.html">
+<h1>Controller<a href="../classes/Controller.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/Controller.html" class="more">« More »</a>
+</div>
+<a name="DefaultController" id="DefaultController"></a><div class="element ajax clickable class" href="../classes/DefaultController.html">
+<h1>DefaultController<a href="../classes/DefaultController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/DefaultController.html" class="more">« More »</a>
+</div>
+<a name="EditorController" id="EditorController"></a><div class="element ajax clickable class" href="../classes/EditorController.html">
+<h1>EditorController<a href="../classes/EditorController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorController.html" class="more">« More »</a>
+</div>
+<a name="EditorElement" id="EditorElement"></a><div class="element ajax clickable class" href="../classes/EditorElement.html">
+<h1>EditorElement<a href="../classes/EditorElement.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_element".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorElement.html" class="more">« More »</a>
+</div>
+<a name="EditorElementAlias" id="EditorElementAlias"></a><div class="element ajax clickable class" href="../classes/EditorElementAlias.html">
+<h1>EditorElementAlias<a href="../classes/EditorElementAlias.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_element_alias".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorElementAlias.html" class="more">« More »</a>
+</div>
+<a name="EditorElementProperty" id="EditorElementProperty"></a><div class="element ajax clickable class" href="../classes/EditorElementProperty.html">
+<h1>EditorElementProperty<a href="../classes/EditorElementProperty.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_element_property".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorElementProperty.html" class="more">« More »</a>
+</div>
+<a name="EditorEvents" id="EditorEvents"></a><div class="element ajax clickable class" href="../classes/EditorEvents.html">
+<h1>EditorEvents<a href="../classes/EditorEvents.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_events".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorEvents.html" class="more">« More »</a>
+</div>
+<a name="EditorPiece" id="EditorPiece"></a><div class="element ajax clickable class" href="../classes/EditorPiece.html">
+<h1>EditorPiece<a href="../classes/EditorPiece.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_piece".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorPiece.html" class="more">« More »</a>
+</div>
+<a name="EditorPieceElement" id="EditorPieceElement"></a><div class="element ajax clickable class" href="../classes/EditorPieceElement.html">
+<h1>EditorPieceElement<a href="../classes/EditorPieceElement.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_piece_element".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorPieceElement.html" class="more">« More »</a>
+</div>
+<a name="EditorPieceelementProperty" id="EditorPieceelementProperty"></a><div class="element ajax clickable class" href="../classes/EditorPieceelementProperty.html">
+<h1>EditorPieceelementProperty<a href="../classes/EditorPieceelementProperty.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_pieceelement_property".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorPieceelementProperty.html" class="more">« More »</a>
+</div>
+<a name="EditorPieceset" id="EditorPieceset"></a><div class="element ajax clickable class" href="../classes/EditorPieceset.html">
+<h1>EditorPieceset<a href="../classes/EditorPieceset.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_pieceset".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorPieceset.html" class="more">« More »</a>
+</div>
+<a name="EditorPiecesetPiece" id="EditorPiecesetPiece"></a><div class="element ajax clickable class" href="../classes/EditorPiecesetPiece.html">
+<h1>EditorPiecesetPiece<a href="../classes/EditorPiecesetPiece.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_pieceset_piece".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorPiecesetPiece.html" class="more">« More »</a>
+</div>
+<a name="EditorScreen" id="EditorScreen"></a><div class="element ajax clickable class" href="../classes/EditorScreen.html">
+<h1>EditorScreen<a href="../classes/EditorScreen.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_screen".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorScreen.html" class="more">« More »</a>
+</div>
+<a name="EditorScreenPieceset" id="EditorScreenPieceset"></a><div class="element ajax clickable class" href="../classes/EditorScreenPieceset.html">
+<h1>EditorScreenPieceset<a href="../classes/EditorScreenPieceset.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "editor_screen_pieceset".</p>
+<div class="details collapse"></div>
+<a href="../classes/EditorScreenPieceset.html" class="more">« More »</a>
+</div>
+<a name="ImportModule" id="ImportModule"></a><div class="element ajax clickable class" href="../classes/ImportModule.html">
+<h1>ImportModule<a href="../classes/ImportModule.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/ImportModule.html" class="more">« More »</a>
+</div>
+<a name="Library" id="Library"></a><div class="element ajax clickable class" href="../classes/Library.html">
+<h1>Library<a href="../classes/Library.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "library".</p>
+<div class="details collapse"></div>
+<a href="../classes/Library.html" class="more">« More »</a>
+</div>
+<a name="LibraryProperty" id="LibraryProperty"></a><div class="element ajax clickable class" href="../classes/LibraryProperty.html">
+<h1>LibraryProperty<a href="../classes/LibraryProperty.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "library_property".</p>
+<div class="details collapse"></div>
+<a href="../classes/LibraryProperty.html" class="more">« More »</a>
+</div>
+<a name="LoginForm" id="LoginForm"></a><div class="element ajax clickable class" href="../classes/LoginForm.html">
+<h1>LoginForm<a href="../classes/LoginForm.html">¶</a>
+</h1>
+<p class="short_description">LoginForm class.</p>
+<div class="details collapse"></div>
+<a href="../classes/LoginForm.html" class="more">« More »</a>
+</div>
+<a name="Organization" id="Organization"></a><div class="element ajax clickable class" href="../classes/Organization.html">
+<h1>Organization<a href="../classes/Organization.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "organization".</p>
+<div class="details collapse"></div>
+<a href="../classes/Organization.html" class="more">« More »</a>
+</div>
+<a name="PeformanceUser" id="PeformanceUser"></a><div class="element ajax clickable class" href="../classes/PeformanceUser.html">
+<h1>PeformanceUser<a href="../classes/PeformanceUser.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "peformance_user".</p>
+<div class="details collapse"></div>
+<a href="../classes/PeformanceUser.html" class="more">« More »</a>
+</div>
+<a name="Person" id="Person"></a><div class="element ajax clickable class" href="../classes/Person.html">
+<h1>Person<a href="../classes/Person.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "person".</p>
+<div class="details collapse"></div>
+<a href="../classes/Person.html" class="more">« More »</a>
+</div>
+<a name="PersonController" id="PersonController"></a><div class="element ajax clickable class" href="../classes/PersonController.html">
+<h1>PersonController<a href="../classes/PersonController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/PersonController.html" class="more">« More »</a>
+</div>
+<a name="Personage" id="Personage"></a><div class="element ajax clickable class" href="../classes/Personage.html">
+<h1>Personage<a href="../classes/Personage.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "personage".</p>
+<div class="details collapse"></div>
+<a href="../classes/Personage.html" class="more">« More »</a>
+</div>
+<a name="PhpStringParser" id="PhpStringParser"></a><div class="element ajax clickable class" href="../classes/PhpStringParser.html">
+<h1>PhpStringParser<a href="../classes/PhpStringParser.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/PhpStringParser.html" class="more">« More »</a>
+</div>
+<a name="RenderController" id="RenderController"></a><div class="element ajax clickable class" href="../classes/RenderController.html">
+<h1>RenderController<a href="../classes/RenderController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/RenderController.html" class="more">« More »</a>
+</div>
+<a name="SiteController" id="SiteController"></a><div class="element ajax clickable class" href="../classes/SiteController.html">
+<h1>SiteController<a href="../classes/SiteController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/SiteController.html" class="more">« More »</a>
+</div>
+<a name="Unity" id="Unity"></a><div class="element ajax clickable class" href="../classes/Unity.html">
+<h1>Unity<a href="../classes/Unity.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "unity".</p>
+<div class="details collapse"></div>
+<a href="../classes/Unity.html" class="more">« More »</a>
+</div>
+<a name="UserController" id="UserController"></a><div class="element ajax clickable class" href="../classes/UserController.html">
+<h1>UserController<a href="../classes/UserController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserController.html" class="more">« More »</a>
+</div>
+<a name="UserIdentity" id="UserIdentity"></a><div class="element ajax clickable class" href="../classes/UserIdentity.html">
+<h1>UserIdentity<a href="../classes/UserIdentity.html">¶</a>
+</h1>
+<p class="short_description">UserIdentity represents the data needed to identity a user.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserIdentity.html" class="more">« More »</a>
+</div>
+<a name="UserSystem" id="UserSystem"></a><div class="element ajax clickable class" href="../classes/UserSystem.html">
+<h1>UserSystem<a href="../classes/UserSystem.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "user_system".</p>
+<div class="details collapse"></div>
+<a href="../classes/UserSystem.html" class="more">« More »</a>
+</div>
+<a name="UserSystemController" id="UserSystemController"></a><div class="element ajax clickable class" href="../classes/UserSystemController.html">
+<h1>UserSystemController<a href="../classes/UserSystemController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserSystemController.html" class="more">« More »</a>
+</div>
+<a name="UserUserclass" id="UserUserclass"></a><div class="element ajax clickable class" href="../classes/UserUserclass.html">
+<h1>UserUserclass<a href="../classes/UserUserclass.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "user_userclass".</p>
+<div class="details collapse"></div>
+<a href="../classes/UserUserclass.html" class="more">« More »</a>
+</div>
+<a name="Userclass" id="Userclass"></a><div class="element ajax clickable class" href="../classes/Userclass.html">
+<h1>Userclass<a href="../classes/Userclass.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "userclass".</p>
+<div class="details collapse"></div>
+<a href="../classes/Userclass.html" class="more">« More »</a>
+</div>
+<a name="UserclassController" id="UserclassController"></a><div class="element ajax clickable class" href="../classes/UserclassController.html">
+<h1>UserclassController<a href="../classes/UserclassController.html">¶</a>
+</h1>
+<p class="short_description">Controller is the customized base controller class.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserclassController.html" class="more">« More »</a>
+</div>
+<a name="UserclassMatrix" id="UserclassMatrix"></a><div class="element ajax clickable class" href="../classes/UserclassMatrix.html">
+<h1>UserclassMatrix<a href="../classes/UserclassMatrix.html">¶</a>
+</h1>
+<p class="short_description">This is the model class for table "userclass_matrix".</p>
+<div class="details collapse"></div>
+<a href="../classes/UserclassMatrix.html" class="more">« More »</a>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a10</a> and<br>
+            generated on 2012-11-05T20:24:15-03:00.<br></footer></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,2923 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project version="2.0.0a10" title="">
+  <file path="ActContentController.php" hash="863fb1373659c7f77d30bef5d7b9785e" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActContentController</name>
+      <full_name>\ActContentController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActContentController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActContentController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="ActDegreeController.php" hash="a06430fc21e644d82a14136450b6b72f" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActDegreeController</name>
+      <full_name>\ActDegreeController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActDegreeController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActDegreeController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="ActDisciplineController.php" hash="aa6d41c1369bd435b6edb29e521bb8c8" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActDisciplineController</name>
+      <full_name>\ActDisciplineController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActDisciplineController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActDisciplineController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="ActGoalController.php" hash="c9ca00097118b4911fd0530d5ff23a4e" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActGoalController</name>
+      <full_name>\ActGoalController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="20">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="20" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="41">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="55" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="51">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="97" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="92">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="92" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="97">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="189" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="184">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="184" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="189">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="205" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="202">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="218" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="215">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="234" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="229">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="229" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="234">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="245" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="241">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="241" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="245">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="252" package="Default">
+        <name>actionLoadContent</name>
+        <full_name>actionLoadContent</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActGoalController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActGoalController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+      <error line="252" code="50010">No DocBlock was found for method actionLoadContent()</error>
+    </parse_markers>
+  </file>
+  <file path="ActMatrixController.php" hash="e66c367dcbaaf49926e32fa6a8b70c8c" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActMatrixController</name>
+      <full_name>\ActMatrixController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="20">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="20" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="41">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="61" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="57">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="92" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="87">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="87" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="92">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="135" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="130">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="130" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="135">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="151" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="148">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="164" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="161">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="180" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="175">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="175" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="180">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="191" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="187">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="187" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="191">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="198" package="Default">
+        <name>actionLoadGoal</name>
+        <full_name>actionLoadGoal</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActMatrixController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActMatrixController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+      <error line="198" code="50010">No DocBlock was found for method actionLoadGoal()</error>
+    </parse_markers>
+  </file>
+  <file path="ActModalityController.php" hash="9399412627e69b0c71ff9cd5cc57c3bd" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActModalityController</name>
+      <full_name>\ActModalityController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActModalityController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActModalityController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="ActScriptController.php" hash="2cc0b03866813c6daef5ff8114ddc61b" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActScriptController</name>
+      <full_name>\ActScriptController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="20">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="20" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="41">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="55" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="51">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="95" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="90">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="90" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="95">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="166" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="161">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="161" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="166">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="182" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="179">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="195" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="192">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="211" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="206">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="206" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="211">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="222" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="218">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="218" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="222">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="229" package="Default">
+        <name>actionLoadContentParent</name>
+        <full_name>actionLoadContentParent</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="237" package="Default">
+        <name>actionLoadContents</name>
+        <full_name>actionLoadContents</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActScriptController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActScriptController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+      <error line="229" code="50010">No DocBlock was found for method actionLoadContentParent()</error>
+      <error line="237" code="50010">No DocBlock was found for method actionLoadContents()</error>
+    </parse_markers>
+  </file>
+  <file path="ActSkillController.php" hash="df21875302aa97dda56fb3ba02c608ae" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>ActSkillController</name>
+      <full_name>\ActSkillController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ActSkillController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ActSkillController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="AssetsController.php" hash="06eeee6621171bf2a3cf3300ab3095e9" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>AssetsController</name>
+      <full_name>\AssetsController</full_name>
+      <property final="false" static="false" visibility="public" line="6" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['none']]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="8" package="Default">
+        <name>actionCss</name>
+        <full_name>actionCss</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="12" package="Default">
+        <name>actionFlash</name>
+        <full_name>actionFlash</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="15" package="Default">
+        <name>genfile</name>
+        <full_name>genfile</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="19" package="Default">
+        <name>compress</name>
+        <full_name>compress</full_name>
+        <argument line="19">
+          <name>$buffer</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="30" package="Default">
+        <name>actionJs</name>
+        <full_name>actionJs</full_name>
+        <argument line="30">
+          <name>$file</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file AssetsController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \AssetsController</error>
+      <error line="6" code="50018">No DocBlock was found for property $layout</error>
+      <error line="8" code="50010">No DocBlock was found for method actionCss()</error>
+      <error line="12" code="50010">No DocBlock was found for method actionFlash()</error>
+      <error line="15" code="50010">No DocBlock was found for method genfile()</error>
+      <error line="19" code="50010">No DocBlock was found for method compress()</error>
+      <error line="30" code="50010">No DocBlock was found for method actionJs()</error>
+    </parse_markers>
+  </file>
+  <file path="CobjectblockController.php" hash="d896602e84cbb523a94f1f0b349b2858" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>CobjectblockController</name>
+      <full_name>\CobjectblockController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file CobjectblockController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \CobjectblockController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="CobjectController.php" hash="9838afd3c97b2d760c039151fc09d061" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>CobjectController</name>
+      <full_name>\CobjectController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="20">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="20" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="41">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="55" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="51">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="85" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="80">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="80" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="85">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="110" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="105">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="105" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="110">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="142" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="139">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="159" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="154">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="154" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="159">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="170" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="166">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="166" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="170">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file CobjectController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \CobjectController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="CobjectTemplateController.php" hash="26223ff91d6f8de38790cb9957db20d9" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>CobjectTemplateController</name>
+      <full_name>\CobjectTemplateController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file CobjectTemplateController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \CobjectTemplateController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="CobjectThemeController.php" hash="eab193c9b62b58f2ed484fdf3bce2399" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>CobjectThemeController</name>
+      <full_name>\CobjectThemeController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file CobjectThemeController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \CobjectThemeController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="CommonPropertyController.php" hash="27e9bfc978e2aea35dc7f12b6e24d989" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>CommonPropertyController</name>
+      <full_name>\CommonPropertyController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file CommonPropertyController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \CommonPropertyController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="CommonTypeController.php" hash="056bf3118eaeea66638a0604cd2a9b73" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>CommonTypeController</name>
+      <full_name>\CommonTypeController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file CommonTypeController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \CommonTypeController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="EditorController.php" hash="b4ddc3987ff5584c8ba74660031e858c" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>EditorController</name>
+      <full_name>\EditorController</full_name>
+      <property final="false" static="false" visibility="public" line="5" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['editor']]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="7" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file EditorController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \EditorController</error>
+      <error line="5" code="50018">No DocBlock was found for property $layout</error>
+      <error line="7" code="50010">No DocBlock was found for method actionIndex()</error>
+    </parse_markers>
+  </file>
+  <file path="PersonController.php" hash="88e1524cc7001507078d1630120fbb19" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>PersonController</name>
+      <full_name>\PersonController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="20">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="20" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="41">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="55" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="51">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="98" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="93">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="93" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="98">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="120" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="115">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="115" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="120">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="136" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="133">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="149" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="146">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="165" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="160">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="160" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="165">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="176" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="172">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="172" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="176">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file PersonController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \PersonController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <file path="RenderController.php" hash="2ba06000dfc0873e682601e353abecdd" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>RenderController</name>
+      <full_name>\RenderController</full_name>
+      <property final="false" static="false" visibility="public" line="5" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['render']]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="10" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="7">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="7" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="21" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="16">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="16" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="37" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="41" package="Default">
+        <name>actionJson</name>
+        <full_name>actionJson</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file RenderController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \RenderController</error>
+      <error line="5" code="50018">No DocBlock was found for property $layout</error>
+      <error line="7" code="50012">No short description for method filters()</error>
+      <error line="37" code="50010">No DocBlock was found for method actionIndex()</error>
+      <error line="41" code="50010">No DocBlock was found for method actionJson()</error>
+    </parse_markers>
+  </file>
+  <file path="SiteController.php" hash="7e26a50cb0c55f8c44c409ae312cc005" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>SiteController</name>
+      <full_name>\SiteController</full_name>
+      <property final="false" static="false" visibility="public" line="8" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['//layouts/fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[Declares class-based actions.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="10">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="19" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="39" package="Default">
+        <name>actions</name>
+        <full_name>actions</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="54">
+          <description><![CDATA[This is the default 'index' action that is invoked
+when an action is not explicitly requested by users.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="67" package="Default">
+        <name>actionError</name>
+        <full_name>actionError</full_name>
+        <docblock line="64">
+          <description><![CDATA[This is the action to handle external exceptions.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="79" package="Default">
+        <name>actionContact</name>
+        <full_name>actionContact</full_name>
+        <docblock line="76">
+          <description><![CDATA[Displays the contact page]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="96" package="Default">
+        <name>actionLogin</name>
+        <full_name>actionLogin</full_name>
+        <docblock line="93">
+          <description><![CDATA[Displays the login page]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="127" package="Default">
+        <name>actionLogout</name>
+        <full_name>actionLogout</full_name>
+        <docblock line="124">
+          <description><![CDATA[Logs out the current user and redirect to homepage.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file SiteController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \SiteController</error>
+      <error line="10" code="50012">No short description for method filters()</error>
+      <error line="19" code="50010">No DocBlock was found for method accessRules()</error>
+      <error line="39" code="50010">No DocBlock was found for method actions()</error>
+    </parse_markers>
+  </file>
+  <file path="UserclassController.php" hash="110e195673f3c2a116c1a2b2bb5f6433" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>UserclassController</name>
+      <full_name>\UserclassController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="20">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="20" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="41">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="61" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="57">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="91" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="86">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="86" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="91">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="136" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="131">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="131" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="136">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="152" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="149">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="165" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="162">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="181" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="176">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="176" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="181">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="192" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="188">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="188" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="192">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="199" package="Default">
+        <name>actionLoadMatrix</name>
+        <full_name>actionLoadMatrix</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file UserclassController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \UserclassController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+      <error line="199" code="50010">No DocBlock was found for method actionLoadMatrix()</error>
+    </parse_markers>
+  </file>
+  <file path="UserController.php" hash="8d90853c49ffc60234a73d5e4a45fe58" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>UserController</name>
+      <full_name>\UserController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="20">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="20" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="41">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="60" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="56">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="93" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="88">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="88" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="93">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="137" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="132">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="132" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="137">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="153" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="150">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="166" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="163">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="182" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="177">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="177" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="182">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="193" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="189">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="189" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="193">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="200" package="Default">
+        <name>actionLoadClasses</name>
+        <full_name>actionLoadClasses</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file UserController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \UserController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+      <error line="200" code="50010">No DocBlock was found for method actionLoadClasses()</error>
+    </parse_markers>
+  </file>
+  <file path="UserSystemController.php" hash="e3c9016139485fb0fe988e3577dd0a9e" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\Controller</extends>
+      <name>UserSystemController</name>
+      <full_name>\UserSystemController</full_name>
+      <property final="false" static="false" visibility="public" line="9" namespace="global" package="Default">
+        <name>$layout</name>
+        <default><![CDATA['fullmenu']]></default>
+        <docblock line="5">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="5" name="var" description="the default layout for the views. Defaults to '//layouts/column2', meaning using two-column layout. See 'protected/views/layouts/column2.php'." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="14" package="Default">
+        <name>filters</name>
+        <full_name>filters</full_name>
+        <docblock line="11">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="11" name="return" description="action filters" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Default">
+        <name>accessRules</name>
+        <full_name>accessRules</full_name>
+        <docblock line="21">
+          <description><![CDATA[Specifies the access control rules.]]></description>
+          <long-description><![CDATA[<p>This method is used by the 'accessControl' filter.</p>]]></long-description>
+          <tag line="21" name="return" description="access control rules" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+        <name>actionView</name>
+        <full_name>actionView</full_name>
+        <docblock line="43">
+          <description><![CDATA[Displays a particular model.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="param" description="the ID of the model to be displayed" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="47">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="58" package="Default">
+        <name>actionCreate</name>
+        <full_name>actionCreate</full_name>
+        <docblock line="54">
+          <description><![CDATA[Creates a new model.]]></description>
+          <long-description><![CDATA[<p>If creation is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="84" package="Default">
+        <name>actionUpdate</name>
+        <full_name>actionUpdate</full_name>
+        <docblock line="79">
+          <description><![CDATA[Updates a particular model.]]></description>
+          <long-description><![CDATA[<p>If update is successful, the browser will be redirected to the 'view' page.</p>]]></long-description>
+          <tag line="79" name="param" description="the ID of the model to be updated" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="84">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Default">
+        <name>actionDelete</name>
+        <full_name>actionDelete</full_name>
+        <docblock line="103">
+          <description><![CDATA[Deletes a particular model.]]></description>
+          <long-description><![CDATA[<p>If deletion is successful, the browser will be redirected to the 'admin' page.</p>]]></long-description>
+          <tag line="103" name="param" description="the ID of the model to be deleted" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="108">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="Default">
+        <name>actionIndex</name>
+        <full_name>actionIndex</full_name>
+        <docblock line="123">
+          <description><![CDATA[Lists all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="140" package="Default">
+        <name>actionAdmin</name>
+        <full_name>actionAdmin</full_name>
+        <docblock line="137">
+          <description><![CDATA[Manages all models.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="Default">
+        <name>loadModel</name>
+        <full_name>loadModel</full_name>
+        <docblock line="152">
+          <description><![CDATA[Returns the data model based on the primary key given in the GET variable.]]></description>
+          <long-description><![CDATA[<p>If the data model is not found, an HTTP exception will be raised.</p>]]></long-description>
+          <tag line="152" name="param" description="the ID of the model to be loaded" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+        <argument line="157">
+          <name>$id</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Default">
+        <name>performAjaxValidation</name>
+        <full_name>performAjaxValidation</full_name>
+        <docblock line="165">
+          <description><![CDATA[Performs the AJAX validation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="165" name="param" description="the model to be validated" type="\CModel" variable="$model">
+            <type by_reference="false">\CModel</type>
+          </tag>
+        </docblock>
+        <argument line="169">
+          <name>$model</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file UserSystemController.php</error>
+      <error line="3" code="50000">No DocBlock was found for \UserSystemController</error>
+      <error line="11" code="50012">No short description for method filters()</error>
+    </parse_markers>
+  </file>
+  <package name="Default" full_name="Default"/>
+  <namespace name="global" full_name="global"/>
+  <marker count="0">todo</marker>
+  <marker count="0">fixme</marker>
+  <deprecated count="0"/>
+</project>
