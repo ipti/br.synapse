@@ -8,7 +8,6 @@
             <!--[if lt IE 8]>
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
             <![endif]-->
-            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery/jquery-1.7.2.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/jquery/jquery.ui.all.css" />
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/theme/yvj.full.css" />
             <title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -21,17 +20,7 @@
             $this->widget('zii.widgets.CMenu', array(
                 'items' => array(
                      array(
-                        'label' => Yii::t('menu', 'Cadastrar'),
-                        'url' => array('/user/index'),
-                        'linkOptions' => array('id' => 'menuuser'),
-                        'itemOptions' => array('id' => 'itemuser'),
-                        'items' => array(
-                            array('label' => Yii::t('menu', 'Unidade'), 'url' => array('/userclass/index')),
-                            array('label' => Yii::t('menu', 'Pessoa'), 'url' => array('/peformance/index')),
-                        ),
-                    ),
-                    array(
-                        'label' => Yii::t('menu', 'Usuário'),
+                        'label' => Yii::t('menu', 'User'),
                         'url' => array('/user/index'),
                         'linkOptions' => array('id' => 'menuuser'),
                         'itemOptions' => array('id' => 'itemuser'),

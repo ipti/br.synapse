@@ -50,6 +50,7 @@
                     newRender.typeID = $('#typeID').val();
                     newRender.atdID = $('#atdID').val();
                     newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
+                    newRender.blockID = $('select#rblock'+newRender.disciplineID).val();
                     newRender.classID = $('#classID').val();
                     newRender.userID = $('select#student'+newRender.classID).val();
                     $('#userID').val(newRender.userID);
@@ -60,8 +61,8 @@
             });
             function loadActs(){
                 $.ajax({
-                    url:"/render/json",//this is the request page of ajax
-                    data:{op:'render',script:newRender.scriptID,userID:newRender.userID,classID:newRender.classID},//data for throwing the expected url
+                    url:"/render/json",
+                    data:{op:'render',script:newRender.scriptID,userID:newRender.userID,classID:newRender.classID,typeID:newRender.typeID,blockID:newRender.blockID},
                     type:"POST",
                     dataType:"json",// you can also specify for the result for json or xml
                     success:function(response){$('body').css('background','#fff');newRender.loadJson2(response); $('.waiting').hide();$('.render').show();newRender.paginate()},
