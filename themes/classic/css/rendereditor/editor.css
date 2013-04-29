@@ -33,8 +33,8 @@
 .theme div.canvas div.content{background:#fff; padding:10px; width:100%;clear:both;margin-top:5px;}
 .theme div.page input.actName{border:1px dotted #999; width:100%; height:30px;color:#999;font-size:14px;font-weight:bold;margin-bottom:10px;}
 .theme div.quest button.addTask{float:left;height:30px;width:30px;border:0px;text-indent:-9999px;background:url('../../images/theme_activity_addtask.png')}
-.theme .tasklist{height:200px; overflow-y:scroll;float:left;width:928px;border:1px dotted #999}
-.theme .tasklist .task{display:block;border:1px dotted #999;padding:10px;margin:10px 0px;min-height:20px;}
+.theme .tasklist{height:500px; overflow-y:scroll;float:left;width:928px;border:1px dotted #999}
+.theme .tasklist .task{display:block;border:1px dotted #999;padding:10px;margin:10px 0px;min-height:200px;}
 .theme .tasklist .delTask{border:0px; background:url('../../images/theme_activity_deltask.png');margin-bottom:-16px; float:right; position:relative; top:0; display:block; right: 0px; height:16px; width:16px;text-indent:-9999px;}
 .active{border-color: red !important;}
 .page_link{visibility:hidden}
@@ -91,12 +91,12 @@ img{display:block;}
 h1,h2,h3,h4,h5{display:none;}
 h6{text-align:right;font-size:12px;display:none}
 .enum li{display:block;margin:10px}
-.options li font{font-size:32px;padding:20px;}
+
 font.eclick{cursor:pointer}
 font.eclick:hover{text-decoration: underline;border:1px dotted #000}
 .options li{float:left;}
 #paginate{background:#fff}
-.screenInfo{display:block;padding:10px;background:#eee;margin-bottom:10px}
+.screenInfo{display:block;padding:10px;background:#eee;margin-bottom:10px;-webkit-box-shadow:  0px 2px 5px 0px rgba(0, 0, 0);box-shadow:  0px 2px 5px 0px rgba(0, 0, 0)}
 .screenInfo label{font-size:11px;display:block;}
 .screen{display:none;}
 #infoAct,#previous{float:left;}
@@ -108,4 +108,13 @@ font.eclick:hover{text-decoration: underline;border:1px dotted #000}
 #next{float:right}
 #nextButton{width: 200px;margin:0 auto;display:block;}
 #message{position:relative !important;margin-bottom:-50px !important;z-index: 1;top:20px;}
-.
+.delement{opacity: 0.3}
+.pairs,.groups{clear: both;display: block;margin: 20px 0px;}
+.pairs .element,.groups .element{float: left;}
+.piecesets{width: 960px;margin:20px auto;}
+.element img{margin:0 auto;}
+.options .element font,.groups .element font{margin:0 14px; font-size:24px;padding:4px;}
+ul.enum,ul.pairs{border-bottom:1px solid #666;margin-bottom:20px}
+.tplMulti span{float:left;border:1px dashed #000;margin:10px}
+.theme .tplMulti .insertImage{border:0px; background:url('../../images/theme_tools_addimage.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
+.theme .tplMulti .insertText{border:0px; background:url('../../images/theme_tools_addtext.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
