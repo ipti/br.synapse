@@ -25,6 +25,8 @@ return array(
     'Reset your password'=> 'Resete sua senha',
     'using email address.'=> 'utilizando seu endereço de e-mail.',
     'Add Matrix' => 'Adicionar Matriz',
-    'Degree'=>'Nível'
+    'Degree'=>'Nível',
+    'Create a new goal' => 'Criar um novo objetivo',
+    'Cobject Manager'=>'Gerenciador de Cobject'
 )
 ?>
