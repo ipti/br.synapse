@@ -21,7 +21,7 @@
             $this->widget('zii.widgets.CMenu', array(
                 'items' => array(
                      array(
-                        'label' => Yii::t('menu', 'Cadastrar'),
+                        'label' => Yii::t('menu', 'Register'),
                         'url' => array('/user/index'),
                         'linkOptions' => array('id' => 'menuuser'),
                         'itemOptions' => array('id' => 'itemuser'),

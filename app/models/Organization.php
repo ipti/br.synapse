@@ -9,6 +9,8 @@
  * @property string $name
  * @property integer $fatherID
  * @property integer $orgLevel
+ * @property integer $degreeID
+ * @property integer $autochild
  *
  * The followings are the available model relations:
  * @property Personage[] $personages
@@ -42,11 +44,13 @@ class Organization extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('fatherID, orgLevel', 'numerical', 'integerOnly'=>true),
-			array('acronym, name', 'length', 'max'=>45),
+			array('name, fatherID, orgLevel, degreeID, autochild', 'required'),
+			array('fatherID, orgLevel, degreeID, autochild', 'numerical', 'integerOnly'=>true),
+			array('acronym', 'length', 'max'=>30),
+			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, acronym, name, fatherID, orgLevel', 'safe', 'on'=>'search'),
+			array('ID, acronym, name, fatherID, orgLevel, degreeID, autochild', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +78,8 @@ class Organization extends CActiveRecord
 			'name' => Yii::t('default', 'Name'),
 			'fatherID' => Yii::t('default', 'Father'),
 			'orgLevel' => Yii::t('default', 'Org Level'),
+			'degreeID' => Yii::t('default', 'Degree'),
+			'autochild' => Yii::t('default', 'Autochild'),
 		);
 	}
 
@@ -93,6 +99,8 @@ class Organization extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('fatherID',$this->fatherID);
 		$criteria->compare('orgLevel',$this->orgLevel);
+		$criteria->compare('degreeID',$this->degreeID);
+		$criteria->compare('autochild',$this->autochild);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

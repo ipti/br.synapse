@@ -5,14 +5,15 @@
  *
  * The followings are the available columns in table 'unity':
  * @property integer $ID
- * @property integer $capacity
  * @property string $name
  * @property integer $organizationID
  * @property integer $fatherID
- * @property integer $period
  * @property integer $locationID
- * @property integer $degreeID
  * @property string $fcode
+ * @property integer $autochild
+ * @property integer $actDate
+ * @property integer $desDate
+ * @property integer $capacity
  *
  * The followings are the available model relations:
  * @property Actor[] $actors
@@ -47,11 +48,12 @@ class Unity extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('capacity, organizationID, fatherID, period, locationID, degreeID', 'numerical', 'integerOnly'=>true),
+			array('name, organizationID, locationID', 'required'),
+			array('organizationID, fatherID, locationID, autochild, actDate, desDate, capacity', 'numerical', 'integerOnly'=>true),
 			array('name, fcode', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, capacity, name, organizationID, fatherID, period, locationID, degreeID, fcode', 'safe', 'on'=>'search'),
+			array('ID, name, organizationID, fatherID, locationID, fcode, autochild, actDate, desDate, capacity', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,14 +78,15 @@ class Unity extends CActiveRecord
 	{
 		return array(
 			'ID' => Yii::t('default', 'ID'),
-			'capacity' => Yii::t('default', 'Capacity'),
 			'name' => Yii::t('default', 'Name'),
 			'organizationID' => Yii::t('default', 'Organization'),
 			'fatherID' => Yii::t('default', 'Father'),
-			'period' => Yii::t('default', 'Period'),
 			'locationID' => Yii::t('default', 'Location'),
-			'degreeID' => Yii::t('default', 'Degree'),
 			'fcode' => Yii::t('default', 'Fcode'),
+			'autochild' => Yii::t('default', 'Autochild'),
+			'actDate' => Yii::t('default', 'Act Date'),
+			'desDate' => Yii::t('default', 'Des Date'),
+			'capacity' => Yii::t('default', 'Capacity'),
 		);
 	}
 
@@ -99,14 +102,15 @@ class Unity extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('ID',$this->ID);
-		$criteria->compare('capacity',$this->capacity);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('organizationID',$this->organizationID);
 		$criteria->compare('fatherID',$this->fatherID);
-		$criteria->compare('period',$this->period);
 		$criteria->compare('locationID',$this->locationID);
-		$criteria->compare('degreeID',$this->degreeID);
 		$criteria->compare('fcode',$this->fcode,true);
+		$criteria->compare('autochild',$this->autochild);
+		$criteria->compare('actDate',$this->actDate);
+		$criteria->compare('desDate',$this->desDate);
+		$criteria->compare('capacity',$this->capacity);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

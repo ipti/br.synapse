@@ -1,25 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "person".
+ * This is the model class for table "location".
  *
- * The followings are the available columns in table 'person':
+ * The followings are the available columns in table 'location':
  * @property integer $ID
+ * @property string $typeLocation
+ * @property integer $fatherID
  * @property string $name
- * @property integer $login
- * @property string $email
- * @property string $password
- * @property integer $phone
+ * @property string $acronym
  *
  * The followings are the available model relations:
- * @property Actor[] $actors
+ * @property Unity[] $unities
  */
-class Person extends CActiveRecord
+class Location extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Person the static model class
+	 * @return Location the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -31,7 +30,7 @@ class Person extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'person';
+		return 'location';
 	}
 
 	/**
@@ -42,13 +41,14 @@ class Person extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, login', 'required'),
-			array('login, phone', 'numerical', 'integerOnly'=>true),
+			array('name', 'required'),
+			array('fatherID', 'numerical', 'integerOnly'=>true),
+			array('typeLocation', 'length', 'max'=>7),
 			array('name', 'length', 'max'=>60),
-			array('email, password', 'length', 'max'=>255),
+			array('acronym', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, login, email, password, phone', 'safe', 'on'=>'search'),
+			array('ID, typeLocation, fatherID, name, acronym', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,7 +60,7 @@ class Person extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actors' => array(self::HAS_MANY, 'Actor', 'personID'),
+			'unities' => array(self::HAS_MANY, 'Unity', 'locationID'),
 		);
 	}
 
@@ -71,11 +71,10 @@ class Person extends CActiveRecord
 	{
 		return array(
 			'ID' => Yii::t('default', 'ID'),
+			'typeLocation' => Yii::t('default', 'Type Location'),
+			'fatherID' => Yii::t('default', 'Father'),
 			'name' => Yii::t('default', 'Name'),
-			'login' => Yii::t('default', 'Login'),
-			'email' => Yii::t('default', 'Email'),
-			'password' => Yii::t('default', 'Password'),
-			'phone' => Yii::t('default', 'Phone'),
+			'acronym' => Yii::t('default', 'Acronym'),
 		);
 	}
 
@@ -91,11 +90,10 @@ class Person extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('ID',$this->ID);
+		$criteria->compare('typeLocation',$this->typeLocation,true);
+		$criteria->compare('fatherID',$this->fatherID);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('login',$this->login);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('phone',$this->phone);
+		$criteria->compare('acronym',$this->acronym,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

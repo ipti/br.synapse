@@ -55,7 +55,7 @@ class PersonController extends Controller {
     public function actionCreate() {
         $model = new Person;
         
-        
+        /*
         $ounityID = 1;
         $unities = Unity::model()->findAllByAttributes(array('fatherID' => $ounityID));
         $runities = array();
@@ -83,7 +83,7 @@ class PersonController extends Controller {
                 Yii::app()->user->setFlash('success', Yii::t('default', 'Person Created Successful:'));
                 $this->redirect(array('index'));
             }
-        }
+        }*/
 
         $this->render('create', array(
             'model' => $model,
