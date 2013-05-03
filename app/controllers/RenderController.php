@@ -21,7 +21,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'json'),
+                'actions' => array('index', 'view', 'create', 'update', 'json', 'login'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -35,7 +35,12 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
-        $this->render('index');
+      $this->render('index'); 
+    }
+    
+     public function actionLogin() {         
+        $this->render('login'); 
+        /// $this->redirect(Yii::app()->baseUrl.'/render/login_render');
     }
 
     public function actionJson() {
