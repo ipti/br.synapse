@@ -1,3 +1,6 @@
+<?php
+    $actor = isset($_POST["actor"]) ? $_POST["actor"] : die("Error: \$_POST[\"actor\"] don't have any value.");
+?>
 <style>
     .prerender{border:1px solid #000;width:319px;margin:100px auto;background: #262626;}
     .prerender .innerborder{border:1px solid #4A4A4A;background:#fff;width:317px;}
@@ -16,6 +19,7 @@
     <div class="innerborder">
         <h1></h1>
         <form>
+            <input type="hidden" name="actor" value="<?php echo $actor?>">
             <label>
                 <font>Tipo de Atendimento:</font>
                 <select id="atdID">
