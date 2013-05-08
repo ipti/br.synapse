@@ -21,7 +21,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'json', 'login'),
+                'actions' => array('index', 'view', 'create', 'update', 'json', 'login', 'filter', 'canvas'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -35,16 +35,65 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
-      $this->render('index'); 
+      $this->render('login'); 
     }
     
      public function actionLogin() {         
         $this->render('login'); 
-        /// $this->redirect(Yii::app()->baseUrl.'/render/login_render');
     }
-
+    
+     public function actionFilter() {         
+        $this->render('filter'); 
+    }
+    
+    public function actionCanvas() {
+        $this->render('canvas');
+    }
+    
     public function actionJson() {
-        if (@$_POST['op'] == 'start') {
+        if (@$_POST['op'] == 'select' || @$_POST['op'] == 'classes'){
+            $json = array();
+            $id = (int)@$_POST["id"];
+            
+            $sql = "SELECT ut.ID, ut.unity, u.name, ut.organizationID, 
+                            ut.unityOrganizationID, ou.orgLevel 
+                    from unity_tree ut
+                    inner join organization ou
+                    on ou.ID = ut.unityOrganizationID
+                    inner join organization o
+                    on o.ID = ut.OrganizationID
+                    inner join unity u
+                    on u.ID = ut.unity
+                    where ut.id = $id ";
+            $sql .= @$_POST['op'] == 'select' ? "AND ou.orgLevel = o.orgLevel+1;" : "AND ou.orgLevel = -1;";
+            $unitys = Yii::app()->db->createCommand($sql)->queryAll();
+
+            @$_POST['op'] == 'select' ? $json['unitys'] = $unitys : $json['classes'] = $unitys;   
+            $json['fatherID'] = $id;
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($json);
+            exit;
+        } elseif (@$_POST['op'] == 'actors'){
+            $json = array();
+            $id = (int)@$_POST["id"];
+            
+            $sql = "SELECT a.id actorID, p.name 
+                    FROM synapse.actor a
+                    inner join person p
+                    on p.ID = a.personID
+                    where a.unityID = $id;";
+            $actors = Yii::app()->db->createCommand($sql)->queryAll();
+            
+            $json['actors'] = $actors;
+            
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($json);
+            exit;
+        }elseif (@$_POST['op'] == 'start') {
             $json = array();
             $disciplines = ActDiscipline::model()->findAll();
             //$classes = Userclass::model()->findAll();
