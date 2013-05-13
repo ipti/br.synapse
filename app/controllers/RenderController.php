@@ -21,7 +21,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'json', 'login', 'logout'),
+                'actions' => array('index', 'view', 'create', 'update', 'json', 'login', 'logout', 'filter', 'canvas'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -35,36 +35,35 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
-      $this->render('index'); 
+        $this->render('login');
     }
-    
-     public function actionLogin() {
+
+    public function actionLogin() {
         $loginmodel = new LoginForm;
-        if(@$_POST["act"]){            
-             $actor = Actor::model()->findByAttributes(array('ID' => $_POST["act"]));
-                
-                  //$personageIdActor = $actor->personageID;
-                  $unityIdActor = $actor->unityID;
-                   //$activatedDateActor = $actor->activatedDate;
-                   //$desactivatedDateActor = $actor->desactivatedDate;                  
-                  // $personage = Personage::model()->findByAttributes(array('ID'=>$personageIdActor));
-                   //$namePersonage = $personage->name;     
-                   Yii::app()->session['unityIdActor'] = $unityIdActor;
-                   $this->redirect("/render/filter");
-        }
-        else if(isset($_POST['LoginForm'])){
+        if (@$_POST["act"]) {
+            $actor = Actor::model()->findByAttributes(array('ID' => $_POST["act"]));
+
+//$personageIdActor = $actor->personageID;
+            $unityIdActor = $actor->unityID;
+//$activatedDateActor = $actor->activatedDate;
+//$desactivatedDateActor = $actor->desactivatedDate;                  
+// $personage = Personage::model()->findByAttributes(array('ID'=>$personageIdActor));
+//$namePersonage = $personage->name;     
+            Yii::app()->session['unityIdActor'] = $unityIdActor;
+            $this->redirect("/render/filter");
+        } else if (isset($_POST['LoginForm'])) {
             $loginmodel->attributes = $_POST['LoginForm'];
             $autenticar = $loginmodel->authenticate();
             $identity = $loginmodel->get_identity(); //$itentity = variável local
-          if($autenticar){ 
-            $idPerson = $identity->getId();
-            //Somente atores Ativos
-            $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL");
-               if (count($actor) > 0 ) {         
-                  //Método login() do CWebUser
-                   Yii::app()->user->login($identity);
-            
-                $html = "
+            if ($autenticar) {
+                $idPerson = $identity->getId();
+//Somente atores Ativos
+                $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL");
+                if (count($actor) > 0) {
+//Método login() do CWebUser
+                    Yii::app()->user->login($identity);
+
+                    $html = "
                    <html>
                       <head>
                       <title> Selecionar Personagem </title>
@@ -72,29 +71,29 @@ class RenderController extends Controller {
                      </head>
                    <body>
                    <form method=\"post\" action=\"/render/login\">
-                   <select id=\"act\" name=\"act\">" ;
-                echo "Bem Vindo : " . $identity->getState('name');
-                   //Seleciona um dos personagem de um Person
-                       for($i=0;count($actor) > $i;$i++) { 
-                          $tempPersonage = Personage::model()->findByAttributes(array('ID'=>$actor[$i]->personageID));
-                          $html .=  " <option value = \"". $actor[$i]->ID ."\">" . $tempPersonage->name . "</option> "  ;      
-                       }
+                   <select id=\"act\" name=\"act\">";
+                    echo "Bem Vindo : " . $identity->getState('name');
+//Seleciona um dos personagem de um Person
+                    for ($i = 0; count($actor) > $i; $i++) {
+                        $tempPersonage = Personage::model()->findByAttributes(array('ID' => $actor[$i]->personageID));
+                        $html .= " <option value = \"" . $actor[$i]->ID . "\">" . $tempPersonage->name . "</option> ";
+                    }
                     $html .= "</select>
                     <input type=\"submit\" value=\"Next\" id=\"selectActor\">
-                    </form>"; 
-                     $html.= " </body>
+                    </form>";
+                    $html.= " </body>
                               </html>";
-                      echo $html;
-              }else{
-                  echo "Não há Atores Ativos para este Usuário !";
-              }     
-                    
-            }else{
+                    echo $html;
+                } else {
+                    echo "Não há Atores Ativos para este Usuário !";
+                }
+            } else {
                 echo $identity->errorMessage;
             }
-          
-            exit;}
-            
+
+            exit;
+        }
+
 //            $name_person = Yii::app()->user->getState('name');
 //         if( (!Yii::app()->user->isGuest) && isset($name_person) ) {
 //             //Está logado no Render-Login --> To be continued
@@ -104,31 +103,81 @@ class RenderController extends Controller {
 //             //Não está logado no Render-Login
 //             $this->render('login', array('model'=>$loginmodel)); 
 //         }
-         
-            $this->render('login', array('model'=>$loginmodel)); 
+
+        $this->render('login', array('model' => $loginmodel));
     }
-    
+
     public function actionLogout() {
         Yii::app()->user->clearStates();
         Yii::app()->user->logout();
         $this->redirect("/render/login");
     }
-    
+
     public function actionAuthentic() {
-        //$this->render('login');
-          if (isset($_POST['Person'])) {
+//$this->render('login');
+        if (isset($_POST['Person'])) {
             $model->attributes = $_POST['Person'];
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->ID));
         }
-        
+    }
+
+
+    public function actionFilter() {
+        $this->render('filter');
+    }
+
+    public function actionCanvas() {
+        $this->render('canvas');
     }
 
     public function actionJson() {
-        if (@$_POST['op'] == 'start') {
+        if (@$_POST['op'] == 'select' || @$_POST['op'] == 'classes') {
+            $json = array();
+            $id = (int) @$_POST["id"];
+
+            $sql = "SELECT ut.ID, ut.unity, u.name, ut.organizationID, 
+                            ut.unityOrganizationID, ou.orgLevel 
+                    from unity_tree ut
+                    inner join organization ou
+                    on ou.ID = ut.unityOrganizationID
+                    inner join organization o
+                    on o.ID = ut.OrganizationID
+                    inner join unity u
+                    on u.ID = ut.unity
+                    where ut.id = $id ";
+            $sql .= @$_POST['op'] == 'select' ? "AND ou.orgLevel = o.orgLevel+1;" : "AND ou.orgLevel = -1;";
+            $unitys = Yii::app()->db->createCommand($sql)->queryAll();
+
+            @$_POST['op'] == 'select' ? $json['unitys'] = $unitys : $json['classes'] = $unitys;
+            $json['fatherID'] = $id;
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($json);
+            exit;
+        } elseif (@$_POST['op'] == 'actors') {
+            $json = array();
+            $id = (int) @$_POST["id"];
+
+            $sql = "SELECT a.id actorID, p.name 
+                    FROM synapse.actor a
+                    inner join person p
+                    on p.ID = a.personID
+                    where a.unityID = $id;";
+            $actors = Yii::app()->db->createCommand($sql)->queryAll();
+
+            $json['actors'] = $actors;
+
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($json);
+            exit;
+        } elseif (@$_POST['op'] == 'start') {
             $json = array();
             $disciplines = ActDiscipline::model()->findAll();
-            //$classes = Userclass::model()->findAll();
+//$classes = Userclass::model()->findAll();
             $themes = CobjectTheme::model()->findAll();
             $levels = ActDegree::model()->findAllByAttributes(array(), "grade !=0");
 
@@ -153,19 +202,19 @@ class RenderController extends Controller {
                 $json['disciplines'][$a]['blocks'] = @$rblock;
             }
             $aa = -1;
-            /*foreach ($classes as $class) {
-                $students = UserUserclass::model()->findAllByAttributes(array('classID' => $class->ID));
-                $rstudents = array();
-                foreach ($students as $student) {
-                    $rstudents[] = $student->user->attributes;
-                }
-                $aa++;
-                $tutors[1]['name'] = 'Fabio Theoto Rocha';
-                $tutors[1]['ID'] = 1;
-                $json['classes'][$aa] = $class->attributes;
-                $json['classes'][$aa]['students'] = @$rstudents;
-                $json['classes'][$aa]['tutors'] = @$tutors;
-            }*/
+            /* foreach ($classes as $class) {
+              $students = UserUserclass::model()->findAllByAttributes(array('classID' => $class->ID));
+              $rstudents = array();
+              foreach ($students as $student) {
+              $rstudents[] = $student->user->attributes;
+              }
+              $aa++;
+              $tutors[1]['name'] = 'Fabio Theoto Rocha';
+              $tutors[1]['ID'] = 1;
+              $json['classes'][$aa] = $class->attributes;
+              $json['classes'][$aa]['students'] = @$rstudents;
+              $json['classes'][$aa]['tutors'] = @$tutors;
+              } */
             foreach ($themes as $theme) {
                 $json['themes'][] = $theme->attributes;
             }
@@ -202,7 +251,7 @@ class RenderController extends Controller {
         if ($typeID == 'rscript') {
             $script = ActScript::model()->findByAttributes(array('ID' => $_POST['script']));
             $contents = ActContent::model()->findAllByAttributes(array('contentParent' => $script->contentParentID));
-            //@todo lembra de excluir os conteudos exclude e include
+//@todo lembra de excluir os conteudos exclude e include
             $x = -1;
             foreach ($contents as $content) {
                 $x++;
@@ -216,7 +265,7 @@ class RenderController extends Controller {
                     $cobjects = CobjectMetadata::model()->findAllByAttributes(array('typeID' => $type->ID, 'value' => $goal->goal->ID));
                     $z = -1;
                     foreach ($cobjects as $cobject) {
-                        //@todo com base no tema filtrar
+//@todo com base no tema filtrar
                         $z++;
                         $json['contents'][$x]['goals'][$y]['cobjects'][$z] = $cobject->cobject->attributes;
                         $json['contents'][$x]['goals'][$y]['cobjects'][$z]['template'] = $cobject->cobject->template->name;
