@@ -40,17 +40,24 @@ class RenderController extends Controller {
 
     public function actionLogin() {
         $loginmodel = new LoginForm;
-        if (@$_POST["act"]) {
+        if (isset($_POST["act"])) {
+            // Autor Selecionado
             $actor = Actor::model()->findByAttributes(array('ID' => $_POST["act"]));
-
+            $idActor = $actor->ID;
+            $nome_personage = $actor->personage->name;
 //$personageIdActor = $actor->personageID;
             $unityIdActor = $actor->unityID;
 //$activatedDateActor = $actor->activatedDate;
 //$desactivatedDateActor = $actor->desactivatedDate;                  
 // $personage = Personage::model()->findByAttributes(array('ID'=>$personageIdActor));
 //$namePersonage = $personage->name;     
-            Yii::app()->session['unityIdActor'] = $unityIdActor;
-            $this->redirect("/render/filter");
+          if(isset($nome_personage) && $nome_personage == "Tutor" ) {
+              Yii::app()->session['unityIdActor'] = $unityIdActor;
+              $this->redirect("/render/filter");
+           }else{
+               Yii::app()->session['idActor'] = $idActor;
+              $this->redirect("/render/canvas");
+           }
         } else if (isset($_POST['LoginForm'])) {
             $loginmodel->attributes = $_POST['LoginForm'];
             $autenticar = $loginmodel->authenticate();
@@ -76,10 +83,10 @@ class RenderController extends Controller {
 //Seleciona um dos personagem de um Person
                     for ($i = 0; count($actor) > $i; $i++) {
                         $tempPersonage = Personage::model()->findByAttributes(array('ID' => $actor[$i]->personageID));
-                        $html .= " <option value = \"" . $actor[$i]->ID . "\">" . $tempPersonage->name . "</option> ";
+                        $html .= "<option value='".$actor[$i]->ID."'>$tempPersonage->name</option>";
                     }
                     $html .= "</select>
-                    <input type=\"submit\" value=\"Next\" id=\"selectActor\">
+                     <input type='submit' value='Next' id='selectActor'/>
                     </form>";
                     $html.= " </body>
                               </html>";

@@ -1,5 +1,5 @@
 <?php
-    $actor = isset($_POST["actor"]) ? $_POST["actor"] : die("Error: \$_POST[\"actor\"] don't have any value.");
+    $actor = Yii::app()->session["idActor"];
 ?>
 <style>
     .prerender{border:1px solid #000;width:319px;margin:100px auto;background: #262626;}
