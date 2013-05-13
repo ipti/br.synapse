@@ -1,5 +1,5 @@
 <?php
-    $unityfather = isset($_POST["Unity"]) ? $_POST["Unity"] : die("Error: \$_POST[\"Unity\"] don't have any value.");
+    $unityfather = Yii::app()->session['unityIdActor'];
 ?>
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/renderize.js"></script>
 <script>
