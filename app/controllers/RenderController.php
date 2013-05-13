@@ -139,9 +139,11 @@ class RenderController extends Controller {
     }
 
     public function actionJson() {
-        if (@$_POST['op'] == 'select' || @$_POST['op'] == 'classes') {
+        if ( isset($_POST['op']) && 
+                ( $_POST['op'] == 'select' || $_POST['op'] == 'classes')) {
             $json = array();
-            $id = (int) @$_POST["id"];
+            
+            $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
 
             $sql = "SELECT ut.ID, ut.unity, u.name, ut.organizationID, 
                             ut.unityOrganizationID, ou.orgLevel 
@@ -153,19 +155,19 @@ class RenderController extends Controller {
                     inner join unity u
                     on u.ID = ut.unity
                     where ut.id = $id ";
-            $sql .= @$_POST['op'] == 'select' ? "AND ou.orgLevel = o.orgLevel+1;" : "AND ou.orgLevel = -1;";
+            $sql .= $_POST['op'] == 'select' ? "AND ou.orgLevel = o.orgLevel+1;" : "AND ou.orgLevel = -1;";
             $unitys = Yii::app()->db->createCommand($sql)->queryAll();
 
-            @$_POST['op'] == 'select' ? $json['unitys'] = $unitys : $json['classes'] = $unitys;
+            $_POST['op'] == 'select' ? $json['unitys'] = $unitys : $json['classes'] = $unitys;
             $json['fatherID'] = $id;
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');
             echo json_encode($json);
             exit;
-        } elseif (@$_POST['op'] == 'actors') {
+        } elseif (isset($_POST['op']) and $_POST['op'] == 'actors') {
             $json = array();
-            $id = (int) @$_POST["id"];
+            $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
 
             $sql = "SELECT a.id actorID, p.name 
                     FROM synapse.actor a
@@ -181,7 +183,7 @@ class RenderController extends Controller {
             header('Content-type: application/json');
             echo json_encode($json);
             exit;
-        } elseif (@$_POST['op'] == 'start') {
+        } elseif (isset($_POST['op']) && $_POST['op'] == 'start') {
             $json = array();
             $disciplines = ActDiscipline::model()->findAll();
 //$classes = Userclass::model()->findAll();
@@ -233,7 +235,7 @@ class RenderController extends Controller {
             header('Content-type: application/json');
             echo json_encode($json);
             exit;
-        } elseif (@$_POST['op'] == 'answer') {
+        } elseif (isset($_POST['op']) && $_POST['op'] == 'answer') {
             $pieceID = str_replace("PIECE", '', $_POST['pieceID']);
             $elementID = str_replace("EP", '', $_POST['elementID']);
             $userID = $_POST['userID'];
@@ -246,6 +248,8 @@ class RenderController extends Controller {
             $peformance->iscorrect = 1;
             $peformance->save();
             exit();
+        } elseif (!isset($_POST['op'])) {
+            die("ERRO: op nulo.");
         }
         $json = array();
         $userID = $_POST['userID'];
