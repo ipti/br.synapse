@@ -65,7 +65,7 @@ class RenderController extends Controller {
             if ($autenticar) {
                 $idPerson = $identity->getId();
 //Somente atores Ativos
-                $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL");
+                $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL OR desactivatedDate = 0 ");
                 if (count($actor) > 0) {
 //Método login() do CWebUser
                     Yii::app()->user->login($identity);

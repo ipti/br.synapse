@@ -11,7 +11,6 @@ $form = $this->beginWidget('CActiveForm', array(
         ));
 
 $title = "Login"; 
-
 ?>      
           
 <div> <!-- Alterar as Classes -->
