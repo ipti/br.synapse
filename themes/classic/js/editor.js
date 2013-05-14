@@ -28,7 +28,7 @@ function editor () {
             case 'addTask':
                 var taskID = this.currentQuest+'_t'+this.countTasks[this.currentQuest];
                 this.countPieces[taskID] = 0;
-                var htmAddTask = '<li class="task" id="'+taskID+'"><div class="tplMulti"><span class="moptions"><button class="insertImage">Insert Image</button><button class="insertText">Insert Text</button></span><button class="newOption">newOption</button></div><button class="delTask">DelTask</button></li>';
+                var htmAddTask = '<li class="task" id="'+taskID+'"><div class="tplMulti"><span class="moptions"><button class="insertImage">Insert Image</button><button id="addtext" class="insertText">Insert Text</button></span><button class="newOption">newOption</button></div><button class="delTask">DelTask</button></li>';
                 this.countTasks[this.currentQuest] =  this.countTasks[this.currentQuest]+1;
                 return htmAddTask;
                 break;
