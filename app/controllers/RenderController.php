@@ -35,7 +35,7 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
-        $this->render('login');
+        $this->redirect("/render/login");
     }
 
     public function actionLogin() {
