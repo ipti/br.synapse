@@ -93,33 +93,139 @@ class SiteController extends Controller {
     /**
      * Displays the login page
      */
-    public function actionLogin() {
-        $this->layout = 'full';
-        $model = new LoginForm;
-
+//    public function actionLogin() {
+//        $this->layout = 'full';
+//        $model = new LoginForm;
+//
+//        // if it is ajax validation request
+//        if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
+//            echo CActiveForm::validate($model);
+//            Yii::app()->end();
+//        }
+//
+//        // collect user input data
+//        if (isset($_POST['LoginForm'])) {
+//            $model->attributes = $_POST['LoginForm'];
+//            // validate user input and redirect to the previous page if valid
+//            if ($model->validate() && $model->login()){
+//                if(isset(Yii::app()->user->returnUrl)){
+//                    $this->redirect(Yii::app()->user->returnUrl);
+//                }else{
+//                    $this->redirect(Yii::app()->baseUrl.'/site/index');
+//                }
+//            }
+//                
+//                
+//        }
+//        // display the login form
+//        $this->render('login', array('model' => $model));
+//    }
+    
+    
+    
+    
+    //=====Novo Login========
+    
+     public function actionLogin() {
+         $this->layout = 'full';
+        $loginmodel = new LoginForm;
+     
         // if it is ajax validation request
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
-
-        // collect user input data
-        if (isset($_POST['LoginForm'])) {
-            $model->attributes = $_POST['LoginForm'];
-            // validate user input and redirect to the previous page if valid
-            if ($model->validate() && $model->login()){
+        
+        if (isset($_POST["act"])) {
+            // Autor Selecionado
+            $actor = Actor::model()->findByAttributes(array('ID' => $_POST["act"]));
+            $idActor = $actor->ID;
+            $nome_personage = $actor->personage->name;
+//$personageIdActor = $actor->personageID;
+            $unityIdActor = $actor->unityID;
+//$activatedDateActor = $actor->activatedDate;
+//$desactivatedDateActor = $actor->desactivatedDate;                  
+// $personage = Personage::model()->findByAttributes(array('ID'=>$personageIdActor));
+//$namePersonage = $personage->name;     
+          if(isset($nome_personage) && $nome_personage == "Tutor" ) {
+              Yii::app()->session['personage'] = $nome_personage;
+              Yii::app()->session['unityIdActor'] = $unityIdActor;
+           }else{
+               Yii::app()->session['personage'] = "Other";
+               Yii::app()->session['idActor'] = $idActor;
+           }
+           
+           //Redirecionamento Após Login e Seleção do Personagem
                 if(isset(Yii::app()->user->returnUrl)){
                     $this->redirect(Yii::app()->user->returnUrl);
                 }else{
                     $this->redirect(Yii::app()->baseUrl.'/site/index');
                 }
+           
+        } else if (isset($_POST['LoginForm'])) {
+            $loginmodel->attributes = $_POST['LoginForm'];
+            $autenticar = $loginmodel->authenticate();
+            $identity = $loginmodel->get_identity(); //$itentity = variável local
+            if ($autenticar) {
+                $idPerson = $identity->getId();
+//Somente atores Ativos
+                $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), 
+                        "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL OR desactivatedDate = 0 ");
+                if (count($actor) > 0) {
+//Método login() do CWebUser
+                    Yii::app()->user->login($identity);
+ 
+                    $html = "
+                   <html>
+                      <head>
+                      <title> Selecionar Personagem </title>
+                       
+                     </head>
+                   <body>
+                   <form method=\"post\" action=\"/site/login\">
+                   <select id=\"act\" name=\"act\">";
+                    echo "Bem Vindo : " . $identity->getState('name');
+//Seleciona um dos personagem de um Person
+                    for ($i = 0; count($actor) > $i; $i++) {
+                        $tempPersonage = Personage::model()->findByAttributes(array('ID' => $actor[$i]->personageID));
+                        $html .= "<option value='".$actor[$i]->ID."'>$tempPersonage->name</option>";
+                    }
+                    $html .= "</select>
+                     <input type='submit' value='Next' id='selectActor'/>
+                    </form>";
+                    $html.= " </body>
+                              </html>";
+                    echo $html;
+                } else {
+                    echo "Não há Atores Ativos para este Usuário !";
+                }
+            } else {
+                echo $identity->errorMessage;
             }
-                
-                
+
+            exit;
         }
-        // display the login form
-        $this->render('login', array('model' => $model));
+
+//            $name_person = Yii::app()->user->getState('name');
+//         if( (!Yii::app()->user->isGuest) && isset($name_person) ) {
+//             //Está logado no Render-Login --> To be continued
+//             echo "Bem Vindo : " . $name_person;
+//             echo "<br> <a href=\"/render/logout\"> Click aqui para fazer logout</a> ";
+//         }else{
+//             //Não está logado no Render-Login
+//             $this->render('login', array('model'=>$loginmodel)); 
+//         }
+
+        $this->render('login', array('model' => $loginmodel));
     }
+    
+    
+    //==================================
+    
+    
+    
+    
+    
 
     /**
      * Logs out the current user and redirect to homepage.
