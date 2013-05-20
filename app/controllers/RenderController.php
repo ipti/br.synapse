@@ -35,90 +35,18 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
-        $this->render('login');
-    }
-
-    public function actionLogin() {
-        $loginmodel = new LoginForm;
-        if (isset($_POST["act"])) {
-            // Autor Selecionado
-            $actor = Actor::model()->findByAttributes(array('ID' => $_POST["act"]));
-            $idActor = $actor->ID;
-            $nome_personage = $actor->personage->name;
-//$personageIdActor = $actor->personageID;
-            $unityIdActor = $actor->unityID;
-//$activatedDateActor = $actor->activatedDate;
-//$desactivatedDateActor = $actor->desactivatedDate;                  
-// $personage = Personage::model()->findByAttributes(array('ID'=>$personageIdActor));
-//$namePersonage = $personage->name;     
-          if(isset($nome_personage) && $nome_personage == "Tutor" ) {
-              Yii::app()->session['unityIdActor'] = $unityIdActor;
-              $this->redirect("/render/filter");
-           }else{
-               Yii::app()->session['idActor'] = $idActor;
-              $this->redirect("/render/canvas");
-           }
-        } else if (isset($_POST['LoginForm'])) {
-            $loginmodel->attributes = $_POST['LoginForm'];
-            $autenticar = $loginmodel->authenticate();
-            $identity = $loginmodel->get_identity(); //$itentity = variável local
-            if ($autenticar) {
-                $idPerson = $identity->getId();
-//Somente atores Ativos
-                $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL OR desactivatedDate = 0 ");
-                if (count($actor) > 0) {
-//Método login() do CWebUser
-                    Yii::app()->user->login($identity);
-
-                    $html = "
-                   <html>
-                      <head>
-                      <title> Selecionar Personagem </title>
-                       
-                     </head>
-                   <body>
-                   <form method=\"post\" action=\"/render/login\">
-                   <select id=\"act\" name=\"act\">";
-                    echo "Bem Vindo : " . $identity->getState('name');
-//Seleciona um dos personagem de um Person
-                    for ($i = 0; count($actor) > $i; $i++) {
-                        $tempPersonage = Personage::model()->findByAttributes(array('ID' => $actor[$i]->personageID));
-                        $html .= "<option value='".$actor[$i]->ID."'>$tempPersonage->name</option>";
-                    }
-                    $html .= "</select>
-                     <input type='submit' value='Next' id='selectActor'/>
-                    </form>";
-                    $html.= " </body>
-                              </html>";
-                    echo $html;
-                } else {
-                    echo "Não há Atores Ativos para este Usuário !";
-                }
-            } else {
-                echo $identity->errorMessage;
-            }
-
-            exit;
+        if( Yii::app()->session['personage'] == "Tutor") {
+            $this->redirect("/render/filter");
+        }else{
+            $this->redirect("/render/canvas");
         }
-
-//            $name_person = Yii::app()->user->getState('name');
-//         if( (!Yii::app()->user->isGuest) && isset($name_person) ) {
-//             //Está logado no Render-Login --> To be continued
-//             echo "Bem Vindo : " . $name_person;
-//             echo "<br> <a href=\"/render/logout\"> Click aqui para fazer logout</a> ";
-//         }else{
-//             //Não está logado no Render-Login
-//             $this->render('login', array('model'=>$loginmodel)); 
-//         }
-
-        $this->render('login', array('model' => $loginmodel));
     }
 
-    public function actionLogout() {
-        Yii::app()->user->clearStates();
-        Yii::app()->user->logout();
-        $this->redirect("/render/login");
-    }
+//    public function actionLogout() {
+//        Yii::app()->user->clearStates();
+//        Yii::app()->user->logout();
+//        $this->redirect("/render/login");
+//    }
 
     public function actionAuthentic() {
 //$this->render('login');
