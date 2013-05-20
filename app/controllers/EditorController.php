@@ -21,7 +21,20 @@ class EditorController extends Controller {
     }
     
     public function actionJson(){
+        if(isset($_POST['op'])){
+            if($_POST['op'] == 'save'){
+               
+            }elseif($_POST['op'] == 'load'){
+                
+            }
+        }else{
+            $json = "ERROR: Operação inválida.";
+        }
         
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($json);
     }
     
     public function actionUpload(){
@@ -69,7 +82,7 @@ class EditorController extends Controller {
                 $json = "ERROR: Operação não definida.";
             }
         }else{
-            $json = "ERROR: Selecione uma imagem";
+            $json = "ERROR: Selecione um arquivo.";
         }
         header('Cache-Control: no-cache, must-revalidate');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
