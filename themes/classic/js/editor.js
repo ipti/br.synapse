@@ -18,7 +18,7 @@ function editor () {
     
     this.addPage = function(){
         this.countPage = this.countPage+1;
-        $(".content").append('<div class="page" id="pg'+this.countPage+'">Página com contador:</div>');
+        $(".content").append('<div class="page" id="pg'+this.countPage+'"></div>');
         this.countQuestion['pg'+this.countPage] = 0;
         
         $('.canvas').pajinate({
@@ -40,71 +40,92 @@ function editor () {
         $('#'+this.currentPageId).append(''+
             '<div class="quest" id="'+questionID+'_q">'+
                 '<input type="text" class="actName" />'+
-                '<button class="addImage">addImage</button>'+
-                '<button class="addSound">addSound</button>'+
+                '<button class="insertImage">Insert Image</button>'+
+                '<button class="insertSound">Insert Sound</button>'+
                 '<button class="addTask" id="tsk_'+questionID+'">AddTask</button>'+
+                '<div id="'+questionID+'_q_forms"></div>'+
                 '<ul class="tasklist" id="'+questionID+'"></ul>'+
                 '<span class="clear"></span>'+
             '</div>');
 
         this.countQuestion[this.currentPageId] =  this.countQuestion[this.currentPageId]+1;          
+
+        var parent = this;
+        $("#"+questionID+"_q > button.insertImage").click(function(){
+            parent.addImage(questionID+"_q_forms");
+            $(this).attr('disabled', 'disabled');
+            //adicionar opção de alterar
+        });
+        $("#"+questionID+"_q > button.insertSound").click(function(){
+            parent.addSound(questionID+"_q_forms");
+            $(this).attr('disabled', 'disabled');
+            //adicionar opção de alterar
+        });
+
     }
     
     this.addTask = function(id){
-        id = id.replace("tsk_", "");
-        this.currentQuest = id;
+        var questid = id.replace("tsk_", "");
+        this.currentQuest = questid;
         
         var taskID = this.currentQuest+'_t'+this.countTasks[this.currentQuest];
         this.countPieces[taskID] = 0;
-        $('#'+id).append(''+
-            '<li class="task" id="'+taskID+'">'+
+        $('#'+questid).append(''+
+            '<li id="'+taskID+'" class="task">'+
                 '<div class="tplMulti">'+
-                    '<span class="moptions">'+
-                        '<button class="insertImage">Insert Image</button>'+
-                        '<button class="insertText">Insert Text</button>'+
-                    '</span>'+
                     '<button class="newOption">newOption</button>'+
+                    '<br>'+
                 '</div>'+
                 '<button class="delTask">DelTask</button>'+
             '</li>');
+        
         this.countTasks[this.currentQuest] =  this.countTasks[this.currentQuest]+1;
         
         var parent = this;
-        $(".insertText").last().click(function(){
-            parent.addText();
-        });
-        $(".insertImage").last().click(function(){
-            parent.addImage();
+        $("#"+taskID+"> div > button.newOption").click(function(){
+            parent.addOption();
         });
     }
     
-    this.addText = function(){
-        var pieceID = this.currentTask+'_p'+this.countPieces[this.currentTask];
-        $('#'+this.currentTask).append('<font class="text editable" id="'+pieceID+'">Clique para Alterar </font>');
-        $('#'+pieceID).editable("/editor/json", {   //save page(or function)
+    this.addText = function(id){
+        var ID = id;
+        $('#'+ID).append('<font class="text editable" id="'+ID+'_text">Clique para Alterar </font>');
+        $('#'+ID+"_text").editable(function(value, settings) { 
+                console.log(this);
+                console.log(value);
+                console.log(settings);
+                return(value);
+             },{ //save function(or page)
             submitdata  : {op: "save"},     //$_POST['op'] on save
             id      : "pieceID",            //$_POST['pieceID'] on save
             name    : "newValue",           //$_POST['newValue'] on save
             type    : "text",               //input type ex: text, textarea, select
             submit  : "Update",
             cancel  : "Calcel",
-            loadurl : "/editor/json",       //load page(or function), json
-            loadtype: POST,                 //Load method
+            //loadurl : "/editor/json",       //load function(or page), json
+            loadtype: "POST",                 //Load method
             loaddata: {op: "load"},         //$_POST['op'] on load
             indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
             tooltip   : 'Click to edit...'
          });
-        this.countPieces[this.currentTask] =  this.countPieces[this.currentTask]+1;
     }
     
-    this.addImage = function(){
-        var pieceID = this.currentTask+'_p'+this.countPieces[this.currentTask]; 
-        $('#'+this.currentTask).append(''+
-            '<div id="'+pieceID+'">'+
-                '<form enctype="multipart/form-data" method="post" action="/Editor/upload">'+
-                    '<input type="hidden" name="op" value="image">'+
-                    '<input type="file" id="imagem" name="file" />'+
-                    '<input type="submit" id="send" class="send" value="Upload Image">'+
+    this.addUploadForm = function(id, type, responseFunction){
+        var ID = id;
+        
+        var type = type;
+        
+        var file    = ID+"_"+type;
+        var form    = file+"_form";
+        var bar     = form+" > div.progress > div.bar";
+        var percent = form+" > div.progress > div.percent";
+        
+        $('#'+ID).append(''+
+            '<div id="'+file+'">'+
+                '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
+                    '<input type="hidden" name="op" value="'+type+'">'+
+                    '<input type="file" id="'+type+'" name="file"/>'+
+                    '<input type="submit" id="send" class="send" value="Upload">'+
                     '<div class="progress">'+
                         '<div class="bar"></div>'+
                         '<div class="percent">0%</div>'+
@@ -113,35 +134,81 @@ function editor () {
             '</div>');
         
             
-            $('form').ajaxForm({
-                beforeSend: function() {
-                    $('.bar').width('0%')
-                    $('.percent').html('0%');
-                },
-                uploadProgress: function(event, position, total, percentComplete) {
-                    $('.bar').width(percentComplete + '%')
-                    $('.percent').html(percentComplete + '%');
-                },
-                success: function(response) {
-                    $("#"+pieceID).remove('form');
-                    $("#"+pieceID).html('<img src="'+response+'" alt="Image"/>');
-                },
-                error: function(error){
-                     $('form').html(error.responseText);
-                },
-                complete: function(xhr) {
-                    //status.html(xhr.responseText);
-                }
-            }); 
-            
-           this.countPieces[this.currentTask] =  this.countPieces[this.currentTask]+1;
+        $("#"+form).ajaxForm({
+            beforeSend: function() {
+                $("#"+bar).width('0%')
+                $("#"+percent).html('0%');
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                $("#"+bar).width(percentComplete + '%')
+                $("#"+percent).html(percentComplete + '%');
+            },
+            success: function(response) {
+                responseFunction(response, file, form);
+            },
+            error: function(error){
+                 $("#"+form).html(error.responseText);
+            },
+            complete: function(xhr) {
+                //status.html(xhr.responseText);
+            }
+        }); 
+    }
+    
+    this.addImage = function(id){
+        this.addUploadForm(id, 'image', function(response, fileid, formid){
+            $("#"+fileid).remove("#"+formid);
+            $("#"+fileid).html('<img src="'+response+'" width="320" height="240" alt="Image"/>');
+        });
+    }
+    
+    this.addSound = function(id){
+        this.addUploadForm(id, 'sound', function(response, fileid, formid){
+            $("#"+fileid).remove("#"+formid);
+            $("#"+fileid).html(''+
+                '<audio src="'+response+'" autoplay="autoplay" controls="controls">'+
+                    'Your browser does not support the audio element.'+
+                '</audio>');
+        });
+    }
+    
+    this.addVideo = function(id){
+        this.addUploadForm(id, 'video', function(response, fileid, formid){
+            $("#"+fileid).remove("#"+formid);
+            $("#"+fileid).html(''+
+                '<video  src="'+response+'" width="320" height="240" autoplay="autoplay" controls="controls">'+
+                    'Your browser does not support the audio element.'+
+                '</video>');
+        });
+    }
+    
+    this.addOption = function(){
+        var pieceID = this.currentTask+'_p'+this.countPieces[this.currentTask]; 
+        $('#'+this.currentTask+" > div.tplMulti").append(''+
+            '<span id="'+pieceID+'" class="moptions">'+
+                '<div>' +
+                    '<button class="insertImage">Insert Image</button>'+
+                    '<button class="insertText">Insert Text</button>'+
+                    '<button class="delOption">Delete Option</button>'+
+                '</div>' +
+            '</span>');
+        this.countPieces[this.currentTask] =  this.countPieces[this.currentTask]+1;
+        
+        var parent = this;
+        $("#"+pieceID+" > div > button.insertText").click(function(){
+            parent.addText(pieceID);
+            $(this).attr('disabled', 'disabled');
+            //adicionar opção de alterar
+        });
+        $("#"+pieceID+" > div > button.insertImage").click(function(){
+            parent.addImage(pieceID);
+            $(this).attr('disabled', 'disabled');
+            //adicionar opção de alterar
+        });
+        $("#"+pieceID+" > div > button.delOption").click(function(){
+            parent.delOption(pieceID);
+            $(this).attr('disabled', 'disabled');
+        });
     }
 
 }
-
-
-                        
-                        
-                        
-                     
-
