@@ -48,14 +48,14 @@ class RenderController extends Controller {
 //        $this->redirect("/render/login");
 //    }
 
-    public function actionAuthentic() {
-//$this->render('login');
-        if (isset($_POST['Person'])) {
-            $model->attributes = $_POST['Person'];
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->ID));
-        }
-    }
+//    public function actionAuthentic() {
+////$this->render('login');
+//        if (isset($_POST['Person'])) {
+//            $model->attributes = $_POST['Person'];
+//            if ($model->save())
+//                $this->redirect(array('view', 'id' => $model->ID));
+//        }
+//    }
 
 
     public function actionFilter() {
