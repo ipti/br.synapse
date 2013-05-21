@@ -48,7 +48,7 @@ class EditorController extends Controller {
     
     public function actionUpload(){
             
-        if(isset($_POST)){
+        if(isset($_FILES['file'])){
             if(isset($_POST['op'])){
                 if($_POST['op'] == 'image'){
                     $extencions = array(".jpg",".jpeg",".gif",".png", ".bmp");
@@ -75,23 +75,23 @@ class EditorController extends Controller {
                     if($size < $max_size){
                         $name = md5(uniqid(time())).$ext; //E:\Programas\xampp\tmp\php746E.tmp
                         $tmp = $_FILES['file']['tmp_name'];
-                        if(move_uploaded_file($tmp,$path.$name)){
-                            //mysql_query("INSERT INTO fotos (foto) VALUES (".$nome_atual.")");
+                        try{
+                            move_uploaded_file($tmp,$path.$name);
                             $json = $url.$name;
-                        }else{
-                            $json = "ERROR: Falha ao enviar";
+                        }catch (Exception $e){
+                            throw new Exception("ERROR: Falha ao enviar.<br>");
                         }
                     }else{
-                        $json = "ERROR: A arquivo deve ser de no máximo $size";
+                        throw new Exception("ERROR: A arquivo deve ser de no máximo $size<br>");
                     }
                 }else{
-                    $json = "ERROR: Somente são aceitos arquivos do tipo ".$_POST['op'].".";
+                    throw new Exception("ERROR: Somente são aceitos arquivos do tipo ".$_POST['op'].".<br>");
                 }
             }else{
-                $json = "ERROR: Operação não definida.";
+                throw new Exception("ERROR: Operação não definida.<br>");
             }
         }else{
-            $json = "ERROR: Selecione um arquivo.";
+            throw new Exception("ERROR: Selecione um arquivo.<br>");
         }
         header('Cache-Control: no-cache, must-revalidate');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
