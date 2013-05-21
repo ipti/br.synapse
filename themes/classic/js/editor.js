@@ -72,11 +72,11 @@ function editor () {
         this.countPieces[taskID] = 0;
         $('#'+questid).append(''+
             '<li id="'+taskID+'" class="task">'+
+                '<button class="delTask">DelTask</button>'+
                 '<div class="tplMulti">'+
                     '<button class="newOption">newOption</button>'+
                     '<br>'+
                 '</div>'+
-                '<button class="delTask">DelTask</button>'+
             '</li>');
         
         this.countTasks[this.currentQuest] =  this.countTasks[this.currentQuest]+1;
@@ -84,6 +84,9 @@ function editor () {
         var parent = this;
         $("#"+taskID+"> div > button.newOption").click(function(){
             parent.addOption();
+        });
+        $("#"+taskID+"> button.delTask").click(function(){
+            parent.delTask(taskID);
         });
     }
     
@@ -113,8 +116,6 @@ function editor () {
     this.addUploadForm = function(id, type, responseFunction){
         var ID = id;
         
-        var type = type;
-        
         var file    = ID+"_"+type;
         var form    = file+"_form";
         var bar     = form+" > div.progress > div.bar";
@@ -124,15 +125,20 @@ function editor () {
             '<div id="'+file+'">'+
                 '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
                     '<input type="hidden" name="op" value="'+type+'">'+
-                    '<input type="file" id="'+type+'" name="file"/>'+
-                    '<input type="submit" id="send" class="send" value="Upload">'+
+                    '<input type="file" id="'+type+'" name="file" value=""/>'+
+                    '<input type="button" id="send" class="send" value="Upload">'+
                     '<div class="progress">'+
                         '<div class="bar"></div>'+
                         '<div class="percent">0%</div>'+
                     '</div>'+
                 '</form>'+
             '</div>');
-        
+        $("#"+form +" > input.send").click(function(){
+            if(!($("#"+form +" > #type").val() == "")){
+                //alert($("#"+form +" > #type").val());
+                $("#"+form).submit();
+            }
+        });
             
         $("#"+form).ajaxForm({
             beforeSend: function() {
@@ -146,8 +152,10 @@ function editor () {
             success: function(response) {
                 responseFunction(response, file, form);
             },
-            error: function(error){
-                 $("#"+form).html(error.responseText);
+            error: function(error, textStatus, errorThrown){
+                 //$("#"+form).html(error.responseText);
+                 alert("Houve um erro ao enviar o arquivo.");
+                 $("#"+form).append(error.responseText);
             },
             complete: function(xhr) {
                 //status.html(xhr.responseText);
@@ -190,6 +198,12 @@ function editor () {
                     '<button class="insertImage">Insert Image</button>'+
                     '<button class="insertText">Insert Text</button>'+
                     '<button class="delOption">Delete Option</button>'+
+                    '<br>'+
+                    '<br>'+
+                    '<label>'+
+                        '<input type="checkbox" id="'+pieceID+'_flag" name="'+pieceID+'_flag" value="Correct">'+
+                        'Correct'+
+                    '</label>'+
                 '</div>' +
             '</span>');
         this.countPieces[this.currentTask] =  this.countPieces[this.currentTask]+1;
@@ -207,8 +221,18 @@ function editor () {
         });
         $("#"+pieceID+" > div > button.delOption").click(function(){
             parent.delOption(pieceID);
-            $(this).attr('disabled', 'disabled');
         });
     }
 
+    this.delTask = function(id){
+        if(confirm('Deseja realmente remover esta Task?')){
+            $("#"+id).remove();
+            delete this.countPieces[id];
+        }
+    }
+    this.delOption = function(id){
+        if(confirm('Deseja realmente remover esta Option?')){
+            $("#"+id).remove();
+        }
+   }
 }
