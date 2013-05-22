@@ -48,4 +48,7 @@ $(function() {
     $('.task').live("mousedown",function(){
         newEditor.changeTask($(this));
     });
+    $('.save').click(function(){
+        newEditor.saveAll();
+    });
 });
