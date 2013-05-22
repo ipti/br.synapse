@@ -54,7 +54,7 @@ class EditorController extends Controller {
                     $extencions = array(".png",".gif",".bmp",".jpeg",".jpg",".ico");
                     $max_size = 1024 * 5; //5MB
 
-                } elseif ($_POST['op'] == 'sound'){
+                } elseif ($_POST['op'] == 'audio'){
                     $extencions = array(".mp3",".wav",".ogg");
                     $max_size = 1024 * 10; //10MB
 
