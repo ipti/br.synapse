@@ -54,12 +54,10 @@ function editor () {
         $("#"+questionID+"_q > button.insertImage").click(function(){
             parent.addImage(questionID+"_q_forms");
             $(this).attr('disabled', 'disabled');
-            //adicionar opção de alterar
         });
         $("#"+questionID+"_q > button.insertSound").click(function(){
             parent.addSound(questionID+"_q_forms");
             $(this).attr('disabled', 'disabled');
-            //adicionar opção de alterar
         });
 
     }
@@ -140,24 +138,28 @@ function editor () {
                 '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
                     '<input type="hidden" name="op" value="'+uploadType+'">'+
                     '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
-                    '<input type="button" id="send" class="send" value="Upload">'+
+                    //'<input type="button" id="send" class="send" value="Upload">'+
                     '<div class="progress">'+
                         '<div class="bar"></div>'+
                         '<div class="percent">0%</div>'+
                     '</div>'+
                 '</form>'+
             '</div>');
+        
         $('#'+form+' > input#'+uploadType).bind('change', function() {
             var filesize = this.files[0].size / 1024; //KB
             filesize = filesize / 1024; //MB
             filesize = Math.round(filesize * 1000) / 1000; //3 decimal
             
-            
-            $("#"+form +" > input.send").attr('disabled', 'disabled');
-            
             if(filesize <= uploadMaxSize){
                 if(!(this.files[0].type.indexOf(uploadType) == -1)){ 
-                    $("#"+form +" > input.send").removeAttr('disabled');
+                    
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        responseFunction(e.target.result, file, form);
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
                 }else{
                     alert('Tipo do arquivo incompatível.');
                 }
@@ -165,11 +167,6 @@ function editor () {
                 alert('Arquivo muito grande. Tamanho máximo: '+uploadMaxSize+'MB');
             }
             
-        });
-        $("#"+form +" > input.send").click(function(){
-            if(!(this.val() == "")){
-                $("#"+form).submit();
-            }
         });
             
         $("#"+form).ajaxForm({
@@ -182,7 +179,7 @@ function editor () {
                 $("#"+percent).html(percentComplete + '%');
             },
             success: function(response) {
-                responseFunction(response, file, form);
+                //enviado com sucesso!
             },
             error: function(error, textStatus, errorThrown){
                  //$("#"+form).html(error.responseText);
@@ -200,10 +197,9 @@ function editor () {
                 type: 'image',
                 accept: Array("png","gif","bmp","jpeg","jpg","ico"),
                 maxsize: (1024 * 5) //5MB
-            },function(response, fileid, formid){
-            
-                $("#"+fileid).remove("#"+formid);
-                $("#"+fileid).html('<img src="'+response+'" width="320" height="240" alt="Image"/>');
+            },function(src, fileid, formid){
+                $("#"+fileid+" > img").remove("img");
+                $("#"+fileid).append('<img  src="'+src+'" width="320" height="240" alt="Image"/>');
             });
     }
     
@@ -212,22 +208,26 @@ function editor () {
                 type: 'audio',
                 accept: Array("mp3","wav","ogg"),
                 maxsize: (1024 * 10) //10MB
-            }, function(response, fileid, formid){
-            $("#"+fileid).remove("#"+formid);
-            $("#"+fileid).html(''+
-                '<audio src="'+response+'" autoplay="autoplay" controls="controls">'+
-                    'Your browser does not support the audio element.'+
-                '</audio>');
+            }, function(src, fileid, formid){
+                $("#"+fileid+" > audio").remove("audio");
+                $("#"+fileid).append(''+
+                    '<audio src="'+src+'" controls="controls">'+
+                        'Your browser does not support the audio element.'+
+                    '</audio>');
         });
     }
     
     this.addVideo = function(id){
-        this.addUploadForm(id, 'video', function(response, fileid, formid){
-            $("#"+fileid).remove("#"+formid);
-            $("#"+fileid).html(''+
-                '<video  src="'+response+'" width="320" height="240" autoplay="autoplay" controls="controls">'+
-                    'Your browser does not support the audio element.'+
-                '</video>');
+        this.addUploadForm(id, {
+                type: 'video',
+                accept: Array("mp4","wmv","ogg"),
+                maxsize: (1024 * 20) //10MB
+            }, function(src, fileid, formid){
+                $("#"+fileid+" > video").remove("video");
+                $("#"+fileid).append(''+
+                    '<video src="'+src+'" width="320" height="240" controls="controls">'+
+                        'Your browser does not support the video element.'+
+                    '</video>');
         });
     }
     
@@ -275,5 +275,11 @@ function editor () {
         if(confirm('Deseja realmente remover esta Option?')){
             $("#"+id).remove();
         }
+   }
+   
+   this.saveAll = function(){
+       //enviar para o banco//
+       $('form').submit();
+       alert("Salvo com sucesso!");
    }
 }
