@@ -27,8 +27,8 @@
             <hgroup>
                 <h1>TAG</h1>
                 <ul>
-                    <li>NOVO</li>
-                    <li>SALVAR</li>
+                    <li class="new">NOVO</li>
+                    <li class="save">SALVAR</li>
                 </ul>
                 <span class="clear"></span>
             </hgroup>
