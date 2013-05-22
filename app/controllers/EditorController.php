@@ -51,7 +51,7 @@ class EditorController extends Controller {
         if(isset($_FILES['file'])){
             if(isset($_POST['op'])){
                 if($_POST['op'] == 'image'){
-                    $extencions = array(".jpg",".jpeg",".gif",".png", ".bmp");
+                    $extencions = array(".png",".gif",".bmp",".jpeg",".jpg",".ico");
                     $max_size = 1024 * 5; //5MB
 
                 } elseif ($_POST['op'] == 'sound'){
@@ -73,7 +73,7 @@ class EditorController extends Controller {
                 if(in_array($ext,$extencions)){
                     $size = round($file_size / 1024);
                     if($size < $max_size){
-                        $name = md5(uniqid(time())).$ext; //E:\Programas\xampp\tmp\php746E.tmp
+                        $name = md5(uniqid(time())).$ext; 
                         $tmp = $_FILES['file']['tmp_name'];
                         try{
                             move_uploaded_file($tmp,$path.$name);
