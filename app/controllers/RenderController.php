@@ -21,7 +21,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'json', 'login', 'logout', 'filter', 'canvas'),
+                'actions' => array('index', 'view', 'create', 'update', 'json', 'login', 'logout', 'filter', 'canvas', 'testepreview'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -42,6 +42,12 @@ class RenderController extends Controller {
         }
     }
 
+    public function actionTestepreview() {
+        $this->render("testepreview");
+    }
+    
+    
+    
 //    public function actionLogout() {
 //        Yii::app()->user->clearStates();
 //        Yii::app()->user->logout();
