@@ -116,7 +116,21 @@ function editor () {
     this.addUploadForm = function(id, type, responseFunction){
         var ID = id;
         
-        var file    = ID+"_"+type;
+        //Default Image
+        var uploadType = (type['type']?type['type']:'image'); 
+        var uploadAccept = Array();
+            uploadAccept = (type['accept']? type['accept']:'*');
+        var uploadMaxSize = (type['maxsize']?type['maxsize']: 1024 * 5); 
+        var uploadMaxWidth = (type['maxwidth']?type['maxwidth']: 800); 
+        var uploadMaxHeight = (type['maxheight']?type['maxheight']: 600); 
+        
+        var accept = '';
+
+        $.each(uploadAccept,function( key, value  ) {
+            accept += uploadType+'/'+value+', ';
+        });
+        
+        var file    = ID+"_"+uploadType;
         var form    = file+"_form";
         var bar     = form+" > div.progress > div.bar";
         var percent = form+" > div.progress > div.percent";
@@ -124,8 +138,8 @@ function editor () {
         $('#'+ID).append(''+
             '<div id="'+file+'">'+
                 '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
-                    '<input type="hidden" name="op" value="'+type+'">'+
-                    '<input type="file" id="'+type+'" name="file" value=""/>'+
+                    '<input type="hidden" name="op" value="'+uploadType+'">'+
+                    '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
                     '<input type="button" id="send" class="send" value="Upload">'+
                     '<div class="progress">'+
                         '<div class="bar"></div>'+
@@ -133,9 +147,27 @@ function editor () {
                     '</div>'+
                 '</form>'+
             '</div>');
+        $('#'+form+' > input#'+uploadType).bind('change', function() {
+            var filesize = this.files[0].size / 1024; //KB
+            filesize = filesize / 1024; //MB
+            filesize = Math.round(filesize * 1000) / 1000; //3 decimal
+            
+            
+            $("#"+form +" > input.send").attr('disabled', 'disabled');
+            
+            if(filesize <= uploadMaxSize){
+                if(!(this.files[0].type.indexOf(uploadType) == -1)){ 
+                    $("#"+form +" > input.send").removeAttr('disabled');
+                }else{
+                    alert('Tipo do arquivo incompatível.');
+                }
+            }else{
+                alert('Arquivo muito grande. Tamanho máximo: '+uploadMaxSize+'MB');
+            }
+            
+        });
         $("#"+form +" > input.send").click(function(){
-            if(!($("#"+form +" > #type").val() == "")){
-                //alert($("#"+form +" > #type").val());
+            if(!(this.val() == "")){
                 $("#"+form).submit();
             }
         });
@@ -164,14 +196,23 @@ function editor () {
     }
     
     this.addImage = function(id){
-        this.addUploadForm(id, 'image', function(response, fileid, formid){
-            $("#"+fileid).remove("#"+formid);
-            $("#"+fileid).html('<img src="'+response+'" width="320" height="240" alt="Image"/>');
-        });
+        this.addUploadForm(id, {
+                type: 'image',
+                accept: Array("png","gif","bmp","jpeg","jpg","ico"),
+                maxsize: (1024 * 5) //5MB
+            },function(response, fileid, formid){
+            
+                $("#"+fileid).remove("#"+formid);
+                $("#"+fileid).html('<img src="'+response+'" width="320" height="240" alt="Image"/>');
+            });
     }
     
     this.addSound = function(id){
-        this.addUploadForm(id, 'sound', function(response, fileid, formid){
+        this.addUploadForm(id, {
+                type: 'audio',
+                accept: Array("mp3","wav","ogg"),
+                maxsize: (1024 * 10) //10MB
+            }, function(response, fileid, formid){
             $("#"+fileid).remove("#"+formid);
             $("#"+fileid).html(''+
                 '<audio src="'+response+'" autoplay="autoplay" controls="controls">'+
