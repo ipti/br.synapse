@@ -37,8 +37,7 @@
 .theme div.tplMulti button.insertText{background:url('../../images/theme_tools_addtext.png'); float:left; height:45px; width:80px;border:0px;text-indent:-9999px;}
 .theme .piecelist{height:500px; overflow-y:scroll;float:left;width:928px;border:1px dotted #999}
 .theme .piecelist .piece{display:block;border:1px dotted #999;padding:10px;margin:10px 0px;min-height:200px;}
-.theme .piecelist .delPiece,
-.theme .element .delElement{border:0px; background:url('../../images/theme_activity_del.png');margin-bottom:-16px; float:right; position:relative; top:0; display:block; right: 0px; height:16px; width:16px;text-indent:-9999px;}
+.theme div.canvas .del{border:0px; background:url('../../images/theme_activity_del.png');margin-bottom:-16px; float:right; position:relative; top:0; display:block; right: 0px; height:16px; width:16px;text-indent:-9999px;}
 .active{border-color: red !important;}
 .page_link{visibility:hidden}
 .ellipse{

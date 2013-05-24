@@ -51,4 +51,7 @@ $(function() {
     $('.save').click(function(){
         newEditor.saveAll();
     });
+//    $('#delScreen').click(function(){
+//       newEditor.delScreen(); 
+//    });
 });

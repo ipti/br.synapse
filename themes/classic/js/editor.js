@@ -38,26 +38,30 @@ function editor () {
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
         this.countPieces[piecesetID] = 0;
         $('#'+this.currentScreenId).append(''+
-            '<div class="PieceSet" id="'+piecesetID+'_ps">'+
-                '<input type="text" class="actName" />'+
+            '<div class="PieceSet" id="'+piecesetID+'">'+
                 '<button class="insertImage">Insert Image</button>'+
                 '<button class="insertSound">Insert Sound</button>'+
                 '<button class="addPiece" id="pie_'+piecesetID+'">AddPiece</button>'+
-                '<div id="'+piecesetID+'_ps_forms"></div>'+
+                '<button class="del delPieceSet">Delete PieceSet</button>'+
+                '<input type="text" class="actName" />'+
+                '<div id="'+piecesetID+'_forms"></div>'+
                 '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
                 '<span class="clear"></span>'+
             '</div>');
 
-        this.countPieceSet[this.currentPageId] =  this.countPieceSet[this.currentPageId]+1;          
+        this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;          
 
         var parent = this;
-        $("#"+piecesetID+"_ps > button.insertImage").click(function(){
-            parent.addImage(piecesetID+"_ps_forms");
+        $("#"+piecesetID+" > button.insertImage").click(function(){
+            parent.addImage(piecesetID+"_forms");
             $(this).attr('disabled', 'disabled');
         });
-        $("#"+piecesetID+"_ps > button.insertSound").click(function(){
-            parent.addSound(piecesetID+"_ps_forms");
+        $("#"+piecesetID+" > button.insertSound").click(function(){
+            parent.addSound(piecesetID+"_forms");
             $(this).attr('disabled', 'disabled');
+        });
+        $("#"+piecesetID+"> button.delPieceSet").click(function(){
+            parent.delPieceSet(piecesetID);
         });
 
     }
@@ -70,7 +74,7 @@ function editor () {
         this.countElements[pieceID] = 0;
         $('#'+PieceSetid).append(''+
             '<li id="'+pieceID+'" class="piece">'+
-                '<button class="delPiece">DelPiece</button>'+
+                '<button class="del delPiece">DelPiece</button>'+
                 '<div class="tplMulti">'+
                     '<button class="newElement">newElement</button>'+
                     '<br>'+
@@ -238,7 +242,7 @@ function editor () {
                 '<div>' +
                     '<button class="insertImage">Insert Image</button>'+
                     '<button class="insertText">Insert Text</button>'+
-                    '<button class="delElement">Delete Element</button>'+
+                    '<button class="del delElement">Delete Element</button>'+
                     '<br>'+
                     '<br>'+
                     '<label>'+
@@ -264,9 +268,24 @@ function editor () {
             parent.delElement(elementID);
         });
     }
+    
+    this.delScreen = function(){
+        var id = this.currentScreenId;
+        if(confirm('Deseja realmente remover este Screen?')){
+            $("#"+id).remove();
+            delete this.countPieceSet[id];
+        }
+    }
+
+    this.delPieceSet = function(id){
+        if(confirm('Deseja realmente remover este PieceSet?')){
+            $("#"+id).remove();
+            delete this.countPieces[id];
+        }
+    }
 
     this.delPiece = function(id){
-        if(confirm('Deseja realmente remover esta Piece?')){
+        if(confirm('Deseja realmente remover este Piece?')){
             $("#"+id).remove();
             delete this.countElements[id];
         }
