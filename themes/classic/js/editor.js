@@ -1,25 +1,25 @@
 function editor () {
     this.templateType;
-    this.currentPageId = 'pg0';
-    this.lastPageId;
-    this.countPage = 0;
-    this.countQuestion = new Array();
-    this.countTasks = new Array();
+    this.currentScreenId = 'sc0';
+    this.lastScreenId;
+    this.countScreen = 0;
+    this.countPieceSet = new Array();
     this.countPieces = new Array();
-    this.currentQuest = 'pg0_q0';
-    this.currentTask = 'pg0_q0_t0';
+    this.countElements = new Array();
+    this.currentPieceSet = 'sc0_ps0';
+    this.currentPiece = 'sc0_ps0_p0';
     
-    this.changeTask = function(task){
-        $('.task').removeClass('active');
-        var id = task.attr('id');
-        task.addClass('active');
-        this.currentTask = id;
+    this.changePiece = function(piece){
+        $('.piece').removeClass('active');
+        var id = piece.attr('id');
+        piece.addClass('active');
+        this.currentPiece = id;
     }
     
-    this.addPage = function(){
-        this.countPage = this.countPage+1;
-        $(".content").append('<div class="page" id="pg'+this.countPage+'"></div>');
-        this.countQuestion['pg'+this.countPage] = 0;
+    this.addScreen = function(){
+        this.countScreen = this.countScreen+1;
+        $(".content").append('<div class="screen" id="sc'+this.countScreen+'"></div>');
+        this.countPieceSet['sc'+this.countScreen] = 0;
         
         $('.canvas').pajinate({
             items_per_page : 1,
@@ -28,63 +28,63 @@ function editor () {
             nav_label_prev : '<',
             nav_label_next : '>',
             show_first_last : false,
-            num_page_links_to_display: 20,
-            nav_panel_id : '.navpage',
+            num_page_links_po_display: 20,
+            nav_panel_id : '.navscreen',
             editor : this
         });
     }
     
-    this.addQuest = function(){
-        var questionID = this.currentPageId+'_q'+this.countQuestion[this.currentPageId];
-        this.countTasks[questionID] = 0;
-        $('#'+this.currentPageId).append(''+
-            '<div class="quest" id="'+questionID+'_q">'+
+    this.addPieceSet = function(){
+        var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
+        this.countPieces[piecesetID] = 0;
+        $('#'+this.currentScreenId).append(''+
+            '<div class="PieceSet" id="'+piecesetID+'_ps">'+
                 '<input type="text" class="actName" />'+
                 '<button class="insertImage">Insert Image</button>'+
                 '<button class="insertSound">Insert Sound</button>'+
-                '<button class="addTask" id="tsk_'+questionID+'">AddTask</button>'+
-                '<div id="'+questionID+'_q_forms"></div>'+
-                '<ul class="tasklist" id="'+questionID+'"></ul>'+
+                '<button class="addPiece" id="pie_'+piecesetID+'">AddPiece</button>'+
+                '<div id="'+piecesetID+'_ps_forms"></div>'+
+                '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
                 '<span class="clear"></span>'+
             '</div>');
 
-        this.countQuestion[this.currentPageId] =  this.countQuestion[this.currentPageId]+1;          
+        this.countPieceSet[this.currentPageId] =  this.countPieceSet[this.currentPageId]+1;          
 
         var parent = this;
-        $("#"+questionID+"_q > button.insertImage").click(function(){
-            parent.addImage(questionID+"_q_forms");
+        $("#"+piecesetID+"_ps > button.insertImage").click(function(){
+            parent.addImage(piecesetID+"_ps_forms");
             $(this).attr('disabled', 'disabled');
         });
-        $("#"+questionID+"_q > button.insertSound").click(function(){
-            parent.addSound(questionID+"_q_forms");
+        $("#"+piecesetID+"_ps > button.insertSound").click(function(){
+            parent.addSound(piecesetID+"_ps_forms");
             $(this).attr('disabled', 'disabled');
         });
 
     }
     
-    this.addTask = function(id){
-        var questid = id.replace("tsk_", "");
-        this.currentQuest = questid;
+    this.addPiece = function(id){
+        var PieceSetid = id.replace("pie_", "");
+        this.currentPieceSet = PieceSetid;
         
-        var taskID = this.currentQuest+'_t'+this.countTasks[this.currentQuest];
-        this.countPieces[taskID] = 0;
-        $('#'+questid).append(''+
-            '<li id="'+taskID+'" class="task">'+
-                '<button class="delTask">DelTask</button>'+
+        var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
+        this.countElements[pieceID] = 0;
+        $('#'+PieceSetid).append(''+
+            '<li id="'+pieceID+'" class="piece">'+
+                '<button class="delPiece">DelPiece</button>'+
                 '<div class="tplMulti">'+
-                    '<button class="newOption">newOption</button>'+
+                    '<button class="newElement">newElement</button>'+
                     '<br>'+
                 '</div>'+
             '</li>');
         
-        this.countTasks[this.currentQuest] =  this.countTasks[this.currentQuest]+1;
+        this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
         
         var parent = this;
-        $("#"+taskID+"> div > button.newOption").click(function(){
-            parent.addOption();
+        $("#"+pieceID+"> div > button.newElement").click(function(){
+            parent.addElement();
         });
-        $("#"+taskID+"> button.delTask").click(function(){
-            parent.delTask(taskID);
+        $("#"+pieceID+"> button.delPiece").click(function(){
+            parent.delPiece(pieceID);
         });
     }
     
@@ -98,7 +98,7 @@ function editor () {
                 return(value);
              },{ //save function(or page)
             submitdata  : {op: "save"},     //$_POST['op'] on save
-            id      : "pieceID",            //$_POST['pieceID'] on save
+            id      : "elementID",            //$_POST['elementID'] on save
             name    : "newValue",           //$_POST['newValue'] on save
             type    : "text",               //input type ex: text, textarea, select
             submit  : "Update",
@@ -195,7 +195,7 @@ function editor () {
     this.addImage = function(id){
         this.addUploadForm(id, {
                 type: 'image',
-                accept: Array("png","gif","bmp","jpeg","jpg","ico"),
+                accept: Array("png","gif","bmp","jpeg","jsc","ico"),
                 maxsize: (1024 * 5) //5MB
             },function(src, fileid, formid){
                 $("#"+fileid+" > img").remove("img");
@@ -231,53 +231,70 @@ function editor () {
         });
     }
     
-    this.addOption = function(){
-        var pieceID = this.currentTask+'_p'+this.countPieces[this.currentTask]; 
-        $('#'+this.currentTask+" > div.tplMulti").append(''+
-            '<span id="'+pieceID+'" class="moptions">'+
+    this.addElement = function(){
+        var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
+        $('#'+this.currentPiece+" > div.tplMulti").append(''+
+            '<span id="'+elementID+'" class="element moptions">'+
                 '<div>' +
                     '<button class="insertImage">Insert Image</button>'+
                     '<button class="insertText">Insert Text</button>'+
-                    '<button class="delOption">Delete Option</button>'+
+                    '<button class="delElement">Delete Element</button>'+
                     '<br>'+
                     '<br>'+
                     '<label>'+
-                        '<input type="checkbox" id="'+pieceID+'_flag" name="'+pieceID+'_flag" value="Correct">'+
+                        '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+
                         'Correct'+
                     '</label>'+
                 '</div>' +
             '</span>');
-        this.countPieces[this.currentTask] =  this.countPieces[this.currentTask]+1;
+        this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         
         var parent = this;
-        $("#"+pieceID+" > div > button.insertText").click(function(){
-            parent.addText(pieceID);
+        $("#"+elementID+" > div > button.insertText").click(function(){
+            parent.addText(elementID);
             $(this).attr('disabled', 'disabled');
             //adicionar opção de alterar
         });
-        $("#"+pieceID+" > div > button.insertImage").click(function(){
-            parent.addImage(pieceID);
+        $("#"+elementID+" > div > button.insertImage").click(function(){
+            parent.addImage(elementID);
             $(this).attr('disabled', 'disabled');
             //adicionar opção de alterar
         });
-        $("#"+pieceID+" > div > button.delOption").click(function(){
-            parent.delOption(pieceID);
+        $("#"+elementID+" > div > button.delElement").click(function(){
+            parent.delElement(elementID);
         });
     }
 
-    this.delTask = function(id){
-        if(confirm('Deseja realmente remover esta Task?')){
+    this.delPiece = function(id){
+        if(confirm('Deseja realmente remover esta Piece?')){
             $("#"+id).remove();
-            delete this.countPieces[id];
+            delete this.countElements[id];
         }
     }
-    this.delOption = function(id){
-        if(confirm('Deseja realmente remover esta Option?')){
+    this.delElement = function(id){
+        if(confirm('Deseja realmente remover esta Element?')){
             $("#"+id).remove();
         }
    }
    
    this.saveAll = function(){
+//       1-> save cobject 
+//            templateID
+//            typeID
+//            themeID
+//       2-> save cobject_metadata
+//            cobjectID
+//            typeID
+//            value
+//       3-> each page -> screen{
+//           each PieceSet -> PieceSet{
+//               each piece -> element{
+//                   each moptons -> element{
+//                       
+//                   }
+//               }
+//           }
+//       }
        //enviar para o banco//
        $('form').submit();
        alert("Salvo com sucesso!");
