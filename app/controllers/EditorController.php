@@ -38,18 +38,8 @@ class EditorController extends Controller {
     
     public function actionJson(){
         if(isset($_POST['op'])){
-            if($_POST['op'] == 'save' && isset($_POST['step'])){
-                switch($_POST['step']){
-                    case "CObject":  
-                        break;
-                    case "Screen":  
-                        break;
-                    case "PieceSet":  
-                        break;
-                    default:
-                        echo "default";
-                }
-              
+            if($_POST['op'] == 'save'){
+               
             }elseif($_POST['op'] == 'load'){
                 
             }

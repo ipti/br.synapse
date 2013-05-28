@@ -8,19 +8,19 @@ $(function() {
         nav_label_next : '>',
         show_first_last : false,
         num_page_links_to_display: 20,
-        nav_panel_id : '.navsreen',
+        nav_panel_id : '.navpage',
         editor : newEditor
     }); 
     
-    newEditor.countPieceSet['sc0'] = 0;
-    newEditor.countPieces['sc0_ps0'] = 0;
+    newEditor.countQuestion['pg0'] = 0;
+    newEditor.countTasks['pg0_q0'] = 0;
     
     $("#toolbar").draggable({
         axis: "y"
     });
                             
-    $("#addScreen").click(function(){
-        newEditor.addScreen();
+    $("#addpage").click(function(){
+        newEditor.addPage();
     });
     $(".insertText").click(function(){
         newEditor.addTexto();
@@ -28,8 +28,8 @@ $(function() {
     $(".insertImage").last().click(function(){
         newEditor.addImage();
     });
-    $("#addPieceSet").click(function(){
-        newEditor.addPieceSet();
+    $("#addquestion").click(function(){
+        newEditor.addQuest();
     })
     /*$(".page").live("click",(function(){
                     //alert(newEditor.currentPageId);
@@ -42,16 +42,13 @@ $(function() {
                     $(this).addClass('active');
                     newEditor.currentQuest = $(this).attr('id');
                 }));*/
-    $(".addPiece").live("click",(function(){
-        newEditor.addPiece($(this).attr('id'));
+    $(".addTask").live("click",(function(){
+        newEditor.addTask($(this).attr('id'));
     }));
-    $('.piece').live("mousedown",function(){
-        newEditor.changePiece($(this));
+    $('.task').live("mousedown",function(){
+        newEditor.changeTask($(this));
     });
     $('.save').click(function(){
         newEditor.saveAll();
     });
-//    $('#delScreen').click(function(){
-//       newEditor.delScreen(); 
-//    });
 });
