@@ -36,7 +36,7 @@
 .theme div.tplMulti button.newElement{background:url('../../images/theme_tools_addelement.png'); float:block; height:45px;width:80px;border:0px;text-indent:-9999px;}
 .theme div.tplMulti button.insertText{background:url('../../images/theme_tools_addtext.png'); float:left; height:45px; width:80px;border:0px;text-indent:-9999px;}
 .theme .piecelist{height:500px; overflow-y:scroll;float:left;width:928px;border:1px dotted #999}
-.theme .piecelist .piece{display:block;border:1px dotted #999;padding:10px;margin:10px 0px;min-height:200px;}
+.theme .piecelist .piece{display:block;border:1px dotted #999;padding:10px;margin:10px 0px;min-height:200px; overflow-y: auto}
 .theme div.canvas .del{border:0px; background:url('../../images/theme_activity_del.png');margin-bottom:-16px; float:right; position:relative; top:0; display:block; right: 0px; height:16px; width:16px;text-indent:-9999px;}
 .active{border-color: red !important;}
 .page_link{visibility:hidden}
@@ -117,7 +117,7 @@ font.eclick:hover{text-decoration: underline;border:1px dotted #000}
 .element img{margin:0 auto;}
 .options .element font,.groups .element font{margin:0 14px; font-size:24px;padding:4px;}
 ul.enum,ul.pairs{border-bottom:1px solid #666;margin-bottom:20px}
-.tplMulti span{float:left;border:1px dashed #000;margin:10px}
+.tplMulti span{float:left;border:1px dashed #000; margin: 5px; padding: 4px;}
 .theme .tplMulti .insertImage{border:0px; background:url('../../images/theme_tools_addimage.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .theme .tplMulti .insertText{border:0px; background:url('../../images/theme_tools_addtext.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .text { border: 1px dashed black; padding: 2px;}
