@@ -16,7 +16,7 @@ class EditorController extends Controller {
    public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'upload', 'json'),
+                'actions' => array('index', 'upload', 'json', 'preeditor'),
                 'users' => array('@'),
             ),
             array('deny', // deny all users
@@ -25,8 +25,15 @@ class EditorController extends Controller {
         );
     }
     
-    public function actionIndex() {
-        $this->render('index');
+   public function actionIndex() {
+     if( !isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) &&  !isset($_POST['cobjectTheme']) ) {
+       $this->redirect('/editor/preeditor');
+       }else { 
+            $this->render('index');
+        }
+    }
+    public function actionPreeditor(){
+        $this->render('preeditor');
     }
     
     public function actionJson(){
