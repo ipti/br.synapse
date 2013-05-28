@@ -1,5 +1,5 @@
 <?php
-
+ 
 class EditorController extends Controller {
 
     public $layout = 'editor';

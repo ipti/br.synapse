@@ -72,7 +72,7 @@
             }
         </script>
         <div class="canvasr">
-            <?php echo $content?>
+            <?php echo $content?> 
         </div>   
     </body>
 </html>

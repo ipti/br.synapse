@@ -1,4 +1,4 @@
-function editor () {
+function editor () { 
     this.COtypeID;
     this.COthemeID;
     this.COtemplateType;

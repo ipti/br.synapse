@@ -1,5 +1,5 @@
 var newEditor = new editor();
-$(function() {
+$(function() { 
     $('.canvas').pajinate({
         items_per_page : 1,
         nav_label_first : '<<',
