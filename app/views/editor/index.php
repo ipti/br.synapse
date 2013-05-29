@@ -37,17 +37,17 @@ $this->breadcrumbs=array(
                 <li id="addsound">Sound</li>
                 <li id="addvideo">Video</li>
                 <li id="addtext">Text</li>-->
-                <li id="addquestion">Question</li>
+                <li id="addPieceSet">Question</li>
                 <!--<li id="addanswer">Answer</li>-->
             </ul>
         </div>
         <div class="canvas">
-            <button class="themebutton" id="addpage">NOVA TELA</button>
-            <ul class="navpage"></ul>
-            <button class="themebutton" id="delpage">APAGAR TELA</button>
+            <button class="themebutton" id="addScreen">NOVA TELA</button>
+            <ul class="navscreen"></ul>
+            <button class="themebutton" id="delScreen">APAGAR TELA</button>
             <span class="clear"></span>
             <div class="content">
-                <div class="page" id="pg0">
+                <div class="screen" id="sc0">
                     <!--<div class="quest" id="pg1_q1">
                         <input type="text" class="actName" />
                         <button class="addTask" id="tsk_pg1_q1">AddTask</button>
@@ -81,4 +81,4 @@ $this->breadcrumbs=array(
                 </div>-->
                 </div>
             </div>
-        </div>   
+            </div>
