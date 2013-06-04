@@ -37,24 +37,138 @@ class EditorController extends Controller {
     }
     
     public function actionJson(){
+        $json = array();
         if(isset($_POST['op'])){
             if($_POST['op'] == 'save' && isset($_POST['step'])){
                 switch($_POST['step']){
-                    case "CObject":  
+                    case "CObject":
+                        if(isset($_POST['COtypeID']) && isset($_POST['COthemeID']) 
+                            && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])){
+                            $typeID = $_POST['COtypeID'];
+                            $templateID = $_POST['COtemplateType'];
+                            $themeID = $_POST['COthemeID'];
+                            $goalID = $_POST['COgoalID'];
+                            
+                            $newCobject = new Cobject();
+                            $newCobject->typeID = $typeID;
+                            $newCobject->templateID = $templateID;
+                            $newCobject->themeID = $themeID;
+                            $newCobject->insert();
+                            
+                            $cobject = Cobject::model()->findByAttributes(array(),array('order'=>'ID desc'));
+                            $cobjectID = $cobject->ID;
+                            
+                            $newCobjectMetadata = new CobjectMetadata();
+                            $newCobjectMetadata->cobjectID = $cobjectID;
+                            $newCobjectMetadata->typeID = 6;
+                            $newCobjectMetadata->value = $goalID;
+                            $newCobjectMetadata->insert();
+                            
+                            $json['CObjectID'] = $cobjectID;
+                            
+                        }else{
+                            throw new Exception("ERROR: Dados do CObject insuficientes.<br>");   
+                        }
                         break;
-                    case "Screen":  
+                    case "Screen":
+                        if(isset($_POST['CObjectID']) && isset($_POST['Number']) && isset($_POST['Ordem'])
+                            && isset($_POST['Width']) && isset($_POST['Height'])){
+                            $cobjectID = $_POST['CObjectID'];
+                            $number = $_POST['Number'];
+                            $ordem = $_POST['Ordem'];
+                            $width = $_POST['Width'];
+                            $height = $_POST['Height'];
+                            
+                            $newScreen = new EditorScreen();
+                            $newScreen->cobjectID = $cobjectID;
+                            $newScreen->number = $number;
+                            $newScreen->order = $ordem;    
+                            $newScreen->width = $width;
+                            $newScreen->height = $height;
+                            $newScreen->insert();
+                            
+                            $screen = EditorScreen::model()->findByAttributes(array(),array('order'=>'ID desc'));
+                            $screenID = $screen->ID;   
+                            
+                            $json['screenID'] = $screenID;
+                            
+                        }else{
+                            throw new Exception("ERROR: Dados da Screen insuficientes.<br>");   
+                        }
                         break;
-                    case "PieceSet":  
+                    case "PieceSet":
+                        if(isset($_POST['typeID']) && isset($_POST['desc']) && isset($_POST['screenID'])
+                            && isset($_POST['position']) && isset($_POST['templateID'])){
+                            
+                            $typeID = $_POST['typeID'];
+                            $desc = $_POST['desc'];
+                            
+                            $screenID = $_POST['screenID'];
+                            $position = $_POST['position'];
+                            $templateID = $_POST['templateID'];
+                            
+                            $newPieceSet = new EditorPieceset();
+                            $newPieceSet->typeID = $typeID;
+                            $newPieceSet->desc = $desc;
+                            $newPieceSet->insert();
+                            
+                            $pieceSet = EditorPieceset::model()->findByAttributes(array(),array('order'=>'ID desc'));
+                            $pieceSetID = $pieceSet->ID;   
+                            
+                            $newScreenPieceSet = new EditorScreenPieceset();
+                            $newScreenPieceSet->screenID = $screenID;
+                            $newScreenPieceSet->piecesetID = $pieceSetID;
+                            $newScreenPieceSet->position = $position;
+                            $newScreenPieceSet->templateID = $templateID;
+                            $newScreenPieceSet->insert();
+                            
+                            $json['PieceSetID'] = $pieceSetID;
+                            
+                        }else{
+                            throw new Exception("ERROR: Dados da PieceSet insuficientes.<br>");   
+                        }
+                        break;
+                    case "Piece":
+                        if(isset($_POST['pieceSetID']) && isset($_POST['ordem']) && isset($_POST['typeID'])){
+                            
+                            $pieceSetID = $_POST['pieceSetID'];
+                            $ordem = $_POST['ordem'];
+                            $typeID = $_POST['typeID'];
+                            
+                            $newPiece = new EditorPiece();
+                            $newPiece->typeID = $typeID;
+                            $newPiece->insert();
+                            
+                            $piece = EditorPiece::model()->findByAttributes(array(),array('order'=>'ID desc'));
+                            $pieceID = $piece->ID; 
+                            
+                            $newPieceSetPiece = new EditorPiecesetPiece();
+                            $newPieceSetPiece->pieceID = $pieceID;
+                            $newPieceSetPiece->piecesetID = $pieceSetID;
+                            $newPieceSetPiece->order = $ordem;
+                            $newPieceSetPiece->insert();
+                            
+                            $json['PieceID'] = $pieceID;
+                            
+                            
+                            
+                        }else{
+                            throw new Exception("ERROR: Dados da Piece insuficientes.<br>");   
+                        }
+                        break;
+                    case "Element":
                         break;
                     default:
-                        echo "default";
+                        throw new Exception("ERROR: Operação inválida.<br>");
                 }
               
             }elseif($_POST['op'] == 'load'){
                 
+            }else{
+                throw new Exception("ERROR: Operação inválida.<br>");
             }
         }else{
-            $json = "ERROR: Operação inválida.";
+            throw new Exception("ERROR: Operação inválida.<br>");
         }
         
         header('Cache-Control: no-cache, must-revalidate');
