@@ -150,13 +150,53 @@ class EditorController extends Controller {
                             
                             $json['PieceID'] = $pieceID;
                             
-                            
-                            
                         }else{
                             throw new Exception("ERROR: Dados da Piece insuficientes.<br>");   
                         }
                         break;
                     case "Element":
+                        if(isset($_POST['typeID'])){
+                            $typeID = $_POST['typeID'];
+                            
+                            if(isset($_POST['pieceID']) && isset($_POST['flag'])
+                                && isset($_POST['ordem']) && isset($_POST['value'])){
+
+                                $pieceID = $_POST['pieceID'];
+                                $flag = $_POST['flag'];
+                                $value = $_POST['value'];
+                                $position = $_POST['ordem'];
+
+                                $newElement = new EditorElement();
+                                $newElement->typeID = $typeID;
+                                $newElement->insert();
+
+                                $element = EditorElement::model()->findByAttributes(array(),array('order'=>'ID desc'));
+                                $elementID = $element->ID; 
+
+                                $newPieceElement = new EditorPieceElement();
+                                $newPieceElement->pieceID = $pieceID;
+                                $newPieceElement->elementID = $elementID;
+                                $newPieceElement->position = $ordem;
+                                $newPieceElement->insert();
+
+                                $json['ElementID'] = $elementID;
+
+                            }else{
+                                throw new Exception("ERROR: Dados da Element insuficientes.<br>");   
+                            }
+                            
+                            switch($typeID){
+                                case 12: //word
+                                break;
+                            
+                                case 16: //image
+                                break;
+                                default:
+                                    throw new Exception("ERROR: Tipo inválido.<br>");
+                            }
+                        }else{
+                            throw new Exception("ERROR: Operação inválida.<br>");
+                        }
                         break;
                     default:
                         throw new Exception("ERROR: Operação inválida.<br>");
@@ -208,7 +248,9 @@ class EditorController extends Controller {
                         $tmp = $_FILES['file']['tmp_name'];
                         try{
                             move_uploaded_file($tmp,$path.$name);
-                            $json = $url.$name;
+                            $json = array();
+                            $json['url'] = $url.$name;
+                            $json['name'] = $name;
                         }catch (Exception $e){
                             throw new Exception("ERROR: Falha ao enviar.<br>");
                         }

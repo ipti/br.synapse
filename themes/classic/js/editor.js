@@ -99,15 +99,15 @@ function editor () {
     this.addText = function(ID){
         $('#'+ID).append('<font class="text editable" id="'+ID+'_text">Clique para Alterar </font>');
         $('#'+ID+"_text").editable(function(value, settings) { 
-            console.log(this);
-            console.log(value);
-            console.log(settings);
+            //console.log(this);
+            //console.log(value);
+            //console.log(settings);
             return(value);
         },{ //save function(or page)
             submitdata  : {
                 op: "save"
             },     //$_POST['op'] on save
-            id      : "elementID",            //$_POST['elementID'] on save
+            id      : "elementID",          //$_POST['elementID'] on save
             name    : "newValue",           //$_POST['newValue'] on save
             type    : "text",               //input type ex: text, textarea, select
             submit  : "Update",
@@ -139,19 +139,12 @@ function editor () {
         
         var file    = ID+"_"+uploadType;
         var form    = file+"_form";
-        var bar     = form+" > div.progress > div.bar";
-        var percent = form+" > div.progress > div.percent";
         
         $('#'+ID).append(''+
             '<div id="'+file+'">'+
             '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
             '<input type="hidden" name="op" value="'+uploadType+'">'+
             '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
-            //'<input type="button" id="send" class="send" value="Upload">'+
-        '<div class="progress" style="visibility:hidden">'+
-            '<div class="bar"></div>'+
-            '<div class="percent">0%</div>'+
-            '</div>'+
             '</form>'+
             '</div>');
         
@@ -177,28 +170,6 @@ function editor () {
             }
             
         });
-            
-        $("#"+form).ajaxForm({
-            beforeSend: function() {
-                $("#"+bar).width('0%')
-                $("#"+percent).html('0%');
-            },
-            uploadProgress: function(event, position, total, percentComplete) {
-                $("#"+bar).width(percentComplete + '%')
-                $("#"+percent).html(percentComplete + '%');
-            },
-            success: function(response) {
-                //enviado com sucesso!
-            },
-            error: function(error, textStatus, errorThrown){
-                //$("#"+form).html(error.responseText);
-                alert("Houve um erro ao enviar o arquivo.");
-                $("#"+form).append(error.responseText);
-            },
-            complete: function(xhr) {
-                //status.html(xhr.responseText);
-            }
-        }); 
     }
     
     this.addImage = function(id){
@@ -250,6 +221,7 @@ function editor () {
             '<button class="del delElement">Delete Element</button>'+
             '<br>'+
             '<br>'+
+            '<br>'+
             '<label>'+
             '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+
             'Correct'+
@@ -259,15 +231,29 @@ function editor () {
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         
         var parent = this;
-        $("#"+elementID+" > div > button.insertText").click(function(){
-            parent.addText(elementID);
-            $(this).attr('disabled', 'disabled');
+        var buttonTextoID = "#"+elementID+" > div > button.insertText";
+        var buttonImageID = "#"+elementID+" > div > button.insertImage";
+        var buttonDelID = "#"+elementID+" > div > button.delElement";
+        var textoID = "#"+elementID+"_text";
+        var imageID = "#"+elementID+"_image";
+        
+        $(buttonTextoID).click(function(){
+            if (confirm('Essa ação irá remover qualquer outro Elemento.\nTem certeza que deseja fazer isso?')){
+                parent.addText(elementID);
+                $(buttonTextoID).attr('disabled', 'disabled');
+                $(buttonImageID).removeAttr('disabled');
+                $(imageID).remove();
+            }
         });
-        $("#"+elementID+" > div > button.insertImage").click(function(){
-            parent.addImage(elementID);
-            $(this).attr('disabled', 'disabled');
+        $(buttonImageID).click(function(){
+            if (confirm('Essa ação irá remover qualquer outro Elemento.\nTem certeza que deseja fazer isso?')){
+                parent.addImage(elementID);
+                $(buttonImageID).attr('disabled', 'disabled');
+                $(buttonTextoID).removeAttr('disabled');
+                $(textoID).remove();
+            }
         });
-        $("#"+elementID+" > div > button.delElement").click(function(){
+        $(buttonDelID).click(function(){
             parent.delElement(elementID);
         });
     }
@@ -334,6 +320,7 @@ function editor () {
         var screenPosition;
         var pieceSetPosition;
         var piecePosition;
+        var elementPosition;
         
         var LastScreenID;
         var LastPieceSetID;
@@ -350,14 +337,17 @@ function editor () {
         //            typeID
         //            value
         //       3-> each screen{
-        //           each PieceSet{
-        //               each element{
-        //                   each moptons -> element{
-        //                       
-        //                   }
-        //               }
-        //           }
-        //       }
+        //              save Screen
+        //              each PieceSet{
+        //                  save PieceSet
+        //                  each Piece{
+        //                      save Piece
+        //                      each element{
+        //                          Save element
+        //                      }
+        //                  }
+        //              }
+        //          }
         //       
         //       
         //cria tela de salvar
@@ -430,12 +420,12 @@ function editor () {
                             $('.savescreen').append('<br><p>PieceSet salvo com sucesso!</p>');
                             LastPieceSetID = response['PieceSetID'];
                             
+                            //reiniciar o contador de posição da Piece no PieceSet
+                            piecePosition = 1;
+                            
                             //Para cada Piece do PieceSet
                             $('#'+PieceSetID+' .piece').each(function(){
                                 //PieceID = $(this).attr('id');
-                                
-                                //reiniciar o contador de posição da Piece no PieceSet
-                                piecePosition = 1;
                                 
                                 //Save Piece
                                 parent.saveData({
@@ -452,35 +442,92 @@ function editor () {
                                     $('.savescreen').append('<br><p>Piece salvo com sucesso!</p>');
                                     LastPieceID = response['PieceID'];
                                     
+                                    elementPosition = 1;
+                                    
                                     //Para cada Elemento no Piece
                                     $('#'+PieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
                                         Flag = $(this+'_flag').val();
                                         
-                                        //Salva Elemento
-                                        parent.saveData({
-                                            //Operação Salvar, Element
-                                            op: "save",
-                                            step: "Element",
-                                            //Dados do Element
-                                            pieceID: LastPieceID,
-                                            flag: Flag
-                                        },
-                                        //Função de sucess do Save Element
-                                        function(response, textStatus, jqXHR){
-                                            $('.savescreen').append('<br><p>Element salvo com sucesso!</p>');
-                                            LastPieceID = response['PieceID'];
+                                        var type;
+                                        var value;
+                                        
+                                        var ElementTextID = ElementID+"_text";
+                                        var ElementImageID = ElementID+"_image";
+                                        var FormElementImageID = ElementID+"_image_form";
+                                        
+                                        if(existID(ElementTextID)){
+                                            //Salva Elemento
+                                            parent.saveData({
+                                                //Operação Salvar, Element, TXT
+                                                op: "save",
+                                                step: "Element",
+                                                type: 11,
+                                                //Dados do Element
+                                                ordem: elementPosition,
+                                                pieceID: LastPieceID,
+                                                flag: Flag,
+                                                value: $(ElementTextID).html()
+                                            },
+                                            //Função de sucess do Save Element
+                                            function(response, textStatus, jqXHR){
+                                                $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                            });
                                             
-                                        });
+                                            //incrementa a Ordem do Element
+                                            elementPosition++;
+                                            
+                                        }else if(existID(ElementImageID)){
+                                            $(FormElementImageID).ajaxForm({
+                                                beforeSend: function() {
+                                                    //$("#"+bar).width('0%')
+                                                    //$("#"+percent).html('0%');
+                                                },
+                                                uploadProgress: function(event, position, total, percentComplete) {
+                                                    //$("#"+bar).width(percentComplete + '%')
+                                                    //$("#"+percent).html(percentComplete + '%');
+                                                },
+                                                success: function(response) {
+                                                    //enviado com sucesso!
+                                                    //Salva Elemento
+                                                    parent.saveData({
+                                                        //Operação Salvar, Element, IMG
+                                                        op: "save",
+                                                        step: "Element",
+                                                        type: 19,
+                                                        //Dados do Element
+                                                        ordem: elementPosition,
+                                                        pieceID: LastPieceID,
+                                                        flag: Flag,
+                                                        value: {
+                                                            url: response['url'],
+                                                            name: response['name']
+                                                        }
+                                                    },
+                                                    //Função de sucess do Save Element
+                                                    function(response, textStatus, jqXHR){
+                                                        $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
+                                                    });
+                                                },
+                                                error: function(error, textStatus, errorThrown){
+                                                    //$("#"+form).html(error.responseText);
+                                                    alert("Houve um erro ao enviar o arquivo.");
+                                                    $("#"+form).append(error.responseText);
+                                                }
+                                            }); 
+                                            
+                                            //incrementa a Ordem do Element
+                                            elementPosition++;
+                                        }
                                     });
+                                    //incrementa a Ordem do Piece
                                     piecePosition++;
                                 });
                             });
-                        
+                            //incrementa a Ordem do PieceSet
                             pieceSetPosition++;
                         });
                     });
-                    
                     //incrementa a Ordem da Screen
                     screenPosition++;
                 });       
@@ -491,5 +538,9 @@ function editor () {
         
         //$('form').submit();
         alert("Salvo com sucesso!");
+    }
+    
+    this.existID = function(id){
+        return $(id).lenght > 0;
     }
 }
