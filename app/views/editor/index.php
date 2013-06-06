@@ -2,6 +2,7 @@
     $commonType = $_POST['commonType'];
     $cobjectTemplate =  $_POST['cobjectTemplate'];
     $cobjectTheme =  $_POST['cobjectTheme'];
+    $actGoal = $_POST['actGoal'];
 $this->breadcrumbs=array(
 	'Editor',
 );?>

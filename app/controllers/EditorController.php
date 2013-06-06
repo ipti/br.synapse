@@ -16,7 +16,7 @@ class EditorController extends Controller {
    public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'upload', 'json', 'preeditor'),
+                'actions' => array('index', 'upload', 'json', 'preeditor', 'filtergoal'),
                 'users' => array('@'),
             ),
             array('deny', // deny all users
@@ -27,15 +27,95 @@ class EditorController extends Controller {
     
    public function actionIndex() {
      if( !isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) &&  !isset($_POST['cobjectTheme']) ) {
-       $this->redirect('/editor/preeditor');
+         $this->redirect('/editor/preeditor');
        }else { 
+           if(isset($_POST['actGoal'])) {
             $this->render('index');
+           }else{
+            $this->redirect('/editor/preeditor?error=1');   
+           }
         }
     }
     public function actionPreeditor(){
         $this->render('preeditor');
     }
-    
+    public function actionFiltergoal(){
+        $idDiscipline = $_POST['idDiscipline'];
+        $idDegree = $_POST['idDegree'];
+     if($idDegree == "undefined") { 
+        $actGoal_disc = Yii::app()->db->createCommand('SELECT degreeID FROM act_goal 
+            WHERE disciplineID =' . $idDiscipline . ' GROUP BY degreeID')->queryAll();
+        $count_Agoal_disc = count($actGoal_disc);
+        if($count_Agoal_disc > 0){
+            for($i=0; $i<$count_Agoal_disc; $i++) {
+                // Array dos Degrees - A cada repetição irá guarda 1 único registro 
+              $actDegree[$i] = Yii::app()->db->createCommand('SELECT ID, name FROM act_degree
+                WHERE ID = ' . $actGoal_disc[$i]['degreeID'] . ' AND grade > 0')->queryAll();
+            }
+            $count_Adeg = count($actDegree);
+              if($count_Adeg > 0 ) {
+                  $str = "<div id='propertyAdeg' align='left'> 
+                 Act Degree&nbsp;:&nbsp;
+                 <select id='actDegree' name='actDegree'>  ";
+                  for($i=0; $i < $count_Adeg; $i++) {
+                    $str.= "<option value=" . $actDegree[$i][0]['ID'] . ">" . $actDegree[$i][0]['name'] . "</option>";
+                  }
+                  $str.= "</select> 
+              </div> " ;
+                  
+                  //Por padrão, como não foi selecionado algum Degree, mostrará o GOAL do 1° [0]
+                  $actGoal_d = Yii::app()->db->createCommand('SELECT ID, name FROM act_goal 
+                     WHERE disciplineID =' . $idDiscipline . ' AND degreeID =' . $actDegree[0][0]['ID'])->queryAll();
+                  $count_Agoal_d = count($actGoal_d);
+                  // No mínimo possui 1 registro
+                  $str.= "<div id='propertyAgoal' class='propertyAgoal' align='center'>
+                      <br> Act Goal&nbsp;:&nbsp;
+                      <select id='actGoal' name='actGoal' style='width:430px'> ";
+                  for($i=0; $i < $count_Agoal_d; $i++) {
+                    $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>" ;   
+                  }
+                  $str.= "</select>
+                      </div>
+             <script type='text/javascript'>
+                $('#actDegree').change(function(){
+                  $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
+                });
+                $('#actGoal,#actDegree,#actDiscipline').change(function(){
+                  $('#error').hide(1000);
+                });
+             </script>";
+                  
+                  echo $str;
+                  
+              }else{
+                  //Não encontrou algum act_degree relacionado a esta disciplina(with grade>0)
+              }
+            
+        }else{
+            //Não encontrou algum goal para a disciplina selecionada
+            echo "<font color='red' size='2'>
+                Não encontrou algum Objetivo para a disciplina selecionada !</font>";
+        }
+         
+     }else{
+         //Selecionou Algum Degree
+                  $actGoal_d = Yii::app()->db->createCommand('SELECT ID, name FROM act_goal 
+                     WHERE disciplineID =' . $idDiscipline . ' AND degreeID =' . $idDegree)->queryAll();
+                  $count_Agoal_d = count($actGoal_d);
+                  // No mínimo possui 1 registro
+                  $str = "<br> Act Goal&nbsp;:&nbsp;
+                      <select id='actGoal' name='actGoal' style='width:430px'> ";
+                  for($i=0; $i < $count_Agoal_d; $i++) {
+                    $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>" ;   
+                  }
+                  $str.= "</select>";
+                  
+                  echo $str;
+     }
+     
+    }
+
+
     public function actionJson(){
         if(isset($_POST['op'])){
             if($_POST['op'] == 'save' && isset($_POST['step'])){
