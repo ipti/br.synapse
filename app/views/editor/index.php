@@ -1,11 +1,10 @@
-<?php
-    $_POST['goal'] = 1;
+ <?php
     if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) 
-        && isset($_POST['cobjectTheme']) && isset($_POST['goal'])){
+        && isset($_POST['cobjectTheme']) && isset($_POST['actGoal'])){
         $commonType = $_POST['commonType'];
-        $cobjectTemplate = $_POST['cobjectTemplate'];
-        $cobjectTheme = $_POST['cobjectTheme'];
-        $goal = $_POST['goal'];
+        $cobjectTemplate =  $_POST['cobjectTemplate'];
+        $cobjectTheme =  $_POST['cobjectTheme'];
+        $actGoal = $_POST['actGoal'];
      }
      else{ 
          die('ERROR: POST Inválido');
@@ -18,7 +17,7 @@ $this->breadcrumbs=array(
    echo "newEditor.COtypeID = $commonType ; \n" ; 
    echo "newEditor.COthemeID = $cobjectTheme; \n" ;
    echo "newEditor.COtemplateType = $cobjectTemplate; \n"; 
-   echo "newEditor.COgoalID = $goal; \n"; 
+   echo "newEditor.COgoalID = $actGoal; \n"; 
 ?>
 </script>
 
@@ -35,12 +34,12 @@ $this->breadcrumbs=array(
 <div id="toolbar" class="toolbar">
     <h2>INSERIR</h2>
     <ul class="tools">
-        <!--<li id="addimage">Imagem</li>
+        <li id="addimage">Imagem</li>
         <li id="addsound">Sound</li>
         <li id="addvideo">Video</li>
-        <li id="addtext">Text</li>-->
+        <li id="addtext">Text</li>
         <li id="addPieceSet">Question</li>
-        <!--<li id="addanswer">Answer</li>-->
+        <li id="addanswer">Answer</li>
     </ul>
 </div>
 <div class="canvas">

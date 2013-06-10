@@ -326,10 +326,6 @@ function editor () {
         var LastPieceSetID;
         var LastPieceID;
         
-        var curretScreenID;
-        var curretPieceSetID;
-        var curretPieceID;
-        
         var pieceSetDescription;
         var Flag;
         //       1-> save cobject 
@@ -384,10 +380,9 @@ function editor () {
                 
                 //Salva Screen
                 parent.saveData({ 
-                    //Operação Salvar, Screen, ID no DOM
+                    //Operação Salvar, Screen
                     op: "save", 
                     step: "Screen",
-                    DomID: ScreenID,
                     //Dados da Screen
                     CObjectID: parent.CObjectID,
                     Number: screenPosition,
@@ -398,23 +393,21 @@ function editor () {
                 //função sucess do save Screen
                 function(response, textStatus, jqXHR){
                     $('.savescreen').append('<br><p>Screen salvo com sucesso!</p>');
-                    curretScreenID = response['DomID'];
                     LastScreenID = response['screenID'];
                     
                     //reinicia o contador de posição dos PieceSet na Screen
                     pieceSetPosition = 1;
                     
                     //Para cada PieceSet da Screen
-                    $('#'+curretScreenID+' .PieceSet').each(function(){
+                    $('#'+ScreenID+' .PieceSet').each(function(){
                         PieceSetID = $(this).attr('id');
                         pieceSetDescription = $('#'+PieceSetID+' .actName' ).val();
                         
                         //Salva PieceSet
                         parent.saveData({ 
-                            //Operação Salvar, PieceSet, ID no DOM
+                            //Operação Salvar, PieceSet
                             op: "save",
                             step: "PieceSet",
-                            DomID: PieceSetID,
                             //Dados do PieceSet
                             typeID: 7,
                             desc: pieceSetDescription,
@@ -425,22 +418,20 @@ function editor () {
                         //Função sucess do save PieceSet
                         function(response, textStatus, jqXHR){
                             $('.savescreen').append('<br><p>PieceSet salvo com sucesso!</p>');
-                            curretPieceSetID = response['DomID'];
                             LastPieceSetID = response['PieceSetID'];
                             
                             //reiniciar o contador de posição da Piece no PieceSet
                             piecePosition = 1;
                             
                             //Para cada Piece do PieceSet
-                            $('#'+curretPieceSetID+' .piece').each(function(){
-                                PieceID = $(this).attr('id');
+                            $('#'+PieceSetID+' .piece').each(function(){
+                                //PieceID = $(this).attr('id');
                                 
                                 //Save Piece
                                 parent.saveData({
-                                    //Operação Salvar, Piece, ID no DOM
+                                    //Operação Salvar, Piece
                                     op: "save",
                                     step: "Piece",
-                                    DomID: PieceID,
                                     //Dados do Piece
                                     typeID: 7,
                                     pieceSetID: LastPieceSetID,
@@ -449,51 +440,35 @@ function editor () {
                                 //Função de sucess do Save Piece
                                 function(response, textStatus, jqXHR){
                                     $('.savescreen').append('<br><p>Piece salvo com sucesso!</p>');
-                                    curretPieceID = response['DomID'];
                                     LastPieceID = response['PieceID'];
                                     
                                     elementPosition = 1;
                                     
                                     //Para cada Elemento no Piece
-                                    $('#'+curretPieceID+' .element').each(function(){
+                                    $('#'+PieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
-                                        Flag = $('#'+ElementID+'_flag').is(':checked');
+                                        Flag = $(this+'_flag').val();
                                         
                                         var type;
                                         var value;
                                         
-                                        var ElementTextID = "#"+ElementID+"_text";
-                                        var ElementImageID = "#"+ElementID+"_image";
-                                        var FormElementImageID = "#"+ElementID+"_image_form";
+                                        var ElementTextID = ElementID+"_text";
+                                        var ElementImageID = ElementID+"_image";
+                                        var FormElementImageID = ElementID+"_image_form";
                                         
-                                        if(parent.existID(ElementTextID)){
-                                            type = 12; //word
-                                            value = $(ElementTextID).html();
-                                        }else if(parent.existID(ElementImageID)){
-                                            type = 16; //image
-                                            value = {};
-                                        }else{
-                                            type = -1;
-                                            value = -1;
-                                        }
-                                        
-                                        var data = {
-                                                //Operação Salvar, Element, Type, ID no DOM
+                                        if(existID(ElementTextID)){
+                                            //Salva Elemento
+                                            parent.saveData({
+                                                //Operação Salvar, Element, TXT
                                                 op: "save",
                                                 step: "Element",
-                                                typeID: type,
-                                                DomID: ElementID,
+                                                type: 11,
                                                 //Dados do Element
                                                 ordem: elementPosition,
                                                 pieceID: LastPieceID,
                                                 flag: Flag,
-                                                value: value
-                                            };
-                                        
-                                        
-                                        if(parent.existID(ElementTextID)){
-                                            //Salva Elemento
-                                            parent.saveData(data,
+                                                value: $(ElementTextID).html()
+                                            },
                                             //Função de sucess do Save Element
                                             function(response, textStatus, jqXHR){
                                                 $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
@@ -502,10 +477,9 @@ function editor () {
                                             //incrementa a Ordem do Element
                                             elementPosition++;
                                             
-                                        }else if(parent.existID(ElementImageID)){
+                                        }else if(existID(ElementImageID)){
                                             $(FormElementImageID).ajaxForm({
                                                 beforeSend: function() {
-                                                    console.log('dentro do AjaxForm');
                                                     //$("#"+bar).width('0%')
                                                     //$("#"+percent).html('0%');
                                                 },
@@ -514,11 +488,22 @@ function editor () {
                                                     //$("#"+percent).html(percentComplete + '%');
                                                 },
                                                 success: function(response) {
-                                                    data['value']['url'] = response['url'];
-                                                    data['value']['name'] = response['name'];
                                                     //enviado com sucesso!
                                                     //Salva Elemento
-                                                    parent.saveData(data,
+                                                    parent.saveData({
+                                                        //Operação Salvar, Element, IMG
+                                                        op: "save",
+                                                        step: "Element",
+                                                        type: 19,
+                                                        //Dados do Element
+                                                        ordem: elementPosition,
+                                                        pieceID: LastPieceID,
+                                                        flag: Flag,
+                                                        value: {
+                                                            url: response['url'],
+                                                            name: response['name']
+                                                        }
+                                                    },
                                                     //Função de sucess do Save Element
                                                     function(response, textStatus, jqXHR){
                                                         $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
@@ -527,11 +512,10 @@ function editor () {
                                                 error: function(error, textStatus, errorThrown){
                                                     //$("#"+form).html(error.responseText);
                                                     alert("Houve um erro ao enviar o arquivo.");
-                                                    $(".savescreen").append(error.responseText);
+                                                    $("#"+form).append(error.responseText);
                                                 }
                                             }); 
                                             
-                                            $(FormElementImageID).submit();
                                             //incrementa a Ordem do Element
                                             elementPosition++;
                                         }
@@ -557,6 +541,6 @@ function editor () {
     }
     
     this.existID = function(id){
-        return $(id).size() > 0;
+        return $(id).lenght > 0;
     }
 }
