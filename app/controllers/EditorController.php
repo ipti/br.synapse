@@ -72,7 +72,8 @@ class EditorController extends Controller {
                         break;
                     case "Screen":
                         if(isset($_POST['CObjectID']) && isset($_POST['Number']) && isset($_POST['Ordem'])
-                            && isset($_POST['Width']) && isset($_POST['Height'])){
+                            && isset($_POST['Width']) && isset($_POST['Height']) && isset($_POST['DomID'])){
+                            $DomID = $_POST['DomID'];
                             $cobjectID = $_POST['CObjectID'];
                             $number = $_POST['Number'];
                             $ordem = $_POST['Ordem'];
@@ -90,6 +91,7 @@ class EditorController extends Controller {
                             $screen = EditorScreen::model()->findByAttributes(array(),array('order'=>'ID desc'));
                             $screenID = $screen->ID;   
                             
+                            $json['DomID'] = $DomID;
                             $json['screenID'] = $screenID;
                             
                         }else{
@@ -98,8 +100,9 @@ class EditorController extends Controller {
                         break;
                     case "PieceSet":
                         if(isset($_POST['typeID']) && isset($_POST['desc']) && isset($_POST['screenID'])
-                            && isset($_POST['position']) && isset($_POST['templateID'])){
+                            && isset($_POST['position']) && isset($_POST['templateID']) && isset($_POST['DomID'])){
                             
+                            $DomID = $_POST['DomID'];
                             $typeID = $_POST['typeID'];
                             $desc = $_POST['desc'];
                             
@@ -122,6 +125,7 @@ class EditorController extends Controller {
                             $newScreenPieceSet->templateID = $templateID;
                             $newScreenPieceSet->insert();
                             
+                            $json['DomID'] = $DomID;
                             $json['PieceSetID'] = $pieceSetID;
                             
                         }else{
@@ -129,8 +133,10 @@ class EditorController extends Controller {
                         }
                         break;
                     case "Piece":
-                        if(isset($_POST['pieceSetID']) && isset($_POST['ordem']) && isset($_POST['typeID'])){
+                        if(isset($_POST['pieceSetID']) && isset($_POST['ordem']) 
+                           && isset($_POST['typeID']) && isset($_POST['DomID'])){
                             
+                            $DomID = $_POST['DomID'];
                             $pieceSetID = $_POST['pieceSetID'];
                             $ordem = $_POST['ordem'];
                             $typeID = $_POST['typeID'];
@@ -148,6 +154,7 @@ class EditorController extends Controller {
                             $newPieceSetPiece->order = $ordem;
                             $newPieceSetPiece->insert();
                             
+                            $json['DomID'] = $DomID;
                             $json['PieceID'] = $pieceID;
                             
                         }else{
@@ -158,9 +165,10 @@ class EditorController extends Controller {
                         if(isset($_POST['typeID'])){
                             $typeID = $_POST['typeID'];
                             
-                            if(isset($_POST['pieceID']) && isset($_POST['flag'])
-                                && isset($_POST['ordem']) && isset($_POST['value'])){
+                            if(isset($_POST['pieceID']) && isset($_POST['flag']) && isset($_POST['ordem']) 
+                               && isset($_POST['value']) && isset($_POST['DomID'])){
 
+                                $DomID = $_POST['DomID'];
                                 $pieceID = $_POST['pieceID'];
                                 $flag = $_POST['flag'];
                                 $value = $_POST['value'];
@@ -176,9 +184,10 @@ class EditorController extends Controller {
                                 $newPieceElement = new EditorPieceElement();
                                 $newPieceElement->pieceID = $pieceID;
                                 $newPieceElement->elementID = $elementID;
-                                $newPieceElement->position = $ordem;
+                                $newPieceElement->position = $position;
                                 $newPieceElement->insert();
 
+                                $json['DomID'] = $DomID;
                                 $json['ElementID'] = $elementID;
 
                             }else{
