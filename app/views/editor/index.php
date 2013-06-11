@@ -10,7 +10,7 @@
          die('ERROR: POST Inválido');
      }
 $this->breadcrumbs=array(
-	'Editor',
+	'Editor', 
 );?>
 <script language ="javascript" type="text/javascript">
 <?php 
@@ -34,12 +34,7 @@ $this->breadcrumbs=array(
 <div id="toolbar" class="toolbar">
     <h2>INSERIR</h2>
     <ul class="tools">
-        <!--<li id="addimage">Imagem</li>
-        <li id="addsound">Sound</li>
-        <li id="addvideo">Video</li>
-        <li id="addtext">Text</li>-->
         <li id="addPieceSet">Question</li>
-        <!--<li id="addanswer">Answer</li>-->
     </ul>
 </div>
 <div class="canvas">
