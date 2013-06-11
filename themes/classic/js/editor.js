@@ -310,37 +310,16 @@ function editor () {
         });
     }
    
+    //Função de salvamento.
+    //salva utilizando Ajax, parte por parte.
     this.saveAll = function(){
-        var parent = this;
-        var ScreenID;
-        var PieceSetID;
-        var PieceID;
-        var ElementID;
-        
-        var screenPosition;
-        var pieceSetPosition;
-        var piecePosition;
-        var elementPosition;
-        
-        var LastScreenID;
-        var LastPieceSetID;
-        var LastPieceID;
-        
-        var curretScreenID;
-        var curretPieceSetID;
-        var curretPieceID;
-        
-        var pieceSetDescription;
-        var Flag;
         //       1-> save cobject 
         //            templateID
         //            typeID
         //            themeID
-        //       2-> save cobject_metadata
-        //            cobjectID
         //            typeID
         //            value
-        //       3-> each screen{
+        //       2-> each screen{
         //              save Screen
         //              each PieceSet{
         //                  save PieceSet
@@ -348,13 +327,51 @@ function editor () {
         //                      save Piece
         //                      each element{
         //                          Save element
+        //                          if element txt{
+        //                             save proprety
+        //                          }
+        //                          else if element img{
+        //                             upload
+        //                             save proprety
+        //                          }
         //                      }
         //                  }
         //              }
         //          }
         //       
         //       
-        //cria tela de salvar
+        
+        //referência à classe
+        var parent = this;
+        
+        //ID no DOM do elemento para o Each
+        var ScreenID;
+        var PieceSetID;
+        var PieceID;
+        var ElementID;
+        
+        //contadores de posição/ordem
+        var screenPosition;
+        var pieceSetPosition;
+        var piecePosition;
+        var elementPosition;
+        
+        //ID do ultimo Salvo no banco
+        var LastScreenID;
+        var LastPieceSetID;
+        var LastPieceID;
+        
+        //ID no DOM do elemento atual
+        //necessário para "sincronizar" o ajax com o javascript
+        var curretScreenID;
+        var curretPieceSetID;
+        var curretPieceID;
+        
+        //Dados em geral dos elementos
+        var pieceSetDescription;
+        var Flag;
+        
+        //cria tela de log
         $('.theme').append('<div style="left: 0px; width: 100%; height: 100%; position: fixed; top: 0px; background: none repeat scroll 0px 0px black; opacity: 0.8;" class="savebg"></div>');
         $('.theme').append('<div style="background: none repeat scroll 0px 0px white; height: 300px; border-radius: 5px 5px 5px 5px; width: 800px; margin-top: 100px; margin-left: 250px; position: fixed; border: 2px solid black; padding: 10px;" class="savescreen">'+
             '<p>Aguarde um instante...</p>'+
@@ -362,7 +379,9 @@ function editor () {
         
         //Salva o CObject
         this.saveData({
+            //Operação Salvar
             op: "save", 
+            //Passo CObject
             step: "CObject",
             //Dados do CObject
             COtypeID: parent.COtypeID,
@@ -372,7 +391,9 @@ function editor () {
         },
         //funcção sucess do save Cobject
         function(response, textStatus, jqXHR){
+            //atualiza a tela de log
             $('.savescreen').append('<br><p>CObject salvo com sucesso!</p>');
+            //atualiza o ID do CObject, com a resposta do Ajax
             parent.CObjectID = response['CObjectID'];
             
             //Reubucua o contador da Ordem das Screens
@@ -380,6 +401,7 @@ function editor () {
             
             //Para cada tela
             $('.screen').each(function(){
+                //Atualiza a ScreeID com o ID do ".screen" atual
                 ScreenID = $(this).attr('id');
                 
                 //Salva Screen
@@ -387,6 +409,7 @@ function editor () {
                     //Operação Salvar, Screen, ID no DOM
                     op: "save", 
                     step: "Screen",
+                    //Necessário para que o JS fique sincronizado com o Ajax
                     DomID: ScreenID,
                     //Dados da Screen
                     CObjectID: parent.CObjectID,
@@ -397,7 +420,10 @@ function editor () {
                 },
                 //função sucess do save Screen
                 function(response, textStatus, jqXHR){
+                    //Atualiza a tela de log
                     $('.savescreen').append('<br><p>Screen salvo com sucesso!</p>');
+                    
+                    //Retorna o ID no DOM e o ID da ultima Tela no Banco.
                     curretScreenID = response['DomID'];
                     LastScreenID = response['screenID'];
                     
@@ -467,7 +493,7 @@ function editor () {
                                         var FormElementImageID = "#"+ElementID+"_image_form";
                                         
                                         if(parent.existID(ElementTextID)){
-                                            type = 12; //word
+                                            type = 11; //text
                                             value = $(ElementTextID).html();
                                         }else if(parent.existID(ElementImageID)){
                                             type = 16; //image
@@ -551,7 +577,6 @@ function editor () {
        
         
         //$('form').submit();
-        alert("Salvo com sucesso!");
     }
     
     this.existID = function(id){
