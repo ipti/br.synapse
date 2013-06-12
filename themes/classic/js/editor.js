@@ -227,7 +227,7 @@ function editor () {
             '<br>'+
             '<br>'+
             '<label>'+
-            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+LABEL_CORRECT+'+
+            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+LABEL_CORRECT+
             '</label>'+
             '</div>' +
             '</span>');
