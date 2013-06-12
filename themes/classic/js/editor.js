@@ -56,7 +56,6 @@ function editor () {
 
         this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;          
 
-        var parent = this;
         $("#"+piecesetID+"_list > button.insertImage").click(function(){
             parent.addImage(piecesetID+"_forms");
             $(this).attr('disabled', 'disabled');
@@ -266,16 +265,17 @@ function editor () {
     }
     
     this.delScreen = function(){
-        var id = this.currentScreenId;
-        if(confirm(MSG_REMOVE_SCREEN)){
-            $("#"+id).remove();
-            delete this.countPieceSet[id];
-        }
+        //var id = this.currentScreenId;
+        //if(confirm(MSG_REMOVE_SCREEN)){
+        //    $("#"+id).remove();
+        //    delete this.countPieceSet[id];
+        //}
+        //não funciona ainda
     }
 
     this.delPieceSet = function(id){
         if(confirm(MSG_REMOVE_PIECESET)){
-            $("#"+id).remove();
+            $("#"+id+"_list").remove();
             delete this.countPieces[id];
         }
     }
