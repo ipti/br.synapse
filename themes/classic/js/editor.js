@@ -39,14 +39,15 @@ function editor () {
     }
     
     this.addPieceSet = function(){
+        var parent = this;
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
         this.countPieces[piecesetID] = 0;
         $('#'+this.currentScreenId).append(''+
             '<div class="PieceSet" id="'+piecesetID+'_list">'+
-            '<button class="insertImage">Insert Image</button>'+
-            '<button class="insertSound">Insert Sound</button>'+
-            '<button class="addPiece" id="pie_'+piecesetID+'">AddPiece</button>'+
-            '<button class="del delPieceSet">Delete PieceSet</button>'+
+            '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
+            '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
+            '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
+            '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
             '<input type="text" class="actName" />'+
             '<div id="'+piecesetID+'_forms"></div>'+
             '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
@@ -71,6 +72,7 @@ function editor () {
     }
     
     this.addPiece = function(id){
+        var parent = this;
         var PieceSetid = id.replace("pie_", "");
         this.currentPieceSet = PieceSetid;
         
@@ -78,16 +80,15 @@ function editor () {
         this.countElements[pieceID] = 0;
         $('#'+PieceSetid).append(''+
             '<li id="'+pieceID+'" class="piece">'+
-            '<button class="del delPiece">DelPiece</button>'+
+            '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>'+
             '<div class="tplMulti">'+
-            '<button class="newElement">newElement</button>'+
+            '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>'+
             '<br>'+
             '</div>'+
             '</li>');
         
         this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
-        
-        var parent = this;
+
         $("#"+pieceID+"> div > button.newElement").click(function(){
             parent.addElement();
         });
@@ -97,7 +98,7 @@ function editor () {
     }
     
     this.addText = function(ID){
-        $('#'+ID).append('<font class="text editable" id="'+ID+'_text">Clique para Alterar </font>');
+        $('#'+ID).append('<font class="text editable" id="'+ID+'_text">'+LABEL_INITIAL_TEXT+'</font>');
         $('#'+ID+"_text").editable(function(value, settings) { 
             //console.log(this);
             //console.log(value);
@@ -118,7 +119,7 @@ function editor () {
                 op: "load"
             },         //$_POST['op'] on load
             indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
-            tooltip   : 'Click to edit...'
+            tooltip   : LABEL_INITIAL_TEXT
         });
     }
     
@@ -163,10 +164,10 @@ function editor () {
                     
                     reader.readAsDataURL(this.files[0]);
                 }else{
-                    alert('Tipo do arquivo incompatível.');
+                    alert(ERROR_INCOMPATIBLE_TYPE);
                 }
             }else{
-                alert('Arquivo muito grande. Tamanho máximo: '+uploadMaxSize+'MB');
+                alert(ERROR_FILE_SIZE +uploadMaxSize+'MB');
             }
             
         });
@@ -184,6 +185,7 @@ function editor () {
     }
     
     this.addSound = function(id){
+        var parent = this;
         this.addUploadForm(id, {
             type: 'audio',
             accept: Array("mp3","wav","ogg"),
@@ -192,12 +194,13 @@ function editor () {
             $("#"+fileid+" > audio").remove("audio");
             $("#"+fileid).append(''+
                 '<audio src="'+src+'" controls="controls">'+
-                'Your browser does not support the audio element.'+
+                ERROR_BROWSER_SUPORT+
                 '</audio>');
         });
     }
     
     this.addVideo = function(id){
+        var parent = this;
         this.addUploadForm(id, {
             type: 'video',
             accept: Array("mp4","wmv","ogg"),
@@ -206,52 +209,57 @@ function editor () {
             $("#"+fileid+" > video").remove("video");
             $("#"+fileid).append(''+
                 '<video src="'+src+'" width="320" height="240" controls="controls">'+
-                'Your browser does not support the video element.'+
+                ERROR_BROWSER_SUPORT+
                 '</video>');
         });
     }
     
     this.addElement = function(){
+        var parent = this;
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         $('#'+this.currentPiece+" > div.tplMulti").append(''+
             '<span id="'+elementID+'" class="element moptions">'+
             '<div>' +
-            '<button class="insertImage">Insert Image</button>'+
-            '<button class="insertText">Insert Text</button>'+
-            '<button class="del delElement">Delete Element</button>'+
+            '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
+            '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
+            '<button class="del delElement">'+LABEL_REMOVE_ELEMENT+'</button>'+
             '<br>'+
             '<br>'+
             '<br>'+
             '<label>'+
-            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+
+            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="'+LABEL_CORRECT+'">'+
             'Correct'+
             '</label>'+
             '</div>' +
             '</span>');
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         
-        var parent = this;
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
         var buttonImageID = "#"+elementID+" > div > button.insertImage";
         var buttonDelID = "#"+elementID+" > div > button.delElement";
         var textoID = "#"+elementID+"_text";
         var imageID = "#"+elementID+"_image";
         
+        var ElementTextID = "#"+elementID+"_text";
+        var ElementImageID = "#"+elementID+"_image";
+        
         $(buttonTextoID).click(function(){
-            if (confirm('Essa ação irá remover qualquer outro Elemento.\nTem certeza que deseja fazer isso?')){
-                parent.addText(elementID);
-                $(buttonTextoID).attr('disabled', 'disabled');
-                $(buttonImageID).removeAttr('disabled');
-                $(imageID).remove();
-            }
+            if(!parent.existID(ElementImageID) || 
+                confirm(MSG_CHANGE_ELEMENT)){
+                    parent.addText(elementID);
+                    $(buttonTextoID).attr('disabled', 'disabled');
+                    $(buttonImageID).removeAttr('disabled');
+                    $(imageID).remove();
+                }
         });
         $(buttonImageID).click(function(){
-            if (confirm('Essa ação irá remover qualquer outro Elemento.\nTem certeza que deseja fazer isso?')){
-                parent.addImage(elementID);
-                $(buttonImageID).attr('disabled', 'disabled');
-                $(buttonTextoID).removeAttr('disabled');
-                $(textoID).remove();
-            }
+            if(!parent.existID(ElementTextID) || 
+                confirm(MSG_CHANGE_ELEMENT)){
+                    parent.addImage(elementID);
+                    $(buttonImageID).attr('disabled', 'disabled');
+                    $(buttonTextoID).removeAttr('disabled');
+                    $(textoID).remove();
+                }
         });
         $(buttonDelID).click(function(){
             parent.delElement(elementID);
@@ -260,27 +268,27 @@ function editor () {
     
     this.delScreen = function(){
         var id = this.currentScreenId;
-        if(confirm('Deseja realmente remover este Screen?')){
+        if(confirm(MSG_REMOVE_SCREEN)){
             $("#"+id).remove();
             delete this.countPieceSet[id];
         }
     }
 
     this.delPieceSet = function(id){
-        if(confirm('Deseja realmente remover este PieceSet?')){
+        if(confirm(MSG_REMOVE_PIECESET)){
             $("#"+id).remove();
             delete this.countPieces[id];
         }
     }
 
     this.delPiece = function(id){
-        if(confirm('Deseja realmente remover este Piece?')){
+        if(confirm(MSG_REMOVE_PIECE)){
             $("#"+id).remove();
             delete this.countElements[id];
         }
     }
     this.delElement = function(id){
-        if(confirm('Deseja realmente remover esta Element?')){
+        if(confirm(MSG_REMOVE_ELEMENT)){
             $("#"+id).remove();
         }
     }
@@ -550,7 +558,7 @@ function editor () {
                                                 },
                                                 error: function(error, textStatus, errorThrown){
                                                     //$("#"+form).html(error.responseText);
-                                                    alert("Houve um erro ao enviar o arquivo.");
+                                                    alert(ERROR_FILE_UPLOAD);
                                                     $(".savescreen").append(error.responseText);
                                                 }
                                             }); 
