@@ -21,18 +21,30 @@ function editor () {
     }
     
     this.addScreen = function(){
+        //incrementa o contador
         this.countScreen = this.countScreen+1;
+        //cria a div da nova screen
         $(".content").append('<div class="screen" id="sc'+this.countScreen+'"></div>');
+        //cria o novo contador de pieceSet
         this.countPieceSet['sc'+this.countScreen] = 0;
+        //atualiza o pajinate
+        this.attPajinate();
+    }
+    
+    this.attPajinate = function(){
+        //pega o valor da quantidade de páginas
+        var lastScreen = $('.screen').size()-1;
         
+        //recria o pajinate passando o start_page como a ultima tela.
         $('.canvas').pajinate({
+            start_page : lastScreen,
             items_per_page : 1,
             nav_label_first : '<<',
             nav_label_last : '>>',
             nav_label_prev : '<',
             nav_label_next : '>',
             show_first_last : false,
-            num_page_links_po_display: 20,
+            num_page_links_to_display: 20,
             nav_panel_id : '.navscreen',
             editor : this
         });
@@ -265,12 +277,17 @@ function editor () {
     }
     
     this.delScreen = function(){
-        //var id = this.currentScreenId;
-        //if(confirm(MSG_REMOVE_SCREEN)){
-        //    $("#"+id).remove();
-        //    delete this.countPieceSet[id];
-        //}
-        //não funciona ainda
+        //pega o id da screen atual
+        var id = this.currentScreenId;
+        //confirmação do ato de remover
+        if(confirm(MSG_REMOVE_SCREEN)){
+            //remove o elemento
+            $("#"+id).remove();
+            //deleta o count do pieceset
+            delete this.countPieceSet[id];
+            //atualiza o pajinate
+            this.attPajinate();
+        }
     }
 
     this.delPieceSet = function(id){

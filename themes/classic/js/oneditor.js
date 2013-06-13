@@ -1,6 +1,7 @@
 var newEditor = new editor();
 $(function() { 
     $('.canvas').pajinate({
+        start_page : 0,
         items_per_page : 1,
         nav_label_first : '<<',
         nav_label_last : '>>',
@@ -22,6 +23,11 @@ $(function() {
     $("#addScreen").click(function(){
         newEditor.addScreen();
     });
+    
+    $("#delScreen").click(function(){
+        newEditor.delScreen();
+    });
+    
     $(".insertText").click(function(){
         newEditor.addTexto();
     });
