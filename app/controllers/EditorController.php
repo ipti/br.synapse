@@ -343,6 +343,8 @@ class EditorController extends Controller {
                                         $newElementProperty->value = $libraryID;
                                         $newElementProperty->insert();
                                         
+                                        $json['LibraryID'] = $libraryID;
+                                        
                                     break;
                                     default:
                                         throw new Exception("ERROR: Tipo inválido.<br>");

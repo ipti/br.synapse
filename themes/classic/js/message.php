@@ -2,6 +2,7 @@
     MSG_REMOVE_PIECESET    = "<?php echo Yii::t('default', 'Do you really whant to remove this PieceSet?'); ?>";   
     MSG_REMOVE_PIECE       = "<?php echo Yii::t('default', 'Do you really whant to remove this Piece?'); ?>";      
     MSG_REMOVE_ELEMENT     = "<?php echo Yii::t('default', 'Do you really whant to remove this Element?'); ?>";   
+    MSG_REMOVE_OBJECT      = "<?php echo Yii::t('default', 'Do you really whant to remove this Object?'); ?>";
     MSG_CHANGE_ELEMENT     = "<?php echo Yii::t('default', 'This action will remove other objects.\n'); ?>"+       
                              "<?php echo Yii::t('default', 'Do you have sure that you want to do this?'); ?>";   
     
@@ -14,6 +15,9 @@
     LABEL_REMOVE_PIECESET  = "<?php echo Yii::t('default', 'Remove PieceSet'); ?>"; 
     LABEL_REMOVE_PIECE     = "<?php echo Yii::t('default', 'Remove Piece'); ?>"; 
     LABEL_REMOVE_ELEMENT   = "<?php echo Yii::t('default', 'Remove Element'); ?>";
+    LABEL_REMOVE_IMAGE     = "<?php echo Yii::t('default', 'Remove Image'); ?>";
+    LABEL_REMOVE_TEXT      = "<?php echo Yii::t('default', 'Remove Text'); ?>";
+    LABEL_REMOVE_OBJECT    = "<?php echo Yii::t('default', 'Remove Object'); ?>";
     LABEL_INITIAL_TEXT     = "<?php echo Yii::t('default', 'Click to Change...'); ?>";
     LABEL_CORRECT          = "<?php echo Yii::t('default', 'Correct'); ?>";
     
