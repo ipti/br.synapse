@@ -20,6 +20,8 @@
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery/jquery.form.js"></script>
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery/jquery.jeditable.mini.js"></script>
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/oneditor.js"></script>
+   
+        
         <title>Synapse - Editor</title>
     </head>
     <body class="theme">

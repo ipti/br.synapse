@@ -16,7 +16,7 @@ class EditorController extends Controller {
    public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'upload', 'json', 'preeditor', 'filtergoal'),
+                'actions' => array('index', 'upload', 'json', 'preeditor', 'filtergoal', 'poseditor'),
                 'users' => array('@'),
             ),
             array('deny', // deny all users
@@ -39,6 +39,73 @@ class EditorController extends Controller {
     public function actionPreeditor(){
         $this->render('preeditor');
     }
+    
+    public function actionPoseditor() {
+  
+        if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['img']) ){
+            //Na Solicitação AJAX
+	//include( 'cutImage.class.php' );
+	$oImg = new cutImage( $_POST['img'] );
+	   if( $oImg->valida() == 'OK' )
+	    {
+		$oImg->posicaoCrop( $_POST['x'], $_POST['y'] );
+		$oImg->redimensiona( $_POST['w'], $_POST['h'], 'crop' );
+		$oImg->grava($_POST['img'] );
+	    }else {
+                $this->redirect('poseditor?error='.$oImg->valida());
+        }
+       }else{
+           //Solicitação Não Ajax
+           
+           // memory limit (nem todo server aceita)
+			ini_set("memory_limit","50M");
+			set_time_limit(0);
+			$img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg", 
+                            "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
+                        $num_img = count($img_sent);
+                       // $num_img = 4;
+                    for($i = 0; $i < $num_img; $i++) { 
+                        $name_img[$i] = $img_sent[$i];
+			$tem_crop	= false;
+			$img[$i]		= '';
+                        if(isset($name_img[$i]))
+			 {
+                                $newDir[$i] = Yii::app()->basePath. "/../rsc/upload/image/". $name_img[$i];
+                                $newDir[$i] = str_replace('\\',"/" ,$newDir[$i]);
+                                $newUrl[$i] = "/rsc/upload/image/" . $name_img[$i] ;
+                                $imagesize[$i] = getimagesize( $newDir[$i] );
+				if( $imagesize[$i] !== false )
+				{
+						$oImg = new cutImage( $newDir[$i] );
+						if( $oImg->valida() == 'OK' )
+						{
+                                                    $oImg->redimensiona( '400', '', '' );
+                                                    $oImg->grava( $newDir[$i] );
+
+                                                    $imagesize[$i]	= getimagesize( $newDir[$i] );
+                                                    $img[$i]		= '<img src="'.$newUrl[$i].'" id="jcrop" '.$imagesize[$i][3].' />';
+                                                    $preview[$i]	= '<img src="'.$newUrl[$i].'" id="preview" '.$imagesize[$i][3].' />';
+                                                    $tem_crop 	= true;	
+						}
+				}
+			}
+                    }
+           //=================================
+           $this->layout = 'none';
+           $property_img = array( array() );
+           for($i = 0; $i < $num_img; $i++) {
+              $property_img[$i]['newDir'] = $newDir[$i];
+              $property_img[$i]['newUrl'] = $newUrl[$i];
+              $property_img[$i]['imagesize'] = $imagesize[$i];
+              $property_img[$i]['img'] = $img[$i];
+              $property_img[$i]['preview'] = $preview[$i];
+              $property_img[$i]['name_img'] = $name_img[$i];
+              $property_img[$i]['tem_crop'] = $tem_crop;
+           }
+         $this->render('poseditor', array('property_img'=>$property_img));  
+        } 
+    }
+    
     public function actionFiltergoal(){
         $idDiscipline = $_POST['idDiscipline'];
         $idDegree = $_POST['idDegree'];
