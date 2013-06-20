@@ -58,14 +58,14 @@ function editor () {
         this.countPieces[piecesetID] = 0;
         $('#'+this.currentScreenId).append(''+
             '<div class="PieceSet" id="'+piecesetID+'_list">'+
-                '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
-                '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
-                '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
-                '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
-                '<input type="text" class="actName" />'+
-                '<div id="'+piecesetID+'_forms"></div>'+
-                '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
-                '<span class="clear"></span>'+
+            '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
+            '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
+            '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
+            '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
+            '<input type="text" class="actName" />'+
+            '<div id="'+piecesetID+'_forms"></div>'+
+            '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
+            '<span class="clear"></span>'+
             '</div>');
 
         this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;          
@@ -165,13 +165,13 @@ function editor () {
         
         $('#'+ID).append(''+
             '<div id="'+file+'" class="'+uploadType+'">'+
-                '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
-                '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
-                    '<input type="hidden" name="op" value="'+uploadType+'">'+
-                    '<label>'+uploadType+': '+
-                        '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
-                    '</label>'+
-                '</form>'+
+            '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
+            '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
+            '<input type="hidden" name="op" value="'+uploadType+'">'+
+            '<label>'+uploadType+': '+
+            '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
+            '</label>'+
+            '</form>'+
             '</div>');
         
         var parent = this;
@@ -276,20 +276,20 @@ function editor () {
         $(buttonTextoID).click(function(){
             if(!parent.existID(ElementImageID) || 
                 confirm(MSG_CHANGE_ELEMENT)){
-                    if(!parent.existID(ElementTextID)){
-                        parent.addText(elementID);
-                        $(imageID).remove();
-                    }
+                if(!parent.existID(ElementTextID)){
+                    parent.addText(elementID);
+                    $(imageID).remove();
                 }
+            }
         });
         $(buttonImageID).click(function(){
             if(!parent.existID(ElementTextID) || 
                 confirm(MSG_CHANGE_ELEMENT)){
-                    if(!parent.existID(ElementImageID)){
-                        parent.addImage(elementID);
-                        $(textoID).remove();
-                    }
+                if(!parent.existID(ElementImageID)){
+                    parent.addImage(elementID);
+                    $(textoID).remove();
                 }
+            }
         });
         $(buttonDelID).click(function(){
             parent.delElement(elementID);
@@ -573,9 +573,9 @@ function editor () {
                                             pieceID: LastPieceID,
                                             flag: Flag,
                                             value: value
-                                       };
+                                        };
                                        
-                                       //Se for um Texto
+                                        //Se for um Texto
                                         if(parent.existID(ElementTextID)){
                                             //Salva Elemento
                                             parent.saveData(
@@ -594,14 +594,14 @@ function editor () {
                                             //criar a função para envio de formulário via Ajax
                                             $(FormElementImageID).ajaxForm({
                                                 beforeSend: function() {
-                                                    //zerar barra de upload
-                                                    //$("#"+bar).width('0%')
-                                                    //$("#"+percent).html('0%');
+                                                //zerar barra de upload
+                                                //$("#"+bar).width('0%')
+                                                //$("#"+percent).html('0%');
                                                 },
                                                 uploadProgress: function(event, position, total, percentComplete) {
-                                                    //atualizar barra de upload
-                                                    //$("#"+bar).width(percentComplete + '%')
-                                                    //$("#"+percent).html(percentComplete + '%');
+                                                //atualizar barra de upload
+                                                //$("#"+bar).width(percentComplete + '%')
+                                                //$("#"+percent).html(percentComplete + '%');
                                                 },
                                                 success: function(response) {
                                                     //dados de retorno do upload
@@ -657,8 +657,8 @@ function editor () {
         //quantidade de elementos.
         var qtdeImages = $('.element .image').size();
         if(qtdeImages == this.uploadedImages){
-            //console.log('PosRender Habilitado!');
-            //console.log(this.uploadedLibraryIDs);
+        //console.log('PosRender Habilitado!');
+        //console.log(this.uploadedLibraryIDs);
         }
         
     }
