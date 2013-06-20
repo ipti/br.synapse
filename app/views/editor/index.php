@@ -25,22 +25,22 @@ $this->breadcrumbs=array(
     <hgroup>
         <h1>TAG</h1>
         <ul>
-            <li class="new">NOVO</li>
-            <li class="save">SALVAR</li>
+            <li class="new"><?php echo Yii::t('default', 'New'); ?></li>
+            <li class="save"><?php echo Yii::t('default', 'Save'); ?></li>
         </ul>
         <span class="clear"></span>
     </hgroup>
 </header>
 <div id="toolbar" class="toolbar">
-    <h2>INSERIR</h2>
+    <h2><?php echo Yii::t('default', 'Add'); ?></h2>
     <ul class="tools">
-        <li id="addPieceSet">Question</li>
+        <li id="addPieceSet"><?php echo Yii::t('default', 'Add PieceSet'); ?></li>
     </ul>
 </div>
 <div class="canvas">
-    <button class="themebutton" id="addScreen">NOVA TELA</button>
+    <button class="themebutton" id="addScreen"><?php echo Yii::t('default', 'Add Screen'); ?></button>
     <ul class="navscreen"></ul>
-    <button class="themebutton" id="delScreen">APAGAR TELA</button>
+    <button class="themebutton" id="delScreen"><?php echo Yii::t('default', 'Remove Screen'); ?></button>
     <span class="clear"></span>
     <div class="content">
         <div class="screen" id="sc0">

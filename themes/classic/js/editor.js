@@ -12,6 +12,8 @@ function editor () {
     this.countElements = new Array();
     this.currentPieceSet = 'sc0_ps0';
     this.currentPiece = 'sc0_ps0_p0';
+    this.uploadedImages = 0;
+    this.uploadedLibraryIDs = new Array();
     
     this.changePiece = function(piece){
         $('.piece').removeClass('active');
@@ -21,48 +23,60 @@ function editor () {
     }
     
     this.addScreen = function(){
+        //incrementa o contador
         this.countScreen = this.countScreen+1;
+        //cria a div da nova screen
         $(".content").append('<div class="screen" id="sc'+this.countScreen+'"></div>');
+        //cria o novo contador de pieceSet
         this.countPieceSet['sc'+this.countScreen] = 0;
+        //atualiza o pajinate
+        this.attPajinate();
+    }
+    
+    this.attPajinate = function(){
+        //pega o valor da quantidade de páginas
+        var lastScreen = $('.screen').size()-1;
         
+        //recria o pajinate passando o start_page como a ultima tela.
         $('.canvas').pajinate({
+            start_page : lastScreen,
             items_per_page : 1,
             nav_label_first : '<<',
             nav_label_last : '>>',
             nav_label_prev : '<',
             nav_label_next : '>',
             show_first_last : false,
-            num_page_links_po_display: 20,
+            num_page_links_to_display: 20,
             nav_panel_id : '.navscreen',
             editor : this
         });
     }
     
     this.addPieceSet = function(){
+        var parent = this;
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
         this.countPieces[piecesetID] = 0;
         $('#'+this.currentScreenId).append(''+
             '<div class="PieceSet" id="'+piecesetID+'_list">'+
-            '<button class="insertImage">Insert Image</button>'+
-            '<button class="insertSound">Insert Sound</button>'+
-            '<button class="addPiece" id="pie_'+piecesetID+'">AddPiece</button>'+
-            '<button class="del delPieceSet">Delete PieceSet</button>'+
-            '<input type="text" class="actName" />'+
-            '<div id="'+piecesetID+'_forms"></div>'+
-            '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
-            '<span class="clear"></span>'+
+                '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
+                '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
+                '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
+                '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
+                '<input type="text" class="actName" />'+
+                '<div id="'+piecesetID+'_forms"></div>'+
+                '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
+                '<span class="clear"></span>'+
             '</div>');
 
         this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;          
 
-        var parent = this;
         $("#"+piecesetID+"_list > button.insertImage").click(function(){
-            parent.addImage(piecesetID+"_forms");
-            $(this).attr('disabled', 'disabled');
+            if (!parent.existID('#'+piecesetID+"_forms_image_form"))
+                parent.addImage(piecesetID+"_forms");
         });
         $("#"+piecesetID+"_list > button.insertSound").click(function(){
-            parent.addSound(piecesetID+"_forms");
-            $(this).attr('disabled', 'disabled');
+            if (!parent.existID('#'+piecesetID+"_forms_audio_form"))
+                parent.addSound(piecesetID+"_forms");
         });
         $("#"+piecesetID+"_list > button.delPieceSet").click(function(){
             parent.delPieceSet(piecesetID);
@@ -71,6 +85,7 @@ function editor () {
     }
     
     this.addPiece = function(id){
+        var parent = this;
         var PieceSetid = id.replace("pie_", "");
         this.currentPieceSet = PieceSetid;
         
@@ -78,16 +93,15 @@ function editor () {
         this.countElements[pieceID] = 0;
         $('#'+PieceSetid).append(''+
             '<li id="'+pieceID+'" class="piece">'+
-            '<button class="del delPiece">DelPiece</button>'+
+            '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>'+
             '<div class="tplMulti">'+
-            '<button class="newElement">newElement</button>'+
+            '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>'+
             '<br>'+
             '</div>'+
             '</li>');
         
         this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
-        
-        var parent = this;
+
         $("#"+pieceID+"> div > button.newElement").click(function(){
             parent.addElement();
         });
@@ -97,8 +111,17 @@ function editor () {
     }
     
     this.addText = function(ID){
-        $('#'+ID).append('<font class="text editable" id="'+ID+'_text">Clique para Alterar </font>');
-        $('#'+ID+"_text").editable(function(value, settings) { 
+        $('#'+ID).append('<div id="'+ID+'_text" class="text">'+
+            '<font class="editable">'+LABEL_INITIAL_TEXT+'</font>'+
+            '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>'+
+            '</div>');
+        
+        var parent = this;
+        $("#"+ID+"_text > button.delText").click(function(){
+            parent.delObject(ID+"_text");
+        });
+        
+        $('#'+ID+"_text > font.editable").editable(function(value, settings) { 
             //console.log(this);
             //console.log(value);
             //console.log(settings);
@@ -118,8 +141,8 @@ function editor () {
                 op: "load"
             },         //$_POST['op'] on load
             indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
-            tooltip   : 'Click to edit...'
-        });
+            tooltip   : LABEL_INITIAL_TEXT
+        });        
     }
     
     this.addUploadForm = function(ID, type, responseFunction){
@@ -141,12 +164,21 @@ function editor () {
         var form    = file+"_form";
         
         $('#'+ID).append(''+
-            '<div id="'+file+'">'+
-            '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
-            '<input type="hidden" name="op" value="'+uploadType+'">'+
-            '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
-            '</form>'+
+            '<div id="'+file+'" class="'+uploadType+'">'+
+                '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
+                '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
+                    '<input type="hidden" name="op" value="'+uploadType+'">'+
+                    '<label>'+uploadType+': '+
+                        '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
+                    '</label>'+
+                '</form>'+
             '</div>');
+        
+        var parent = this;
+        
+        $("#"+file+"> button.delObject").click(function(){
+            parent.delObject(file);
+        });
         
         $('#'+form+' > input#'+uploadType).bind('change', function() {
             var filesize = this.files[0].size / 1024; //KB
@@ -163,10 +195,10 @@ function editor () {
                     
                     reader.readAsDataURL(this.files[0]);
                 }else{
-                    alert('Tipo do arquivo incompatível.');
+                    alert(ERROR_INCOMPATIBLE_TYPE);
                 }
             }else{
-                alert('Arquivo muito grande. Tamanho máximo: '+uploadMaxSize+'MB');
+                alert(ERROR_FILE_SIZE +uploadMaxSize+'MB');
             }
             
         });
@@ -184,6 +216,7 @@ function editor () {
     }
     
     this.addSound = function(id){
+        var parent = this;
         this.addUploadForm(id, {
             type: 'audio',
             accept: Array("mp3","wav","ogg"),
@@ -192,12 +225,13 @@ function editor () {
             $("#"+fileid+" > audio").remove("audio");
             $("#"+fileid).append(''+
                 '<audio src="'+src+'" controls="controls">'+
-                'Your browser does not support the audio element.'+
+                ERROR_BROWSER_SUPORT+
                 '</audio>');
         });
     }
     
     this.addVideo = function(id){
+        var parent = this;
         this.addUploadForm(id, {
             type: 'video',
             accept: Array("mp4","wmv","ogg"),
@@ -206,52 +240,56 @@ function editor () {
             $("#"+fileid+" > video").remove("video");
             $("#"+fileid).append(''+
                 '<video src="'+src+'" width="320" height="240" controls="controls">'+
-                'Your browser does not support the video element.'+
+                ERROR_BROWSER_SUPORT+
                 '</video>');
         });
     }
     
     this.addElement = function(){
+        var parent = this;
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         $('#'+this.currentPiece+" > div.tplMulti").append(''+
             '<span id="'+elementID+'" class="element moptions">'+
             '<div>' +
-            '<button class="insertImage">Insert Image</button>'+
-            '<button class="insertText">Insert Text</button>'+
-            '<button class="del delElement">Delete Element</button>'+
+            '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
+            '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
+            '<button class="del delElement">'+LABEL_REMOVE_ELEMENT+'</button>'+
             '<br>'+
             '<br>'+
             '<br>'+
             '<label>'+
-            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+
-            'Correct'+
+            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+LABEL_CORRECT+
             '</label>'+
             '</div>' +
             '</span>');
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         
-        var parent = this;
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
         var buttonImageID = "#"+elementID+" > div > button.insertImage";
         var buttonDelID = "#"+elementID+" > div > button.delElement";
         var textoID = "#"+elementID+"_text";
         var imageID = "#"+elementID+"_image";
         
+        var ElementTextID = "#"+elementID+"_text";
+        var ElementImageID = "#"+elementID+"_image";
+        
         $(buttonTextoID).click(function(){
-            if (confirm('Essa ação irá remover qualquer outro Elemento.\nTem certeza que deseja fazer isso?')){
-                parent.addText(elementID);
-                $(buttonTextoID).attr('disabled', 'disabled');
-                $(buttonImageID).removeAttr('disabled');
-                $(imageID).remove();
-            }
+            if(!parent.existID(ElementImageID) || 
+                confirm(MSG_CHANGE_ELEMENT)){
+                    if(!parent.existID(ElementTextID)){
+                        parent.addText(elementID);
+                        $(imageID).remove();
+                    }
+                }
         });
         $(buttonImageID).click(function(){
-            if (confirm('Essa ação irá remover qualquer outro Elemento.\nTem certeza que deseja fazer isso?')){
-                parent.addImage(elementID);
-                $(buttonImageID).attr('disabled', 'disabled');
-                $(buttonTextoID).removeAttr('disabled');
-                $(textoID).remove();
-            }
+            if(!parent.existID(ElementTextID) || 
+                confirm(MSG_CHANGE_ELEMENT)){
+                    if(!parent.existID(ElementImageID)){
+                        parent.addImage(elementID);
+                        $(textoID).remove();
+                    }
+                }
         });
         $(buttonDelID).click(function(){
             parent.delElement(elementID);
@@ -259,28 +297,40 @@ function editor () {
     }
     
     this.delScreen = function(){
+        //pega o id da screen atual
         var id = this.currentScreenId;
-        if(confirm('Deseja realmente remover este Screen?')){
+        //confirmação do ato de remover
+        if(confirm(MSG_REMOVE_SCREEN)){
+            //remove o elemento
             $("#"+id).remove();
+            //deleta o count do pieceset
             delete this.countPieceSet[id];
+            //atualiza o pajinate
+            this.attPajinate();
         }
     }
 
     this.delPieceSet = function(id){
-        if(confirm('Deseja realmente remover este PieceSet?')){
-            $("#"+id).remove();
+        if(confirm(MSG_REMOVE_PIECESET)){
+            $("#"+id+"_list").remove();
             delete this.countPieces[id];
         }
     }
 
     this.delPiece = function(id){
-        if(confirm('Deseja realmente remover este Piece?')){
+        if(confirm(MSG_REMOVE_PIECE)){
             $("#"+id).remove();
             delete this.countElements[id];
         }
     }
     this.delElement = function(id){
-        if(confirm('Deseja realmente remover esta Element?')){
+        if(confirm(MSG_REMOVE_ELEMENT)){
+            $("#"+id).remove();
+        }
+    }
+    
+    this.delObject = function(id){
+        if(confirm(MSG_REMOVE_OBJECT)){
             $("#"+id).remove();
         }
     }
@@ -310,37 +360,16 @@ function editor () {
         });
     }
    
+    //Função de salvamento.
+    //salva utilizando Ajax, parte por parte.
     this.saveAll = function(){
-        var parent = this;
-        var ScreenID;
-        var PieceSetID;
-        var PieceID;
-        var ElementID;
-        
-        var screenPosition;
-        var pieceSetPosition;
-        var piecePosition;
-        var elementPosition;
-        
-        var LastScreenID;
-        var LastPieceSetID;
-        var LastPieceID;
-        
-        var curretScreenID;
-        var curretPieceSetID;
-        var curretPieceID;
-        
-        var pieceSetDescription;
-        var Flag;
         //       1-> save cobject 
         //            templateID
         //            typeID
         //            themeID
-        //       2-> save cobject_metadata
-        //            cobjectID
         //            typeID
         //            value
-        //       3-> each screen{
+        //       2-> each screen{
         //              save Screen
         //              each PieceSet{
         //                  save PieceSet
@@ -348,13 +377,55 @@ function editor () {
         //                      save Piece
         //                      each element{
         //                          Save element
+        //                          if element txt{
+        //                             save proprety
+        //                          }
+        //                          else if element img{
+        //                             upload
+        //                             save proprety
+        //                          }
         //                      }
         //                  }
         //              }
         //          }
         //       
         //       
-        //cria tela de salvar
+        
+        //referência à classe
+        var parent = this;
+        
+        //ID no DOM do elemento para o Each
+        var ScreenID;
+        var PieceSetID;
+        var PieceID;
+        var ElementID;
+        
+        //contadores de posição/ordem
+        var screenPosition;
+        var pieceSetPosition;
+        var piecePosition;
+        var elementPosition;
+        
+        //ID do ultimo Salvo no banco
+        var LastScreenID;
+        var LastPieceSetID;
+        var LastPieceID;
+        
+        //ID no DOM do elemento atual
+        //necessário para "sincronizar" o ajax com o javascript
+        var curretScreenID;
+        var curretPieceSetID;
+        var curretPieceID;
+        
+        //Dados em geral dos elementos
+        var pieceSetDescription;
+        var Flag;
+        
+        //inicializa contador
+        this.uploadedImages = 0;
+        this.uploadedLibraryIDs = new Array();
+        
+        //cria tela de log
         $('.theme').append('<div style="left: 0px; width: 100%; height: 100%; position: fixed; top: 0px; background: none repeat scroll 0px 0px black; opacity: 0.8;" class="savebg"></div>');
         $('.theme').append('<div style="background: none repeat scroll 0px 0px white; height: 300px; border-radius: 5px 5px 5px 5px; width: 800px; margin-top: 100px; margin-left: 250px; position: fixed; border: 2px solid black; padding: 10px;" class="savescreen">'+
             '<p>Aguarde um instante...</p>'+
@@ -362,7 +433,9 @@ function editor () {
         
         //Salva o CObject
         this.saveData({
+            //Operação Salvar
             op: "save", 
+            //Passo CObject
             step: "CObject",
             //Dados do CObject
             COtypeID: parent.COtypeID,
@@ -372,7 +445,9 @@ function editor () {
         },
         //funcção sucess do save Cobject
         function(response, textStatus, jqXHR){
+            //atualiza a tela de log
             $('.savescreen').append('<br><p>CObject salvo com sucesso!</p>');
+            //atualiza o ID do CObject, com a resposta do Ajax
             parent.CObjectID = response['CObjectID'];
             
             //Reubucua o contador da Ordem das Screens
@@ -380,6 +455,7 @@ function editor () {
             
             //Para cada tela
             $('.screen').each(function(){
+                //Atualiza a ScreeID com o ID do ".screen" atual
                 ScreenID = $(this).attr('id');
                 
                 //Salva Screen
@@ -387,6 +463,7 @@ function editor () {
                     //Operação Salvar, Screen, ID no DOM
                     op: "save", 
                     step: "Screen",
+                    //Necessário para que o JS fique sincronizado com o Ajax
                     DomID: ScreenID,
                     //Dados da Screen
                     CObjectID: parent.CObjectID,
@@ -397,7 +474,10 @@ function editor () {
                 },
                 //função sucess do save Screen
                 function(response, textStatus, jqXHR){
+                    //Atualiza a tela de log
                     $('.savescreen').append('<br><p>Screen salvo com sucesso!</p>');
+                    
+                    //Retorna o ID no DOM e o ID da ultima Tela no Banco.
                     curretScreenID = response['DomID'];
                     LastScreenID = response['screenID'];
                     
@@ -452,6 +532,7 @@ function editor () {
                                     curretPieceID = response['DomID'];
                                     LastPieceID = response['PieceID'];
                                     
+                                    //inicializa o contador de posição do elemento
                                     elementPosition = 1;
                                     
                                     //Para cada Elemento no Piece
@@ -459,15 +540,18 @@ function editor () {
                                         ElementID = $(this).attr('id');
                                         Flag = $('#'+ElementID+'_flag').is(':checked');
                                         
+                                        //declaração das variáveis que serão passadas por ajax
                                         var type;
                                         var value;
                                         
+                                        //IDs dos Formulários, textos e imagens
                                         var ElementTextID = "#"+ElementID+"_text";
                                         var ElementImageID = "#"+ElementID+"_image";
                                         var FormElementImageID = "#"+ElementID+"_image_form";
                                         
+                                        //Preencher as variáveis de acordo com o tipo do objeto a ser salvo
                                         if(parent.existID(ElementTextID)){
-                                            type = 12; //word
+                                            type = 11; //text
                                             value = $(ElementTextID).html();
                                         }else if(parent.existID(ElementImageID)){
                                             type = 16; //image
@@ -477,7 +561,9 @@ function editor () {
                                             value = -1;
                                         }
                                         
+                                        //Dados que serão passados pelo ajax
                                         var data = {
+                                            //Operação Salvar, Element, Type, ID no DOM
                                             op: "save",
                                             step: "Element",
                                             typeID: type,
@@ -487,49 +573,66 @@ function editor () {
                                             pieceID: LastPieceID,
                                             flag: Flag,
                                             value: value
-                                            //Operação Salvar, Element, Type, ID no DOM
                                        };
                                        
+                                       //Se for um Texto
                                         if(parent.existID(ElementTextID)){
                                             //Salva Elemento
-                                            parent.saveData(data,
-                                            //Função de sucess do Save Element
-                                            function(response, textStatus, jqXHR){
-                                                $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
-                                            });
+                                            parent.saveData(
+                                                //Variáveis dados
+                                                data,
+                                                //Função de sucess do Save Element
+                                                function(response, textStatus, jqXHR){
+                                                    $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                                });
                                             
                                             //incrementa a Ordem do Element
                                             elementPosition++;
-                                            
+                                        
+                                        //Se for uma Imagem
                                         }else if(parent.existID(ElementImageID)){
+                                            //criar a função para envio de formulário via Ajax
                                             $(FormElementImageID).ajaxForm({
                                                 beforeSend: function() {
+                                                    //zerar barra de upload
                                                     //$("#"+bar).width('0%')
                                                     //$("#"+percent).html('0%');
                                                 },
                                                 uploadProgress: function(event, position, total, percentComplete) {
+                                                    //atualizar barra de upload
                                                     //$("#"+bar).width(percentComplete + '%')
                                                     //$("#"+percent).html(percentComplete + '%');
                                                 },
                                                 success: function(response) {
+                                                    //dados de retorno do upload
                                                     data['value']['url'] = response['url'];
                                                     data['value']['name'] = response['name'];
-                                                    //enviado com sucesso!
+                                                    
                                                     //Salva Elemento
-                                                    parent.saveData(data,
-                                                    //Função de sucess do Save Element
-                                                    function(response, textStatus, jqXHR){
-                                                        $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
-                                                    });
+                                                    parent.saveData(
+                                                        //Dados
+                                                        data,
+                                                        //Função de sucess do Save Element
+                                                        function(response, textStatus, jqXHR){
+                                                            $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
+                                                            
+                                                            //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
+                                                            parent.uploadedLibraryIDs[parent.uploadedImages++] = response["LibraryID"];
+                                                            
+                                                            //chama o posRender
+                                                            parent.posRender();
+                                                        });
                                                 },
                                                 error: function(error, textStatus, errorThrown){
                                                     //$("#"+form).html(error.responseText);
-                                                    alert("Houve um erro ao enviar o arquivo.");
+                                                    alert(ERROR_FILE_UPLOAD);
                                                     $(".savescreen").append(error.responseText);
                                                 }
-                                            }); 
+                                            });
                                             
+                                            //Envia o formulário atual
                                             $(FormElementImageID).submit();
+                                            
                                             //incrementa a Ordem do Element
                                             elementPosition++;
                                         }
@@ -548,10 +651,16 @@ function editor () {
             });
         });
        
-       
+    }
+    
+    this.posRender = function(){
+        //quantidade de elementos.
+        var qtdeImages = $('.element .image').size();
+        if(qtdeImages == this.uploadedImages){
+            //console.log('PosRender Habilitado!');
+            //console.log(this.uploadedLibraryIDs);
+        }
         
-        //$('form').submit();
-        alert("Salvo com sucesso!");
     }
     
     this.existID = function(id){

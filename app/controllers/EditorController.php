@@ -336,19 +336,91 @@ class EditorController extends Controller {
                                 $newPieceElement->insert();
 
                                 $json['ElementID'] = $elementID;
+                            
+                                switch($typeID){
+                                    case 11: //text
+                                        //salva editor_element_property 's
+                                            //6 text
+                                        $newElementProperty = new EditorElementProperty();
+                                        $newElementProperty->elementID = $elementID;
+                                        $newElementProperty->propertyID = 6;
+                                        $newElementProperty->value = $value;
+                                        $newElementProperty->insert();
+                                            //10 language
+                                        $newElementProperty = new EditorElementProperty();
+                                        $newElementProperty->elementID = $elementID;
+                                        $newElementProperty->propertyID = 10;
+                                        $newElementProperty->value = "português";
+                                        $newElementProperty->insert();
+                                    break;
+                                    case 16: //image
+                                        $src = $value['url'];
+                                        $nome = $value['name'];
+                                        $nome = explode(".", $nome);
+                                        $ext = $nome[1];
+                                        //Pegar informações da imagem
+                                        
+                                        $url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
+                                        list($width, $height, $type) = getimagesize("$url$src"); 
+                                        
+                                        //Salva library
+                                            //type 9 
+                                        $newLibrary = new Library();
+                                        $newLibrary->typeID = 9;
+                                        $newLibrary->insert();
+                                        
+                                        //Pegar o ID do ultimo adicionado.
+                                        $library = Library::model()->findByAttributes(array(),array('order'=>'ID desc'));
+                                        $libraryID = $library->ID; 
+                                        
+                                        //Salva library_property 's
+                                            //1 width
+                                        $newLibraryProperty = new LibraryProperty();
+                                        $newLibraryProperty->libraryID = $libraryID;
+                                        $newLibraryProperty->propertyID = 1;
+                                        $newLibraryProperty->value = $width;
+                                        $newLibraryProperty->insert();
+                                        
+                                            //2 height
+                                        $newLibraryProperty = new LibraryProperty();
+                                        $newLibraryProperty->libraryID = $libraryID;
+                                        $newLibraryProperty->propertyID = 2;
+                                        $newLibraryProperty->value = $height;
+                                        $newLibraryProperty->insert();
+                                        
+                                            //5 src
+                                        $newLibraryProperty = new LibraryProperty();
+                                        $newLibraryProperty->libraryID = $libraryID;
+                                        $newLibraryProperty->propertyID = 5;
+                                        $newLibraryProperty->value = $src;
+                                        $newLibraryProperty->insert();
+                                        
+                                            //12 extension
+                                        $newLibraryProperty = new LibraryProperty();
+                                        $newLibraryProperty->libraryID = $libraryID;
+                                        $newLibraryProperty->propertyID = 12;
+                                        $newLibraryProperty->value = $ext;
+                                        $newLibraryProperty->insert();
+                                        
+                                        //Salva na editor_element_property
+                                            //4 libraryID
+                                        $newElementProperty = new EditorElementProperty();
+                                        $newElementProperty->elementID = $elementID;
+                                        $newElementProperty->propertyID = 4;
+                                        $newElementProperty->value = $libraryID;
+                                        $newElementProperty->insert();
+                                        
+                                        $json['LibraryID'] = $libraryID;
+                                        
+                                    break;
+                                    default:
+                                        throw new Exception("ERROR: Tipo inválido.<br>");
+                                }
+                                
+                                
 
                             }else{
                                 throw new Exception("ERROR: Dados da Element insuficientes.<br>");   
-                            }
-                            
-                            switch($typeID){
-                                case 12: //word
-                                break;
-                            
-                                case 16: //image
-                                break;
-                                default:
-                                    throw new Exception("ERROR: Tipo inválido.<br>");
                             }
                         }else{
                             throw new Exception("ERROR: Operação inválida.<br>");
@@ -374,7 +446,7 @@ class EditorController extends Controller {
     }
     
     public function actionUpload(){
-            
+        $json = array();
         if(isset($_FILES['file'])){
             if(isset($_POST['op'])){
                 if($_POST['op'] == 'image'){
@@ -391,7 +463,7 @@ class EditorController extends Controller {
                 }
                 $path = Yii::app()->basePath . '\..\rsc\upload\\'.$_POST['op'].'\\';
                 $url = "/rsc/upload/".$_POST['op']."/";
-
+                
                 $file_name = $_FILES['file']['name'];
                 $file_size = $_FILES['file']['size'];
                 
@@ -404,7 +476,6 @@ class EditorController extends Controller {
                         $tmp = $_FILES['file']['tmp_name'];
                         try{
                             move_uploaded_file($tmp,$path.$name);
-                            $json = array();
                             $json['url'] = $url.$name;
                             $json['name'] = $name;
                         }catch (Exception $e){
