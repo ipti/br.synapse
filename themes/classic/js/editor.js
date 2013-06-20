@@ -620,7 +620,7 @@ function editor () {
                                                             parent.uploadedLibraryIDs[parent.uploadedImages++] = response["LibraryID"];
                                                             
                                                             //chama o posRender
-                                                            parent.posRender();
+                                                            parent.posEditor();
                                                         });
                                                 },
                                                 error: function(error, textStatus, errorThrown){
@@ -653,7 +653,7 @@ function editor () {
        
     }
     
-    this.posRender = function(){
+    this.posEditor = function(){
         //quantidade de elementos.
         var qtdeImages = $('.element .image').size();
         if(qtdeImages == this.uploadedImages){
