@@ -12,7 +12,7 @@ function editor () {
     this.countElements = new Array();
     this.currentPieceSet = 'sc0_ps0';
     this.currentPiece = 'sc0_ps0_p0';
-    this.uploadedImages = 0;
+    this.uploadedElements = 0;
     this.uploadedLibraryIDs = new Array();
     
     this.changePiece = function(piece){
@@ -584,6 +584,7 @@ function editor () {
                                                 //Função de sucess do Save Element
                                                 function(response, textStatus, jqXHR){
                                                     $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                                    parent.uploadedElements++
                                                 });
                                             
                                             //incrementa a Ordem do Element
@@ -617,7 +618,7 @@ function editor () {
                                                             $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
                                                             
                                                             //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                            parent.uploadedLibraryIDs[parent.uploadedImages++] = response["LibraryID"];
+                                                            parent.uploadedLibraryIDs[parent.uploadedElements++] = response["LibraryID"];
                                                             
                                                             //chama o posRender
                                                             parent.posEditor();
@@ -655,8 +656,23 @@ function editor () {
     
     this.posEditor = function(){
         //quantidade de elementos.
-        var qtdeImages = $('.element .image').size();
-        if(qtdeImages == this.uploadedImages){
+        var qtdeImages = $('.element').size();
+        if(qtdeImages == this.uploadedElements){
+            var parent = this;
+            $.ajax({
+                type: "POST",
+                url: "/Editor/poseditor",
+                dataType: 'json',
+                ids: parent.uploadedLibraryIDs,                
+                error: function( jqXHR, textStatus, errorThrown ){
+                    $('.savescreen').append('<br><p>Erro ao inviar ids ao poseditor.</p>');
+                    $('.savescreen').append('<br><p>Error mensage:</p>');
+                    $('.savescreen').append(jqXHR.responseText);
+                },
+                success: function(response, textStatus, jqXHR){
+                    alert('Save complet!');
+                }
+            });
         //console.log('PosRender Habilitado!');
         //console.log(this.uploadedLibraryIDs);
         }

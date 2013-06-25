@@ -5,7 +5,19 @@
 
 
 function renderize(){
-    this.startRenderize = function (response){
+    this.op;
+    this.startRenderize = function (response, op){
+        //se operação não existir, o pradão é all
+        if(typeof(op) == "undefined"){
+            this.op = "all";
+        }
+        else{
+            this.op = op;
+            //lista de operações
+                //unity
+                //class
+                //all
+        }
         if(typeof(response.unitys) != "undefined"){
             this.loadUnitys(response.unitys, 0);
         }
@@ -19,12 +31,13 @@ function renderize(){
         var count = unitys.length;
         
         if(count == 0){
-            this.loadJsonClasses(fatherID);
+            if(this.op != "unity")
+                this.loadJsonClasses(fatherID);
         }
         else if (count == 1){
             $("#box_"+(id)).remove();
-            $("#box_"+(id-1)).append("<div id=\"box_"+id+"\" class=\"box\"></div>");
-            $("#box_"+id).append("<input type=\"hidden\" id=\"org_"+id+"\" value=\""+unitys[0].unity+"\">");
+            $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
+            $("#box_"+id).append("<input type='hidden' id='org_"+id+"' value='"+unitys[0].unity+"'>");
             nextUnity = unitys[0].unity;
             this.loadJsonUnity(nextUnity);
         }
@@ -35,10 +48,10 @@ function renderize(){
             for(i=0; i<count; i++){
                 options += "<option value='"+unitys[i].unity+"'>"+unitys[i].name+"</option>";
             }
-            $("#box_"+(id-1)).append("<div id=\"box_"+id+"\" class=\"box\"></div>");
+            $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
             
             $("#box_"+(id)).append((id == 1) ? "<font>Unity:</font>" : "<font>-></font>");
-            $("#box_"+(id)).append("<select id=\"org_"+id+"\" class=\"org\" >"+options+"</select>");
+            $("#box_"+(id)).append("<select id='org_"+id+"' class='org' >"+options+"</select>");
             $("#org_"+id).change(function(){
                 id = $(this).attr("id");
                 id = id.replace("org_", "");
@@ -59,14 +72,16 @@ function renderize(){
             options += "<option value='"+classes[i].unity+"'>"+classes[i].name+"</option>";
         }
         $("#classesbox").remove();
-        $("#filter").append("<div id=\"classesbox\"></div>");
+        $("#filter").append("<div id='classesbox' class='formField'></div>");
         $("#classesbox").append("<font>Class:</font>");
-        $("#classesbox").append("<select id=\"classes\">"+options+"</select>");
+        $("#classesbox").append("<select id='classes'>"+options+"</select>");
         $("#classes").change(function(){
+            if(parent.op == "all")
                 parent.loadJsonActors($(this).val());
         });
         var nextClass = classes[0].unity;
-        parent.loadJsonActors(nextClass);
+        if(parent.op == "all")
+            parent.loadJsonActors(nextClass);
     }
     this.loadActors = function (actors){
         var options = "";
@@ -76,11 +91,11 @@ function renderize(){
             options += "<option value='"+actors[i].actorID+"'>"+actors[i].name+"</option>";
         }
         $("#actorsbox").remove();
-        $("#filter").append("<div id=\"actorsbox\"></div>")
+        $("#filter").append("<div id='actorsbox' class='formField'></div>")
         $("#actorsbox").append("<font>Actor:</font>");
-        $("#actorsbox").append("<select id=\"actors\" name=\"actor\">"+options+"</select>");
+        $("#actorsbox").append("<select id='actors' name='actor'>"+options+"</select>");
         $("#actorsbox").append("<br>");
-        $("#actorsbox").append("<br><input type=\"submit\" value=\"Start\">");
+        $("#actorsbox").append("<br><input type='submit' value='Start'>");
         $("#actors").change(function(){
         });
     }

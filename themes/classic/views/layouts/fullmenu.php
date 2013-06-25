@@ -27,7 +27,7 @@
                         'itemOptions' => array('id' => 'itemuser'),
                         'items' => array(
                             array('label' => Yii::t('menu', 'Unidade'), 'url' => array('/userclass/index')),
-                            array('label' => Yii::t('menu', 'Pessoa'), 'url' => array('/peformance/index')),
+                            array('label' => Yii::t('menu', 'Pessoa'), 'url' => array('/person/index')),
                         ),
                     ),
                     array(
