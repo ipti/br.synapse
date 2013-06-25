@@ -1,11 +1,11 @@
 <div id="mainPage" class="main">
 <?php
 $this->breadcrumbs=array(
-	'people',
+	'Actors',
 );
-$contextDesc = Yii::t('default', 'Available actions that may be taken on Person.');
+$contextDesc = Yii::t('default', 'Available actions that may be taken on Actor.');
 $this->menu=array(
-array('label'=> Yii::t('default', 'Create a new Person'), 'url'=>array('create'),'description' => Yii::t('default', 'This action create a new Person')),
+array('label'=> Yii::t('default', 'Create a new Actor'), 'url'=>array('create'),'description' => Yii::t('default', 'This action create a new Actor')),
 ); 
 
 ?>
@@ -18,7 +18,7 @@ array('label'=> Yii::t('default', 'Create a new Person'), 'url'=>array('create')
                 <br/>
             <?php endif ?>
             <div class="panelGroup form">
-                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'people')?></div></div>
+                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'Actors')?></div></div>
                 <div class="panelGroupBody">
                     <?php $this->widget('zii.widgets.grid.CGridView', array(
                         'dataProvider' => $dataProvider,
@@ -26,10 +26,11 @@ array('label'=> Yii::t('default', 'Create a new Person'), 'url'=>array('create')
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
                     		'ID',
-                                'name',
-                                'login',
-                                'email',
-                                'phone',
+		'unityID',
+		'personID',
+		'personageID',
+		'activatedDate',
+		'desactivatedDate',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   

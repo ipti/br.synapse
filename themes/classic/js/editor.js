@@ -12,7 +12,7 @@ function editor () {
     this.countElements = new Array();
     this.currentPieceSet = 'sc0_ps0';
     this.currentPiece = 'sc0_ps0_p0';
-    this.uploadedImages = 0;
+    this.uploadedElements = 0;
     this.uploadedLibraryIDs = new Array();
     
     this.changePiece = function(piece){
@@ -58,14 +58,14 @@ function editor () {
         this.countPieces[piecesetID] = 0;
         $('#'+this.currentScreenId).append(''+
             '<div class="PieceSet" id="'+piecesetID+'_list">'+
-                '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
-                '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
-                '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
-                '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
-                '<input type="text" class="actName" />'+
-                '<div id="'+piecesetID+'_forms"></div>'+
-                '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
-                '<span class="clear"></span>'+
+            '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
+            '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
+            '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
+            '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
+            '<input type="text" class="actName" />'+
+            '<div id="'+piecesetID+'_forms"></div>'+
+            '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
+            '<span class="clear"></span>'+
             '</div>');
 
         this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;          
@@ -165,13 +165,13 @@ function editor () {
         
         $('#'+ID).append(''+
             '<div id="'+file+'" class="'+uploadType+'">'+
-                '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
-                '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
-                    '<input type="hidden" name="op" value="'+uploadType+'">'+
-                    '<label>'+uploadType+': '+
-                        '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
-                    '</label>'+
-                '</form>'+
+            '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
+            '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
+            '<input type="hidden" name="op" value="'+uploadType+'">'+
+            '<label>'+uploadType+': '+
+            '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
+            '</label>'+
+            '</form>'+
             '</div>');
         
         var parent = this;
@@ -276,20 +276,20 @@ function editor () {
         $(buttonTextoID).click(function(){
             if(!parent.existID(ElementImageID) || 
                 confirm(MSG_CHANGE_ELEMENT)){
-                    if(!parent.existID(ElementTextID)){
-                        parent.addText(elementID);
-                        $(imageID).remove();
-                    }
+                if(!parent.existID(ElementTextID)){
+                    parent.addText(elementID);
+                    $(imageID).remove();
                 }
+            }
         });
         $(buttonImageID).click(function(){
             if(!parent.existID(ElementTextID) || 
                 confirm(MSG_CHANGE_ELEMENT)){
-                    if(!parent.existID(ElementImageID)){
-                        parent.addImage(elementID);
-                        $(textoID).remove();
-                    }
+                if(!parent.existID(ElementImageID)){
+                    parent.addImage(elementID);
+                    $(textoID).remove();
                 }
+            }
         });
         $(buttonDelID).click(function(){
             parent.delElement(elementID);
@@ -573,9 +573,9 @@ function editor () {
                                             pieceID: LastPieceID,
                                             flag: Flag,
                                             value: value
-                                       };
+                                        };
                                        
-                                       //Se for um Texto
+                                        //Se for um Texto
                                         if(parent.existID(ElementTextID)){
                                             //Salva Elemento
                                             parent.saveData(
@@ -584,6 +584,7 @@ function editor () {
                                                 //Função de sucess do Save Element
                                                 function(response, textStatus, jqXHR){
                                                     $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                                    parent.uploadedElements++
                                                 });
                                             
                                             //incrementa a Ordem do Element
@@ -594,14 +595,14 @@ function editor () {
                                             //criar a função para envio de formulário via Ajax
                                             $(FormElementImageID).ajaxForm({
                                                 beforeSend: function() {
-                                                    //zerar barra de upload
-                                                    //$("#"+bar).width('0%')
-                                                    //$("#"+percent).html('0%');
+                                                //zerar barra de upload
+                                                //$("#"+bar).width('0%')
+                                                //$("#"+percent).html('0%');
                                                 },
                                                 uploadProgress: function(event, position, total, percentComplete) {
-                                                    //atualizar barra de upload
-                                                    //$("#"+bar).width(percentComplete + '%')
-                                                    //$("#"+percent).html(percentComplete + '%');
+                                                //atualizar barra de upload
+                                                //$("#"+bar).width(percentComplete + '%')
+                                                //$("#"+percent).html(percentComplete + '%');
                                                 },
                                                 success: function(response) {
                                                     //dados de retorno do upload
@@ -617,10 +618,10 @@ function editor () {
                                                             $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
                                                             
                                                             //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                            parent.uploadedLibraryIDs[parent.uploadedImages++] = response["LibraryID"];
+                                                            parent.uploadedLibraryIDs[parent.uploadedElements++] = response["LibraryID"];
                                                             
                                                             //chama o posRender
-                                                            parent.posRender();
+                                                            parent.posEditor();
                                                         });
                                                 },
                                                 error: function(error, textStatus, errorThrown){
@@ -653,12 +654,27 @@ function editor () {
        
     }
     
-    this.posRender = function(){
+    this.posEditor = function(){
         //quantidade de elementos.
-        var qtdeImages = $('.element .image').size();
-        if(qtdeImages == this.uploadedImages){
-            //console.log('PosRender Habilitado!');
-            //console.log(this.uploadedLibraryIDs);
+        var qtdeImages = $('.element').size();
+        if(qtdeImages == this.uploadedElements){
+            var parent = this;
+            $.ajax({
+                type: "POST",
+                url: "/Editor/poseditor",
+                dataType: 'json',
+                ids: parent.uploadedLibraryIDs,                
+                error: function( jqXHR, textStatus, errorThrown ){
+                    $('.savescreen').append('<br><p>Erro ao inviar ids ao poseditor.</p>');
+                    $('.savescreen').append('<br><p>Error mensage:</p>');
+                    $('.savescreen').append(jqXHR.responseText);
+                },
+                success: function(response, textStatus, jqXHR){
+                    alert('Save complet!');
+                }
+            });
+        //console.log('PosRender Habilitado!');
+        //console.log(this.uploadedLibraryIDs);
         }
         
     }
