@@ -92,8 +92,7 @@ class EditorController extends Controller {
 				}
 			}
                     }
-                }
-            }
+                        
             //=================================
             $this->layout = 'none';
             $property_img = array(array());
