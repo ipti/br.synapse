@@ -56,7 +56,7 @@ class EditorController extends Controller {
                 $this->redirect('poseditor?error='.$oImg->valida());
         }
        }else{
-           //Solicitação Não Ajax
+           //Solicitação Não AJAX
            // memory limit (nem todo server aceita)
 			ini_set("memory_limit","50M");
 			set_time_limit(0);
