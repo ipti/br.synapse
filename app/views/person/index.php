@@ -26,11 +26,10 @@ array('label'=> Yii::t('default', 'Create a new Person'), 'url'=>array('create')
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
                     		'ID',
-		'name',
-		'login',
-		'email',
-		'password',
-		'phone',
+                                'name',
+                                'login',
+                                'email',
+                                'phone',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   

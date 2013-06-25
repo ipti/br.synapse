@@ -42,7 +42,7 @@ class AssetsController extends Controller {
         //include $filename;
         //echo ob_get_clean();
        // var_dump(Yii::app()->);
-        $path = $_SERVER["DOCUMENT_ROOT"].'themes/classic/js/'.$file;
+        $path = $_SERVER["DOCUMENT_ROOT"].Yii::app()->theme->baseUrl.'/js/'.$file;
         if(file_exists($path)){
             $fcontent = file_get_contents($path);
         }else{
