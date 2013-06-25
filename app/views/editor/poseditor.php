@@ -22,48 +22,48 @@
                    
                 <!-- 2° Parte -->
 			<h2 id="tit-jcrop<?php echo $i ; ?>" class="tit-jcrop">Recorte a imagem: <?php echo $property_img[$i]['name_img']; ?></h2>
-			<div id="div-jcrop<?php echo $i ; ?>">
+			<div id="div-jcrop<?php echo $i ; ?>" class="div-jcrop">
 				
-				<div id="div-preview<?php echo $i ; ?>">
+				<div id="div-preview<?php echo $i ; ?>" class="div-preview">
 					<?php echo $property_img[$i]['preview']; ?>
 				</div>
 				
 				<?php echo $property_img[$i]['img']; ?>
 				
-				<input type="button" value="Salvar" id="btn-crop<?php echo $i ; ?>" />
+				<input type="button" value="Salvar" id="btn-crop<?php echo $i ; ?>" class="btn-crop" />
 			</div>
-			<div id="debug<?php echo $i ; ?>">
+			<div id="debug<?php echo $i ; ?>" class="debug">
 				<p><strong>X</strong> <input type="text" id="x<?php echo $i ; ?>" size="5" disabled /> x <input type="text" id="x2<?php echo $i ; ?>" size="5" disabled /> </p>
 				<p><strong>Y</strong> <input type="text" id="y<?php echo $i ; ?>" size="5" disabled /> x <input type="text" id="y2<?php echo $i ; ?>" size="5" disabled /> </p>
 				<p><strong>Dimensões</strong> <input type="text" id="h<?php echo $i ; ?>" size="5" disabled /> x <input type="text" id="w<?php echo $i ; ?>" size="5" disabled /></p>
 			</div>
 			<script type="text/javascript">
-				var img = '<?php echo $property_img[$i]['newDir']; ?>';
-                                var img_url = '<?php echo $property_img[$i]['newUrl']; ?>'
-                                 window.alert(img);
+				var img<?php echo $i;?> = '<?php echo $property_img[$i]['newDir']; ?>';
+                                var img_url<?php echo $i;?> = '<?php echo $property_img[$i]['newUrl']; ?>'
+                                
 				$(function(){                                    
 					$('#jcrop<?php echo $i ; ?>').Jcrop({
-						onChange: exibePreview,
-						onSelect: exibePreview,
+						onChange: exibePreview<?php echo $i; ?>,
+						onSelect: exibePreview<?php echo $i; ?>,
 						aspectRatio: 1
 					});
 					$('#btn-crop<?php echo $i ; ?>').click(function(){
 						$.post( 'poseditor', {
-							img:img, 
+							img:img<?php echo $i;?>, 
 							x: $('#x<?php echo $i ; ?>').val(), 
 							y: $('#y<?php echo $i ; ?>').val(), 
 							w: $('#w<?php echo $i ; ?>').val(), 
 							h: $('#h<?php echo $i ; ?>').val()
 						}, function(){
-							$('#div-jcrop<?php echo $i ; ?>').html( '<img src="' + img_url + '?' + Math.random() + '" width="'+$('#w').val()+'" height="'+$('#h').val()+'" />' );
+							$('#div-jcrop<?php echo $i ; ?>').html( '<img src="' + img_url<?php echo $i;?> + '" width="'+$('#w').val()+'" height="'+$('#h').val()+'" />' );
 							$('#debug<?php echo $i ; ?>').hide();
-							$('#tit-jcrop<?php echo $i ; ?>').html('Feito!<br /><a href="poseditor">enviar outra imagem</a>'); // see-> 'retirar'
+							$('#tit-jcrop<?php echo $i ; ?>').html('Feito!<br />');
 						});
 						return false;
 					});
 				});
 				
-				function exibePreview(c)
+				function exibePreview<?php echo $i; ?>(c)
 				{
 					var rx = 100 / c.w;
 					var ry = 100 / c.h;

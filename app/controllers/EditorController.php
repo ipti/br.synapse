@@ -56,13 +56,14 @@ class EditorController extends Controller {
         }
        }else{
            //Solicitação Não Ajax
-           
            // memory limit (nem todo server aceita)
 			ini_set("memory_limit","50M");
 			set_time_limit(0);
 			$img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg", 
                             "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
                         $num_img = count($img_sent);
+                        
+                        
                        // $num_img = 4;
                     for($i = 0; $i < $num_img; $i++) { 
                         $name_img[$i] = $img_sent[$i];
@@ -83,8 +84,8 @@ class EditorController extends Controller {
                                                     $oImg->grava( $newDir[$i] );
 
                                                     $imagesize[$i]	= getimagesize( $newDir[$i] );
-                                                    $img[$i]		= '<img src="'.$newUrl[$i].'" id="jcrop" '.$imagesize[$i][3].' />';
-                                                    $preview[$i]	= '<img src="'.$newUrl[$i].'" id="preview" '.$imagesize[$i][3].' />';
+                                                    $img[$i]		= '<img src="'.$newUrl[$i].'" id="jcrop' .$i.  '" '.$imagesize[$i][3].' />';
+                                                    $preview[$i]	= '<img src="'.$newUrl[$i].'" id="preview' .$i. '" '.$imagesize[$i][3].' />';
                                                     $tem_crop 	= true;	
 						}
 				}
