@@ -40,52 +40,59 @@ class EditorController extends Controller {
     public function actionPreeditor() {
         $this->render('preeditor');
     }
-
+    
     public function actionPoseditor() {
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['img'])) {
+  
+        if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['img']) ){
             //Na Solicitação AJAX
-            //include( 'cutImage.class.php' );
-            $oImg = new cutImage($_POST['img']);
-            if ($oImg->valida() == 'OK') {
-                $oImg->posicaoCrop($_POST['x'], $_POST['y']);
-                $oImg->redimensiona($_POST['w'], $_POST['h'], 'crop');
-                $oImg->grava($_POST['img']);
-            } else {
-                $this->redirect('poseditor?error=' . $oImg->valida());
-            }
-        } else {
-            //Solicitação Não Ajax
-            // memory limit (nem todo server aceita)
-            ini_set("memory_limit", "50M");
-            set_time_limit(0);
-            $img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg",
-                "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
-            $num_img = count($img_sent);
-            // $num_img = 4;
-            for ($i = 0; $i < $num_img; $i++) {
-                $name_img[$i] = $img_sent[$i];
-                $tem_crop = false;
-                $img[$i] = '';
-                if (isset($name_img[$i])) {
-                    $newDir[$i] = Yii::app()->basePath . "/../rsc/upload/image/" . $name_img[$i];
-                    $newDir[$i] = str_replace('\\', "/", $newDir[$i]);
-                    $newUrl[$i] = "/rsc/upload/image/" . $name_img[$i];
-                    $imagesize[$i] = getimagesize($newDir[$i]);
-                    if ($imagesize[$i] !== false) {
-                        $oImg = new cutImage($newDir[$i]);
-                        if ($oImg->valida() == 'OK') {
-                            $oImg->redimensiona('400', '', '');
-                            $oImg->grava($newDir[$i]);
+	//include( 'cutImage.class.php' );
+	$oImg = new cutImage( $_POST['img'] );
+	   if( $oImg->valida() == 'OK' )
+	    {
+		$oImg->posicaoCrop( $_POST['x'], $_POST['y'] );
+		$oImg->redimensiona( $_POST['w'], $_POST['h'], 'crop' );
+		$oImg->grava($_POST['img'] );
+	    }else {
+                $this->redirect('poseditor?error='.$oImg->valida());
+        }
+       }else{
+           //Solicitação Não AJAX
+           // memory limit (nem todo server aceita)
+			ini_set("memory_limit","50M");
+			set_time_limit(0);
+			$img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg", 
+                            "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
+                        $num_img = count($img_sent);
+                        
+                        
+                       // $num_img = 4;
+                    for($i = 0; $i < $num_img; $i++) { 
+                        $name_img[$i] = $img_sent[$i];
+			$tem_crop	= false;
+			$img[$i]		= '';
+                        if(isset($name_img[$i]))
+			 {
+                                $newDir[$i] = Yii::app()->basePath. "/../rsc/upload/image/". $name_img[$i];
+                                $newDir[$i] = str_replace('\\',"/" ,$newDir[$i]);
+                                $newUrl[$i] = "/rsc/upload/image/" . $name_img[$i] ;
+                                $imagesize[$i] = getimagesize( $newDir[$i] );
+				if( $imagesize[$i] !== false )
+				{
+						$oImg = new cutImage( $newDir[$i] );
+						if( $oImg->valida() == 'OK' )
+						{
+                                                    $oImg->redimensiona( '400', '', '' );
+                                                    $oImg->grava( $newDir[$i] );
 
-                            $imagesize[$i] = getimagesize($newDir[$i]);
-                            $img[$i] = '<img src="' . $newUrl[$i] . '" id="jcrop" ' . $imagesize[$i][3] . ' />';
-                            $preview[$i] = '<img src="' . $newUrl[$i] . '" id="preview" ' . $imagesize[$i][3] . ' />';
-                            $tem_crop = true;
-                        }
+                                                    $imagesize[$i]	= getimagesize( $newDir[$i] );
+                                                    $img[$i]		= '<img src="'.$newUrl[$i].'" id="jcrop' .$i.  '" '.$imagesize[$i][3].' />';
+                                                    $preview[$i]	= '<img src="'.$newUrl[$i].'" id="preview' .$i. '" '.$imagesize[$i][3].' />';
+                                                    $tem_crop 	= true;	
+						}
+				}
+			}
                     }
-                }
-            }
+                        
             //=================================
             $this->layout = 'none';
             $property_img = array(array());
