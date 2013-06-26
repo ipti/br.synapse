@@ -1,3 +1,27 @@
+<?php $unityfather = Yii::app()->session['unityIdActor']; ?>
+<!--Início do JS -->
+<script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/renderize.js"></script>
+<script>
+    var unity = <?php echo $unityfather ?>;
+     
+    $(function() {
+        var newRenderize = new renderize();
+   
+        $.ajax({
+            url:"/render/json",//this is the request page of ajax
+            data:{op:'select', id:unity},//data for throwing the expected url
+            type:"POST",
+            dataType:"json",// you can also specify for the result for json or xml
+            success:function(response){
+                newRenderize.startRenderize(response,'unity');
+            },
+            error:function(){
+            }
+        });
+
+    });
+</script>
+<!--      Final do JS         -->
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'unity-form',
 	'enableAjaxValidation'=>false,
@@ -10,7 +34,13 @@
                 <div class="panelGroupAbout">
                      <?php echo Yii::t('default', 'Fields with * are required.')?></div>
 
-                                    <div class="formField">
+                      <div id="filter">
+                        <input type="hidden" id="UnityFather" value="<?php  echo $unityfather; ?>"/>
+                        <div id="box_0" class="box formField">
+                        </div>
+                      </div>              
+                
+                    <div class="formField">
                         <?php echo $form->labelEx($model,'name'); ?>
                         <?php echo $form->textField($model,'name',array('size'=>45,'maxlength'=>45)); ?>
                         <?php echo $form->error($model,'name'); ?>
