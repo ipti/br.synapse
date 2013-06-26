@@ -53,40 +53,37 @@ class PersonController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new Person;
+        //cria o modelo de pessoa e de ator
+        $modelP = new Person;
+        $modelA = new Actor;
         
-        /*
-        $ounityID = 1;
-        $unities = Unity::model()->findAllByAttributes(array('fatherID' => $ounityID));
-        $runities = array();
-        if(!isset($unities)){
-            return false;
-        }
-        foreach ($unities as $unity) {
-            if(!$this->seachUnity($unity)){
-                
-            }
-            $data = $this->unityData($unity);
-        }
-
-        $runities[$unity->ID] = $unity->attributes;
-        foreach ($unity->organization->personages as $personage) {
-            $runities[]['personages'][] = $personage->attributes;
-        }
-
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
-        if (isset($_POST['Person'])) {
-            $model->attributes = $_POST['Person'];
-            if ($model->save()) {
-                Yii::app()->user->setFlash('success', Yii::t('default', 'Person Created Successful:'));
-                $this->redirect(array('index'));
+        
+        //se a class e o person foram passados por post
+        if(isset($_POST["class"]) && isset($_POST['Person'])){
+            //o unityId será o valor ca class
+            $unityID = $_POST["class"];
+            //preencherá o modelo de person com os valores recebidos
+            $modelP->attributes = $_POST['Person'];
+            //se salvar o modelo
+            if ($modelP->save()) {
+                //adiciona as informações ao modelo de actor
+                $modelA->unityID = $unityID;
+                $modelA->personID = $modelP->ID;
+                $modelA->personageID = 1;
+                $modelA->activatedDate = time();
+                //se salvar o modelo
+                if($modelA->save()){
+                    Yii::app()->user->setFlash('success', Yii::t('default', 'Person Created Successful:'));
+                    //redireciona para a página inicial do person
+                    $this->redirect(array('index'));
+                }
             }
-        }*/
-
+        }
+        
         $this->render('create', array(
-            'model' => $model,
+            'model' => $modelP,
         ));
     }
 

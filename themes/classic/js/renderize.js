@@ -37,7 +37,7 @@ function renderize(){
         else if (count == 1){
             $("#box_"+(id)).remove();
             $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
-            $("#box_"+id).append("<input type='hidden' id='org_"+id+"' value='"+unitys[0].unity+"'>");
+            $("#box_"+id).append("<input type='hidden' id='org_"+id+"' name='org["+id+"]' value='"+unitys[0].unity+"'>");
             nextUnity = unitys[0].unity;
             this.loadJsonUnity(nextUnity);
         }
@@ -51,7 +51,7 @@ function renderize(){
             $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
             
             $("#box_"+(id)).append((id == 1) ? "<font>Unity:</font>" : "<font>-></font>");
-            $("#box_"+(id)).append("<select id='org_"+id+"' class='org' >"+options+"</select>");
+            $("#box_"+(id)).append("<select id='org_"+id+"' name='org["+id+"]' class='org' >"+options+"</select>");
             $("#org_"+id).change(function(){
                 id = $(this).attr("id");
                 id = id.replace("org_", "");
@@ -74,7 +74,7 @@ function renderize(){
         $("#classesbox").remove();
         $("#filter").append("<div id='classesbox' class='formField'></div>");
         $("#classesbox").append("<font>Class:</font>");
-        $("#classesbox").append("<select id='classes'>"+options+"</select>");
+        $("#classesbox").append("<select id='classes' name='class'>"+options+"</select>");
         $("#classes").change(function(){
             if(parent.op == "all")
                 parent.loadJsonActors($(this).val());

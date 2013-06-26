@@ -37,7 +37,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <div class="panelGroupAbout">
             <?php echo Yii::t('default', 'Fields with * are required.') ?></div>
         
-        <duv id="filter">
+        <div id="filter">
             <input type="hidden" id="UnityFather" value="<?php  echo $unityfather; ?>"/>
             <div id="box_0" class="box formField"></div>
         </div>
