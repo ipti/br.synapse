@@ -69,6 +69,7 @@ class RenderController extends Controller {
     }
 
     public function actionCanvas() {
+        var_dump($_POST);exit;
         $this->render('canvas');
     }
 

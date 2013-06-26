@@ -1,5 +1,7 @@
 <?php
+    //var_dump($_REQUEST);
     $actor = Yii::app()->session["idActor"];
+    ///var_dump($actor);
 ?>
 <style>
     .prerender{border:1px solid #000;width:319px;margin:100px auto;background: #262626;}
