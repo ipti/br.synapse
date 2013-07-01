@@ -659,7 +659,18 @@ function editor () {
         var qtdeImages = $('.element').size();
         if(qtdeImages == this.uploadedElements){
             var parent = this;
-            $.ajax({
+            
+            var inputs = "";
+            //cria os inputs para ser enviados por Post
+            for (var i in parent.uploadedLibraryIDs){
+                inputs += '<input type="hidden" name="uploadedLibraryIDs['+i+']" value="'+parent.uploadedLibraryIDs[i]+'">';
+            }
+            alert('Save complet!');
+            
+            //cria formulário para enviar o array de library para o poseditor
+            $('.savescreen').append('<form action="/Editor/poseditor" method="post">'+inputs+'<input type="submit" value="PosEditor"></form>');
+            
+            /*$.ajax({
                 type: "POST",
                 url: "/Editor/poseditor",
                 dataType: 'json',
@@ -667,14 +678,12 @@ function editor () {
                 error: function( jqXHR, textStatus, errorThrown ){
                     $('.savescreen').append('<br><p>Erro ao inviar ids ao poseditor.</p>');
                     $('.savescreen').append('<br><p>Error mensage:</p>');
-                    $('.savescreen').append(jqXHR.responseText);
+                    $('html').html(jqXHR.responseText);
                 },
                 success: function(response, textStatus, jqXHR){
                     alert('Save complet!');
                 }
-            });
-        //console.log('PosRender Habilitado!');
-        //console.log(this.uploadedLibraryIDs);
+            });*/
         }
         
     }
