@@ -6,20 +6,36 @@
      
     $(function() {
         var newRenderize = new renderize();
-   
+        var id = $('.org').size(); 
+        window.alert('begin: ' + id );
         $.ajax({
             url:"/render/json",//this is the request page of ajax
             data:{op:'select', id:unity},//data for throwing the expected url
             type:"POST",
             dataType:"json",// you can also specify for the result for json or xml
             success:function(response){
-                newRenderize.startRenderize(response,'unity');
+                newRenderize.startRenderize(response,'unity', 
+                    function () {
+                        id = $('.org').size();
+                        window.alert("count:"+id);
+                    } );
             },
             error:function(){
             }
         });
+        
+//        $.post(
+//            "/render/json",
+//            {op:'select', id:unity},//data for throwing the expected url
+//                function () {
+//                    var id = $('.org').size();
+//                    console.log("count:"+id);
+//                } 
+//        );
 
     });
+    
+   
 </script>
 <!--      Final do JS         -->
 <?php $form=$this->beginWidget('CActiveForm', array(
