@@ -162,14 +162,15 @@ function editor () {
         
         var file    = ID+"_"+uploadType;
         var form    = file+"_form";
+        var input   = file+"_input";
         
         $('#'+ID).append(''+
             '<div id="'+file+'" class="'+uploadType+'">'+
             '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
             '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
-            '<input type="hidden" name="op" value="'+uploadType+'">'+
+            '<input type="hidden" name="op" value="'+uploadType+'"/>'+
             '<label>'+uploadType+': '+
-            '<input type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
+            '<input id="'+input+'" type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
             '</label>'+
             '</form>'+
             '</div>');
@@ -180,7 +181,7 @@ function editor () {
             parent.delObject(file);
         });
         
-        $('#'+form+' > input#'+uploadType).bind('change', function() {
+        $("#"+input).bind('change', function() {
             var filesize = this.files[0].size / 1024; //KB
             filesize = filesize / 1024; //MB
             filesize = Math.round(filesize * 1000) / 1000; //3 decimal
@@ -209,6 +210,7 @@ function editor () {
             type: 'image',
             accept: Array("png","gif","bmp","jpeg","jsc","ico"),
             maxsize: (1024 * 5) //5MB
+        //função onChange
         },function(src, fileid, formid){
             $("#"+fileid+" > img").remove("img");
             $("#"+fileid).append('<img  src="'+src+'" width="320" height="240" alt="Image"/>');
