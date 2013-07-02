@@ -6,8 +6,7 @@
      
     $(function() {
         var newRenderize = new renderize();
-        var id = $('.org').size(); 
-        window.alert('begin: ' + id );
+   
         $.ajax({
             url:"/render/json",//this is the request page of ajax
             data:{op:'select', id:unity},//data for throwing the expected url
@@ -16,8 +15,13 @@
             success:function(response){
                 newRenderize.startRenderize(response,'unity', 
                     function () {
-                        id = $('.org').size();
-                        window.alert("count:"+id);
+                        var num_unitys = 0;
+                        num_unitys = $('.org').size(); // coincide com o OrgfatherID da Última Unity
+                        $.post("/unity/loadOrg", {totalUnity: num_unitys} , function(result) {
+                           $('#Unity_organizationID').html(result);                      
+                           var IDfolk = $('#org_'+num_unitys).val(); // Id do Pai da nova Unity
+                           $('#Unity_fatherID').val(IDfolk);
+                        });
                     } );
             },
             error:function(){
@@ -55,7 +59,6 @@
                         <div id="box_0" class="box formField">
                         </div>
                       </div>              
-                
                     <div class="formField">
                         <?php echo $form->labelEx($model,'name'); ?>
                         <?php echo $form->textField($model,'name',array('size'=>45,'maxlength'=>45)); ?>
@@ -73,11 +76,11 @@
                         <?php echo $form->error($model,'organizationID'); ?>
                     </div>
 
-                                      <!--  <div class="formField">
-                        <?php // echo $form->labelEx($model,'fatherID'); ?>
-                        <?php // echo $form->textField($model,'fatherID'); ?>
-                        <?php // echo $form->error($model,'fatherID'); ?>
-                      </div> -->
+                                       <div class="formField">
+                       <!-- <?php//  echo $form->labelEx($model,'fatherID'); ?> -->
+                        <?php  echo $form->hiddenField($model,'fatherID'); ?>
+                      <!--  <?php//  echo $form->error($model,'fatherID'); ?> -->
+                        </div>  
 
                                         <div class="formField">
                         <?php echo $form->labelEx($model,'locationID'); ?>

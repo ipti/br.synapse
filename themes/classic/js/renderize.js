@@ -66,7 +66,6 @@ function renderize(){
                 id = parseInt(id);
                 $("#box_"+(id+1)).remove();
                 parent.loadJsonUnity($(this).val());
-                parent.func();
             });
             nextUnity = unitys[0].unity;
             this.loadJsonUnity(nextUnity);
@@ -117,6 +116,7 @@ function renderize(){
             dataType:"json",// you can also specify for the result for json or xml
             success:function(response){
                 parent.loadUnitys(response.unitys, response.fatherID);
+                parent.func();
             },
             error:function(){
             }

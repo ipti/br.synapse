@@ -27,7 +27,7 @@ class UnityController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','view','create','update'),
+				'actions'=>array('index','view','create','update', 'loadOrg'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -40,6 +40,27 @@ class UnityController extends Controller
 		);
 	}
 
+        
+        public function actionLoadOrg() 
+        {
+            if( isset($_POST['totalUnity']) ) {
+                $totalUnitys = $_POST['totalUnity'];
+                $orgs = Organization::model()->findAll(array( 
+                    'condition' => 'fatherID = :totalUnitys+1',
+                    'params' => array(':totalUnitys' => $totalUnitys),
+                    ));
+                $num_orgs = count($orgs);
+                $str = '';
+                for($i=0; $i < $num_orgs; $i++ ) {
+                    $str .= "<option value ='". $orgs[$i]->ID ."'>" . $orgs[$i]->name . "</option>";
+                }
+                 echo $str;
+            }
+        }      
+        
+        
+        
+        
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
