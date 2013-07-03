@@ -1,3 +1,47 @@
+<?php $unityfather = Yii::app()->session['unityIdActor']; ?>
+<!--Início do JS -->
+<script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/renderize.js"></script>
+<script>
+    var unity = <?php echo $unityfather ?>;
+     
+    $(function() {
+        var newRenderize = new renderize();
+   
+        $.ajax({
+            url:"/render/json",//this is the request page of ajax
+            data:{op:'select', id:unity},//data for throwing the expected url
+            type:"POST",
+            dataType:"json",// you can also specify for the result for json or xml
+            success:function(response){
+                newRenderize.startRenderize(response,'unity', 
+                    function () {
+                        var num_unitys = 0;
+                        num_unitys = $('.org').size(); // coincide com o OrgfatherID da Última Unity
+                        $.post("/unity/loadOrg", {totalUnity: num_unitys} , function(result) {
+                           $('#Unity_organizationID').html(result);                      
+                           var IDfolk = $('#org_'+num_unitys).val(); // Id do Pai da nova Unity
+                           $('#Unity_fatherID').val(IDfolk);
+                        });
+                    } );
+            },
+            error:function(){
+            }
+        });
+        
+//        $.post(
+//            "/render/json",
+//            {op:'select', id:unity},//data for throwing the expected url
+//                function () {
+//                    var id = $('.org').size();
+//                    console.log("count:"+id);
+//                } 
+//        );
+
+    });
+    
+   
+</script>
+<!--      Final do JS         -->
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'unity-form',
 	'enableAjaxValidation'=>false,
@@ -10,7 +54,12 @@
                 <div class="panelGroupAbout">
                      <?php echo Yii::t('default', 'Fields with * are required.')?></div>
 
-                                    <div class="formField">
+                      <div id="filter">
+                        <input type="hidden" id="UnityFather" value="<?php  echo $unityfather; ?>"/>
+                        <div id="box_0" class="box formField">
+                        </div>
+                      </div>              
+                    <div class="formField">
                         <?php echo $form->labelEx($model,'name'); ?>
                         <?php echo $form->textField($model,'name',array('size'=>45,'maxlength'=>45)); ?>
                         <?php echo $form->error($model,'name'); ?>
@@ -27,11 +76,11 @@
                         <?php echo $form->error($model,'organizationID'); ?>
                     </div>
 
-                                      <!--  <div class="formField">
-                        <?php // echo $form->labelEx($model,'fatherID'); ?>
-                        <?php // echo $form->textField($model,'fatherID'); ?>
-                        <?php // echo $form->error($model,'fatherID'); ?>
-                      </div> -->
+                                       <div class="formField">
+                       <!-- <?php//  echo $form->labelEx($model,'fatherID'); ?> -->
+                        <?php  echo $form->hiddenField($model,'fatherID'); ?>
+                      <!--  <?php//  echo $form->error($model,'fatherID'); ?> -->
+                        </div>  
 
                                         <div class="formField">
                         <?php echo $form->labelEx($model,'locationID'); ?>

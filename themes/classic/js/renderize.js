@@ -6,7 +6,8 @@
 
 function renderize(){
     this.op;
-    this.startRenderize = function (response, op){
+    this.func;
+    this.startRenderize = function (response, op, func){
         //se operação não existir, o pradão é all
         if(typeof(op) == "undefined"){
             this.op = "all";
@@ -18,6 +19,12 @@ function renderize(){
                 //class
                 //all
         }
+        //Função será chamada no Onchange de cada Unity
+        if(typeof (func) != "undefined")
+            this.func = func;
+        else
+            this.func = function(id){};
+        
         if(typeof(response.unitys) != "undefined"){
             this.loadUnitys(response.unitys, 0);
         }
@@ -51,6 +58,7 @@ function renderize(){
             $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
             
             $("#box_"+(id)).append((id == 1) ? "<font>Unity:</font>" : "<font>-></font>");
+            // Chamar função no onChange
             $("#box_"+(id)).append("<select id='org_"+id+"' name='org["+id+"]' class='org' >"+options+"</select>");
             $("#org_"+id).change(function(){
                 id = $(this).attr("id");
@@ -108,6 +116,7 @@ function renderize(){
             dataType:"json",// you can also specify for the result for json or xml
             success:function(response){
                 parent.loadUnitys(response.unitys, response.fatherID);
+                parent.func();
             },
             error:function(){
             }
