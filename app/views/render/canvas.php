@@ -1,6 +1,6 @@
 <?php
-    //var_dump($_REQUEST);
-    $actor = Yii::app()->session["idActor"];
+    $actor = $_REQUEST['actor'];
+    $class = $_REQUEST['class'];
     ///var_dump($actor);
 ?>
 <style>
@@ -21,7 +21,6 @@
     <div class="innerborder">
         <h1></h1>
         <form>
-            <input type="hidden" name="actor" value="<?php echo $actor?>">
             <label>
                 <font>Tipo de Atendimento:</font>
                 <select id="atdID">
@@ -77,8 +76,8 @@
                 <input name="password" value="" type="password"/>
             </label>
             <input class="start" type="button" value="iniciar atendimento">
-            <input type="hidden" id="classID"/>
-            <input type="hidden" id="userID"/>
+            <input type="hidden" id="classID" value="<?php echo $class?>"/>
+            <input type="hidden" id="actorID" value="<?php echo $actor ?>"/>
         </form>
     </div>
 </div>

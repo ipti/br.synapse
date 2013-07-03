@@ -69,7 +69,6 @@ class RenderController extends Controller {
     }
 
     public function actionCanvas() {
-        var_dump($_POST);exit;
         $this->render('canvas');
     }
 
@@ -187,12 +186,12 @@ class RenderController extends Controller {
             die("ERRO: op nulo.");
         }
         $json = array();
-        $userID = $_POST['userID'];
+        $actorID = $_POST['actorID'];
         $classID = $_POST['classID'];
         $typeID = $_POST['typeID'];
-        $user = User::model()->findByPk($userID);
-        $json['userID'] = $userID;
-        $json['userName'] = $user->name;
+        $actor = Actor::model()->findByPk($actorID);
+        $json['actorID'] = $actorID;
+        $json['userName'] = $actor->person->name;
         $json['classID'] = $classID;
         if ($typeID == 'rscript') {
             $script = ActScript::model()->findByAttributes(array('ID' => $_POST['script']));
