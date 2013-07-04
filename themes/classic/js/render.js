@@ -160,14 +160,14 @@ function render () {
     this.wrongAnswer = function(){
         var pieceID = $(this).parent().parent().parent().parent().attr('id');
         var elementID = $(this).attr('id');
-        var userID = $('#userID').val();
+        var actorID = $('#actorID').val();
         $.ajax({
             url:"/render/json",
             data:{
                 op:'answer',
                 pieceID:pieceID,
                 elementID:elementID,
-                userID:userID,
+                actorID:actorID,
                 value:'Erro'
             },
             type:"POST",
