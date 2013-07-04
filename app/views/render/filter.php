@@ -39,7 +39,7 @@
 <div class="prerender">
 <div class="innerborder">
     <form id="filter" method="POST" action="/render/canvas">
-        <input type="hidden" id="UnityFather" value="<?php  echo $unityfather; ?>"/>
+        <input type="hidden" name="unityfather" id="UnityFather" value="<?php  echo $unityfather; ?>"/>
         <div id="box_0" class="box">
         </div>
     </form>

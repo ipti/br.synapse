@@ -40,59 +40,55 @@ class EditorController extends Controller {
     public function actionPreeditor() {
         $this->render('preeditor');
     }
-    
-    public function actionPoseditor() {
-  
-        if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['img']) ){
-            //Na Solicitação AJAX
-	//include( 'cutImage.class.php' );
-	$oImg = new cutImage( $_POST['img'] );
-	   if( $oImg->valida() == 'OK' )
-	    {
-		$oImg->posicaoCrop( $_POST['x'], $_POST['y'] );
-		$oImg->redimensiona( $_POST['w'], $_POST['h'], 'crop' );
-		$oImg->grava($_POST['img'] );
-	    }else {
-                $this->redirect('poseditor?error='.$oImg->valida());
-        }
-       }else{
-           //Solicitação Não AJAX
-           // memory limit (nem todo server aceita)
-			ini_set("memory_limit","50M");
-			set_time_limit(0);
-			$img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg", 
-                            "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
-                        $num_img = count($img_sent);
-                        
-                        
-                       // $num_img = 4;
-                    for($i = 0; $i < $num_img; $i++) { 
-                        $name_img[$i] = $img_sent[$i];
-			$tem_crop	= false;
-			$img[$i]		= '';
-                        if(isset($name_img[$i]))
-			 {
-                                $newDir[$i] = Yii::app()->basePath. "/../rsc/upload/image/". $name_img[$i];
-                                $newDir[$i] = str_replace('\\',"/" ,$newDir[$i]);
-                                $newUrl[$i] = "/rsc/upload/image/" . $name_img[$i] ;
-                                $imagesize[$i] = getimagesize( $newDir[$i] );
-				if( $imagesize[$i] !== false )
-				{
-						$oImg = new cutImage( $newDir[$i] );
-						if( $oImg->valida() == 'OK' )
-						{
-                                                    $oImg->redimensiona( '400', '', '' );
-                                                    $oImg->grava( $newDir[$i] );
 
-                                                    $imagesize[$i]	= getimagesize( $newDir[$i] );
-                                                    $img[$i]		= '<img src="'.$newUrl[$i].'" id="jcrop' .$i.  '" '.$imagesize[$i][3].' />';
-                                                    $preview[$i]	= '<img src="'.$newUrl[$i].'" id="preview' .$i. '" '.$imagesize[$i][3].' />';
-                                                    $tem_crop 	= true;	
-						}
-				}
-			}
+    public function actionPoseditor() {
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['img'])) {
+            //Na Solicitação AJAX
+            //include( 'cutImage.class.php' );
+            $oImg = new cutImage($_POST['img']);
+            if ($oImg->valida() == 'OK') {
+                $oImg->posicaoCrop($_POST['x'], $_POST['y']);
+                $oImg->redimensiona($_POST['w'], $_POST['h'], 'crop');
+                $oImg->grava($_POST['img']);
+            } else {
+                $this->redirect('poseditor?error=' . $oImg->valida());
+            }
+        } else {
+            //Solicitação Não AJAX
+            // memory limit (nem todo server aceita)
+            ini_set("memory_limit", "50M");
+            set_time_limit(0);
+            $img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg",
+                "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
+            $num_img = count($img_sent);
+
+
+            // $num_img = 4;
+            for ($i = 0; $i < $num_img; $i++) {
+                $name_img[$i] = $img_sent[$i];
+                $tem_crop = false;
+                $img[$i] = '';
+                if (isset($name_img[$i])) {
+                    $newDir[$i] = Yii::app()->basePath . "/../rsc/upload/image/" . $name_img[$i];
+                    $newDir[$i] = str_replace('\\', "/", $newDir[$i]);
+                    $newUrl[$i] = "/rsc/upload/image/" . $name_img[$i];
+                    $imagesize[$i] = getimagesize($newDir[$i]);
+                    if ($imagesize[$i] !== false) {
+                        $oImg = new cutImage($newDir[$i]);
+                        if ($oImg->valida() == 'OK') {
+                            $oImg->redimensiona('400', '', '');
+                            $oImg->grava($newDir[$i]);
+
+                            $imagesize[$i] = getimagesize($newDir[$i]);
+                            $img[$i] = '<img src="' . $newUrl[$i] . '" id="jcrop' . $i . '" ' . $imagesize[$i][3] . ' />';
+                            $preview[$i] = '<img src="' . $newUrl[$i] . '" id="preview' . $i . '" ' . $imagesize[$i][3] . ' />';
+                            $tem_crop = true;
+                        }
                     }
-                        
+                }
+            }
+
             //=================================
             $this->layout = 'none';
             $property_img = array(array());
@@ -437,35 +433,62 @@ class EditorController extends Controller {
 
     public function actionUpload() {
         $json = array();
+        //Checa se existem arquivos
         if (isset($_FILES['file'])) {
+            //checa se existe operação
             if (isset($_POST['op'])) {
+                //se opreação for imagem
                 if ($_POST['op'] == 'image') {
+                    //define as extensões aceitas
                     $extencions = array(".png", ".gif", ".bmp", ".jpeg", ".jpg", ".ico");
+                    //define tamanho máximo
                     $max_size = 1024 * 5; //5MB
+                //se operação for audio
                 } elseif ($_POST['op'] == 'audio') {
+                    //define as extensões aceitas
                     $extencions = array(".mp3", ".wav", ".ogg");
+                    //define tamanho máximo
                     $max_size = 1024 * 10; //10MB
+                //se opração for video    
                 } elseif ($_POST['op'] == 'video') {
+                    //define as extensões aceitas
                     $extencions = array(".mp4", ".webm", ".ogg");
+                    //define tamanho máximo
                     $max_size = 1024 * 20; //20MB
                 }
+                //define qual o endereço que será guardado o arquivo
                 $path = Yii::app()->basePath . '\..\rsc\upload\\' . $_POST['op'] . '\\';
+                //define qual a url para visualização do arquivo
                 $url = "/rsc/upload/" . $_POST['op'] . "/";
 
+                //pega o nome do arquivo
                 $file_name = $_FILES['file']['name'];
+                //pega o tamanho do arquivo
                 $file_size = $_FILES['file']['size'];
 
+                //pega a extensão do arquivo
                 $ext = strtolower(strrchr($file_name, "."));
 
+                //se a extensão do arquivo estiver na array de extensão
                 if (in_array($ext, $extencions)) {
+                    //muda unidade do tamanho do arquivo
                     $size = round($file_size / 1024);
+                    //se o tamanho for menor que o máximo
                     if ($size < $max_size) {
+                        //gera um código md5 concatenado com a extensão para ser o nome do arquivo
+                        //e evitar duplicatas
                         $name = md5(uniqid(time())) . $ext;
+                        //pega o nome temporário do arquivo, para poder move-lo
                         $tmp = $_FILES['file']['tmp_name'];
+                        
+                        //tenta
                         try {
+                            //move o arquivo temporário para o novo local
                             move_uploaded_file($tmp, $path . $name);
+                            //adiciona ao retorno do json a URL e o nome do arquivo
                             $json['url'] = $url . $name;
                             $json['name'] = $name;
+                        //se não funcionar
                         } catch (Exception $e) {
                             throw new Exception("ERROR: Falha ao enviar.<br>");
                         }
@@ -481,9 +504,11 @@ class EditorController extends Controller {
         } else {
             throw new Exception("ERROR: Selecione um arquivo.<br>");
         }
+        //cria o cabeçalho do json
         header('Cache-Control: no-cache, must-revalidate');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
         header('Content-type: application/json');
+        //escreve o json que serpa retornado
         echo json_encode($json);
     }
 
