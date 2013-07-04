@@ -77,9 +77,9 @@
                     </div>
 
                                        <div class="formField">
-                       <!-- <?php//  echo $form->labelEx($model,'fatherID'); ?> -->
+                       <!-- <?php //  echo $form->labelEx($model,'fatherID'); ?> -->
                         <?php  echo $form->hiddenField($model,'fatherID'); ?>
-                      <!--  <?php//  echo $form->error($model,'fatherID'); ?> -->
+                      <!--  <?php //  echo $form->error($model,'fatherID'); ?> -->
                         </div>  
 
                                         <div class="formField">
