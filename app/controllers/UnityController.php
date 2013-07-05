@@ -81,7 +81,7 @@ class UnityController extends Controller
                 $modelUTree->organizationID = $OrgIDunity_father ; //Unity_Father
                 $modelUTree->unity = $IDunity_child; //Unity_Child
                 $modelUTree->unityOrganizationID = $OrgIDunity_child; //Unity_Child
-                $modelUTree->save();
+                 if($modelUTree->save()) {
                     if(isset($IDunity_father) && $IDunity_father > 0 ) {
                         //Salvar os Próximos Pais
                         $this_father = Unity::model()->findByAttributes(array('ID' => $IDunity_father )); 
@@ -91,11 +91,14 @@ class UnityController extends Controller
                             $new_father = Unity::model()->findByAttributes(array('ID'=>$IDnew_father));
                             $new_Org_father = $new_father->organizationID;
                            }        
-                        return $this->saveAncient($IDunity_child, $OrgIDunity_child,
-                        $IDnew_father, $new_Org_father );
+                return $this->saveAncient($IDunity_child, $OrgIDunity_child,
+                $IDnew_father, $new_Org_father );
                     }
                     
                     return true;
+                 }else{
+                    return false;
+                 }
             }
             
         }
@@ -127,8 +130,6 @@ class UnityController extends Controller
                             }
                             $ancients = $this->saveAncient($IDunity_child, $OrgIDunity_child, 
                                     $IDunity_father, $OrgIDunity_father);
-                            
-                            
                             
                             //=====================================================
                                 Yii::app()->user->setFlash('success', Yii::t('default', 'Unity Created Successful:'));
