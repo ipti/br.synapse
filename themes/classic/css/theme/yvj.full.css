@@ -201,6 +201,7 @@ div.formField{
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
+    background:#282828;
     background: -moz-linear-gradient(center top , #464646 0pt, #323232 100%) repeat scroll 0 0 transparent;
     border-color: -moz-use-text-color -moz-use-text-color #000000;
     border-style: none none solid;
