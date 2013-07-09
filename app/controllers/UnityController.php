@@ -72,6 +72,38 @@ class UnityController extends Controller
 		));
 	}
 
+        // Salvar relações com Todos os seus 'Pais' na Unity_Tree
+       public function saveAncient($IDunity_child, $OrgIDunity_child, 
+                                    $IDunity_father, $OrgIDunity_father) {
+            if(isset($IDunity_child) && isset($OrgIDunity_child)) {
+                $modelUTree = new UnityTree;
+                $modelUTree->ID = $IDunity_father;   //Unity_Father
+                $modelUTree->organizationID = $OrgIDunity_father ; //Unity_Father
+                $modelUTree->unity = $IDunity_child; //Unity_Child
+                $modelUTree->unityOrganizationID = $OrgIDunity_child; //Unity_Child
+                 if($modelUTree->save()) {
+                    if(isset($IDunity_father) && $IDunity_father > 0 ) {
+                        //Salvar os Próximos Pais
+                        $this_father = Unity::model()->findByAttributes(array('ID' => $IDunity_father )); 
+                        $IDnew_father = $this_father->fatherID  ; // Pai do Pai
+                        $new_Org_father = null;
+                        if(isset($IDnew_father) && $IDnew_father > 0) {
+                            $new_father = Unity::model()->findByAttributes(array('ID'=>$IDnew_father));
+                            $new_Org_father = $new_father->organizationID;
+                           }        
+                return $this->saveAncient($IDunity_child, $OrgIDunity_child,
+                $IDnew_father, $new_Org_father );
+                    }
+                    
+                    return true;
+                 }else{
+                    return false;
+                 }
+            }
+            
+        }
+        
+        
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -87,6 +119,19 @@ class UnityController extends Controller
 		{
 			$model->attributes=$_POST['Unity'];
 			if($model->save()){
+                            //Inserir na Árvore
+                            $IDunity_child = $model->ID;
+                            $OrgIDunity_child = $model->organizationID;
+                            $IDunity_father =  $model->fatherID;
+                            if(isset($IDunity_father) && $IDunity_father > 0) {
+                               $father = Unity::model()->findByAttributes(array('ID' => $IDunity_father )); 
+                               $OrgIDunity_father = $father->organizationID;
+                                // $OrgIDunity_father = $model->fatherID->organizationID;
+                            }
+                            $ancients = $this->saveAncient($IDunity_child, $OrgIDunity_child, 
+                                    $IDunity_father, $OrgIDunity_father);
+                            
+                            //=====================================================
                                 Yii::app()->user->setFlash('success', Yii::t('default', 'Unity Created Successful:'));
 				$this->redirect(array('index'));
                                }

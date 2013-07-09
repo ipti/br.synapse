@@ -77,9 +77,9 @@
                     </div>
 
                                        <div class="formField">
-                       <!-- <?php//  echo $form->labelEx($model,'fatherID'); ?> -->
+                       <!-- <?php //  echo $form->labelEx($model,'fatherID'); ?> -->
                         <?php  echo $form->hiddenField($model,'fatherID'); ?>
-                      <!--  <?php//  echo $form->error($model,'fatherID'); ?> -->
+                      <!--  <?php //  echo $form->error($model,'fatherID'); ?> -->
                         </div>  
 
                                         <div class="formField">
@@ -91,7 +91,10 @@
                            ?>                     
                         <?php echo $form->error($model,'locationID'); ?>
                     </div>
-
+                            <span id='test'> <?php 
+                            // Testar Field Data no Yii
+                            
+                            ?> </span>
                                      <!--  <div class="formField">
                         <?php //echo $form->labelEx($model,'fcode'); ?>
                         <?php //echo $form->textField($model,'fcode',array('size'=>45,'maxlength'=>45)); ?>
