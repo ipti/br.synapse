@@ -1,6 +1,8 @@
 <?php $unityfather = Yii::app()->session['unityIdActor']; ?>
 <!--Início do JS -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/renderize.js"></script>
+<script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/date/jquery.maskedinput.js"> </script>
+<script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/date/datas.js"> </script>
 <script>
     var unity = <?php echo $unityfather ?>;
      
@@ -38,6 +40,20 @@
 //        );
 
     });
+    
+ $(document).ready( 
+   function(){
+   $('#actDt').mask("99/99/9999");
+   $('#actDt').change(function() { dateToTimestmp(this.value,'Unity_actDate') });
+   $('#desDt').mask("99/99/9999");
+   $('#desDt').change(function() { dateToTimestmp(this.value,'Unity_desDate')  });
+   $('#desDt, #actDt').on('focusout', function() { 
+       if( $('#Unity_desDate').val() <= $('#Unity_actDate').val() ) {
+            var act_des_date = "A Data de Desativação deve ser MAIOR que a Data de Ativação !";
+            window.alert(act_des_date);
+             } 
+        } );
+     });
     
    
 </script>
@@ -91,10 +107,7 @@
                            ?>                     
                         <?php echo $form->error($model,'locationID'); ?>
                     </div>
-                            <span id='test'> <?php 
-                            // Testar Field Data no Yii
-                            
-                            ?> </span>
+
                                      <!--  <div class="formField">
                         <?php //echo $form->labelEx($model,'fcode'); ?>
                         <?php //echo $form->textField($model,'fcode',array('size'=>45,'maxlength'=>45)); ?>
@@ -109,13 +122,15 @@
 
                                         <div class="formField">
                         <?php echo $form->labelEx($model,'actDate'); ?>
-                        <?php echo $form->textField($model,'actDate'); ?>
+                              <input type="text" id="actDt">
+                        <?php echo $form->hiddenField($model,'actDate'); ?>
                         <?php echo $form->error($model,'actDate'); ?>
                     </div>
 
                                         <div class="formField">
                         <?php echo $form->labelEx($model,'desDate'); ?>
-                        <?php echo $form->textField($model,'desDate'); ?>
+                              <input type="text" id="desDt">
+                        <?php echo $form->hiddenField($model,'desDate'); ?>
                         <?php echo $form->error($model,'desDate'); ?>
                     </div>
 
