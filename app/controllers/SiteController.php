@@ -122,6 +122,22 @@ class SiteController extends Controller {
 //    }
     
     
+    private function redirPersonage($nome_personage,$idActor,$unityIdActor){
+        Yii::app()->session['personage'] = $nome_personage;
+        Yii::app()->session['idActor'] = $idActor;
+        Yii::app()->session['unityIdActor'] = $unityIdActor;
+        //Redirecionamento Após Login e Seleção do Personagem
+        switch($nome_personage){
+            case "Tutor":
+                    $this->redirect(Yii::app()->baseUrl.'/render/');
+                break;
+            case "Aluno":
+                    $this->redirect(Yii::app()->baseUrl.'/render/canvas');
+                break;
+            default:                    
+                $this->redirect(Yii::app()->baseUrl.'/site/index');
+        }
+    }
     
     
     //=====Novo Login========
@@ -147,21 +163,13 @@ class SiteController extends Controller {
 //$desactivatedDateActor = $actor->desactivatedDate;                  
 // $personage = Personage::model()->findByAttributes(array('ID'=>$personageIdActor));
 //$namePersonage = $personage->name;     
-          if(isset($nome_personage) && $nome_personage == "Tutor" ) {
-              Yii::app()->session['personage'] = $nome_personage;
-              Yii::app()->session['unityIdActor'] = $unityIdActor;
-           }else{
-               Yii::app()->session['personage'] = "Other";
-               Yii::app()->session['idActor'] = $idActor;
-           }
-           
-           //Redirecionamento Após Login e Seleção do Personagem
-                if(isset(Yii::app()->user->returnUrl)){
-                    $this->redirect(Yii::app()->user->returnUrl);
-                }else{
-                    $this->redirect(Yii::app()->baseUrl.'/site/index');
-                }
-           
+
+            //se os valores estiverem setados
+            if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {
+                //redireciona para a página correta
+                $this->redirPersonage($nome_personage,$idActor,$unityIdActor);
+            }
+ 
         } else if (isset($_POST['LoginForm'])) {
             $loginmodel->attributes = $_POST['LoginForm'];
             $autenticar = $loginmodel->authenticate();
@@ -171,10 +179,12 @@ class SiteController extends Controller {
 //Somente atores Ativos
                 $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), 
                         "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL OR desactivatedDate = 0 ");
-                if (count($actor) > 0) {
+
+                //efetua login
+                Yii::app()->user->login($identity);
+                
+                if (count($actor) > 1) {
 //Método login() do CWebUser
-                    Yii::app()->user->login($identity);
- 
                     $html = "
                    <html>
                       <head>
@@ -196,11 +206,28 @@ class SiteController extends Controller {
                     $html.= " </body>
                               </html>";
                     echo $html;
+                }
+                //se só houver 1 ator na lista
+                else if(count($actor) == 1){
+                    //pega as informações
+                    $tempPersonage = Personage::model()->findByAttributes(array('ID' => $actor[0]->personageID));
+                    //nome do personagem
+                    $nome_personage = $tempPersonage->name;
+                    //id do ator
+                    $idActor = $actor[0]->ID;
+                    //id da unidade
+                    $unityIdActor = $actor[0]->unityID;
+                    
+                    //se os valores estiverem setados
+                    if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {
+                        //redireciona para a página correta
+                        $this->redirPersonage($nome_personage,$idActor,$unityIdActor);
+                    }
                 } else {
-                    echo "Não há Atores Ativos para este Usuário !";
+                    throw new Exception("Não há Atores Ativos para este Usuário!");
                 }
             } else {
-                echo $identity->errorMessage;
+                 throw new Exception($identity->errorMessage);
             }
 
             exit;

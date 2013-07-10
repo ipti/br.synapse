@@ -346,7 +346,7 @@ class EditorController extends Controller {
                                     case 16: //image
                                         $src = $value['url'];
                                         $nome = $value['name'];
-                                        $nome = explode(".", $nome);
+                                        $ext = explode(".", $nome);
                                         $ext = $nome[1];
                                         //Pegar informações da imagem
 
@@ -389,7 +389,7 @@ class EditorController extends Controller {
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->libraryID = $libraryID;
                                         $newLibraryProperty->propertyID = 12;
-                                        $newLibraryProperty->value = $ext;
+                                        $newLibraryProperty->value = $nome;     //apenas o nome do arquivo
                                         $newLibraryProperty->insert();
 
                                         //Salva na editor_element_property
