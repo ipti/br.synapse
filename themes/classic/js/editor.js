@@ -117,11 +117,14 @@ function editor () {
             '</div>');
         
         var parent = this;
-        $("#"+ID+"_text > button.delText").click(function(){
+        var text = "#"+ID+"_text";
+        var editable = text+" > font.editable";
+        
+        $(text+" > button.delText").click(function(){
             parent.delObject(ID+"_text");
         });
         
-        $('#'+ID+"_text > font.editable").editable(function(value, settings) { 
+        $(editable).editable(function(value, settings) { 
             //console.log(this);
             //console.log(value);
             //console.log(settings);
@@ -143,6 +146,35 @@ function editor () {
             indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
             tooltip   : LABEL_INITIAL_TEXT
         });        
+        
+        //Quando clicar no editabke
+        $(editable).on('click',function(){ 
+            var form = editable+" > form";
+            var input = form+" > input";
+            var submit = form+" > button[type=submit]";
+
+            //adiciona a função de foco ao input
+            $(input).on("focus",function(){
+                //se o valor for igual ao LABEL_INITIAL_TEXT
+                if($(input).val() == LABEL_INITIAL_TEXT){
+                    //remove o texto
+                    $(input).val("");
+                }
+            });
+            //adiciona a função de perda de fodo do input
+            $(input).on("focusout",function(){
+                //se não houver textoo
+                if($(input).val() == ""){
+                    //adiciona o texto LABEL_INITIAL_TEXT
+                    $(input).val(LABEL_INITIAL_TEXT);
+                    //da submit no formulário
+                    $(form).submit();
+                }
+            });
+            //seta o foco no input
+            $(input).focus();
+        });
+        
     }
     
     this.addUploadForm = function(ID, type, responseFunction){
