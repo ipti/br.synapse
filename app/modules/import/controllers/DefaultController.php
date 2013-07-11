@@ -20,9 +20,9 @@ class DefaultController extends Controller {
     }
 
     public function actionIndex() {
-        /*
-        //1) IMPORTAR AS DISCIPLINAS;
         set_time_limit(0);
+
+        //1) IMPORTAR AS DISCIPLINAS;
         header('Content-type: text/html; charset=utf-8');
         $reader = $this->search("SELECT * FROM discipline");
         foreach ($reader as $row) {
@@ -38,6 +38,7 @@ class DefaultController extends Controller {
         $reader = $this->search($stemplate);
 
         //MODIFICAR  a tabela e incluir ids para formato e interatividade.
+        //@todo importar todos os templates;
         foreach ($reader as $row) {
             $tmp = new CobjectTemplate();
             $tmp->oldID = $row['dold'];
@@ -68,7 +69,8 @@ class DefaultController extends Controller {
 
 
         //4)IMPORTAR AS HABILIDADES
-        $skills = "select * from activitycontent where type_id = '1' and father_id < '20'"; //"SELECT * FROM activityhability";
+        //@INCLUIR CAMPO FATHER_ID
+        $skills = "select * from activitycontent where type_id = '1' and (father_id = '11' or father_id ='16') and id <> '20'"; //"SELECT * FROM activityhability";
         $reader = $this->search($skills);
         foreach ($reader as $row) {
             $tmp = new ActSkill();
@@ -82,9 +84,9 @@ class DefaultController extends Controller {
         }
 
         //5)IMPORTAR OS NIVEIS
-        $sdegree = "select  (description||' - '||b.name||' ANO') AS name,b.id,0 as parentID,b.grade AS year,c.grade AS stage,0 as grade from degreeblock b join degreestage c on(b.degreestage_id=c.id)
+        $sdegree = "select  (c.name||' - '||b.name||' ANO') AS name,b.id,0 as parentID,b.grade AS year,c.grade AS stage,0 as grade from degreeblock b join degreestage c on(b.degreestage_id=c.id)
           UNION
-          select  (description||' - '||b.name||' ANO'||'/'||a.name) AS name,a.id,b.id as parentID,b.grade AS year,c.grade AS stage,a.grade AS grade from degreegrade a join degreeblock b on(a.degreeblock_id=b.id) join degreestage c on(b.degreestage_id=c.id)
+          select  (c.name||' - '||b.name||' ANO'||'/'||a.name) AS name,a.id,b.id as parentID,b.grade AS year,c.grade AS stage,a.grade AS grade from degreegrade a join degreeblock b on(a.degreeblock_id=b.id) join degreestage c on(b.degreestage_id=c.id)
           order by parentid,stage,year,grade";
         $reader = $this->search($sdegree);
         foreach ($reader as $row) {
@@ -199,7 +201,9 @@ class DefaultController extends Controller {
                     $this->elog('Habilidade/Objetivo:', $sskill->skillID . '/' . $sskill->goalID);
                 }
             }
-        }*/
+        }
+
+
         //9) IMPORTAR AS ATIVIDADES;
         $sqlacts = "select * from activity where activitytype_id = 2 and status = 1";
         $reader = $this->search($sqlacts);
@@ -208,11 +212,12 @@ class DefaultController extends Controller {
             $tmp->oldID = $row['id'];
             $tmp->typeID = 1;
             $theme = CobjectTheme::model()->findByAttributes(array('oldID' => $row['semantic_id']));
-            if(!isset($theme)){
-                $tmp->themeID = 916;
-            }else{
-                $tmp->themeID = $theme->ID;
+            if (!isset($theme)) {
+                $theme = CobjectTheme::model()->findByAttributes(array('oldID' => 1));
             }
+            $tmp->themeID = $theme->ID;
+            //@TODO SETAR UM TEMPLADE PADRÃO;
+            //@CASO NÃO EXISTA TEMPLATE.
             if (!isset($row['activityinteratividade_id'])) {
                 $template = CobjectTemplate::model()->findByAttributes(array('oldID' => $row['activitytemplate_id'], 'oldIDFormat' => $row['activityformat_id']));
             } else {
@@ -224,6 +229,7 @@ class DefaultController extends Controller {
             } else {
                 $this->elog('Atividade:', $tmp->ID);
             }
+            $tmp = Cobject::model()->findByAttributes(array('oldID' => $row['id']));
             $c = new CobjectData();
             $c->cobjectID = $tmp->ID;
             $goal = ActGoal::model()->findByAttributes(array('oldID' => $row['goal_id']));
@@ -232,10 +238,12 @@ class DefaultController extends Controller {
             } else {
                 $c->goalID = $goal->ID;
             }
+            $this->elog('Goal/Atividade:', $goal->ID . '/' . $tmp->ID);
         }
 
 
         //10) IMPORTAR AS SCREEN
+        //@TODO INCLUIR CAMPO DE SCREEN NA PIECE.
         $sscreens = "select d.id,a.screen from layer_property a join piece c on(a.piece_id=c.id) join activity d on(c.activity_id=d.id) group by d.id,a.screen order by d.id";
         $reader = $this->search($sscreens);
         foreach ($reader as $row) {
@@ -257,6 +265,7 @@ class DefaultController extends Controller {
         $spiecesets = "select a.id,activity_id,description,a.seq,screen,a.name_varchar from piece a join layer_property b on(a.id=b.piece_id) group by a.id,screen,activity_id,description,a.seq,a.name_varchar order by activity_id,screen";
         $reader = $this->search($spiecesets);
         foreach ($reader as $row) {
+            $cobject = Cobject::model()->findByAttributes(array('oldID' => $row['activity_id']));
             $tmp = new EditorPieceset();
             $tmp->oldID = $row['id'];
             $tmp->typeID = 7;
@@ -264,15 +273,14 @@ class DefaultController extends Controller {
             $tmp->save();
             $this->elog('Pieceset:', $tmp->ID);
 
-            $cobject = Cobject::model()->findByAttributes(array('oldID' => $row['activity_id']));
+
             if (isset($cobject)) {
                 $screen = EditorScreen::model()->findByAttributes(array('cobjectID' => $cobject->ID, 'order' => $row['screen']));
                 $piecescreen = new EditorScreenPieceset();
                 $piecescreen->piecesetID = $tmp->ID;
                 $piecescreen->screenID = $screen->ID;
                 $piecescreen->position = $row['seq'];
-                
-                $piecescreen->templateID = 26;
+                $piecescreen->templateID = $cobject->templateID;
                 $piecescreen->save();
                 $this->elog('Pieceset/Screen:', $piecescreen->piecesetID . '/' . $piecescreen->screenID);
             }
@@ -300,7 +308,7 @@ class DefaultController extends Controller {
                 $this->elog('Pieceset/Piece:', $piecesetpiece->piecesetID . '/' . $piecesetpiece->pieceID);
             }
         }
-        $sqlpiecelements = "select a.id,a.screen,a.piece_id,a.pos_x,a.pos_y,a.dim_x,a.dim_y,a.align,c.name as layertype,a.element_id as table_ref,a.piece_element_id,b.seq,(CASE WHEN b.media IS NULL OR b.media = '' THEN d.name ELSE b.media END) as table_source,b.media,d.name, 
+        $sqlpiecelements = "select d.name as classification,a.id,a.screen,a.piece_id,a.pos_x,a.pos_y,a.dim_x,a.dim_y,a.align,c.name as layertype,a.element_id as table_ref,a.piece_element_id,b.seq,(CASE WHEN b.media IS NULL OR b.media = '' THEN d.name ELSE b.media END) as table_source,b.media,d.name,
           (CASE WHEN b.media IS NULL OR b.media = '' THEN (CASE WHEN d.name = 'image' THEN (select ('extension:'||extension||';'||dim_x||';'||b.name) from image a2 join style b on(b.id=a2.style) where a2.id=a.element_id) ELSE '2' END) ELSE (CASE WHEN b.media = 'image' THEN '1' ELSE '2' END) END)
           from layer_property a
           join piece_element b on(a.piece_element_id=b.id)
@@ -341,13 +349,14 @@ class DefaultController extends Controller {
                         $elementProperty->value = $item['idiom'];
                         $elementProperty->save();
                         $this->elog('ElementProperty:', $elementProperty->elementID . '[' . $elementProperty->propertyID . '/' . $elementProperty->value . ']');
-
-                        $property = CommonProperty::model()->findByAttributes(array('context' => 'element', 'name' => 'classification'));
-                        $elementProperty = new EditorElementProperty();
-                        $elementProperty->elementID = $element->ID;
-                        $elementProperty->propertyID = $property->ID;
-                        $elementProperty->value = 'morpheme';
-                        $elementProperty->save();
+                        if($row['classification'] != 'NULL'){
+                            $property = CommonProperty::model()->findByAttributes(array('context' => 'element', 'name' => 'classification'));
+                            $elementProperty = new EditorElementProperty();
+                            $elementProperty->elementID = $element->ID;
+                            $elementProperty->propertyID = $property->ID;
+                            $elementProperty->value = $row['classification'];
+                            $elementProperty->save();
+                        }
                         $this->elog('ElementProperty:', $elementProperty->elementID . '[' . $elementProperty->propertyID . '/' . $elementProperty->value . ']');
                     }
                 } else if ($src == 'phrase') {
@@ -380,12 +389,15 @@ class DefaultController extends Controller {
                         $elementProperty->save();
                         $this->elog('ElementProperty:', $elementProperty->elementID . '[' . $elementProperty->propertyID . '/' . $elementProperty->value . ']');
 
-                        $property = CommonProperty::model()->findByAttributes(array('context' => 'element', 'name' => 'classification'));
-                        $elementProperty = new EditorElementProperty();
-                        $elementProperty->elementID = $element->ID;
-                        $elementProperty->propertyID = $property->ID;
-                        $elementProperty->value = 'phrase';
-                        $elementProperty->save();
+                        if($row['classification'] != 'NULL'){
+                            $property = CommonProperty::model()->findByAttributes(array('context' => 'element', 'name' => 'classification'));
+                            $elementProperty = new EditorElementProperty();
+                            $elementProperty->elementID = $element->ID;
+                            $elementProperty->propertyID = $property->ID;
+                            $elementProperty->value = $row['classification'];
+                            $elementProperty->save();
+                        }
+                        //@TODO ADDICIONAR DUAS PROPRIEDAS: CONTEÚDO E TEMA;
                         $this->elog('ElementProperty:', $elementProperty->elementID . '[' . $elementProperty->propertyID . '/' . $elementProperty->value . ']');
                     }
                 } else if ($src == 'paragraph') {
@@ -418,12 +430,15 @@ class DefaultController extends Controller {
                         $elementProperty->save();
                         $this->elog('ElementProperty:', $elementProperty->elementID . '[' . $elementProperty->propertyID . '/' . $elementProperty->value . ']');
 
-                        $property = CommonProperty::model()->findByAttributes(array('context' => 'element', 'name' => 'classification'));
-                        $elementProperty = new EditorElementProperty();
-                        $elementProperty->elementID = $element->ID;
-                        $elementProperty->propertyID = $property->ID;
-                        $elementProperty->value = 'paragraph';
-                        $elementProperty->save();
+                        if($row['classification'] != 'NULL'){
+                            $property = CommonProperty::model()->findByAttributes(array('context' => 'element', 'name' => 'classification'));
+                            $elementProperty = new EditorElementProperty();
+                            $elementProperty->elementID = $element->ID;
+                            $elementProperty->propertyID = $property->ID;
+                            $elementProperty->value = $row['classification'];
+                            $elementProperty->save();
+                        }
+                        //@TODO ADICIONAR PROPRIEDADE TEMA.
                         $this->elog('ElementProperty:', $elementProperty->elementID . '[' . $elementProperty->propertyID . '/' . $elementProperty->value . ']');
                     }
                 } else if ($src == 'speech' || $src == 'word' || $src == 'compound') {
@@ -756,8 +771,8 @@ class DefaultController extends Controller {
           }
           }
           }
-          } */
-        /* SELECT * FROM cobject_cobjectblock a
+          }
+          /* SELECT * FROM cobject_cobjectblock a
           join cobject b on(a.cobjectID=b.ID)
           join cobject_metadata c on(c.cobjectID=b.ID and c.typeID=6)
           join act_goal d on(d.ID=c.value)
