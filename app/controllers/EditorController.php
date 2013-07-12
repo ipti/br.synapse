@@ -106,8 +106,9 @@ class EditorController extends Controller {
     }
 
     public function actionFiltergoal() {
-        $idDiscipline = $_POST['idDiscipline'];
-        $idDegree = $_POST['idDegree'];
+      if(!isset($_POST['goalID']) ) {  
+            $idDiscipline = $_POST['idDiscipline'];
+            $idDegree = $_POST['idDegree'];
         if ($idDegree == "undefined") {
             $actGoal_disc = Yii::app()->db->createCommand('SELECT degreeID FROM act_goal 
             WHERE disciplineID =' . $idDiscipline . ' GROUP BY degreeID')->queryAll();
@@ -140,17 +141,23 @@ class EditorController extends Controller {
                     for ($i = 0; $i < $count_Agoal_d; $i++) {
                         $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>";
                     }
-                    $str.= "</select>
-                      </div>
+                      
+                    $str.= "</select>";
+                    $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']) .
+                           "</div>
+                            <br>                      
+
              <script type='text/javascript'>
                 $('#actDegree').change(function(){
-                  $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
+                    $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
+                });
+                $('#actGoal').change(function(){
+                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
                 });
                 $('#actGoal,#actDegree,#actDiscipline').change(function(){
-                  $('#error').hide(1000);
+                    $('#error').hide(1000);
                 });
              </script>";
-
                     echo $str;
                 } else {
                     //Não encontrou algum act_degree relacionado a esta disciplina(with grade>0)
@@ -172,9 +179,41 @@ class EditorController extends Controller {
                 $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>";
             }
             $str.= "</select>";
-
+            $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']);
             echo $str;
         }
+      }else{
+          //Somente Pesquisar Pelo GoalID
+          $goalID = $_POST['goalID'];
+          echo  $this->searchCobjectofGoal($goalID);
+      }  
+   }
+    
+    private function searchCobjectofGoal($actGoal_id) {
+        //Se foi definida, então existe pelo menos a posição 0
+        $IDActGoal = (isset($actGoal_id) ? $actGoal_id : -1) ; 
+        //Selecionando ou não algum Degree
+        //==========Editar os Cobjects Existentes - As atividades========//
+        $cobject_metadata = Yii::app()->db->createCommand('SELECT cobjectID FROM cobject_metadata
+            WHERE value = ' . $IDActGoal)->queryAll();
+        $count_CobjMdata = count($cobject_metadata); 
+        if($count_CobjMdata > 0 ) {
+            $str2 = "<br><br><div id='showCobjectIDs' align='left'>
+                <span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
+                <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/json/'>
+                <select id='cobjectID' name='cobjectID' style='width:430px'>";
+            for($i = 0; $i < $count_CobjMdata; $i++){
+                $str2.= "<option value=" . $cobject_metadata[$i]['cobjectID'] . ">"
+                      . $cobject_metadata[$i]['cobjectID'] . "</option>";
+            }
+                $str2.= "</select>
+                         <input id='editCobject' name='editCobject' type='button' value='Change Cobject'>
+                    </div>";         
+                   return $str2;
+           
+        }
+        
+        //=================================================================
     }
 
     public function actionJson() {
