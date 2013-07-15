@@ -485,13 +485,13 @@ function editor () {
             parent.CObjectID = response['CObjectID'];
             
             //Reubucua o contador da Ordem das Screens
-            screenPosition = 1;
+            screenPosition = 0;
             
             //Para cada tela
             $('.screen').each(function(){
                 //Atualiza a ScreeID com o ID do ".screen" atual
                 ScreenID = $(this).attr('id');
-                
+          
                 //Salva Screen
                 parent.saveData({ 
                     //Operação Salvar, Screen, ID no DOM
@@ -501,7 +501,7 @@ function editor () {
                     DomID: ScreenID,
                     //Dados da Screen
                     CObjectID: parent.CObjectID,
-                    Number: screenPosition,
+                    Number: ++screenPosition,//incrementa a Ordem da Screen
                     Ordem: screenPosition,
                     Width: 960,
                     Height: 500
@@ -516,13 +516,13 @@ function editor () {
                     LastScreenID = response['screenID'];
                     
                     //reinicia o contador de posição dos PieceSet na Screen
-                    pieceSetPosition = 1;
+                    pieceSetPosition = 0;
                     
                     //Para cada PieceSet da Screen
                     $('#'+curretScreenID+' .PieceSet').each(function(){
                         PieceSetID = $(this).attr('id');
                         pieceSetDescription = $('#'+PieceSetID+' .actName' ).val();
-                        
+                   
                         //Salva PieceSet
                         parent.saveData({ 
                             //Operação Salvar, PieceSet, ID no DOM
@@ -533,7 +533,7 @@ function editor () {
                             typeID: 7,
                             desc: pieceSetDescription,
                             screenID: LastScreenID,
-                            position: pieceSetPosition,
+                            position: ++pieceSetPosition, //incrementa a Ordem do PieceSet
                             templateID: parent.COtemplateType
                         },
                         //Função sucess do save PieceSet
@@ -543,7 +543,7 @@ function editor () {
                             LastPieceSetID = response['PieceSetID'];
                             
                             //reiniciar o contador de posição da Piece no PieceSet
-                            piecePosition = 1;
+                            piecePosition = 0;
                             
                             //Para cada Piece do PieceSet
                             $('#'+curretPieceSetID+' .piece').each(function(){
@@ -558,7 +558,7 @@ function editor () {
                                     //Dados do Piece
                                     typeID: 7,
                                     pieceSetID: LastPieceSetID,
-                                    ordem: piecePosition
+                                    ordem: ++piecePosition //incrementa a Ordem do Piece
                                 },
                                 //Função de sucess do Save Piece
                                 function(response, textStatus, jqXHR){
@@ -567,7 +567,7 @@ function editor () {
                                     LastPieceID = response['PieceID'];
                                     
                                     //inicializa o contador de posição do elemento
-                                    elementPosition = 1;
+                                    elementPosition = 0;
                                     
                                     //Para cada Elemento no Piece
                                     $('#'+curretPieceID+' .element').each(function(){
@@ -586,7 +586,7 @@ function editor () {
                                         //Preencher as variáveis de acordo com o tipo do objeto a ser salvo
                                         if(parent.existID(ElementTextID)){
                                             type = 11; //text
-                                            value = $(ElementTextID).html();
+                                            value = $(ElementTextID+" > font").html();
                                         }else if(parent.existID(ElementImageID)){
                                             type = 16; //image
                                             value = {};
@@ -603,7 +603,7 @@ function editor () {
                                             typeID: type,
                                             DomID: ElementID,
                                             //Dados do Element
-                                            ordem: elementPosition,
+                                            ordem: ++elementPosition, //incrementa a Ordem do Element
                                             pieceID: LastPieceID,
                                             flag: Flag,
                                             value: value
@@ -620,9 +620,6 @@ function editor () {
                                                     $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
                                                     parent.uploadedElements++
                                                 });
-                                            
-                                            //incrementa a Ordem do Element
-                                            elementPosition++;
                                         
                                         //Se for uma Imagem
                                         }else if(parent.existID(ElementImageID)){
@@ -668,20 +665,12 @@ function editor () {
                                             //Envia o formulário atual
                                             $(FormElementImageID).submit();
                                             
-                                            //incrementa a Ordem do Element
-                                            elementPosition++;
                                         }
                                     });
-                                    //incrementa a Ordem do Piece
-                                    piecePosition++;
                                 });
                             });
-                            //incrementa a Ordem do PieceSet
-                            pieceSetPosition++;
                         });
                     });
-                    //incrementa a Ordem da Screen
-                    screenPosition++;
                 });       
             });
         });
