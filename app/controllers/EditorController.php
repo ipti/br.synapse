@@ -207,7 +207,8 @@ class EditorController extends Controller {
                       . $cobject_metadata[$i]['cobjectID'] . "</option>";
             }
                 $str2.= "</select>
-                         <input id='editCobject' name='editCobject' type='button' value='Change Cobject'>
+                    <input type='hidden' name='op' value='load'> 
+                         <input id='editCobject' name='editCobject' type='submit' value='Change Cobject'>
                     </div>";         
                    return $str2;
            
