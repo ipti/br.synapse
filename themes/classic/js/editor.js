@@ -6,6 +6,7 @@ function editor () {
     this.COgoalID;
     this.currentScreenId = 'sc0';
     this.lastScreenId;
+    this.mode;
     this.countScreen = 0;
     this.countPieceSet = new Array();
     this.countPieces = new Array();
@@ -22,11 +23,18 @@ function editor () {
         this.currentPiece = id;
     }
     
-    this.addScreen = function(){
+    this.addScreen = function(id){
+        //variável para adição do ID do banco, se ele não existir ficará vazio.
+        var plus = "";
+        //se estiver setado o novo id
+        if(this.isset(id)){
+            //adiciona o código na varíavel
+            plus = ' idBD="'+id+'" ';
+        }
         //incrementa o contador
         this.countScreen = this.countScreen+1;
-        //cria a div da nova screen
-        $(".content").append('<div class="screen" id="sc'+this.countScreen+'"></div>');
+        //cria a div da nova screen, e adiciona o ID do banco, caso exista.
+        $(".content").append('<div class="screen" id="sc'+this.countScreen+'" '+plus+'></div>');
         //cria o novo contador de pieceSet
         this.countPieceSet['sc'+this.countScreen] = 0;
         //atualiza o pajinate
@@ -52,17 +60,32 @@ function editor () {
         });
     }
     
-    this.addPieceSet = function(){
+    this.addPieceSet = function(id, desc, type){
+        //variável para adição do ID do banco, se ele não existir ficará vazio.
+        var plus = "";
+        //variável para adição de descrição vinda do banco.
+        var plusdesc = "";
+        //variável para adição de tipo vindo do banco.
+        var plustype = "";
+        
+        //se estiverem setadas as informações do banco
+        if(this.isset(id) && this.isset(desc) && this.isset(type)){
+            //adiciona o código na varíavel
+            plus = ' idBD="'+id+'" ';
+            plusdesc = desc;
+            plustype = type;
+        }
+        
         var parent = this;
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
         this.countPieces[piecesetID] = 0;
         $('#'+this.currentScreenId).append(''+
-            '<div class="PieceSet" id="'+piecesetID+'_list">'+
+            '<div class="PieceSet" id="'+piecesetID+'_list" '+plus+'>'+
             '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
             '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
             '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
             '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
-            '<input type="text" class="actName" />'+
+            '<input type="text" class="actName" value="'+plusdesc+'" />'+
             '<div id="'+piecesetID+'_forms"></div>'+
             '<ul class="piecelist" id="'+piecesetID+'"></ul>'+
             '<span class="clear"></span>'+
@@ -84,15 +107,24 @@ function editor () {
 
     }
     
-    this.addPiece = function(id){
+    this.addPiece = function(id, idbd){
         var parent = this;
+        
+        //variável para adição do ID do banco, se ele não existir ficará vazio.
+        var plus = "";
+        //se estiver setado o novo id
+        if(this.isset(idbd)){
+            //adiciona o código na varíavel
+            plus = ' idBD="'+idbd+'" ';
+        }
+        
         var PieceSetid = id.replace("pie_", "");
         this.currentPieceSet = PieceSetid;
         
         var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
         this.countElements[pieceID] = 0;
         $('#'+PieceSetid).append(''+
-            '<li id="'+pieceID+'" class="piece">'+
+            '<li id="'+pieceID+'" class="piece" idbd="'+plus+'">'+
             '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>'+
             '<div class="tplMulti">'+
             '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>'+
@@ -110,12 +142,23 @@ function editor () {
         });
     }
     
-    this.addText = function(ID){
+    this.addText = function(ID, loaddata){       
+        
+        //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
+        var initial_text = "";
+        //se estiver setado o novo id
+        if(this.isset(loaddata)){
+            //adiciona o código na varíavel
+            initial_text = loaddata['text'];
+        }else{
+            initial_text = LABEL_INITIAL_TEXT;
+        }
+        
         $('#'+ID).append('<div id="'+ID+'_text" class="text">'+
-            '<font class="editable">'+LABEL_INITIAL_TEXT+'</font>'+
+            '<font class="editable">'+initial_text+'</font>'+
             '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>'+
             '</div>');
-        
+             
         var parent = this;
         var text = "#"+ID+"_text";
         var editable = text+" > font.editable";
@@ -144,7 +187,7 @@ function editor () {
                 op: "load"
             },         //$_POST['op'] on load
             indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
-            tooltip   : LABEL_INITIAL_TEXT
+            tooltip   : initial_text
         });        
         
         //Quando clicar no editabke
@@ -155,8 +198,8 @@ function editor () {
 
             //adiciona a função de foco ao input
             $(input).on("focus",function(){
-                //se o valor for igual ao LABEL_INITIAL_TEXT
-                if($(input).val() == LABEL_INITIAL_TEXT){
+                //se o valor for igual ao initial_text
+                if($(input).val() == initial_text){
                     //remove o texto
                     $(input).val("");
                 }
@@ -165,8 +208,8 @@ function editor () {
             $(input).on("focusout",function(){
                 //se não houver textoo
                 if($(input).val() == ""){
-                    //adiciona o texto LABEL_INITIAL_TEXT
-                    $(input).val(LABEL_INITIAL_TEXT);
+                    //adiciona o texto initial_text
+                    $(input).val(initial_text);
                     //da submit no formulário
                     $(form).submit();
                 }
@@ -177,7 +220,18 @@ function editor () {
         
     }
     
-    this.addUploadForm = function(ID, type, responseFunction){
+    this.addUploadForm = function(ID, type, responseFunction, loaddata){
+        
+        //variável para adição do ID do banco, se ele não existir ficará vazio.
+        var libBDID = "";
+        console.log(loaddata);
+        //se estiver setado o novo id
+        if(this.isset(loaddata) && this.isset(loaddata['library'])){
+            //adiciona o código na varíavel
+            libBDID = ' idBD="'+loaddata['library']['ID']+'" ';
+        }
+        
+        
         //Default Image
         var uploadType = (type['type']?type['type']:'image'); 
         var uploadAccept = Array();
@@ -197,7 +251,7 @@ function editor () {
         var input   = file+"_input";
         
         $('#'+ID).append(''+
-            '<div id="'+file+'" class="'+uploadType+'">'+
+            '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">'+
             '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
             '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
             '<input type="hidden" name="op" value="'+uploadType+'"/>'+
@@ -206,6 +260,12 @@ function editor () {
             '</label>'+
             '</form>'+
             '</div>');
+        
+        
+        if(this.isset(loaddata) && this.isset(loaddata['library'])){
+            var src = '/rsc/upload/'+uploadType+'/'+loaddata['library']['src'];
+            responseFunction(src, file, form); 
+        }
         
         var parent = this;
         
@@ -237,7 +297,7 @@ function editor () {
         });
     }
     
-    this.addImage = function(id){
+    this.addImage = function(id, loaddata){
         this.addUploadForm(id, {
             type: 'image',
             accept: Array("png","gif","bmp","jpeg","jsc","ico"),
@@ -246,10 +306,10 @@ function editor () {
         },function(src, fileid, formid){
             $("#"+fileid+" > img").remove("img");
             $("#"+fileid).append('<img  src="'+src+'" width="320" height="240" alt="Image"/>');
-        });
+        },loaddata);
     }
     
-    this.addSound = function(id){
+    this.addSound = function(id, loaddata){
         var parent = this;
         this.addUploadForm(id, {
             type: 'audio',
@@ -261,10 +321,10 @@ function editor () {
                 '<audio src="'+src+'" controls="controls">'+
                 ERROR_BROWSER_SUPORT+
                 '</audio>');
-        });
+        },loaddata);
     }
     
-    this.addVideo = function(id){
+    this.addVideo = function(id, loaddata){
         var parent = this;
         this.addUploadForm(id, {
             type: 'video',
@@ -276,14 +336,23 @@ function editor () {
                 '<video src="'+src+'" width="320" height="240" controls="controls">'+
                 ERROR_BROWSER_SUPORT+
                 '</video>');
-        });
+        },loaddata);
     }
     
-    this.addElement = function(){
+    this.addElement = function(idbd, type, loaddata){
         var parent = this;
+            
+        //variável para adição do ID do banco, se ele não existir ficará vazio.
+        var plus = "";
+        //se estiver setado o novo id
+        if(this.isset(idbd)){
+            //adiciona o código na varíavel
+            plus = ' idBD="'+idbd+'" ';
+        }
+        
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         $('#'+this.currentPiece+" > div.tplMulti").append(''+
-            '<span id="'+elementID+'" class="element moptions">'+
+            '<span id="'+elementID+'" '+plus+' class="element moptions">'+
             '<div>' +
             '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
             '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
@@ -296,6 +365,31 @@ function editor () {
             '</label>'+
             '</div>' +
             '</span>');
+        
+        
+        
+        if(this.isset(loaddata)){
+            switch(type){
+                case '11'://text
+                    this.addText(elementID, loaddata);
+                    break;
+                case '16'://Library
+                    switch(loaddata['library']['type']){
+                        case '9'://image
+                            this.addImage(elementID, loaddata);
+                            break;
+                        case '17'://video
+                            this.addImage(elementID, loaddata);
+                            break;
+                        case '20'://sound
+                            this.addSound(elementID, loaddata);
+                            break;
+                    }
+                    break;
+                default:
+                    console.log(elementID+' '+type+' '+loaddata);
+            }
+        }
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
@@ -330,11 +424,11 @@ function editor () {
         });
     }
     
-    this.delScreen = function(){
+    this.delScreen = function(force){
         //pega o id da screen atual
         var id = this.currentScreenId;
         //confirmação do ato de remover
-        if(confirm(MSG_REMOVE_SCREEN)){
+        if(force || confirm(MSG_REMOVE_SCREEN)){
             //remove o elemento
             $("#"+id).remove();
             //deleta o count do pieceset
@@ -711,7 +805,147 @@ function editor () {
         
     }
     
+    this.load = function(){
+        //define parent como a classe base
+        var parent = this;
+        //inicia a requisição de ajax
+        $.ajax({
+            type: "POST",
+            url: "/Editor/json",
+            dataType: 'json',
+            data: {
+                op:'load',
+                cobjectID:parent.CObjectID
+            },                
+            error: function( jqXHR, textStatus, errorThrown ){
+                $('html').html(jqXHR.responseText);
+            },
+            success: function(response, textStatus, jqXHR){
+                //força a deleção da screen inicial
+                parent.delScreen(true);
+                //para cada item do response
+                $.each(response, function(i, item){
+                    //caso i
+                    switch(i){
+                        //seja o ID do cobject
+                        case 'cobjectID':
+                            //altera na classe
+                            parent.CObjectID = item;
+                        //seja o ID do tipo
+                        case 'typeID':
+                            //altera na classe
+                            parent.COtypeID = item;
+                            break;
+                        //seja o ID do tema
+                        case 'themeID':
+                            //altera na classe
+                            parent.COthemeID = item;
+                            break;
+                        //seja o ID do template
+                        case 'templateID':
+                            //altera na classe
+                            parent.COtemplateID = item;
+                        //se não
+                        default:
+                            //se for uma screen
+                            if(i.slice(0,1) == "S"){
+                                //pega o id da screen a partir do indice
+                                var screenID = i.slice(1);
+                                //adiciona a screen
+                                parent.addScreen(screenID);
+                                
+                                //para cada item da screen
+                                $.each(item, function(i, item){
+                                    //se for um pieceset
+                                    if(i.slice(0,2) == "PS"){
+                                        //pega o id do pieceset a partir do indice
+                                        var piecesetID = i.slice(2);
+                                        //pega a descrição do pieceset a partir do item
+                                        var desc = item['desc'];
+                                        //pega o tipo do pieceset a partir do item
+                                        var type = item['typeID'];
+                                        
+                                        //adiciona o pieceset
+                                        parent.addPieceSet(piecesetID, desc, type);
+                                        
+                                        //para cada item do pieceset
+                                        $.each(item, function(i,item){
+                                            //se for um piece
+                                            if(i.slice(0,1) == "P"){
+                                                //pega o id do pieceset a partir do indice
+                                                var pieceID = i.slice(1);
+                                                var DOMpiecesetID = $('.piecelist').last().attr('id');
+                                                //adiciona o pieceset
+                                                parent.addPiece(DOMpiecesetID,pieceID);
+                                                //seleciona o piece adicionado
+                                                parent.changePiece($('.piece').last());
+                                                //para cada item do pieceset
+                                                $.each(item, function(i,item){
+                                                    //se for um elemento
+                                                    if(i.slice(0,1) == "E"){
+                                                        //declara a array de dados das propriedades do elemento
+                                                        parent.parent = this;
+                                                        var data = new Array();
+                                                        
+                                                        //preenchimento do array de dados
+                                                        $.each(item, function(i,item){
+                                                            if(i.slice(0,1) == "L"){
+                                                                var data = new Array();
+                                                                console.log(i+':'+i.slice(1));
+                                                                console.log(data);
+                                                                data['library']['ID'] = i.slice(1);
+                                                                console.log(i+':'+item['typeID']);
+                                                                data['library']['type'] = item['typeID'];
+                                                                if(parent.isset(item['Prop1']))
+                                                                    data['library']['width'] = item['Prop1'];
+                                                                if(parent.isset(item['Prop4']['Prop2']))
+                                                                    data['library']['height'] = item['Prop2'];
+                                                                if(parent.isset(item['Prop4']['Prop5']))
+                                                                    data['library']['src'] = item['Prop5'];
+                                                                if(parent.isset(item['Prop4']['Prop12']))
+                                                                    data['library']['extension'] = item['Prop12'];
+                                                                if(parent.isset(item['Prop4']['Prop22']))
+                                                                    data['library']['nstyle'] = item['Prop22'];
+                                                                if(parent.isset(item['Prop4']['Prop23']))
+                                                                    data['library']['content'] = item['Prop23'];
+                                                                if(parent.isset(item['Prop4']['Prop24']))
+                                                                    data['library']['color'] = item['Prop24'];
+                                                                console.log(data);
+                                                                
+                                                            }
+                                                        });
+                                                        if(parent.isset(item['Prop6']))
+                                                            data['text'] =item['Prop6'];
+                                                        if(parent.isset(item['Prop10']))
+                                                            data['language'] = item['Prop10'];
+                                                        if(parent.isset(item['Prop11']))
+                                                            data['classification'] = item['Prop11'];
+                                                        //pega o tipo do element
+                                                        var type = item['typeID'];
+                                                        //pega o id do element a partir do indice
+                                                        var elementID = i.slice(1);
+                                                        console.log(data);
+                                                        parent.addElement(elementID,type,data);
+                                                        
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+                    }
+                });
+                alert('Load complet!');
+            }
+        });
+    }
+    
     this.existID = function(id){
         return $(id).size() > 0;
+    }
+    this.isset = function(variable){
+        return (typeof variable !== 'undefined');
     }
 }
