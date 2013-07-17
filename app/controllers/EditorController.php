@@ -26,17 +26,21 @@ class EditorController extends Controller {
     }
 
     public function actionIndex() {
-        if (!isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) && !isset($_POST['cobjectTheme'])) {
+        if(isset($_GET['cID'])){
+            $this->render('index');
+        }
+        elseif (!isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) && !isset($_POST['cobjectTheme'])) {
             $this->redirect('/editor/preeditor');
-        } else {
+        }
+        else {
             if (isset($_POST['actGoal'])) {
                 $this->render('index');
-            } else {
+            }else {
                 $this->redirect('/editor/preeditor?error=1');
             }
         }
     }
-
+    
     public function actionPreeditor() {
         $this->render('preeditor');
     }
@@ -422,14 +426,14 @@ class EditorController extends Controller {
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->libraryID = $libraryID;
                                         $newLibraryProperty->propertyID = 5;
-                                        $newLibraryProperty->value = $src;
+                                        $newLibraryProperty->value = $nome;//apenas o nome do arquivo
                                         $newLibraryProperty->insert();
 
                                         //12 extension
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->libraryID = $libraryID;
                                         $newLibraryProperty->propertyID = 12;
-                                        $newLibraryProperty->value = $nome;     //apenas o nome do arquivo
+                                        $newLibraryProperty->value = $ext;     
                                         $newLibraryProperty->insert();
 
                                         //Salva na editor_element_property
@@ -457,7 +461,62 @@ class EditorController extends Controller {
                         throw new Exception("ERROR: Operação inválida.<br>");
                 }
             } elseif ($_POST['op'] == 'load') {
-                
+                if(isset($_POST['cobjectID'])){
+                    $cobjectID = $_POST['cobjectID'];
+                    $cobject = Cobject::model()->findByAttributes(array('ID'=>$cobjectID));
+                    $json['cobjectID'] = $cobjectID;
+                    $json['typeID'] = $cobject->typeID;
+                    $json['themeID'] = $cobject->themeID;
+                    $json['templateID'] = $cobject->templateID;
+                    
+                    $Srceens = EditorScreen::model()->findAllByAttributes(array('cobjectID'=>$cobjectID),array('order'=>'`order`'));
+                    
+                    foreach ($Srceens as $sc):
+                        $json['S'.$sc->ID] = array();
+                        $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screenID'=>$sc->ID),array('order'=>'`position`'));
+                        foreach ($ScreenPieceset as $scps):
+                            $PieceSet = EditorPieceset::model()->findByAttributes(array('ID'=>$scps->piecesetID));
+                            $json['S'.$sc->ID]['PS'.$PieceSet->ID] = array();
+                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['desc'] = $PieceSet->desc;
+                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['typeID'] = $PieceSet->typeID;
+                            
+                            $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('piecesetID'=>$PieceSet->ID),array('order'=>'`order`'));
+                            foreach ($PieceSetPiece as $psp):
+                                $Piece = EditorPiece::model()->findByAttributes(array('ID'=>$psp->pieceID));
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID] = array();
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['description'] = $Piece->description;
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['name'] = $Piece->name;
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['typeID'] = $Piece->typeID;
+                                
+                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('pieceID'=>$psp->pieceID),array('order'=>'`position`'));
+                                
+                                foreach ($PieceElement as $pe):
+                                    $Element = EditorElement::model()->findByAttributes(array('ID'=>$pe->elementID));
+                                    $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID] = array();
+                                    $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['typeID'] = $Element->typeID;
+                                    
+                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('elementID'=>$Element->ID));
+                                    foreach ($ElementProperty as $ep):
+                                        if($ep->propertyID == 4){ //libraryID
+                                            $Library = Library::model()->findByAttributes(array('ID'=>$ep->value));
+                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID] = array();
+                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID]['typeID'] = $Library->typeID; //9 image; 17 movie; 20 sound 
+                                            
+                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID'=>$Library->ID));
+                                            foreach($LibraryProperty as $lp):
+                                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID]['Prop'.$lp->propertyID] = $lp->value;
+                                            endforeach;
+                                        }else{
+                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['Prop'.$ep->propertyID] = $ep->value;
+                                            
+                                        }
+                                    endforeach;
+                                endforeach;
+                            endforeach;
+                        endforeach;
+                    endforeach;
+                    
+                }
             } else {
                 throw new Exception("ERROR: Operação inválida.<br>");
             }
