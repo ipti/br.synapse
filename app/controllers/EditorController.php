@@ -63,14 +63,24 @@ class EditorController extends Controller {
             // memory limit (nem todo server aceita)
             ini_set("memory_limit", "50M");
             set_time_limit(0);
-            $img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg",
-                "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
-            $num_img = count($img_sent);
-
-
-            // $num_img = 4;
+            
+            //--------------------------------------------
+            $uploadedLibraryIDs = isset($_POST['uploadedLibraryIDs']) ? $_POST['uploadedLibraryIDs'] : null  ;
+            if($uploadedLibraryIDs == null){
+                $this->redirect('/editor');
+            }
+                
+            $num_img = count($uploadedLibraryIDs);
+            $i = 0;
+              foreach($uploadedLibraryIDs as $upLibId):
+                  $srcOfImgs[$i] = LibraryProperty::model()->findByAttributes(array('libraryID' => $upLibId,
+                      'propertyID' => 5));
+                  $i++;
+              endforeach;
+            //--------------------------------------------          
+              
             for ($i = 0; $i < $num_img; $i++) {
-                $name_img[$i] = $img_sent[$i];
+                $name_img[$i] = $srcOfImgs[$i]->value;
                 $tem_crop = false;
                 $img[$i] = '';
                 if (isset($name_img[$i])) {
@@ -148,14 +158,14 @@ class EditorController extends Controller {
                       
                     $str.= "</select>";
                     $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']) .
-                           "</div>
-                            <br>                      
+                           "</div>                  
 
              <script type='text/javascript'>
                 $('#actDegree').change(function(){
                     $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
                 });
                 $('#actGoal').change(function(){
+                    window.alert('Change Act_Goal');
                     $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
                 });
                 $('#actGoal,#actDegree,#actDiscipline').change(function(){
@@ -184,6 +194,13 @@ class EditorController extends Controller {
             }
             $str.= "</select>";
             $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']);
+            $str.="
+                <script language='javascript' type='text/javascript'>  
+                $('#actGoal').change(function(){
+                    window.alert('Change Act_Goal - 2');
+                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
+                }); </script> "  ;
+                
             echo $str;
         }
       }else{
@@ -202,8 +219,8 @@ class EditorController extends Controller {
             WHERE value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata); 
         if($count_CobjMdata > 0 ) {
-            $str2 = "<br><br><div id='showCobjectIDs' align='left'>
-                <span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
+            $str2 = "<div id='showCobjectIDs' align='left'>
+              <br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
                 <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/json/'>
                 <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for($i = 0; $i < $count_CobjMdata; $i++){
