@@ -10,6 +10,9 @@
      elseif(isset($_GET['cID'])){
          $cobjectID = $_GET['cID'];
          $mode = 'edit';
+     }elseif (isset($_POST['cobjectID'])) {
+         $cobjectID = $_POST['cobjectID'];
+         $mode = 'edit';
      }
      else{ 
           throw new Exception('ERROR: RQEUEST Inválido');

@@ -75,6 +75,7 @@ function editor () {
             plusdesc = desc;
             plustype = type;
         }
+        console.log(plusdesc);
         
         var parent = this;
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
@@ -867,7 +868,6 @@ function editor () {
                                         
                                         //adiciona o pieceset
                                         parent.addPieceSet(piecesetID, desc, type);
-                                        
                                         //para cada item do pieceset
                                         $.each(item, function(i,item){
                                             //se for um piece
@@ -896,6 +896,7 @@ function editor () {
                                                                 data['library']['ID'] = i.slice(1);
                                                                 console.log(i+':'+item['typeID']);
                                                                 data['library']['type'] = item['typeID'];
+                                                                //HERE!
                                                                 if(parent.isset(item['Prop1']))
                                                                     data['library']['width'] = item['Prop1'];
                                                                 if(parent.isset(item['Prop4']['Prop2']))
