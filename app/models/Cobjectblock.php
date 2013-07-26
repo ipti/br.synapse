@@ -4,9 +4,9 @@
  * This is the model class for table "cobjectblock".
  *
  * The followings are the available columns in table 'cobjectblock':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
- * @property integer $disciplineID
+ * @property integer $discipline_id
  *
  * The followings are the available model relations:
  * @property CobjectCobjectblock[] $cobjectCobjectblocks
@@ -40,12 +40,12 @@ class Cobjectblock extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, disciplineID', 'required'),
-			array('disciplineID', 'numerical', 'integerOnly'=>true),
+			array('name, discipline_id', 'required'),
+			array('discipline_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, disciplineID', 'safe', 'on'=>'search'),
+			array('id, name, discipline_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,8 +57,8 @@ class Cobjectblock extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'cobjectCobjectblocks' => array(self::HAS_MANY, 'CobjectCobjectblock', 'blockID'),
-			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'disciplineID'),
+			'cobjectCobjectblocks' => array(self::HAS_MANY, 'CobjectCobjectblock', 'cobject_block_id'),
+			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'discipline_id'),
 		);
 	}
 
@@ -68,9 +68,9 @@ class Cobjectblock extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
-			'disciplineID' => Yii::t('default', 'Discipline'),
+			'discipline_id' => Yii::t('default', 'Discipline'),
 		);
 	}
 
@@ -85,9 +85,9 @@ class Cobjectblock extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('disciplineID',$this->disciplineID);
+		$criteria->compare('discipline_id',$this->discipline_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

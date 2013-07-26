@@ -4,12 +4,12 @@
  * This is the model class for table "person".
  *
  * The followings are the available columns in table 'person':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
- * @property integer $login
+ * @property string $login
  * @property string $email
  * @property string $password
- * @property integer $phone
+ * @property string $fk_code
  *
  * The followings are the available model relations:
  * @property Actor[] $actors
@@ -43,12 +43,12 @@ class Person extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, login', 'required'),
-			array('login, phone', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			array('email, password', 'length', 'max'=>255),
+			array('fk_code', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, login, email, password, phone', 'safe', 'on'=>'search'),
+			array('id, name, login, email, password, fk_code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,7 +60,7 @@ class Person extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actors' => array(self::HAS_MANY, 'Actor', 'personID'),
+			'actors' => array(self::HAS_MANY, 'Actor', 'person_id'),
 		);
 	}
 
@@ -70,12 +70,12 @@ class Person extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
 			'login' => Yii::t('default', 'Login'),
 			'email' => Yii::t('default', 'Email'),
 			'password' => Yii::t('default', 'Password'),
-			'phone' => Yii::t('default', 'Phone'),
+			'fk_code' => Yii::t('default', 'Fk Code'),
 		);
 	}
 
@@ -90,12 +90,12 @@ class Person extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('login',$this->login);
+		$criteria->compare('login',$this->login,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('password',$this->password,true);
-		$criteria->compare('phone',$this->phone);
+		$criteria->compare('fk_code',$this->fk_code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

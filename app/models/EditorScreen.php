@@ -4,11 +4,8 @@
  * This is the model class for table "editor_screen".
  *
  * The followings are the available columns in table 'editor_screen':
- * @property integer $ID
- * @property integer $cobjectID
- * @property integer $number
- * @property integer $width
- * @property integer $height
+ * @property integer $id
+ * @property integer $cobject_id
  * @property integer $order
  * @property integer $oldID
  *
@@ -44,11 +41,11 @@ class EditorScreen extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cobjectID, oldID', 'required'),
-			array('cobjectID, number, width, height, order, oldID', 'numerical', 'integerOnly'=>true),
+			array('cobject_id', 'required'),
+			array('cobject_id, order, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, cobjectID, number, width, height, order, oldID', 'safe', 'on'=>'search'),
+			array('id, cobject_id, order, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,8 +57,8 @@ class EditorScreen extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobjectID'),
-			'editorScreenPiecesets' => array(self::HAS_MANY, 'EditorScreenPieceset', 'screenID'),
+			'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobject_id'),
+			'editorScreenPiecesets' => array(self::HAS_MANY, 'EditorScreenPieceset', 'screen_id'),
 		);
 	}
 
@@ -71,11 +68,8 @@ class EditorScreen extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'cobjectID' => Yii::t('default', 'Cobject'),
-			'number' => Yii::t('default', 'Number'),
-			'width' => Yii::t('default', 'Width'),
-			'height' => Yii::t('default', 'Height'),
+			'id' => Yii::t('default', 'ID'),
+			'cobject_id' => Yii::t('default', 'Cobject'),
 			'order' => Yii::t('default', 'Order'),
 			'oldID' => Yii::t('default', 'Old'),
 		);
@@ -92,11 +86,8 @@ class EditorScreen extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('cobjectID',$this->cobjectID);
-		$criteria->compare('number',$this->number);
-		$criteria->compare('width',$this->width);
-		$criteria->compare('height',$this->height);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('cobject_id',$this->cobject_id);
 		$criteria->compare('order',$this->order);
 		$criteria->compare('oldID',$this->oldID);
 

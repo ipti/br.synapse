@@ -4,10 +4,10 @@
  * This is the model class for table "act_goal".
  *
  * The followings are the available columns in table 'act_goal':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
- * @property integer $degreeID
- * @property integer $disciplineID
+ * @property integer $degree_id
+ * @property integer $discipline_id
  * @property integer $oldID
  *
  * The followings are the available model relations:
@@ -46,11 +46,11 @@ class ActGoal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, degreeID, disciplineID', 'required'),
-			array('degreeID, disciplineID, oldID', 'numerical', 'integerOnly'=>true),
+			array('name, degree_id, discipline_id', 'required'),
+			array('degree_id, discipline_id, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, degreeID, disciplineID, oldID', 'safe', 'on'=>'search'),
+			array('id, name, degree_id, discipline_id, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,12 +62,12 @@ class ActGoal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'degree' => array(self::BELONGS_TO, 'ActDegree', 'degreeID'),
-			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'disciplineID'),
-			'actGoalContents' => array(self::HAS_MANY, 'ActGoalContent', 'goalID'),
-			'actGoalMatrixes' => array(self::HAS_MANY, 'ActGoalMatrix', 'goalID'),
-			'actGoalModalities' => array(self::HAS_MANY, 'ActGoalModality', 'goalID'),
-			'actGoalSkills' => array(self::HAS_MANY, 'ActGoalSkill', 'goalID'),
+			'degree' => array(self::BELONGS_TO, 'ActDegree', 'degree_id'),
+			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'discipline_id'),
+			'actGoalContents' => array(self::HAS_MANY, 'ActGoalContent', 'goal_id'),
+			'actGoalMatrixes' => array(self::HAS_MANY, 'ActGoalMatrix', 'goal_id'),
+			'actGoalModalities' => array(self::HAS_MANY, 'ActGoalModality', 'goal_id'),
+			'actGoalSkills' => array(self::HAS_MANY, 'ActGoalSkill', 'goal_id'),
 		);
 	}
 
@@ -77,10 +77,10 @@ class ActGoal extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
-			'degreeID' => Yii::t('default', 'Degree'),
-			'disciplineID' => Yii::t('default', 'Discipline'),
+			'degree_id' => Yii::t('default', 'Degree'),
+			'discipline_id' => Yii::t('default', 'Discipline'),
 			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
@@ -96,10 +96,10 @@ class ActGoal extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('degreeID',$this->degreeID);
-		$criteria->compare('disciplineID',$this->disciplineID);
+		$criteria->compare('degree_id',$this->degree_id);
+		$criteria->compare('discipline_id',$this->discipline_id);
 		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(

@@ -4,17 +4,15 @@
  * This is the model class for table "editor_pieceset".
  *
  * The followings are the available columns in table 'editor_pieceset':
- * @property integer $ID
- * @property integer $typeID
- * @property string $desc
+ * @property integer $id
+ * @property integer $template_id
+ * @property string $description
  * @property integer $oldID
  *
  * The followings are the available model relations:
- * @property CommonType $type
+ * @property CobjectTemplate $template
  * @property EditorPiecesetPiece[] $editorPiecesetPieces
  * @property EditorScreenPieceset[] $editorScreenPiecesets
- * @property EditorScreenPieceset[] $editorScreenPiecesets1
- * @property PerformancePiecesetCache[] $performancePiecesetCaches
  */
 class EditorPieceset extends CActiveRecord
 {
@@ -44,12 +42,11 @@ class EditorPieceset extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('typeID, oldID', 'required'),
-			array('typeID, oldID', 'numerical', 'integerOnly'=>true),
-			array('desc', 'safe'),
+			array('template_id, oldID', 'numerical', 'integerOnly'=>true),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, typeID, desc, oldID', 'safe', 'on'=>'search'),
+			array('id, template_id, description, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,11 +58,9 @@ class EditorPieceset extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'type' => array(self::BELONGS_TO, 'CommonType', 'typeID'),
-			'editorPiecesetPieces' => array(self::HAS_MANY, 'EditorPiecesetPiece', 'piecesetID'),
-			'editorScreenPiecesets' => array(self::HAS_MANY, 'EditorScreenPieceset', 'piecesetID'),
-			'editorScreenPiecesets1' => array(self::HAS_MANY, 'EditorScreenPieceset', 'piecesetParent'),
-			'performancePiecesetCaches' => array(self::HAS_MANY, 'PerformancePiecesetCache', 'piecesetID'),
+			'template' => array(self::BELONGS_TO, 'CobjectTemplate', 'template_id'),
+			'editorPiecesetPieces' => array(self::HAS_MANY, 'EditorPiecesetPiece', 'pieceset_id'),
+			'editorScreenPiecesets' => array(self::HAS_MANY, 'EditorScreenPieceset', 'pieceset_id'),
 		);
 	}
 
@@ -75,9 +70,9 @@ class EditorPieceset extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'typeID' => Yii::t('default', 'Type'),
-			'desc' => Yii::t('default', 'Desc'),
+			'id' => Yii::t('default', 'ID'),
+			'template_id' => Yii::t('default', 'Template'),
+			'description' => Yii::t('default', 'Description'),
 			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
@@ -93,9 +88,9 @@ class EditorPieceset extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('typeID',$this->typeID);
-		$criteria->compare('desc',$this->desc,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('template_id',$this->template_id);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(

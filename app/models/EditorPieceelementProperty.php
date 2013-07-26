@@ -4,14 +4,14 @@
  * This is the model class for table "editor_pieceelement_property".
  *
  * The followings are the available columns in table 'editor_pieceelement_property':
- * @property integer $ID
- * @property integer $propertyID
+ * @property integer $id
+ * @property integer $property_id
  * @property string $value
- * @property integer $pieceElementID
+ * @property integer $piece_element_id
  *
  * The followings are the available model relations:
- * @property EditorPieceElement $pieceElement
  * @property CommonProperty $property
+ * @property EditorPieceElement $pieceElement
  */
 class EditorPieceelementProperty extends CActiveRecord
 {
@@ -41,12 +41,12 @@ class EditorPieceelementProperty extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('propertyID, pieceElementID', 'required'),
-			array('propertyID, pieceElementID', 'numerical', 'integerOnly'=>true),
+			array('property_id, piece_element_id', 'required'),
+			array('property_id, piece_element_id', 'numerical', 'integerOnly'=>true),
 			array('value', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, propertyID, value, pieceElementID', 'safe', 'on'=>'search'),
+			array('id, property_id, value, piece_element_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,8 +58,8 @@ class EditorPieceelementProperty extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'pieceElementID'),
-			'property' => array(self::BELONGS_TO, 'CommonProperty', 'propertyID'),
+			'property' => array(self::BELONGS_TO, 'CommonProperty', 'property_id'),
+			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'piece_element_id'),
 		);
 	}
 
@@ -69,10 +69,10 @@ class EditorPieceelementProperty extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'propertyID' => Yii::t('default', 'Property'),
+			'id' => Yii::t('default', 'ID'),
+			'property_id' => Yii::t('default', 'Property'),
 			'value' => Yii::t('default', 'Value'),
-			'pieceElementID' => Yii::t('default', 'Piece Element'),
+			'piece_element_id' => Yii::t('default', 'Piece Element'),
 		);
 	}
 
@@ -87,10 +87,10 @@ class EditorPieceelementProperty extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('propertyID',$this->propertyID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('property_id',$this->property_id);
 		$criteria->compare('value',$this->value,true);
-		$criteria->compare('pieceElementID',$this->pieceElementID);
+		$criteria->compare('piece_element_id',$this->piece_element_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -4,18 +4,18 @@
  * This is the model class for table "editor_piece_element".
  *
  * The followings are the available columns in table 'editor_piece_element':
- * @property integer $ID
- * @property integer $pieceID
- * @property integer $elementID
- * @property integer $position
+ * @property integer $id
+ * @property integer $piece_id
+ * @property integer $element_id
+ * @property integer $order
  * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property EditorEvents[] $editorEvents
- * @property EditorElement $element
  * @property EditorPiece $piece
+ * @property EditorElement $element
  * @property EditorPieceelementProperty[] $editorPieceelementProperties
- * @property PeformanceUser[] $peformanceUsers
+ * @property PeformanceActor[] $peformanceActors
  */
 class EditorPieceElement extends CActiveRecord
 {
@@ -45,11 +45,11 @@ class EditorPieceElement extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pieceID, elementID, position, oldID', 'required'),
-			array('pieceID, elementID, position, oldID', 'numerical', 'integerOnly'=>true),
+			array('piece_id, element_id', 'required'),
+			array('piece_id, element_id, order, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, pieceID, elementID, position, oldID', 'safe', 'on'=>'search'),
+			array('id, piece_id, element_id, order, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,11 +61,11 @@ class EditorPieceElement extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'editorEvents' => array(self::HAS_MANY, 'EditorEvents', 'pieceElementID'),
-			'element' => array(self::BELONGS_TO, 'EditorElement', 'elementID'),
-			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'pieceID'),
-			'editorPieceelementProperties' => array(self::HAS_MANY, 'EditorPieceelementProperty', 'pieceElementID'),
-			'peformanceUsers' => array(self::HAS_MANY, 'PeformanceUser', 'pieceElementID'),
+			'editorEvents' => array(self::HAS_MANY, 'EditorEvents', 'piece_element_id'),
+			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'piece_id'),
+			'element' => array(self::BELONGS_TO, 'EditorElement', 'element_id'),
+			'editorPieceelementProperties' => array(self::HAS_MANY, 'EditorPieceelementProperty', 'piece_element_id'),
+			'peformanceActors' => array(self::HAS_MANY, 'PeformanceActor', 'piece_element_id'),
 		);
 	}
 
@@ -75,10 +75,10 @@ class EditorPieceElement extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'pieceID' => Yii::t('default', 'Piece'),
-			'elementID' => Yii::t('default', 'Element'),
-			'position' => Yii::t('default', 'Position'),
+			'id' => Yii::t('default', 'ID'),
+			'piece_id' => Yii::t('default', 'Piece'),
+			'element_id' => Yii::t('default', 'Element'),
+			'order' => Yii::t('default', 'Order'),
 			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
@@ -94,10 +94,10 @@ class EditorPieceElement extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('pieceID',$this->pieceID);
-		$criteria->compare('elementID',$this->elementID);
-		$criteria->compare('position',$this->position);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('piece_id',$this->piece_id);
+		$criteria->compare('element_id',$this->element_id);
+		$criteria->compare('order',$this->order);
 		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(

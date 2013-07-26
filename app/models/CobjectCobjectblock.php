@@ -4,13 +4,13 @@
  * This is the model class for table "cobject_cobjectblock".
  *
  * The followings are the available columns in table 'cobject_cobjectblock':
- * @property integer $ID
- * @property integer $cobjectID
- * @property integer $blockID
+ * @property integer $id
+ * @property integer $cobject_id
+ * @property integer $cobject_block_id
  *
  * The followings are the available model relations:
- * @property Cobjectblock $block
  * @property Cobject $cobject
+ * @property Cobjectblock $cobjectBlock
  */
 class CobjectCobjectblock extends CActiveRecord
 {
@@ -40,11 +40,11 @@ class CobjectCobjectblock extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cobjectID, blockID', 'required'),
-			array('cobjectID, blockID', 'numerical', 'integerOnly'=>true),
+			array('cobject_id, cobject_block_id', 'required'),
+			array('cobject_id, cobject_block_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, cobjectID, blockID', 'safe', 'on'=>'search'),
+			array('id, cobject_id, cobject_block_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,8 +56,8 @@ class CobjectCobjectblock extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'block' => array(self::BELONGS_TO, 'Cobjectblock', 'blockID'),
-			'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobjectID'),
+			'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobject_id'),
+			'cobjectBlock' => array(self::BELONGS_TO, 'Cobjectblock', 'cobject_block_id'),
 		);
 	}
 
@@ -67,9 +67,9 @@ class CobjectCobjectblock extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'cobjectID' => Yii::t('default', 'Cobject'),
-			'blockID' => Yii::t('default', 'Block'),
+			'id' => Yii::t('default', 'ID'),
+			'cobject_id' => Yii::t('default', 'Cobject'),
+			'cobject_block_id' => Yii::t('default', 'Cobject Block'),
 		);
 	}
 
@@ -84,9 +84,9 @@ class CobjectCobjectblock extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('cobjectID',$this->cobjectID);
-		$criteria->compare('blockID',$this->blockID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('cobject_id',$this->cobject_id);
+		$criteria->compare('cobject_block_id',$this->cobject_block_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

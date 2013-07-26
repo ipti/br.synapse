@@ -4,11 +4,12 @@
  * This is the model class for table "cobject".
  *
  * The followings are the available columns in table 'cobject':
- * @property integer $ID
- * @property integer $typeID
- * @property integer $templateID
- * @property integer $themeID
+ * @property integer $id
+ * @property integer $type_id
+ * @property integer $template_id
+ * @property integer $theme_id
  * @property integer $oldID
+ * @property string $status
  *
  * The followings are the available model relations:
  * @property CobjectTemplate $template
@@ -17,7 +18,6 @@
  * @property CobjectCobjectblock[] $cobjectCobjectblocks
  * @property CobjectMetadata[] $cobjectMetadatas
  * @property EditorScreen[] $editorScreens
- * @property PerfomanceCobjectCache[] $perfomanceCobjectCaches
  */
 class Cobject extends CActiveRecord
 {
@@ -47,11 +47,12 @@ class Cobject extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('typeID, templateID, themeID', 'required'),
-			array('typeID, templateID, themeID, oldID', 'numerical', 'integerOnly'=>true),
+			array('type_id, template_id', 'required'),
+			array('type_id, template_id, theme_id, oldID', 'numerical', 'integerOnly'=>true),
+			array('status', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, typeID, templateID, themeID, oldID', 'safe', 'on'=>'search'),
+			array('id, type_id, template_id, theme_id, oldID, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,13 +64,12 @@ class Cobject extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'template' => array(self::BELONGS_TO, 'CobjectTemplate', 'templateID'),
-			'theme' => array(self::BELONGS_TO, 'CobjectTheme', 'themeID'),
-			'type' => array(self::BELONGS_TO, 'CommonType', 'typeID'),
-			'cobjectCobjectblocks' => array(self::HAS_MANY, 'CobjectCobjectblock', 'cobjectID'),
-			'cobjectMetadatas' => array(self::HAS_MANY, 'CobjectMetadata', 'cobjectID'),
-			'editorScreens' => array(self::HAS_MANY, 'EditorScreen', 'cobjectID'),
-			'perfomanceCobjectCaches' => array(self::HAS_MANY, 'PerfomanceCobjectCache', 'cobjectID'),
+			'template' => array(self::BELONGS_TO, 'CobjectTemplate', 'template_id'),
+			'theme' => array(self::BELONGS_TO, 'CobjectTheme', 'theme_id'),
+			'type' => array(self::BELONGS_TO, 'CommonType', 'type_id'),
+			'cobjectCobjectblocks' => array(self::HAS_MANY, 'CobjectCobjectblock', 'cobject_id'),
+			'cobjectMetadatas' => array(self::HAS_MANY, 'CobjectMetadata', 'cobject_id'),
+			'editorScreens' => array(self::HAS_MANY, 'EditorScreen', 'cobject_id'),
 		);
 	}
 
@@ -79,11 +79,12 @@ class Cobject extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'typeID' => Yii::t('default', 'Type'),
-			'templateID' => Yii::t('default', 'Template'),
-			'themeID' => Yii::t('default', 'Theme'),
+			'id' => Yii::t('default', 'ID'),
+			'type_id' => Yii::t('default', 'Type'),
+			'template_id' => Yii::t('default', 'Template'),
+			'theme_id' => Yii::t('default', 'Theme'),
 			'oldID' => Yii::t('default', 'Old'),
+			'status' => Yii::t('default', 'Status'),
 		);
 	}
 
@@ -98,11 +99,12 @@ class Cobject extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('typeID',$this->typeID);
-		$criteria->compare('templateID',$this->templateID);
-		$criteria->compare('themeID',$this->themeID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('type_id',$this->type_id);
+		$criteria->compare('template_id',$this->template_id);
+		$criteria->compare('theme_id',$this->theme_id);
 		$criteria->compare('oldID',$this->oldID);
+		$criteria->compare('status',$this->status,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

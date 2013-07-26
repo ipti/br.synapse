@@ -4,14 +4,14 @@
  * This is the model class for table "act_script_content".
  *
  * The followings are the available columns in table 'act_script_content':
- * @property integer $ID
- * @property integer $contentID
- * @property integer $scriptID
+ * @property integer $id
+ * @property integer $content_id
+ * @property integer $script_id
  * @property string $status
  *
  * The followings are the available model relations:
- * @property ActContent $content
  * @property ActScript $script
+ * @property ActContent $content
  */
 class ActScriptContent extends CActiveRecord
 {
@@ -41,12 +41,12 @@ class ActScriptContent extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('contentID, scriptID, status', 'required'),
-			array('contentID, scriptID', 'numerical', 'integerOnly'=>true),
+			array('content_id, script_id, status', 'required'),
+			array('content_id, script_id', 'numerical', 'integerOnly'=>true),
 			array('status', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, contentID, scriptID, status', 'safe', 'on'=>'search'),
+			array('id, content_id, script_id, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,8 +58,8 @@ class ActScriptContent extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'content' => array(self::BELONGS_TO, 'ActContent', 'contentID'),
-			'script' => array(self::BELONGS_TO, 'ActScript', 'scriptID'),
+			'script' => array(self::BELONGS_TO, 'ActScript', 'script_id'),
+			'content' => array(self::BELONGS_TO, 'ActContent', 'content_id'),
 		);
 	}
 
@@ -69,9 +69,9 @@ class ActScriptContent extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'contentID' => Yii::t('default', 'Content'),
-			'scriptID' => Yii::t('default', 'Script'),
+			'id' => Yii::t('default', 'ID'),
+			'content_id' => Yii::t('default', 'Content'),
+			'script_id' => Yii::t('default', 'Script'),
 			'status' => Yii::t('default', 'Status'),
 		);
 	}
@@ -87,9 +87,9 @@ class ActScriptContent extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('contentID',$this->contentID);
-		$criteria->compare('scriptID',$this->scriptID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('content_id',$this->content_id);
+		$criteria->compare('script_id',$this->script_id);
 		$criteria->compare('status',$this->status,true);
 
 		return new CActiveDataProvider($this, array(

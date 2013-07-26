@@ -4,13 +4,14 @@
  * This is the model class for table "common_property".
  *
  * The followings are the available columns in table 'common_property':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
  * @property string $context
  *
  * The followings are the available model relations:
  * @property EditorElementProperty[] $editorElementProperties
  * @property EditorPieceelementProperty[] $editorPieceelementProperties
+ * @property LibraryProperty[] $libraryProperties
  */
 class CommonProperty extends CActiveRecord
 {
@@ -41,11 +42,11 @@ class CommonProperty extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, context', 'required'),
-			array('name', 'length', 'max'=>45),
+			array('name', 'length', 'max'=>100),
 			array('context', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, context', 'safe', 'on'=>'search'),
+			array('id, name, context', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,8 +58,9 @@ class CommonProperty extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'editorElementProperties' => array(self::HAS_MANY, 'EditorElementProperty', 'propertyID'),
-			'editorPieceelementProperties' => array(self::HAS_MANY, 'EditorPieceelementProperty', 'propertyID'),
+			'editorElementProperties' => array(self::HAS_MANY, 'EditorElementProperty', 'property_id'),
+			'editorPieceelementProperties' => array(self::HAS_MANY, 'EditorPieceelementProperty', 'property_id'),
+			'libraryProperties' => array(self::HAS_MANY, 'LibraryProperty', 'property_id'),
 		);
 	}
 
@@ -68,7 +70,7 @@ class CommonProperty extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
 			'context' => Yii::t('default', 'Context'),
 		);
@@ -85,7 +87,7 @@ class CommonProperty extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('context',$this->context,true);
 

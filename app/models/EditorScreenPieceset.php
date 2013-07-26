@@ -4,18 +4,17 @@
  * This is the model class for table "editor_screen_pieceset".
  *
  * The followings are the available columns in table 'editor_screen_pieceset':
- * @property integer $ID
- * @property integer $screenID
- * @property integer $piecesetID
- * @property integer $piecesetParent
- * @property integer $position
- * @property integer $templateID
+ * @property integer $id
+ * @property integer $screen_id
+ * @property integer $pieceset_id
+ * @property integer $pieceset_parent_id
+ * @property integer $order
  *
  * The followings are the available model relations:
  * @property EditorPieceset $pieceset
- * @property EditorPieceset $piecesetParent0
+ * @property EditorScreenPieceset $piecesetParent
+ * @property EditorScreenPieceset[] $editorScreenPiecesets
  * @property EditorScreen $screen
- * @property CobjectTemplate $template
  */
 class EditorScreenPieceset extends CActiveRecord
 {
@@ -45,11 +44,11 @@ class EditorScreenPieceset extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('screenID, piecesetID, templateID', 'required'),
-			array('screenID, piecesetID, piecesetParent, position, templateID', 'numerical', 'integerOnly'=>true),
+			array('screen_id, pieceset_id', 'required'),
+			array('screen_id, pieceset_id, pieceset_parent_id, order', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, screenID, piecesetID, piecesetParent, position, templateID', 'safe', 'on'=>'search'),
+			array('id, screen_id, pieceset_id, pieceset_parent_id, order', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,10 +60,10 @@ class EditorScreenPieceset extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'pieceset' => array(self::BELONGS_TO, 'EditorPieceset', 'piecesetID'),
-			'piecesetParent0' => array(self::BELONGS_TO, 'EditorPieceset', 'piecesetParent'),
-			'screen' => array(self::BELONGS_TO, 'EditorScreen', 'screenID'),
-			'template' => array(self::BELONGS_TO, 'CobjectTemplate', 'templateID'),
+			'pieceset' => array(self::BELONGS_TO, 'EditorPieceset', 'pieceset_id'),
+			'piecesetParent' => array(self::BELONGS_TO, 'EditorScreenPieceset', 'pieceset_parent_id'),
+			'editorScreenPiecesets' => array(self::HAS_MANY, 'EditorScreenPieceset', 'pieceset_parent_id'),
+			'screen' => array(self::BELONGS_TO, 'EditorScreen', 'screen_id'),
 		);
 	}
 
@@ -74,12 +73,11 @@ class EditorScreenPieceset extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'screenID' => Yii::t('default', 'Screen'),
-			'piecesetID' => Yii::t('default', 'Pieceset'),
-			'piecesetParent' => Yii::t('default', 'Pieceset Parent'),
-			'position' => Yii::t('default', 'Position'),
-			'templateID' => Yii::t('default', 'Template'),
+			'id' => Yii::t('default', 'ID'),
+			'screen_id' => Yii::t('default', 'Screen'),
+			'pieceset_id' => Yii::t('default', 'Pieceset'),
+			'pieceset_parent_id' => Yii::t('default', 'Pieceset Parent'),
+			'order' => Yii::t('default', 'Order'),
 		);
 	}
 
@@ -94,12 +92,11 @@ class EditorScreenPieceset extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('screenID',$this->screenID);
-		$criteria->compare('piecesetID',$this->piecesetID);
-		$criteria->compare('piecesetParent',$this->piecesetParent);
-		$criteria->compare('position',$this->position);
-		$criteria->compare('templateID',$this->templateID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('screen_id',$this->screen_id);
+		$criteria->compare('pieceset_id',$this->pieceset_id);
+		$criteria->compare('pieceset_parent_id',$this->pieceset_parent_id);
+		$criteria->compare('order',$this->order);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

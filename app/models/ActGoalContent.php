@@ -4,13 +4,13 @@
  * This is the model class for table "act_goal_content".
  *
  * The followings are the available columns in table 'act_goal_content':
- * @property integer $ID
- * @property integer $goalID
- * @property integer $contentID
+ * @property integer $id
+ * @property integer $goal_id
+ * @property integer $content_id
  *
  * The followings are the available model relations:
- * @property ActContent $content
  * @property ActGoal $goal
+ * @property ActContent $content
  */
 class ActGoalContent extends CActiveRecord
 {
@@ -40,11 +40,11 @@ class ActGoalContent extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('goalID, contentID', 'required'),
-			array('goalID, contentID', 'numerical', 'integerOnly'=>true),
+			array('goal_id, content_id', 'required'),
+			array('goal_id, content_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, goalID, contentID', 'safe', 'on'=>'search'),
+			array('id, goal_id, content_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,8 +56,8 @@ class ActGoalContent extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'content' => array(self::BELONGS_TO, 'ActContent', 'contentID'),
-			'goal' => array(self::BELONGS_TO, 'ActGoal', 'goalID'),
+			'goal' => array(self::BELONGS_TO, 'ActGoal', 'goal_id'),
+			'content' => array(self::BELONGS_TO, 'ActContent', 'content_id'),
 		);
 	}
 
@@ -67,9 +67,9 @@ class ActGoalContent extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'goalID' => Yii::t('default', 'Goal'),
-			'contentID' => Yii::t('default', 'Content'),
+			'id' => Yii::t('default', 'ID'),
+			'goal_id' => Yii::t('default', 'Goal'),
+			'content_id' => Yii::t('default', 'Content'),
 		);
 	}
 
@@ -84,9 +84,9 @@ class ActGoalContent extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('goalID',$this->goalID);
-		$criteria->compare('contentID',$this->contentID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('goal_id',$this->goal_id);
+		$criteria->compare('content_id',$this->content_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

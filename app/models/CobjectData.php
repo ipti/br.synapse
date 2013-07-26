@@ -15,7 +15,7 @@
  */
 class CobjectData extends CActiveRecord {
 
-    public $cobjectID;
+    public $cobject_id;
     public $rules;
     public $labels;
 
@@ -26,13 +26,13 @@ class CobjectData extends CActiveRecord {
             $this->labels[$type->name] = $type->label;
             $this->rules[] = $rule;
         }
-        $this->cobjectID = $cObjectID;
+        $this->cobject_id = $cObjectID;
     }
 
     public function __get($name) {
         $type = CommonType::model()->findByAttributes(array('name' => $name));
-        if (isset($this->cobjectID)) {
-            $data = CobjectMetadata::model()->findByAttributes(array('cobjectID' => $this->cobjectID, 'typeID' => $type->ID));
+        if (isset($this->cobject_id)) {
+            $data = CobjectMetadata::model()->findByAttributes(array('cobject_id' => $this->cobject_id, 'type_id' => $type->id));
             if (isset($data)) {
                 return $data->value;
             } else {
@@ -47,28 +47,28 @@ class CobjectData extends CActiveRecord {
         if ($name == 'atrributes') {
             foreach ($value as $key => $val) {
                 $type = CommonType::model()->findByAttributes(array('name' => $key));
-                $data = CobjectMetadata::model()->findByAttributes(array('typeID' => $type->ID, 'cobjectID' => $this->cobjectID));
+                $data = CobjectMetadata::model()->findByAttributes(array('type_id' => $type->id, 'cobject_id' => $this->cobject_id));
                 if (isset($data)) {
                     $data->value = $val;
                     $data->save();
                 } else {
                     $data = new CobjectMetadata();
-                    $data->cobjectID = $this->cobjectID;
-                    $data->typeID = $type->ID;
+                    $data->cobject_id = $this->cobject_id;
+                    $data->type_id = $type->id;
                     $data->value = $val;
                     $data->save();
                 }
             }
         } else {
             $type = CommonType::model()->findByAttributes(array('name' => $name));
-            $data = CobjectMetadata::model()->findByAttributes(array('typeID' => $type->ID, 'cobjectID' => $this->cobjectID));
+            $data = CobjectMetadata::model()->findByAttributes(array('type_id' => $type->id, 'cobject_id' => $this->cobject_id));
             if (isset($data)) {
                 $data->value = $value;
                 $data->save();
             } else {
                 $data = new CobjectMetadata();
-                $data->cobjectID = $this->cobjectID;
-                $data->typeID = $type->ID;
+                $data->cobject_id = $this->cobject_id;
+                $data->type_id = $type->id;
                 $data->value = $value;
                 $data->save();
             }
@@ -107,8 +107,8 @@ class CobjectData extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'type' => array(self::BELONGS_TO, 'CommonType', 'typeID'),
-            'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobjectID'),
+            'type' => array(self::BELONGS_TO, 'CommonType', 'type_id'),
+            'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobject_id'),
         );
     }
 
@@ -129,9 +129,9 @@ class CobjectData extends CActiveRecord {
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('ID', $this->ID);
-        $criteria->compare('cobjectID', $this->cobjectID);
-        $criteria->compare('typeID', $this->typeID);
+        $criteria->compare('id', $this->id);
+        $criteria->compare('cobject_id', $this->cobject_id);
+        $criteria->compare('type_id', $this->type_id);
         $criteria->compare('value', $this->value, true);
 
         return new CActiveDataProvider($this, array(

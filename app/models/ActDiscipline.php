@@ -4,7 +4,7 @@
  * This is the model class for table "act_discipline".
  *
  * The followings are the available columns in table 'act_discipline':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
  * @property integer $oldID
  *
@@ -48,7 +48,7 @@ class ActDiscipline extends CActiveRecord
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, oldID', 'safe', 'on'=>'search'),
+			array('id, name, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,11 +60,11 @@ class ActDiscipline extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actContents' => array(self::HAS_MANY, 'ActContent', 'disciplineID'),
-			'actGoals' => array(self::HAS_MANY, 'ActGoal', 'disciplineID'),
-			'actMatrixes' => array(self::HAS_MANY, 'ActMatrix', 'disciplineID'),
-			'actScripts' => array(self::HAS_MANY, 'ActScript', 'disciplineID'),
-			'cobjectblocks' => array(self::HAS_MANY, 'Cobjectblock', 'disciplineID'),
+			'actContents' => array(self::HAS_MANY, 'ActContent', 'discipline_id'),
+			'actGoals' => array(self::HAS_MANY, 'ActGoal', 'discipline_id'),
+			'actMatrixes' => array(self::HAS_MANY, 'ActMatrix', 'discipline_id'),
+			'actScripts' => array(self::HAS_MANY, 'ActScript', 'discipline_id'),
+			'cobjectblocks' => array(self::HAS_MANY, 'Cobjectblock', 'discipline_id'),
 		);
 	}
 
@@ -74,7 +74,7 @@ class ActDiscipline extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
 			'oldID' => Yii::t('default', 'Old'),
 		);
@@ -91,7 +91,7 @@ class ActDiscipline extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('oldID',$this->oldID);
 

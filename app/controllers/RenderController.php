@@ -2,7 +2,7 @@
 
 class RenderController extends Controller {
 
-    public $layout = 'render';
+    public $layout = 'cbjrender';
 
     /**
      * @return array action filters
@@ -13,6 +13,144 @@ class RenderController extends Controller {
         );
     }
 
+    public function elog($text) {
+        $this->http_response_code(200);
+        echo json_encode($text);
+        flush();
+        ob_flush();
+    }
+
+    public function actionListcobjects() {
+        $content_parent = 19;
+        $contentsIn = "282,281";
+        $contentOut = "277,275";
+        $join = "";
+        $sql = "select distinct(id) from cobject where status='on'";
+        /* $sql = "select  distinct(a2.cobject_id)
+          from cobject a1
+          join cobject_metadata a2 on(a1.id=a2.cobject_id and a2.type_id=13)
+          join act_goal a3 on(a3.id=a2.value)
+          join act_goal_content a4 on(a3.id=a4.goal_id)
+          join act_content a6 on(a6.id=a4.content_id)";
+          $where = " where a6.content_parent=19 and (a6.id in($contentsIn) or a6.id not in($contentOut));";
+          if (isset($modality)) {
+          $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
+          $where.="";
+          }
+          if (isset($degree)) {
+          $join .= " left join act_degree a14 on(a14.id=a3.degree_id)";
+          $where .="";
+          }
+          if (isset($content)) {
+          $where .="";
+          } */
+        $command = Yii::app()->db->createCommand($sql . $join . $where);
+        $command->execute();
+        $reader = $command->queryAll();
+        echo json_encode($reader);
+        exit;
+    }
+
+    public function actionLoadcobject() {
+        $cobject_id = $_REQUEST['ID'];
+        $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
+        $command = Yii::app()->db->createCommand($sql);
+        $command->execute();
+        $row = $command->queryRow();
+        $json = $row;
+        $cobject = Cobject::model()->findByPk($row['cobject_id']);
+        $a5 = $a2 = $a3 = -1;
+        if (isset($cobject->editorScreens)) {
+            foreach ($cobject->editorScreens as $screen) {
+                $a2++;
+                $json['screens'][$a2] = $screen->attributes;
+                $a3 = -1;
+                foreach ($screen->editorScreenPiecesets as $pieceset) {
+                    if ($cobject->template->code != 'AEL') {
+                        $a3++;
+                    }
+                    $json['screens'][$a2]['piecesets'][$a3]['id'] = $pieceset->pieceset->id;
+                    $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $pieceset->pieceset->template->code;
+                    $a4 = -1;
+                    foreach ($pieceset->pieceset->editorPiecesetPieces as $piece) {
+                        $a4++;
+                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $piece->piece->id;
+                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $piece->piece->name;
+                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $piece->piece->description;
+                        if ($cobject->template->code != 'AEL') {
+                            $a5 = -1;
+                        }
+                        foreach ($piece->piece->editorPieceElements as $element) {
+                            $a5++;
+                            $properties = $events = $gproperties = array();
+                            foreach ($element->editorPieceelementProperties as $property) {
+                                $properties[] = array('name' => $property->property->name, 'value' => $property->value);
+                            }
+                            if ($cobject->template->code == 'AEL') {
+                                $properties[] = array('name' => 'group', 'value' => $piece->piece->id);
+                            }
+                            foreach ($element->editorEvents as $event) {
+                                $events[] = array('name' => $event->type->name, 'event' => $event->event, 'action' => $event->action);
+                            }
+                            foreach ($element->element->editorElementProperties as $gproperty) {
+                                $gproperties[] = array('name' => $gproperty->property->name, 'value' => $gproperty->value);
+                                if ($gproperty->property->name == 'library_id') {
+                                    $libid = $gproperty->value;
+                                }
+                            }
+                            if ($element->element->type->name == 'multimidia') {
+                                $lib = Library::model()->findByAttributes(array('id' => $libid));
+                                foreach ($lib->libraryProperties as $libproperty) {
+                                    $gproperties[] = array('name' => $libproperty->property->name, 'value' => $libproperty->value);
+                                };
+                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['typemulti'] = $lib->type->name;
+                            }
+
+                            foreach ($element->element->editorElementAliases as $alias) {
+                                $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
+                            }
+
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['code'] = 'EP' . $element->id;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementProperties'] = $properties;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementProperties'] = $properties;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['events'] = $events;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['generalProperties'] = $gproperties;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['type'] = $element->element->type->name;
+                        }
+                    }
+                }
+            }
+            echo json_encode($json);
+        } else {
+            $json['cobject'] = $cobject_id;
+            echo json_encode($json);
+        }
+        exit;
+    }
+
+    public function actionLoadcobjects() {
+        set_time_limit(0);
+        //header('Content-type: application/json');
+        //header('Content-type: text/html; charset=utf-8');
+        //header('Cache-Control: no-cache, must-revalidate');
+        // header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        //header('Content-type: application/json');
+
+        ;
+        $reader = $command->query();
+        $ocobject_id = -1;
+        $json = array();
+        $a1 = -1;
+        foreach ($reader as $row) {
+            if ($ocobject_id != $row['cobject_id']) {
+                
+            }
+            $ocobject_id = $row['cobject_id'];
+        }
+
+        exit;
+    }
+
     /**
      * Specifies the access control rules.
      * This method is used by the 'accessControl' filter.
@@ -21,8 +159,8 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'json', 'login', 'logout', 'filter', 'canvas', 'testepreview'),
-                'users' => array('@'),
+                'actions' => array('listcobjects', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview'),
+                'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions' => array('admin', 'delete'),
@@ -67,6 +205,48 @@ class RenderController extends Controller {
 
     public function actionCanvas() {
         $this->render('canvas');
+    }
+
+    public function actionStage() {
+        $cobject_id = @$_REQUEST['id'];
+        $script = @$_RESQUEST['script'];
+        $modality = @$_REQUEST['modality'];
+        $degree = @$_REQUEST['degree'];
+        $content = @$_REQUEST['content'];
+        $actor = @$_REQUEST['actor'];
+
+        $content_parent = 19;
+        $contentsIn = "282,281";
+        $contentOut = "277,275";
+        $join = "";
+        $sql = "select distinct(cobject_id) as id from render_cobjects where template_code = 'PRE' and status='on'";
+        /* $sql = "select  distinct(a1.id)
+          from cobject a1
+          join cobject_metadata a2 on(a1.id=a2.cobject_id and a2.type_id=13)
+          join act_goal a3 on(a3.id=a2.value)
+          join act_goal_content a4 on(a3.id=a4.goal_id)
+          join act_content a6 on(a6.id=a4.content_id)";
+          $where = " where a6.content_parent=19 and (a6.id in($contentsIn) or a6.id not in($contentOut))";
+          if (isset($modality)) {
+          $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
+          $where.="";
+          }
+          if (isset($degree)) {
+          $join .= " left join act_degree a14 on(a14.id=a3.degree_id)";
+          $where .="";
+          }
+          if (isset($content)) {
+          $where .="";
+          } */
+        //$command = Yii::app()->db->createCommand($sql . $join . $where . " limit 10");
+        $command = Yii::app()->db->createCommand($sql);
+        $command->execute();
+        $reader = $command->queryAll();
+        $json['ids'] = $reader;
+        $json['size'] = count($reader);
+        $json['pctitem'] = round(100 / count($reader), 1);
+        $json = json_encode($json);
+        $this->render('stage', array('json' => $json));
     }
 
     public function actionJson() {
@@ -186,16 +366,18 @@ class RenderController extends Controller {
         $json = array();
         $actorID = $_POST['actorID'];
         $classID = $_POST['classID'];
-        $typeID = $_POST['typeID'];
+        //$typeID = $_POST['typeID'];
+        $typeID = "rscript";
         $actor = Actor::model()->findByPk($actorID);
         $json['actorID'] = $actorID;
         $json['userName'] = $actor->person->name;
         $json['classID'] = $classID;
         if ($typeID == 'rscript') {
-            //$script = ActScript::model()->findByAttributes(array('ID' => $_POST['script']));
-            //$contents = ActContent::model()->findAllByAttributes(array('contentParent' => $script->contentParentID));
-            $contents = ActContent::model()->findAll();
-//@todo lembra de excluir os conteudos exclude e include
+
+            $script = ActScript::model()->findByAttributes(array('ID' => $_POST['script']));
+            $contents = ActContent::model()->findAllByAttributes(array('contentParent' => $script->contentParentID));
+            //$contents = ActContent::model()->findAll();
+//@todo lembra de excluir os conteudos exclude e include    
             $x = -1;
             foreach ($contents as $content) {
                 $x++;
@@ -209,67 +391,65 @@ class RenderController extends Controller {
                     $cobjects = CobjectMetadata::model()->findAllByAttributes(array('typeID' => $type->ID, 'value' => $goal->goal->ID));
                     $z = -1;
                     foreach ($cobjects as $cobject) {
-//@todo com base no tema filtrar
-                        if ($cobject->cobject->template->code == 'PRVW') {
-                            $z++;
-                            $json['contents'][$x]['goals'][$y]['cobjects'][$z] = $cobject->cobject->attributes;
-                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['template'] = $cobject->cobject->template->name;
-                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['template_code'] = $cobject->cobject->template->code;
-                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['theme'] = $cobject->cobject->theme->name;
-                            $b = $w = -1;
-                            foreach ($cobject->cobject->editorScreens as $screen) {
-                                $w++;
-                                $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w] = $screen->attributes;
-                                $v = -1;
-                                foreach ($screen->editorScreenPiecesets as $pieceset) {
+                        //@todo com base no tema filtrar
+                        $z++;
+                        $json['contents'][$x]['goals'][$y]['cobjects'][$z] = $cobject->cobject->attributes;
+                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['template'] = $cobject->cobject->template->name;
+                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['template_code'] = $cobject->cobject->template->code;
+                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['theme'] = $cobject->cobject->theme->name;
+                        $b = $w = -1;
+                        foreach ($cobject->cobject->editorScreens as $screen) {
+                            $w++;
+                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w] = $screen->attributes;
+                            $v = -1;
+                            foreach ($screen->editorScreenPiecesets as $pieceset) {
+                                if ($cobject->cobject->template->code != 'AEHC') {
+                                    $v++;
+                                }
+                                $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['ID'] = $pieceset->pieceset->ID;
+                                $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['template'] = $pieceset->template->name;
+                                $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['template_code'] = $pieceset->template->code;
+                                $a = -1;
+                                foreach ($pieceset->pieceset->editorPiecesetPieces as $piece) {
                                     if ($cobject->cobject->template->code != 'AEHC') {
-                                        $v++;
+                                        $a++;
                                     }
-                                    $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['ID'] = $pieceset->pieceset->ID;
-                                    $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['template'] = $pieceset->template->name;
-                                    $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['template_code'] = $pieceset->template->code;
-                                    $a = -1;
-                                    foreach ($pieceset->pieceset->editorPiecesetPieces as $piece) {
-                                        if ($cobject->cobject->template->code != 'AEHC') {
-                                            $a++;
+                                    $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['ID'] = $piece->piece->ID;
+                                    $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['type'] = $piece->piece->type->name;
+                                    if ($cobject->cobject->template->code != 'AEHC') {
+                                        $b = -1;
+                                    }
+                                    foreach ($piece->piece->editorPieceElements as $element) {
+                                        $b++;
+                                        $properties = $events = $gproperties = array();
+                                        foreach ($element->editorPieceelementProperties as $property) {
+                                            $properties[] = array('name' => $property->property->name, 'value' => $property->value);
                                         }
-                                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['ID'] = $piece->piece->ID;
-                                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['type'] = $piece->piece->type->name;
-                                        if ($cobject->cobject->template->code != 'AEHC') {
-                                            $b = -1;
+                                        if ($cobject->cobject->template->code == 'AEHC') {
+                                            $properties[] = array('name' => 'group', 'value' => $piece->piece->ID);
                                         }
-                                        foreach ($piece->piece->editorPieceElements as $element) {
-                                            $b++;
-                                            $properties = $events = $gproperties = array();
-                                            foreach ($element->editorPieceelementProperties as $property) {
-                                                $properties[] = array('name' => $property->property->name, 'value' => $property->value);
+                                        foreach ($element->editorEvents as $event) {
+                                            $events[] = array('name' => $event->type->name, 'event' => $event->event, 'action' => $event->action);
+                                        }
+                                        foreach ($element->element->editorElementProperties as $gproperty) {
+                                            if ($gproperty->property->name == 'libraryID') {
+                                                $lib = Library::model()->findByAttributes(array('ID' => $gproperty->value));
+                                                foreach ($lib->libraryProperties as $libproperty) {
+                                                    $gproperties[] = array('name' => $libproperty->property->name, 'value' => $libproperty->value);
+                                                };
+                                            } else {
+                                                $gproperties[] = array('name' => $gproperty->property->name, 'value' => $gproperty->value);
                                             }
-                                            if ($cobject->cobject->template->code == 'AEHC') {
-                                                $properties[] = array('name' => 'group', 'value' => $piece->piece->ID);
-                                            }
-                                            foreach ($element->editorEvents as $event) {
-                                                $events[] = array('name' => $event->type->name, 'event' => $event->event, 'action' => $event->action);
-                                            }
-                                            foreach ($element->element->editorElementProperties as $gproperty) {
-                                                if ($gproperty->property->name == 'libraryID') {
-                                                    $lib = Library::model()->findByAttributes(array('ID' => $gproperty->value));
-                                                    foreach ($lib->libraryProperties as $libproperty) {
-                                                        $gproperties[] = array('name' => $libproperty->property->name, 'value' => $libproperty->value);
-                                                    };
-                                                } else {
-                                                    $gproperties[] = array('name' => $gproperty->property->name, 'value' => $gproperty->value);
-                                                }
-                                            }
+                                        }
 
-                                            foreach ($element->element->editorElementAliases as $alias) {
-                                                $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
-                                            }
-                                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['code'] = 'EP' . $element->ID;
-                                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['elementProperties'] = $properties;
-                                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['events'] = $events;
-                                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['generalProperties'] = $gproperties;
-                                            $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['type'] = $element->element->type->name;
+                                        foreach ($element->element->editorElementAliases as $alias) {
+                                            $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
                                         }
+                                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['code'] = 'EP' . $element->ID;
+                                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['elementProperties'] = $properties;
+                                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['events'] = $events;
+                                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['generalProperties'] = $gproperties;
+                                        $json['contents'][$x]['goals'][$y]['cobjects'][$z]['screens'][$w]['piecesets'][$v]['pieces'][$a]['elements'][$b]['type'] = $element->element->type->name;
                                     }
                                 }
                             }

@@ -4,11 +4,11 @@
  * This is the model class for table "editor_events".
  *
  * The followings are the available columns in table 'editor_events':
- * @property integer $ID
- * @property integer $pieceElementID
- * @property integer $typeID
+ * @property integer $id
+ * @property integer $piece_element_id
  * @property string $action
  * @property string $event
+ * @property integer $type_id
  *
  * The followings are the available model relations:
  * @property EditorPieceElement $pieceElement
@@ -42,12 +42,12 @@ class EditorEvents extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ID, pieceElementID, typeID, action, event', 'required'),
-			array('ID, pieceElementID, typeID', 'numerical', 'integerOnly'=>true),
+			array('id, piece_element_id, action, event, type_id', 'required'),
+			array('id, piece_element_id, type_id', 'numerical', 'integerOnly'=>true),
 			array('event', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, pieceElementID, typeID, action, event', 'safe', 'on'=>'search'),
+			array('id, piece_element_id, action, event, type_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,8 +59,8 @@ class EditorEvents extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'pieceElementID'),
-			'type' => array(self::BELONGS_TO, 'CommonType', 'typeID'),
+			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'piece_element_id'),
+			'type' => array(self::BELONGS_TO, 'CommonType', 'type_id'),
 		);
 	}
 
@@ -70,11 +70,11 @@ class EditorEvents extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'pieceElementID' => Yii::t('default', 'Piece Element'),
-			'typeID' => Yii::t('default', 'Type'),
+			'id' => Yii::t('default', 'ID'),
+			'piece_element_id' => Yii::t('default', 'Piece Element'),
 			'action' => Yii::t('default', 'Action'),
 			'event' => Yii::t('default', 'Event'),
+			'type_id' => Yii::t('default', 'Type'),
 		);
 	}
 
@@ -89,11 +89,11 @@ class EditorEvents extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('pieceElementID',$this->pieceElementID);
-		$criteria->compare('typeID',$this->typeID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('piece_element_id',$this->piece_element_id);
 		$criteria->compare('action',$this->action,true);
 		$criteria->compare('event',$this->event,true);
+		$criteria->compare('type_id',$this->type_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

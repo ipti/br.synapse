@@ -1,7 +1,6 @@
 <?php
-    $actor = $_REQUEST['actor'];
-    $class = $_REQUEST['class'];
-    ///var_dump($actor);
+    $act = Actor::model()->findbypk($_REQUEST['actor']);
+    $class = Unity::model()->findbypk($_REQUEST['class']);
 ?>
 <style>
     .prerender{border:1px solid #000;width:319px;margin:100px auto;background: #262626;}
@@ -26,16 +25,15 @@
                 <select id="atdID">
                     <option value="avaliacao">AVALIAÇÃO</option>
                     <option value="treino">TREINO</option>
-                    <option value="livre">LIVRE</option>
                 </select>
             </label>
-            <label id="rblockscript">
+            <!--<label id="rblockscript">
                 <font>Bloco/Roteiro:</font>
                 <select id="typeID">
                     <option value="rscript">ROTEIRO</option>
                     <option value="rblock">BLOCO</option>
                 </select>
-            </label>
+            </label>-->
             <label id="rdiscipline">
                 <font>Disciplina:</font>
             </label>
@@ -46,9 +44,9 @@
             <label id="robjective">
                 <font>Objetivo:</font>
             </label>-->
-            <label class="blockscript" id="rblock">
+            <!--<label class="blockscript" id="rblock">
                 <font>Bloco:</font>
-            </label>
+            </label>-->
             <label class="blockscript" id="rscript">
                 <font>Roteiro:</font>
             </label>
@@ -63,21 +61,17 @@
                 </select>
             </label>-->
             <label id="rclasses">
-                <font>Turma:</font>
+                <font>Turma:</font><?php echo $class->name?>
             </label>
             <label id="rtutors">
-                <font>Tutor:</font>
+                <font>Tutor:</font><?php echo Yii::app()->user->name;?>
             </label>
             <label id="rstudents">
-                <font>Aluno:</font>
-            </label>
-            <label id="password">
-                <font>Senha:</font>
-                <input name="password" value="" type="password"/>
+                <font>Aluno:</font><?php echo $act->person->name?>
             </label>
             <input class="start" type="button" value="iniciar atendimento">
-            <input type="hidden" id="classID" value="<?php echo $class?>"/>
-            <input type="hidden" id="actorID" value="<?php echo $actor ?>"/>
+            <input type="hidden" id="classID" value="<?php echo $class->ID?>"/>
+            <input type="hidden" id="actorID" value="<?php echo $act->ID; ?>"/>
         </form>
     </div>
 </div>

@@ -4,16 +4,15 @@
  * This is the model class for table "act_matrix".
  *
  * The followings are the available columns in table 'act_matrix':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
- * @property integer $disciplineID
- * @property integer $degreeID
+ * @property integer $discipline_id
+ * @property integer $degree_id
  *
  * The followings are the available model relations:
  * @property ActGoalMatrix[] $actGoalMatrixes
  * @property ActDiscipline $discipline
  * @property ActDegree $degree
- * @property UserclassMatrix[] $userclassMatrixes
  */
 class ActMatrix extends CActiveRecord
 {
@@ -43,12 +42,12 @@ class ActMatrix extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, disciplineID, degreeID', 'required'),
-			array('disciplineID, degreeID', 'numerical', 'integerOnly'=>true),
+			array('name, discipline_id, degree_id', 'required'),
+			array('discipline_id, degree_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, disciplineID, degreeID', 'safe', 'on'=>'search'),
+			array('id, name, discipline_id, degree_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,10 +59,9 @@ class ActMatrix extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actGoalMatrixes' => array(self::HAS_MANY, 'ActGoalMatrix', 'matrixID'),
-			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'disciplineID'),
-			'degree' => array(self::BELONGS_TO, 'ActDegree', 'degreeID'),
-			'userclassMatrixes' => array(self::HAS_MANY, 'UserclassMatrix', 'matrixID'),
+			'actGoalMatrixes' => array(self::HAS_MANY, 'ActGoalMatrix', 'matrix_id'),
+			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'discipline_id'),
+			'degree' => array(self::BELONGS_TO, 'ActDegree', 'degree_id'),
 		);
 	}
 
@@ -73,10 +71,10 @@ class ActMatrix extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
-			'disciplineID' => Yii::t('default', 'Discipline'),
-			'degreeID' => Yii::t('default', 'Degree'),
+			'discipline_id' => Yii::t('default', 'Discipline'),
+			'degree_id' => Yii::t('default', 'Degree'),
 		);
 	}
 
@@ -91,10 +89,10 @@ class ActMatrix extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('disciplineID',$this->disciplineID);
-		$criteria->compare('degreeID',$this->degreeID);
+		$criteria->compare('discipline_id',$this->discipline_id);
+		$criteria->compare('degree_id',$this->degree_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

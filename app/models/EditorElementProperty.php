@@ -4,14 +4,14 @@
  * This is the model class for table "editor_element_property".
  *
  * The followings are the available columns in table 'editor_element_property':
- * @property integer $ID
- * @property integer $propertyID
- * @property integer $elementID
+ * @property integer $id
+ * @property integer $property_id
+ * @property integer $element_id
  * @property string $value
  *
  * The followings are the available model relations:
- * @property EditorElement $element
  * @property CommonProperty $property
+ * @property EditorElement $element
  */
 class EditorElementProperty extends CActiveRecord
 {
@@ -41,12 +41,12 @@ class EditorElementProperty extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('propertyID, elementID', 'required'),
-			array('propertyID, elementID', 'numerical', 'integerOnly'=>true),
+			array('property_id, element_id', 'required'),
+			array('property_id, element_id', 'numerical', 'integerOnly'=>true),
 			array('value', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, propertyID, elementID, value', 'safe', 'on'=>'search'),
+			array('id, property_id, element_id, value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,8 +58,8 @@ class EditorElementProperty extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'element' => array(self::BELONGS_TO, 'EditorElement', 'elementID'),
-			'property' => array(self::BELONGS_TO, 'CommonProperty', 'propertyID'),
+			'property' => array(self::BELONGS_TO, 'CommonProperty', 'property_id'),
+			'element' => array(self::BELONGS_TO, 'EditorElement', 'element_id'),
 		);
 	}
 
@@ -69,9 +69,9 @@ class EditorElementProperty extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'propertyID' => Yii::t('default', 'Property'),
-			'elementID' => Yii::t('default', 'Element'),
+			'id' => Yii::t('default', 'ID'),
+			'property_id' => Yii::t('default', 'Property'),
+			'element_id' => Yii::t('default', 'Element'),
 			'value' => Yii::t('default', 'Value'),
 		);
 	}
@@ -87,9 +87,9 @@ class EditorElementProperty extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('propertyID',$this->propertyID);
-		$criteria->compare('elementID',$this->elementID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('property_id',$this->property_id);
+		$criteria->compare('element_id',$this->element_id);
 		$criteria->compare('value',$this->value,true);
 
 		return new CActiveDataProvider($this, array(

@@ -1,28 +1,29 @@
 <?php
 
 /**
- * This is the model class for table "peformance_user".
+ * This is the model class for table "peformance_actor".
  *
- * The followings are the available columns in table 'peformance_user':
- * @property integer $ID
- * @property integer $pieceID
- * @property integer $pieceElementID
- * @property integer $userID
- * @property string $date
+ * The followings are the available columns in table 'peformance_actor':
+ * @property integer $id
+ * @property integer $piece_id
+ * @property integer $piece_element_id
+ * @property integer $actor_id
+ * @property integer $start_time
+ * @property integer $final_time
  * @property string $value
- * @property integer $iscorrect
+ * @property string $iscorrect
  *
  * The followings are the available model relations:
- * @property User $user
- * @property EditorPieceElement $pieceElement
  * @property EditorPiece $piece
+ * @property EditorPieceElement $pieceElement
+ * @property Actor $actor
  */
-class PeformanceUser extends CActiveRecord
+class PeformanceActor extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return PeformanceUser the static model class
+	 * @return PeformanceActor the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -34,7 +35,7 @@ class PeformanceUser extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'peformance_user';
+		return 'peformance_actor';
 	}
 
 	/**
@@ -45,12 +46,13 @@ class PeformanceUser extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pieceID, pieceElementID, userID', 'required'),
-			array('pieceID, pieceElementID, userID, iscorrect', 'numerical', 'integerOnly'=>true),
-			array('date, value', 'safe'),
+			array('piece_id, piece_element_id, actor_id, start_time, final_time', 'required'),
+			array('piece_id, piece_element_id, actor_id, start_time, final_time', 'numerical', 'integerOnly'=>true),
+			array('iscorrect', 'length', 'max'=>5),
+			array('value', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, pieceID, pieceElementID, userID, date, value, iscorrect', 'safe', 'on'=>'search'),
+			array('id, piece_id, piece_element_id, actor_id, start_time, final_time, value, iscorrect', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,9 +64,9 @@ class PeformanceUser extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'User', 'userID'),
-			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'pieceElementID'),
-			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'pieceID'),
+			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'piece_id'),
+			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'piece_element_id'),
+			'actor' => array(self::BELONGS_TO, 'Actor', 'actor_id'),
 		);
 	}
 
@@ -74,11 +76,12 @@ class PeformanceUser extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'pieceID' => Yii::t('default', 'Piece'),
-			'pieceElementID' => Yii::t('default', 'Piece Element'),
-			'userID' => Yii::t('default', 'User'),
-			'date' => Yii::t('default', 'Date'),
+			'id' => Yii::t('default', 'ID'),
+			'piece_id' => Yii::t('default', 'Piece'),
+			'piece_element_id' => Yii::t('default', 'Piece Element'),
+			'actor_id' => Yii::t('default', 'Actor'),
+			'start_time' => Yii::t('default', 'Start Time'),
+			'final_time' => Yii::t('default', 'Final Time'),
 			'value' => Yii::t('default', 'Value'),
 			'iscorrect' => Yii::t('default', 'Iscorrect'),
 		);
@@ -95,13 +98,14 @@ class PeformanceUser extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('pieceID',$this->pieceID);
-		$criteria->compare('pieceElementID',$this->pieceElementID);
-		$criteria->compare('userID',$this->userID);
-		$criteria->compare('date',$this->date,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('piece_id',$this->piece_id);
+		$criteria->compare('piece_element_id',$this->piece_element_id);
+		$criteria->compare('actor_id',$this->actor_id);
+		$criteria->compare('start_time',$this->start_time);
+		$criteria->compare('final_time',$this->final_time);
 		$criteria->compare('value',$this->value,true);
-		$criteria->compare('iscorrect',$this->iscorrect);
+		$criteria->compare('iscorrect',$this->iscorrect,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -4,25 +4,29 @@
  * This is the model class for table "common_type".
  *
  * The followings are the available columns in table 'common_type':
- * @property integer $ID
+ * @property integer $id
  * @property string $context
  * @property string $name
- * @property integer $typeParent
+ * @property integer $type_parent
  * @property string $validator
  * @property string $label
- * @property string $htmlSource
- * @property string $htmlType
+ * @property string $html_source
+ * @property string $html_type
+ * @property integer $oldID
+ * @property string $code
  *
  * The followings are the available model relations:
  * @property Cobject[] $cobjects
  * @property CobjectMetadata[] $cobjectMetadatas
- * @property CommonType $typeParent0
+ * @property CobjectTemplate[] $cobjectTemplates
+ * @property CobjectTemplate[] $cobjectTemplates1
+ * @property CommonType $typeParent
  * @property CommonType[] $commonTypes
  * @property EditorElement[] $editorElements
  * @property EditorElementAlias[] $editorElementAliases
+ * @property EditorElementAlias[] $editorElementAliases1
  * @property EditorEvents[] $editorEvents
- * @property EditorPiece[] $editorPieces
- * @property EditorPieceset[] $editorPiecesets
+ * @property Library[] $libraries
  */
 class CommonType extends CActiveRecord
 {
@@ -53,13 +57,13 @@ class CommonType extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('context, name', 'required'),
-			array('typeParent', 'numerical', 'integerOnly'=>true),
+			array('type_parent, oldID', 'numerical', 'integerOnly'=>true),
 			array('context', 'length', 'max'=>30),
-			array('name, label, htmlType', 'length', 'max'=>45),
-			array('validator, htmlSource', 'safe'),
+			array('name, label, html_type, code', 'length', 'max'=>45),
+			array('validator, html_source', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, context, name, typeParent, validator, label, htmlSource, htmlType', 'safe', 'on'=>'search'),
+			array('id, context, name, type_parent, validator, label, html_source, html_type, oldID, code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,15 +75,17 @@ class CommonType extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'cobjects' => array(self::HAS_MANY, 'Cobject', 'typeID'),
-			'cobjectMetadatas' => array(self::HAS_MANY, 'CobjectMetadata', 'typeID'),
-			'typeParent0' => array(self::BELONGS_TO, 'CommonType', 'typeParent'),
-			'commonTypes' => array(self::HAS_MANY, 'CommonType', 'typeParent'),
-			'editorElements' => array(self::HAS_MANY, 'EditorElement', 'typeID'),
-			'editorElementAliases' => array(self::HAS_MANY, 'EditorElementAlias', 'originalTypeID'),
-			'editorEvents' => array(self::HAS_MANY, 'EditorEvents', 'typeID'),
-			'editorPieces' => array(self::HAS_MANY, 'EditorPiece', 'typeID'),
-			'editorPiecesets' => array(self::HAS_MANY, 'EditorPieceset', 'typeID'),
+			'cobjects' => array(self::HAS_MANY, 'Cobject', 'type_id'),
+			'cobjectMetadatas' => array(self::HAS_MANY, 'CobjectMetadata', 'type_id'),
+			'cobjectTemplates' => array(self::HAS_MANY, 'CobjectTemplate', 'format_type_id'),
+			'cobjectTemplates1' => array(self::HAS_MANY, 'CobjectTemplate', 'interative_type_id'),
+			'typeParent' => array(self::BELONGS_TO, 'CommonType', 'type_parent'),
+			'commonTypes' => array(self::HAS_MANY, 'CommonType', 'type_parent'),
+			'editorElements' => array(self::HAS_MANY, 'EditorElement', 'type_id'),
+			'editorElementAliases' => array(self::HAS_MANY, 'EditorElementAlias', 'primary_type_id'),
+			'editorElementAliases1' => array(self::HAS_MANY, 'EditorElementAlias', 'secondary_type_id'),
+			'editorEvents' => array(self::HAS_MANY, 'EditorEvents', 'type_id'),
+			'libraries' => array(self::HAS_MANY, 'Library', 'type_id'),
 		);
 	}
 
@@ -89,14 +95,16 @@ class CommonType extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'context' => Yii::t('default', 'Context'),
 			'name' => Yii::t('default', 'Name'),
-			'typeParent' => Yii::t('default', 'Type Parent'),
+			'type_parent' => Yii::t('default', 'Type Parent'),
 			'validator' => Yii::t('default', 'Validator'),
 			'label' => Yii::t('default', 'Label'),
-			'htmlSource' => Yii::t('default', 'Html Source'),
-			'htmlType' => Yii::t('default', 'Html Type'),
+			'html_source' => Yii::t('default', 'Html Source'),
+			'html_type' => Yii::t('default', 'Html Type'),
+			'oldID' => Yii::t('default', 'Old'),
+			'code' => Yii::t('default', 'Code'),
 		);
 	}
 
@@ -111,14 +119,16 @@ class CommonType extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('context',$this->context,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('typeParent',$this->typeParent);
+		$criteria->compare('type_parent',$this->type_parent);
 		$criteria->compare('validator',$this->validator,true);
 		$criteria->compare('label',$this->label,true);
-		$criteria->compare('htmlSource',$this->htmlSource,true);
-		$criteria->compare('htmlType',$this->htmlType,true);
+		$criteria->compare('html_source',$this->html_source,true);
+		$criteria->compare('html_type',$this->html_type,true);
+		$criteria->compare('oldID',$this->oldID);
+		$criteria->compare('code',$this->code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

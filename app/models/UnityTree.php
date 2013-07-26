@@ -4,10 +4,17 @@
  * This is the model class for table "unity_tree".
  *
  * The followings are the available columns in table 'unity_tree':
- * @property integer $ID
- * @property integer $unity
- * @property integer $organizationID
- * @property integer $unityOrganizationID
+ * @property integer $id
+ * @property integer $primary_organization_id
+ * @property integer $primary_unity_id
+ * @property integer $secondary_organization_id
+ * @property integer $secondary_unity_id
+ *
+ * The followings are the available model relations:
+ * @property Organization $primaryOrganization
+ * @property Unity $primaryUnity
+ * @property Organization $secondaryOrganization
+ * @property Unity $secondaryUnity
  */
 class UnityTree extends CActiveRecord
 {
@@ -37,11 +44,11 @@ class UnityTree extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ID, unity, organizationID', 'required'),
-			array('ID, unity, organizationID, unityOrganizationID', 'numerical', 'integerOnly'=>true),
+			array('primary_organization_id, primary_unity_id, secondary_organization_id, secondary_unity_id', 'required'),
+			array('primary_organization_id, primary_unity_id, secondary_organization_id, secondary_unity_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, unity, organizationID, unityOrganizationID', 'safe', 'on'=>'search'),
+			array('id, primary_organization_id, primary_unity_id, secondary_organization_id, secondary_unity_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,6 +60,10 @@ class UnityTree extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'primaryOrganization' => array(self::BELONGS_TO, 'Organization', 'primary_organization_id'),
+			'primaryUnity' => array(self::BELONGS_TO, 'Unity', 'primary_unity_id'),
+			'secondaryOrganization' => array(self::BELONGS_TO, 'Organization', 'secondary_organization_id'),
+			'secondaryUnity' => array(self::BELONGS_TO, 'Unity', 'secondary_unity_id'),
 		);
 	}
 
@@ -62,10 +73,11 @@ class UnityTree extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => 'ID',
-			'unity' => 'Unity',
-			'organizationID' => 'Organization',
-			'unityOrganizationID' => 'Unity Organization',
+			'id' => Yii::t('default', 'ID'),
+			'primary_organization_id' => Yii::t('default', 'Primary Organization'),
+			'primary_unity_id' => Yii::t('default', 'Primary Unity'),
+			'secondary_organization_id' => Yii::t('default', 'Secondary Organization'),
+			'secondary_unity_id' => Yii::t('default', 'Secondary Unity'),
 		);
 	}
 
@@ -80,10 +92,11 @@ class UnityTree extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('unity',$this->unity);
-		$criteria->compare('organizationID',$this->organizationID);
-		$criteria->compare('unityOrganizationID',$this->unityOrganizationID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('primary_organization_id',$this->primary_organization_id);
+		$criteria->compare('primary_unity_id',$this->primary_unity_id);
+		$criteria->compare('secondary_organization_id',$this->secondary_organization_id);
+		$criteria->compare('secondary_unity_id',$this->secondary_unity_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

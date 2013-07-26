@@ -4,15 +4,17 @@
  * This is the model class for table "editor_element_alias".
  *
  * The followings are the available columns in table 'editor_element_alias':
- * @property integer $ID
- * @property integer $originalElementID
- * @property integer $originalTypeID
- * @property integer $typeID
- * @property integer $elementID
+ * @property integer $id
+ * @property integer $primary_id
+ * @property integer $primary_type_id
+ * @property integer $secondary_type_id
+ * @property integer $secondary_id
  *
  * The followings are the available model relations:
- * @property EditorElement $originalElement
- * @property CommonType $originalType
+ * @property EditorElement $secondary
+ * @property CommonType $secondaryType
+ * @property EditorElement $primary
+ * @property CommonType $primaryType
  */
 class EditorElementAlias extends CActiveRecord
 {
@@ -42,11 +44,11 @@ class EditorElementAlias extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('originalElementID, originalTypeID, typeID, elementID', 'required'),
-			array('originalElementID, originalTypeID, typeID, elementID', 'numerical', 'integerOnly'=>true),
+			array('primary_id, primary_type_id, secondary_type_id, secondary_id', 'required'),
+			array('primary_id, primary_type_id, secondary_type_id, secondary_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, originalElementID, originalTypeID, typeID, elementID', 'safe', 'on'=>'search'),
+			array('id, primary_id, primary_type_id, secondary_type_id, secondary_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,8 +60,10 @@ class EditorElementAlias extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'originalElement' => array(self::BELONGS_TO, 'EditorElement', 'originalElementID'),
-			'originalType' => array(self::BELONGS_TO, 'CommonType', 'originalTypeID'),
+			'secondary' => array(self::BELONGS_TO, 'EditorElement', 'secondary_id'),
+			'secondaryType' => array(self::BELONGS_TO, 'CommonType', 'secondary_type_id'),
+			'primary' => array(self::BELONGS_TO, 'EditorElement', 'primary_id'),
+			'primaryType' => array(self::BELONGS_TO, 'CommonType', 'primary_type_id'),
 		);
 	}
 
@@ -69,11 +73,11 @@ class EditorElementAlias extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'originalElementID' => Yii::t('default', 'Original Element'),
-			'originalTypeID' => Yii::t('default', 'Original Type'),
-			'typeID' => Yii::t('default', 'Type'),
-			'elementID' => Yii::t('default', 'Element'),
+			'id' => Yii::t('default', 'ID'),
+			'primary_id' => Yii::t('default', 'Primary'),
+			'primary_type_id' => Yii::t('default', 'Primary Type'),
+			'secondary_type_id' => Yii::t('default', 'Secondary Type'),
+			'secondary_id' => Yii::t('default', 'Secondary'),
 		);
 	}
 
@@ -88,11 +92,11 @@ class EditorElementAlias extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('originalElementID',$this->originalElementID);
-		$criteria->compare('originalTypeID',$this->originalTypeID);
-		$criteria->compare('typeID',$this->typeID);
-		$criteria->compare('elementID',$this->elementID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('primary_id',$this->primary_id);
+		$criteria->compare('primary_type_id',$this->primary_type_id);
+		$criteria->compare('secondary_type_id',$this->secondary_type_id);
+		$criteria->compare('secondary_id',$this->secondary_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

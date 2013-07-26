@@ -4,12 +4,15 @@
  * This is the model class for table "act_skill".
  *
  * The followings are the available columns in table 'act_skill':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
+ * @property integer $skill_parent
  * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property ActGoalSkill[] $actGoalSkills
+ * @property ActSkill $skillParent
+ * @property ActSkill[] $actSkills
  */
 class ActSkill extends CActiveRecord
 {
@@ -40,11 +43,11 @@ class ActSkill extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('oldID', 'numerical', 'integerOnly'=>true),
+			array('skill_parent, oldID', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, oldID', 'safe', 'on'=>'search'),
+			array('id, name, skill_parent, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,7 +59,9 @@ class ActSkill extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actGoalSkills' => array(self::HAS_MANY, 'ActGoalSkill', 'skillID'),
+			'actGoalSkills' => array(self::HAS_MANY, 'ActGoalSkill', 'skill_id'),
+			'skillParent' => array(self::BELONGS_TO, 'ActSkill', 'skill_parent'),
+			'actSkills' => array(self::HAS_MANY, 'ActSkill', 'skill_parent'),
 		);
 	}
 
@@ -66,8 +71,9 @@ class ActSkill extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
+			'skill_parent' => Yii::t('default', 'Skill Parent'),
 			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
@@ -83,8 +89,9 @@ class ActSkill extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('skill_parent',$this->skill_parent);
 		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(

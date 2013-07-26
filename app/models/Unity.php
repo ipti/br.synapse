@@ -4,16 +4,14 @@
  * This is the model class for table "unity".
  *
  * The followings are the available columns in table 'unity':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
- * @property integer $organizationID
- * @property integer $fatherID
- * @property integer $locationID
- * @property string $fcode
- * @property integer $autochild
- * @property integer $actDate
- * @property integer $desDate
- * @property integer $capacity
+ * @property integer $organization_id
+ * @property integer $father_id
+ * @property integer $location_id
+ * @property string $fk_code
+ * @property integer $active_date
+ * @property integer $desactive_date
  *
  * The followings are the available model relations:
  * @property Actor[] $actors
@@ -48,12 +46,12 @@ class Unity extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, organizationID, locationID', 'required'),
-			array('organizationID, fatherID, locationID, autochild, actDate, desDate, capacity', 'numerical', 'integerOnly'=>true),
-			array('name, fcode', 'length', 'max'=>45),
+			array('organization_id, father_id, location_id, active_date, desactive_date', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>45),
+			array('fk_code', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, organizationID, fatherID, locationID, fcode, autochild, actDate, desDate, capacity', 'safe', 'on'=>'search'),
+			array('id, name, organization_id, father_id, location_id, fk_code, active_date, desactive_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,9 +63,9 @@ class Unity extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actors' => array(self::HAS_MANY, 'Actor', 'unityID'),
-			'location' => array(self::BELONGS_TO, 'Location', 'locationID'),
-			'organization' => array(self::BELONGS_TO, 'Organization', 'organizationID'),
+			'actors' => array(self::HAS_MANY, 'Actor', 'unity_id'),
+			'location' => array(self::BELONGS_TO, 'Location', 'location_id'),
+			'organization' => array(self::BELONGS_TO, 'Organization', 'organization_id'),
 		);
 	}
 
@@ -77,16 +75,14 @@ class Unity extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
-			'organizationID' => Yii::t('default', 'Organization'),
-			'fatherID' => Yii::t('default', 'Father'),
-			'locationID' => Yii::t('default', 'Location'),
-			'fcode' => Yii::t('default', 'Fcode'),
-			'autochild' => Yii::t('default', 'Autochild'),
-			'actDate' => Yii::t('default', 'Act Date'),
-			'desDate' => Yii::t('default', 'Des Date'),
-			'capacity' => Yii::t('default', 'Capacity'),
+			'organization_id' => Yii::t('default', 'Organization'),
+			'father_id' => Yii::t('default', 'Father'),
+			'location_id' => Yii::t('default', 'Location'),
+			'fk_code' => Yii::t('default', 'Fk Code'),
+			'active_date' => Yii::t('default', 'Active Date'),
+			'desactive_date' => Yii::t('default', 'Desactive Date'),
 		);
 	}
 
@@ -101,16 +97,14 @@ class Unity extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('organizationID',$this->organizationID);
-		$criteria->compare('fatherID',$this->fatherID);
-		$criteria->compare('locationID',$this->locationID);
-		$criteria->compare('fcode',$this->fcode,true);
-		$criteria->compare('autochild',$this->autochild);
-		$criteria->compare('actDate',$this->actDate);
-		$criteria->compare('desDate',$this->desDate);
-		$criteria->compare('capacity',$this->capacity);
+		$criteria->compare('organization_id',$this->organization_id);
+		$criteria->compare('father_id',$this->father_id);
+		$criteria->compare('location_id',$this->location_id);
+		$criteria->compare('fk_code',$this->fk_code,true);
+		$criteria->compare('active_date',$this->active_date);
+		$criteria->compare('desactive_date',$this->desactive_date);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

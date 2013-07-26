@@ -3,10 +3,19 @@
  * and open the template in the editor.
  */
 
-
-            
+hashCode = function(str){
+    var hash = 0;
+    if (str.length == 0) return hash;
+    for (i = 0; i < str.length; i++) {
+        char1 = str.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char1;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}   
 function render () {
     var html;
+    this.actorName ='NENHUM';
     this.templateType;
     this.disciplineID;
     this.scriptID;
@@ -17,6 +26,102 @@ function render () {
     this.lastClick = -1;
     this.ctCorrect = 0;
     this.ctWrong = 0;
+    this.pctLoad = 0;
+    
+    this.init = function(){
+        $("#start").on('click',NEWRENDER.start);
+    }
+    this.progressbar = function(percent, $element) {
+        if(percent > 100){
+            percent = 100;
+        }
+        var progressBarWidth = percent * $element.width() / 100;
+        progressBarWidth = Math.round(progressBarWidth);
+        $element.find('div').animate({
+            width: progressBarWidth
+        }, 10).html(Math.round(percent) + "%&nbsp;");
+    }
+    this.messageload = function(title,text){
+        $('#titleload').text(title);
+        $('#msgload').html(text);
+    }
+    this.start = function(){
+        $('.waiting').hide();
+        $('.render').show();
+        $('body').css('background','white');
+        //requesição ajax do tipo start;
+        //pega o usuário, consulta e ve onde parou e start do ponto, se não do começo
+        $('.screen').first().fadeIn('slow');
+        $('.screen').first().addClass('currentScreen');
+    }
+    this.ajaxrecursive = function(id,pos,json){
+        var parent = this;
+        $.ajax({
+            url:"/render/loadcobject",
+            data:{
+                ID:id
+            },
+            type:"POST",
+            dataType:"json",
+            success:function(response){
+                parent.pctLoad = parent.pctLoad+json.pctitem;
+                parent.progressbar(parent.pctLoad, $('#progressBar'));
+                parent.messageload("Carregando "+response.cobject_type+" "+id+"...",response.goal);
+                parent.loadcobject(response);
+                if(pos+1 >= json.size){
+                    $('#msgload').hide();
+                    parent.messageload("Concluido");
+                    $("#start").show();
+                }else{
+                    parent.ajaxrecursive(json.ids[pos+1].id,pos+1,json);
+                }
+            },
+            error:function(){
+            }
+        });
+    }
+    this.progresiveLoad = function(json,id){
+        this.ajaxrecursive(json.ids[0].id,0,json);
+    }
+    this.mountHeader = function(cobject){
+        infoScreen = $('<div class="screenInfo"></div>');
+        infoScreen.append('<span id="infoAct"><label><strong>Aluno:</strong>'+this.actorName+' [Acertos:<span id="ctCorrect">0</span>/Erros:<span class="ctWrong">0</span>]</label><label><strong>Atividade: </strong>Nº'+cobject.cobject_id+'-'+cobject.template_code+'-'+cobject.theme+'</label><label><strong>Conteúdo: </strong> '+cobject.content+'</label><label><strong>Objetivo:</strong> '+cobject.goal+'</label></span>');
+        nextScreen = $('<span id="next">»</span>').on('click',function(){
+            $('.currentScreen').hide();
+            $('.currentScreen').next().show();
+            $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+        });
+        prevScreen = $('<span id="previous">«</span>').on('click',function(){
+            $('.currentScreen').hide();
+            $('.currentScreen').prev().show();
+            $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
+        });
+        if(parent.atdID == "avaliacao"){
+            prevScreen.hide();
+            nextScreen.hide();     
+        }
+        infoScreen.append(nextScreen);
+        infoScreen.prepend(prevScreen);
+        infoScreen.append('<span class="clear"></span>');
+        if($(".cobjects").text()==""){
+            prevScreen.hide();
+        }
+        return infoScreen;
+    }
+    this.loadcobject = function(cobject){
+        var parent = this;
+        if(typeof(cobject.screens) != "undefined"){
+            $.each(cobject.screens, function(i, screen) {
+                htmScreen = $('<div class="screen" id="SCR'+screen.id+'"></div>');
+                htmScreen.append(parent.mountHeader(cobject));
+                if(typeof(screen.piecesets) != "undefined"){
+                    htmScreen.append(parent.loadPiecesets(screen.piecesets,cobject.template_code));
+                }
+                $(".cobjects").append(htmScreen);
+            });
+        }
+         
+    }
     this.startRender = function (response){
         if(typeof(response.disciplines) != "undefined"){
             this.loadDisciplines(response.disciplines);
@@ -31,15 +136,64 @@ function render () {
             this.loadLevels(response.levels);
         }
     }
+    this.responseAnswer = function(){
+        var elementID = $(this).attr('id');
+        var sanswer = $(this).attr('uas');
+        console.log(elementID)
+        var uanswer = $(this).prev().val();
+        console.log(uanswer);
+        uanswer = hashCode(uanswer);
+        console.log(uanswer);
+        console.log(sanswer);
+        
+        if(uanswer == sanswer){
+            newRender.ctCorrect = newRender.ctCorrect+1;
+            $('.ctCorrect').text(newRender.ctCorrect);
+            $('.currentScreen input.ielement').val("");
+            if(newRender.atdID == "avaliacao"){
+                $('.currentScreen input').attr('disabled','disabled');
+                nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
+                    $('.currentScreen').hide();
+                    $('.currentScreen').next().show();
+                    $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+                });
+                $('.currentScreen').append(nextScreen);
+            }
+            $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
+            $('#message').fadeOut(3000,function(){
+                $('#message').remove();
+            });
+        //computar o valor;
+        }else{
+            $('.currentScreen input.ielement').val("");
+            newRender.ctWrong = newRender.ctWrong+1;
+            $('.ctWrong').text(newRender.ctWrong);
+            if(newRender.atdID == "avaliacao"){
+                $('.currentScreen input').attr('disabled','disabled');
+                nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
+                    $('.currentScreen').hide();
+                    $('.currentScreen').next().show();
+                    $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+                });
+                $('.currentScreen').append(nextScreen);
+            }
+            $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
+            $('#message').fadeOut(3000,function(){
+                $('#message').remove();
+            });
+        }
+        
+    }
     this.matchElement = function(){
         //alert(newRender.lastClick);
-        if(newRender.lastClick != -1){
-            var group = $('#'+newRender.lastClick).attr('group');
+        if(NEWRENDER.lastClick != -1){
+            var group = $('#'+NEWRENDER.lastClick).attr('group');
             if(group == $(this).attr('group')){
                 var pieceID = $(this).parent().parent().parent().parent().attr('id');
                 var elementID = $(this).attr('id');
                 var userID = $('#userID').val();
-                $.ajax({
+            //NEWRENDER.ctAnswer();
+            /* $.ajax({
                     url:"/render/json",
                     data:{
                         op:'answer',
@@ -60,12 +214,12 @@ function render () {
                 $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
                 $('#message').fadeOut(3000,function(){
                     $('#message').remove();
-                });
+                });*/
             }else{
                 var pieceID = $(this).parent().parent().parent().parent().attr('id');
                 var elementID = $(this).attr('id');
                 var userID = $('#userID').val();
-                $.ajax({
+            /*$.ajax({
                     url:"/render/json",
                     data:{
                         op:'answer',
@@ -86,32 +240,44 @@ function render () {
                 $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
                 $('#message').fadeOut(3000,function(){
                     $('#message').remove();
-                });
+                });*/
             }
-            $(this).off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
-            var ID = $('#'+newRender.lastClick).parent().parent().attr('ID');
-            $('.'+ID+' li').css('opacity','1');
-            $('.'+ID+' .ielement').on('click',newRender.matchElement);
-            $('#'+newRender.lastClick).css('border','none').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
-            newRender.lastClick = -1;
-            if($('.currentScreen .ielement').length == 0){
-                if(newRender.atdID == "avaliacao"){
+            if($(this).parent().parent().attr('id') != 'pairs'){
+                $(this).off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+            }
+            var ID = $('#'+NEWRENDER.lastClick).parent().parent().attr('ID');
+            $('.currentScreen .'+ID+' li').css('opacity','1');
+            $('.currentScreen .'+ID+' .ielement').on('click',NEWRENDER.matchElement);
+            if($(this).parent().parent().attr('id') == 'pairs'){
+                $('#'+NEWRENDER.lastClick).css('border','none').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+            }
+            NEWRENDER.lastClick = -1;
+            alert($('.currentScreen #groups .ielement').length);
+            if($('.currentScreen #groups .ielement').length == 0){
+                //reinicializar.
+                $('.currentScreen #pairs .ielement').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+                if(NEWRENDER.atdID == "avaliacao"){
+                    //NEWRENDER.nextInner();
                     nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
                         $('.currentScreen').hide();
                         $('.currentScreen').next().show();
                         $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
                     });
                     $('.currentScreen').append(nextScreen);
+                }else{
+                    $('.currentScreen li').css('opacity','1');
+                    $('.currentScreen .delement').addClass('ielement').removeClass('delement');
+                    $('.currentScreen .ielement,.currentScreen .delement').on('click',NEWRENDER.matchElement).css('opacity','1');
                 }
             }
         }else{
             var classID = $(this).parent().parent().attr('ID');
-            $('.'+classID+' li').css('opacity','0.3');
+            $('.currentScreen .'+classID+' li').css('opacity','0.3');
             $(this).parent().css('opacity','0.9');
-            $('.'+classID+' .ielement').css('border','none');
-            $('.'+classID+' .ielement').off('click');
+            $('.currentScreen .'+classID+' .ielement').css('border','none');
+            $('.currentScreen .'+classID+' .ielement').off('click');
             $(this).css('border','1px dotted #000');
-            newRender.lastClick = $(this).attr('ID');
+            NEWRENDER.lastClick = $(this).attr('ID');
         }
     }
     this.correctAnswer =  function(){
@@ -265,6 +431,7 @@ function render () {
             $(".activities").html(this.loadContents(response.contents));
         }
     }
+    
     this.loadJson2 = function(response){
         if(this.atdID ==  'Avaliacao'){
             
@@ -308,6 +475,9 @@ function render () {
                                         infoScreen.prepend(prevScreen);
                                         infoScreen.append('<span class="clear"></span>');
                                         htmScreen.append(infoScreen);
+                                        if(fullHtm.text()==""){
+                                            prevScreen.hide();
+                                        }
                                         if(typeof(screen.piecesets) != "undefined"){
                                             htmScreen.append(parent.loadPiecesets(screen.piecesets,cobject.template_code));
                                         }
@@ -319,6 +489,22 @@ function render () {
                     });
                 }
             });
+            htmlScreen = $('<div class="screen" id="SCRLAST"></div>');
+            infoScreenl = $('<div class="screenInfo"></div>');
+            infoScreenl.append('<span id="infoAct"></span>');
+            prevScreenl = $('<span id="previous">«</span>').on('click',function(){
+                $('.currentScreen').hide();
+                $('.currentScreen').prev().show();
+                $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
+            });
+            if(parent.atdID == "avaliacao"){
+                prevScreenl.hide();
+            }
+            infoScreenl.prepend(prevScreenl);
+            infoScreenl.append('<span class="clear"></span>');
+            htmlScreen.append(infoScreenl);
+            htmlScreen.append('<strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">'+newRender.ctWrong+'</span>/Erros:<span class="ctWrong">'+newRender.ctCorrect+'</span>)<br/><input id="end" value="finalizar atendimento" type="button">');
+            fullHtm.append(htmlScreen);
             $(".activities").html(fullHtm);
         }
     }
@@ -326,6 +512,7 @@ function render () {
 
     }
     this.paginate = function(){
+        alert(111);
         //pega o usuário, consulta e ve onde parou e start do ponto, se não do começo
         $('.screen').first().fadeIn('slow');
         $('.screen').first().addClass('currentScreen');
@@ -386,7 +573,7 @@ function render () {
         var parent = this;
         htmPiecesets = $('<div class="piecesets"></div>');
         $.each(piecesets, function(i, pieceset) {
-            htmPieceset = $('<div id="PCSET'+pieceset.ID+'" class="pieceset"><h5>'+pieceset.desc+'</h5></div>');
+            htmPieceset = $('<div id="PCSET'+pieceset.id+'" class="pieceset"><h5>'+pieceset.description+'</h5></div>');
             if(typeof(pieceset.pieces) != "undefined"){
                 htmPieceset.append(parent.loadPieces(pieceset.pieces,template));
             }
@@ -400,24 +587,8 @@ function render () {
         htmPieces = $('<div class="pieces"></div>');
         $.each(pieces, function(i, piece) {
             if(typeof(piece.elements) != "undefined"){
-                htmPiece = $('<div id="PIECE'+piece.ID+'" class="piece"><h6>'+piece.oldID+'('+template+')</h6></div>');
-                switch (template){
-                    case 'AEHDD':
-                        htmPiece.append(parent.loadElements(piece.elements,template));
-                        break;
-                    case 'PRHW':
-                        htmPiece.append(parent.loadElements(piece.elements,template));
-                        break;
-                    case 'MEHW':
-                        htmPiece.append(parent.loadElements(piece.elements,template));
-                        break;
-                    case 'AEVC':
-                        htmPiece.append(parent.loadElements(piece.elements,template));
-                        break;
-                    case 'AEHC':
-                        htmPiece.append(parent.loadElements(piece.elements,template));
-                        break;
-                }
+                htmPiece = $('<div id="PIECE'+piece.id+'" class="piece"><h6>'+piece.oldID+'('+template+')</h6></div>');
+                htmPiece.append(parent.loadElements(piece.elements,template));
                 htmPieces.append(htmPiece);
             }
         });
@@ -428,23 +599,15 @@ function render () {
         var parent = this;
         htmFinal = $('<div class="blockElements"></div>');
         switch (template){
-            case 'AEHDD':
-                htmDrag = $('<ul class="elements edrag"></ul>');
-                htmDrop = $('<ul class="elements edrop"></li>');
-                break;
-            case 'MEHW':
+            case 'MTE':
                 htmEnum = $('<ul class="elements enum"></ul>');
                 htmOptions = $('<ul class="elements options"></ul>')
                 break;
-            case 'PRHW':
+            case 'PRE':
                 htmEnum = $('<ul class="elements enum"></ul>');
                 htmOptions = $('<ul class="elements options"></ul>')
                 break;
-            case 'AEVC':
-                htmEnum = $('<ul class="elements enum"></ul>');
-                htmOptions = $('<ul class="elements options"></ul>')
-                break;
-            case 'AEHC':
+            case 'AEL':
                 htmPair = $('<ul id="pairs" class="elements pairs"></ul>');
                 htmGroup = $('<ul id="groups" class="elements groups"></ul>')
                 break;
@@ -452,12 +615,16 @@ function render () {
         $.each(elements, function(i, element) {
             blockElement = $('<li class="element"></li>');
             switch (element.type){
-                case 'image':
-                    htmElement = $('<img src="globo.jpg"/>');
-                    break;
-                case 'sound':
-                    blockElement.prepend('<font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font>');
-                    htmElement = $('<audio controls="controls"></audio>');
+                case 'multimidia':
+                    switch(element.typemulti){
+                        case 'image':
+                            htmElement = $('<img src="none.jpg"/>');
+                            break;
+                        case 'sound':
+                            blockElement.prepend('<font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font>');
+                            htmElement = $('<audio controls="controls"></audio>');
+                            break;
+                    }
                     break;
                 case 'phrase':
                     htmElement = $('<font></font>');
@@ -487,7 +654,7 @@ function render () {
                     if(gproperty.name == 'text'){
                         htmElement.text(gproperty.value);
                     }else if(gproperty.name == 'src'){
-                        if(element.type == 'sound'){
+                        if(element.typemulti == 'sound'){
                             htm = $('<source/>');
                             htm.attr('src','/rsc/library/sound/'+gproperty.value);
                             htmElement.append(htm);
@@ -512,10 +679,10 @@ function render () {
                             htmElement.css(property.name,property.value);
                             break;
                         case 'width':
-                            htmElement.css(property.name,property.value);
+                            //htmElement.css(property.name,property.value);
                             break;
                         case 'height':
-                            htmElement.css(property.name,property.value);
+                            //htmElement.css(property.name,property.value);
                             break;    
                         case 'posx':
                             //htmElement.css('position','absolute');
@@ -565,18 +732,13 @@ function render () {
                         switch(property.value){
                             case 'Modelo':
                                 switch (template){
-                                    case 'AEHDD':
-                                        break;
-                                    case 'MEHW':
+                                    case 'MTE':
                                         htmEnum.append(blockElement.append(htmElement));
                                         break;
-                                    case 'PRHW':
+                                    case 'PRE':
                                         htmEnum.append(blockElement.append(htmElement));
                                         break;
-                                    case 'AEVC':
-                                        htmEnum.append(blockElement.append(htmElement));
-                                        break;
-                                    case 'AEHC':
+                                    case 'AEL':
                                         htmElement.addClass('pclick');
                                         htmElement.on('click',parent.matchElement);
                                         htmPair.append(blockElement.append(htmElement));
@@ -585,24 +747,26 @@ function render () {
                                 break;
                             case 'Acerto':
                                 switch (template){
-                                    case 'AEHDD':
-                                        break;
-                                    case 'MEHW':
+                                    case 'MTE':
                                         htmElement.addClass('eclick');
                                         htmElement.on('click',parent.correctAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
-                                    case 'PRHW':
-                                        htmElement.addClass('eclick');
-                                        htmElement.on('click',parent.correctAnswer);
+                                    case 'PRE':
+                                        var inputElement = $("<input type='text'/>");
+                                        var inputButton = $("<input class='ok' type='button' value='OK'/>");
+                                        inputButton.on('click',parent.responseAnswer);
+                                        var attrs = htmElement.prop("attributes");
+                                        inputButton.attr('uas',hashCode(htmElement.text()));
+                                        $.each(attrs, function() {
+                                            inputElement.attr(this.name, this.value);
+                                        });
+                                        htmElement.text("");
+                                        htmElement.append(inputElement);
+                                        htmElement.append(inputButton);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
-                                    case 'AEVC':
-                                        htmElement.addClass('eclick');
-                                        htmElement.on('click',parent.correctAnswer);
-                                        htmOptions.append(blockElement.append(htmElement));
-                                        break;
-                                    case 'AEHC':
+                                    case 'AEL':
                                         htmElement.addClass('gclick');
                                         htmElement.on('click',parent.matchElement);
                                         htmGroup.append(blockElement.append(htmElement));
@@ -611,27 +775,20 @@ function render () {
                                 break;
                             case 'Erro':
                                 switch (template){
-                                    case 'AEHDD':
-                                        break;
-                                    case 'MEHW':
+                                    case 'MTE':
                                         htmElement.addClass('eclick');
                                         htmElement.on('click',parent.wrongAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
-                                    case 'PRHW':
+                                    case 'PRE':
                                         htmElement.addClass('eclick');
                                         htmElement.on('click',parent.wrongAnswer);
                                         htmOptions.append(blockElement.append(htmElement));
                                         break;
-                                    case 'AEVC':
+                                    case 'AEL':
                                         htmElement.addClass('eclick');
                                         htmElement.on('click',parent.wrongAnswer);
-                                        htmOptions.append(blockElement.append(htmElement));
-                                        break;
-                                    case 'AEHC':
-                                        htmElement.addClass('eclick');
-                                        htmElement.on('click',parent.wrongAnswer);
-                                        htmOptions.append(blockElement.append(htmElement));
+                                        htmGroup.append(blockElement.append(htmElement));
                                         break;
                                 }
                                 break;    
@@ -641,23 +798,15 @@ function render () {
             }
         });
         switch (template){
-            case 'AEHDD':
-                htmFinal.append(htmDrop);
-                htmFinal.append(htmDrag);
-                break;
-            case 'MEHW':
+            case 'MTE':
                 htmFinal.append(htmEnum);
                 htmFinal.append(htmOptions);
                 break;
-            case 'PRHW':
+            case 'PRE':
                 htmFinal.append(htmEnum);
                 htmFinal.append(htmOptions);
                 break;
-            case 'AEVC':
-                htmFinal.append(htmEnum);
-                htmFinal.append(htmOptions);
-                break;
-            case 'AEHC':
+            case 'AEL':
                 htmPair2 = $('<ul id="pairs" class="elements pairs"></ul>');
                 htmGroup2 = $('<ul id="groups" class="elements groups"></ul>');
                 htmPair2.append(htmPair.find('li').sort(function(){
