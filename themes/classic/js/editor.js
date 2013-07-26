@@ -15,7 +15,7 @@ function editor () {
     this.currentPiece = 'sc0_ps0_p0';
     this.uploadedElements = 0;
     this.uploadedLibraryIDs = new Array();
-    
+    this.isload = false;
     this.changePiece = function(piece){
         $('.piece').removeClass('active');
         var id = piece.attr('id');
@@ -561,19 +561,29 @@ function editor () {
             '</div>');
         
         //Salva o CObject
-        this.saveData({
-            //Operação Salvar
-            op: "save", 
-            //Passo CObject
-            step: "CObject",
-            //Dados do CObject
-            COtypeID: parent.COtypeID,
-            COthemeID: parent.COthemeID,
-            COtemplateType: parent.COtemplateType,
-            COgoalID: parent.COgoalID
-        },
-        //funcção sucess do save Cobject
-        function(response, textStatus, jqXHR){
+        if(!parent.isload) {
+            this.saveData({
+                //Operação Salvar
+                op: "save", 
+                //Passo CObject
+                step: "CObject",
+                //Dados do CObject
+                COtypeID: parent.COtypeID,
+                COthemeID: parent.COthemeID,
+                COtemplateType: parent.COtemplateType,
+                COgoalID: parent.COgoalID
+            }, 
+            //funcção sucess do save Cobject
+                function(response, textStatus, jqXHR){
+                    posSaveCobject(response, textStatus, jqXHR);
+                } 
+            );
+         }else{
+             // Here !!!!
+         }        
+        //======================
+        
+        function posSaveCobject(response, textStatus, jqXHR){
             //atualiza a tela de log
             $('.savescreen').append('<br><p>CObject salvo com sucesso!</p>');
             //atualiza o ID do CObject, com a resposta do Ajax
@@ -768,9 +778,10 @@ function editor () {
                     });
                 });       
             });
-        });
+        }
+        //======================
        
-    }
+    } // End Form SaveAll
     
     this.posEditor = function(){
         //quantidade de elementos.
@@ -824,6 +835,7 @@ function editor () {
             success: function(response, textStatus, jqXHR){
                 //força a deleção da screen inicial
                 parent.delScreen(true);
+                parent.isload = true;//Identificar se esta no load.
                 //para cada item do response
                 $.each(response, function(i, item){
                     //caso i
@@ -886,31 +898,45 @@ function editor () {
                                                         //declara a array de dados das propriedades do elemento
                                                         parent.parent = this;
                                                         var data = new Array();
-                                                        
+                                                        data['library'] = new Array(); // Cria um Array na posição 'library'
                                                         //preenchimento do array de dados
                                                         $.each(item, function(i,item){
                                                             if(i.slice(0,1) == "L"){
-                                                                var data = new Array();
+                                                                //var data = new Array(); Comentei, pois limitava a visualização
                                                                 console.log(i+':'+i.slice(1));
-                                                                console.log(data);
+                                                                console.log("item"+item);                        
                                                                 data['library']['ID'] = i.slice(1);
                                                                 console.log(i+':'+item['typeID']);
                                                                 data['library']['type'] = item['typeID'];
+                                                                console.log('teste matriz 2 ' + item['Prop4']);
                                                                 //HERE!
                                                                 if(parent.isset(item['Prop1']))
                                                                     data['library']['width'] = item['Prop1'];
-                                                                if(parent.isset(item['Prop4']['Prop2']))
+                                                                if(parent.isset(item['Prop2']))
                                                                     data['library']['height'] = item['Prop2'];
-                                                                if(parent.isset(item['Prop4']['Prop5']))
+                                                                if(parent.isset(item['Prop5']))
                                                                     data['library']['src'] = item['Prop5'];
-                                                                if(parent.isset(item['Prop4']['Prop12']))
+                                                                if(parent.isset(item['Prop12']))
                                                                     data['library']['extension'] = item['Prop12'];
-                                                                if(parent.isset(item['Prop4']['Prop22']))
+                                                                if(parent.isset(item['Prop22']))
                                                                     data['library']['nstyle'] = item['Prop22'];
-                                                                if(parent.isset(item['Prop4']['Prop23']))
+                                                                if(parent.isset(item['Prop23']))
                                                                     data['library']['content'] = item['Prop23'];
-                                                                if(parent.isset(item['Prop4']['Prop24']))
+                                                                if(parent.isset(item['Prop24']))
                                                                     data['library']['color'] = item['Prop24'];
+                                                                //=================================
+//                                                                if(parent.isset(item['Prop4']['Prop2']))
+//                                                                    data['library']['height'] = item['Prop2'];
+//                                                                if(parent.isset(item['Prop4']['Prop5']))
+//                                                                    data['library']['src'] = item['Prop5'];
+//                                                                if(parent.isset(item['Prop4']['Prop12']))
+//                                                                    data['library']['extension'] = item['Prop12'];
+//                                                                if(parent.isset(item['Prop4']['Prop22']))
+//                                                                    data['library']['nstyle'] = item['Prop22'];
+//                                                                if(parent.isset(item['Prop4']['Prop23']))
+//                                                                    data['library']['content'] = item['Prop23'];
+//                                                                if(parent.isset(item['Prop4']['Prop24']))
+//                                                                    data['library']['color'] = item['Prop24'];
                                                                 console.log(data);
                                                                 
                                                             }
@@ -924,8 +950,7 @@ function editor () {
                                                         //pega o tipo do element
                                                         var type = item['typeID'];
                                                         //pega o id do element a partir do indice
-                                                        var elementID = i.slice(1);
-                                                        console.log(data);
+                                                        var elementID = i.slice(1);                         
                                                         parent.addElement(elementID,type,data);
                                                         
                                                     }
