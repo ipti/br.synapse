@@ -884,34 +884,29 @@ function editor () {
                                                     //se for um elemento
                                                     if(i.slice(0,1) == "E"){
                                                         //declara a array de dados das propriedades do elemento
-                                                        parent.parent = this;
                                                         var data = new Array();
                                                         
                                                         //preenchimento do array de dados
                                                         $.each(item, function(i,item){
                                                             if(i.slice(0,1) == "L"){
-                                                                var data = new Array();
-                                                                console.log(i+':'+i.slice(1));
-                                                                console.log(data);
+                                                                data['library'] = new Array();
                                                                 data['library']['ID'] = i.slice(1);
-                                                                console.log(i+':'+item['typeID']);
                                                                 data['library']['type'] = item['typeID'];
+                                                                
                                                                 if(parent.isset(item['Prop1']))
                                                                     data['library']['width'] = item['Prop1'];
-                                                                if(parent.isset(item['Prop4']['Prop2']))
+                                                                if(parent.isset(item['Prop2']))
                                                                     data['library']['height'] = item['Prop2'];
-                                                                if(parent.isset(item['Prop4']['Prop5']))
+                                                                if(parent.isset(item['Prop5']))
                                                                     data['library']['src'] = item['Prop5'];
-                                                                if(parent.isset(item['Prop4']['Prop12']))
+                                                                if(parent.isset(item['Prop12']))
                                                                     data['library']['extension'] = item['Prop12'];
-                                                                if(parent.isset(item['Prop4']['Prop22']))
+                                                                if(parent.isset(item['Prop22']))
                                                                     data['library']['nstyle'] = item['Prop22'];
-                                                                if(parent.isset(item['Prop4']['Prop23']))
+                                                                if(parent.isset(item['Prop23']))
                                                                     data['library']['content'] = item['Prop23'];
-                                                                if(parent.isset(item['Prop4']['Prop24']))
+                                                                if(parent.isset(item['Prop24']))
                                                                     data['library']['color'] = item['Prop24'];
-                                                                console.log(data);
-                                                                
                                                             }
                                                         });
                                                         if(parent.isset(item['Prop6']))
