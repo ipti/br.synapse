@@ -434,7 +434,7 @@ class EditorController extends Controller {
                                         $src = $value['url'];
                                         $nome = $value['name'];
                                         $ext = explode(".", $nome);
-                                        $ext = $nome[1];
+                                        $ext = $ext[1];
                                         //Pegar informações da imagem
 
                                         $url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
@@ -560,6 +560,8 @@ class EditorController extends Controller {
                     endforeach;
                     
                 }
+            } elseif($_POST['op'] == 'update'){
+                
             } else {
                 throw new Exception("ERROR: Operação inválida.<br>");
             }
@@ -621,11 +623,11 @@ class EditorController extends Controller {
                         //e evitar duplicatas
                         
                         //=============================
-                        if(isset($_POST['isload'])) {
-                            $name = $file_name;
-                        }else {
+                        //if(isset($_POST['isload'])) {
+                        //    $name = $file_name;
+                        //}else {
                         $name = md5(uniqid(time())) . $ext;
-                        }
+                        //}
                         ///=============================
                         
                         //pega o nome temporário do arquivo, para poder move-lo
