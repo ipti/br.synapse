@@ -1,18 +1,18 @@
  <?php
-    $load = 'false';
     if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) 
         && isset($_POST['cobjectTheme']) && isset($_POST['actGoal'])){
         $commonType = $_POST['commonType'];
         $cobjectTemplate =  $_POST['cobjectTemplate'];
         $cobjectTheme =  $_POST['cobjectTheme'];
         $actGoal = $_POST['actGoal'];
+        $mode = 'new';
      }
      elseif(isset($_GET['cID'])){
          $cobjectID = $_GET['cID'];
-         $load = 'true';
+         $mode = 'edit';
      }elseif (isset($_POST['cobjectID'])) {
          $cobjectID = $_POST['cobjectID'];
-         $load = 'true';
+         $mode = 'edit';
      }
      else{ 
           throw new Exception('ERROR: RQEUEST Inválido');
@@ -22,7 +22,7 @@ $this->breadcrumbs=array(
 );?>
 <script language ="javascript" type="text/javascript">
 <?php 
-   if($load=='false'){
+   if($mode == 'new'){
        echo "newEditor.COtypeID = $commonType ; \n" ; 
        echo "newEditor.COthemeID = $cobjectTheme; \n" ;
        echo "newEditor.COtemplateType = $cobjectTemplate; \n"; 
@@ -31,7 +31,7 @@ $this->breadcrumbs=array(
    else{
        echo "newEditor.CObjectID = $cobjectID; \n";
    }
-       echo "newEditor.isload = $load; \n"; 
+   echo "newEditor.mode = '$mode'; \n";
 ?>
 </script>
 
