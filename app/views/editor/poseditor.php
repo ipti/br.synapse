@@ -53,9 +53,10 @@
 							x: $('#x<?php echo $i ; ?>').val(), 
 							y: $('#y<?php echo $i ; ?>').val(), 
 							w: $('#w<?php echo $i ; ?>').val(), 
-							h: $('#h<?php echo $i ; ?>').val()
+							h: $('#h<?php echo $i ; ?>').val(),
+                                                        libraryID: <?php echo $property_img[$i]['libraryID']; ?>
 						}, function(){
-							$('#div-jcrop<?php echo $i ; ?>').html( '<img src="' + img_url<?php echo $i;?> + '" width="'+$('#w').val()+'" height="'+$('#h').val()+'" />' );
+							$('#div-jcrop<?php echo $i ; ?>').html( '<img src="' + img_url<?php echo $i;?> + '" width="'+$('#w<?php echo $i ; ?>').val()+'" height="'+$('#h<?php echo $i ; ?>').val()+'" >' );
 							$('#debug<?php echo $i ; ?>').hide();
 							$('#tit-jcrop<?php echo $i ; ?>').html('Feito!<br />');
 						});

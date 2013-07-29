@@ -26,17 +26,21 @@ class EditorController extends Controller {
     }
 
     public function actionIndex() {
-        if (!isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) && !isset($_POST['cobjectTheme'])) {
+        if(isset($_GET['cID']) || isset($_POST['cobjectID']) ){
+            $this->render('index');
+        }
+        elseif (!isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) && !isset($_POST['cobjectTheme'])) {
             $this->redirect('/editor/preeditor');
-        } else {
+        }
+        else {
             if (isset($_POST['actGoal'])) {
                 $this->render('index');
-            } else {
+            }else {
                 $this->redirect('/editor/preeditor?error=1');
             }
         }
     }
-
+    
     public function actionPreeditor() {
         $this->render('preeditor');
     }
@@ -51,6 +55,19 @@ class EditorController extends Controller {
                 $oImg->posicaoCrop($_POST['x'], $_POST['y']);
                 $oImg->redimensiona($_POST['w'], $_POST['h'], 'crop');
                 $oImg->grava($_POST['img']);
+                //====== Atualizar o LibraryProperty ======//
+                  $libraryID = $_POST['libraryID'];
+                  $libsProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID' => $libraryID));
+                  foreach ($libsProperty as $libprop):
+                      switch($libprop->propertyID) {
+                        case 1 : $libprop->value = $_POST['w']; //Width
+                            $libprop->save();
+                            break; 
+                        case 2 : $libprop->value = $_POST['h']; //Height
+                            $libprop->save();  
+                      } 
+                  endforeach;
+                //==================================================
             } else {
                 $this->redirect('poseditor?error=' . $oImg->valida());
             }
@@ -59,14 +76,35 @@ class EditorController extends Controller {
             // memory limit (nem todo server aceita)
             ini_set("memory_limit", "50M");
             set_time_limit(0);
-            $img_sent = array("Chrysanthemum.jpg", "Hydrangeas.jpg",
-                "Jellyfish.jpg", "Koala.jpg", "Lighthouse.jpg"); // O array de imagens que foram enviadas
-            $num_img = count($img_sent);
-
-
-            // $num_img = 4;
+            
+            //--------------------------------------------
+            $uploadedLibraryIDs = isset($_POST['uploadedLibraryIDs']) ? $_POST['uploadedLibraryIDs'] : null  ;
+            if($uploadedLibraryIDs == null){
+                $this->redirect('/editor');
+            }
+                
+            $num_img = count($uploadedLibraryIDs);
+            $i = 0;
+              foreach($uploadedLibraryIDs as $upLibId):
+                  $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('libraryID' => $upLibId,
+                      'propertyID' => 5));
+                  $i++;
+              endforeach;
+            //--------------------------------------------          
+            $j = 0;
             for ($i = 0; $i < $num_img; $i++) {
-                $name_img[$i] = $img_sent[$i];
+               
+                $name_img[$i] = $libsProperty[$j]->value; // .value = srcOfimage
+                $nome_extension = explode('.',$name_img[$i]);
+                $extension = $nome_extension[1]  ;
+                // Não Recortar Gifs
+                if($extension == 'gif') {
+                    $j++;
+                    $i--;
+                    $num_img--;
+                    continue;
+                }
+                $libraryID[$i] = $libsProperty[$j]->libraryID;
                 $tem_crop = false;
                 $img[$i] = '';
                 if (isset($name_img[$i])) {
@@ -77,7 +115,7 @@ class EditorController extends Controller {
                     if ($imagesize[$i] !== false) {
                         $oImg = new cutImage($newDir[$i]);
                         if ($oImg->valida() == 'OK') {
-                            $oImg->redimensiona('400', '', '');
+                           // $oImg->redimensiona('400', '', '');
                             $oImg->grava($newDir[$i]);
 
                             $imagesize[$i] = getimagesize($newDir[$i]);
@@ -87,7 +125,8 @@ class EditorController extends Controller {
                         }
                     }
                 }
-            }
+           $j++;
+              }
 
             //=================================
             $this->layout = 'none';
@@ -100,14 +139,16 @@ class EditorController extends Controller {
                 $property_img[$i]['preview'] = $preview[$i];
                 $property_img[$i]['name_img'] = $name_img[$i];
                 $property_img[$i]['tem_crop'] = $tem_crop;
+                $property_img[$i]['libraryID'] = $libraryID[$i];
             }
             $this->render('poseditor', array('property_img' => $property_img));
         }
     }
 
     public function actionFiltergoal() {
-        $idDiscipline = $_POST['idDiscipline'];
-        $idDegree = $_POST['idDegree'];
+      if(!isset($_POST['goalID']) ) {  
+            $idDiscipline = $_POST['idDiscipline'];
+            $idDegree = $_POST['idDegree'];
         if ($idDegree == "undefined") {
             $actGoal_disc = Yii::app()->db->createCommand('SELECT degreeID FROM act_goal 
             WHERE disciplineID =' . $idDiscipline . ' GROUP BY degreeID')->queryAll();
@@ -140,17 +181,23 @@ class EditorController extends Controller {
                     for ($i = 0; $i < $count_Agoal_d; $i++) {
                         $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>";
                     }
-                    $str.= "</select>
-                      </div>
+                      
+                    $str.= "</select>";
+                    $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']) .
+                           "</div>                  
+
              <script type='text/javascript'>
                 $('#actDegree').change(function(){
-                  $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
+                    $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
+                });
+                $('#actGoal').change(function(){
+                    window.alert('Change Act_Goal');
+                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
                 });
                 $('#actGoal,#actDegree,#actDiscipline').change(function(){
-                  $('#error').hide(1000);
+                    $('#error').hide(1000);
                 });
              </script>";
-
                     echo $str;
                 } else {
                     //Não encontrou algum act_degree relacionado a esta disciplina(with grade>0)
@@ -172,9 +219,49 @@ class EditorController extends Controller {
                 $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>";
             }
             $str.= "</select>";
-
+            $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']);
+            $str.="
+                <script language='javascript' type='text/javascript'>  
+                $('#actGoal').change(function(){
+                    window.alert('Change Act_Goal - 2');
+                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
+                }); </script> "  ;
+                
             echo $str;
         }
+      }else{
+          //Somente Pesquisar Pelo GoalID
+          $goalID = $_POST['goalID'];
+          echo  $this->searchCobjectofGoal($goalID);
+      }  
+   }
+    
+    private function searchCobjectofGoal($actGoal_id) {
+        //Se foi definida, então existe pelo menos a posição 0
+        $IDActGoal = (isset($actGoal_id) ? $actGoal_id : -1) ; 
+        //Selecionando ou não algum Degree
+        //==========Editar os Cobjects Existentes - As atividades========//
+        $cobject_metadata = Yii::app()->db->createCommand('SELECT cobjectID FROM cobject_metadata
+            WHERE value = ' . $IDActGoal)->queryAll();
+        $count_CobjMdata = count($cobject_metadata); 
+        if($count_CobjMdata > 0 ) {
+            $str2 = "<div id='showCobjectIDs' align='left'>
+              <br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
+                <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
+                <select id='cobjectID' name='cobjectID' style='width:430px'>";
+            for($i = 0; $i < $count_CobjMdata; $i++){
+                $str2.= "<option value=" . $cobject_metadata[$i]['cobjectID'] . ">"
+                      . $cobject_metadata[$i]['cobjectID'] . "</option>";
+            }
+                $str2.= "</select>
+                    <input type='hidden' name='op' value='load'> 
+                         <input id='editCobject' name='editCobject' type='submit' value='Change Cobject'>
+                    </div>";         
+                   return $str2;
+           
+        }
+        
+        //=================================================================
     }
 
     public function actionJson() {
@@ -382,14 +469,14 @@ class EditorController extends Controller {
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->libraryID = $libraryID;
                                         $newLibraryProperty->propertyID = 5;
-                                        $newLibraryProperty->value = $src;
+                                        $newLibraryProperty->value = $nome;//apenas o nome do arquivo
                                         $newLibraryProperty->insert();
 
                                         //12 extension
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->libraryID = $libraryID;
                                         $newLibraryProperty->propertyID = 12;
-                                        $newLibraryProperty->value = $nome;     //apenas o nome do arquivo
+                                        $newLibraryProperty->value = $ext;     
                                         $newLibraryProperty->insert();
 
                                         //Salva na editor_element_property
@@ -417,7 +504,62 @@ class EditorController extends Controller {
                         throw new Exception("ERROR: Operação inválida.<br>");
                 }
             } elseif ($_POST['op'] == 'load') {
-                
+                if(isset($_POST['cobjectID'])){
+                    $cobjectID = $_POST['cobjectID'];
+                    $cobject = Cobject::model()->findByAttributes(array('ID'=>$cobjectID));
+                    $json['cobjectID'] = $cobjectID;
+                    $json['typeID'] = $cobject->typeID;
+                    $json['themeID'] = $cobject->themeID;
+                    $json['templateID'] = $cobject->templateID;
+                    
+                    $Srceens = EditorScreen::model()->findAllByAttributes(array('cobjectID'=>$cobjectID),array('order'=>'`order`'));
+                    
+                    foreach ($Srceens as $sc):
+                        $json['S'.$sc->ID] = array();
+                        $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screenID'=>$sc->ID),array('order'=>'`position`'));
+                        foreach ($ScreenPieceset as $scps):
+                            $PieceSet = EditorPieceset::model()->findByAttributes(array('ID'=>$scps->piecesetID));
+                            $json['S'.$sc->ID]['PS'.$PieceSet->ID] = array();
+                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['desc'] = $PieceSet->desc;
+                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['typeID'] = $PieceSet->typeID;
+                            
+                            $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('piecesetID'=>$PieceSet->ID),array('order'=>'`order`'));
+                            foreach ($PieceSetPiece as $psp):
+                                $Piece = EditorPiece::model()->findByAttributes(array('ID'=>$psp->pieceID));
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID] = array();
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['description'] = $Piece->description;
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['name'] = $Piece->name;
+                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['typeID'] = $Piece->typeID;
+                                
+                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('pieceID'=>$psp->pieceID),array('order'=>'`position`'));
+                                
+                                foreach ($PieceElement as $pe):
+                                    $Element = EditorElement::model()->findByAttributes(array('ID'=>$pe->elementID));
+                                    $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID] = array();
+                                    $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['typeID'] = $Element->typeID;
+                                    
+                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('elementID'=>$Element->ID));
+                                    foreach ($ElementProperty as $ep):
+                                        if($ep->propertyID == 4){ //libraryID
+                                            $Library = Library::model()->findByAttributes(array('ID'=>$ep->value));
+                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID] = array();
+                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID]['typeID'] = $Library->typeID; //9 image; 17 movie; 20 sound 
+                                            
+                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID'=>$Library->ID));
+                                            foreach($LibraryProperty as $lp):
+                                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID]['Prop'.$lp->propertyID] = $lp->value;
+                                            endforeach;
+                                        }else{
+                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['Prop'.$ep->propertyID] = $ep->value;
+                                            
+                                        }
+                                    endforeach;
+                                endforeach;
+                            endforeach;
+                        endforeach;
+                    endforeach;
+                    
+                }
             } else {
                 throw new Exception("ERROR: Operação inválida.<br>");
             }
@@ -477,7 +619,15 @@ class EditorController extends Controller {
                     if ($size < $max_size) {
                         //gera um código md5 concatenado com a extensão para ser o nome do arquivo
                         //e evitar duplicatas
+                        
+                        //=============================
+                        if(isset($_POST['isload'])) {
+                            $name = $file_name;
+                        }else {
                         $name = md5(uniqid(time())) . $ext;
+                        }
+                        ///=============================
+                        
                         //pega o nome temporário do arquivo, para poder move-lo
                         $tmp = $_FILES['file']['tmp_name'];
                         

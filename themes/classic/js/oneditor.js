@@ -18,16 +18,13 @@ $(function() {
     
     $("#toolbar").draggable({
         axis: "y"
-    });
-                            
+    });                   
     $("#addScreen").click(function(){
         newEditor.addScreen();
     });
-    
     $("#delScreen").click(function(){
-        newEditor.delScreen();
+        newEditor.delScreen(false);
     });
-    
     $(".insertText").click(function(){
         newEditor.addTexto();
     });
@@ -37,17 +34,6 @@ $(function() {
     $("#addPieceSet").click(function(){
         newEditor.addPieceSet();
     })
-    /*$(".page").live("click",(function(){
-                    //alert(newEditor.currentPageId);
-                    $('.page').removeClass('activePage');
-                    //newEditor.currentPageId = $(this).attr('id');
-                    $(this).addClass('active');
-                }));
-                /* $(".tasklist").live("click",(function(){
-                    $('.tasklist').removeClass('active');
-                    $(this).addClass('active');
-                    newEditor.currentQuest = $(this).attr('id');
-                }));*/
     $(".addPiece").live("click",(function(){
         newEditor.addPiece($(this).attr('id'));
     }));
@@ -57,7 +43,7 @@ $(function() {
     $('.save').click(function(){
         newEditor.saveAll();
     });
-//    $('#delScreen').click(function(){
-//       newEditor.delScreen(); 
-//    });
+    if(newEditor.mode == 'edit'){    
+        newEditor.load();
+    }
 });

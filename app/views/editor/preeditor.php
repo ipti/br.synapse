@@ -28,6 +28,9 @@
              $('#actDegree').change(function(){
                $('#propertyAgoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
              });
+             $('#actGoal').change(function(){
+               $('#showCobjectIDs').load("filtergoal", {goalID: $('#actGoal').val()} );  
+             });
 
         });
          </script>    

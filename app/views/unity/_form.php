@@ -47,8 +47,9 @@
    $('#actDt').change(function() { dateToTimestmp(this.value,'Unity_actDate') });
    $('#desDt').mask("99/99/9999");
    $('#desDt').change(function() { dateToTimestmp(this.value,'Unity_desDate')  });
-   $('#desDt, #actDt').on('focusout', function() { 
-       if( $('#Unity_desDate').val() <= $('#Unity_actDate').val() ) {
+   $('#desDt, #actDt').blur( function() { 
+       if( ($('#Unity_desDate').val() <= $('#Unity_actDate').val()) &&
+          $('#Unity_desDate').val() != '' && $('#Unity_actDate').val() != '' ) {
             var act_des_date = "A Data de Desativação deve ser MAIOR que a Data de Ativação !";
             window.alert(act_des_date);
              } 
