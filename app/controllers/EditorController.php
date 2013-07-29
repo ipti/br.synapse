@@ -360,7 +360,7 @@ class EditorController extends Controller {
                         break;
                     case "Piece":
                         if (isset($_POST['pieceSetID']) && isset($_POST['ordem'])
-                                && isset($_POST['typeID']) && isset($_POST['DomID'])) {
+                                && isset($_POST['typeID']) && isset($_POST['DomID']) ) {
 
                             $DomID = $_POST['DomID'];
                             $pieceSetID = $_POST['pieceSetID'];
