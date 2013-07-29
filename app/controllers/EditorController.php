@@ -383,7 +383,7 @@ class EditorController extends Controller {
                             $json['DomID'] = $DomID;
                             $json['PieceID'] = $pieceID;
                         } else {
-                            throw new Exception("ERROR: Dados da Piece insuficientes.<br>");
+                            throw new Exception("ERROR: Dados da Piece Insuficientes.<br>");
                         }
                         break;
                     case "Element":
