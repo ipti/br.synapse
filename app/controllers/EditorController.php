@@ -619,7 +619,15 @@ class EditorController extends Controller {
                     if ($size < $max_size) {
                         //gera um código md5 concatenado com a extensão para ser o nome do arquivo
                         //e evitar duplicatas
+                        
+                        //=============================
+                        if(isset($_POST['isload'])) {
+                            $name = $file_name;
+                        }else {
                         $name = md5(uniqid(time())) . $ext;
+                        }
+                        ///=============================
+                        
                         //pega o nome temporário do arquivo, para poder move-lo
                         $tmp = $_FILES['file']['tmp_name'];
                         
