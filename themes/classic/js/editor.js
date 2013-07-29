@@ -15,7 +15,8 @@ function editor () {
     this.currentPiece = 'sc0_ps0_p0';
     this.uploadedElements = 0;
     this.uploadedLibraryIDs = new Array();
-    
+    //------
+    this.isload = false;
     this.changePiece = function(piece){
         $('.piece').removeClass('active');
         var id = piece.attr('id');
@@ -75,6 +76,7 @@ function editor () {
             plusdesc = desc;
             plustype = type;
         }
+        console.log(plusdesc);
         
         var parent = this;
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
@@ -222,6 +224,8 @@ function editor () {
     
     this.addUploadForm = function(ID, type, responseFunction, loaddata){
         
+        var parent = this; 
+        
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var libBDID = "";
         console.log(loaddata);
@@ -250,11 +254,16 @@ function editor () {
         var form    = file+"_form";
         var input   = file+"_input";
         
+          var identify_isload = '';
+          if( parent.isset(parent.isload) ) {
+               identify_isload =  '<input type="hidden" name="isload" value="'+parent.isload+'"/>' ;
+            }
         $('#'+ID).append(''+
             '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">'+
             '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
             '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
             '<input type="hidden" name="op" value="'+uploadType+'"/>'+
+             identify_isload +
             '<label>'+uploadType+': '+
             '<input id="'+input+'" type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
             '</label>'+
@@ -560,24 +569,37 @@ function editor () {
             '</div>');
         
         //Salva o CObject
-        this.saveData({
-            //Operação Salvar
-            op: "save", 
-            //Passo CObject
-            step: "CObject",
-            //Dados do CObject
-            COtypeID: parent.COtypeID,
-            COthemeID: parent.COthemeID,
-            COtemplateType: parent.COtemplateType,
-            COgoalID: parent.COgoalID
-        },
-        //funcção sucess do save Cobject
-        function(response, textStatus, jqXHR){
-            //atualiza a tela de log
-            $('.savescreen').append('<br><p>CObject salvo com sucesso!</p>');
-            //atualiza o ID do CObject, com a resposta do Ajax
-            parent.CObjectID = response['CObjectID'];
+        if(!parent.isload) {
+            this.saveData({
+                //Operação Salvar
+                op: "save", 
+                //Passo CObject
+                step: "CObject",
+                //Dados do CObject
+                COtypeID: parent.COtypeID,
+                COthemeID: parent.COthemeID,
+                COtemplateType: parent.COtemplateType,
+                COgoalID: parent.COgoalID
+            }, 
+            //funcção sucess do save Cobject
+                function(response, textStatus, jqXHR){
+                    //atualiza a tela de log
+                    $('.savescreen').append('<br><p>CObject salvo com sucesso!</p>');
+                    posSaveCobject(response, textStatus, jqXHR);
+                } 
+            );
+         }else{
+             // Então Existe um this.CObjectID
+             posSaveCobject(null, null, null )
+         }        
+        //======================
+        
+        function posSaveCobject(response, textStatus, jqXHR ){
             
+            //atualiza o ID do CObject, com a resposta do Ajax          
+            if(!parent.isset(parent.CObjectID) )  {
+               parent.CObjectID =  response['CObjectID'];
+            }
             //Reubucua o contador da Ordem das Screens
             screenPosition = 0;
             
@@ -585,7 +607,7 @@ function editor () {
             $('.screen').each(function(){
                 //Atualiza a ScreeID com o ID do ".screen" atual
                 ScreenID = $(this).attr('id');
-          
+                ScreenID_BD = $(this).attr('idBD');
                 //Salva Screen
                 parent.saveData({ 
                     //Operação Salvar, Screen, ID no DOM
@@ -598,7 +620,9 @@ function editor () {
                     Number: ++screenPosition,//incrementa a Ordem da Screen
                     Ordem: screenPosition,
                     Width: 960,
-                    Height: 500
+                    Height: 500,
+                    isload: parent.isload,
+                    ID_BD: ScreenID_BD 
                 },
                 //função sucess do save Screen
                 function(response, textStatus, jqXHR){
@@ -615,8 +639,9 @@ function editor () {
                     //Para cada PieceSet da Screen
                     $('#'+curretScreenID+' .PieceSet').each(function(){
                         PieceSetID = $(this).attr('id');
-                        pieceSetDescription = $('#'+PieceSetID+' .actName' ).val();
-                   
+                        PieceSetID_BD = $(this).attr('idBD');
+                        pieceSetDescription = $('#'+PieceSetID+' .actName' ).val(); // Here Why? máximo 9 da data?
+                      window.alert(PieceSetID);
                         //Salva PieceSet
                         parent.saveData({ 
                             //Operação Salvar, PieceSet, ID no DOM
@@ -628,7 +653,9 @@ function editor () {
                             desc: pieceSetDescription,
                             screenID: LastScreenID,
                             position: ++pieceSetPosition, //incrementa a Ordem do PieceSet
-                            templateID: parent.COtemplateType
+                            templateID: parent.COtemplateType,
+                            isload: parent.isload,
+                            ID_BD : PieceSetID_BD
                         },
                         //Função sucess do save PieceSet
                         function(response, textStatus, jqXHR){
@@ -642,7 +669,7 @@ function editor () {
                             //Para cada Piece do PieceSet
                             $('#'+curretPieceSetID+' .piece').each(function(){
                                 PieceID = $(this).attr('id');
-                                
+                                PieceID_BD = $(this).attr('idBD');
                                 //Save Piece
                                 parent.saveData({
                                     //Operação Salvar, Piece, ID no DOM
@@ -652,7 +679,9 @@ function editor () {
                                     //Dados do Piece
                                     typeID: 7,
                                     pieceSetID: LastPieceSetID,
-                                    ordem: ++piecePosition //incrementa a Ordem do Piece
+                                    ordem: ++piecePosition, //incrementa a Ordem do Piece
+                                    isload: parent.isload,
+                                    ID_BD : PieceID_BD 
                                 },
                                 //Função de sucess do Save Piece
                                 function(response, textStatus, jqXHR){
@@ -666,6 +695,7 @@ function editor () {
                                     //Para cada Elemento no Piece
                                     $('#'+curretPieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
+                                        ElementID_BD = $(this).attr('idBD');
                                         Flag = $('#'+ElementID+'_flag').is(':checked');
                                         
                                         //declaração das variáveis que serão passadas por ajax
@@ -700,9 +730,11 @@ function editor () {
                                             ordem: ++elementPosition, //incrementa a Ordem do Element
                                             pieceID: LastPieceID,
                                             flag: Flag,
-                                            value: value
+                                            value: value,
+                                            isload: parent.isload,
+                                            ID_BD:  ElementID_BD
                                         };
-                                       
+                                       // HERE !!! verificar os IDS das librarys
                                         //Se for um Texto
                                         if(parent.existID(ElementTextID)){
                                             //Salva Elemento
@@ -767,9 +799,10 @@ function editor () {
                     });
                 });       
             });
-        });
+        }
+        //======================
        
-    }
+    } // End Form SaveAll
     
     this.posEditor = function(){
         //quantidade de elementos.
@@ -823,6 +856,7 @@ function editor () {
             success: function(response, textStatus, jqXHR){
                 //força a deleção da screen inicial
                 parent.delScreen(true);
+                parent.isload = true;//Identificar se esta no load.
                 //para cada item do response
                 $.each(response, function(i, item){
                     //caso i
@@ -867,7 +901,6 @@ function editor () {
                                         
                                         //adiciona o pieceset
                                         parent.addPieceSet(piecesetID, desc, type);
-                                        
                                         //para cada item do pieceset
                                         $.each(item, function(i,item){
                                             //se for um piece
@@ -885,7 +918,7 @@ function editor () {
                                                     if(i.slice(0,1) == "E"){
                                                         //declara a array de dados das propriedades do elemento
                                                         var data = new Array();
-                                                        
+                                                        data['library'] = new Array(); // Cria um Array na posição 'library'
                                                         //preenchimento do array de dados
                                                         $.each(item, function(i,item){
                                                             if(i.slice(0,1) == "L"){
@@ -918,8 +951,7 @@ function editor () {
                                                         //pega o tipo do element
                                                         var type = item['typeID'];
                                                         //pega o id do element a partir do indice
-                                                        var elementID = i.slice(1);
-                                                        console.log(data);
+                                                        var elementID = i.slice(1);                         
                                                         parent.addElement(elementID,type,data);
                                                         
                                                     }

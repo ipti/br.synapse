@@ -26,7 +26,7 @@ class EditorController extends Controller {
     }
 
     public function actionIndex() {
-        if(isset($_GET['cID'])){
+        if(isset($_GET['cID']) || isset($_POST['cobjectID']) ){
             $this->render('index');
         }
         elseif (!isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) && !isset($_POST['cobjectTheme'])) {
@@ -55,6 +55,19 @@ class EditorController extends Controller {
                 $oImg->posicaoCrop($_POST['x'], $_POST['y']);
                 $oImg->redimensiona($_POST['w'], $_POST['h'], 'crop');
                 $oImg->grava($_POST['img']);
+                //====== Atualizar o LibraryProperty ======//
+                  $libraryID = $_POST['libraryID'];
+                  $libsProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID' => $libraryID));
+                  foreach ($libsProperty as $libprop):
+                      switch($libprop->propertyID) {
+                        case 1 : $libprop->value = $_POST['w']; //Width
+                            $libprop->save();
+                            break; 
+                        case 2 : $libprop->value = $_POST['h']; //Height
+                            $libprop->save();  
+                      } 
+                  endforeach;
+                //==================================================
             } else {
                 $this->redirect('poseditor?error=' . $oImg->valida());
             }
@@ -73,14 +86,25 @@ class EditorController extends Controller {
             $num_img = count($uploadedLibraryIDs);
             $i = 0;
               foreach($uploadedLibraryIDs as $upLibId):
-                  $srcOfImgs[$i] = LibraryProperty::model()->findByAttributes(array('libraryID' => $upLibId,
+                  $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('libraryID' => $upLibId,
                       'propertyID' => 5));
                   $i++;
               endforeach;
             //--------------------------------------------          
-              
+            $j = 0;
             for ($i = 0; $i < $num_img; $i++) {
-                $name_img[$i] = $srcOfImgs[$i]->value;
+               
+                $name_img[$i] = $libsProperty[$j]->value; // .value = srcOfimage
+                $nome_extension = explode('.',$name_img[$i]);
+                $extension = $nome_extension[1]  ;
+                // Não Recortar Gifs
+                if($extension == 'gif') {
+                    $j++;
+                    $i--;
+                    $num_img--;
+                    continue;
+                }
+                $libraryID[$i] = $libsProperty[$j]->libraryID;
                 $tem_crop = false;
                 $img[$i] = '';
                 if (isset($name_img[$i])) {
@@ -91,7 +115,7 @@ class EditorController extends Controller {
                     if ($imagesize[$i] !== false) {
                         $oImg = new cutImage($newDir[$i]);
                         if ($oImg->valida() == 'OK') {
-                            $oImg->redimensiona('400', '', '');
+                           // $oImg->redimensiona('400', '', '');
                             $oImg->grava($newDir[$i]);
 
                             $imagesize[$i] = getimagesize($newDir[$i]);
@@ -101,7 +125,8 @@ class EditorController extends Controller {
                         }
                     }
                 }
-            }
+           $j++;
+              }
 
             //=================================
             $this->layout = 'none';
@@ -114,6 +139,7 @@ class EditorController extends Controller {
                 $property_img[$i]['preview'] = $preview[$i];
                 $property_img[$i]['name_img'] = $name_img[$i];
                 $property_img[$i]['tem_crop'] = $tem_crop;
+                $property_img[$i]['libraryID'] = $libraryID[$i];
             }
             $this->render('poseditor', array('property_img' => $property_img));
         }
@@ -221,7 +247,7 @@ class EditorController extends Controller {
         if($count_CobjMdata > 0 ) {
             $str2 = "<div id='showCobjectIDs' align='left'>
               <br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
-                <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/json/'>
+                <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
                 <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for($i = 0; $i < $count_CobjMdata; $i++){
                 $str2.= "<option value=" . $cobject_metadata[$i]['cobjectID'] . ">"
@@ -593,7 +619,15 @@ class EditorController extends Controller {
                     if ($size < $max_size) {
                         //gera um código md5 concatenado com a extensão para ser o nome do arquivo
                         //e evitar duplicatas
+                        
+                        //=============================
+                        if(isset($_POST['isload'])) {
+                            $name = $file_name;
+                        }else {
                         $name = md5(uniqid(time())) . $ext;
+                        }
+                        ///=============================
+                        
                         //pega o nome temporário do arquivo, para poder move-lo
                         $tmp = $_FILES['file']['tmp_name'];
                         
