@@ -4,14 +4,14 @@
  * This is the model class for table "library_property".
  *
  * The followings are the available columns in table 'library_property':
- * @property integer $ID
- * @property integer $propertyID
+ * @property integer $id
+ * @property integer $property_id
+ * @property integer $library_id
  * @property string $value
- * @property integer $libraryID
  *
  * The followings are the available model relations:
- * @property CommonProperty $property
  * @property Library $library
+ * @property CommonProperty $property
  */
 class LibraryProperty extends CActiveRecord
 {
@@ -41,12 +41,11 @@ class LibraryProperty extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('propertyID, value, libraryID', 'required'),
-			array('propertyID, libraryID', 'numerical', 'integerOnly'=>true),
-			array('value', 'length', 'max'=>45),
+			array('property_id, library_id, value', 'required'),
+			array('property_id, library_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, propertyID, value, libraryID', 'safe', 'on'=>'search'),
+			array('id, property_id, library_id, value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,8 +57,8 @@ class LibraryProperty extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'property' => array(self::BELONGS_TO, 'CommonProperty', 'propertyID'),
-			'library' => array(self::BELONGS_TO, 'Library', 'libraryID'),
+			'library' => array(self::BELONGS_TO, 'Library', 'library_id'),
+			'property' => array(self::BELONGS_TO, 'CommonProperty', 'property_id'),
 		);
 	}
 
@@ -69,10 +68,10 @@ class LibraryProperty extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'propertyID' => Yii::t('default', 'Property'),
+			'id' => Yii::t('default', 'ID'),
+			'property_id' => Yii::t('default', 'Property'),
+			'library_id' => Yii::t('default', 'Library'),
 			'value' => Yii::t('default', 'Value'),
-			'libraryID' => Yii::t('default', 'Library'),
 		);
 	}
 
@@ -87,10 +86,10 @@ class LibraryProperty extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('propertyID',$this->propertyID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('property_id',$this->property_id);
+		$criteria->compare('library_id',$this->library_id);
 		$criteria->compare('value',$this->value,true);
-		$criteria->compare('libraryID',$this->libraryID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -4,15 +4,17 @@
  * This is the model class for table "organization".
  *
  * The followings are the available columns in table 'organization':
- * @property integer $ID
+ * @property integer $id
  * @property string $acronym
  * @property string $name
- * @property integer $fatherID
- * @property integer $orgLevel
- * @property integer $degreeID
- * @property integer $autochild
+ * @property integer $father_id
+ * @property integer $orglevel
+ * @property integer $degree_id
+ * @property string $autochild
+ * @property string $fk_code
  *
  * The followings are the available model relations:
+ * @property ActDegree $degree
  * @property Personage[] $personages
  * @property Unity[] $unities
  */
@@ -44,13 +46,14 @@ class Organization extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, fatherID, orgLevel, degreeID, autochild', 'required'),
-			array('fatherID, orgLevel, degreeID, autochild', 'numerical', 'integerOnly'=>true),
-			array('acronym', 'length', 'max'=>30),
-			array('name', 'length', 'max'=>60),
+			array('acronym, name, orglevel', 'required'),
+			array('father_id, orglevel, degree_id', 'numerical', 'integerOnly'=>true),
+			array('acronym, name', 'length', 'max'=>45),
+			array('autochild', 'length', 'max'=>5),
+			array('fk_code', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, acronym, name, fatherID, orgLevel, degreeID, autochild', 'safe', 'on'=>'search'),
+			array('id, acronym, name, father_id, orglevel, degree_id, autochild, fk_code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,8 +65,9 @@ class Organization extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'personages' => array(self::HAS_MANY, 'Personage', 'organizationID'),
-			'unities' => array(self::HAS_MANY, 'Unity', 'organizationID'),
+			'degree' => array(self::BELONGS_TO, 'ActDegree', 'degree_id'),
+			'personages' => array(self::HAS_MANY, 'Personage', 'organization_id'),
+			'unities' => array(self::HAS_MANY, 'Unity', 'organization_id'),
 		);
 	}
 
@@ -73,13 +77,14 @@ class Organization extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'acronym' => Yii::t('default', 'Acronym'),
 			'name' => Yii::t('default', 'Name'),
-			'fatherID' => Yii::t('default', 'Father'),
-			'orgLevel' => Yii::t('default', 'Org Level'),
-			'degreeID' => Yii::t('default', 'Degree'),
+			'father_id' => Yii::t('default', 'Father'),
+			'orglevel' => Yii::t('default', 'Orglevel'),
+			'degree_id' => Yii::t('default', 'Degree'),
 			'autochild' => Yii::t('default', 'Autochild'),
+			'fk_code' => Yii::t('default', 'Fk Code'),
 		);
 	}
 
@@ -94,13 +99,14 @@ class Organization extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('acronym',$this->acronym,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('fatherID',$this->fatherID);
-		$criteria->compare('orgLevel',$this->orgLevel);
-		$criteria->compare('degreeID',$this->degreeID);
-		$criteria->compare('autochild',$this->autochild);
+		$criteria->compare('father_id',$this->father_id);
+		$criteria->compare('orglevel',$this->orglevel);
+		$criteria->compare('degree_id',$this->degree_id);
+		$criteria->compare('autochild',$this->autochild,true);
+		$criteria->compare('fk_code',$this->fk_code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

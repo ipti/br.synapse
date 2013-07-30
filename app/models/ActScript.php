@@ -4,14 +4,14 @@
  * This is the model class for table "act_script".
  *
  * The followings are the available columns in table 'act_script':
- * @property integer $ID
- * @property integer $disciplineID
- * @property integer $performanceIndice
- * @property integer $contentParentID
+ * @property integer $id
+ * @property integer $discipline_id
+ * @property integer $performance_index
+ * @property integer $father_content
  *
  * The followings are the available model relations:
  * @property ActDiscipline $discipline
- * @property ActContent $contentParent
+ * @property ActContent $fatherContent
  * @property ActScriptContent[] $actScriptContents
  */
 class ActScript extends CActiveRecord
@@ -42,11 +42,11 @@ class ActScript extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('disciplineID, contentParentID,performanceIndice', 'required'),
-			array('disciplineID, performanceIndice, contentParentID', 'numerical', 'integerOnly'=>true),
+			array('discipline_id, performance_index, father_content', 'required'),
+			array('discipline_id, performance_index, father_content', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, disciplineID, performanceIndice, contentParentID', 'safe', 'on'=>'search'),
+			array('id, discipline_id, performance_index, father_content', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,9 +58,9 @@ class ActScript extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'disciplineID'),
-			'contentParent' => array(self::BELONGS_TO, 'ActContent', 'contentParentID'),
-			'actScriptContents' => array(self::HAS_MANY, 'ActScriptContent', 'scriptID'),
+			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'discipline_id'),
+			'fatherContent' => array(self::BELONGS_TO, 'ActContent', 'father_content'),
+			'actScriptContents' => array(self::HAS_MANY, 'ActScriptContent', 'script_id'),
 		);
 	}
 
@@ -70,10 +70,10 @@ class ActScript extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'disciplineID' => Yii::t('default', 'Discipline'),
-			'performanceIndice' => Yii::t('default', 'Performance Indice'),
-			'contentParentID' => Yii::t('default', 'Content Parent'),
+			'id' => Yii::t('default', 'ID'),
+			'discipline_id' => Yii::t('default', 'Discipline'),
+			'performance_index' => Yii::t('default', 'Performance Index'),
+			'father_content' => Yii::t('default', 'Father Content'),
 		);
 	}
 
@@ -88,10 +88,10 @@ class ActScript extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('disciplineID',$this->disciplineID);
-		$criteria->compare('performanceIndice',$this->performanceIndice);
-		$criteria->compare('contentParentID',$this->contentParentID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('discipline_id',$this->discipline_id);
+		$criteria->compare('performance_index',$this->performance_index);
+		$criteria->compare('father_content',$this->father_content);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

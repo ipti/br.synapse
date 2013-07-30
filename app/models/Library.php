@@ -4,9 +4,8 @@
  * This is the model class for table "library".
  *
  * The followings are the available columns in table 'library':
- * @property integer $ID
- * @property integer $typeID
- * @property string $table_archive
+ * @property integer $id
+ * @property integer $type_id
  *
  * The followings are the available model relations:
  * @property CommonType $type
@@ -40,12 +39,11 @@ class Library extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('typeID', 'required'),
-			array('typeID', 'numerical', 'integerOnly'=>true),
-			array('table_archive', 'length', 'max'=>30),
+			array('type_id', 'required'),
+			array('type_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, typeID, table_archive', 'safe', 'on'=>'search'),
+			array('id, type_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,8 +55,8 @@ class Library extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'type' => array(self::BELONGS_TO, 'CommonType', 'typeID'),
-			'libraryProperties' => array(self::HAS_MANY, 'LibraryProperty', 'libraryID'),
+			'type' => array(self::BELONGS_TO, 'CommonType', 'type_id'),
+			'libraryProperties' => array(self::HAS_MANY, 'LibraryProperty', 'library_id'),
 		);
 	}
 
@@ -68,9 +66,8 @@ class Library extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'typeID' => Yii::t('default', 'Type'),
-			'table_archive' => Yii::t('default', 'Table Archive'),
+			'id' => Yii::t('default', 'ID'),
+			'type_id' => Yii::t('default', 'Type'),
 		);
 	}
 
@@ -85,16 +82,11 @@ class Library extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('typeID',$this->typeID);
-		$criteria->compare('table_archive',$this->table_archive,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('type_id',$this->type_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-        
-        public function getid(){
-            return $this->ID;
-        }
 }

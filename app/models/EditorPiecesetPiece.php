@@ -4,9 +4,10 @@
  * This is the model class for table "editor_pieceset_piece".
  *
  * The followings are the available columns in table 'editor_pieceset_piece':
- * @property integer $ID
- * @property integer $piecesetID
- * @property integer $pieceID
+ * @property integer $id
+ * @property integer $pieceset_id
+ * @property integer $piece_id
+ * @property integer $screen_id
  * @property integer $order
  *
  * The followings are the available model relations:
@@ -41,11 +42,11 @@ class EditorPiecesetPiece extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('piecesetID, pieceID, order', 'required'),
-			array('piecesetID, pieceID, order', 'numerical', 'integerOnly'=>true),
+			array('pieceset_id, piece_id', 'required'),
+			array('pieceset_id, piece_id, screen_id, order', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, piecesetID, pieceID, order', 'safe', 'on'=>'search'),
+			array('id, pieceset_id, piece_id, screen_id, order', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,8 +58,8 @@ class EditorPiecesetPiece extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'pieceID'),
-			'pieceset' => array(self::BELONGS_TO, 'EditorPieceset', 'piecesetID'),
+			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'piece_id'),
+			'pieceset' => array(self::BELONGS_TO, 'EditorPieceset', 'pieceset_id'),
 		);
 	}
 
@@ -68,9 +69,10 @@ class EditorPiecesetPiece extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'piecesetID' => Yii::t('default', 'Pieceset'),
-			'pieceID' => Yii::t('default', 'Piece'),
+			'id' => Yii::t('default', 'ID'),
+			'pieceset_id' => Yii::t('default', 'Pieceset'),
+			'piece_id' => Yii::t('default', 'Piece'),
+			'screen_id' => Yii::t('default', 'Screen'),
 			'order' => Yii::t('default', 'Order'),
 		);
 	}
@@ -86,9 +88,10 @@ class EditorPiecesetPiece extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('piecesetID',$this->piecesetID);
-		$criteria->compare('pieceID',$this->pieceID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('pieceset_id',$this->pieceset_id);
+		$criteria->compare('piece_id',$this->piece_id);
+		$criteria->compare('screen_id',$this->screen_id);
 		$criteria->compare('order',$this->order);
 
 		return new CActiveDataProvider($this, array(

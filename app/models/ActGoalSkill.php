@@ -4,9 +4,9 @@
  * This is the model class for table "act_goal_skill".
  *
  * The followings are the available columns in table 'act_goal_skill':
- * @property integer $ID
- * @property integer $goalID
- * @property integer $skillID
+ * @property integer $id
+ * @property integer $goal_id
+ * @property integer $skill_id
  *
  * The followings are the available model relations:
  * @property ActGoal $goal
@@ -40,11 +40,11 @@ class ActGoalSkill extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('goalID, skillID', 'required'),
-			array('goalID, skillID', 'numerical', 'integerOnly'=>true),
+			array('goal_id, skill_id', 'required'),
+			array('goal_id, skill_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, goalID, skillID', 'safe', 'on'=>'search'),
+			array('id, goal_id, skill_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,8 +56,8 @@ class ActGoalSkill extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'goal' => array(self::BELONGS_TO, 'ActGoal', 'goalID'),
-			'skill' => array(self::BELONGS_TO, 'ActSkill', 'skillID'),
+			'goal' => array(self::BELONGS_TO, 'ActGoal', 'goal_id'),
+			'skill' => array(self::BELONGS_TO, 'ActSkill', 'skill_id'),
 		);
 	}
 
@@ -67,9 +67,9 @@ class ActGoalSkill extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'goalID' => Yii::t('default', 'Goal'),
-			'skillID' => Yii::t('default', 'Skill'),
+			'id' => Yii::t('default', 'ID'),
+			'goal_id' => Yii::t('default', 'Goal'),
+			'skill_id' => Yii::t('default', 'Skill'),
 		);
 	}
 
@@ -84,9 +84,9 @@ class ActGoalSkill extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('goalID',$this->goalID);
-		$criteria->compare('skillID',$this->skillID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('goal_id',$this->goal_id);
+		$criteria->compare('skill_id',$this->skill_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -4,8 +4,8 @@
  * This is the model class for table "personage".
  *
  * The followings are the available columns in table 'personage':
- * @property integer $ID
- * @property integer $organizationID
+ * @property integer $id
+ * @property integer $organization_id
  * @property string $name
  *
  * The followings are the available model relations:
@@ -40,11 +40,12 @@ class Personage extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('organizationID', 'numerical', 'integerOnly'=>true),
+			array('organization_id', 'required'),
+			array('organization_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, organizationID, name', 'safe', 'on'=>'search'),
+			array('id, organization_id, name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,8 +57,8 @@ class Personage extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actors' => array(self::HAS_MANY, 'Actor', 'personageID'),
-			'organization' => array(self::BELONGS_TO, 'Organization', 'organizationID'),
+			'actors' => array(self::HAS_MANY, 'Actor', 'personage_id'),
+			'organization' => array(self::BELONGS_TO, 'Organization', 'organization_id'),
 		);
 	}
 
@@ -67,8 +68,8 @@ class Personage extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'organizationID' => Yii::t('default', 'Organization'),
+			'id' => Yii::t('default', 'ID'),
+			'organization_id' => Yii::t('default', 'Organization'),
 			'name' => Yii::t('default', 'Name'),
 		);
 	}
@@ -84,8 +85,8 @@ class Personage extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('organizationID',$this->organizationID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('organization_id',$this->organization_id);
 		$criteria->compare('name',$this->name,true);
 
 		return new CActiveDataProvider($this, array(

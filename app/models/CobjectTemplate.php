@@ -4,15 +4,19 @@
  * This is the model class for table "cobject_template".
  *
  * The followings are the available columns in table 'cobject_template':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
  * @property string $code
+ * @property integer $format_type_id
+ * @property integer $interative_type_id
  * @property integer $oldID
  * @property integer $oldIDFormat
  * @property integer $oldIDInterative
  *
  * The followings are the available model relations:
  * @property Cobject[] $cobjects
+ * @property CommonType $formatType
+ * @property CommonType $interativeType
  * @property EditorScreenPieceset[] $editorScreenPiecesets
  */
 class CobjectTemplate extends CActiveRecord
@@ -44,12 +48,12 @@ class CobjectTemplate extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, code', 'required'),
-			array('oldID, oldIDFormat, oldIDInterative', 'numerical', 'integerOnly'=>true),
+			array('format_type_id, interative_type_id, oldID, oldIDFormat, oldIDInterative', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			array('code', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, code, oldID, oldIDFormat, oldIDInterative', 'safe', 'on'=>'search'),
+			array('id, name, code, format_type_id, interative_type_id, oldID, oldIDFormat, oldIDInterative', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,7 +65,9 @@ class CobjectTemplate extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'cobjects' => array(self::HAS_MANY, 'Cobject', 'templateID'),
+			'cobjects' => array(self::HAS_MANY, 'Cobject', 'template_id'),
+			'formatType' => array(self::BELONGS_TO, 'CommonType', 'format_type_id'),
+			'interativeType' => array(self::BELONGS_TO, 'CommonType', 'interative_type_id'),
 			'editorScreenPiecesets' => array(self::HAS_MANY, 'EditorScreenPieceset', 'templateID'),
 		);
 	}
@@ -72,9 +78,11 @@ class CobjectTemplate extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
 			'code' => Yii::t('default', 'Code'),
+			'format_type_id' => Yii::t('default', 'Format Type'),
+			'interative_type_id' => Yii::t('default', 'Interative Type'),
 			'oldID' => Yii::t('default', 'Old'),
 			'oldIDFormat' => Yii::t('default', 'Old Idformat'),
 			'oldIDInterative' => Yii::t('default', 'Old Idinterative'),
@@ -92,9 +100,11 @@ class CobjectTemplate extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('code',$this->code,true);
+		$criteria->compare('format_type_id',$this->format_type_id);
+		$criteria->compare('interative_type_id',$this->interative_type_id);
 		$criteria->compare('oldID',$this->oldID);
 		$criteria->compare('oldIDFormat',$this->oldIDFormat);
 		$criteria->compare('oldIDInterative',$this->oldIDInterative);

@@ -4,9 +4,9 @@
  * This is the model class for table "location".
  *
  * The followings are the available columns in table 'location':
- * @property integer $ID
- * @property string $typeLocation
- * @property integer $fatherID
+ * @property integer $id
+ * @property integer $location_type
+ * @property integer $father_id
  * @property string $name
  * @property string $acronym
  *
@@ -41,14 +41,11 @@ class Location extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
-			array('fatherID', 'numerical', 'integerOnly'=>true),
-			array('typeLocation', 'length', 'max'=>7),
-			array('name', 'length', 'max'=>60),
-			array('acronym', 'length', 'max'=>30),
+			array('location_type, father_id', 'numerical', 'integerOnly'=>true),
+			array('name, acronym', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, typeLocation, fatherID, name, acronym', 'safe', 'on'=>'search'),
+			array('id, location_type, father_id, name, acronym', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,7 +57,7 @@ class Location extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'unities' => array(self::HAS_MANY, 'Unity', 'locationID'),
+			'unities' => array(self::HAS_MANY, 'Unity', 'location_id'),
 		);
 	}
 
@@ -70,9 +67,9 @@ class Location extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
-			'typeLocation' => Yii::t('default', 'Type Location'),
-			'fatherID' => Yii::t('default', 'Father'),
+			'id' => Yii::t('default', 'ID'),
+			'location_type' => Yii::t('default', 'Location Type'),
+			'father_id' => Yii::t('default', 'Father'),
 			'name' => Yii::t('default', 'Name'),
 			'acronym' => Yii::t('default', 'Acronym'),
 		);
@@ -89,9 +86,9 @@ class Location extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
-		$criteria->compare('typeLocation',$this->typeLocation,true);
-		$criteria->compare('fatherID',$this->fatherID);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('location_type',$this->location_type);
+		$criteria->compare('father_id',$this->father_id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('acronym',$this->acronym,true);
 

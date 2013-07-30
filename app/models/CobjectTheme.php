@@ -4,12 +4,15 @@
  * This is the model class for table "cobject_theme".
  *
  * The followings are the available columns in table 'cobject_theme':
- * @property integer $ID
+ * @property integer $id
  * @property string $name
  * @property integer $oldID
+ * @property integer $parent_id
  *
  * The followings are the available model relations:
  * @property Cobject[] $cobjects
+ * @property CobjectTheme $parent
+ * @property CobjectTheme[] $cobjectThemes
  */
 class CobjectTheme extends CActiveRecord
 {
@@ -40,11 +43,11 @@ class CobjectTheme extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('oldID', 'numerical', 'integerOnly'=>true),
+			array('oldID, parent_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ID, name, oldID', 'safe', 'on'=>'search'),
+			array('id, name, oldID, parent_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,7 +59,9 @@ class CobjectTheme extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'cobjects' => array(self::HAS_MANY, 'Cobject', 'themeID'),
+			'cobjects' => array(self::HAS_MANY, 'Cobject', 'theme_id'),
+			'parent' => array(self::BELONGS_TO, 'CobjectTheme', 'parent_id'),
+			'cobjectThemes' => array(self::HAS_MANY, 'CobjectTheme', 'parent_id'),
 		);
 	}
 
@@ -66,9 +71,10 @@ class CobjectTheme extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ID' => Yii::t('default', 'ID'),
+			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
 			'oldID' => Yii::t('default', 'Old'),
+			'parent_id' => Yii::t('default', 'Parent'),
 		);
 	}
 
@@ -83,9 +89,10 @@ class CobjectTheme extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ID',$this->ID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('oldID',$this->oldID);
+		$criteria->compare('parent_id',$this->parent_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
