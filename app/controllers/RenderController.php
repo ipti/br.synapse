@@ -257,19 +257,19 @@ class RenderController extends Controller {
 
             $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
 
-            $sql = "SELECT ut.ID, ut.unity, u.name, ut.organizationID, 
-                            ut.unityOrganizationID, ou.orgLevel 
+            $sql = "SELECT ut.primary_unity_id, ut.secondary_unity_id, u.name, ut.primary_organization_id, 
+                            ut.secondary_organization_id, ou.orglevel 
                     from unity_tree ut
                     inner join organization ou
-                    on ou.ID = ut.unityOrganizationID
+                    on ou.id = ut.secondary_organization_id
                     inner join organization o
-                    on o.ID = ut.OrganizationID
+                    on o.id = ut.primary_organization_id
                     inner join unity u
-                    on u.ID = ut.unity
-                    where ut.id = $id ";
-            $sql .= $_POST['op'] == 'select' ? "AND ou.orgLevel = o.orgLevel+1;" : "AND ou.orgLevel = -1;";
+                    on u.id = ut.secondary_unity_id
+                    where ut.primary_unity_id = $id ";
+            $sql .= $_POST['op'] == 'select' ? "AND ou.orglevel = o.orglevel+1;" : "AND ou.orglevel = -1;";
             $unitys = Yii::app()->db->createCommand($sql)->queryAll();
-
+            $json['sql'] = $sql;
             $_POST['op'] == 'select' ? $json['unitys'] = $unitys : $json['classes'] = $unitys;
             $json['fatherID'] = $id;
             header('Cache-Control: no-cache, must-revalidate');
@@ -284,8 +284,8 @@ class RenderController extends Controller {
             $sql = "SELECT a.id actorID, p.name 
                     FROM synapse.actor a
                     inner join person p
-                    on p.ID = a.personID
-                    where a.unityID = $id;";
+                    on p.id = a.person_id
+                    where a.unity_id = $id;";
             $actors = Yii::app()->db->createCommand($sql)->queryAll();
 
             $json['actors'] = $actors;

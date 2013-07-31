@@ -365,6 +365,7 @@ function render () {
         });
     }
     
+    //carregar informações para o filtro
     this.loadThemes = function(themes){
         htmContent = $('<select id="rtheme"></select>');
         $.each(themes, function(i, theme) {
