@@ -1,7 +1,7 @@
 <?php
 $this->breadcrumbs=array(
 	'Actors'=>array('index'),
-	$model->ID,
+	$model->id,
 );
 $contextDesc = Yii::t('default', 'Available actions that may be taken on Actor.');
 $this->menu=array(
@@ -13,17 +13,17 @@ array('label'=> Yii::t('default', 'List Actor'), 'url'=>array('index'),'descript
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">
             <div class="panelGroup form">
-                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Actor # '.$model->ID.' :')?></div></div>
+                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Actor # '.$model->id.' :')?></div></div>
                 <div class="panelGroupBody">
                     <?php $this->widget('zii.widgets.CDetailView', array(
                     'data'=>$model,
                     'attributes'=>array(
-                    		'ID',
-		'unityID',
-		'personID',
-		'personageID',
-		'activatedDate',
-		'desactivatedDate',
+                    		'id',
+		'unity_id',
+		'person_id',
+		'personage_id',
+		'activated_date',
+		'desactivated_date',
                     ),
                     )); ?>
                 </div>   

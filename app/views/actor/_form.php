@@ -11,33 +11,33 @@
                      <?php echo Yii::t('default', 'Fields with * are required.')?></div>
 
                                     <div class="formField">
-                        <?php echo $form->labelEx($model,'unityID'); ?>
-                        <?php echo $form->textField($model,'unityID'); ?>
-                        <?php echo $form->error($model,'unityID'); ?>
+                        <?php echo $form->labelEx($model,'unity_id'); ?>
+                        <?php echo $form->textField($model,'unity_id'); ?>
+                        <?php echo $form->error($model,'unity_id'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'personID'); ?>
-                        <?php echo $form->textField($model,'personID'); ?>
-                        <?php echo $form->error($model,'personID'); ?>
+                        <?php echo $form->labelEx($model,'person_id'); ?>
+                        <?php echo $form->textField($model,'person_id'); ?>
+                        <?php echo $form->error($model,'person_id'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'personageID'); ?>
-                        <?php echo $form->textField($model,'personageID'); ?>
-                        <?php echo $form->error($model,'personageID'); ?>
+                        <?php echo $form->labelEx($model,'personage_id'); ?>
+                        <?php echo $form->textField($model,'personage_id'); ?>
+                        <?php echo $form->error($model,'personage_id'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'activatedDate'); ?>
-                        <?php echo $form->textField($model,'activatedDate'); ?>
-                        <?php echo $form->error($model,'activatedDate'); ?>
+                        <?php echo $form->labelEx($model,'activated_date'); ?>
+                        <?php echo $form->textField($model,'activated_date'); ?>
+                        <?php echo $form->error($model,'activated_date'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'desactivatedDate'); ?>
-                        <?php echo $form->textField($model,'desactivatedDate'); ?>
-                        <?php echo $form->error($model,'desactivatedDate'); ?>
+                        <?php echo $form->labelEx($model,'desactivated_date'); ?>
+                        <?php echo $form->textField($model,'desactivated_date'); ?>
+                        <?php echo $form->error($model,'desactivated_date'); ?>
                     </div>
 
                                     <div class="formField buttonWizardBar">

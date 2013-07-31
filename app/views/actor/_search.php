@@ -6,33 +6,33 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'ID'); ?>
-		<?php echo $form->textField($model,'ID'); ?>
+		<?php echo $form->label($model,'id'); ?>
+		<?php echo $form->textField($model,'id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'unityID'); ?>
-		<?php echo $form->textField($model,'unityID'); ?>
+		<?php echo $form->label($model,'unity_id'); ?>
+		<?php echo $form->textField($model,'unity_id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'personID'); ?>
-		<?php echo $form->textField($model,'personID'); ?>
+		<?php echo $form->label($model,'person_id'); ?>
+		<?php echo $form->textField($model,'person_id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'personageID'); ?>
-		<?php echo $form->textField($model,'personageID'); ?>
+		<?php echo $form->label($model,'personage_id'); ?>
+		<?php echo $form->textField($model,'personage_id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'activatedDate'); ?>
-		<?php echo $form->textField($model,'activatedDate'); ?>
+		<?php echo $form->label($model,'activated_date'); ?>
+		<?php echo $form->textField($model,'activated_date'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'desactivatedDate'); ?>
-		<?php echo $form->textField($model,'desactivatedDate'); ?>
+		<?php echo $form->label($model,'desactivated_date'); ?>
+		<?php echo $form->textField($model,'desactivated_date'); ?>
 	</div>
 
 	<div class="row buttons">

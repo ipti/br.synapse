@@ -13,20 +13,20 @@ array('label'=> Yii::t('default', 'List Unity'), 'url'=>array('index'),'descript
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">
             <div class="panelGroup form">
-                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Unity # '.$model->ID.' :')?></div></div>
+                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Unity # '.$model->id.' :')?></div></div>
                 <div class="panelGroupBody">
                     <?php $this->widget('zii.widgets.CDetailView', array(
                     'data'=>$model,
                     'attributes'=>array(
-                    		'ID',
+                    		'id',
 		'name',
-		'organizationID',
-		'fatherID',
-		'locationID',
+		'organization_id',
+		'father_id',
+		'location_id',
 		'fcode',
 		'autochild',
-		'actDate',
-		'desDate',
+		'act_date',
+		'des_date',
 		'capacity',
                     ),
                     )); ?>

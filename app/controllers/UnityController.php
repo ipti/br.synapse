@@ -46,13 +46,13 @@ class UnityController extends Controller
             if( isset($_POST['totalUnity']) ) {
                 $totalUnitys = $_POST['totalUnity'];
                 $orgs = Organization::model()->findAll(array( 
-                    'condition' => 'fatherID = :totalUnitys+1',
+                    'condition' => 'father_id = :totalUnitys+1',
                     'params' => array(':totalUnitys' => $totalUnitys),
                     ));
                 $num_orgs = count($orgs);
                 $str = '';
                 for($i=0; $i < $num_orgs; $i++ ) {
-                    $str .= "<option value ='". $orgs[$i]->ID ."'>" . $orgs[$i]->name . "</option>";
+                    $str .= "<option value ='". $orgs[$i]->id ."'>" . $orgs[$i]->name . "</option>";
                 }
                  echo $str;
             }
@@ -77,19 +77,19 @@ class UnityController extends Controller
                                     $IDunity_father, $OrgIDunity_father) {
             if(isset($IDunity_child) && isset($OrgIDunity_child)) {
                 $modelUTree = new UnityTree;
-                $modelUTree->ID = $IDunity_father;   //Unity_Father
-                $modelUTree->organizationID = $OrgIDunity_father ; //Unity_Father
-                $modelUTree->unity = $IDunity_child; //Unity_Child
-                $modelUTree->unityOrganizationID = $OrgIDunity_child; //Unity_Child
+                $modelUTree->primay_unity_id = $IDunity_father;   //Unity_Father
+                $modelUTree->primary_organization_id = $OrgIDunity_father ; //Unity_Father
+                $modelUTree->secondary_unity_id = $IDunity_child; //Unity_Child
+                $modelUTree->secondary_organization_id = $OrgIDunity_child; //Unity_Child
                  if($modelUTree->save()) {
                     if(isset($IDunity_father) && $IDunity_father > 0 ) {
                         //Salvar os Próximos Pais
-                        $this_father = Unity::model()->findByAttributes(array('ID' => $IDunity_father )); 
-                        $IDnew_father = $this_father->fatherID  ; // Pai do Pai
+                        $this_father = Unity::model()->findByAttributes(array('id' => $IDunity_father )); 
+                        $IDnew_father = $this_father->father_id  ; // Pai do Pai
                         $new_Org_father = null;
                         if(isset($IDnew_father) && $IDnew_father > 0) {
-                            $new_father = Unity::model()->findByAttributes(array('ID'=>$IDnew_father));
-                            $new_Org_father = $new_father->organizationID;
+                            $new_father = Unity::model()->findByAttributes(array('id'=>$IDnew_father));
+                            $new_Org_father = $new_father->organization_id;
                            }        
                 return $this->saveAncient($IDunity_child, $OrgIDunity_child,
                 $IDnew_father, $new_Org_father );
@@ -120,12 +120,12 @@ class UnityController extends Controller
 			$model->attributes=$_POST['Unity'];
 			if($model->save()){
                             //Inserir na Árvore
-                            $IDunity_child = $model->ID;
-                            $OrgIDunity_child = $model->organizationID;
-                            $IDunity_father =  $model->fatherID;
+                            $IDunity_child = $model->id;
+                            $OrgIDunity_child = $model->organization_id;
+                            $IDunity_father =  $model->father_id;
                             if(isset($IDunity_father) && $IDunity_father > 0) {
-                               $father = Unity::model()->findByAttributes(array('ID' => $IDunity_father )); 
-                               $OrgIDunity_father = $father->organizationID;
+                               $father = Unity::model()->findByAttributes(array('id' => $IDunity_father )); 
+                               $OrgIDunity_father = $father->organization_id;
                                 // $OrgIDunity_father = $model->fatherID->organizationID;
                             }
                             $ancients = $this->saveAncient($IDunity_child, $OrgIDunity_child, 
