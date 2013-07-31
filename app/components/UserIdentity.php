@@ -44,7 +44,7 @@ class UserIdentity extends CUserIdentity
             $this->errorCode=self::ERROR_PASSWORD_INVALID;
         else
         {
-            $this->_id=$record->ID;
+            $this->_id=$record->id;
             $this->setState('name', $record->name); 
             $this->errorCode=self::ERROR_NONE;
             
