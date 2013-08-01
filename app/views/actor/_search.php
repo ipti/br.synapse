@@ -26,13 +26,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'activated_date'); ?>
-		<?php echo $form->textField($model,'activated_date'); ?>
+		<?php echo $form->label($model,'active_date'); ?>
+		<?php echo $form->textField($model,'active_date'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'desactivated_date'); ?>
-		<?php echo $form->textField($model,'desactivated_date'); ?>
+		<?php echo $form->label($model,'desactive_date'); ?>
+		<?php echo $form->textField($model,'desactive_date'); ?>
 	</div>
 
 	<div class="row buttons">

@@ -29,15 +29,15 @@
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'activated_date'); ?>
-                        <?php echo $form->textField($model,'activated_date'); ?>
-                        <?php echo $form->error($model,'activated_date'); ?>
+                        <?php echo $form->labelEx($model,'active_date'); ?>
+                        <?php echo $form->textField($model,'active_date'); ?>
+                        <?php echo $form->error($model,'active_date'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'desactivated_date'); ?>
-                        <?php echo $form->textField($model,'desactivated_date'); ?>
-                        <?php echo $form->error($model,'desactivated_date'); ?>
+                        <?php echo $form->labelEx($model,'desactive_date'); ?>
+                        <?php echo $form->textField($model,'desactive_date'); ?>
+                        <?php echo $form->error($model,'desactive_date'); ?>
                     </div>
 
                                     <div class="formField buttonWizardBar">

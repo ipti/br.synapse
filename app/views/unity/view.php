@@ -23,11 +23,11 @@ array('label'=> Yii::t('default', 'List Unity'), 'url'=>array('index'),'descript
 		'organization_id',
 		'father_id',
 		'location_id',
-		'fcode',
-		'autochild',
-		'act_date',
-		'des_date',
-		'capacity',
+		'fk_code',
+		//'autochild',
+		'active_date',
+		'desactive_date',
+		//'capacity',
                     ),
                     )); ?>
                 </div>   

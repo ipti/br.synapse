@@ -29,8 +29,8 @@ array('label'=> Yii::t('default', 'Create a new Actor'), 'url'=>array('create'),
 		'unity_id',
 		'person_id',
 		'personage_id',
-		'activated_date',
-		'desactivated_date',
+		'active_date',
+		'desactive_date',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   
