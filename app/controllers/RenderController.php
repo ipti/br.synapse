@@ -281,7 +281,7 @@ class RenderController extends Controller {
             $json = array();
             $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
 
-            $sql = "SELECT a.id actorID, p.name 
+            $sql = "SELECT a.id actor_id, p.name 
                     FROM synapse.actor a
                     inner join person p
                     on p.id = a.person_id
@@ -306,8 +306,8 @@ class RenderController extends Controller {
             foreach ($disciplines as $discipline) {
                 $a++;
                 $json['disciplines'][$a] = $discipline->attributes;
-                $scripts = ActScript::model()->findAllByAttributes(array('disciplineID' => $discipline->ID));
-                $blocks = Cobjectblock::model()->findAllByAttributes(array('disciplineID' => $discipline->ID));
+                $scripts = ActScript::model()->findAllByAttributes(array('discipline_id' => $discipline->id));
+                $blocks = Cobjectblock::model()->findAllByAttributes(array('discipline_id' => $discipline->id));
                 $rscript = $rblock = array();
                 $b = $c = -1;
                 foreach ($scripts as $script) {

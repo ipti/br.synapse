@@ -34,19 +34,17 @@
             $('#rscript'+v).show();
             $('#rblock'+v).show();
         });
-        $('.start').click(function(){
-            newRender.typeID = $('#typeID').val();
-            newRender.atdID = $('#atdID').val();
-            newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
-            newRender.blockID = $('select#rblock'+newRender.disciplineID).val();
-            newRender.classID = $('#classID').val();
-            newRender.actorID = $('#actorID').val();
-            $('.prerender').hide();
-            $('.waiting').show();
-//                    loadActs();
-            //$(form).submit();
-            //vai dar post para stage.php
-        })
+//        $('.start').click(function(){
+//            newRender.typeID = $('#typeID').val();
+//            newRender.atdID = $('#atdID').val();
+//            newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
+//            newRender.blockID = $('select#rblock'+newRender.disciplineID).val();
+//            newRender.classID = $('#classID').val();
+//            newRender.actorID = $('#actorID').val();
+//            $('.prerender').hide();
+//            $('.waiting').show();
+//            loadActs();
+//        })
     });
 </script>
 
@@ -67,7 +65,7 @@
 <div class="prerender">
     <div class="innerborder">
         <h1></h1>
-        <form>
+        <form action="/render/stage" method="POST">
             <label>
                 <font>Tipo de Atendimento:</font>
                 <select id="atdID">
@@ -117,7 +115,7 @@
             <label id="rstudents">
                 <font>Aluno:</font><?php echo $act->person->name?>
             </label>
-            <input class="start" type="button" value="iniciar atendimento">
+            <input class="start" type="submit" value="iniciar atendimento">
             <input type="hidden" id="classID" value="<?php echo $class->id?>"/>
             <input type="hidden" id="actorID" value="<?php echo $act->id; ?>"/>
         </form>
