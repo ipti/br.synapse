@@ -123,3 +123,6 @@ ul.enum,ul.pairs{border-bottom:1px solid #666;margin-bottom:20px}
 .theme .tplMulti .insertImage{border:0px; background:url('../../images/theme_tools_addimage.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .theme .tplMulti .insertText{border:0px; background:url('../../images/theme_tools_addtext.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .text { border: 1px dashed black; padding: 2px;}
+.messagebox{margin:10px auto;width:95%;display:block;padding:10px;}
+.messagewrong{background:red;color:#fff}
+.messagecorrect{background:green;color:#fff}
