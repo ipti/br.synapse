@@ -159,7 +159,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('listcobjects', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview'),
+                'actions' => array('listcobjects', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -206,7 +206,18 @@ class RenderController extends Controller {
     public function actionCanvas() {
         $this->render('canvas');
     }
-
+    public function actionCompute(){
+        $perf = new PeformanceActor();
+        $data['piece_id'] = $_REQUEST['pieceID'];
+        $data['piece_element_id'] = $_REQUEST['elementID'];
+        $data['actor_id'] = $_REQUEST['actorID'];
+        $data['final_time'] = $_REQUEST['finalTime'];
+        $data['start_time'] = $_REQUEST['startTime'];
+        $data['value'] = $_REQUEST['value'];
+        $data['iscorrect'] = $_REQUEST['isCorrect'];
+        $perf->setAttributes($data);
+        $perf->save();
+    }
     public function actionStage() {
         $cobject_id = @$_REQUEST['id'];
         $script = @$_RESQUEST['script'];
@@ -219,7 +230,7 @@ class RenderController extends Controller {
         $contentsIn = "282,281";
         $contentOut = "277,275";
         $join = "";
-        $sql = "select distinct(cobject_id) as id from render_cobjects where template_code = 'PRE' and status='on'";
+            $sql = "select distinct(cobject_id) as id from render_cobjects where template_code = 'PRE' and status='on'";
         /* $sql = "select  distinct(a1.id)
           from cobject a1
           join cobject_metadata a2 on(a1.id=a2.cobject_id and a2.type_id=13)

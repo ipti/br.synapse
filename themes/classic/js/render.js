@@ -20,9 +20,10 @@ function render () {
     this.disciplineID;
     this.scriptID;
     this.classID;
-    this.userID;
+    this.actorID;
     this.typeID;
     this.atdID;
+    this.startTime;
     this.lastClick = -1;
     this.ctCorrect = 0;
     this.ctWrong = 0;
@@ -85,16 +86,18 @@ function render () {
     }
     this.mountHeader = function(cobject){
         infoScreen = $('<div class="screenInfo"></div>');
-        infoScreen.append('<span id="infoAct"><label><strong>Aluno:</strong>'+this.actorName+' [Acertos:<span id="ctCorrect">0</span>/Erros:<span class="ctWrong">0</span>]</label><label><strong>Atividade: </strong>Nº'+cobject.cobject_id+'-'+cobject.template_code+'-'+cobject.theme+'</label><label><strong>Conteúdo: </strong> '+cobject.content+'</label><label><strong>Objetivo:</strong> '+cobject.goal+'</label></span>');
+        infoScreen.append('<span id="infoAct"><label><strong>Aluno:</strong>'+this.actorName+' [Acertos:<span class="ctCorrect">0</span>/Erros:<span class="ctWrong">0</span>]</label><label><strong>Atividade: </strong>Nº'+cobject.cobject_id+'-'+cobject.template_code+'-'+cobject.theme+'</label><label><strong>Conteúdo: </strong> '+cobject.content+'</label><label><strong>Objetivo:</strong> '+cobject.goal+'</label></span>');
         nextScreen = $('<span id="next">»</span>').on('click',function(){
             $('.currentScreen').hide();
             $('.currentScreen').next().show();
             $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+            NEWRENDER.startTime = Math.round(+new Date()/1000);
         });
         prevScreen = $('<span id="previous">«</span>').on('click',function(){
             $('.currentScreen').hide();
             $('.currentScreen').prev().show();
             $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
+            NEWRENDER.startTime = Math.round(+new Date()/1000);
         });
         if(parent.atdID == "avaliacao"){
             prevScreen.hide();
@@ -107,6 +110,24 @@ function render () {
             prevScreen.hide();
         }
         return infoScreen;
+    }
+    this.mountReportScreen = function(){
+        htmlScreen = $('<div class="screen" id="SCRLAST"></div>');
+        infoScreenl = $('<div class="screenInfo"></div>');
+        infoScreenl.append('<span id="infoAct"></span>');
+        prevScreenl = $('<span id="previous">«</span>').on('click',function(){
+            $('.currentScreen').hide();
+            $('.currentScreen').prev().show();
+            $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
+        });
+        if(parent.atdID == "avaliacao"){
+            prevScreenl.hide();
+        }
+        infoScreenl.prepend(prevScreenl);
+        infoScreenl.append('<span class="clear"></span>');
+        htmlScreen.append(infoScreenl);
+        htmlScreen.append('<strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">'+NEWRENDER.ctWrong+'</span>/Erros:<span class="ctWrong">'+NEWRENDER.ctCorrect+'</span>)<br/><input id="end" value="finalizar atendimento" type="button">');
+        fullHtm.append(htmlScreen);
     }
     this.loadcobject = function(cobject){
         var parent = this;
@@ -122,125 +143,79 @@ function render () {
         }
          
     }
-    this.startRender = function (response){
-        if(typeof(response.disciplines) != "undefined"){
-            this.loadDisciplines(response.disciplines);
+    this.responseAnswer = function(){
+        var sanswer = $(this).attr('uas');
+        var useranswer = $(this).prev().val();
+        uanswer = hashCode(useranswer);
+        $('.currentScreen input.ielement').val("");
+        if(NEWRENDER.atdID == "avaliacao"){
+            $('.currentScreen input').attr('disabled','disabled');
+            NEWRENDER.nextInFuction();
         }
-        if(typeof(response.classes) != "undefined"){
-            this.loadClasses(response.classes);
-        }
-        if(typeof(response.themes) != "undefined"){
-            this.loadThemes(response.themes);
-        }
-        if(typeof(response.levels) != "undefined"){
-            this.loadLevels(response.levels);
+        if(uanswer == sanswer){
+            NEWRENDER.compute('correct',$(this),useranswer)
+        }else{
+            NEWRENDER.compute('wrong',$(this),useranswer);
         }
     }
-    this.responseAnswer = function(){
-        var elementID = $(this).attr('id');
-        var sanswer = $(this).attr('uas');
-        console.log(elementID)
-        var uanswer = $(this).prev().val();
-        console.log(uanswer);
-        uanswer = hashCode(uanswer);
-        console.log(uanswer);
-        console.log(sanswer);
-        
-        if(uanswer == sanswer){
-            newRender.ctCorrect = newRender.ctCorrect+1;
-            $('.ctCorrect').text(newRender.ctCorrect);
-            $('.currentScreen input.ielement').val("");
-            if(newRender.atdID == "avaliacao"){
-                $('.currentScreen input').attr('disabled','disabled');
-                nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
-                    $('.currentScreen').hide();
-                    $('.currentScreen').next().show();
-                    $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-                });
-                $('.currentScreen').append(nextScreen);
-            }
-            $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
-            $('#message').fadeOut(3000,function(){
-                $('#message').remove();
-            });
-        //computar o valor;
+    this.compute = function(type,element,value){
+        NEWRENDER.showMessage(type);
+        pieceID = element.parent().parent().parent().attr('id');
+        elementID = element.attr('id');
+        pieceID = pieceID.replace('BL_', '');
+        elementID = elementID.replace('EP', '');
+        var finaltime = Math.round(+new Date()/1000);
+        if(type == 'correct'){
+            NEWRENDER.ctCorrect = NEWRENDER.ctCorrect+1;
+            $('.ctCorrect').text(NEWRENDER.ctCorrect);
+            iscorrect = true;
         }else{
-            $('.currentScreen input.ielement').val("");
-            newRender.ctWrong = newRender.ctWrong+1;
-            $('.ctWrong').text(newRender.ctWrong);
-            if(newRender.atdID == "avaliacao"){
-                $('.currentScreen input').attr('disabled','disabled');
-                nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
-                    $('.currentScreen').hide();
-                    $('.currentScreen').next().show();
-                    $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-                });
-                $('.currentScreen').append(nextScreen);
-            }
-            $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
-            $('#message').fadeOut(3000,function(){
-                $('#message').remove();
-            });
+            NEWRENDER.ctWrong = NEWRENDER.ctWrong+1;
+            $('.ctWrong').text(NEWRENDER.ctWrong);
+            iscorrect = false;
         }
-        
+        $.ajax({
+            url:"/render/compute",
+            data:{
+                pieceID:pieceID,
+                elementID:elementID,
+                actorID:NEWRENDER.actorID,
+                finalTime:finaltime,
+                startTime:NEWRENDER.startTime,
+                isCorrect: iscorrect,
+                value: value
+            },
+            type:"POST",
+            dataType:"json"
+        });
+    }
+    this.showMessage = function(type){
+        if(type == 'correct'){
+            msg = '<font id="message" class="messagebox messagecorrect">Parabéns, você acertou</font>';
+        }else{
+            msg = '<font id="message" class="messagebox messagewrong" style="">Oops! Você errou, continue tentando.</font>';
+        }
+        $('.currentScreen').prepend(msg);
+        $('#message').fadeOut(3000,function(){
+            $('#message').remove();
+        });
+    }
+    this.nextInFuction = function(){
+        nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
+            $('.currentScreen').hide();
+            $('.currentScreen').next().show();
+            $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
+            NEWRENDER.startTime = Math.round(+new Date()/1000);
+        });
+        $('.currentScreen').append(nextScreen);
     }
     this.matchElement = function(){
-        //alert(newRender.lastClick);
         if(NEWRENDER.lastClick != -1){
             var group = $('#'+NEWRENDER.lastClick).attr('group');
             if(group == $(this).attr('group')){
-                var pieceID = $(this).parent().parent().parent().parent().attr('id');
-                var elementID = $(this).attr('id');
-                var userID = $('#userID').val();
-            //NEWRENDER.ctAnswer();
-            /* $.ajax({
-                    url:"/render/json",
-                    data:{
-                        op:'answer',
-                        pieceID:pieceID,
-                        elementID:elementID,
-                        userID:userID,
-                        value:'Acerto'
-                    },
-                    type:"POST",
-                    dataType:"json",
-                    success:function(response){
-                    },
-                    error:function(){
-                    }
-                });
-                newRender.ctCorrect = newRender.ctCorrect+1;
-                $('.ctCorrect').text(newRender.ctCorrect);
-                $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
-                $('#message').fadeOut(3000,function(){
-                    $('#message').remove();
-                });*/
+                NEWRENDER.compute('correct',$(this),group);
             }else{
-                var pieceID = $(this).parent().parent().parent().parent().attr('id');
-                var elementID = $(this).attr('id');
-                var userID = $('#userID').val();
-            /*$.ajax({
-                    url:"/render/json",
-                    data:{
-                        op:'answer',
-                        pieceID:pieceID,
-                        elementID:elementID,
-                        userID:userID,
-                        value:'Erro'
-                    },
-                    type:"POST",
-                    dataType:"json",
-                    success:function(response){
-                    },
-                    error:function(){
-                    }
-                });
-                newRender.ctWrong = newRender.ctWrong+1;
-                $('.ctWrong').text(newRender.ctWrong);
-                $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
-                $('#message').fadeOut(3000,function(){
-                    $('#message').remove();
-                });*/
+                NEWRENDER.compute('wrong',$(this),group);
             }
             if($(this).parent().parent().attr('id') != 'pairs'){
                 $(this).off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
@@ -257,13 +232,7 @@ function render () {
                 //reinicializar.
                 $('.currentScreen #pairs .ielement').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
                 if(NEWRENDER.atdID == "avaliacao"){
-                    //NEWRENDER.nextInner();
-                    nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
-                        $('.currentScreen').hide();
-                        $('.currentScreen').next().show();
-                        $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-                    });
-                    $('.currentScreen').append(nextScreen);
+                    NEWRENDER.nextInFuction();
                 }else{
                     $('.currentScreen li').css('opacity','1');
                     $('.currentScreen .delement').addClass('ielement').removeClass('delement');
@@ -281,281 +250,25 @@ function render () {
         }
     }
     this.correctAnswer =  function(){
-        var pieceID = $(this).parent().parent().parent().parent().attr('id');
-        var elementID = $(this).attr('id');
-        var userID = $('#userID').val();
-        $.ajax({
-            url:"/render/json",
-            data:{
-                op:'answer',
-                pieceID:pieceID,
-                elementID:elementID,
-                userID:userID,
-                value:'Acerto'
-            },
-            type:"POST",
-            dataType:"json",
-            success:function(response){
-            },
-            error:function(){
-            }
-        });
         $(this).off('click').css('cursor','auto');
         $(this).css('opacity','0.5');
-        newRender.ctCorrect = newRender.ctCorrect+1;
-        $('.ctCorrect').text(newRender.ctCorrect);
-        if(newRender.atdID == "avaliacao"){
+        NEWRENDER.compute('correct',$(this),$(this).attr('id'));
+        if(NEWRENDER.atdID == "avaliacao"){
             $('.currentScreen .eclick').off('click').css('cursor','auto');
-            nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
-                $('.currentScreen').hide();
-                $('.currentScreen').next().show();
-                $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-            });
-            $('.currentScreen').append(nextScreen);
+            NEWRENDER.nextInFuction();
         }
-       
-        $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:green;color:#fff">Parabéns, você acertou</font>');
-        $('#message').fadeOut(3000,function(){
-            $('#message').remove();
-        });
-    //$('.currentScreen').hide();
-    //$('.currentScreen').next().show();
-    //$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-        
     }
     this.wrongAnswer = function(){
-        var pieceID = $(this).parent().parent().parent().parent().attr('id');
-        var elementID = $(this).attr('id');
-        var actorID = $('#actorID').val();
-        $.ajax({
-            url:"/render/json",
-            data:{
-                op:'answer',
-                pieceID:pieceID,
-                elementID:elementID,
-                actorID:actorID,
-                value:'Erro'
-            },
-            type:"POST",
-            dataType:"json",
-            success:function(response){
-            },
-            error:function(){
-            }
-        });
-        $('.currentScreen').prepend('<font id="message" style="margin:10px auto;width:95%;display:block;padding:10px;background:red;color:#fff">Oops! Você errou, continue tentando.</font>');
-        //$('.currentScreen').hide();
-        //$('.currentScreen').next().show();
-        //$('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
         $(this).off('click').css('cursor','auto');
         $(this).css('opacity','0.5');
-        newRender.ctWrong = newRender.ctWrong+1;
-        $('.ctWrong').text(newRender.ctWrong);
-        if(newRender.atdID == "avaliacao"){
+        NEWRENDER.compute('wrong',$(this),$(this).attr('id'));
+        if(NEWRENDER.atdID == "avaliacao"){
             $('.currentScreen .eclick').off('click').css('opacity','0.5').css('cursor','auto');
-            nextScreen = $('<span id="nextButton">Avançar »</span>').on('click',function(){
-                $('.currentScreen').hide();
-                $('.currentScreen').next().show();
-                $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-            });
-            $('.currentScreen').append(nextScreen);
+            NEWRENDER.nextInFuction();
         }
-        $('#message').fadeOut(3000,function(){
-            $('#message').remove();
-        });
+        
     }
     
-    this.loadThemes = function(themes){
-        htmContent = $('<select id="rtheme"></select>');
-        $.each(themes, function(i, theme) {
-            htmContent.append('<option value="'+theme.ID+'">'+theme.name+'</option>');
-        });
-        $('#rtheme').append(htmContent);
-    }
-    this.loadLevels = function(levels){
-        htmContent = $('<select style="width:150px;" id="rlevels"></select>');
-        $.each(levels, function(i, level) {
-            htmContent.append('<option value="'+level.ID+'">'+level.name+'</option>');
-        });
-        $('#rlevels').append(htmContent);
-    }
-    this.loadDisciplines = function(disciplines){
-        htmContent = $('<select id="rdiscipline"></select>');
-        $.each(disciplines, function(i, discipline) {
-            htmContent.append('<option value="'+discipline.ID+'">'+discipline.name+'</option>');
-            if(typeof(discipline.scripts) != "undefined"){
-                htmScript = $('<select class="rscripts" id="rscript'+discipline.ID+'"></select>');
-                $.each(discipline.scripts, function(i, script) {
-                    htmScript.append('<option value="'+script.ID+'">'+script.name+'</option>');
-                });
-                $('#rscript').append(htmScript);
-            }
-            if(typeof(discipline.blocks) != "undefined"){
-                htmScript = $('<select class="rblocks" id="rblock'+discipline.ID+'"></select>');
-                $.each(discipline.blocks, function(i, block) {
-                    htmScript.append('<option value="'+block.ID+'">'+block.name+'</option>');
-                });
-                $('#rblock').append(htmScript);
-            }
-        });
-        $('#rdiscipline').append(htmContent);
-    }
-    this.loadClasses = function(classes){
-        htmContent = $('<select id="rclassys"></select>').change(function(){
-            $('.students,.tutors').hide();
-            v = $("select#rclassys").val();
-            $('#classID').val(v);
-            $('#student'+v+','+'#tutor'+v).show();
-        });
-        $.each(classes, function(i, classy) {
-            htmContent.append('<option value="'+classy.ID+'">'+classy.name+'</option>');
-            if(typeof(classy.students) != "undefined"){
-                htmStudent = $('<select class="students" id="student'+classy.ID+'"></select>');
-                $.each(classy.students, function(i, student) {
-                    htmStudent.append('<option value="'+student.ID+'">'+student.name+'</option>');
-                });
-                $('#rstudents').append(htmStudent);
-            }
-            if(typeof(classy.tutors) != "undefined"){
-                htmTutor = $('<select class="tutors" id="tutor'+classy.ID+'"></select>');
-                $.each(classy.tutors, function(i, tutor) {
-                    htmTutor.append('<option value="'+tutor.ID+'">'+tutor.name+'</option>');
-                });
-                $('#rtutors').append(htmTutor);
-            }
-        });
-        $('#rclasses').append(htmContent);
-    }
-    this.loadJson = function(response){
-        if(typeof(response.contents) != "undefined"){
-            $(".activities").html(this.loadContents(response.contents));
-        }
-    }
-    
-    this.loadJson2 = function(response){
-        if(this.atdID ==  'Avaliacao'){
-            
-        }
-        //alert(this.atdID);
-        //alert(classID);
-        //alert(userID);
-        var parent = this;
-        var fullHtm = $('<div id="paginate"></div>');
-        if(typeof(response.contents) != "undefined"){
-            $.each(response.contents, function(i, content) {
-                content.ID;
-                content.description;
-                if(typeof(content.goals) != "undefined"){
-                    $.each(content.goals, function(i, goal) {
-                        goal.ID;
-                        goal.name;
-                        if(typeof(goal.cobjects) != "undefined"){
-                            $.each(goal.cobjects, function(i, cobject) {
-                                cobject.ID;
-                                if(typeof(cobject.screens) != "undefined"){
-                                    $.each(cobject.screens, function(i, screen) {
-                                        htmScreen = $('<div class="screen" id="SCR'+screen.ID+'"></div>');
-                                        infoScreen = $('<div class="screenInfo"></div>');
-                                        infoScreen.append('<span id="infoAct"><label><strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">0</span>/Erros:<span class="ctWrong">0</span>)</label><label><strong>Atividade:</strong>Nº'+cobject.oldID+'-'+cobject.template_code+'-'+cobject.theme+'-'+screen.ID+'</label><label><strong>Conteúdo:</strong> '+content.description+'</label><label><strong>Objetivo:</strong> '+goal.name+'</label></span>');
-                                        nextScreen = $('<span id="next">»</span>').on('click',function(){
-                                            $('.currentScreen').hide();
-                                            $('.currentScreen').next().show();
-                                            $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-                                        });
-                                        prevScreen = $('<span id="previous">«</span>').on('click',function(){
-                                            $('.currentScreen').hide();
-                                            $('.currentScreen').prev().show();
-                                            $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
-                                        });
-                                        if(parent.atdID == "avaliacao"){
-                                            prevScreen.hide();
-                                            nextScreen.hide();     
-                                        }
-                                        infoScreen.append(nextScreen);
-                                        infoScreen.prepend(prevScreen);
-                                        infoScreen.append('<span class="clear"></span>');
-                                        htmScreen.append(infoScreen);
-                                        if(fullHtm.text()==""){
-                                            prevScreen.hide();
-                                        }
-                                        if(typeof(screen.piecesets) != "undefined"){
-                                            htmScreen.append(parent.loadPiecesets(screen.piecesets,cobject.template_code));
-                                        }
-                                        fullHtm.append(htmScreen);
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-            htmlScreen = $('<div class="screen" id="SCRLAST"></div>');
-            infoScreenl = $('<div class="screenInfo"></div>');
-            infoScreenl.append('<span id="infoAct"></span>');
-            prevScreenl = $('<span id="previous">«</span>').on('click',function(){
-                $('.currentScreen').hide();
-                $('.currentScreen').prev().show();
-                $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
-            });
-            if(parent.atdID == "avaliacao"){
-                prevScreenl.hide();
-            }
-            infoScreenl.prepend(prevScreenl);
-            infoScreenl.append('<span class="clear"></span>');
-            htmlScreen.append(infoScreenl);
-            htmlScreen.append('<strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">'+newRender.ctWrong+'</span>/Erros:<span class="ctWrong">'+newRender.ctCorrect+'</span>)<br/><input id="end" value="finalizar atendimento" type="button">');
-            fullHtm.append(htmlScreen);
-            $(".activities").html(fullHtm);
-        }
-    }
-    this.next = function(){
-
-    }
-    this.paginate = function(){
-        alert(111);
-        //pega o usuário, consulta e ve onde parou e start do ponto, se não do começo
-        $('.screen').first().fadeIn('slow');
-        $('.screen').first().addClass('currentScreen');
-    }
-    this.loadContents = function(contents){
-        var parent = this;
-        htmContents =  $('<div class="contents"></div>');
-        $.each(contents, function(i, content) {
-            htmContent = $('<div class="content" id="CTN'+content.ID+'"><h1>'+content.description+'</h1></div>');
-            if(typeof(content.goals) != "undefined"){
-                htmContent.append(parent.loadGoals(content.goals));
-            }
-            htmContents.append(htmContent);
-        });
-        return htmContents;
-    };
-                
-    this.loadGoals = function(goals){
-        var parent = this;
-        htmGoals =  $('<div class="goals"></div>');
-        $.each(goals, function(i, goal) {
-            htmGoal = $('<div class="goal" id="GL'+goal.ID+'"><h2>'+goal.name+'</h2></div>');
-            if(typeof(goal.cobjects) != "undefined"){
-                htmGoal.append(parent.loadCobjects(goal.cobjects));
-            }
-            htmGoals.append(htmGoal);
-        });
-        return htmGoals;
-    };
-                
-    this.loadCobjects = function(cobjects){
-        var parent = this;
-        htmCobjects =  $('<div class="cobjects"></div>');
-        $.each(cobjects, function(i, cobject) {
-            htmCobject = $('<div class="cobject" id="COBJ'+cobject.ID+'"><h3><strong>Atividade:</strong>'+cobject.template_code+'-'+cobject.template+'-'+cobject.code+'</h3></div>');
-            if(typeof(cobject.screens) != "undefined"){
-                htmCobject.append(parent.loadScreens(cobject.screens,cobject.template_code));
-            }
-            htmCobjects.append(htmCobject);
-        });
-        return htmCobjects;
-    };
-                
     this.loadScreens = function(screens,template){
         var parent = this;
         htmScreens =  $('<div class="screens"></div>');
@@ -588,16 +301,16 @@ function render () {
         $.each(pieces, function(i, piece) {
             if(typeof(piece.elements) != "undefined"){
                 htmPiece = $('<div id="PIECE'+piece.id+'" class="piece"><h6>'+piece.oldID+'('+template+')</h6></div>');
-                htmPiece.append(parent.loadElements(piece.elements,template));
+                htmPiece.append(parent.loadElements(piece.elements,template,piece.id));
                 htmPieces.append(htmPiece);
             }
         });
         return htmPieces;
     };
     
-    this.loadElements = function(elements,template){
+    this.loadElements = function(elements,template,pieceID){
         var parent = this;
-        htmFinal = $('<div class="blockElements"></div>');
+        htmFinal = $('<div id="BL_'+pieceID+'" class="blockElements"></div>');
         switch (template){
             case 'MTE':
                 htmEnum = $('<ul class="elements enum"></ul>');
@@ -761,10 +474,11 @@ function render () {
                                         $.each(attrs, function() {
                                             inputElement.attr(this.name, this.value);
                                         });
+                                        inputButton.attr('id',inputElement.attr('id'));
                                         htmElement.text("");
                                         htmElement.append(inputElement);
                                         htmElement.append(inputButton);
-                                        htmOptions.append(blockElement.append(htmElement));
+                                        htmOptions.append(blockElement.append(inputElement).append(inputButton));
                                         break;
                                     case 'AEL':
                                         htmElement.addClass('gclick');
