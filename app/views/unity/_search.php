@@ -6,8 +6,8 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'ID'); ?>
-		<?php echo $form->textField($model,'ID'); ?>
+		<?php echo $form->label($model,'id'); ?>
+		<?php echo $form->textField($model,'id'); ?>
 	</div>
 
 	<div class="row">
@@ -16,18 +16,18 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'organizationID'); ?>
-		<?php echo $form->textField($model,'organizationID'); ?>
+		<?php echo $form->label($model,'organization_id'); ?>
+		<?php echo $form->textField($model,'organization_id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'fatherID'); ?>
-		<?php echo $form->textField($model,'fatherID'); ?>
+		<?php echo $form->label($model,'father_id'); ?>
+		<?php echo $form->textField($model,'father_id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'locationID'); ?>
-		<?php echo $form->textField($model,'locationID'); ?>
+		<?php echo $form->label($model,'location_id'); ?>
+		<?php echo $form->textField($model,'location_id'); ?>
 	</div>
 
 	<div class="row">
@@ -41,13 +41,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'actDate'); ?>
-		<?php echo $form->textField($model,'actDate'); ?>
+		<?php echo $form->label($model,'act_date'); ?>
+		<?php echo $form->textField($model,'act_date'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'desDate'); ?>
-		<?php echo $form->textField($model,'desDate'); ?>
+		<?php echo $form->label($model,'des_date'); ?>
+		<?php echo $form->textField($model,'des_date'); ?>
 	</div>
 
 	<div class="row">

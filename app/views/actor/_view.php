@@ -1,27 +1,27 @@
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('ID')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->ID), array('view', 'id'=>$data->ID)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('unityID')); ?>:</b>
-	<?php echo CHtml::encode($data->unityID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('unity_id')); ?>:</b>
+	<?php echo CHtml::encode($data->unity_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('personID')); ?>:</b>
-	<?php echo CHtml::encode($data->personID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('person_id')); ?>:</b>
+	<?php echo CHtml::encode($data->person_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('personageID')); ?>:</b>
-	<?php echo CHtml::encode($data->personageID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('personage_id')); ?>:</b>
+	<?php echo CHtml::encode($data->personage_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('activatedDate')); ?>:</b>
-	<?php echo CHtml::encode($data->activatedDate); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('activated_date')); ?>:</b>
+	<?php echo CHtml::encode($data->activated_date); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('desactivatedDate')); ?>:</b>
-	<?php echo CHtml::encode($data->desactivatedDate); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('desactivated_date')); ?>:</b>
+	<?php echo CHtml::encode($data->desactivated_date); ?>
 	<br />
 
 

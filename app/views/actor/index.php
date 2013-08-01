@@ -25,12 +25,12 @@ array('label'=> Yii::t('default', 'Create a new Actor'), 'url'=>array('create'),
                         'enablePagination' => true,
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
-                    		'ID',
-		'unityID',
-		'personID',
-		'personageID',
-		'activatedDate',
-		'desactivatedDate',
+                    		'id',
+		'unity_id',
+		'person_id',
+		'personage_id',
+		'activated_date',
+		'desactivated_date',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   
