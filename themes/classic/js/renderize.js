@@ -44,8 +44,8 @@ function renderize(){
         else if (count == 1){
             $("#box_"+(id)).remove();
             $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
-            $("#box_"+id).append("<input type='hidden' id='org_"+id+"' name='org["+id+"]' value='"+unitys[0].unity+"'>");
-            nextUnity = unitys[0].unity;
+            $("#box_"+id).append("<input type='hidden' id='org_"+id+"' name='org["+id+"]' value='"+unitys[0].secondary_unity_id+"'>");
+            nextUnity = unitys[0].secondary_unity_id;
             this.loadJsonUnity(nextUnity);
         }
         else{
@@ -53,7 +53,7 @@ function renderize(){
             $("#box_"+id).remove();
             var options = "";
             for(i=0; i<count; i++){
-                options += "<option value='"+unitys[i].unity+"'>"+unitys[i].name+"</option>";
+                options += "<option value='"+unitys[i].secondary_unity_id+"'>"+unitys[i].name+"</option>";
             }
             $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
             
@@ -67,7 +67,7 @@ function renderize(){
                 $("#box_"+(id+1)).remove();
                 parent.loadJsonUnity($(this).val());
             });
-            nextUnity = unitys[0].unity;
+            nextUnity = unitys[0].secondary_unity_id;
             this.loadJsonUnity(nextUnity);
         }
     }
@@ -77,7 +77,7 @@ function renderize(){
         var count = classes.length;
         
         for(i=0; i<count; i++){
-            options += "<option value='"+classes[i].unity+"'>"+classes[i].name+"</option>";
+            options += "<option value='"+classes[i].secondary_unity_id+"'>"+classes[i].name+"</option>";
         }
         $("#classesbox").remove();
         $("#filter").append("<div id='classesbox' class='formField'></div>");
@@ -87,7 +87,7 @@ function renderize(){
             if(parent.op == "all")
                 parent.loadJsonActors($(this).val());
         });
-        var nextClass = classes[0].unity;
+        var nextClass = classes[0].secondary_unity_id;
         if(parent.op == "all")
             parent.loadJsonActors(nextClass);
     }
@@ -96,7 +96,7 @@ function renderize(){
         var count = actors.length;
         
         for(i=0; i<count; i++){
-            options += "<option value='"+actors[i].actorID+"'>"+actors[i].name+"</option>";
+            options += "<option value='"+actors[i].actor_id+"'>"+actors[i].name+"</option>";
         }
         $("#actorsbox").remove();
         $("#filter").append("<div id='actorsbox' class='formField'></div>")

@@ -1,7 +1,53 @@
 <?php
     $act = Actor::model()->findbypk($_REQUEST['actor']);
     $class = Unity::model()->findbypk($_REQUEST['class']);
+//actor
+//
 ?>
+
+<script>
+    var newRender = new render();
+    $(function() {
+        $.ajax({
+            url:"/render/json",//this is the request page of ajax
+            data:{op:'start'},//data for throwing the expected url
+            type:"POST",
+            dataType:"json",// you can also specify for the result for json or xml
+            success:function(response){newRender.startRender(response);$('#rclassys').trigger('change');$('#rdiscipline').trigger('change');$('#rblockscript select').trigger('change');},
+            error:function(){
+            }
+        });
+
+        $('#previous').on('click',function(){
+
+        });
+        $('#rblockscript').change(function(){
+            $('.blockscript').hide();
+            v = $("#rblockscript select").val();
+            $('#'+v).show();
+        });
+        $('#rdiscipline').change(function(){
+            $('.rscripts').hide();
+            $('.rblocks').hide();
+            v = $("select#rdiscipline").val();
+            newRender.disciplineID = v;
+            $('#rscript'+v).show();
+            $('#rblock'+v).show();
+        });
+//        $('.start').click(function(){
+//            newRender.typeID = $('#typeID').val();
+//            newRender.atdID = $('#atdID').val();
+//            newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
+//            newRender.blockID = $('select#rblock'+newRender.disciplineID).val();
+//            newRender.classID = $('#classID').val();
+//            newRender.actorID = $('#actorID').val();
+//            $('.prerender').hide();
+//            $('.waiting').show();
+//            loadActs();
+//        })
+    });
+</script>
+
 <style>
     .prerender{border:1px solid #000;width:319px;margin:100px auto;background: #262626;}
     .prerender .innerborder{border:1px solid #4A4A4A;background:#fff;width:317px;}
@@ -19,7 +65,7 @@
 <div class="prerender">
     <div class="innerborder">
         <h1></h1>
-        <form>
+        <form action="/render/stage" method="POST">
             <label>
                 <font>Tipo de Atendimento:</font>
                 <select id="atdID">
@@ -69,9 +115,9 @@
             <label id="rstudents">
                 <font>Aluno:</font><?php echo $act->person->name?>
             </label>
-            <input class="start" type="button" value="iniciar atendimento">
-            <input type="hidden" id="classID" value="<?php echo $class->ID?>"/>
-            <input type="hidden" id="actorID" value="<?php echo $act->ID; ?>"/>
+            <input class="start" type="submit" value="iniciar atendimento">
+            <input type="hidden" id="classID" value="<?php echo $class->id?>"/>
+            <input type="hidden" id="actorID" value="<?php echo $act->id; ?>"/>
         </form>
     </div>
 </div>
