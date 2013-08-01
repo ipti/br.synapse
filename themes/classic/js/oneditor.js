@@ -43,7 +43,7 @@ $(function() {
     $('.save').click(function(){
         newEditor.saveAll();
     });
-    if(newEditor.mode == 'edit'){    
+    if(newEditor.isload){    
         newEditor.load();
     }
 });

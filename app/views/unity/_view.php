@@ -1,23 +1,23 @@
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('ID')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->ID), array('view', 'id'=>$data->ID)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
 	<?php echo CHtml::encode($data->name); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('organizationID')); ?>:</b>
-	<?php echo CHtml::encode($data->organizationID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('organization_id')); ?>:</b>
+	<?php echo CHtml::encode($data->organization_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('fatherID')); ?>:</b>
-	<?php echo CHtml::encode($data->fatherID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('father_id')); ?>:</b>
+	<?php echo CHtml::encode($data->father_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('locationID')); ?>:</b>
-	<?php echo CHtml::encode($data->locationID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('location_id')); ?>:</b>
+	<?php echo CHtml::encode($data->location_id); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('fcode')); ?>:</b>

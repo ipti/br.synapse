@@ -57,9 +57,9 @@ class EditorController extends Controller {
                 $oImg->grava($_POST['img']);
                 //====== Atualizar o LibraryProperty ======//
                   $libraryID = $_POST['libraryID'];
-                  $libsProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID' => $libraryID));
+                  $libsProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $libraryID));
                   foreach ($libsProperty as $libprop):
-                      switch($libprop->propertyID) {
+                      switch($libprop->property_id) {
                         case 1 : $libprop->value = $_POST['w']; //Width
                             $libprop->save();
                             break; 
@@ -87,7 +87,7 @@ class EditorController extends Controller {
             $i = 0;
               foreach($uploadedLibraryIDs as $upLibId):
                   $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('libraryID' => $upLibId,
-                      'propertyID' => 5));
+                      'property_id' => 5));
                   $i++;
               endforeach;
             //--------------------------------------------          
@@ -104,7 +104,7 @@ class EditorController extends Controller {
                     $num_img--;
                     continue;
                 }
-                $libraryID[$i] = $libsProperty[$j]->libraryID;
+                $libraryID[$i] = $libsProperty[$j]->library_id;
                 $tem_crop = false;
                 $img[$i] = '';
                 if (isset($name_img[$i])) {
@@ -150,14 +150,14 @@ class EditorController extends Controller {
             $idDiscipline = $_POST['idDiscipline'];
             $idDegree = $_POST['idDegree'];
         if ($idDegree == "undefined") {
-            $actGoal_disc = Yii::app()->db->createCommand('SELECT degreeID FROM act_goal 
-            WHERE disciplineID =' . $idDiscipline . ' GROUP BY degreeID')->queryAll();
+            $actGoal_disc = Yii::app()->db->createCommand('SELECT degree_id FROM act_goal 
+            WHERE discipline_id =' . $idDiscipline . ' GROUP BY degree_id')->queryAll();
             $count_Agoal_disc = count($actGoal_disc);
             if ($count_Agoal_disc > 0) {
                 for ($i = 0; $i < $count_Agoal_disc; $i++) {
                     // Array dos Degrees - A cada repetição irá guarda 1 único registro 
-                    $actDegree[$i] = Yii::app()->db->createCommand('SELECT ID, name FROM act_degree
-                WHERE ID = ' . $actGoal_disc[$i]['degreeID'] . ' AND grade > 0')->queryAll();
+                    $actDegree[$i] = Yii::app()->db->createCommand('SELECT id, name FROM act_degree
+                WHERE id = ' . $actGoal_disc[$i]['degreeID'] . ' AND grade > 0')->queryAll();
                 }
                 $count_Adeg = count($actDegree);
                 if ($count_Adeg > 0) {
@@ -171,8 +171,8 @@ class EditorController extends Controller {
               </div> ";
 
                     //Por padrão, como não foi selecionado algum Degree, mostrará o GOAL do 1° [0]
-                    $actGoal_d = Yii::app()->db->createCommand('SELECT ID, name FROM act_goal 
-                     WHERE disciplineID =' . $idDiscipline . ' AND degreeID =' . $actDegree[0][0]['ID'])->queryAll();
+                    $actGoal_d = Yii::app()->db->createCommand('SELECT id, name FROM act_goal 
+                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $actDegree[0][0]['ID'])->queryAll();
                     $count_Agoal_d = count($actGoal_d);
                     // No mínimo possui 1 registro
                     $str.= "<div id='propertyAgoal' class='propertyAgoal' align='center'>
@@ -209,8 +209,8 @@ class EditorController extends Controller {
             }
         } else {
             //Selecionou Algum Degree
-            $actGoal_d = Yii::app()->db->createCommand('SELECT ID, name FROM act_goal 
-                     WHERE disciplineID =' . $idDiscipline . ' AND degreeID =' . $idDegree)->queryAll();
+            $actGoal_d = Yii::app()->db->createCommand('SELECT id, name FROM act_goal 
+                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $idDegree)->queryAll();
             $count_Agoal_d = count($actGoal_d);
             // No mínimo possui 1 registro
             $str = "<br> Act Goal&nbsp;:&nbsp;
@@ -241,7 +241,7 @@ class EditorController extends Controller {
         $IDActGoal = (isset($actGoal_id) ? $actGoal_id : -1) ; 
         //Selecionando ou não algum Degree
         //==========Editar os Cobjects Existentes - As atividades========//
-        $cobject_metadata = Yii::app()->db->createCommand('SELECT cobjectID FROM cobject_metadata
+        $cobject_metadata = Yii::app()->db->createCommand('SELECT cobject_id FROM cobject_metadata
             WHERE value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata); 
         if($count_CobjMdata > 0 ) {
@@ -278,17 +278,17 @@ class EditorController extends Controller {
                             $goalID = $_POST['COgoalID'];
 
                             $newCobject = new Cobject();
-                            $newCobject->typeID = $typeID;
-                            $newCobject->templateID = $templateID;
-                            $newCobject->themeID = $themeID;
+                            $newCobject->type_id = $typeID;
+                            $newCobject->template_id = $templateID;
+                            $newCobject->theme_id = $themeID;
                             $newCobject->insert();
 
-                            $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'ID desc'));
-                            $cobjectID = $cobject->ID;
+                            $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            $cobjectID = $cobject->id;
 
                             $newCobjectMetadata = new CobjectMetadata();
-                            $newCobjectMetadata->cobjectID = $cobjectID;
-                            $newCobjectMetadata->typeID = 6;
+                            $newCobjectMetadata->cobject_id = $cobjectID;
+                            $newCobjectMetadata->type_id = 6;
                             $newCobjectMetadata->value = $goalID;
                             $newCobjectMetadata->insert();
 
@@ -309,15 +309,15 @@ class EditorController extends Controller {
                             $height = $_POST['Height'];
 
                             $newScreen = new EditorScreen();
-                            $newScreen->cobjectID = $cobjectID;
+                            $newScreen->cobject_id = $cobjectID;
                             $newScreen->number = $number;
                             $newScreen->order = $ordem;
                             $newScreen->width = $width;
                             $newScreen->height = $height;
                             $newScreen->insert();
 
-                            $screen = EditorScreen::model()->findByAttributes(array(), array('order' => 'ID desc'));
-                            $screenID = $screen->ID;
+                            $screen = EditorScreen::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            $screenID = $screen->id;
 
                             $json['DomID'] = $DomID;
                             $json['screenID'] = $screenID;
@@ -338,18 +338,18 @@ class EditorController extends Controller {
                             $templateID = $_POST['templateID'];
 
                             $newPieceSet = new EditorPieceset();
-                            $newPieceSet->typeID = $typeID;
+                            $newPieceSet->type_id = $typeID;
                             $newPieceSet->desc = $desc;
                             $newPieceSet->insert();
 
-                            $pieceSet = EditorPieceset::model()->findByAttributes(array(), array('order' => 'ID desc'));
-                            $pieceSetID = $pieceSet->ID;
+                            $pieceSet = EditorPieceset::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            $pieceSetID = $pieceSet->id;
 
                             $newScreenPieceSet = new EditorScreenPieceset();
-                            $newScreenPieceSet->screenID = $screenID;
-                            $newScreenPieceSet->piecesetID = $pieceSetID;
+                            $newScreenPieceSet->screen_id = $screenID;
+                            $newScreenPieceSet->pieceset_id = $pieceSetID;
                             $newScreenPieceSet->position = $position;
-                            $newScreenPieceSet->templateID = $templateID;
+                            $newScreenPieceSet->template_id = $templateID;
                             $newScreenPieceSet->insert();
 
                             $json['DomID'] = $DomID;
@@ -360,7 +360,7 @@ class EditorController extends Controller {
                         break;
                     case "Piece":
                         if (isset($_POST['pieceSetID']) && isset($_POST['ordem'])
-                                && isset($_POST['typeID']) && isset($_POST['DomID'])) {
+                                && isset($_POST['typeID']) && isset($_POST['DomID']) ) {
 
                             $DomID = $_POST['DomID'];
                             $pieceSetID = $_POST['pieceSetID'];
@@ -368,15 +368,15 @@ class EditorController extends Controller {
                             $typeID = $_POST['typeID'];
 
                             $newPiece = new EditorPiece();
-                            $newPiece->typeID = $typeID;
+                            $newPiece->type_id = $typeID;
                             $newPiece->insert();
 
-                            $piece = EditorPiece::model()->findByAttributes(array(), array('order' => 'ID desc'));
-                            $pieceID = $piece->ID;
+                            $piece = EditorPiece::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            $pieceID = $piece->id;
 
                             $newPieceSetPiece = new EditorPiecesetPiece();
-                            $newPieceSetPiece->pieceID = $pieceID;
-                            $newPieceSetPiece->piecesetID = $pieceSetID;
+                            $newPieceSetPiece->piece_id = $pieceID;
+                            $newPieceSetPiece->pieceset_id = $pieceSetID;
                             $newPieceSetPiece->order = $ordem;
                             $newPieceSetPiece->insert();
 
@@ -400,15 +400,15 @@ class EditorController extends Controller {
                                 $position = $_POST['ordem'];
 
                                 $newElement = new EditorElement();
-                                $newElement->typeID = $typeID;
+                                $newElement->type_id = $typeID;
                                 $newElement->insert();
 
-                                $element = EditorElement::model()->findByAttributes(array(), array('order' => 'ID desc'));
-                                $elementID = $element->ID;
+                                $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                $elementID = $element->id;
 
                                 $newPieceElement = new EditorPieceElement();
-                                $newPieceElement->pieceID = $pieceID;
-                                $newPieceElement->elementID = $elementID;
+                                $newPieceElement->piece_id = $pieceID;
+                                $newPieceElement->element_id = $elementID;
                                 $newPieceElement->position = $position;
                                 $newPieceElement->insert();
 
@@ -419,14 +419,14 @@ class EditorController extends Controller {
                                         //salva editor_element_property 's
                                         //6 text
                                         $newElementProperty = new EditorElementProperty();
-                                        $newElementProperty->elementID = $elementID;
-                                        $newElementProperty->propertyID = 6;
+                                        $newElementProperty->element_id = $elementID;
+                                        $newElementProperty->property_id = 6;
                                         $newElementProperty->value = $value;
                                         $newElementProperty->insert();
                                         //10 language
                                         $newElementProperty = new EditorElementProperty();
-                                        $newElementProperty->elementID = $elementID;
-                                        $newElementProperty->propertyID = 10;
+                                        $newElementProperty->element_id = $elementID;
+                                        $newElementProperty->property_id = 10;
                                         $newElementProperty->value = "português";
                                         $newElementProperty->insert();
                                         break;
@@ -434,7 +434,7 @@ class EditorController extends Controller {
                                         $src = $value['url'];
                                         $nome = $value['name'];
                                         $ext = explode(".", $nome);
-                                        $ext = $nome[1];
+                                        $ext = $ext[1];
                                         //Pegar informações da imagem
 
                                         $url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
@@ -443,47 +443,47 @@ class EditorController extends Controller {
                                         //Salva library
                                         //type 9 
                                         $newLibrary = new Library();
-                                        $newLibrary->typeID = 9;
+                                        $newLibrary->type_id = 9;
                                         $newLibrary->insert();
 
                                         //Pegar o ID do ultimo adicionado.
-                                        $library = Library::model()->findByAttributes(array(), array('order' => 'ID desc'));
-                                        $libraryID = $library->ID;
+                                        $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                        $libraryID = $library->id;
 
                                         //Salva library_property 's
                                         //1 width
                                         $newLibraryProperty = new LibraryProperty();
-                                        $newLibraryProperty->libraryID = $libraryID;
-                                        $newLibraryProperty->propertyID = 1;
+                                        $newLibraryProperty->library_id = $libraryID;
+                                        $newLibraryProperty->property_id = 1;
                                         $newLibraryProperty->value = $width;
                                         $newLibraryProperty->insert();
 
                                         //2 height
                                         $newLibraryProperty = new LibraryProperty();
-                                        $newLibraryProperty->libraryID = $libraryID;
-                                        $newLibraryProperty->propertyID = 2;
+                                        $newLibraryProperty->library_id = $libraryID;
+                                        $newLibraryProperty->property_id = 2;
                                         $newLibraryProperty->value = $height;
                                         $newLibraryProperty->insert();
 
                                         //5 src
                                         $newLibraryProperty = new LibraryProperty();
-                                        $newLibraryProperty->libraryID = $libraryID;
-                                        $newLibraryProperty->propertyID = 5;
+                                        $newLibraryProperty->library_id = $libraryID;
+                                        $newLibraryProperty->property_id = 5;
                                         $newLibraryProperty->value = $nome;//apenas o nome do arquivo
                                         $newLibraryProperty->insert();
 
                                         //12 extension
                                         $newLibraryProperty = new LibraryProperty();
-                                        $newLibraryProperty->libraryID = $libraryID;
-                                        $newLibraryProperty->propertyID = 12;
+                                        $newLibraryProperty->library_id = $libraryID;
+                                        $newLibraryProperty->property_id = 12;
                                         $newLibraryProperty->value = $ext;     
                                         $newLibraryProperty->insert();
 
                                         //Salva na editor_element_property
                                         //4 libraryID
                                         $newElementProperty = new EditorElementProperty();
-                                        $newElementProperty->elementID = $elementID;
-                                        $newElementProperty->propertyID = 4;
+                                        $newElementProperty->element_id = $elementID;
+                                        $newElementProperty->property_id = 4;
                                         $newElementProperty->value = $libraryID;
                                         $newElementProperty->insert();
 
@@ -506,51 +506,51 @@ class EditorController extends Controller {
             } elseif ($_POST['op'] == 'load') {
                 if(isset($_POST['cobjectID'])){
                     $cobjectID = $_POST['cobjectID'];
-                    $cobject = Cobject::model()->findByAttributes(array('ID'=>$cobjectID));
+                    $cobject = Cobject::model()->findByAttributes(array('id'=>$cobjectID));
                     $json['cobjectID'] = $cobjectID;
-                    $json['typeID'] = $cobject->typeID;
-                    $json['themeID'] = $cobject->themeID;
-                    $json['templateID'] = $cobject->templateID;
+                    $json['typeID'] = $cobject->type_id;
+                    $json['themeID'] = $cobject->theme_id;
+                    $json['templateID'] = $cobject->template_id;
                     
-                    $Srceens = EditorScreen::model()->findAllByAttributes(array('cobjectID'=>$cobjectID),array('order'=>'`order`'));
+                    $Srceens = EditorScreen::model()->findAllByAttributes(array('cobject_id'=>$cobjectID),array('order'=>'`order`'));
                     
                     foreach ($Srceens as $sc):
-                        $json['S'.$sc->ID] = array();
-                        $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screenID'=>$sc->ID),array('order'=>'`position`'));
+                        $json['S'.$sc->id] = array();
+                        $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screen_id'=>$sc->id),array('order'=>'`position`'));
                         foreach ($ScreenPieceset as $scps):
-                            $PieceSet = EditorPieceset::model()->findByAttributes(array('ID'=>$scps->piecesetID));
-                            $json['S'.$sc->ID]['PS'.$PieceSet->ID] = array();
-                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['desc'] = $PieceSet->desc;
-                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['typeID'] = $PieceSet->typeID;
+                            $PieceSet = EditorPieceset::model()->findByAttributes(array('ID'=>$scps->pieceset_id));
+                            $json['S'.$sc->id]['PS'.$PieceSet->id] = array();
+                            $json['S'.$sc->id]['PS'.$PieceSet->id]['desc'] = $PieceSet->desc;
+                            $json['S'.$sc->id]['PS'.$PieceSet->id]['typeID'] = $PieceSet->type_id;
                             
-                            $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('piecesetID'=>$PieceSet->ID),array('order'=>'`order`'));
+                            $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('pieceset_id'=>$PieceSet->id),array('order'=>'`order`'));
                             foreach ($PieceSetPiece as $psp):
-                                $Piece = EditorPiece::model()->findByAttributes(array('ID'=>$psp->pieceID));
-                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID] = array();
-                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['description'] = $Piece->description;
-                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['name'] = $Piece->name;
-                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['typeID'] = $Piece->typeID;
+                                $Piece = EditorPiece::model()->findByAttributes(array('id'=>$psp->piece_id));
+                                $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id] = array();
+                                $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['description'] = $Piece->description;
+                                $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['name'] = $Piece->name;
+                                $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['typeID'] = $Piece->type_id;
                                 
-                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('pieceID'=>$psp->pieceID),array('order'=>'`position`'));
+                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('pieceID'=>$psp->piece_id),array('order'=>'`position`'));
                                 
                                 foreach ($PieceElement as $pe):
-                                    $Element = EditorElement::model()->findByAttributes(array('ID'=>$pe->elementID));
-                                    $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID] = array();
-                                    $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['typeID'] = $Element->typeID;
+                                    $Element = EditorElement::model()->findByAttributes(array('id'=>$pe->element_id));
+                                    $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id] = array();
+                                    $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['typeID'] = $Element->type_id;
                                     
-                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('elementID'=>$Element->ID));
+                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('elementID'=>$Element->id));
                                     foreach ($ElementProperty as $ep):
-                                        if($ep->propertyID == 4){ //libraryID
-                                            $Library = Library::model()->findByAttributes(array('ID'=>$ep->value));
-                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID] = array();
-                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID]['typeID'] = $Library->typeID; //9 image; 17 movie; 20 sound 
+                                        if($ep->property_id == 4){ //libraryID
+                                            $Library = Library::model()->findByAttributes(array('id'=>$ep->value));
+                                            $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['L'.$Library->id] = array();
+                                            $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['L'.$Library->id]['typeID'] = $Library->type_id; //9 image; 17 movie; 20 sound 
                                             
-                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID'=>$Library->ID));
+                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID'=>$Library->id));
                                             foreach($LibraryProperty as $lp):
-                                                $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['L'.$Library->ID]['Prop'.$lp->propertyID] = $lp->value;
+                                                $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['L'.$Library->id]['Prop'.$lp->property_id] = $lp->value;
                                             endforeach;
                                         }else{
-                                            $json['S'.$sc->ID]['PS'.$PieceSet->ID]['P'.$Piece->ID]['E'.$Element->ID]['Prop'.$ep->propertyID] = $ep->value;
+                                            $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['Prop'.$ep->property_id] = $ep->value;
                                             
                                         }
                                     endforeach;
@@ -560,6 +560,8 @@ class EditorController extends Controller {
                     endforeach;
                     
                 }
+            } elseif($_POST['op'] == 'update'){
+                
             } else {
                 throw new Exception("ERROR: Operação inválida.<br>");
             }
@@ -621,11 +623,11 @@ class EditorController extends Controller {
                         //e evitar duplicatas
                         
                         //=============================
-                        if(isset($_POST['isload'])) {
-                            $name = $file_name;
-                        }else {
+                        //if(isset($_POST['isload'])) {
+                        //    $name = $file_name;
+                        //}else {
                         $name = md5(uniqid(time())) . $ext;
-                        }
+                        //}
                         ///=============================
                         
                         //pega o nome temporário do arquivo, para poder move-lo

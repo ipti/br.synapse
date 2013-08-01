@@ -83,30 +83,30 @@
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'organizationID'); ?>
+                        <?php echo $form->labelEx($model,'organization_id'); ?>
                                  <?php
                                  echo $form->dropDownList(
                                         $model,
-                                        'organizationID',
+                                        'organization_id',
                                         CHtml::listData(Organization::model()->findAll(),'ID','name') );
                                  ?>                         
-                        <?php echo $form->error($model,'organizationID'); ?>
+                        <?php echo $form->error($model,'organization_id'); ?>
                     </div>
 
                                        <div class="formField">
                        <!-- <?php //  echo $form->labelEx($model,'fatherID'); ?> -->
-                        <?php  echo $form->hiddenField($model,'fatherID'); ?>
+                        <?php  echo $form->hiddenField($model,'father_id'); ?>
                       <!--  <?php //  echo $form->error($model,'fatherID'); ?> -->
                         </div>  
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'locationID'); ?>
+                        <?php echo $form->labelEx($model,'location_id'); ?>
                         <?php // echo $form->textField($model,'locationID'); ?>
                           <?php
-                             echo $form->dropDownList($model, 'locationID', 
+                             echo $form->dropDownList($model, 'location_id', 
                                      CHtml::listData(Location::model()->findAll(), 'ID', 'name')); 
                            ?>                     
-                        <?php echo $form->error($model,'locationID'); ?>
+                        <?php echo $form->error($model,'location_id'); ?>
                     </div>
 
                                      <!--  <div class="formField">
@@ -122,17 +122,17 @@
                     </div> -->
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'actDate'); ?>
+                        <?php echo $form->labelEx($model,'act_date'); ?>
                               <input type="text" id="actDt">
-                        <?php echo $form->hiddenField($model,'actDate'); ?>
-                        <?php echo $form->error($model,'actDate'); ?>
+                        <?php echo $form->hiddenField($model,'act_date'); ?>
+                        <?php echo $form->error($model,'act_date'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'desDate'); ?>
+                        <?php echo $form->labelEx($model,'des_date'); ?>
                               <input type="text" id="desDt">
-                        <?php echo $form->hiddenField($model,'desDate'); ?>
-                        <?php echo $form->error($model,'desDate'); ?>
+                        <?php echo $form->hiddenField($model,'des_date'); ?>
+                        <?php echo $form->error($model,'des_date'); ?>
                     </div>
 
                                         <div class="formField">

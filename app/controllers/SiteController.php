@@ -143,7 +143,7 @@ class SiteController extends Controller {
     //=====Novo Login========
     
      public function actionLogin() {
-         $this->layout = 'full';
+        $this->layout = 'full';
         $loginmodel = new LoginForm;
      
         // if it is ajax validation request
@@ -154,14 +154,14 @@ class SiteController extends Controller {
         
         if (isset($_POST["act"])) {
             // Autor Selecionado
-            $actor = Actor::model()->findByAttributes(array('ID' => $_POST["act"]));
-            $idActor = $actor->ID;
+            $actor = Actor::model()->findByAttributes(array('id' => $_POST["act"]));
+            $idActor = $actor->id;
             $nome_personage = $actor->personage->name;
 //$personageIdActor = $actor->personageID;
-            $unityIdActor = $actor->unityID;
+            $unityIdActor = $actor->unity_id;
 //$activatedDateActor = $actor->activatedDate;
 //$desactivatedDateActor = $actor->desactivatedDate;                  
-// $personage = Personage::model()->findByAttributes(array('ID'=>$personageIdActor));
+// $personage = Personage::model()->findByAttributes(array('id'=>$personageIdActor));
 //$namePersonage = $personage->name;     
 
             //se os valores estiverem setados
@@ -177,8 +177,8 @@ class SiteController extends Controller {
             if ($autenticar) {
                 $idPerson = $identity->getId();
 //Somente atores Ativos
-                $actor = Actor::model()->findAllByAttributes(array('personID' => $idPerson), 
-                        "desactivatedDate >" . time() . " OR " . "desactivatedDate is NULL OR desactivatedDate = 0 ");
+                $actor = Actor::model()->findAllByAttributes(array('person_id' => $idPerson), 
+                        "desactive_date >" . time() . " OR " . "desactive_date is NULL OR desactive_date = 0 ");
 
                 //efetua login
                 Yii::app()->user->login($identity);
@@ -197,8 +197,8 @@ class SiteController extends Controller {
                     echo "Bem Vindo : " . $identity->getState('name');
 //Seleciona um dos personagem de um Person
                     for ($i = 0; count($actor) > $i; $i++) {
-                        $tempPersonage = Personage::model()->findByAttributes(array('ID' => $actor[$i]->personageID));
-                        $html .= "<option value='".$actor[$i]->ID."'>$tempPersonage->name</option>";
+                        $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[$i]->personage_id));
+                        $html .= "<option value='".$actor[$i]->id."'>$tempPersonage->name</option>";
                     }
                     $html .= "</select>
                      <input type='submit' value='Next' id='selectActor'/>
@@ -210,13 +210,13 @@ class SiteController extends Controller {
                 //se só houver 1 ator na lista
                 else if(count($actor) == 1){
                     //pega as informações
-                    $tempPersonage = Personage::model()->findByAttributes(array('ID' => $actor[0]->personageID));
+                    $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[0]->personage_id));
                     //nome do personagem
                     $nome_personage = $tempPersonage->name;
                     //id do ator
-                    $idActor = $actor[0]->ID;
+                    $idActor = $actor[0]->id;
                     //id da unidade
-                    $unityIdActor = $actor[0]->unityID;
+                    $unityIdActor = $actor[0]->unity_id;
                     
                     //se os valores estiverem setados
                     if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {

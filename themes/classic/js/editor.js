@@ -6,7 +6,6 @@ function editor () {
     this.COgoalID;
     this.currentScreenId = 'sc0';
     this.lastScreenId;
-    this.mode;
     this.countScreen = 0;
     this.countPieceSet = new Array();
     this.countPieces = new Array();
@@ -15,8 +14,8 @@ function editor () {
     this.currentPiece = 'sc0_ps0_p0';
     this.uploadedElements = 0;
     this.uploadedLibraryIDs = new Array();
-    //------
     this.isload = false;
+    
     this.changePiece = function(piece){
         $('.piece').removeClass('active');
         var id = piece.attr('id');
@@ -126,7 +125,7 @@ function editor () {
         var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
         this.countElements[pieceID] = 0;
         $('#'+PieceSetid).append(''+
-            '<li id="'+pieceID+'" class="piece" idbd="'+plus+'">'+
+            '<li id="'+pieceID+'" class="piece" '+plus+'>'+
             '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>'+
             '<div class="tplMulti">'+
             '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>'+
@@ -228,7 +227,7 @@ function editor () {
         
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var libBDID = "";
-        console.log(loaddata);
+        
         //se estiver setado o novo id
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
             //adiciona o código na varíavel
@@ -380,6 +379,10 @@ function editor () {
         if(this.isset(loaddata)){
             switch(type){
                 case '11'://text
+                case '12'://word
+                case '13'://paragraph
+                case '18'://morphem
+                case '19'://number
                     this.addText(elementID, loaddata);
                     break;
                 case '16'://Library
@@ -590,7 +593,7 @@ function editor () {
             );
          }else{
              // Então Existe um this.CObjectID
-             posSaveCobject(null, null, null )
+             posSaveCobject();
          }        
         //======================
         
@@ -600,7 +603,7 @@ function editor () {
             if(!parent.isset(parent.CObjectID) )  {
                parent.CObjectID =  response['CObjectID'];
             }
-            //Reubucua o contador da Ordem das Screens
+            //Reinicia o contador da Ordem das Screens
             screenPosition = 0;
             
             //Para cada tela
@@ -918,7 +921,7 @@ function editor () {
                                                     if(i.slice(0,1) == "E"){
                                                         //declara a array de dados das propriedades do elemento
                                                         var data = new Array();
-                                                        data['library'] = new Array(); // Cria um Array na posição 'library'
+                                                        
                                                         //preenchimento do array de dados
                                                         $.each(item, function(i,item){
                                                             if(i.slice(0,1) == "L"){
