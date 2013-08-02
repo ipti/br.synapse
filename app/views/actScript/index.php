@@ -26,13 +26,13 @@ array('label'=> Yii::t('default', 'Create a new ActScript'), 'url'=>array('creat
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
 		array(
-                                'name' => 'disciplineID',
+                                'name' => 'discipline',
                                 'value' => '$data->discipline->name',
                             ),
-		'performanceIndice',
+		'performance_index',
 		array(
-                                'name' => 'contentParent',
-                                'value' => '(isset($data->contentParent) ? $data->contentParent->description: "N/A")',
+                                'name' => 'father_content',
+                                'value' => '(isset($data->father_content) ? $data->fatherContent->description: "N/A")',
                             ),
                      array('class' => 'CButtonColumn',),),
                     )); ?>

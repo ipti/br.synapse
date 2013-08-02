@@ -206,7 +206,8 @@ class RenderController extends Controller {
     public function actionCanvas() {
         $this->render('canvas');
     }
-    public function actionCompute(){
+
+    public function actionCompute() {
         $perf = new PeformanceActor();
         $data['piece_id'] = $_REQUEST['pieceID'];
         $data['piece_element_id'] = $_REQUEST['elementID'];
@@ -218,39 +219,59 @@ class RenderController extends Controller {
         $perf->setAttributes($data);
         $perf->save();
     }
+
     public function actionStage() {
         $cobject_id = @$_REQUEST['id'];
-        $script = @$_RESQUEST['script'];
+        $script = @$_REQUEST['scriptID'];
         $modality = @$_REQUEST['modality'];
         $degree = @$_REQUEST['degree'];
         $content = @$_REQUEST['content'];
         $actor = @$_REQUEST['actor'];
-
-        $content_parent = 19;
-        $contentsIn = "282,281";
-        $contentOut = "277,275";
+        $script = ActScript::model()->findByPk($script);
+        $content_parent = $script->father_content;
+        foreach ($script->actScriptContents as $content) {
+            if ($content->status == 'in') {
+                $contentsIn[] = $content->content_id;
+            } else {
+                $contentOut[] = $content->content_id;
+            }
+        }
+        if (isset($contentsIn)) {
+            $contentsIn = implode(",", $contentsIn);
+        }
+        if (isset($contentOut)) {
+            $contentOut = implode(",", $contentOut);
+        }
         $join = "";
-            $sql = "select distinct(cobject_id) as id from render_cobjects where template_code = 'PRE' and status='on'";
-        /* $sql = "select  distinct(a1.id)
+        //$sql = "select distinct(cobject_id) as id from render_cobjects where template_code = 'PRE' and status='on'";
+        $sql = "select  distinct(a1.id)
           from cobject a1
           join cobject_metadata a2 on(a1.id=a2.cobject_id and a2.type_id=13)
           join act_goal a3 on(a3.id=a2.value)
           join act_goal_content a4 on(a3.id=a4.goal_id)
           join act_content a6 on(a6.id=a4.content_id)";
-          $where = " where a6.content_parent=19 and (a6.id in($contentsIn) or a6.id not in($contentOut))";
-          if (isset($modality)) {
-          $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
-          $where.="";
-          }
-          if (isset($degree)) {
-          $join .= " left join act_degree a14 on(a14.id=a3.degree_id)";
-          $where .="";
-          }
-          if (isset($content)) {
-          $where .="";
-          } */
-        //$command = Yii::app()->db->createCommand($sql . $join . $where . " limit 10");
-        $command = Yii::app()->db->createCommand($sql);
+        $where = " where a6.id=$content_parent";
+        if (isset($contentsIn) && isset($contentOut)) {
+            $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
+        } else if (isset($contentsIn) && !isset($contentOut)) {
+            $where.= " and (a6.id in($contentsIn))";
+        } else if (isset($contentOut) && !isset($contentsIn)) {
+            $where.= " and (a6.id not in($contentOut))";
+        }
+
+        if (isset($modality)) {
+            $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
+            $where.="";
+        }
+        if (isset($degree)) {
+            $join .= " left join act_degree a14 on(a14.id=a3.degree_id)";
+            $where .="";
+        }
+        if (isset($content)) {
+            $where .="";
+        }
+        $fsql = $sql . $join . $where . "";
+        $command = Yii::app()->db->createCommand($fsql);
         $command->execute();
         $reader = $command->queryAll();
         $json['ids'] = $reader;
@@ -324,7 +345,7 @@ class RenderController extends Controller {
                 foreach ($scripts as $script) {
                     $b++;
                     $rscript[$b] = $script->attributes;
-                    $rscript[$b]['name'] = $script->contentParent->description;
+                    $rscript[$b]['name'] = $script->fatherContent->description;
                 }
                 foreach ($blocks as $block) {
                     $c++;

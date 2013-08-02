@@ -13,21 +13,21 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php echo Yii::t('default', 'Fields with * are required.') ?></div>
 
         <div class="formField">
-            <?php echo $form->labelEx($model, 'disciplineID'); ?>
-            <?php echo $form->dropDownList($model, 'disciplineID', CHtml::listData(ActDiscipline::model()->findAll(), 'ID', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actscript/loadcontentparent'), 'update' => '#ActScript_contentParentID'))); ?>
-            <?php echo $form->error($model, 'disciplineID'); ?>
+            <?php echo $form->labelEx($model, 'discipline_id'); ?>
+            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actscript/loadcontentparent'), 'update' => '#ActScript_father_content'))); ?>
+            <?php echo $form->error($model, 'discipline_id'); ?>
         </div>
 
         <div class="formField">
-            <?php echo $form->labelEx($model, 'contentParentID'); ?>
-            <?php echo $form->dropDownList($model, 'contentParentID', CHtml::listData(ActContent::model()->findAll(), 'ID', 'description'),array('empty'=>'NONE','ajax' => array('type' => 'POST', 'url' => CController::createUrl('actscript/loadcontents'), 'update' => '.contents'))); ?>
-            <?php echo $form->error($model, 'contentParentID'); ?>
+            <?php echo $form->labelEx($model, 'father_content'); ?>
+            <?php echo $form->dropDownList($model, 'father_content', CHtml::listData(ActContent::model()->findAll(), 'id', 'description'),array('empty'=>'NONE','ajax' => array('type' => 'POST', 'url' => CController::createUrl('actscript/loadcontents'), 'update' => '.contents'))); ?>
+            <?php echo $form->error($model, 'father_content'); ?>
         </div>
         
         <div class="formField">
-            <?php echo $form->labelEx($model, 'performanceIndice'); ?>
-            <?php echo $form->textField($model, 'performanceIndice'); ?>
-            <?php echo $form->error($model, 'performanceIndice'); ?>
+            <?php echo $form->labelEx($model, 'performance_index'); ?>
+            <?php echo $form->textField($model, 'performance_index'); ?>
+            <?php echo $form->error($model, 'performance_index'); ?>
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php
             if (isset($contentsin)) {
                 foreach ($contentsin as $cin) {
-                    echo '<li><input type="hidden" value="' . $cin->contentID . '" name="ActScriptContentIn[]">' . $cin->content->description . ' - <a id="' . $cin->contentID . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
+                    echo '<li><input type="hidden" value="' . $cin->content_id . '" name="ActScriptContentIn[]">' . $cin->content->description . ' - <a id="' . $cin->content_id . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
                 }
             }
             ?>
@@ -60,7 +60,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php
             if (isset($contentsout)) {
                 foreach ($contentsout as $out) {
-                    echo '<li><input type="hidden" value="' . $out->contentID . '" name="ActScriptContentOut[]">' . $out->content->description . ' - <a id="' .  $out->contentID . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
+                    echo '<li><input type="hidden" value="' . $out->content_id . '" name="ActScriptContentOut[]">' . $out->content->description . ' - <a id="' .  $out->content_id   . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
                 }
             }
             ?>

@@ -73,6 +73,7 @@ function render () {
                     $('#msgload').hide();
                     parent.messageload("Concluido");
                     $("#start").show();
+                    NEWRENDER.mountReportScreen();
                 }else{
                     parent.ajaxrecursive(json.ids[pos+1].id,pos+1,json);
                 }
@@ -126,8 +127,8 @@ function render () {
         infoScreenl.prepend(prevScreenl);
         infoScreenl.append('<span class="clear"></span>');
         htmlScreen.append(infoScreenl);
-        htmlScreen.append('<strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">'+NEWRENDER.ctWrong+'</span>/Erros:<span class="ctWrong">'+NEWRENDER.ctCorrect+'</span>)<br/><input id="end" value="finalizar atendimento" type="button">');
-        fullHtm.append(htmlScreen);
+        htmlScreen.append('<strong>Aluno:</strong>'+NEWRENDER.actorName+'(Acertos:<span class="ctCorrect">'+NEWRENDER.ctWrong+'</span>/Erros:<span class="ctWrong">'+NEWRENDER.ctCorrect+'</span>)<br/><input id="end" value="finalizar atendimento" type="button">');
+        $(".cobjects").append(htmlScreen);
     }
     this.loadcobject = function(cobject){
         var parent = this;
@@ -269,6 +270,20 @@ function render () {
         
     }
     
+    this.startRender = function (response){
+        if(typeof(response.disciplines) != "undefined"){
+            this.loadDisciplines(response.disciplines);
+        }
+        if(typeof(response.classes) != "undefined"){
+            this.loadClasses(response.classes);
+        }
+        if(typeof(response.themes) != "undefined"){
+            this.loadThemes(response.themes);
+        }
+        if(typeof(response.levels) != "undefined"){
+            this.loadLevels(response.levels);
+        }
+    }
     //carregar informações para o filtro
     this.loadThemes = function(themes){
         htmContent = $('<select id="rtheme"></select>');
@@ -287,16 +302,16 @@ function render () {
     this.loadDisciplines = function(disciplines){
         htmContent = $('<select id="rdiscipline"></select>');
         $.each(disciplines, function(i, discipline) {
-            htmContent.append('<option value="'+discipline.ID+'">'+discipline.name+'</option>');
+            htmContent.append('<option value="'+discipline.id+'">'+discipline.name+'</option>');
             if(typeof(discipline.scripts) != "undefined"){
-                htmScript = $('<select class="rscripts" id="rscript'+discipline.ID+'"></select>');
+                htmScript = $('<select class="rscripts" id="rscript'+discipline.id+'"></select>');
                 $.each(discipline.scripts, function(i, script) {
-                    htmScript.append('<option value="'+script.ID+'">'+script.name+'</option>');
+                    htmScript.append('<option value="'+script.id+'">'+script.name+'</option>');
                 });
                 $('#rscript').append(htmScript);
             }
             if(typeof(discipline.blocks) != "undefined"){
-                htmScript = $('<select class="rblocks" id="rblock'+discipline.ID+'"></select>');
+                htmScript = $('<select class="rblocks" id="rblock'+discipline.id+'"></select>');
                 $.each(discipline.blocks, function(i, block) {
                     htmScript.append('<option value="'+block.ID+'">'+block.name+'</option>');
                 });
@@ -546,6 +561,10 @@ function render () {
                 case 'text':
                     htmElement = $('<font></font>');
                     break;
+                default:
+                    htmElement = $('<font></font>');
+                    break;
+                        
             }
             htmElement.addClass('ielement');
             if(typeof(element.events) != "undefined"){

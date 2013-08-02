@@ -1,6 +1,11 @@
 <?php
+if (isset($_SESSION['idActor'])) {
+    $act = Actor::model()->findbypk($_SESSION['idActor']);
+    $class = Unity::model()->findbypk($_SESSION['unityIdActor']);
+} else {
     $act = Actor::model()->findbypk($_REQUEST['actor']);
     $class = Unity::model()->findbypk($_REQUEST['class']);
+}
 //actor
 //
 ?>
@@ -34,17 +39,23 @@
             $('#rscript'+v).show();
             $('#rblock'+v).show();
         });
-//        $('.start').click(function(){
-//            newRender.typeID = $('#typeID').val();
-//            newRender.atdID = $('#atdID').val();
-//            newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
-//            newRender.blockID = $('select#rblock'+newRender.disciplineID).val();
-//            newRender.classID = $('#classID').val();
-//            newRender.actorID = $('#actorID').val();
-//            $('.prerender').hide();
-//            $('.waiting').show();
-//            loadActs();
-//        })
+        $('.start').click(function(){
+            newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
+            newRender.typeID = $('#typeID').val();
+            newRender.atdID = $('#atdID').val();
+            $('#disciplineID').val(newRender.disciplineID);
+            $('#scriptID').val(newRender.scriptID);
+            $('form').submit();
+            //            
+            //           
+            //            
+            //            newRender.blockID = $('select#rblock'+newRender.disciplineID).val();
+            //            newRender.classID = $('#classID').val();
+            //            newRender.actorID = $('#actorID').val();
+            //            $('.prerender').hide();
+            //            $('.waiting').show();
+            //            loadActs();
+        })
     });
 </script>
 
@@ -96,9 +107,9 @@
             <label class="blockscript" id="rscript">
                 <font>Roteiro:</font>
             </label>
-            <label id="rtheme">
+            <!--<label id="rtheme">
                 <font>Tema:</font>
-            </label>
+            </label>-->
             <!--<label>
                 <font>Seguir a matriz:</font>
                 <select>
@@ -107,26 +118,20 @@
                 </select>
             </label>-->
             <label id="rclasses">
-                <font>Turma:</font><?php echo $class->name?>
+                <font>Turma:</font><?php echo $class->name ?>
             </label>
             <label id="rtutors">
-                <font>Tutor:</font><?php echo Yii::app()->user->name;?>
+                <font>Tutor:</font><?php echo Yii::app()->user->name; ?>
             </label>
             <label id="rstudents">
-                <font>Aluno:</font><?php echo $act->person->name?>
+                <font>Aluno:</font><?php echo $act->person->name ?>
             </label>
             <input class="start" type="submit" value="iniciar atendimento">
-            <input type="hidden" id="classID" value="<?php echo $class->id?>"/>
-            <input type="hidden" id="actorID" value="<?php echo $act->id; ?>"/>
+            <input name="unityID" type="hidden" id="classID" value="<?php echo $class->id ?>"/>
+            <input name="actorID" type="hidden" id="actorID" value="<?php echo $act->id; ?>"/>
+            <input name="scriptID" type="hidden" id="scriptID" value=""/>
+            <input name="disciplineID" type="hidden" id="disciplineID" value=""/>
         </form>
     </div>
 </div>
-<div class="waiting">
-    <div style="font-size:31px;margin:200px auto;display:block; text-align: center">
-        <font>Carregando...</font>
-        <img style="margin:0 auto;" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_loading.gif"/>
-    </div>
-</div>
-<div class="render">
-    <div class="activities"></div>
-</div>
+
