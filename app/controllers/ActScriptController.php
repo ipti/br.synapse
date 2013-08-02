@@ -25,11 +25,11 @@ class ActScriptController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update','loadcontentparent','loadcontents'),
+                'actions' => array('delete','index', 'view', 'create', 'update', 'loadcontentparent', 'loadcontents'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
+                'actions' => array('admin'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -54,7 +54,7 @@ class ActScriptController extends Controller {
      */
     public function actionCreate() {
         $model = new ActScript;
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/',array('file'=>'common.js')),CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -63,21 +63,25 @@ class ActScriptController extends Controller {
             $model->attributes = $_POST['ActScript'];
             if ($model->save()) {
                 Yii::app()->user->setFlash('success', Yii::t('default', 'ActScript Created Successful:'));
-                foreach ($_POST['ActScriptContentIn'] as $ci) {
-                    $content = new ActScriptContent();
-                    $content->scriptID = $model->ID;
-                    $content->contentID = $ci;
-                    $content->status = 'in';
-                    $content->save();
+                if (isset($_POST['ActScriptContentIn'])) {
+                    foreach ($_POST['ActScriptContentIn'] as $ci) {
+                        $content = new ActScriptContent();
+                        $content->script_id = $model->id;
+                        $content->content_id = $ci;
+                        $content->status = 'in';
+                        $content->save();
+                    }
                 }
-                foreach ($_POST['ActScriptContentOut'] as $ci) {
-                    $content = new ActScriptContent();
-                    $content->scriptID = $model->ID;
-                    $content->contentID = $ci;
-                    $content->status = 'out';
-                    $content->save();
+                if (isset($_POST['ActScriptContentOut'])) {
+                    foreach ($_POST['ActScriptContentOut'] as $ci) {
+                        $content = new ActScriptContent();
+                        $content->script_id = $model->id;
+                        $content->content_id = $ci;
+                        $content->status = 'out';
+                        $content->save();
+                    }
                 }
-                
+
                 $this->redirect(array('index'));
             }
         }
@@ -93,68 +97,68 @@ class ActScriptController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/',array('file'=>'common.js')),CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
         $model = $this->loadModel($id);
-        $contentsin = ActScriptContent::model()->findAllByAttributes(array('scriptID' => $id,'status'=>'in'));
-        $contentsout = ActScriptContent::model()->findAllByAttributes(array('scriptID' => $id,'status'=>'out'));
+        $contentsin = ActScriptContent::model()->findAllByAttributes(array('script_id' => $id, 'status' => 'in'));
+        $contentsout = ActScriptContent::model()->findAllByAttributes(array('script_id' => $id, 'status' => 'out'));
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
         if (isset($_POST['ActScript'])) {
             $model->attributes = $_POST['ActScript'];
-            if ($model->save()){
+            if ($model->save()) {
                 $icontentsout = $icontentsin = array();
                 foreach ($contentsin as $in) {
-                    $icontentsin[] = $in->contentID;
+                    $icontentsin[] = $in->content_id;
                 }
                 foreach ($contentsout as $out) {
-                    $icontentsout[] = $out->contentID;
+                    $icontentsout[] = $out->content_id;
                 }
                 if (isset($_POST['ActScriptContentIn'])) {
                     $removed = array_diff($icontentsin, $_POST['ActScriptContentIn']);
-                    ActScriptContent::model()->deleteAllByAttributes(array('status'=>'in','scriptID' => $model->ID, 'contentID' => array_values($removed)));
+                    ActScriptContent::model()->deleteAllByAttributes(array('status' => 'in', 'script_id' => $model->id, 'content_id' => array_values($removed)));
                     $insert = array_diff($_POST['ActScriptContentIn'], $icontentsin);
                     if (isset($insert)) {
                         foreach ($insert as $in) {
                             $d = new ActScriptContent();
-                            $d->scriptID = $model->ID;
-                            $d->contentID = $in;
+                            $d->script_id = $model->ID;
+                            $d->content_id = $in;
                             $d->status = 'in';
                             $d->save();
                         }
                     }
                 } else {
-                    ActScriptContent::model()->deleteAllByAttributes(array('scriptID' => $model->ID,'status'=>'in'));
+                    ActScriptContent::model()->deleteAllByAttributes(array('script_id' => $model->id, 'status' => 'in'));
                 }
                 if (isset($_POST['ActScriptContentOut'])) {
                     $removed = array_diff($icontentsout, $_POST['ActScriptContentOut']);
-                    ActScriptContent::model()->deleteAllByAttributes(array('status'=>'out','scriptID' => $model->ID, 'contentID' => array_values($removed)));
+                    ActScriptContent::model()->deleteAllByAttributes(array('status' => 'out', 'script_id' => $model->id, 'content_id' => array_values($removed)));
                     $insert = array_diff($_POST['ActScriptContentOut'], $icontentsout);
                     if (isset($insert)) {
                         foreach ($insert as $in) {
                             $d = new ActScriptContent();
-                            $d->scriptID = $model->ID;
-                            $d->contentID = $in;
+                            $d->script_id = $model->id;
+                            $d->content_id = $in;
                             $d->status = 'out';
                             $d->save();
                         }
                     }
                 } else {
-                    ActScriptContent::model()->deleteAllByAttributes(array('scriptID' => $model->ID,'status'=>'out'));
+                    ActScriptContent::model()->deleteAllByAttributes(array('script_id' => $model->id, 'status' => 'out'));
                 }
-                
-                
-                
-               // $this->redirect(array('view', 'id' => $model->ID));
+
+
+
+                // $this->redirect(array('view', 'id' => $model->ID));
             }
         }
-        $contentsin = ActScriptContent::model()->findAllByAttributes(array('scriptID' => $id,'status'=>'in'));
-        $contentsout = ActScriptContent::model()->findAllByAttributes(array('scriptID' => $id,'status'=>'out'));
-        Yii::app()->clientScript->registerScript('updateSelect',"updateLoad('actScript');",CClientScript::POS_LOAD);
+        $contentsin = ActScriptContent::model()->findAllByAttributes(array('script_id' => $id, 'status' => 'in'));
+        $contentsout = ActScriptContent::model()->findAllByAttributes(array('script_id' => $id, 'status' => 'out'));
+        Yii::app()->clientScript->registerScript('updateSelect', "updateLoad('actScript');", CClientScript::POS_LOAD);
         $this->render('update', array(
             'model' => $model,
-            'contentsin'=>$contentsin,
-            'contentsout'=>$contentsout
+            'contentsin' => $contentsin,
+            'contentsout' => $contentsout
         ));
     }
 
@@ -227,16 +231,16 @@ class ActScriptController extends Controller {
     }
 
     public function actionLoadContentParent() {
-        $data = ActContent::model()->findAllByAttributes(array('contentParent'=>NULL,'disciplineID' => $_POST['ActScript']['disciplineID']));
-        $data = CHtml::listData($data, 'ID', 'description');
+        $data = ActContent::model()->findAllByAttributes(array('discipline_id' => $_POST['ActScript']['discipline_id']), array('order' => 'description'));
+        $data = CHtml::listData($data, 'id', 'description');
         foreach ($data as $value => $name) {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
     }
-    
+
     public function actionLoadContents() {
-        $data = ActContent::model()->findAllByAttributes(array('contentParent'=>$_POST['ActScript']['contentParentID'],'disciplineID' => $_POST['ActScript']['disciplineID']));
-        $data = CHtml::listData($data, 'ID', 'description');
+        $data = ActContent::model()->findAllByAttributes(array('discipline_id' => $_POST['ActScript']['discipline_id']), array('order' => 'description'));
+        $data = CHtml::listData($data, 'id', 'description');
         foreach ($data as $value => $name) {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
