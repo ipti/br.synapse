@@ -13,17 +13,18 @@ array('label'=> Yii::t('default', 'List Person'), 'url'=>array('index'),'descrip
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">
             <div class="panelGroup form">
-                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Person # '.$model->ID.' :')?></div></div>
+                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Person # '.$model->id.' :')?></div></div>
                 <div class="panelGroupBody">
                     <?php $this->widget('zii.widgets.CDetailView', array(
                     'data'=>$model,
                     'attributes'=>array(
-                    		'ID',
+                    		'id',
 		'name',
 		'login',
 		'email',
+                'fk_code',
 		'password',
-		'phone',
+		//'phone',
                     ),
                     )); ?>
                 </div>   

@@ -1,7 +1,7 @@
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('ID')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->ID), array('view', 'id'=>$data->ID)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
@@ -15,14 +15,17 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
 	<?php echo CHtml::encode($data->email); ?>
 	<br />
-
+        
+        <b><?php echo CHtml::encode($data->getAttributeLabel('fk_code')); ?>:</b>
+	<?php echo CHtml::encode($data->fk_code); ?>
+	<br />
 	<b><?php echo CHtml::encode($data->getAttributeLabel('password')); ?>:</b>
 	<?php echo CHtml::encode($data->password); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('phone')); ?>:</b>
-	<?php echo CHtml::encode($data->phone); ?>
-	<br />
+<!--	<b><?php //echo CHtml::encode($data->getAttributeLabel('phone')); ?>:</b>
+	<?php //echo CHtml::encode($data->phone); ?>
+	<br />-->
 
 
 </div>

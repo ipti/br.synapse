@@ -6,8 +6,8 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'ID'); ?>
-		<?php echo $form->textField($model,'ID'); ?>
+		<?php echo $form->label($model,'id'); ?>
+		<?php echo $form->textField($model,'id'); ?>
 	</div>
 
 	<div class="row">
@@ -24,11 +24,15 @@
 		<?php echo $form->label($model,'email'); ?>
 		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
+           <div class="row">
+                <?php echo $form->label($model,'fk_code'); ?>
+                <?php echo $form->textField($model,'fk_code',array('size'=>60,'maxlength'=>255)); ?>
+            </div>
 
-	<div class="row">
-		<?php echo $form->label($model,'phone'); ?>
-		<?php echo $form->textField($model,'phone'); ?>
-	</div>
+<!--	<div class="row">
+		<?php //echo $form->label($model,'phone'); ?>
+		<?php //echo $form->textField($model,'phone'); ?>
+	</div>-->
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>
