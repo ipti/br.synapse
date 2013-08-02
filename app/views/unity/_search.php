@@ -31,29 +31,30 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'fcode'); ?>
-		<?php echo $form->textField($model,'fcode',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->label($model,'fk_code'); ?>
+		<?php echo $form->textField($model,'fk_code',array('size'=>45,'maxlength'=>45)); ?>
+	</div>
+
+       <!--	Retirado do MODEL
+       <div class="row">
+		<?php //echo $form->label($model,'autochild'); ?>
+		<?php //echo $form->textField($model,'autochild'); ?>
+	</div>-->
+
+	<div class="row">
+		<?php echo $form->label($model,'active_date'); ?>
+		<?php echo $form->textField($model,'active_date'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'autochild'); ?>
-		<?php echo $form->textField($model,'autochild'); ?>
+		<?php echo $form->label($model,'desactive_date'); ?>
+		<?php echo $form->textField($model,'desactive_date'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'act_date'); ?>
-		<?php echo $form->textField($model,'act_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'des_date'); ?>
-		<?php echo $form->textField($model,'des_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'capacity'); ?>
-		<?php echo $form->textField($model,'capacity'); ?>
-	</div>
+<!--	<div class="row">
+		<?php //echo $form->label($model,'capacity'); ?>
+		<?php //echo $form->textField($model,'capacity'); ?>
+	</div>-->
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>

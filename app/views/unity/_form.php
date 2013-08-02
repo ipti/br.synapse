@@ -110,9 +110,9 @@
                     </div>
 
                                      <!--  <div class="formField">
-                        <?php //echo $form->labelEx($model,'fcode'); ?>
-                        <?php //echo $form->textField($model,'fcode',array('size'=>45,'maxlength'=>45)); ?>
-                        <?php //echo $form->error($model,'fcode'); ?>
+                        <?php //echo $form->labelEx($model,'fk_code'); ?>
+                        <?php //echo $form->textField($model,'fk_code',array('size'=>45,'maxlength'=>45)); ?>
+                        <?php //echo $form->error($model,'fk_code'); ?>
                     </div> -->
 
                                   <!-- GERAR AUTOMATICAMENTE !!! <div class="formField">
@@ -122,24 +122,24 @@
                     </div> -->
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'act_date'); ?>
+                        <?php echo $form->labelEx($model,'active_date'); ?>
                               <input type="text" id="actDt">
-                        <?php echo $form->hiddenField($model,'act_date'); ?>
-                        <?php echo $form->error($model,'act_date'); ?>
+                        <?php echo $form->hiddenField($model,'active_date'); ?>
+                        <?php echo $form->error($model,'active_date'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'des_date'); ?>
+                        <?php echo $form->labelEx($model,'desactive_date'); ?>
                               <input type="text" id="desDt">
-                        <?php echo $form->hiddenField($model,'des_date'); ?>
-                        <?php echo $form->error($model,'des_date'); ?>
+                        <?php echo $form->hiddenField($model,'desactive_date'); ?>
+                        <?php echo $form->error($model,'desactive_date'); ?>
                     </div>
 
-                                        <div class="formField">
-                        <?php echo $form->labelEx($model,'capacity'); ?>
-                        <?php echo $form->textField($model,'capacity'); ?>
-                        <?php echo $form->error($model,'capacity'); ?>
-                    </div>
+<!--                                        <div class="formField">
+                        <?php //echo $form->labelEx($model,'capacity'); ?>
+                        <?php // echo $form->textField($model,'capacity'); ?>
+                        <?php //echo $form->error($model,'capacity'); ?>
+                    </div>-->
 
                                     <div class="formField buttonWizardBar">
                     <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('default', 'Create') : Yii::t('default', 'Save'),array('class' => 'buttonLink button')); ?>

@@ -46,8 +46,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'unity_id',
 		'person_id',
 		'personage_id',
-		'activated_date',
-		'desactivated_date',
+		'active_date',
+		'desactive_date',
 		array(
 			'class'=>'CButtonColumn',
 		),

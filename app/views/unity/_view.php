@@ -20,13 +20,14 @@
 	<?php echo CHtml::encode($data->location_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('fcode')); ?>:</b>
-	<?php echo CHtml::encode($data->fcode); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('fk_code')); ?>:</b>
+	<?php echo CHtml::encode($data->fk_code); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('autochild')); ?>:</b>
-	<?php echo CHtml::encode($data->autochild); ?>
-	<br />
+        <!--  Retirado do MODEL
+        <b><?php //echo CHtml::encode($data->getAttributeLabel('autochild')); ?>:</b>
+	<?php //echo CHtml::encode($data->autochild); ?>
+	<br />-->
 
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('actDate')); ?>:</b>

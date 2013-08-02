@@ -16,12 +16,12 @@
 	<?php echo CHtml::encode($data->personage_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('activated_date')); ?>:</b>
-	<?php echo CHtml::encode($data->activated_date); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('active_date')); ?>:</b>
+	<?php echo CHtml::encode($data->active_date); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('desactivated_date')); ?>:</b>
-	<?php echo CHtml::encode($data->desactivated_date); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('desactive_date')); ?>:</b>
+	<?php echo CHtml::encode($data->desactive_date); ?>
 	<br />
 
 

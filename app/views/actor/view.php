@@ -22,8 +22,8 @@ array('label'=> Yii::t('default', 'List Actor'), 'url'=>array('index'),'descript
 		'unity_id',
 		'person_id',
 		'personage_id',
-		'activated_date',
-		'desactivated_date',
+		'active_date',
+		'desactive_date',
                     ),
                     )); ?>
                 </div>   
