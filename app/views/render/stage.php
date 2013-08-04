@@ -34,6 +34,7 @@
     NEWRENDER.scriptID = 1;
     NEWRENDER.actorID = 2;
     NEWRENDER.typeAtd = 'script';
+    NEWRENDER.atdID = 'exam';
     
     $(function() {
         var json = <?php echo $json ?>;

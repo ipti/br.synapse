@@ -77,13 +77,13 @@ if (isset($_SESSION['idActor'])) {
     <div class="innerborder">
         <h1></h1>
         <form action="/render/stage" method="POST">
-            <label>
+            <!--<label>
                 <font>Tipo de Atendimento:</font>
                 <select id="atdID">
-                    <option value="avaliacao">AVALIAÇÃO</option>
-                    <option value="treino">TREINO</option>
+                    <option value="exam">AVALIAÇÃO</option>
+                    <option value="training">TREINO</option>
                 </select>
-            </label>
+            </label>-->
             <!--<label id="rblockscript">
                 <font>Bloco/Roteiro:</font>
                 <select id="typeID">
@@ -104,9 +104,9 @@ if (isset($_SESSION['idActor'])) {
             <!--<label class="blockscript" id="rblock">
                 <font>Bloco:</font>
             </label>-->
-            <label class="blockscript" id="rscript">
+            <!--<label class="blockscript" id="rscript">
                 <font>Roteiro:</font>
-            </label>
+            </label>-->
             <!--<label id="rtheme">
                 <font>Tema:</font>
             </label>-->

@@ -22,7 +22,7 @@ function render () {
     this.classID;
     this.actorID;
     this.typeID;
-    this.atdID;
+    this.atdID = 'exam';
     this.startTime;
     this.lastClick = -1;
     this.ctCorrect = 0;
@@ -49,6 +49,7 @@ function render () {
     this.start = function(){
         $('.waiting').hide();
         $('.render').show();
+        this.atdID='exam';
         $('body').css('background','white');
         //requesição ajax do tipo start;
         //pega o usuário, consulta e ve onde parou e start do ponto, se não do começo
@@ -86,6 +87,7 @@ function render () {
         this.ajaxrecursive(json.ids[0].id,0,json);
     }
     this.mountHeader = function(cobject){
+        var parent = this;
         infoScreen = $('<div class="screenInfo"></div>');
         infoScreen.append('<span id="infoAct"><label><strong>Aluno:</strong>'+this.actorName+' [Acertos:<span class="ctCorrect">0</span>/Erros:<span class="ctWrong">0</span>]</label><label><strong>Atividade: </strong>Nº'+cobject.cobject_id+'-'+cobject.template_code+'-'+cobject.theme+'</label><label><strong>Conteúdo: </strong> '+cobject.content+'</label><label><strong>Objetivo:</strong> '+cobject.goal+'</label></span>');
         nextScreen = $('<span id="next">»</span>').on('click',function(){
@@ -100,7 +102,7 @@ function render () {
             $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
             NEWRENDER.startTime = Math.round(+new Date()/1000);
         });
-        if(parent.atdID == "avaliacao"){
+        if(parent.atdID == "exam"){
             prevScreen.hide();
             nextScreen.hide();     
         }
@@ -149,7 +151,7 @@ function render () {
         var useranswer = $(this).prev().val();
         uanswer = hashCode(useranswer);
         $('.currentScreen input.ielement').val("");
-        if(NEWRENDER.atdID == "avaliacao"){
+        if(NEWRENDER.atdID == "exam"){
             $('.currentScreen input').attr('disabled','disabled');
             NEWRENDER.nextInFuction();
         }
@@ -232,7 +234,7 @@ function render () {
             if($('.currentScreen #groups .ielement').length == 0){
                 //reinicializar.
                 $('.currentScreen #pairs .ielement').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
-                if(NEWRENDER.atdID == "avaliacao"){
+                if(NEWRENDER.atdID == "exam"){
                     NEWRENDER.nextInFuction();
                 }else{
                     $('.currentScreen li').css('opacity','1');
@@ -254,7 +256,7 @@ function render () {
         $(this).off('click').css('cursor','auto');
         $(this).css('opacity','0.5');
         NEWRENDER.compute('correct',$(this),$(this).attr('id'));
-        if(NEWRENDER.atdID == "avaliacao"){
+        if(NEWRENDER.atdID == "exam"){
             $('.currentScreen .eclick').off('click').css('cursor','auto');
             NEWRENDER.nextInFuction();
         }
@@ -263,7 +265,7 @@ function render () {
         $(this).off('click').css('cursor','auto');
         $(this).css('opacity','0.5');
         NEWRENDER.compute('wrong',$(this),$(this).attr('id'));
-        if(NEWRENDER.atdID == "avaliacao"){
+        if(NEWRENDER.atdID == "exam"){
             $('.currentScreen .eclick').off('click').css('opacity','0.5').css('cursor','auto');
             NEWRENDER.nextInFuction();
         }
@@ -300,7 +302,7 @@ function render () {
         $('#rlevels').append(htmContent);
     }
     this.loadDisciplines = function(disciplines){
-        htmContent = $('<select id="rdiscipline"></select>');
+        htmContent = $('<select name="disciplineID" id="rdiscipline"></select>');
         $.each(disciplines, function(i, discipline) {
             htmContent.append('<option value="'+discipline.id+'">'+discipline.name+'</option>');
             if(typeof(discipline.scripts) != "undefined"){
@@ -320,162 +322,7 @@ function render () {
         });
         $('#rdiscipline').append(htmContent);
     }
-    this.loadClasses = function(classes){
-        htmContent = $('<select id="rclassys"></select>').change(function(){
-            $('.students,.tutors').hide();
-            v = $("select#rclassys").val();
-            $('#classID').val(v);
-            $('#student'+v+','+'#tutor'+v).show();
-        });
-        $.each(classes, function(i, classy) {
-            htmContent.append('<option value="'+classy.ID+'">'+classy.name+'</option>');
-            if(typeof(classy.students) != "undefined"){
-                htmStudent = $('<select class="students" id="student'+classy.ID+'"></select>');
-                $.each(classy.students, function(i, student) {
-                    htmStudent.append('<option value="'+student.ID+'">'+student.name+'</option>');
-                });
-                $('#rstudents').append(htmStudent);
-            }
-            if(typeof(classy.tutors) != "undefined"){
-                htmTutor = $('<select class="tutors" id="tutor'+classy.ID+'"></select>');
-                $.each(classy.tutors, function(i, tutor) {
-                    htmTutor.append('<option value="'+tutor.ID+'">'+tutor.name+'</option>');
-                });
-                $('#rtutors').append(htmTutor);
-            }
-        });
-        $('#rclasses').append(htmContent);
-    }
-    this.loadJson = function(response){
-        if(typeof(response.contents) != "undefined"){
-            $(".activities").html(this.loadContents(response.contents));
-        }
-    }
     
-    this.loadJson2 = function(response){
-        if(this.atdID ==  'Avaliacao'){
-            
-        }
-        //alert(this.atdID);
-        //alert(classID);
-        //alert(userID);
-        var parent = this;
-        var fullHtm = $('<div id="paginate"></div>');
-        if(typeof(response.contents) != "undefined"){
-            $.each(response.contents, function(i, content) {
-                content.ID;
-                content.description;
-                if(typeof(content.goals) != "undefined"){
-                    $.each(content.goals, function(i, goal) {
-                        goal.ID;
-                        goal.name;
-                        if(typeof(goal.cobjects) != "undefined"){
-                            $.each(goal.cobjects, function(i, cobject) {
-                                cobject.ID;
-                                if(typeof(cobject.screens) != "undefined"){
-                                    $.each(cobject.screens, function(i, screen) {
-                                        htmScreen = $('<div class="screen" id="SCR'+screen.ID+'"></div>');
-                                        infoScreen = $('<div class="screenInfo"></div>');
-                                        infoScreen.append('<span id="infoAct"><label><strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">0</span>/Erros:<span class="ctWrong">0</span>)</label><label><strong>Atividade:</strong>Nº'+cobject.oldID+'-'+cobject.template_code+'-'+cobject.theme+'-'+screen.ID+'</label><label><strong>Conteúdo:</strong> '+content.description+'</label><label><strong>Objetivo:</strong> '+goal.name+'</label></span>');
-                                        nextScreen = $('<span id="next">»</span>').on('click',function(){
-                                            $('.currentScreen').hide();
-                                            $('.currentScreen').next().show();
-                                            $('.currentScreen').removeClass('currentScreen').next().addClass('currentScreen');
-                                        });
-                                        prevScreen = $('<span id="previous">«</span>').on('click',function(){
-                                            $('.currentScreen').hide();
-                                            $('.currentScreen').prev().show();
-                                            $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
-                                        });
-                                        if(parent.atdID == "avaliacao"){
-                                            prevScreen.hide();
-                                            nextScreen.hide();     
-                                        }
-                                        infoScreen.append(nextScreen);
-                                        infoScreen.prepend(prevScreen);
-                                        infoScreen.append('<span class="clear"></span>');
-                                        htmScreen.append(infoScreen);
-                                        if(fullHtm.text()==""){
-                                            prevScreen.hide();
-                                        }
-                                        if(typeof(screen.piecesets) != "undefined"){
-                                            htmScreen.append(parent.loadPiecesets(screen.piecesets,cobject.template_code));
-                                        }
-                                        fullHtm.append(htmScreen);
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-            htmlScreen = $('<div class="screen" id="SCRLAST"></div>');
-            infoScreenl = $('<div class="screenInfo"></div>');
-            infoScreenl.append('<span id="infoAct"></span>');
-            prevScreenl = $('<span id="previous">«</span>').on('click',function(){
-                $('.currentScreen').hide();
-                $('.currentScreen').prev().show();
-                $('.currentScreen').removeClass('currentScreen').prev().addClass('currentScreen');
-            });
-            if(parent.atdID == "avaliacao"){
-                prevScreenl.hide();
-            }
-            infoScreenl.prepend(prevScreenl);
-            infoScreenl.append('<span class="clear"></span>');
-            htmlScreen.append(infoScreenl);
-            htmlScreen.append('<strong>Aluno:</strong>'+response.userName+'(Acertos:<span class="ctCorrect">'+newRender.ctWrong+'</span>/Erros:<span class="ctWrong">'+newRender.ctCorrect+'</span>)<br/><input id="end" value="finalizar atendimento" type="button">');
-            fullHtm.append(htmlScreen);
-            $(".activities").html(fullHtm);
-        }
-    }
-    this.next = function(){
-
-    }
-    this.paginate = function(){
-        alert(111);
-        //pega o usuário, consulta e ve onde parou e start do ponto, se não do começo
-        $('.screen').first().fadeIn('slow');
-        $('.screen').first().addClass('currentScreen');
-    }
-    this.loadContents = function(contents){
-        var parent = this;
-        htmContents =  $('<div class="contents"></div>');
-        $.each(contents, function(i, content) {
-            htmContent = $('<div class="content" id="CTN'+content.ID+'"><h1>'+content.description+'</h1></div>');
-            if(typeof(content.goals) != "undefined"){
-                htmContent.append(parent.loadGoals(content.goals));
-            }
-            htmContents.append(htmContent);
-        });
-        return htmContents;
-    };
-                
-    this.loadGoals = function(goals){
-        var parent = this;
-        htmGoals =  $('<div class="goals"></div>');
-        $.each(goals, function(i, goal) {
-            htmGoal = $('<div class="goal" id="GL'+goal.ID+'"><h2>'+goal.name+'</h2></div>');
-            if(typeof(goal.cobjects) != "undefined"){
-                htmGoal.append(parent.loadCobjects(goal.cobjects));
-            }
-            htmGoals.append(htmGoal);
-        });
-        return htmGoals;
-    };
-                
-    this.loadCobjects = function(cobjects){
-        var parent = this;
-        htmCobjects =  $('<div class="cobjects"></div>');
-        $.each(cobjects, function(i, cobject) {
-            htmCobject = $('<div class="cobject" id="COBJ'+cobject.ID+'"><h3><strong>Atividade:</strong>'+cobject.template_code+'-'+cobject.template+'-'+cobject.code+'</h3></div>');
-            if(typeof(cobject.screens) != "undefined"){
-                htmCobject.append(parent.loadScreens(cobject.screens,cobject.template_code));
-            }
-            htmCobjects.append(htmCobject);
-        });
-        return htmCobjects;
-    };
-                
     this.loadScreens = function(screens,template){
         var parent = this;
         htmScreens =  $('<div class="screens"></div>');
@@ -493,7 +340,7 @@ function render () {
         var parent = this;
         htmPiecesets = $('<div class="piecesets"></div>');
         $.each(piecesets, function(i, pieceset) {
-            htmPieceset = $('<div id="PCSET'+pieceset.id+'" class="pieceset"><h5>'+pieceset.description+'</h5></div>');
+            htmPieceset = $('<div id="PCS_'+pieceset.id+'" class="pieceset"><h5>'+pieceset.description+'</h5></div>');
             if(typeof(pieceset.pieces) != "undefined"){
                 htmPieceset.append(parent.loadPieces(pieceset.pieces,template));
             }
@@ -507,7 +354,7 @@ function render () {
         htmPieces = $('<div class="pieces"></div>');
         $.each(pieces, function(i, piece) {
             if(typeof(piece.elements) != "undefined"){
-                htmPiece = $('<div id="PIECE'+piece.id+'" class="piece"><h6>'+piece.oldID+'('+template+')</h6></div>');
+                htmPiece = $('<div id="PC_'+piece.id+'" class="piece"></div>');
                 htmPiece.append(parent.loadElements(piece.elements,template,piece.id));
                 htmPieces.append(htmPiece);
             }
@@ -520,16 +367,22 @@ function render () {
         htmFinal = $('<div id="BL_'+pieceID+'" class="blockElements"></div>');
         switch (template){
             case 'MTE':
-                htmEnum = $('<ul class="elements enum"></ul>');
-                htmOptions = $('<ul class="elements options"></ul>')
+                htmEnum = $('<ul id="UL_'+pieceID+'" class="elements enum"></ul>');
+                htmOptions = $('<ul id="UL_'+pieceID+'" class="elements options"></ul>')
                 break;
             case 'PRE':
-                htmEnum = $('<ul class="elements enum"></ul>');
-                htmOptions = $('<ul class="elements options"></ul>')
+                htmEnum = $('<ul id="UL_'+pieceID+'" class="elements enum"></ul>');
+                htmOptions = $('<ul id="UL_'+pieceID+'" class="elements options"></ul>')
                 break;
             case 'AEL':
-                htmPair = $('<ul id="pairs" class="elements pairs"></ul>');
-                htmGroup = $('<ul id="groups" class="elements groups"></ul>')
+                htmPair = $('<ul id="UL_'+pieceID+'" class="elements pairs"></ul>');
+                htmGroup = $('<ul id="UL_'+pieceID+'" class="elements groups"></ul>')
+                break;
+            case 'TXT':
+                htmText = $('<ul id="UL_'+pieceID+'" class="lstexts"></ul>');
+                break;
+            default:
+                htmText = $('<ul id="UL_'+pieceID+'" class="lstexts"></ul>');
                 break;
         }
         $.each(elements, function(i, element) {
@@ -538,7 +391,7 @@ function render () {
                 case 'multimidia':
                     switch(element.typemulti){
                         case 'image':
-                            htmElement = $('<img src="none.jpg"/>');
+                            htmElement = $('<img src="/rsc/library/images/none.jpg"/>');
                             break;
                         case 'sound':
                             blockElement.prepend('<font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font>');
@@ -560,9 +413,10 @@ function render () {
                     break; 
                 case 'text':
                     htmElement = $('<font></font>');
+                    tmElement.addClass('selement');
                     break;
                 default:
-                    htmElement = $('<font></font>');
+                    htmElement = $('<font>'+element.type+'</font>');
                     break;
                         
             }
@@ -603,10 +457,10 @@ function render () {
                             htmElement.css(property.name,property.value);
                             break;
                         case 'width':
-                            //htmElement.css(property.name,property.value);
+                            htmElement.css(property.name,property.value);
                             break;
                         case 'height':
-                            //htmElement.css(property.name,property.value);
+                            htmElement.css(property.name,property.value);
                             break;    
                         case 'posx':
                             //htmElement.css('position','absolute');
@@ -667,6 +521,12 @@ function render () {
                                         htmElement.on('click',parent.matchElement);
                                         htmPair.append(blockElement.append(htmElement));
                                         break;
+                                    case 'TXT':
+                                        htmText.append(blockElement.append(htmElement));
+                                        break;
+                                    default:
+                                        htmText.append(blockElement.append(htmElement));
+                                        break;
                                 }
                                 break;
                             case 'Acerto':
@@ -696,6 +556,12 @@ function render () {
                                         htmElement.on('click',parent.matchElement);
                                         htmGroup.append(blockElement.append(htmElement));
                                         break;
+                                    case 'TXT':
+                                        htmText.append(blockElement.append(htmElement));
+                                        break;
+                                    default:
+                                        htmText.append(blockElement.append(htmElement));
+                                        break;
                                 }
                                 break;
                             case 'Erro':
@@ -714,6 +580,12 @@ function render () {
                                         htmElement.addClass('eclick');
                                         htmElement.on('click',parent.wrongAnswer);
                                         htmGroup.append(blockElement.append(htmElement));
+                                        break;
+                                    case 'TXT':
+                                        htmText.append(blockElement.append(htmElement));
+                                        break;
+                                    default:
+                                        htmText.append(blockElement.append(htmElement));
                                         break;
                                 }
                                 break;    
@@ -742,6 +614,12 @@ function render () {
                 }))
                 htmFinal.append(htmPair2.append('<li style="clear:both;display:block"></li>'));
                 htmFinal.append(htmGroup2.append('<li style="clear:both;display:block"></li>'));
+                break;
+            case 'TXT':
+                htmFinal.append(htmText);
+                break;
+            default:
+                htmFinal.append(htmText);
                 break;
         }
         return htmFinal.append('<span style="display:block;clear:both"></span>');

@@ -126,3 +126,4 @@ ul.enum,ul.pairs{border-bottom:1px solid #666;margin-bottom:20px}
 .messagebox{margin:10px auto;width:95%;display:block;padding:10px;}
 .messagewrong{background:red;color:#fff}
 .messagecorrect{background:green;color:#fff}
+.lstexts li font{display:block;padding-top:10px;}

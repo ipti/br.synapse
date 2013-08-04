@@ -222,12 +222,13 @@ class RenderController extends Controller {
 
     public function actionStage() {
         $cobject_id = @$_REQUEST['id'];
+        $disciplineID = @$_REQUEST['disciplineID'];
         $script = @$_REQUEST['scriptID'];
         $modality = @$_REQUEST['modality'];
         $degree = @$_REQUEST['degree'];
         $content = @$_REQUEST['content'];
         $actor = @$_REQUEST['actor'];
-        $script = ActScript::model()->findByPk($script);
+        /*$script = ActScript::model()->findByPk($script);
         $content_parent = $script->father_content;
         foreach ($script->actScriptContents as $content) {
             if ($content->status == 'in') {
@@ -241,7 +242,7 @@ class RenderController extends Controller {
         }
         if (isset($contentOut)) {
             $contentOut = implode(",", $contentOut);
-        }
+        }*/
         $join = "";
         //$sql = "select distinct(cobject_id) as id from render_cobjects where template_code = 'PRE' and status='on'";
         $sql = "select  distinct(a1.id)
@@ -249,15 +250,16 @@ class RenderController extends Controller {
           join cobject_metadata a2 on(a1.id=a2.cobject_id and a2.type_id=13)
           join act_goal a3 on(a3.id=a2.value)
           join act_goal_content a4 on(a3.id=a4.goal_id)
-          join act_content a6 on(a6.id=a4.content_id)";
-        $where = " where a6.id=$content_parent";
-        if (isset($contentsIn) && isset($contentOut)) {
+          join act_content a6 on(a6.id=a4.content_id)
+          join act_degree a7 on(a3.degree_id=a7.id)";
+        $where = " where a1.status='on' and a7.stage = '2' and (year = '1' or year = '2') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
+        /*if (isset($contentsIn) && isset($contentOut)) {
             $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
         } else if (isset($contentsIn) && !isset($contentOut)) {
             $where.= " and (a6.id in($contentsIn))";
         } else if (isset($contentOut) && !isset($contentsIn)) {
             $where.= " and (a6.id not in($contentOut))";
-        }
+        }*/
 
         if (isset($modality)) {
             $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
@@ -270,7 +272,7 @@ class RenderController extends Controller {
         if (isset($content)) {
             $where .="";
         }
-        $fsql = $sql . $join . $where . "";
+        $fsql = $sql . $join . $where . " order by a7.year,a7.grade,a1.id";
         $command = Yii::app()->db->createCommand($fsql);
         $command->execute();
         $reader = $command->queryAll();
@@ -452,6 +454,7 @@ class RenderController extends Controller {
                                         $b = -1;
                                     }
                                     foreach ($piece->piece->editorPieceElements as $element) {
+                                        
                                         $b++;
                                         $properties = $events = $gproperties = array();
                                         foreach ($element->editorPieceelementProperties as $property) {

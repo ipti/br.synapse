@@ -269,7 +269,7 @@ class DefaultController extends Controller {
                 }
                 break;
             case 'activities':
-                $sqlacts = "select * from activity";
+                $sqlacts = "select * from activity order by coalesce(father_id,0),id asc";
                 $reader = $this->search($sqlacts);
                 foreach ($reader as $row) {
                     if (!isset($row['activitytype_id'])) {
@@ -279,6 +279,12 @@ class DefaultController extends Controller {
                     $tmp = new Cobject();
                     $tmp->oldID = $row['id'];
                     $tmp->type_id = $type->id;
+                    if (isset($row['father_id'])) {
+                        $father = Cobject::model()->findByAttributes(array('oldID'=>$row['father_id']));
+                        if(isset($father)){
+                            $tmp->father_id = $father->id;
+                        }
+                    }
                     if ($row['status'] == '1') {
                         $tmp->status = 'on';
                     }

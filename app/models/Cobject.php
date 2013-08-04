@@ -10,11 +10,14 @@
  * @property integer $theme_id
  * @property integer $oldID
  * @property string $status
+ * @property integer $father_id
  *
  * The followings are the available model relations:
  * @property CobjectTemplate $template
  * @property CobjectTheme $theme
  * @property CommonType $type
+ * @property Cobject $father
+ * @property Cobject[] $cobjects
  * @property CobjectCobjectblock[] $cobjectCobjectblocks
  * @property CobjectMetadata[] $cobjectMetadatas
  * @property EditorScreen[] $editorScreens
@@ -48,11 +51,11 @@ class Cobject extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('type_id, template_id', 'required'),
-			array('type_id, template_id, theme_id, oldID', 'numerical', 'integerOnly'=>true),
+			array('type_id, template_id, theme_id, oldID, father_id', 'numerical', 'integerOnly'=>true),
 			array('status', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type_id, template_id, theme_id, oldID, status', 'safe', 'on'=>'search'),
+			array('id, type_id, template_id, theme_id, oldID, status, father_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +70,8 @@ class Cobject extends CActiveRecord
 			'template' => array(self::BELONGS_TO, 'CobjectTemplate', 'template_id'),
 			'theme' => array(self::BELONGS_TO, 'CobjectTheme', 'theme_id'),
 			'type' => array(self::BELONGS_TO, 'CommonType', 'type_id'),
+			'father' => array(self::BELONGS_TO, 'Cobject', 'father_id'),
+			'cobjects' => array(self::HAS_MANY, 'Cobject', 'father_id'),
 			'cobjectCobjectblocks' => array(self::HAS_MANY, 'CobjectCobjectblock', 'cobject_id'),
 			'cobjectMetadatas' => array(self::HAS_MANY, 'CobjectMetadata', 'cobject_id'),
 			'editorScreens' => array(self::HAS_MANY, 'EditorScreen', 'cobject_id'),
@@ -85,6 +90,7 @@ class Cobject extends CActiveRecord
 			'theme_id' => Yii::t('default', 'Theme'),
 			'oldID' => Yii::t('default', 'Old'),
 			'status' => Yii::t('default', 'Status'),
+			'father_id' => Yii::t('default', 'Father'),
 		);
 	}
 
@@ -105,6 +111,7 @@ class Cobject extends CActiveRecord
 		$criteria->compare('theme_id',$this->theme_id);
 		$criteria->compare('oldID',$this->oldID);
 		$criteria->compare('status',$this->status,true);
+		$criteria->compare('father_id',$this->father_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
