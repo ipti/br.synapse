@@ -69,10 +69,10 @@ class PersonController extends Controller {
             //se salvar o modelo
             if ($modelP->save()) {
                 //adiciona as informações ao modelo de actor
-                $modelA->unityID = $unityID;
-                $modelA->personID = $modelP->ID;
-                $modelA->personageID = 1;
-                $modelA->activatedDate = time();
+                $modelA->unity_id = $unityID;
+                $modelA->person_id = $modelP->id;
+                $modelA->personage_id = 1;
+                $modelA->active_date = time();
                 //se salvar o modelo
                 if($modelA->save()){
                     Yii::app()->user->setFlash('success', Yii::t('default', 'Person Created Successful:'));
@@ -101,7 +101,7 @@ class PersonController extends Controller {
         if (isset($_POST['Person'])) {
             $model->attributes = $_POST['Person'];
             if ($model->save())
-                $this->redirect(array('view', 'id' => $model->ID));
+                $this->redirect(array('view', 'id' => $model->id));
         }
 
         $this->render('update', array(

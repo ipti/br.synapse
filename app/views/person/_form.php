@@ -13,7 +13,6 @@ $form = $this->beginWidget('CActiveForm', array(
         $(function() {
             unity = <?php echo $unityfather ?>;
             newRenderize= new renderize();
-
             $.ajax({
                 url:"/render/json",//this is the request page of ajax
                 data:{op:'select', id:unity},//data for throwing the expected url
@@ -59,18 +58,24 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php echo $form->textField($model, 'email', array('size' => 60, 'maxlength' => 255)); ?>
             <?php echo $form->error($model, 'email'); ?>
         </div>
-
+        
+        <div class="formField">
+            <?php echo $form->labelEx($model, 'fk_code'); ?>
+            <?php echo $form->textField($model, 'fk_code', array('size' => 60, 'maxlength' => 255)); ?>
+            <?php echo $form->error($model, 'fk_code'); ?>
+        </div>
+        
         <div class="formField">
             <?php echo $form->labelEx($model, 'password'); ?>
             <?php echo $form->passwordField($model, 'password', array('size' => 60, 'maxlength' => 255)); ?>
             <?php echo $form->error($model, 'password'); ?>
         </div>
 
-        <div class="formField">
-            <?php echo $form->labelEx($model, 'phone'); ?>
-            <?php echo $form->textField($model, 'phone'); ?>
-            <?php echo $form->error($model, 'phone'); ?>
-        </div>
+<!--        <div class="formField">
+            <?php //echo $form->labelEx($model, 'phone'); ?>
+            <?php //echo $form->textField($model, 'phone'); ?>
+            <?php //echo $form->error($model, 'phone'); ?>
+        </div>-->
 
         <div class="formField buttonWizardBar">
             <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('default', 'Create') : Yii::t('default', 'Save'), array('class' => 'buttonLink button')); ?>

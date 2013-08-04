@@ -20,9 +20,9 @@
                         var num_unitys = 0;
                         num_unitys = $('.org').size(); // coincide com o OrgfatherID da Última Unity
                         $.post("/unity/loadOrg", {totalUnity: num_unitys} , function(result) {
-                           $('#Unity_organizationID').html(result);                      
+                           $('#Unity_organization_id').html(result);                      
                            var IDfolk = $('#org_'+num_unitys).val(); // Id do Pai da nova Unity
-                           $('#Unity_fatherID').val(IDfolk);
+                           $('#Unity_father_id').val(IDfolk);
                         });
                     } );
             },
@@ -44,12 +44,12 @@
  $(document).ready( 
    function(){
    $('#actDt').mask("99/99/9999");
-   $('#actDt').change(function() { dateToTimestmp(this.value,'Unity_actDate') });
+   $('#actDt').change(function() { dateToTimestmp(this.value,'Unity_active_date') });
    $('#desDt').mask("99/99/9999");
-   $('#desDt').change(function() { dateToTimestmp(this.value,'Unity_desDate')  });
+   $('#desDt').change(function() { dateToTimestmp(this.value,'Unity_desactive_date')  });
    $('#desDt, #actDt').blur( function() { 
-       if( ($('#Unity_desDate').val() <= $('#Unity_actDate').val()) &&
-          $('#Unity_desDate').val() != '' && $('#Unity_actDate').val() != '' ) {
+       if( ($('#Unity_desactive_date').val() <= $('#Unity_active_date').val()) &&
+          $('#Unity_desactive_date').val() != '' && $('#Unity_active_date').val() != '' ) {
             var act_des_date = "A Data de Desativação deve ser MAIOR que a Data de Ativação !";
             window.alert(act_des_date);
              } 
@@ -88,7 +88,7 @@
                                  echo $form->dropDownList(
                                         $model,
                                         'organization_id',
-                                        CHtml::listData(Organization::model()->findAll(),'ID','name') );
+                                        CHtml::listData(Organization::model()->findAll(),'id','name') );
                                  ?>                         
                         <?php echo $form->error($model,'organization_id'); ?>
                     </div>
@@ -104,7 +104,7 @@
                         <?php // echo $form->textField($model,'locationID'); ?>
                           <?php
                              echo $form->dropDownList($model, 'location_id', 
-                                     CHtml::listData(Location::model()->findAll(), 'ID', 'name')); 
+                                     CHtml::listData(Location::model()->findAll(), 'id', 'name')); 
                            ?>                     
                         <?php echo $form->error($model,'location_id'); ?>
                     </div>

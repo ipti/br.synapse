@@ -303,7 +303,6 @@ class RenderController extends Controller {
                     where ut.primary_unity_id = $id ";
             $sql .= $_POST['op'] == 'select' ? "AND ou.orglevel = o.orglevel+1;" : "AND ou.orglevel = -1;";
             $unitys = Yii::app()->db->createCommand($sql)->queryAll();
-            $json['sql'] = $sql;
             $_POST['op'] == 'select' ? $json['unitys'] = $unitys : $json['classes'] = $unitys;
             $json['fatherID'] = $id;
             header('Cache-Control: no-cache, must-revalidate');

@@ -25,11 +25,12 @@ array('label'=> Yii::t('default', 'Create a new Person'), 'url'=>array('create')
                         'enablePagination' => true,
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
-                    		'ID',
+                    		'id',
                                 'name',
                                 'login',
                                 'email',
-                                'phone',
+                                'fk_code',
+                                //'phone',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   
