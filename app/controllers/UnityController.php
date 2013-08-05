@@ -43,18 +43,23 @@ class UnityController extends Controller
         
         public function actionLoadOrg() 
         {
-            if( isset($_POST['totalUnity']) ) {
-                $totalUnitys = $_POST['totalUnity'];
+            if( isset($_POST['unity_id']) ) {
+                $unity_id = $_POST['unity_id'];
+                $unity = Unity::model()->findByPk($unity_id);
+                $org_father_id = $unity->organization->id;
+                
                 $orgs = Organization::model()->findAll(array( 
-                    'condition' => 'father_id = :totalUnitys+1',
-                    'params' => array(':totalUnitys' => $totalUnitys),
+                    'condition' => 'father_id = :org_father_id',
+                    'params' => array(':org_father_id' => $org_father_id),
                     ));
                 $num_orgs = count($orgs);
                 $str = '';
                 for($i=0; $i < $num_orgs; $i++ ) {
                     $str .= "<option value ='". $orgs[$i]->id ."'>" . $orgs[$i]->name . "</option>";
                 }
-                 echo $str;
+                echo $str;
+            }else{
+                throw new Exception("ERROR: Post inválido");
             }
         }      
         
