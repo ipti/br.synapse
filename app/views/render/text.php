@@ -31,24 +31,15 @@
 <script>
 
     var NEWRENDER = new render();
-    NEWRENDER.scriptID = 1;
-    NEWRENDER.actorID = 2;
-    NEWRENDER.atdID = 'exam';
-    
+    NEWRENDER.init();
+    NEWRENDER.atdID = 'text';
     $(function() {
         var json = <?php echo $json ?>;
-        NEWRENDER.init();
-        NEWRENDER.progresiveLoad(json,'#status');
+        NEWRENDER.loadcobject(json,'#status');
+        NEWRENDER.start();
+        NEWRENDER.mountReportScreen();
     });
 </script>
-<div class="waiting">
-    <div style="font-size:24px;margin:200px auto;display:block; text-align: center;color:white;">
-        <font id="titleload">Inicializando...</font>
-        <div id="progressBar"><div></div></div>
-        <span id="msgload" style="font-size:12px;">Inicializando objetivos</span>
-        <input id="start" style="display:none;font-size:20px" type="button" value="Iniciar"/>
-    </div>
-</div>
 <div class="render">
     <div class="cobjects"></div>
 </div>

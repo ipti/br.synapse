@@ -51,14 +51,16 @@ class RenderController extends Controller {
         exit;
     }
 
-    public function actionLoadcobject() {
-        $cobject_id = $_REQUEST['ID'];
+    public function cobjectbyid($cobject_id) {
         $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
         $command = Yii::app()->db->createCommand($sql);
         $command->execute();
         $row = $command->queryRow();
         $json = $row;
         $cobject = Cobject::model()->findByPk($row['cobject_id']);
+        if (isset($cobject->father)) {
+            $json['father'] = $cobject->father->id;
+        }
         $a5 = $a2 = $a3 = -1;
         if (isset($cobject->editorScreens)) {
             foreach ($cobject->editorScreens as $screen) {
@@ -87,6 +89,7 @@ class RenderController extends Controller {
                                 $properties[] = array('name' => $property->property->name, 'value' => $property->value);
                             }
                             if ($cobject->template->code == 'AEL') {
+                                $properties[] = array('name' => 'match', 'value' => $piece->piece->id);
                                 $properties[] = array('name' => 'group', 'value' => $piece->piece->id);
                             }
                             foreach ($element->editorEvents as $event) {
@@ -120,12 +123,25 @@ class RenderController extends Controller {
                     }
                 }
             }
-            echo json_encode($json);
+            return $json;
         } else {
             $json['cobject'] = $cobject_id;
-            echo json_encode($json);
+            return $json;
         }
+    }
+
+    public function actionLoadcobject() {
+        $cobject_id = $_REQUEST['ID'];
+        $json = $this->cobjectbyid($cobject_id);
+        echo json_encode($json);
         exit;
+    }
+
+    public function actionLoadtext() {
+        $cobject_id = $_REQUEST['ID'];
+        $json = $this->cobjectbyid($cobject_id);
+        $json = json_encode($json);
+        $this->render('text', array('json' => $json));
     }
 
     public function actionLoadcobjects() {
@@ -159,7 +175,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('listcobjects', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview'),
+                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -228,21 +244,21 @@ class RenderController extends Controller {
         $degree = @$_REQUEST['degree'];
         $content = @$_REQUEST['content'];
         $actor = @$_REQUEST['actor'];
-        /*$script = ActScript::model()->findByPk($script);
-        $content_parent = $script->father_content;
-        foreach ($script->actScriptContents as $content) {
-            if ($content->status == 'in') {
-                $contentsIn[] = $content->content_id;
-            } else {
-                $contentOut[] = $content->content_id;
-            }
-        }
-        if (isset($contentsIn)) {
-            $contentsIn = implode(",", $contentsIn);
-        }
-        if (isset($contentOut)) {
-            $contentOut = implode(",", $contentOut);
-        }*/
+        /* $script = ActScript::model()->findByPk($script);
+          $content_parent = $script->father_content;
+          foreach ($script->actScriptContents as $content) {
+          if ($content->status == 'in') {
+          $contentsIn[] = $content->content_id;
+          } else {
+          $contentOut[] = $content->content_id;
+          }
+          }
+          if (isset($contentsIn)) {
+          $contentsIn = implode(",", $contentsIn);
+          }
+          if (isset($contentOut)) {
+          $contentOut = implode(",", $contentOut);
+          } */
         $join = "";
         //$sql = "select distinct(cobject_id) as id from render_cobjects where template_code = 'PRE' and status='on'";
         $sql = "select  distinct(a1.id)
@@ -253,13 +269,13 @@ class RenderController extends Controller {
           join act_content a6 on(a6.id=a4.content_id)
           join act_degree a7 on(a3.degree_id=a7.id)";
         $where = " where a1.status='on' and a7.stage = '2' and (year = '1' or year = '2') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
-        /*if (isset($contentsIn) && isset($contentOut)) {
-            $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
-        } else if (isset($contentsIn) && !isset($contentOut)) {
-            $where.= " and (a6.id in($contentsIn))";
-        } else if (isset($contentOut) && !isset($contentsIn)) {
-            $where.= " and (a6.id not in($contentOut))";
-        }*/
+        /* if (isset($contentsIn) && isset($contentOut)) {
+          $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
+          } else if (isset($contentsIn) && !isset($contentOut)) {
+          $where.= " and (a6.id in($contentsIn))";
+          } else if (isset($contentOut) && !isset($contentsIn)) {
+          $where.= " and (a6.id not in($contentOut))";
+          } */
 
         if (isset($modality)) {
             $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
@@ -453,7 +469,7 @@ class RenderController extends Controller {
                                         $b = -1;
                                     }
                                     foreach ($piece->piece->editorPieceElements as $element) {
-                                        
+
                                         $b++;
                                         $properties = $events = $gproperties = array();
                                         foreach ($element->editorPieceelementProperties as $property) {

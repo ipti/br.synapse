@@ -409,11 +409,23 @@ class DefaultController extends Controller {
                         $this->elog('Tipo:', $src . '(' . $row['table_source'] . ')');
                         $type = CommonType::model()->findByAttributes(array('context' => 'element', 'name' => $type_element));
                         $element = EditorElement::model()->findByAttributes(array('oldID' => $row['table_ref'], 'type_id' => $type->id));
+                        if($type_element == 'multimidia'){
+                            if(isset($element)){
+                                 $libproperty = CommonProperty::model()->findByAttributes(array('name'=>'library_id'));
+                                 $libid = EditorElementProperty::model()->findByAttributes(array('element_id'=>$element->id,'property_id'=>$libproperty->id));
+                                 $lib = Library::model()->findByAttributes(array('id' => $libid->value));
+                                 if($lib->type->name != $src){
+                                     unset($element);
+                                 }
+                            }
+                        }
                         if (!isset($element)) {
                             $element = new EditorElement();
                             $element->type_id = $type->id;
                             $element->oldID = $row['table_ref'];
                             $element->save();
+                        }else{
+                            
                         }
                         switch ($src) {
                             case 'morpheme':
