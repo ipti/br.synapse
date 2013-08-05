@@ -82,7 +82,7 @@ class UnityController extends Controller
                                     $IDunity_father, $OrgIDunity_father) {
             if(isset($IDunity_child) && isset($OrgIDunity_child)) {
                 $modelUTree = new UnityTree;
-                $modelUTree->primay_unity_id = $IDunity_father;   //Unity_Father Old ID
+                $modelUTree->primary_unity_id = $IDunity_father;   //Unity_Father Old ID
                 $modelUTree->primary_organization_id = $OrgIDunity_father ; //Unity_Father Old organizationID
                 $modelUTree->secondary_unity_id = $IDunity_child; //Unity_Child Old  unity
                 $modelUTree->secondary_organization_id = $OrgIDunity_child; //Unity_Child OLD unityOrganizationID

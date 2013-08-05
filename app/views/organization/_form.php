@@ -23,21 +23,21 @@
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'fatherID'); ?>
-                        <?php echo $form->textField($model,'fatherID'); ?>
-                        <?php echo $form->error($model,'fatherID'); ?>
+                        <?php echo $form->labelEx($model,'father_id'); ?>
+                        <?php echo $form->textField($model,'father_id'); ?>
+                        <?php echo $form->error($model,'father_id'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'orgLevel'); ?>
-                        <?php echo $form->textField($model,'orgLevel'); ?>
-                        <?php echo $form->error($model,'orgLevel'); ?>
+                        <?php echo $form->labelEx($model,'orglevel'); ?>
+                        <?php echo $form->textField($model,'orglevel'); ?>
+                        <?php echo $form->error($model,'orglevel'); ?>
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'degreeID'); ?>
-                        <?php echo $form->textField($model,'degreeID'); ?>
-                        <?php echo $form->error($model,'degreeID'); ?>
+                        <?php echo $form->labelEx($model,'degree_id'); ?>
+                        <?php echo $form->textField($model,'degree_id'); ?>
+                        <?php echo $form->error($model,'degree_id'); ?>
                     </div>
 
                                         <div class="formField">

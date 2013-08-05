@@ -6,8 +6,8 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'ID'); ?>
-		<?php echo $form->textField($model,'ID'); ?>
+		<?php echo $form->label($model,'id'); ?>
+		<?php echo $form->textField($model,'id'); ?>
 	</div>
 
 	<div class="row">
@@ -21,18 +21,18 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'fatherID'); ?>
-		<?php echo $form->textField($model,'fatherID'); ?>
+		<?php echo $form->label($model,'father_id'); ?>
+		<?php echo $form->textField($model,'father_id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'orgLevel'); ?>
-		<?php echo $form->textField($model,'orgLevel'); ?>
+		<?php echo $form->label($model,'orglevel'); ?>
+		<?php echo $form->textField($model,'orglevel'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'degreeID'); ?>
-		<?php echo $form->textField($model,'degreeID'); ?>
+		<?php echo $form->label($model,'degree_id'); ?>
+		<?php echo $form->textField($model,'degree_id'); ?>
 	</div>
 
 	<div class="row">
