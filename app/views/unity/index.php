@@ -25,16 +25,15 @@ array('label'=> Yii::t('default', 'Create a new Unity'), 'url'=>array('create'),
                         'enablePagination' => true,
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
-                    		'id',
-		'name',
-		'organization_id',
-		'father_id',
-		'location_id',
-		'fk_code',
-		//'autochild',
-		'active_date',
-		'desactive_date',
-		//'capacity',
+                            'name',
+                            array(
+                                'name'=>'organization_id',
+                                'value'=>'$data->organization->name',
+                            ),
+                            array(
+                                'name'=>'location_id',
+                                'value'=>'$data->location->name',
+                            ),
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   

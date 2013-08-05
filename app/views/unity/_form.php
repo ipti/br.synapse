@@ -19,7 +19,9 @@
                     function () {
                         var num_unitys = 0;
                         num_unitys = $('.org').size(); // coincide com o OrgfatherID da Última Unity
-                        $.post("/unity/loadOrg", {totalUnity: num_unitys} , function(result) {
+                        var lastUnity = $('.org').last();
+                        var lastUnityID = lastUnity.val(); 
+                        $.post("/unity/loadOrg", {unity_id: lastUnityID} , function(result) {
                            $('#Unity_organization_id').html(result);                      
                            var IDfolk = $('#org_'+num_unitys).val(); // Id do Pai da nova Unity
                            $('#Unity_father_id').val(IDfolk);

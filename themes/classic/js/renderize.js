@@ -44,7 +44,7 @@ function renderize(){
         else if (count == 1){
             $("#box_"+(id)).remove();
             $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
-            $("#box_"+id).append("<input type='hidden' id='org_"+id+"' name='org["+id+"]' value='"+unitys[0].secondary_unity_id+"'>");
+            $("#box_"+id).append("<input type='hidden' id='org_"+id+"' class='org' name='org["+id+"]' value='"+unitys[0].secondary_unity_id+"'>");
             nextUnity = unitys[0].secondary_unity_id;
             this.loadJsonUnity(nextUnity);
         }

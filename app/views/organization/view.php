@@ -13,17 +13,17 @@ array('label'=> Yii::t('default', 'List Organization'), 'url'=>array('index'),'d
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">
             <div class="panelGroup form">
-                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Organization # '.$model->ID.' :')?></div></div>
+                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View Organization # '.$model->id.' :')?></div></div>
                 <div class="panelGroupBody">
                     <?php $this->widget('zii.widgets.CDetailView', array(
                     'data'=>$model,
                     'attributes'=>array(
-                    		'ID',
+                    		'id',
 		'acronym',
 		'name',
-		'fatherID',
-		'orgLevel',
-		'degreeID',
+		'father_id',
+		'orglevel',
+		'degree_id',
 		'autochild',
                     ),
                     )); ?>

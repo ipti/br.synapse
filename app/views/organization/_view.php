@@ -1,7 +1,7 @@
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('ID')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->ID), array('view', 'id'=>$data->ID)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('acronym')); ?>:</b>
@@ -12,16 +12,16 @@
 	<?php echo CHtml::encode($data->name); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('fatherID')); ?>:</b>
-	<?php echo CHtml::encode($data->fatherID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('father_id')); ?>:</b>
+	<?php echo CHtml::encode($data->father_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('orgLevel')); ?>:</b>
-	<?php echo CHtml::encode($data->orgLevel); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('orglevel')); ?>:</b>
+	<?php echo CHtml::encode($data->orglevel); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('degreeID')); ?>:</b>
-	<?php echo CHtml::encode($data->degreeID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('degree_id')); ?>:</b>
+	<?php echo CHtml::encode($data->degree_id); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('autochild')); ?>:</b>

@@ -25,12 +25,12 @@ array('label'=> Yii::t('default', 'Create a new Organization'), 'url'=>array('cr
                         'enablePagination' => true,
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
-                    		'ID',
+                    		'id',
 		'acronym',
 		'name',
-		'fatherID',
-		'orgLevel',
-		'degreeID',
+		'father_id',
+		'orglevel',
+		'degree_id',
 		'autochild',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
