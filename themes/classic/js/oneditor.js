@@ -16,9 +16,9 @@ $(function() {
     newEditor.countPieceSet['sc0'] = 0;
     newEditor.countPieces['sc0_ps0'] = 0;
     
-    $("#toolbar").draggable({
-        axis: "y"
-    });                   
+    //$("#toolbar").draggable({
+    //    axis: "y"
+    //});                   
     $("#addScreen").click(function(){
         newEditor.addScreen();
     });

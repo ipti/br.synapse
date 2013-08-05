@@ -15,6 +15,10 @@ function editor () {
     this.uploadedElements = 0;
     this.uploadedLibraryIDs = new Array();
     this.isload = false;
+    this.TXT = new Array(2);
+    this.MTE = new Array(3,4,5,6);
+    this.PRE = new Array(7,8,9,10,11,12);
+    this.AEL = new Array(13,14,15);
     
     this.changePiece = function(piece){
         $('.piece').removeClass('active');
@@ -75,7 +79,6 @@ function editor () {
             plusdesc = desc;
             plustype = type;
         }
-        console.log(plusdesc);
         
         var parent = this;
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
@@ -124,20 +127,30 @@ function editor () {
         
         var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
         this.countElements[pieceID] = 0;
-        $('#'+PieceSetid).append(''+
+        console.log(parent.PRE.indexOf(parent.COtemplateType) != -1);
+        var html = ''+
             '<li id="'+pieceID+'" class="piece" '+plus+'>'+
             '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>'+
-            '<div class="tplMulti">'+
-            '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>'+
-            '<br>'+
+            '<div class="tplMulti">';
+            '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>';
+        if(parent.MTE.indexOf(parent.COtemplateType) != -1){
+            html += '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>';
+        }else if(parent.PRE.indexOf(parent.COtemplateType) != -1){
+            html+= '';
+        }
+            html+= '<br>'+
             '</div>'+
-            '</li>');
+            '</li>';
+        $('#'+PieceSetid).append(html);
         
         this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
-
-        $("#"+pieceID+"> div > button.newElement").click(function(){
+        if(parent.MTE.indexOf(parent.COtemplateType) != -1){
+            $("#"+pieceID+"> div > button.newElement").click(function(){
+                parent.addElement();
+            });
+        }else if(parent.PRE.indexOf(parent.COtemplateType) != -1){
             parent.addElement();
-        });
+        }
         $("#"+pieceID+"> button.delPiece").click(function(){
             parent.delPiece(pieceID);
         });
@@ -359,9 +372,11 @@ function editor () {
         }
         
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
-        $('#'+this.currentPiece+" > div.tplMulti").append(''+
-            '<span id="'+elementID+'" '+plus+' class="element moptions">'+
-            '<div>' +
+        
+        var html = '<span id="'+elementID+'" '+plus+' class="element moptions">'+
+            '<div>';
+        if(parent.MTE.indexOf(parent.COtemplateType) != -1){
+            html += ''+
             '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
             '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
             '<button class="del delElement">'+LABEL_REMOVE_ELEMENT+'</button>'+
@@ -369,10 +384,14 @@ function editor () {
             '<br>'+
             '<br>'+
             '<label>'+
-            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct">'+LABEL_CORRECT+
-            '</label>'+
-            '</div>' +
-            '</span>');
+            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct"/>'+LABEL_CORRECT+
+            '</label>';
+        }else if(parent.PRE.indexOf(parent.COtemplateType) != -1){
+            html+= '<label>'+LABEL_CORRECT+'<input type="edit" id="'+elementID+'_flag" name="'+elementID+'_flag" value=""/></label>';
+        }
+        html += '</div>' +
+            '</span>';
+        $('#'+this.currentPiece+" > div.tplMulti").append(html);
         
         
         
@@ -391,7 +410,7 @@ function editor () {
                             this.addImage(elementID, loaddata);
                             break;
                         case '17'://video
-                            this.addImage(elementID, loaddata);
+                            this.addVideo(elementID, loaddata);
                             break;
                         case '20'://sound
                             this.addSound(elementID, loaddata);
@@ -399,7 +418,7 @@ function editor () {
                     }
                     break;
                 default:
-                    console.log(elementID+' '+type+' '+loaddata);
+                    //console.log(elementID+' '+type+' '+loaddata);
             }
         }
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;

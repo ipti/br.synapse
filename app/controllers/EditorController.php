@@ -26,7 +26,7 @@ class EditorController extends Controller {
     }
 
     public function actionIndex() {
-        if(isset($_GET['cID']) || isset($_POST['cobjectID']) ){
+        if(isset($_GET['cID']) || isset($_POST['cobject_id']) ){
             $this->render('index');
         }
         elseif (!isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) && !isset($_POST['cobjectTheme'])) {
@@ -157,7 +157,7 @@ class EditorController extends Controller {
                 for ($i = 0; $i < $count_Agoal_disc; $i++) {
                     // Array dos Degrees - A cada repetição irá guarda 1 único registro 
                     $actDegree[$i] = Yii::app()->db->createCommand('SELECT id, name FROM act_degree
-                WHERE id = ' . $actGoal_disc[$i]['degreeID'] . ' AND grade > 0')->queryAll();
+                WHERE id = ' . $actGoal_disc[$i]['degree_id'] . ' AND grade > 0')->queryAll();
                 }
                 $count_Adeg = count($actDegree);
                 if ($count_Adeg > 0) {
@@ -165,25 +165,25 @@ class EditorController extends Controller {
                  Act Degree&nbsp;:&nbsp;
                  <select id='actDegree' name='actDegree'>  ";
                     for ($i = 0; $i < $count_Adeg; $i++) {
-                        $str.= "<option value=" . $actDegree[$i][0]['ID'] . ">" . $actDegree[$i][0]['name'] . "</option>";
+                        $str.= "<option value=" . $actDegree[$i][0]['id'] . ">" . $actDegree[$i][0]['name'] . "</option>";
                     }
                     $str.= "</select> 
               </div> ";
 
                     //Por padrão, como não foi selecionado algum Degree, mostrará o GOAL do 1° [0]
                     $actGoal_d = Yii::app()->db->createCommand('SELECT id, name FROM act_goal 
-                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $actDegree[0][0]['ID'])->queryAll();
+                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $actDegree[0][0]['id'])->queryAll();
                     $count_Agoal_d = count($actGoal_d);
                     // No mínimo possui 1 registro
                     $str.= "<div id='propertyAgoal' class='propertyAgoal' align='center'>
                       <br> Act Goal&nbsp;:&nbsp;
                       <select id='actGoal' name='actGoal' style='width:430px'> ";
                     for ($i = 0; $i < $count_Agoal_d; $i++) {
-                        $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>";
+                        $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
                     }
                       
                     $str.= "</select>";
-                    $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']) .
+                    $str.=  $this->searchCobjectofGoal($actGoal_d[0]['id']) .
                            "</div>                  
 
              <script type='text/javascript'>
@@ -216,10 +216,10 @@ class EditorController extends Controller {
             $str = "<br> Act Goal&nbsp;:&nbsp;
                       <select id='actGoal' name='actGoal' style='width:430px'> ";
             for ($i = 0; $i < $count_Agoal_d; $i++) {
-                $str.= "<option value=" . $actGoal_d[$i]['ID'] . ">" . $actGoal_d[$i]['name'] . "</option>";
+                $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
             }
             $str.= "</select>";
-            $str.=  $this->searchCobjectofGoal($actGoal_d[0]['ID']);
+            $str.=  $this->searchCobjectofGoal($actGoal_d[0]['id']);
             $str.="
                 <script language='javascript' type='text/javascript'>  
                 $('#actGoal').change(function(){
@@ -250,8 +250,8 @@ class EditorController extends Controller {
                 <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
                 <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for($i = 0; $i < $count_CobjMdata; $i++){
-                $str2.= "<option value=" . $cobject_metadata[$i]['cobjectID'] . ">"
-                      . $cobject_metadata[$i]['cobjectID'] . "</option>";
+                $str2.= "<option value=" . $cobject_metadata[$i]['cobject_id'] . ">"
+                      . $cobject_metadata[$i]['cobject_id'] . "</option>";
             }
                 $str2.= "</select>
                     <input type='hidden' name='op' value='load'> 
@@ -504,10 +504,10 @@ class EditorController extends Controller {
                         throw new Exception("ERROR: Operação inválida.<br>");
                 }
             } elseif ($_POST['op'] == 'load') {
-                if(isset($_POST['cobjectID'])){
-                    $cobjectID = $_POST['cobjectID'];
+                if(isset($_POST['cobject_id'])){
+                    $cobjectID = $_POST['cobject_id'];
                     $cobject = Cobject::model()->findByAttributes(array('id'=>$cobjectID));
-                    $json['cobjectID'] = $cobjectID;
+                    $json['cobject_id'] = $cobjectID;
                     $json['typeID'] = $cobject->type_id;
                     $json['themeID'] = $cobject->theme_id;
                     $json['templateID'] = $cobject->template_id;
@@ -518,7 +518,7 @@ class EditorController extends Controller {
                         $json['S'.$sc->id] = array();
                         $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screen_id'=>$sc->id),array('order'=>'`position`'));
                         foreach ($ScreenPieceset as $scps):
-                            $PieceSet = EditorPieceset::model()->findByAttributes(array('ID'=>$scps->pieceset_id));
+                            $PieceSet = EditorPieceset::model()->findByAttributes(array('id'=>$scps->pieceset_id));
                             $json['S'.$sc->id]['PS'.$PieceSet->id] = array();
                             $json['S'.$sc->id]['PS'.$PieceSet->id]['desc'] = $PieceSet->desc;
                             $json['S'.$sc->id]['PS'.$PieceSet->id]['typeID'] = $PieceSet->type_id;
