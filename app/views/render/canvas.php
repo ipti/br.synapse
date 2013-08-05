@@ -1,5 +1,5 @@
 <?php
-if (isset($_SESSION['idActor'])) {
+if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
     $act = Actor::model()->findbypk($_SESSION['idActor']);
     $class = Unity::model()->findbypk($_SESSION['unityIdActor']);
 } else {

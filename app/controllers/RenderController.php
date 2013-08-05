@@ -243,7 +243,8 @@ class RenderController extends Controller {
         $modality = @$_REQUEST['modality'];
         $degree = @$_REQUEST['degree'];
         $content = @$_REQUEST['content'];
-        $actor = @$_REQUEST['actor'];
+        $actor = @$_REQUEST['actorID'];
+        $actor = Actor::model()->findbypk($actor);
         /* $script = ActScript::model()->findByPk($script);
           $content_parent = $script->father_content;
           foreach ($script->actScriptContents as $content) {
@@ -296,7 +297,7 @@ class RenderController extends Controller {
         $json['size'] = count($reader);
         $json['pctitem'] = round(100 / count($reader), 1);
         $json = json_encode($json);
-        $this->render('stage', array('json' => $json));
+        $this->render('stage', array('json' => $json,'actor'=>$actor));
     }
 
     public function actionJson() {
