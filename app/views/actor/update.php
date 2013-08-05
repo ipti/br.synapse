@@ -2,7 +2,7 @@
     <?php
 $this->breadcrumbs=array(
 	'Actors'=>array('index'),
-	$model->ID=>array('view','id'=>$model->ID),
+	$model->id=>array('view','id'=>$model->id),
 	'Update',
 );
 
