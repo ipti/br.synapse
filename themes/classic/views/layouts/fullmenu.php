@@ -22,11 +22,11 @@
                 'items' => array(
                      array(
                         'label' => Yii::t('menu', 'Register'),
-                        'url' => array('/user/index'),
+                        'url' => array('/person/index'),
                         'linkOptions' => array('id' => 'menuuser'),
                         'itemOptions' => array('id' => 'itemuser'),
                         'items' => array(
-                            array('label' => Yii::t('menu', 'Unidade'), 'url' => array('/userclass/index')),
+                            array('label' => Yii::t('menu', 'Unidade'), 'url' => array('/unity/index')),
                             array('label' => Yii::t('menu', 'Pessoa'), 'url' => array('/person/index')),
                         ),
                     ),
