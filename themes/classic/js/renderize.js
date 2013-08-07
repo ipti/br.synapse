@@ -57,7 +57,7 @@ function renderize(){
             }
             $("#box_"+(id-1)).append("<div id='box_"+id+"' class='box'></div>");
             
-            $("#box_"+(id)).append((id == 1) ? "<font>Unity:</font>" : "<font>-></font>");
+            $("#box_"+(id)).append((id == 1) ? "<font>Unidade:</font>" : "<font>-></font>");
             // Chamar função no onChange
             $("#box_"+(id)).append("<select id='org_"+id+"' name='org["+id+"]' class='org' >"+options+"</select>");
             $("#org_"+id).change(function(){
@@ -81,7 +81,7 @@ function renderize(){
         }
         $("#classesbox").remove();
         $("#filter").append("<div id='classesbox' class='formField'></div>");
-        $("#classesbox").append("<font>Class:</font>");
+        $("#classesbox").append("<font>Turma:</font>");
         $("#classesbox").append("<select id='classes' name='class'>"+options+"</select>");
         $("#classes").change(function(){
             if(parent.op == "all")
@@ -100,7 +100,7 @@ function renderize(){
         }
         $("#actorsbox").remove();
         $("#filter").append("<div id='actorsbox' class='formField'></div>")
-        $("#actorsbox").append("<font>Actor:</font>");
+        $("#actorsbox").append("<font>Aluno:</font>");
         $("#actorsbox").append("<select id='actors' name='actor'>"+options+"</select>");
         $("#actorsbox").append("<br>");
         $("#actorsbox").append("<br><input type='submit' value='Start'>");

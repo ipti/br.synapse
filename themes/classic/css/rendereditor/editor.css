@@ -93,11 +93,11 @@
 img{display:block;}
 h1,h2,h3,h4,h5{display:none;}
 h6{text-align:right;font-size:12px;display:none}
-.enum li{display:block;margin:10px}
+.enum li{display:block;margin:10px;text-align: center}
 
 font.eclick{cursor:pointer}
 font.eclick:hover{text-decoration: underline;border:1px dotted #000;background:black;color:white;}
-.options li{margin:10px 0px;}
+.options li{margin:10px 0px;float:left}
 #paginate{background:#fff}
 .screenInfo{display:block;padding:10px;background:#eee;margin-bottom:10px;-webkit-box-shadow:  0px 2px 5px 0px rgba(0, 0, 0);box-shadow:  0px 2px 5px 0px rgba(0, 0, 0)}
 .screenInfo label{font-size:11px;display:block;}
@@ -113,12 +113,13 @@ body{margin:0}
 #nextButton{width: 200px;margin:0 auto;display:block;}
 #message{position:relative !important;margin-bottom:-50px !important;z-index: 1;top:20px;}
 .delement{opacity: 0.3}
-.pairs,.groups{float:left;width:460px;margin:0px 5px;border:1px solid;}
-.pairs .element,.groups .element{border-bottom:1px dotted;font-size:20px;padding:5px}
+.pairs,.groups{display: block}
+.pairs .element,.groups .element{float: left}
 .piecesets{width: 960px;margin:20px auto;}
 .element img{margin:0 auto;}
-.options .element font{margin:0 14px; font-size:12px;padding:4px;}
+.options .element font{margin:0 14px;padding:4px;}
 ul.enum,ul.pairs{border-bottom:1px solid #666;margin-bottom:20px}
+ul.pairs{padding-bottom:20px;}
 .tplMulti span{float:left;border:1px dashed #000; margin: 5px; padding: 4px;}
 .theme .tplMulti .insertImage{border:0px; background:url('../../images/theme_tools_addimage.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .theme .tplMulti .insertText{border:0px; background:url('../../images/theme_tools_addtext.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
@@ -126,3 +127,36 @@ ul.enum,ul.pairs{border-bottom:1px solid #666;margin-bottom:20px}
 .messagebox{margin:10px auto;width:95%;display:block;padding:10px;}
 .messagewrong{background:red;color:#fff}
 .messagecorrect{background:green;color:#fff}
+.lstexts li font{display:block;padding-top:10px;}
+.element input[type=text]{width: 240px;height:32px;}
+.element input[type=button]{width: 98px;height:38px;}
+label.goal{font-weight: bold;font-size:20px;text-align: center}
+.stpair6,.stgroup6{width: 150px;margin: 0px 5px;text-align: center;font-size:23px;}
+.stpair5,.stgroup5{width: 182px;margin: 0px 5px;text-align: center;font-size:25px;}
+.stpair4,.stgroup4{width: 230px;margin: 0px 5px;text-align: center;font-size:25px;}
+.stpair3,.stgroup3{width: 310px;margin: 0px 5px;text-align: center;font-size:25px;}
+.stpair6 img,.stgroup6 img{width:150px;height: 150px}
+.stpair5 img,.stgroup5 img{width:180px; height: 180px;} 
+.stpair4 img,.stgroup4 img{width:230px; height: 230px;} 
+.stpair3 img,.stgroup3 img{width:310px; height: 230px;} 
+.groups font, .pairs font{display: block;cursor: pointer}
+.groups font:hover,.pairs font:hover{background:#eee}
+.lstexts font{text-align:center}
+.enum font{text-align: center}
+.options7{width: 135px;font-size:20px;text-align: center}
+.options7 font{font-size:23px;}
+.options7 img{width: 135px;height:135px}
+.options4{width: 240px;font-size:20px;text-align: center}
+.options4 font{font-size:28px;}
+.options4 img{width: 240px;height:240px}
+.options5{width: 190px;font-size:20px;text-align: center}
+.options5 font{font-size:20px;}
+.options5 img{width: 190px;height:240px}
+.options2{width: 460px;text-align: center}
+.options2 font{font-size:35px;}
+.options2 img{width: 460px;height:460px}
+.options3{width: 320px;text-align: center}
+.options3 font{font-size:25px;}
+.options3 img{width: 320px;height:320px}
+.sps_render_ending strong{margin:0 auto;display:block; width:260px; font-size:160px;color:green;font-weight: bold;margin-top:50px;}
+.sps_render_ending span{text-align:center;font-size:30px;font-weight: bold;display:block;}

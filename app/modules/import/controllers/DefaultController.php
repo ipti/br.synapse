@@ -269,7 +269,7 @@ class DefaultController extends Controller {
                 }
                 break;
             case 'activities':
-                $sqlacts = "select * from activity";
+                $sqlacts = "select * from activity order by coalesce(father_id,0),id asc";
                 $reader = $this->search($sqlacts);
                 foreach ($reader as $row) {
                     if (!isset($row['activitytype_id'])) {
@@ -279,6 +279,12 @@ class DefaultController extends Controller {
                     $tmp = new Cobject();
                     $tmp->oldID = $row['id'];
                     $tmp->type_id = $type->id;
+                    if (isset($row['father_id'])) {
+                        $father = Cobject::model()->findByAttributes(array('oldID'=>$row['father_id']));
+                        if(isset($father)){
+                            $tmp->father_id = $father->id;
+                        }
+                    }
                     if ($row['status'] == '1') {
                         $tmp->status = 'on';
                     }
@@ -403,11 +409,23 @@ class DefaultController extends Controller {
                         $this->elog('Tipo:', $src . '(' . $row['table_source'] . ')');
                         $type = CommonType::model()->findByAttributes(array('context' => 'element', 'name' => $type_element));
                         $element = EditorElement::model()->findByAttributes(array('oldID' => $row['table_ref'], 'type_id' => $type->id));
+                        if($type_element == 'multimidia'){
+                            if(isset($element)){
+                                 $libproperty = CommonProperty::model()->findByAttributes(array('name'=>'library_id'));
+                                 $libid = EditorElementProperty::model()->findByAttributes(array('element_id'=>$element->id,'property_id'=>$libproperty->id));
+                                 $lib = Library::model()->findByAttributes(array('id' => $libid->value));
+                                 if($lib->type->name != $src){
+                                     unset($element);
+                                 }
+                            }
+                        }
                         if (!isset($element)) {
                             $element = new EditorElement();
                             $element->type_id = $type->id;
                             $element->oldID = $row['table_ref'];
                             $element->save();
+                        }else{
+                            
                         }
                         switch ($src) {
                             case 'morpheme':
