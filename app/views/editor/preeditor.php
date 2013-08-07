@@ -39,7 +39,7 @@
           <div id = 'property' class='innerborder'>
           <form name='propertyForm' id='propertyForm' method='POST' action='index'>
           <div id='propertyCT'> 
-          Common Type&nbsp;:&nbsp;
+          Tipo&nbsp;:&nbsp;
           <select id='commonType' name='commonType'> 
           <?php
           for ($i = 0; $i < $count_CT; $i++) {
@@ -49,7 +49,7 @@
          </select> 
           </div>
           <div id='propertyCTemp' > 
-          Cobject Template&nbsp;:&nbsp;
+          Template&nbsp;:&nbsp;
           <select id='cobjectTemplate' name='cobjectTemplate'> 
               <?php
             for ($i = 0; $i < $count_Ctemp; $i++) {
@@ -59,7 +59,7 @@
           </select> 
           </div>
           <div id='propertyCthem'  > 
-          Cobject Theme&nbsp;:&nbsp;
+          Tema&nbsp;:&nbsp;
           <select id='cobjectTheme' name='cobjectTheme'> 
            <?php   
             for ($i = 0; $i < $count_Cthem; $i++) {
@@ -70,7 +70,7 @@
           </div>
               <hr>
               <div id='propertyAdis'> 
-                 Act Discipline&nbsp;:&nbsp;
+                 Disciplina&nbsp;:&nbsp;
                  <select id='actDiscipline' name='actDiscipline'> 
                    <?php   
                      for ($i = 0; $i < $count_Adis; $i++) {
