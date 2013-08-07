@@ -178,6 +178,9 @@ function editor () {
     this.addText = function(ID, loaddata){       
         //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
         var initial_text = "";
+        
+        var parent = this;
+        
         //se estiver setado o novo id
         if(this.isset(loaddata)){
             //adiciona o código na varíavel
@@ -187,10 +190,18 @@ function editor () {
             initial_text = LABEL_INITIAL_TEXT;
         }
         
-        $('#'+ID).append('<div id="'+ID+'_text" class="text">'+
-            '<font class="editable">'+initial_text+'</font>'+
-            '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>'+
-            '</div>');
+        var html = '<div id="'+ID+'_text" class="text">'+
+            '<font class="editable">'+initial_text+'</font>';
+        if(parent.COTemplateTypeIn(parent.MTE)){
+            html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
+        } else if(parent.COTemplateTypeIn(parent.PRE)){
+            html += '';
+        } else {
+            
+        }
+        html += '</div>';
+        
+        $('#'+ID).append(html);
              
         var parent = this;
         var text = "#"+ID+"_text";
@@ -394,7 +405,7 @@ function editor () {
         
         var html = '<span id="'+elementID+'" '+plus+' class="element moptions">'+
             '<div>';
-        if(parent.MTE.indexOf(parent.COtemplateType) != -1){
+        if(parent.COTemplateTypeIn(parent.MTE)){
             html += ''+
             '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
             '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
@@ -405,13 +416,12 @@ function editor () {
             '<label>'+
             '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct"/>'+LABEL_CORRECT+
             '</label>';
-        }else if(parent.PRE.indexOf(parent.COtemplateType) != -1){
-            html+= '<label>'+LABEL_CORRECT+' <input type="edit" id="'+elementID+'_flag" name="'+elementID+'_flag" value=""/></label>';
+        }else if(parent.COTemplateTypeIn(parent.PRE)){
+            html+= '<label>'+LABEL_CORRECT+' </label>';
         }
         html += '</div>' +
             '</span>';
         $('#'+this.currentPiece+" > div.tplMulti").append(html);
-        
         
         
         if(this.isset(loaddata)){
@@ -442,36 +452,41 @@ function editor () {
         }
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         
-        var buttonTextoID = "#"+elementID+" > div > button.insertText";
-        var buttonImageID = "#"+elementID+" > div > button.insertImage";
-        var buttonDelID = "#"+elementID+" > div > button.delElement";
-        var textoID = "#"+elementID+"_text";
-        var imageID = "#"+elementID+"_image";
         
-        var ElementTextID = "#"+elementID+"_text";
-        var ElementImageID = "#"+elementID+"_image";
-        
-        $(buttonTextoID).click(function(){
-            if(!parent.existID(ElementImageID) || 
-                confirm(MSG_CHANGE_ELEMENT)){
-                if(!parent.existID(ElementTextID)){
-                    parent.addText(elementID);
-                    $(imageID).remove();
+        if(parent.COTemplateTypeIn(parent.MTE)){
+            var buttonTextoID = "#"+elementID+" > div > button.insertText";
+            var buttonImageID = "#"+elementID+" > div > button.insertImage";
+            var buttonDelID = "#"+elementID+" > div > button.delElement";
+            var textoID = "#"+elementID+"_text";
+            var imageID = "#"+elementID+"_image";
+
+            var ElementTextID = "#"+elementID+"_text";
+            var ElementImageID = "#"+elementID+"_image";
+
+            $(buttonTextoID).click(function(){
+                if(!parent.existID(ElementImageID) || 
+                    confirm(MSG_CHANGE_ELEMENT)){
+                    if(!parent.existID(ElementTextID)){
+                        parent.addText(elementID);
+                        $(imageID).remove();
+                    }
                 }
-            }
-        });
-        $(buttonImageID).click(function(){
-            if(!parent.existID(ElementTextID) || 
-                confirm(MSG_CHANGE_ELEMENT)){
-                if(!parent.existID(ElementImageID)){
-                    parent.addImage(elementID);
-                    $(textoID).remove();
+            });
+            $(buttonImageID).click(function(){
+                if(!parent.existID(ElementTextID) || 
+                    confirm(MSG_CHANGE_ELEMENT)){
+                    if(!parent.existID(ElementImageID)){
+                        parent.addImage(elementID);
+                        $(textoID).remove();
+                    }
                 }
-            }
-        });
-        $(buttonDelID).click(function(){
-            parent.delElement(elementID);
-        });
+            });
+            $(buttonDelID).click(function(){
+                parent.delElement(elementID);
+            });
+        }else if(parent.COTemplateTypeIn(parent.PRE)){
+            parent.addText(elementID);
+        }
     }
     
     this.delScreen = function(force){
