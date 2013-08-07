@@ -298,22 +298,15 @@ class EditorController extends Controller {
                         }
                         break;
                     case "Screen":
-                        if (isset($_POST['CObjectID']) && isset($_POST['Number']) && isset($_POST['Ordem'])
-                                && isset($_POST['Width']) && isset($_POST['Height']) && isset($_POST['DomID'])) {
+                        if (isset($_POST['CObjectID']) && isset($_POST['Ordem']) && isset($_POST['DomID'])) {
 
                             $DomID = $_POST['DomID'];
                             $cobjectID = $_POST['CObjectID'];
-                            $number = $_POST['Number'];
                             $ordem = $_POST['Ordem'];
-                            $width = $_POST['Width'];
-                            $height = $_POST['Height'];
 
                             $newScreen = new EditorScreen();
                             $newScreen->cobject_id = $cobjectID;
-                            $newScreen->number = $number;
                             $newScreen->order = $ordem;
-                            $newScreen->width = $width;
-                            $newScreen->height = $height;
                             $newScreen->insert();
 
                             $screen = EditorScreen::model()->findByAttributes(array(), array('order' => 'id desc'));
@@ -326,20 +319,19 @@ class EditorController extends Controller {
                         }
                         break;
                     case "PieceSet":
-                        if (isset($_POST['typeID']) && isset($_POST['desc']) && isset($_POST['screenID'])
-                                && isset($_POST['position']) && isset($_POST['templateID']) && isset($_POST['DomID'])) {
+                        if (isset($_POST['description']) && isset($_POST['screenID'])
+                                && isset($_POST['order']) && isset($_POST['templateID']) && isset($_POST['DomID'])) {
 
                             $DomID = $_POST['DomID'];
-                            $typeID = $_POST['typeID'];
-                            $desc = $_POST['desc'];
+                            $description = $_POST['description'];
 
                             $screenID = $_POST['screenID'];
-                            $position = $_POST['position'];
+                            $order = $_POST['order'];
                             $templateID = $_POST['templateID'];
 
                             $newPieceSet = new EditorPieceset();
-                            $newPieceSet->type_id = $typeID;
-                            $newPieceSet->desc = $desc;
+                            $newPieceSet->template_id = $templateID;
+                            $newPieceSet->description = $description;
                             $newPieceSet->insert();
 
                             $pieceSet = EditorPieceset::model()->findByAttributes(array(), array('order' => 'id desc'));
@@ -348,8 +340,7 @@ class EditorController extends Controller {
                             $newScreenPieceSet = new EditorScreenPieceset();
                             $newScreenPieceSet->screen_id = $screenID;
                             $newScreenPieceSet->pieceset_id = $pieceSetID;
-                            $newScreenPieceSet->position = $position;
-                            $newScreenPieceSet->template_id = $templateID;
+                            $newScreenPieceSet->order = $order;
                             $newScreenPieceSet->insert();
 
                             $json['DomID'] = $DomID;
@@ -360,15 +351,14 @@ class EditorController extends Controller {
                         break;
                     case "Piece":
                         if (isset($_POST['pieceSetID']) && isset($_POST['ordem'])
-                                && isset($_POST['typeID']) && isset($_POST['DomID']) ) {
+                                && isset($_POST['DomID']) && isset($_POST['screenID'])) {
 
                             $DomID = $_POST['DomID'];
                             $pieceSetID = $_POST['pieceSetID'];
+                            $screenID = $_POST['screenID'];
                             $ordem = $_POST['ordem'];
-                            $typeID = $_POST['typeID'];
 
                             $newPiece = new EditorPiece();
-                            $newPiece->type_id = $typeID;
                             $newPiece->insert();
 
                             $piece = EditorPiece::model()->findByAttributes(array(), array('order' => 'id desc'));
@@ -377,6 +367,7 @@ class EditorController extends Controller {
                             $newPieceSetPiece = new EditorPiecesetPiece();
                             $newPieceSetPiece->piece_id = $pieceID;
                             $newPieceSetPiece->pieceset_id = $pieceSetID;
+                            $newPieceSetPiece->screen_id = $screenID;
                             $newPieceSetPiece->order = $ordem;
                             $newPieceSetPiece->insert();
 
@@ -397,7 +388,7 @@ class EditorController extends Controller {
                                 $pieceID = $_POST['pieceID'];
                                 $flag = $_POST['flag'];
                                 $value = $_POST['value'];
-                                $position = $_POST['ordem'];
+                                $order = $_POST['ordem'];
 
                                 $newElement = new EditorElement();
                                 $newElement->type_id = $typeID;
@@ -409,7 +400,7 @@ class EditorController extends Controller {
                                 $newPieceElement = new EditorPieceElement();
                                 $newPieceElement->piece_id = $pieceID;
                                 $newPieceElement->element_id = $elementID;
-                                $newPieceElement->position = $position;
+                                $newPieceElement->order = $order;
                                 $newPieceElement->insert();
 
                                 $json['ElementID'] = $elementID;
@@ -429,6 +420,7 @@ class EditorController extends Controller {
                                         $newElementProperty->property_id = 10;
                                         $newElementProperty->value = "português";
                                         $newElementProperty->insert();
+                                        
                                         break;
                                     case 16: //image
                                         $src = $value['url'];
