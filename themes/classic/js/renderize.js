@@ -8,6 +8,7 @@ function renderize(){
     this.op;
     this.func;
     this.startRenderize = function (response, op, func){
+        window.alert(response.unitys);
         //se operação não existir, o pradão é all
         if(typeof(op) == "undefined"){
             this.op = "all";

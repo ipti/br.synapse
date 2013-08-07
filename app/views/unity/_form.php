@@ -5,7 +5,7 @@
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/date/datas.js"> </script>
 <script>
     var unity = <?php echo $unityfather ?>;
-     
+    
     $(function() {
         var newRenderize = new renderize();
    
@@ -15,6 +15,7 @@
             type:"POST",
             dataType:"json",// you can also specify for the result for json or xml
             success:function(response){
+                window.alert(unity);
                 newRenderize.startRenderize(response,'unity', 
                     function () {
                         var num_unitys = 0;
