@@ -307,6 +307,7 @@ function render () {
     //carregar informações para o filtro
     this.loadThemes = function(themes){
         htmContent = $('<select id="rtheme"></select>');
+        htmContent.append('<option value="0">TODOS</option>');
         $.each(themes, function(i, theme) {
             htmContent.append('<option value="'+theme.ID+'">'+theme.name+'</option>');
         });
@@ -325,6 +326,7 @@ function render () {
             htmContent.append('<option value="'+discipline.id+'">'+discipline.name+'</option>');
             if(typeof(discipline.scripts) != "undefined"){
                 htmScript = $('<select class="rscripts" id="rscript'+discipline.id+'"></select>');
+                htmScript.append('<option value="0">TODOS</option>');
                 $.each(discipline.scripts, function(i, script) {
                     htmScript.append('<option value="'+script.id+'">'+script.name+'</option>');
                 });
