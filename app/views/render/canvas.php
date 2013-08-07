@@ -18,7 +18,7 @@ if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
             data:{op:'start'},//data for throwing the expected url
             type:"POST",
             dataType:"json",// you can also specify for the result for json or xml
-            success:function(response){newRender.startRender(response);$('#rclassys').trigger('change');$('#rdiscipline').trigger('change');$('#rblockscript select').trigger('change');},
+            success:function(response){newRender.startRender(response);$('#rdiscipline').trigger('change');$('#rblockscript select').trigger('change');},
             error:function(){
             }
         });
@@ -104,12 +104,12 @@ if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
             <!--<label class="blockscript" id="rblock">
                 <font>Bloco:</font>
             </label>-->
-            <!--<label class="blockscript" id="rscript">
+            <label class="blockscript" id="rscript">
                 <font>Roteiro:</font>
-            </label>-->
-            <!--<label id="rtheme">
+            </label>
+           <label id="rtheme">
                 <font>Tema:</font>
-            </label>-->
+            </label>
             <!--<label>
                 <font>Seguir a matriz:</font>
                 <select>

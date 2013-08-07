@@ -103,7 +103,7 @@ function renderize(){
         $("#actorsbox").append("<font>Aluno:</font>");
         $("#actorsbox").append("<select id='actors' name='actor'>"+options+"</select>");
         $("#actorsbox").append("<br>");
-        $("#actorsbox").append("<br><input type='submit' value='Start'>");
+        $("#actorsbox").append("<br><input style='display:block;margin:0 auto;' type='submit' value='Confirmar'>");
         $("#actors").change(function(){
         });
     }
