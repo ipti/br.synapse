@@ -681,16 +681,16 @@ function editor () {
                         //Salva PieceSet
                         parent.saveData({ 
                             //Operação Salvar, PieceSet, ID no DOM
-                            op: parent.isload ? "update": "save", 
+                            op: "save",
                             step: "PieceSet",
                             DomID: PieceSetID,
                             //Dados do PieceSet
-                            template_id: 7,
+                            typeID: 7,
                             description: pieceSetDescription,
                             screenID: LastScreenID,
                             order: ++pieceSetPosition, //incrementa a Ordem do PieceSet
                             templateID: parent.COtemplateType,
-                           // isload: parent.isload,
+                            isload: parent.isload,
                             ID_BD : PieceSetID_BD
                         },
                         //Função sucess do save PieceSet
@@ -709,15 +709,15 @@ function editor () {
                                 //Save Piece
                                 parent.saveData({
                                     //Operação Salvar, Piece, ID no DOM
-                                    op: parent.isload ? "update": "save", 
+                                    op: "save",
                                     step: "Piece",
                                     DomID: PieceID,
                                     //Dados do Piece
-                                   // typeID: 7,
+                                    typeID: 7,
                                     pieceSetID: LastPieceSetID,
                                     ordem: ++piecePosition, //incrementa a Ordem do Piece
                                     screenID: LastScreenID,
-                                   // isload: parent.isload,
+                                    isload: parent.isload,
                                     ID_BD : PieceID_BD 
                                 },
                                 //Função de sucess do Save Piece
@@ -759,7 +759,7 @@ function editor () {
                                         //Dados que serão passados pelo ajax
                                         var data = {
                                             //Operação Salvar, Element, Type, ID no DOM
-                                            op: parent.isload ? "update": "save", 
+                                            op: "save",
                                             step: "Element",
                                             typeID: type,
                                             DomID: ElementID,
@@ -768,7 +768,7 @@ function editor () {
                                             pieceID: LastPieceID,
                                             flag: Flag,
                                             value: value,
-                                           // isload: parent.isload,
+                                            isload: parent.isload,
                                             ID_BD:  ElementID_BD
                                         };
                                        // HERE !!! verificar os IDS das librarys
@@ -930,9 +930,9 @@ function editor () {
                                         //pega o id do pieceset a partir do indice
                                         var piecesetID = i.slice(2);
                                         //pega a descrição do pieceset a partir do item
-                                        var desc = item['description'];
+                                        var desc = item['desc'];
                                         //pega o tipo do pieceset a partir do item
-                                        var type = item['template_id'];
+                                        var type = item['typeID'];
                                         
                                         //adiciona o pieceset
                                         parent.addPieceSet(piecesetID, desc, type);

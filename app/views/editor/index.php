@@ -16,12 +16,7 @@
      }
      else{ 
           throw new Exception('ERROR: RQEUEST Inválido');
-     } 
-     if(isset($cobjectID)) {  // Verificar Redundância
-         $object = Cobject::model()->findByPk($cobjectID);
-         $cobjectTemplate = $object->template_id;
      }
-     
 $this->breadcrumbs=array(
 	'Editor', 
 );?>
@@ -30,12 +25,12 @@ $this->breadcrumbs=array(
    if($load=='false'){
        echo "newEditor.COtypeID = $commonType ; \n" ; 
        echo "newEditor.COthemeID = $cobjectTheme; \n" ;
+       echo "newEditor.COtemplateType = $cobjectTemplate; \n"; 
        echo "newEditor.COgoalID = $actGoal; \n"; 
    }
    else{
        echo "newEditor.CObjectID = $cobjectID; \n";
    }
-       echo "newEditor.COtemplateType = $cobjectTemplate; \n"; 
        echo "newEditor.isload = $load; \n"; 
 ?>
 </script>
