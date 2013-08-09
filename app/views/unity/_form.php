@@ -2,10 +2,10 @@
 <!--Início do JS -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/renderize.js"></script>
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/date/jquery.maskedinput.js"> </script>
-<script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/date/datas.js"> </script>
+<script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/date/dates.js"> </script>
 <script>
     var unity = <?php echo $unityfather ?>;
-     
+    
     $(function() {
         var newRenderize = new renderize();
    
@@ -45,6 +45,10 @@
     
  $(document).ready( 
    function(){
+   //-- Update----//
+   timestmpToDate( $('#Unity_active_date').val() ,'actDt') ;
+   timestmpToDate( $('#Unity_desactive_date').val() ,'desDt') ;
+   //-------   -----//
    $('#actDt').mask("99/99/9999");
    $('#actDt').change(function() { dateToTimestmp(this.value,'Unity_active_date') });
    $('#desDt').mask("99/99/9999");

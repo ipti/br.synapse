@@ -132,6 +132,8 @@ class UnityController extends Controller
                                $father = Unity::model()->findByAttributes(array('id' => $IDunity_father )); 
                                $OrgIDunity_father = $father->organization_id;
                                 // $OrgIDunity_father = $model->fatherID->organizationID;
+                            }else{
+                               $OrgIDunity_father;
                             }
                             
                             $ancients = $this->saveAncient($IDunity_child, $OrgIDunity_child, 

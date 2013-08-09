@@ -162,7 +162,7 @@ class EditorController extends Controller {
                 $count_Adeg = count($actDegree);
                 if ($count_Adeg > 0) {
                     $str = "<div id='propertyAdeg' align='left'> 
-                 Act Degree&nbsp;:&nbsp;
+                 Nível&nbsp;:&nbsp;
                  <select id='actDegree' name='actDegree'>  ";
                     for ($i = 0; $i < $count_Adeg; $i++) {
                         $str.= "<option value=" . $actDegree[$i][0]['id'] . ">" . $actDegree[$i][0]['name'] . "</option>";
@@ -176,7 +176,7 @@ class EditorController extends Controller {
                     $count_Agoal_d = count($actGoal_d);
                     // No mínimo possui 1 registro
                     $str.= "<div id='propertyAgoal' class='propertyAgoal' align='center'>
-                      <br> Act Goal&nbsp;:&nbsp;
+                      <br> Nível&nbsp;:&nbsp;
                       <select id='actGoal' name='actGoal' style='width:430px'> ";
                     for ($i = 0; $i < $count_Agoal_d; $i++) {
                         $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
@@ -213,7 +213,7 @@ class EditorController extends Controller {
                      WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $idDegree)->queryAll();
             $count_Agoal_d = count($actGoal_d);
             // No mínimo possui 1 registro
-            $str = "<br> Act Goal&nbsp;:&nbsp;
+            $str = "<br> Nível&nbsp;:&nbsp;
                       <select id='actGoal' name='actGoal' style='width:430px'> ";
             for ($i = 0; $i < $count_Agoal_d; $i++) {
                 $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
