@@ -191,7 +191,7 @@ function editor () {
         }
         
         var html = '<div id="'+ID+'_text" class="text">'+
-            '<font class="editable">'+initial_text+'</font>';
+            '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
         if(parent.COTemplateTypeIn(parent.MTE)){
             html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
         } else if(parent.COTemplateTypeIn(parent.PRE)){
@@ -403,10 +403,10 @@ function editor () {
         
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         
-        var html = '<span id="'+elementID+'" '+plus+' class="element moptions">'+
-            '<div>';
+        var html = '<span id="'+elementID+'" '+plus+' class="element moptions">';
         if(parent.COTemplateTypeIn(parent.MTE)){
             html += ''+
+            '<div>'+
             '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
             '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
             '<button class="del delElement">'+LABEL_REMOVE_ELEMENT+'</button>'+
@@ -415,12 +415,12 @@ function editor () {
             '<br>'+
             '<label>'+
             '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct"/>'+LABEL_CORRECT+
-            '</label>';
+            '</label>'+
+            '</div>';
         }else if(parent.COTemplateTypeIn(parent.PRE)){
             html+= '<label>'+LABEL_CORRECT+' </label>';
         }
-        html += '</div>' +
-            '</span>';
+        html += '</span>';
         $('#'+this.currentPiece+" > div.tplMulti").append(html);
         
         
@@ -696,7 +696,7 @@ function editor () {
                         //Salva PieceSet
                         parent.saveData({ 
                             //Operação Salvar, PieceSet, ID no DOM
-                            op: "save",
+                            op: parent.isload ? "update": "save",
                             step: "PieceSet",
                             DomID: PieceSetID,
                             //Dados do PieceSet
@@ -724,7 +724,7 @@ function editor () {
                                 //Save Piece
                                 parent.saveData({
                                     //Operação Salvar, Piece, ID no DOM
-                                    op: "save",
+                                    op: parent.isload ? "update": "save", 
                                     step: "Piece",
                                     DomID: PieceID,
                                     //Dados do Piece
@@ -748,7 +748,7 @@ function editor () {
                                     $('#'+curretPieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
                                         ElementID_BD = $(this).attr('idBD');
-                                        Flag = $('#'+ElementID+'_flag').is(':checked');
+                                        Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
                                         
                                         //declaração das variáveis que serão passadas por ajax
                                         var type;
@@ -774,7 +774,7 @@ function editor () {
                                         //Dados que serão passados pelo ajax
                                         var data = {
                                             //Operação Salvar, Element, Type, ID no DOM
-                                            op: "save",
+                                            op: parent.isload ? "update": "save", 
                                             step: "Element",
                                             typeID: type,
                                             DomID: ElementID,
