@@ -402,8 +402,18 @@ class EditorController extends Controller {
                                 $newPieceElement->element_id = $elementID;
                                 $newPieceElement->order = $order;
                                 $newPieceElement->insert();
-
+                                
                                 $json['ElementID'] = $elementID;
+                                
+                                $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id'=> $pieceID, 'element_id'=> $elementID), array('order' => 'id desc'));
+                                $pieceElementID = $pieceElement->id;
+
+                                //41 layertype
+                                $newPieceElementProperty = new EditorPieceelementProperty();
+                                $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                $newPieceElementProperty->property_id = 41;
+                                $newPieceElementProperty->value = $flag == 1? 'Correto' : 'Errado';
+                                $newPieceElementProperty->insert();
 
                                 switch ($typeID) {
                                     case 11: //text
