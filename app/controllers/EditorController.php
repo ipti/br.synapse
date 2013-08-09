@@ -26,7 +26,7 @@ class EditorController extends Controller {
     }
 
     public function actionIndex() {
-        if(isset($_GET['cID']) || isset($_POST['cobject_id']) ){
+        if(isset($_GET['cID']) || isset($_POST['cobjectID']) ){
             $this->render('index');
         }
         elseif (!isset($_POST['commonType']) && !isset($_POST['cobjectTemplate']) && !isset($_POST['cobjectTheme'])) {
@@ -86,7 +86,7 @@ class EditorController extends Controller {
             $num_img = count($uploadedLibraryIDs);
             $i = 0;
               foreach($uploadedLibraryIDs as $upLibId):
-                  $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('libraryID' => $upLibId,
+                  $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('library_id' => $upLibId,
                       'property_id' => 5));
                   $i++;
               endforeach;
@@ -267,7 +267,7 @@ class EditorController extends Controller {
     public function actionJson() {
         $json = array();
         if (isset($_POST['op'])) {
-            if ($_POST['op'] == 'save' && isset($_POST['step'])) {
+            if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
                 switch ($_POST['step']) {
                     case "CObject":
                         if (isset($_POST['COtypeID']) && isset($_POST['COthemeID'])
@@ -303,13 +303,22 @@ class EditorController extends Controller {
                             $DomID = $_POST['DomID'];
                             $cobjectID = $_POST['CObjectID'];
                             $ordem = $_POST['Ordem'];
-
-                            $newScreen = new EditorScreen();
+                            if($_POST['op'] == 'update') {
+                                $IDDB = $_POST['ID_BD'];
+                                $newScreen = EditorScreen::model()->findByPk($IDDB);
+                            }else{
+                                $newScreen = new EditorScreen();
+                            }
+                            
                             $newScreen->cobject_id = $cobjectID;
                             $newScreen->order = $ordem;
-                            $newScreen->insert();
-
-                            $screen = EditorScreen::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            if($_POST['op'] == 'update') {
+                               $newScreen->save();
+                               $screen = $newScreen;
+                            }else{
+                                $newScreen->insert();
+                                $screen = EditorScreen::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            }
                             $screenID = $screen->id;
 
                             $json['DomID'] = $DomID;
@@ -328,20 +337,43 @@ class EditorController extends Controller {
                             $screenID = $_POST['screenID'];
                             $order = $_POST['order'];
                             $templateID = $_POST['templateID'];
-
-                            $newPieceSet = new EditorPieceset();
+                            
+                             if($_POST['op'] == 'update') {
+                                $IDDB = $_POST['ID_BD'];
+                                $newPieceSet = EditorPieceset::model()->findByPk($IDDB);
+                            }else{
+                                $newPieceSet = new EditorPieceset();
+                            }
                             $newPieceSet->template_id = $templateID;
                             $newPieceSet->description = $description;
-                            $newPieceSet->insert();
-
-                            $pieceSet = EditorPieceset::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            if($_POST['op'] == 'update'){
+                                $newPieceSet->save();
+                                $pieceSet = $newPieceSet;
+                            }else{
+                                $newPieceSet->insert();
+                                $pieceSet = EditorPieceset::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            }
+                           
                             $pieceSetID = $pieceSet->id;
-
-                            $newScreenPieceSet = new EditorScreenPieceset();
+                            
+                            if($_POST['op'] == 'update') {
+                              $newScreenPieceSet = EditorScreenPieceset::model()->find(array(
+                                      'condition' => 'screen_id =:screenID AND pieceset_id=:piecesetID',
+                                      'params' => array(':screenID' => $screenID ,':piecesetID' => $pieceSetID)
+                                      ));
+                            }else{
+                              $newScreenPieceSet = new EditorScreenPieceset();  
+                            }
+                            
                             $newScreenPieceSet->screen_id = $screenID;
                             $newScreenPieceSet->pieceset_id = $pieceSetID;
                             $newScreenPieceSet->order = $order;
-                            $newScreenPieceSet->insert();
+                            if($_POST['op'] == 'update') {
+                               $newScreenPieceSet->save();  
+                            }else{
+                               $newScreenPieceSet->insert(); 
+                            }
+                            
 
                             $json['DomID'] = $DomID;
                             $json['PieceSetID'] = $pieceSetID;
@@ -357,19 +389,41 @@ class EditorController extends Controller {
                             $pieceSetID = $_POST['pieceSetID'];
                             $screenID = $_POST['screenID'];
                             $ordem = $_POST['ordem'];
+                             if($_POST['op'] == 'update') {
+                                $IDDB = $_POST['ID_BD'];
+                                $newPiece = EditorPiece::model()->findByPk($IDDB);
+                            }else{
+                               $newPiece = new EditorPiece();
+                            }
+                            
+                            
+                            if($_POST['op'] == 'update') {
+                                $newPiece->save();
+                                $piece = $newPiece;
+                            }else{
+                                $newPiece->insert();
+                                $piece = EditorPiece::model()->findByAttributes(array(), array('order' => 'id desc'));
+                            }
 
-                            $newPiece = new EditorPiece();
-                            $newPiece->insert();
-
-                            $piece = EditorPiece::model()->findByAttributes(array(), array('order' => 'id desc'));
                             $pieceID = $piece->id;
-
-                            $newPieceSetPiece = new EditorPiecesetPiece();
+                            
+                            if($_POST['op'] == 'update') {
+                              $newPieceSetPiece = EditorPiecesetPiece::model()->find(array(
+                                      'condition' => 'piece_id =:pieceID AND pieceset_id=:piecesetID',
+                                      'params' => array(':pieceID' => $pieceID ,':piecesetID' => $pieceSetID)
+                                      ));
+                            }else{
+                              $newPieceSetPiece = new EditorPiecesetPiece();  
+                            }
                             $newPieceSetPiece->piece_id = $pieceID;
                             $newPieceSetPiece->pieceset_id = $pieceSetID;
                             $newPieceSetPiece->screen_id = $screenID;
                             $newPieceSetPiece->order = $ordem;
-                            $newPieceSetPiece->insert();
+                            if($_POST['op'] == 'update') {
+                               $newPieceSetPiece->save();  
+                            }else{
+                               $newPieceSetPiece->insert(); 
+                            }
 
                             $json['DomID'] = $DomID;
                             $json['PieceID'] = $pieceID;
@@ -389,38 +443,84 @@ class EditorController extends Controller {
                                 $flag = $_POST['flag'];
                                 $value = $_POST['value'];
                                 $order = $_POST['ordem'];
-
-                                $newElement = new EditorElement();
+                                if($_POST['op'] == 'update') {
+                                    $IDDB = $_POST['ID_BD'];
+                                    $newElement = EditorElement::model()->findByPk($IDDB);
+                                }else{
+                                    $newElement = new EditorElement();
+                                }
                                 $newElement->type_id = $typeID;
-                                $newElement->insert();
+                                if($_POST['op'] == 'update') {
+                                    $newElement->save();
+                                    $element = $newElement;
+                                }else{
+                                   $newElement->insert(); 
+                                   $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                }
 
-                                $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
                                 $elementID = $element->id;
 
-                                $newPieceElement = new EditorPieceElement();
+                               if($_POST['op'] == 'update') {
+                                    $newPieceElement = EditorPieceElement::model()->find(array(
+                                      'condition' => 'element_id =:elementID AND piece_id=:pieceID',
+                                      'params' => array(':elementID' => $elementID ,':pieceID' => $pieceID)
+                                      ));
+                                }else{
+                                  $newPieceElement = new EditorPieceElement(); 
+                                }
+                                
                                 $newPieceElement->piece_id = $pieceID;
                                 $newPieceElement->element_id = $elementID;
                                 $newPieceElement->order = $order;
-                                $newPieceElement->insert();
-
+                                if($_POST['op'] == 'update') {
+                                    $newPieceElement->save();  
+                                }else{
+                                   $newPieceElement->insert();
+                                }
+                                
                                 $json['ElementID'] = $elementID;
 
                                 switch ($typeID) {
                                     case 11: //text
                                         //salva editor_element_property 's
                                         //6 text
-                                        $newElementProperty = new EditorElementProperty();
+                                        if($_POST['op'] == 'update') {
+                                           $newElementProperty = EditorElementProperty::model()->find(array(
+                                              'condition' => 'element_id =:elementID AND property_id=6',
+                                              'params' => array(':elementID' => $elementID )
+                                      ));
+                                        }else{ 
+                                            $newElementProperty = new EditorElementProperty();                                      
+                                        }
+                                        
                                         $newElementProperty->element_id = $elementID;
                                         $newElementProperty->property_id = 6;
                                         $newElementProperty->value = $value;
-                                        $newElementProperty->insert();
+                                        if($_POST['op'] == 'update') {
+                                           $newElementProperty->save();
+                                        }else{
+                                           $newElementProperty->insert();  
+                                        }
+                                       
+                                        
                                         //10 language
-                                        $newElementProperty = new EditorElementProperty();
+                                        if($_POST['op'] == 'update') {
+                                           $newElementProperty = EditorElementProperty::model()->find(array(
+                                              'condition' => 'element_id =:elementID AND property_id=10',
+                                              'params' => array(':elementID' => $elementID )
+                                      ));
+                                        }else{
+                                            $newElementProperty = new EditorElementProperty(); 
+                                        } 
+                                       
                                         $newElementProperty->element_id = $elementID;
                                         $newElementProperty->property_id = 10;
                                         $newElementProperty->value = "português";
-                                        $newElementProperty->insert();
-                                        
+                                        if($_POST['op'] == 'update') {
+                                          $newElementProperty->save();  
+                                        }else{
+                                          $newElementProperty->insert();  
+                                        } 
                                         break;
                                     case 16: //image
                                         $src = $value['url'];
@@ -434,51 +534,128 @@ class EditorController extends Controller {
 
                                         //Salva library
                                         //type 9 
-                                        $newLibrary = new Library();
+                                        if($_POST['op'] == 'update') {
+                                            //Id da Library-Img
+                                        $ElementProperty_IDlib = EditorElementProperty::model()->find(array(
+                                          'condition' => 'element_id =:elementID AND property_id=16',
+                                          'params' => array(':elementID' => $elementID )));
+                                      echo ($ElementProperty_IDlib);
+                                      exit;
+                                        $theIDLibrary = $ElementProperty_IDlib->value;
+                                            //====================
+                                           $newLibrary = Library::model()->findByPk($theIDLibrary);
+                                        }else{
+                                           $newLibrary = new Library(); 
+                                        } 
                                         $newLibrary->type_id = 9;
-                                        $newLibrary->insert();
-
-                                        //Pegar o ID do ultimo adicionado.
-                                        $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                        if($_POST['op'] == 'update') {
+                                            $newLibrary->save();
+                                            $library = $newLibrary;
+                                        }else{
+                                            $newLibrary->insert();
+                                            //Pegar o ID do ultimo adicionado.
+                                            $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                        }
                                         $libraryID = $library->id;
 
                                         //Salva library_property 's
                                         //1 width
-                                        $newLibraryProperty = new LibraryProperty();
+                                       if($_POST['op'] == 'update') {
+                                           $newLibraryProperty = LibraryProperty::model()->find(array(
+                                              'condition' => 'library_id =:libraryID AND property_id=1',
+                                              'params' => array(':libraryID' => $libraryID )
+                                             ));
+                                        }else{
+                                            $newLibraryProperty = new LibraryProperty();
+                                        } 
+                                        
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = 1;
                                         $newLibraryProperty->value = $width;
-                                        $newLibraryProperty->insert();
+                                        if($_POST['op'] == 'update') {
+                                            $newLibraryProperty->save();
+                                        }else{
+                                            $newLibraryProperty->insert();
+                                        }
+                                        
 
                                         //2 height
-                                        $newLibraryProperty = new LibraryProperty();
+                                           if($_POST['op'] == 'update') {
+                                               $newLibraryProperty = LibraryProperty::model()->find(array(
+                                              'condition' => 'library_id =:libraryID AND property_id=2',
+                                              'params' => array(':libraryID' => $libraryID )
+                                             ));
+                                          }else{
+                                              $newLibraryProperty = new LibraryProperty(); 
+                                          } 
+                                       
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = 2;
                                         $newLibraryProperty->value = $height;
-                                        $newLibraryProperty->insert();
+                                        if($_POST['op'] == 'update') {
+                                           $newLibraryProperty->save();
+                                        }else{
+                                           $newLibraryProperty->insert(); 
+                                        }
+                                        
 
                                         //5 src
-                                        $newLibraryProperty = new LibraryProperty();
+                                            if($_POST['op'] == 'update') {
+                                               $newLibraryProperty = LibraryProperty::model()->find(array(
+                                              'condition' => 'library_id =:libraryID AND property_id=5',
+                                              'params' => array(':libraryID' => $libraryID )
+                                             ));
+                                          }else{
+                                              $newLibraryProperty = new LibraryProperty(); 
+                                          }                     
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = 5;
                                         $newLibraryProperty->value = $nome;//apenas o nome do arquivo
-                                        $newLibraryProperty->insert();
-
+                                        if($_POST['op'] == 'update') {
+                                           $newLibraryProperty->save();   
+                                        }else{
+                                           $newLibraryProperty->insert(); 
+                                        }
+                                            
+                                       
                                         //12 extension
-                                        $newLibraryProperty = new LibraryProperty();
+                                           if($_POST['op'] == 'update') {
+                                               $newLibraryProperty = LibraryProperty::model()->find(array(
+                                              'condition' => 'library_id =:libraryID AND property_id=12',
+                                              'params' => array(':libraryID' => $libraryID )
+                                             ));
+                                           }else{
+                                               $newLibraryProperty = new LibraryProperty(); 
+                                            } 
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = 12;
-                                        $newLibraryProperty->value = $ext;     
-                                        $newLibraryProperty->insert();
-
+                                        $newLibraryProperty->value = $ext;
+                                        if($_POST['op'] == 'update') {
+                                           $newLibraryProperty->save(); 
+                                        }else {
+                                           $newLibraryProperty->insert();  
+                                        }
+                                        
                                         //Salva na editor_element_property
                                         //4 libraryID
-                                        $newElementProperty = new EditorElementProperty();
+                                        if($_POST['op'] == 'update') {
+                                            $newElementProperty = EditorElementProperty::model()->find(array(
+                                          'condition' => 'element_id =:elementID AND property_id=4',
+                                          'params' => array(':elementID' => $elementID )
+                                           ));
+                                        }else{
+                                           $newElementProperty = new EditorElementProperty();
+                                        } 
+                                        
                                         $newElementProperty->element_id = $elementID;
                                         $newElementProperty->property_id = 4;
                                         $newElementProperty->value = $libraryID;
-                                        $newElementProperty->insert();
-
+                                        if($_POST['op'] == 'update') {
+                                           $newElementProperty->save();  
+                                        }else{
+                                           $newElementProperty->insert(); 
+                                        }
+                                        
                                         $json['LibraryID'] = $libraryID;
 
                                         break;
@@ -496,8 +673,8 @@ class EditorController extends Controller {
                         throw new Exception("ERROR: Operação inválida.<br>");
                 }
             } elseif ($_POST['op'] == 'load') {
-                if(isset($_POST['cobject_id'])){
-                    $cobjectID = $_POST['cobject_id'];
+                if(isset($_POST['cobjectID'])){
+                    $cobjectID = $_POST['cobjectID'];
                     $cobject = Cobject::model()->findByAttributes(array('id'=>$cobjectID));
                     $json['cobject_id'] = $cobjectID;
                     $json['typeID'] = $cobject->type_id;
@@ -508,12 +685,12 @@ class EditorController extends Controller {
                     
                     foreach ($Srceens as $sc):
                         $json['S'.$sc->id] = array();
-                        $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screen_id'=>$sc->id),array('order'=>'`position`'));
+                        $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screen_id'=>$sc->id),array('order'=>'`order`'));
                         foreach ($ScreenPieceset as $scps):
                             $PieceSet = EditorPieceset::model()->findByAttributes(array('id'=>$scps->pieceset_id));
                             $json['S'.$sc->id]['PS'.$PieceSet->id] = array();
-                            $json['S'.$sc->id]['PS'.$PieceSet->id]['desc'] = $PieceSet->desc;
-                            $json['S'.$sc->id]['PS'.$PieceSet->id]['typeID'] = $PieceSet->type_id;
+                            $json['S'.$sc->id]['PS'.$PieceSet->id]['description'] = $PieceSet->description;
+                            $json['S'.$sc->id]['PS'.$PieceSet->id]['template_id'] = $PieceSet->template_id;
                             
                             $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('pieceset_id'=>$PieceSet->id),array('order'=>'`order`'));
                             foreach ($PieceSetPiece as $psp):
@@ -521,23 +698,22 @@ class EditorController extends Controller {
                                 $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id] = array();
                                 $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['description'] = $Piece->description;
                                 $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['name'] = $Piece->name;
-                                $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['typeID'] = $Piece->type_id;
                                 
-                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('pieceID'=>$psp->piece_id),array('order'=>'`position`'));
+                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('piece_id'=>$psp->piece_id),array('order'=>'`order`'));
                                 
                                 foreach ($PieceElement as $pe):
                                     $Element = EditorElement::model()->findByAttributes(array('id'=>$pe->element_id));
                                     $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id] = array();
                                     $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['typeID'] = $Element->type_id;
                                     
-                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('elementID'=>$Element->id));
+                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id'=>$Element->id));
                                     foreach ($ElementProperty as $ep):
                                         if($ep->property_id == 4){ //libraryID
                                             $Library = Library::model()->findByAttributes(array('id'=>$ep->value));
                                             $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['L'.$Library->id] = array();
                                             $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['L'.$Library->id]['typeID'] = $Library->type_id; //9 image; 17 movie; 20 sound 
                                             
-                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('libraryID'=>$Library->id));
+                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id'=>$Library->id));
                                             foreach($LibraryProperty as $lp):
                                                 $json['S'.$sc->id]['PS'.$PieceSet->id]['P'.$Piece->id]['E'.$Element->id]['L'.$Library->id]['Prop'.$lp->property_id] = $lp->value;
                                             endforeach;
