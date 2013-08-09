@@ -65,7 +65,7 @@ class SiteController extends Controller {
      * This is the action to handle external exceptions.
      */
     public function actionError() {
-        if ($error = Yii::app()->errorHandler->error) {
+        if ($error == Yii::app()->errorHandler->error) {
             if (Yii::app()->request->isAjaxRequest)
                 echo $error['message'];
             else
@@ -157,12 +157,12 @@ class SiteController extends Controller {
             $actor = Actor::model()->findByAttributes(array('id' => $_POST["act"]));
             $idActor = $actor->id;
             $nome_personage = $actor->personage->name;
-//$personageIdActor = $actor->personageID;
+            //$personageIdActor = $actor->personageID;
             $unityIdActor = $actor->unity_id;
-//$activatedDateActor = $actor->activatedDate;
-//$desactivatedDateActor = $actor->desactivatedDate;                  
-// $personage = Personage::model()->findByAttributes(array('id'=>$personageIdActor));
-//$namePersonage = $personage->name;     
+            //$activatedDateActor = $actor->activatedDate;
+            //$desactivatedDateActor = $actor->desactivatedDate;                  
+            // $personage = Personage::model()->findByAttributes(array('id'=>$personageIdActor));
+            //$namePersonage = $personage->name;     
 
             //se os valores estiverem setados
             if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {
@@ -174,62 +174,67 @@ class SiteController extends Controller {
             $loginmodel->attributes = $_POST['LoginForm'];
             $autenticar = $loginmodel->authenticate();
             $identity = $loginmodel->get_identity(); //$itentity = variável local
-            if ($autenticar) {
-                $idPerson = $identity->getId();
-//Somente atores Ativos
-                $actor = Actor::model()->findAllByAttributes(array('person_id' => $idPerson), 
-                        "desactive_date >" . time() . " OR " . "desactive_date is NULL OR desactive_date = 0 ");
+            
+            try{
+                if ($autenticar) {
+                    $idPerson = $identity->getId();
+                    //Somente atores Ativos
+                    $actor = Actor::model()->findAllByAttributes(array('person_id' => $idPerson), 
+                            "desactive_date >" . time() . " OR " . "desactive_date is NULL OR desactive_date = 0 ");
 
-                //efetua login
-                Yii::app()->user->login($identity);
-                
-                if (count($actor) > 1) {
-//Método login() do CWebUser
-                    $html = "
-                   <html>
-                      <head>
-                      <title> Selecionar Personagem </title>
-                       
-                     </head>
-                   <body>
-                   <form method=\"post\" action=\"/site/login\">
-                   <select id=\"act\" name=\"act\">";
-                    echo "Bem Vindo : " . $identity->getState('name');
-//Seleciona um dos personagem de um Person
-                    for ($i = 0; count($actor) > $i; $i++) {
-                        $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[$i]->personage_id));
-                        $html .= "<option value='".$actor[$i]->id."'>$tempPersonage->name</option>";
+                    //efetua login
+                    Yii::app()->user->login($identity);
+
+                    if (count($actor) > 1) {
+                        //Método login() do CWebUser
+                        $html = "
+                       <html>
+                          <head>
+                          <title> Selecionar Personagem </title>
+
+                         </head>
+                       <body>
+                       <form method=\"post\" action=\"/site/login\">
+                       <select id=\"act\" name=\"act\">";
+                        echo "Bem Vindo : " . $identity->getState('name');
+                        //Seleciona um dos personagem de um Person
+                        for ($i = 0; count($actor) > $i; $i++) {
+                            $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[$i]->personage_id));
+                            $html .= "<option value='".$actor[$i]->id."'>$tempPersonage->name</option>";
+                        }
+                        $html .= "</select>
+                         <input type='submit' value='Next' id='selectActor'/>
+                        </form>";
+                        $html.= " </body>
+                                  </html>";
+                        echo $html;
                     }
-                    $html .= "</select>
-                     <input type='submit' value='Next' id='selectActor'/>
-                    </form>";
-                    $html.= " </body>
-                              </html>";
-                    echo $html;
-                }
-                //se só houver 1 ator na lista
-                else if(count($actor) == 1){
-                    //pega as informações
-                    $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[0]->personage_id));
-                    //nome do personagem
-                    $nome_personage = $tempPersonage->name;
-                    //id do ator
-                    $idActor = $actor[0]->id;
-                    //id da unidade
-                    $unityIdActor = $actor[0]->unity_id;
-                    
-                    //se os valores estiverem setados
-                    if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {
-                        //redireciona para a página correta
-                        $this->redirPersonage($nome_personage,$idActor,$unityIdActor);
+                    //se só houver 1 ator na lista
+                    else if(count($actor) == 1){
+                        //pega as informações
+                        $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[0]->personage_id));
+                        //nome do personagem
+                        $nome_personage = $tempPersonage->name;
+                        //id do ator
+                        $idActor = $actor[0]->id;
+                        //id da unidade
+                        $unityIdActor = $actor[0]->unity_id;
+
+                        //se os valores estiverem setados
+                        if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {
+                            //redireciona para a página correta
+                            $this->redirPersonage($nome_personage,$idActor,$unityIdActor);
+                        }
+                    } else {
+                        throw new Exception("Não há Atores Ativos para este Usuário!");
                     }
                 } else {
-                    throw new Exception("Não há Atores Ativos para este Usuário!");
+                     throw new Exception("Senha incorreta");
                 }
-            } else {
-                 throw new Exception($identity->errorMessage);
-            }
 
+            } catch(Exception $e) {
+                $this->render('login', array('model' => $loginmodel));
+            }
             exit;
         }
 
