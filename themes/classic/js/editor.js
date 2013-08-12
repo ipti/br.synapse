@@ -136,19 +136,20 @@ function editor () {
         //inicia o html do piece
         var html = ''+
             '<li id="'+pieceID+'" class="piece" '+plus+'>'+
-            '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>'+
-            '<div class="tplMulti">';
+            '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>';
         //Se o Template for MTE
-        if(parent.COTemplateTypeIn(parent.MTE)){
-            html += '<button class="newElement">'+LABEL_ADD_ELEMENT+'</button>';
+        if(parent.COTemplateTypeIn(parent.MTE) ){
+            html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
         //Se o template for PRE
         }else if(parent.COTemplateTypeIn(parent.PRE)){
-            html+= '';
+            html+= '<div class="tplMulti"></div>';
+        }else if(parent.COTemplateTypeIn(parent.AEL)){
+            html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
+                "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
+                "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
         }
         //finaliza o html
-        html+= '<br>'+
-            '</div>'+
-            '</li>';
+        html+= '</li>';
         //appenda o html do piece no pieceset
         $('#'+PieceSetid).append(html);
         
@@ -156,11 +157,19 @@ function editor () {
         this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
         
         //se template for MTE
-        if(parent.COTemplateTypeIn(parent.MTE)){
+        if(parent.COTemplateTypeIn(parent.MTE)
+            || parent.COTemplateTypeIn(parent.AEL)){
             //adiciona a função do botão addElement
             $("#"+pieceID+"> div > button.newElement").click(function(){
                 parent.addElement();
             });
+            if(parent.COTemplateTypeIn(parent.AEL)){
+                //$('#'+pieceID+'_query').sortable();
+                //$('#'+pieceID+'_query').disableSelection();
+                //$('#'+pieceID+'_query_resp').sortable();
+                //$('#'+pieceID+'_query_resp').disableSelection();
+                
+            }
         //se template for PRE
         }else if(parent.COTemplateTypeIn(parent.PRE)){
             //altera a seleção de piece
@@ -177,33 +186,22 @@ function editor () {
     
     this.addText = function(ID, loaddata){       
         //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
-        var initial_text = "";
+        var initial_text = this.isset(loaddata) ? loaddata['text'] : LABEL_INITIAL_TEXT;
         
         var parent = this;
         
-        //se estiver setado o novo id
-        if(this.isset(loaddata)){
-            //adiciona o código na varíavel
-            initial_text = loaddata['text'];
-        }else{
-            //adiciona a constante na variável
-            initial_text = LABEL_INITIAL_TEXT;
-        }
-        
         var html = '<div id="'+ID+'_text" class="text">'+
-            '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
+            '<font class="editable" id="'+ID+'_flag">'+initial_text+'</font>';
         if(parent.COTemplateTypeIn(parent.MTE)){
             html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
         } else if(parent.COTemplateTypeIn(parent.PRE)){
             html += '';
-        } else {
-            
-        }
+        } 
+        
         html += '</div>';
         
         $('#'+ID).append(html);
              
-        var parent = this;
         var text = "#"+ID+"_text";
         var editable = text+" > font.editable";
         
@@ -234,7 +232,7 @@ function editor () {
             tooltip   : initial_text
         });        
         
-        //Quando clicar no editabke
+        //Quando clicar no editable
         $(editable).on('click',function(){ 
             var form = editable+" > form";
             var input = form+" > input";
@@ -296,22 +294,28 @@ function editor () {
         var form    = file+"_form";
         var input   = file+"_input";
         
-          var identify_isload = '';
-          if( parent.isset(parent.isload) ) {
-               identify_isload =  '<input type="hidden" name="isload" value="'+parent.isload+'"/>' ;
-            }
-        $('#'+ID).append(''+
-            '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">'+
-            '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
-            '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
+        var identify_isload = '';
+        if( parent.isset(parent.isload) ) {
+             identify_isload =  '<input type="hidden" name="isload" value="'+parent.isload+'"/>' ;
+        }
+           
+       var html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">';
+       if(parent.COTemplateTypeIn(parent.MTE)){
+           html += '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>';
+       }     
+       else {
+           html +="";
+       }
+       html += '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
             '<input type="hidden" name="op" value="'+uploadType+'"/>'+
              identify_isload +
             '<label>'+uploadType+': '+
             '<input id="'+input+'" type="file" id="'+uploadType+'" name="file" value="" accept="'+accept+'" />'+
             '</label>'+
             '</form>'+
-            '</div>');
+            '</div>';
         
+        $('#'+ID).append(html);
         
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
             var src = '/rsc/upload/'+uploadType+'/'+loaddata['library']['src'];
@@ -418,11 +422,31 @@ function editor () {
             '</label>'+
             '</div>';
         }else if(parent.COTemplateTypeIn(parent.PRE)){
-            html+= '<label>'+LABEL_CORRECT+' </label>';
+            html += '<label>'+LABEL_CORRECT+' </label>';
+        }else if(parent.COTemplateTypeIn(parent.AEL)){
+            var group = $("#"+parent.currentPiece+"_query > .element").length+1;
+            html = '<li id="'+elementID+'" '+plus+' class="element moptions" match="'+group+'">'+
+            '<div>'+
+            '<spam>('+group+')</spam>'+
+            '<button class="insertImage" group="'+group+'">'+LABEL_ADD_IMAGE+'</button>'+
+            '<button class="insertText" group="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
+            '</div>'+
+            '</li>';
+            var html2 = '<li id="'+elementID+'_resp" class="element" match="'+group+'">'+
+            '<div>'+
+            '<spam>('+group+')</spam>'+
+            '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
+            '</div>'+
+            '</li>';
+            $("#"+parent.currentPiece+"_query").append(html);
+            $("#"+parent.currentPiece+"_query_resp").append(html2);
+            
         }
-        html += '</span>';
-        $('#'+this.currentPiece+" > div.tplMulti").append(html);
-        
+    
+        if(!(parent.COTemplateTypeIn(parent.AEL))){
+            html += '</span>';
+            $('#'+parent.currentPiece+" > div.tplMulti").append(html);
+        }
         
         if(this.isset(loaddata)){
             switch(type){
@@ -453,9 +477,22 @@ function editor () {
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         
         
-        if(parent.COTemplateTypeIn(parent.MTE)){
-            var buttonTextoID = "#"+elementID+" > div > button.insertText";
+        if(parent.COTemplateTypeIn(parent.MTE)
+            || parent.COTemplateTypeIn(parent.AEL)){
+            if(parent.COTemplateTypeIn(parent.AEL)){
+                var buttonTextoRespID = "#"+elementID+ (parent.COTemplateTypeIn(parent.AEL) ? "_resp" : "") + "> div > button.insertText";
+                //if(parent.COTemplateTypeIn(parent.AEL))
+                //    buttonTextoRespID = "#"+elementID+"_resp > div > button.insertText";
+                //else
+                //    buttonTextoRespID = "#"+elementID+" > div > button.insertText";
+                $(buttonTextoRespID).click(function(){
+                    parent.addText(elementID+"_resp");
+                    $(buttonTextoRespID).remove();
+                });
+            }
+            var buttonTextoID = "#"+elementID+"> div > button.insertText";
             var buttonImageID = "#"+elementID+" > div > button.insertImage";
+            
             var buttonDelID = "#"+elementID+" > div > button.delElement";
             var textoID = "#"+elementID+"_text";
             var imageID = "#"+elementID+"_image";
@@ -464,7 +501,11 @@ function editor () {
             var ElementImageID = "#"+elementID+"_image";
 
             $(buttonTextoID).click(function(){
-                if(!parent.existID(ElementImageID) || 
+                if(parent.COTemplateTypeIn(parent.AEL)){
+                    parent.addText(elementID);
+                    $(buttonTextoID).remove();
+                }
+                else if(!parent.existID(ElementImageID) || 
                     confirm(MSG_CHANGE_ELEMENT)){
                     if(!parent.existID(ElementTextID)){
                         parent.addText(elementID);
@@ -473,7 +514,11 @@ function editor () {
                 }
             });
             $(buttonImageID).click(function(){
-                if(!parent.existID(ElementTextID) || 
+                if(parent.COTemplateTypeIn(parent.AEL)){
+                    parent.addImage(elementID);
+                    $(buttonImageID).remove();
+                }
+                else if(!parent.existID(ElementTextID) ||
                     confirm(MSG_CHANGE_ELEMENT)){
                     if(!parent.existID(ElementImageID)){
                         parent.addImage(elementID);
