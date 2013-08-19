@@ -1,3 +1,12 @@
+TYPE = {}
+TYPE.ELEMENT = {}
+TYPE.ELEMENT.TEXT = "TEXT";
+TYPE.ELEMENT.MULTIMIDIA = "MULTIMIDIA";
+TYPE.LIBRARY = {}
+TYPE.LIBRARY.IMAGE = "IMAGE";
+TYPE.LIBRARY.SOUND = "SOUND";
+TYPE.LIBRARY.MOVIE = "MOVIE";
+
 function editor () { 
     this.COtypeID;
     this.COthemeID;
@@ -794,6 +803,7 @@ function editor () {
                                         ElementID = $(this).attr('id');
                                         ElementID_BD = $(this).attr('idBD');
                                         Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
+                                        Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);
                                         
                                         //declaração das variáveis que serão passadas por ajax
                                         var type;
@@ -804,30 +814,18 @@ function editor () {
                                         var ElementImageID = "#"+ElementID+"_image";
                                         var FormElementImageID = "#"+ElementID+"_image_form";
                                         
-                                        //Preencher as variáveis de acordo com o tipo do objeto a ser salvo
-                                        if(parent.existID(ElementTextID)){
-                                            type = 11; //text
-                                            value = $(ElementTextID+" > font").html();
-                                        }else if(parent.existID(ElementImageID)){
-                                            type = 16; //image
-                                            value = {};
-                                        }else{
-                                            type = -1;
-                                            value = -1;
-                                        }
-                                        
                                         //Dados que serão passados pelo ajax
                                         var data = {
                                             //Operação Salvar, Element, Type, ID no DOM
                                             op: parent.isload ? "update": "save", 
                                             step: "Element",
-                                            typeID: type,
                                             DomID: ElementID,
                                             //Dados do Element
                                             ordem: ++elementPosition, //incrementa a Ordem do Element
                                             pieceID: LastPieceID,
                                             flag: Flag,
-                                            value: value,
+                                            value: {},
+                                            match: Match,
                                             isload: parent.isload,
                                             ID_BD:  ElementID_BD
                                         };
@@ -835,6 +833,8 @@ function editor () {
                                         //Se for um Texto
                                         if(parent.existID(ElementTextID)){
                                             //Salva Elemento
+                                            data["typeID"] = TYPE.ELEMENT.TEXT;
+                                            data["value"] = $(ElementTextID+" > font").html();
                                             parent.saveData(
                                                 //Variáveis dados
                                                 data,
@@ -845,7 +845,10 @@ function editor () {
                                                 });
                                         
                                         //Se for uma Imagem
-                                        }else if(parent.existID(ElementImageID)){
+                                        }
+                                        if(parent.existID(ElementImageID)){
+                                            data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
+                                            data["library"] = TYPE.LIBRARY.IMAGE;
                                             //criar a função para envio de formulário via Ajax
                                             $(FormElementImageID).ajaxForm({
                                                 beforeSend: function() {
