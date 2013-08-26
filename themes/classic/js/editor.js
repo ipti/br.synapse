@@ -445,7 +445,7 @@ function editor () {
             '<button class="insertText" group="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
             '</div>'+
             '</li>';
-            var html2 = '<li id="'+elementID+'_resp" class="element" match="'+group+'">'+
+            var html2 = '<li id="'+elementID+'_resp" class=" .elementresp" match="'+group+'">'+
             '<div>'+
             '<spam>('+group+')</spam>'+
             '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
@@ -812,7 +812,7 @@ function editor () {
                                             ElementID_BD = $(this).attr('idBD');
                                             Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
                                             Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);
-                                        
+                                            
                                             //declaração das variáveis que serão passadas por ajax
                                             var type;
                                             var value;
@@ -823,6 +823,8 @@ function editor () {
                                             var FormElementImageID = "#"+ElementID+"_image_form";
                                             var input_NameDB_ID = "#"+ElementID+"_image_nameDB";
                                             var input_NameCurrent_ID = "#"+ElementID+"_image_input";
+                                            
+                                            var ElementRespID = "#"+ElementID+"_resp_text";
                                             //Dados que serão passados pelo ajax
                                             var data = {
                                                 //Operação Salvar, Element, Type, ID no DOM
@@ -853,64 +855,80 @@ function editor () {
                                                         parent.uploadedElements++
                                                     });
                                         
-                                            //Se for uma Imagem
                                             }
+                                            //Se for uma Resposta
+                                            if(parent.existID(ElementRespID)){
+                                                //Salva Elemento
+                                                data["typeID"] = TYPE.ELEMENT.TEXT;
+                                                data["value"] = $(ElementRespID+" > font").html();
+                                                parent.saveData(
+                                                    //Variáveis dados
+                                                    data,
+                                                    //Função de sucess do Save Element
+                                                    function(response, textStatus, jqXHR){
+                                                        $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                                        parent.uploadedElements++
+                                                    });
+                                        
+                                            }
+                                            //Se for uma Imagem
                                             if(parent.existID(ElementImageID)){
-                                                   var doUpload = true;
-                                                   if ( parent.isload &&
-                                                       ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
-                                                            || $(input_NameCurrent_ID).val() == '')
-                                                        ) {
-                                                                //Não faz upload, pois não houve alterações
-                                                            doUpload = false;
+                                                var doUpload = true;
+                                                if ( parent.isload &&
+                                                    ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
+                                                        || $(input_NameCurrent_ID).val() == '')
+                                                    ) {
+                                                    //Não faz upload, pois não houve alterações
+                                                    doUpload = false;
+                                                }
+                                                if(doUpload) {
+                                                    data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
+                                                    data["library"] = TYPE.LIBRARY.IMAGE;
+                                                    //criar a função para envio de formulário via Ajax
+
+
+                                                    $(FormElementImageID).ajaxForm({
+                                                        beforeSend: function() {
+                                                        //zerar barra de upload
+                                                        //$("#"+bar).width('0%')
+                                                        //$("#"+percent).html('0%');
+                                                        },
+                                                        uploadProgress: function(event, position, total, percentComplete) {
+                                                        //atualizar barra de upload
+                                                        //$("#"+bar).width(percentComplete + '%')
+                                                        //$("#"+percent).html(percentComplete + '%');
+                                                        },
+                                                        success: function(response) {
+                                                            //dados de retorno do upload
+                                                            data['value'] = {};
+                                                            data['value']['url'] = response['url'];
+                                                            data['value']['name'] = response['name'];
+
+                                                            //Salva Elemento
+                                                            parent.saveData(
+                                                                //Dados
+                                                                data,
+                                                                //Função de sucess do Save Element
+                                                                function(response, textStatus, jqXHR){
+                                                                    $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
+
+                                                                    //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
+                                                                    parent.uploadedLibraryIDs[parent.uploadedElements++] = response['LibraryID'];
+
+                                                                    //chama o posRender
+                                                                    parent.posEditor();
+                                                                });
+                                                        },
+                                                        error: function(error, textStatus, errorThrown){
+                                                            //$("#"+form).html(error.responseText);
+                                                            alert(ERROR_FILE_UPLOAD);
+                                                            $(".savescreen").append(error.responseText);
                                                         }
-                                             if(doUpload) {
-                                                data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
-                                                data["library"] = TYPE.LIBRARY.IMAGE;
-                                                //criar a função para envio de formulário via Ajax
-                                             
-                                                
-                                                $(FormElementImageID).ajaxForm({
-                                                    beforeSend: function() {
-                                                    //zerar barra de upload
-                                                    //$("#"+bar).width('0%')
-                                                    //$("#"+percent).html('0%');
-                                                    },
-                                                    uploadProgress: function(event, position, total, percentComplete) {
-                                                    //atualizar barra de upload
-                                                    //$("#"+bar).width(percentComplete + '%')
-                                                    //$("#"+percent).html(percentComplete + '%');
-                                                    },
-                                                    success: function(response) {
-                                                        //dados de retorno do upload
-                                                        data['value']['url'] = response['url'];
-                                                        data['value']['name'] = response['name'];
-                                                    
-                                                        //Salva Elemento
-                                                        parent.saveData(
-                                                            //Dados
-                                                            data,
-                                                            //Função de sucess do Save Element
-                                                            function(response, textStatus, jqXHR){
-                                                                $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
-                                                            
-                                                                //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                                parent.uploadedLibraryIDs[parent.uploadedElements++] = response['LibraryID'];
-                                                            
-                                                                //chama o posRender
-                                                                parent.posEditor();
-                                                            });
-                                                    },
-                                                    error: function(error, textStatus, errorThrown){
-                                                        //$("#"+form).html(error.responseText);
-                                                        alert(ERROR_FILE_UPLOAD);
-                                                        $(".savescreen").append(error.responseText);
-                                                    }
-                                                });
-                                            
-                                                //Envia o formulário atual
-                                                $(FormElementImageID).submit();
-                                             }
+                                                    });
+
+                                                    //Envia o formulário atual
+                                                    $(FormElementImageID).submit();
+                                                }
                                             }
                                         });
                                     });

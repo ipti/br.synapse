@@ -442,7 +442,6 @@ class EditorController extends Controller {
 
                             if (isset($_POST['pieceID']) && isset($_POST['flag']) && isset($_POST['ordem'])
                                     && isset($_POST['value']) && isset($_POST['DomID'])) {
-
                                 $DomID = $_POST['DomID'];
                                 $pieceID = $_POST['pieceID'];
                                 $flag = $_POST['flag'];
