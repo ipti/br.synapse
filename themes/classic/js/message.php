@@ -25,4 +25,3 @@ ERROR_INCOMPATIBLE_TYPE    = "<?php echo Yii::t('default', 'Incompatible file ty
 ERROR_FILE_SIZE            = "<?php echo Yii::t('default', 'File too big. Max Size: '); ?>"; 
 ERROR_BROWSER_SUPORT       = "<?php echo Yii::t('default', 'Your browser does not support this element.'); ?>";
 ERROR_FILE_UPLOAD          = "<?php echo Yii::t('default', 'Something wrong happened at the file upload.'); ?>"; 
-

@@ -1,37 +1,35 @@
- <?php
-    $load = 'false';
-    if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) 
-        && isset($_POST['cobjectTheme']) && isset($_POST['actGoal'])){
-        $commonType = $_POST['commonType'];
-        $cobjectTemplate =  $_POST['cobjectTemplate'];
-        $cobjectTheme =  $_POST['cobjectTheme'];
-        $actGoal = $_POST['actGoal'];
-     }
-     elseif(isset($_GET['cID'])){
-         $cobjectID = $_GET['cID'];
-         $load = 'true';
-     }elseif (isset($_POST['cobjectID'])) {
-         $cobjectID = $_POST['cobjectID'];
-         $load = 'true';
-     }
-     else{ 
-          throw new Exception('ERROR: RQEUEST Inválido');
-     }
-$this->breadcrumbs=array(
-	'Editor', 
-);?>
+<?php
+$load = 'false';
+if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate'])
+        && isset($_POST['cobjectTheme']) && isset($_POST['actGoal'])) {
+    $commonType = $_POST['commonType'];
+    $cobjectTemplate = $_POST['cobjectTemplate'];
+    $cobjectTheme = $_POST['cobjectTheme'];
+    $actGoal = $_POST['actGoal'];
+} elseif (isset($_GET['cID'])) {
+    $cobjectID = $_GET['cID'];
+    $load = 'true';
+} elseif (isset($_POST['cobjectID'])) {
+    $cobjectID = $_POST['cobjectID'];
+    $load = 'true';
+} else {
+    throw new Exception('ERROR: RQEUEST Inválido');
+}
+$this->breadcrumbs = array(
+    'Editor',
+);
+?>
 <script language ="javascript" type="text/javascript">
-<?php 
-   if($load=='false'){
-       echo "newEditor.COtypeID = $commonType ; \n" ; 
-       echo "newEditor.COthemeID = $cobjectTheme; \n" ;
-       echo "newEditor.COtemplateType = $cobjectTemplate; \n"; 
-       echo "newEditor.COgoalID = $actGoal; \n"; 
-   }
-   else{
-       echo "newEditor.CObjectID = $cobjectID; \n";
-   }
-       echo "newEditor.isload = $load; \n"; 
+<?php
+if ($load == 'false') {
+    echo "newEditor.COtypeID = $commonType ; \n";
+    echo "newEditor.COthemeID = $cobjectTheme; \n";
+    echo "newEditor.COtemplateType = $cobjectTemplate; \n";
+    echo "newEditor.COgoalID = $actGoal; \n";
+} else {
+    echo "newEditor.CObjectID = $cobjectID; \n";
+}
+echo "newEditor.isload = $load; \n";
 ?>
 </script>
 

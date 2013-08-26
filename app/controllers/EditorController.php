@@ -1,8 +1,15 @@
 <?php
 
+    
 class EditorController extends Controller {
 
     public $layout = 'editor';
+    
+    public $TYPE_ELEMENT_TEXT = "TEXT";
+    public $TYPE_ELEMENT_MULTIMIDIA = "MULTIMIDIA";
+    public $TYPE_LIBRARY_IMAGE = "IMAGE";
+    public $TYPE_LIBRARY_SOUND = "SOUND";
+    public $TYPE_LIBRARY_MOVIE = "MOVIE";
 
     /**
      * @return array action filters
@@ -379,8 +386,9 @@ class EditorController extends Controller {
                         break;
                     case "Element":
                         if (isset($_POST['typeID'])) {
-                            $typeID = $_POST['typeID'];
-
+                            $typeName = $_POST['typeID'];
+                            $typeID =  $this->getTypeIDByName($typeName);
+                            
                             if (isset($_POST['pieceID']) && isset($_POST['flag']) && isset($_POST['ordem'])
                                     && isset($_POST['value']) && isset($_POST['DomID'])) {
 
@@ -402,27 +410,28 @@ class EditorController extends Controller {
                                 $newPieceElement->element_id = $elementID;
                                 $newPieceElement->order = $order;
                                 $newPieceElement->insert();
-
+                                
                                 $json['ElementID'] = $elementID;
-
-                                switch ($typeID) {
-                                    case 11: //text
-                                        //salva editor_element_property 's
-                                        //6 text
-                                        $newElementProperty = new EditorElementProperty();
-                                        $newElementProperty->element_id = $elementID;
-                                        $newElementProperty->property_id = 6;
-                                        $newElementProperty->value = $value;
-                                        $newElementProperty->insert();
-                                        //10 language
-                                        $newElementProperty = new EditorElementProperty();
-                                        $newElementProperty->element_id = $elementID;
-                                        $newElementProperty->property_id = 10;
-                                        $newElementProperty->value = "português";
-                                        $newElementProperty->insert();
-                                        
-                                        break;
-                                    case 16: //image
+                                
+                                $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id'=> $pieceID, 'element_id'=> $elementID), array('order' => 'id desc'));
+                                $pieceElementID = $pieceElement->id;
+                                
+                                
+                                //layertype
+                                $propertyName = "layertype";
+                                $propertyContext = "piecelement";
+                                $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
+                                $newPieceElementProperty = new EditorPieceelementProperty();
+                                $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                $newPieceElementProperty->property_id =  $propertyID;
+                                $newPieceElementProperty->value = $flag == 1? 'Correto' : 'Errado';
+                                $newPieceElementProperty->insert();
+                                
+                                if(isset($_POST["library"])){
+                                    $libraryTypeName = $_POST["library"];
+                                    $libraryTypeID =  $this->getTypeIDByName($libraryTypeName);
+                                    
+                                    if($libraryTypeName == $this->TYPE_LIBRARY_IMAGE){//image
                                         $src = $value['url'];
                                         $nome = $value['name'];
                                         $ext = explode(".", $nome);
@@ -433,9 +442,8 @@ class EditorController extends Controller {
                                         list($width, $height, $type) = getimagesize("$url$src");
 
                                         //Salva library
-                                        //type 9 
                                         $newLibrary = new Library();
-                                        $newLibrary->type_id = 9;
+                                        $newLibrary->type_id = $libraryTypeID;
                                         $newLibrary->insert();
 
                                         //Pegar o ID do ultimo adicionado.
@@ -443,47 +451,85 @@ class EditorController extends Controller {
                                         $libraryID = $library->id;
 
                                         //Salva library_property 's
-                                        //1 width
+                                        //width
+                                        $propertyName = "width";
+                                        $propertyContext = $libraryTypeName;
+                                        $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->library_id = $libraryID;
-                                        $newLibraryProperty->property_id = 1;
+                                        $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $width;
                                         $newLibraryProperty->insert();
 
-                                        //2 height
+                                        //height
+                                        $propertyName = "height";
+                                        $propertyContext = $libraryTypeName;
+                                        $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->library_id = $libraryID;
-                                        $newLibraryProperty->property_id = 2;
+                                        $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $height;
                                         $newLibraryProperty->insert();
 
-                                        //5 src
+                                        //src
+                                        $propertyName = "src";
+                                        $propertyContext = "library";
+                                        $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->library_id = $libraryID;
-                                        $newLibraryProperty->property_id = 5;
+                                        $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $nome;//apenas o nome do arquivo
                                         $newLibraryProperty->insert();
 
-                                        //12 extension
+                                        //extension
+                                        $propertyName = "extension";
+                                        $propertyContext = "library";
+                                        $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
                                         $newLibraryProperty = new LibraryProperty();
                                         $newLibraryProperty->library_id = $libraryID;
-                                        $newLibraryProperty->property_id = 12;
+                                        $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $ext;     
                                         $newLibraryProperty->insert();
 
                                         //Salva na editor_element_property
-                                        //4 libraryID
+                                        //libraryID
+                                        $propertyName = "library_id";
+                                        $propertyContext = $typeName;
+                                        $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
                                         $newElementProperty = new EditorElementProperty();
                                         $newElementProperty->element_id = $elementID;
-                                        $newElementProperty->property_id = 4;
+                                        $newElementProperty->property_id = $propertyID;
                                         $newElementProperty->value = $libraryID;
                                         $newElementProperty->insert();
-
+                                        
                                         $json['LibraryID'] = $libraryID;
-
-                                        break;
-                                    default:
-                                        throw new Exception("ERROR: Tipo inválido.<br>");
+                                        
+                                    }
+                                    
+                                }elseif($typeName == $this->TYPE_ELEMENT_TEXT){  //text
+                                        //salva editor_element_property 's
+                                        //text                                        
+                                        $propertyName = "text";
+                                        $propertyContext = "phrase";
+                                        $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
+                                        $newElementProperty = new EditorElementProperty();
+                                        $newElementProperty->element_id = $elementID;
+                                        $newElementProperty->property_id = $propertyID;
+                                        $newElementProperty->value = $value;
+                                        $newElementProperty->insert();
+                                        
+                                        //language
+                                        $propertyName = "language";
+                                        $propertyContext = "element";
+                                        $propertyID = $this->getPropertyIDByName($propertyName,$propertyContext);
+                                        $newElementProperty = new EditorElementProperty();
+                                        $newElementProperty->element_id = $elementID;
+                                        $newElementProperty->property_id = $propertyID;
+                                        $newElementProperty->value = "português";
+                                        $newElementProperty->insert();
+                                    
+                                }else{
+                                    throw new Exception("ERROR: Tipo inválido.<br>");
                                 }
                             } else {
                                 throw new Exception("ERROR: Dados da Element insuficientes.<br>");
@@ -655,7 +701,22 @@ class EditorController extends Controller {
         //escreve o json que serpa retornado
         echo json_encode($json);
     }
-
+    
+    private function getTypeIDByName($str){
+        $typeName = $str;
+        $type = CommonType::model()->findByAttributes(array('name' => strtolower($typeName)));
+        $typeID = $type->id;
+        
+        return $typeID;
+    }    
+    private function getPropertyIDByName($str, $str2){
+        $propertyName = $str;
+        $propertyContext = $str2;
+        $property = CommonProperty::model()->findByAttributes(array('name' => strtolower($propertyName), 'context' => strtolower($propertyContext)));
+        $propertyID = $property->id;
+        
+        return $propertyID;
+    }
     // Uncomment the following methods and override them if needed
     /*
       public function filters()
