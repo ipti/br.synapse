@@ -48,6 +48,7 @@ class EditorController extends Controller {
         $this->render('preeditor');
     }
 
+    
     public function actionPoseditor() {
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['img'])) {

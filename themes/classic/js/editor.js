@@ -30,7 +30,8 @@ function editor () {
     this.AEL = new Array(13,14,15);
     
     this.COTemplateTypeIn = function(array){
-        return array.indexOf(this.COtemplateType) != -1
+        console.log(this.COtemplateType);
+        return array.indexOf(this.COtemplateType) != -1 ;
     }
     
     this.changePiece = function(piece){
@@ -147,6 +148,7 @@ function editor () {
         '<li id="'+pieceID+'" class="piece" '+plus+'>'+
         '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>';
         //Se o Template for MTE
+        console.log(parent.COTemplateTypeIn(parent.MTE));
         if(parent.COTemplateTypeIn(parent.MTE) ){
             html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
         //Se o template for PRE
@@ -998,23 +1000,25 @@ function editor () {
                         //caso i
                         switch(i){
                             //seja o ID do cobject
-                            case 'cobjectID':
+                            case 'cobject_id':
                                 //altera na classe
-                                parent.CObjectID = item;
+                                parent.CObjectID = Number(item);
+                                break;
                             //seja o ID do tipo
                             case 'typeID':
                                 //altera na classe
-                                parent.COtypeID = item;
+                                parent.COtypeID = Number(item);
                                 break;
                             //seja o ID do tema
                             case 'themeID':
                                 //altera na classe
-                                parent.COthemeID = item;
+                                parent.COthemeID = Number(item);
                                 break;
                             //seja o ID do template
                             case 'templateID':
                                 //altera na classe
-                                parent.COtemplateID = item;
+                                parent.COtemplateType = Number(item);
+                                break;
                             //se não
                             default:
                                 //se for uma screen

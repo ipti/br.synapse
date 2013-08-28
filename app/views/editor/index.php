@@ -35,7 +35,7 @@ echo "newEditor.isload = $load; \n";
 
 <header>
     <hgroup>
-        <h1>TAG</h1>
+        <h1> TAG </h1>
         <ul>
             <li class="new"><?php echo Yii::t('default', 'New'); ?></li>
             <li class="save"><?php echo Yii::t('default', 'Save'); ?></li>
