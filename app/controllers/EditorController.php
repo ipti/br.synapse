@@ -48,9 +48,7 @@ class EditorController extends Controller {
         $this->render('preeditor');
     }
 
-    
     public function actionPoseditor() {
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['img'])) {
             //Na Solicitação AJAX
             //include( 'cutImage.class.php' );
@@ -89,9 +87,10 @@ class EditorController extends Controller {
 
             $num_img = count($uploadedLibraryIDs);
             $i = 0;
+            $idPropertySrc = $this->getPropertyIDByName('src','library');
             foreach ($uploadedLibraryIDs as $upLibId):
                 $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('library_id' => $upLibId,
-                    'property_id' => 5));
+                    'property_id' => $idPropertySrc ));
                 $i++;
             endforeach;
             //--------------------------------------------          
@@ -227,7 +226,6 @@ class EditorController extends Controller {
                 $str.="
                 <script language='javascript' type='text/javascript'>  
                 $('#actGoal').change(function(){
-                    window.alert('Change Act_Goal - 2');
                     $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
                 }); </script> ";
 
@@ -317,7 +315,7 @@ class EditorController extends Controller {
 
                             $newScreen->cobject_id = $cobjectID;
                             $newScreen->order = $ordem;
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $newScreen->save();
                                 $screen = $newScreen;
                             } else {
@@ -343,7 +341,7 @@ class EditorController extends Controller {
                             $order = $_POST['order'];
                             $templateID = $_POST['templateID'];
 
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $IDDB = $_POST['ID_BD'];
                                 $newPieceSet = EditorPieceset::model()->findByPk($IDDB);
                             } else {
@@ -351,7 +349,7 @@ class EditorController extends Controller {
                             }
                             $newPieceSet->template_id = $templateID;
                             $newPieceSet->description = $description;
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $newPieceSet->save();
                                 $pieceSet = $newPieceSet;
                             } else {
@@ -361,7 +359,7 @@ class EditorController extends Controller {
 
                             $pieceSetID = $pieceSet->id;
 
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $newScreenPieceSet = EditorScreenPieceset::model()->find(array(
                                     'condition' => 'screen_id =:screenID AND pieceset_id=:piecesetID',
                                     'params' => array(':screenID' => $screenID, ':piecesetID' => $pieceSetID)
@@ -373,7 +371,7 @@ class EditorController extends Controller {
                             $newScreenPieceSet->screen_id = $screenID;
                             $newScreenPieceSet->pieceset_id = $pieceSetID;
                             $newScreenPieceSet->order = $order;
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $newScreenPieceSet->save();
                             } else {
                                 $newScreenPieceSet->insert();
@@ -394,7 +392,7 @@ class EditorController extends Controller {
                             $pieceSetID = $_POST['pieceSetID'];
                             $screenID = $_POST['screenID'];
                             $ordem = $_POST['ordem'];
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $IDDB = $_POST['ID_BD'];
                                 $newPiece = EditorPiece::model()->findByPk($IDDB);
                             } else {
@@ -402,7 +400,7 @@ class EditorController extends Controller {
                             }
 
 
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $newPiece->save();
                                 $piece = $newPiece;
                             } else {
@@ -412,7 +410,7 @@ class EditorController extends Controller {
 
                             $pieceID = $piece->id;
 
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $newPieceSetPiece = EditorPiecesetPiece::model()->find(array(
                                     'condition' => 'piece_id =:pieceID AND pieceset_id=:piecesetID',
                                     'params' => array(':pieceID' => $pieceID, ':piecesetID' => $pieceSetID)
@@ -424,7 +422,7 @@ class EditorController extends Controller {
                             $newPieceSetPiece->pieceset_id = $pieceSetID;
                             $newPieceSetPiece->screen_id = $screenID;
                             $newPieceSetPiece->order = $ordem;
-                            if ($_POST['op'] == 'update') {
+                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $newPieceSetPiece->save();
                             } else {
                                 $newPieceSetPiece->insert();
@@ -448,14 +446,14 @@ class EditorController extends Controller {
                                 $flag = $_POST['flag'];
                                 $value = $_POST['value'];
                                 $order = $_POST['ordem'];
-                                if ($_POST['op'] == 'update') {
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                     $IDDB = $_POST['ID_BD'];
                                     $newElement = EditorElement::model()->findByPk($IDDB);
                                 } else {
                                     $newElement = new EditorElement();
                                 }
                                 $newElement->type_id = $typeID;
-                                if ($_POST['op'] == 'update') {
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                     $newElement->save();
                                     $element = $newElement;
                                 } else {
@@ -465,7 +463,7 @@ class EditorController extends Controller {
 
                                 $elementID = $element->id;
 
-                                if ($_POST['op'] == 'update') {
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                     $newPieceElement = EditorPieceElement::model()->find(array(
                                         'condition' => 'element_id =:elementID AND piece_id=:pieceID',
                                         'params' => array(':elementID' => $elementID, ':pieceID' => $pieceID)
@@ -477,7 +475,7 @@ class EditorController extends Controller {
                                 $newPieceElement->piece_id = $pieceID;
                                 $newPieceElement->element_id = $elementID;
                                 $newPieceElement->order = $order;
-                                if ($_POST['op'] == 'update') {
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                     $newPieceElement->save();
                                 } else {
                                     $newPieceElement->insert();
@@ -513,7 +511,7 @@ class EditorController extends Controller {
                                         list($width, $height, $type) = getimagesize("$url$src");
                                         //Salva library
                                         //type 9 
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $propName = "library_id";
                                             $propContext = "multimidia";
                                             $propID = $this->getPropertyIDByName($propName, $propContext);
@@ -532,7 +530,7 @@ class EditorController extends Controller {
                                         }
                                         $library_typeName = $_POST['library'];
                                         $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibrary->save();
                                             $library = $newLibrary;
                                         } else {
@@ -546,7 +544,7 @@ class EditorController extends Controller {
                                         $propertyName = "width";
                                         $propertyContext = $libraryTypeName;
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty = LibraryProperty::model()->find(array(
                                                 'condition' => 'library_id =:libraryID AND property_id=:propertyID',
                                                 'params' => array(':libraryID' => $libraryID,
@@ -559,7 +557,7 @@ class EditorController extends Controller {
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $width;
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty->save();
                                         } else {
                                             $newLibraryProperty->insert();
@@ -570,7 +568,7 @@ class EditorController extends Controller {
                                         $propertyName = "height";
                                         $propertyContext = $libraryTypeName;
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty = LibraryProperty::model()->find(array(
                                                 'condition' => 'library_id =:libraryID AND property_id=:propertyID',
                                                 'params' => array(':libraryID' => $libraryID,
@@ -583,7 +581,7 @@ class EditorController extends Controller {
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $height;
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty->save();
                                         } else {
                                             $newLibraryProperty->insert();
@@ -594,7 +592,7 @@ class EditorController extends Controller {
                                         $propertyName = "src";
                                         $propertyContext = "library";
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty = LibraryProperty::model()->find(array(
                                                 'condition' => 'library_id =:libraryID AND property_id=:propertyID',
                                                 'params' => array(':libraryID' => $libraryID,
@@ -606,7 +604,7 @@ class EditorController extends Controller {
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $nome; //apenas o nome do arquivo
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty->save();
                                         } else {
                                             $newLibraryProperty->insert();
@@ -617,7 +615,7 @@ class EditorController extends Controller {
                                         $propertyName = "extension";
                                         $propertyContext = "library";
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty = LibraryProperty::model()->find(array(
                                                 'condition' => 'library_id =:libraryID AND property_id=:propertyID',
                                                 'params' => array(':libraryID' => $libraryID,
@@ -629,7 +627,7 @@ class EditorController extends Controller {
                                         $newLibraryProperty->library_id = $libraryID;
                                         $newLibraryProperty->property_id = $propertyID;
                                         $newLibraryProperty->value = $ext;
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newLibraryProperty->save();
                                         } else {
                                             $newLibraryProperty->insert();
@@ -640,7 +638,7 @@ class EditorController extends Controller {
                                         $propertyName = "library_id";
                                         $propertyContext = $typeName;
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newElementProperty = EditorElementProperty::model()->find(array(
                                                 'condition' => 'element_id =:elementID AND property_id=:propertyID',
                                                 'params' => array(':elementID' => $elementID,
@@ -653,7 +651,7 @@ class EditorController extends Controller {
                                         $newElementProperty->element_id = $elementID;
                                         $newElementProperty->property_id = $propertyID;
                                         $newElementProperty->value = $libraryID;
-                                        if ($_POST['op'] == 'update') {
+                                        if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                             $newElementProperty->save();
                                         } else {
                                             $newElementProperty->insert();
@@ -667,7 +665,7 @@ class EditorController extends Controller {
                                     $propertyName = "text";
                                     $propertyContext = "phrase";
                                     $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                    if ($_POST['op'] == 'update') {
+                                    if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                         $newElementProperty = EditorElementProperty::model()->find(array(
                                             'condition' => 'element_id =:elementID AND property_id=:propertyID',
                                             'params' => array(':elementID' => $elementID,
@@ -679,7 +677,7 @@ class EditorController extends Controller {
                                     $newElementProperty->element_id = $elementID;
                                     $newElementProperty->property_id = $propertyID;
                                     $newElementProperty->value = $value;
-                                    if ($_POST['op'] == 'update') {
+                                    if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                         $newElementProperty->save();
                                     } else {
                                         $newElementProperty->insert();
@@ -689,7 +687,7 @@ class EditorController extends Controller {
                                     $propertyName = "language";
                                     $propertyContext = "element";
                                     $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                    if ($_POST['op'] == 'update') {
+                                    if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                         $newElementProperty = EditorElementProperty::model()->find(array(
                                             'condition' => 'element_id =:elementID AND property_id=:propertyID',
                                             'params' => array(':elementID' => $elementID,
@@ -701,7 +699,7 @@ class EditorController extends Controller {
                                     $newElementProperty->element_id = $elementID;
                                     $newElementProperty->property_id = $propertyID;
                                     $newElementProperty->value = "português";
-                                    if ($_POST['op'] == 'update') {
+                                    if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                         $newElementProperty->save();
                                     } else {
                                         $newElementProperty->insert();

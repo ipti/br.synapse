@@ -956,7 +956,7 @@ function editor () {
                 }
             
                 //cria formulário para enviar o array de library para o poseditor
-                $('.savescreen').append('<form action="/Editor/poseditor" method="post">'+inputs+'<input type="submit" value="PosEditor"></form>');
+                $('.savescreen').append('<form action="/editor/poseditor" method="post">'+inputs+'<input type="submit" value="PosEditor"></form>');
             
             /*$.ajax({
                 type: "POST",
@@ -980,6 +980,7 @@ function editor () {
             //define parent como a classe base
             var parent = this;
             //inicia a requisição de ajax
+            $('#loading').html('<img src="/themes/classic/images/loading.gif" id="img_load"/>');
             $.ajax({
                 type: "POST",
                 url: "/editor/json",
@@ -989,6 +990,7 @@ function editor () {
                     cobjectID:parent.CObjectID
                 },                
                 error: function( jqXHR, textStatus, errorThrown ){
+                    $('#img_load').remove();
                     $('html').html(jqXHR.responseText);
                 },
                 success: function(response, textStatus, jqXHR){
@@ -1104,7 +1106,7 @@ function editor () {
 
                         }
                     });
-                    alert('Load complet!');
+                    $('#img_load').remove();
                 }
             });
         }

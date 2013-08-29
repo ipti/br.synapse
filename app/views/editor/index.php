@@ -53,6 +53,7 @@ echo "newEditor.isload = $load; \n";
     <button class="themebutton" id="addScreen"><?php echo Yii::t('default', 'Add Screen'); ?></button>
     <ul class="navscreen"></ul>
     <button class="themebutton" id="delScreen"><?php echo Yii::t('default', 'Remove Screen'); ?></button>
+    <div id="loading"></div>
     <span class="clear"></span>
     <div class="content">
         <div class="screen" id="sc0">
