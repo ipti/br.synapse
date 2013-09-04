@@ -28,7 +28,7 @@ function editor () {
     this.MTE = new Array(3,4,5,6);
     this.PRE = new Array(7,8,9,10,11,12);
     this.AEL = new Array(13,14,15);
-    
+    this.unLinks = [];
     this.COTemplateTypeIn = function(array){
         console.log(this.COtemplateType);
         return array.indexOf(this.COtemplateType) != -1 ;

@@ -304,14 +304,16 @@ class EditorController extends Controller {
                             $DomID = $_POST['DomID'];
                             $cobjectID = $_POST['CObjectID'];
                             $ordem = $_POST['Ordem'];
+                           
                             if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                 $IDDB = $_POST['ID_BD'];
                                 $newScreen = EditorScreen::model()->findByPk($IDDB);
+//                                //Desvincular Relação Cobject_Screen - Quando é Excluída !
+//                                
+//                                $BrothersScreens = EditorScreen::model()->findAllByAttributes(array('cobject'));
                             } else {
                                 $newScreen = new EditorScreen();
                             }
-
-
 
                             $newScreen->cobject_id = $cobjectID;
                             $newScreen->order = $ordem;
@@ -452,7 +454,10 @@ class EditorController extends Controller {
                                 } else {
                                     $newElement = new EditorElement();
                                 }
-                                $newElement->type_id = $typeID;
+                                $elementChangeType = (!empty($newElement->type_id) && ($newElement->type_id != $typeID )) ;
+                                $newElement->type_id = $typeID; // novo tipo ou alterado
+                                // Se $elementChangeType = true, então destrói a library deste element
+                                
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                     $newElement->save();
                                     $element = $newElement;
@@ -497,7 +502,7 @@ class EditorController extends Controller {
                                 $newPieceElementProperty->value = $flag == 1 ? 'Correto' : 'Errado';
                                 $newPieceElementProperty->insert();
 
-                                if (isset($_POST["library"])) {
+                                if (isset($_POST["library"])) { 
                                     $libraryTypeName = $_POST["library"];
                                     $libraryTypeID = $this->getTypeIDByName($libraryTypeName);
 
