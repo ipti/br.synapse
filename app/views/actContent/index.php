@@ -25,13 +25,13 @@
                         'enablePagination' => true,
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
-                            'ID',
+                            'id',
                             array(
-                                'name' => 'contentParent',
+                                'name' => Yii::t('default', 'Content Parent'),
                                 'value' => '(isset($data->contentParent0) ? $data->contentParent0->description: "N/A")',
                             ),
                             array(
-                                'name' => 'disciplineID',
+                                'name' => Yii::t('default', 'Discipline'),
                                 'value' => '$data->discipline->name',
                                 'filter' => CHtml::dropDownList('Provider[onoff]', '', array(
                                     '1' => 'Portuguës',

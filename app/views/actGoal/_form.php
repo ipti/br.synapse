@@ -16,15 +16,15 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
 
         <div class="formField">
-            <?php echo $form->labelEx($model, 'degreeID'); ?>
-            <?php echo $form->dropDownList($model, 'degreeID', CHtml::listData(ActDegree::model()->findAll('degreeParent IS NOT NULL'), 'ID', 'name')); ?>                    
-            <?php echo $form->error($model, 'degreeID'); ?>
+            <?php echo $form->labelEx($model, 'degree_id'); ?>
+            <?php echo $form->dropDownList($model, 'degree_id', CHtml::listData(ActDegree::model()->findAll('degree_parent IS NOT NULL'), 'id', 'name')); ?>                    
+            <?php echo $form->error($model, 'degree_id'); ?>
         </div>
 
         <div class="formField">
-            <?php echo $form->labelEx($model, 'disciplineID'); ?>
-            <?php echo $form->dropDownList($model, 'disciplineID', CHtml::listData(ActDiscipline::model()->findAll(), 'ID', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actgoal/loadcontent'), 'update' => '#contentID'))); ?>                    
-            <?php echo $form->error($model, 'disciplineID'); ?>
+            <?php echo $form->labelEx($model, 'discipline_id'); ?>
+            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actgoal/loadcontent'), 'update' => '#contentID'))); ?>                    
+            <?php echo $form->error($model, 'discipline_id'); ?>
         </div>
  </div>
 </div>
@@ -32,7 +32,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="panelGroupHeader"><div><?php echo Yii::t('default', 'Add Modality') ?></div></div>
     <div class="panelGroupBody">
         <div class="formField">
-            <?php echo CHtml::dropDownList('modalityID', '', CHtml::listData(ActModality::model()->findAll(), 'ID', 'name')); ?>
+            <?php echo CHtml::dropDownList('modalityID', '', CHtml::listData(ActModality::model()->findAll(), 'id', 'name')); ?>
             <?php echo CHtml::button(Yii::t('default', 'Add'), array('onclick' => 'addItem(\'ActGoalModality\')', 'id' => 'addGoalModality', 'class' => 'buttonLink button')); ?>
         </div>
         <ul id="modalityItens" class="multItens">
@@ -50,14 +50,14 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="panelGroupHeader"><div class=""> <?php echo Yii::t('default', 'Add Skill') ?></div></div>
     <div class="panelGroupBody">
         <div class="formField">
-            <?php echo CHtml::dropDownList('skillID', '', CHtml::listData(ActSkill::model()->findAll(), 'ID', 'name')); ?>
+            <?php echo CHtml::dropDownList('skillID', '', CHtml::listData(ActSkill::model()->findAll(), 'id', 'name')); ?>
             <?php echo CHtml::button(Yii::t('default', 'Add'), array('onclick' => 'addItem(\'ActGoalSkill\')', 'id' => 'addGoalSkill', 'class' => 'buttonLink button')); ?>
         </div>
         <ul id="skillItens" class="multItens">
             <?php
             if (isset($skills)) {
                 foreach ($skills as $skill) {
-                    echo '<li><input type="hidden" value="' . $skill->skillID . '" name="ActGoalSkill[]">' . $skill->skill->name . ' - <a id="' . $skill->skillID . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
+                    echo '<li><input type="hidden" value="' . $skill->skill_id . '" name="ActGoalSkill[]">' . $skill->skill->name . ' - <a id="' . $skill->skill_id . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
                 }
             }
             ?>
@@ -75,7 +75,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php
             if (isset($contents)) {
                 foreach ($contents as $content) {
-                    echo '<li><input type="hidden" value="' . $content->contentID . '" name="ActGoalContent[]">' . $content->content->description . ' - <a id="' . $content->contentID . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
+                    echo '<li><input type="hidden" value="' . $content->content_id . '" name="ActGoalContent[]">' . $content->content->description . ' - <a id="' . $content->content_id . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
                 }
             }
             ?>

@@ -9,8 +9,7 @@ return array(
     'Theme' => 'Temas',
     'Type' => 'Tipos',
     'Block' => 'Blocos',
-    'Cobject' => 'Cobjeto',
-    'Cobject' => 'Cobjeto',
+    'Cobject' => 'Atividade',
     'Goal' => 'Objetivo',
     'Modality' => 'Modalidade',
     'Skill' => 'Habilidade',
@@ -25,5 +24,7 @@ return array(
     'Status'=>'Estatus',
     'Alias'=>'Alias',
     'Import/Export'=>'Import/Export',
+    'Level'=>'Nível',
+    'Register'=>'Cadastro'
 )
 ?>

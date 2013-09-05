@@ -253,7 +253,7 @@ div.formField{
 .userInfo{background:url('../../images/theme_icon_logout.png') no-repeat center center; border-left: 1px solid #282828; float:right;width:3%;height:46px;}
 .userInfo:hover{background:#505050 url('../../images/theme_icon_logout.png') no-repeat center center ;}
 .logoTag{float:left;height:47px;width:3.5%;background: -moz-linear-gradient(center top , rgba(253, 253, 253, 1), rgba(238, 238, 238, 1)) repeat scroll 0 0 #C4C4C4;}
-.logoTag a{display:block;width:100%;height:100%;background:url('../../images/tag_icon.png') no-repeat center center;}
+.logoTag a{display:block;width:100%;height:100%;background:url('../../images/icon_synapse.png') no-repeat center center;}
 
 /** ------------------- COMMON BOX STYLE -------------------------- **/
 .ibox {

@@ -64,20 +64,20 @@ class ActGoalController extends Controller {
                 Yii::app()->user->setFlash('success', Yii::t('default', 'ActGoal Created Successful:'));
                 foreach ($_POST['ActGoalModality'] as $m) {
                     $modality = new ActGoalModality();
-                    $modality->modalityID = (int) $m;
-                    $modality->goalID = (int) $model->ID;
+                    $modality->modality_id = (int) $m;
+                    $modality->goal_id = (int) $model->id;
                     $modality->save();
                 }
                 foreach ($_POST['ActGoalSkill'] as $s) {
                     $skill = new ActGoalSkill();
-                    $skill->skillID = (int) $s;
-                    $skill->goalID = (int) $model->ID;
+                    $skill->skill_id = (int) $s;
+                    $skill->goal_id = (int) $model->id;
                     $skill->save();
                 }
                 foreach ($_POST['ActGoalContent'] as $c) {
                     $content = new ActGoalContent();
-                    $content->contentID = (int) $c;
-                    $content->goalID = (int) $model->ID;
+                    $content->content_id = (int) $c;
+                    $content->goal_id = (int) $model->id;
                     $content->save();
                 }
                 $this->redirect(array('index'));
@@ -97,9 +97,9 @@ class ActGoalController extends Controller {
     public function actionUpdate($id) {
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/',array('file'=>'common.js')),CClientScript::POS_END);
         $model = $this->loadModel($id);
-        $modalities = ActGoalModality::model()->findAllByAttributes(array('goalID' => $id));
-        $skills = ActGoalSkill::model()->findAllByAttributes(array('goalID' => $id));
-        $contents = ActGoalContent::model()->findAllByAttributes(array('goalID' => $id));
+        $modalities = ActGoalModality::model()->findAllByAttributes(array('goal_id' => $id));
+        $skills = ActGoalSkill::model()->findAllByAttributes(array('goal_id' => $id));
+        $contents = ActGoalContent::model()->findAllByAttributes(array('goal_id' => $id));
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -109,58 +109,58 @@ class ActGoalController extends Controller {
             if ($model->save()) {
                 $imodalities = $iskills = $icontents = array();
                 foreach ($modalities as $modality) {
-                    $imodalities[] = $modality->modalityID;
+                    $imodalities[] = $modality->modality_id;
                 }
                 foreach ($skills as $skill) {
-                    $iskills[] = $skill->skillID;
+                    $iskills[] = $skill->skill_id;
                 }
                 foreach ($contents as $content) {
-                    $icontents[] = $content->contentID;
+                    $icontents[] = $content->content_id;
                 }
                 if (isset($_POST['ActGoalModality'])) {
                     $removed = array_diff($imodalities, $_POST['ActGoalModality']);
-                    ActGoalModality::model()->deleteAllByAttributes(array('goalID' => $model->ID, 'modalityID' => array_values($removed)));
+                    ActGoalModality::model()->deleteAllByAttributes(array('goal_id' => $model->id, 'modality_id' => array_values($removed)));
                     $insert = array_diff($_POST['ActGoalModality'], $imodalities);
                     if (isset($insert)) {
                         foreach ($insert as $in) {
                             $d = new ActGoalModality();
-                            $d->goalID = $model->ID;
-                            $d->modalityID = $in;
+                            $d->goal_id = $model->id;
+                            $d->modality_id = $in;
                             $d->save();
                         }
                     }
                 } else {
-                    ActGoalModality::model()->deleteAllByAttributes(array('goalID' => $model->ID));
+                    ActGoalModality::model()->deleteAllByAttributes(array('goal_id' => $model->id));
                 }
                 if (isset($_POST['ActGoalSkill'])) {
                     $removed = array_diff($iskills, $_POST['ActGoalSkill']);
-                    ActGoalSkill::model()->deleteAllByAttributes(array('goalID' => $model->ID, 'skillID' => array_values($removed)));
+                    ActGoalSkill::model()->deleteAllByAttributes(array('goal_id' => $model->id, 'skill_id' => array_values($removed)));
                     $insert = array_diff($_POST['ActGoalSkill'], $iskills);
                     if (isset($insert)) {
                         foreach ($insert as $in) {
                             $d = new ActGoalSkill();
-                            $d->goalID = $model->ID;
-                            $d->skillID = $in;
+                            $d->goal_id = $model->id;
+                            $d->skill_id = $in;
                             $d->save();
                         }
                     }
                 } else {
-                    ActGoalSkill::model()->deleteAllByAttributes(array('goalID' => $model->ID));
+                    ActGoalSkill::model()->deleteAllByAttributes(array('goal_id' => $model->id));
                 }
                  if (isset($_POST['ActGoalContent'])) {
                     $removed = array_diff($icontents, $_POST['ActGoalContent']);
-                    ActGoalContent::model()->deleteAllByAttributes(array('goalID' => $model->ID, 'contentID' => array_values($removed)));
+                    ActGoalContent::model()->deleteAllByAttributes(array('goal_id' => $model->id, 'content_id' => array_values($removed)));
                     $insert = array_diff($_POST['ActGoalContent'], $icontents);
                     if (isset($insert)) {
                         foreach ($insert as $in) {
                             $d = new ActGoalContent();
-                            $d->goalID = $model->ID;
-                            $d->contentID = $in;
+                            $d->goal_id = $model->id;
+                            $d->content_id = $in;
                             $d->save();
                         }
                     }
                 } else {
-                    ActGoalContent::model()->deleteAllByAttributes(array('goalID' => $model->ID));
+                    ActGoalContent::model()->deleteAllByAttributes(array('goal_id' => $model->id));
                 }    
 
 
@@ -169,9 +169,9 @@ class ActGoalController extends Controller {
                // $this->redirect(array('view', 'id' => $model->ID));
             }
         }
-        $modalities = ActGoalModality::model()->findAllByAttributes(array('goalID' => $id));
-        $skills = ActGoalSkill::model()->findAllByAttributes(array('goalID' => $id));
-        $contents = ActGoalContent::model()->findAllByAttributes(array('goalID' => $id));
+        $modalities = ActGoalModality::model()->findAllByAttributes(array('goal_id' => $id));
+        $skills = ActGoalSkill::model()->findAllByAttributes(array('goal_id' => $id));
+        $contents = ActGoalContent::model()->findAllByAttributes(array('goal_id' => $id));
         Yii::app()->clientScript->registerScript('updateSelect',"updateLoad('actGoal');",CClientScript::POS_LOAD);
         $this->render('update', array(
             'model' => $model,
@@ -252,8 +252,8 @@ class ActGoalController extends Controller {
     public function actionLoadContent() {
         $model = new ActGoal;
         $model->attributes = $_POST['ActGoal'];
-        $data = ActContent::model()->findAllByAttributes(array('disciplineID' => $model->disciplineID));
-        $data = CHtml::listData($data, 'ID', 'description');
+        $data = ActContent::model()->findAllByAttributes(array('discipline_id' => $model->discipline_id));
+        $data = CHtml::listData($data, 'id', 'description');
         foreach ($data as $value => $name) {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }

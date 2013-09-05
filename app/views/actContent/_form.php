@@ -13,15 +13,15 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php echo Yii::t('default', 'Fields with * are required.') ?></div>
 
         <div class="formField">
-            <?php echo $form->labelEx($model, 'contentParent'); ?>
-            <?php echo $form->dropDownList($model, 'contentParent', CHtml::listData(ActContent::model()->findAll(), 'ID', 'description'),array('empty'=>Yii::t('default','NONE'))); ?>
-            <?php echo $form->error($model, 'contentParent'); ?>
+            <?php echo $form->labelEx($model, 'content_parent'); ?>
+            <?php echo $form->dropDownList($model, 'content_parent', CHtml::listData(ActContent::model()->findAll(), 'id', 'description'),array('empty'=>Yii::t('default','NONE'))); ?>
+            <?php echo $form->error($model, 'content_parent'); ?>
         </div>
 
         <div class="formField">
-            <?php echo $form->labelEx($model, 'disciplineID'); ?>
-              <?php echo $form->dropDownList($model, 'disciplineID', CHtml::listData(ActDiscipline::model()->findAll(), 'ID', 'name')); ?>
-            <?php echo $form->error($model, 'disciplineID'); ?>
+            <?php echo $form->labelEx($model, 'discipline_id'); ?>
+              <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name')); ?>
+            <?php echo $form->error($model, 'discipline_id'); ?>
         </div>
 
         <div class="formField">
