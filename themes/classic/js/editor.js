@@ -303,13 +303,12 @@ function editor () {
         var input   = file+"_input";
         var name_DB = file+"_nameDB"; // Id--> Unico pra cada form, guardando o name_DB corrent
         
-        var identify_isload = '';
+        var name_db = '';
         var ld_src = "" ;
         if( parent.isset(parent.isload) ) {
-            identify_isload =  '<input type="hidden" name="isload" value="'+parent.isload+'"/>' ;
             if( parent.isload && this.isset(loaddata) && this.isset(loaddata['library']) ) {
                 ld_src = loaddata['library']['src'];
-                identify_isload += '<input type="hidden" name="name_DB" value="' + 
+                name_db += '<input type="hidden" name="name_DB" value="' + 
                 ld_src  + '" + id="'+ name_DB +'">' ;
             }
         }
@@ -326,7 +325,7 @@ function editor () {
         '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
         '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
         '<input type="hidden" name="op" value="'+uploadType+'"/>'+
-        identify_isload +
+          name_db +
         '<label>'+uploadType+': '+
         '<input id="'+input+'" type="file" id="'+uploadType+'" name="file" value="' + ld_src +'" accept="'+accept+'" />'+
         '</label>'+
@@ -416,8 +415,8 @@ function editor () {
         var plus = "";
         //se estiver setado o novo id
         if(this.isset(idbd)){
-            //adiciona o código na varíavel
-            plus = ' idBD="'+idbd+'" ';
+            //adiciona o código na varíavel e também uma flag de alteração
+            plus = ' idBD="'+idbd+'" updated="'+0+'"';
         }
         
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
@@ -812,6 +811,7 @@ function editor () {
                                         $('#'+curretPieceID+' .element').each(function(){
                                             ElementID = $(this).attr('id');
                                             ElementID_BD = $(this).attr('idBD');
+                                            ElementFlag_Updated = $(this).attr('updated');
                                             Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
                                             Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);
                                             
@@ -840,7 +840,8 @@ function editor () {
                                                 value: {},
                                                 match: Match,
                                                 isload: parent.isload,
-                                                ID_BD:  ElementID_BD
+                                                ID_BD:  ElementID_BD,
+                                                updated: ElementFlag_Updated
                                             };
                                             // HERE !!! verificar os IDS das librarys
                                             //Se for um Texto
