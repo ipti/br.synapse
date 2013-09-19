@@ -26,7 +26,7 @@ $(function() {
         newEditor.delScreen(false);
     });
     $(".insertText").click(function(){
-        newEditor.addTexto();
+        newEditor.addText();
     });
     $(".insertImage").last().click(function(){
         newEditor.addImage();
@@ -43,7 +43,14 @@ $(function() {
     $('.save').click(function(){
         newEditor.saveAll();
     });
+    
     if(newEditor.isload){    
         newEditor.load();
     }
+    
+    $('.input_element').live("change",function() {
+        newEditor.elementChanged($(this));
+    });
+    
+    
 });

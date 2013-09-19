@@ -460,7 +460,20 @@ class EditorController extends Controller {
                                     $newElement = EditorElement::model()->findByPk($IDDB);
                                     $Element_Piece = EditorPieceElement::model()->findByAttributes(
                                             array('piece_id' => $pieceID, 'element_id' => $newElement->id));
-                                    $Element_Piece->delete(); // X Desvinculado
+                                    $Element_Piece_Property = EditorPieceelementProperty::model()
+                                            ->findAll(array(
+                                              'condition' => 'piece_element_id=:idPieceElement',
+                                              'params' => array(':idPieceElement' =>$Element_Piece->id)
+                                                ));
+                                    $size_properties_Element_Piece = count($Element_Piece_Property);
+                                    $ls=null;
+                                    foreach($Element_Piece_Property as $ls ):
+                                        // Excluir cada propriedade do Element_Piece
+                                        $ls->delete();
+                                    endforeach;
+                                    //Depois, Desvincula o elemento da peça.                                  
+                                    $Element_Piece->delete(); 
+                                    
                                     $unlink_New = true;
                                 } elseif ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 0) {
@@ -510,20 +523,20 @@ class EditorController extends Controller {
                                             list($width, $height, $type) = getimagesize("$url$src");
                                             //Salva library
                                             //type 9 
-                                            if ($unlink_New) {
-                                                //Desvincular Element_Library
-                                                $propName = "library_id";
-                                                $propContext = "multimidia";
-                                                $propID = $this->getPropertyIDByName($propName, $propContext);
-                                                //Id da Library-Img
-                                                $ElementProperty_IDlib = EditorElementProperty::model()->find(array(
-                                                    'condition' => 'element_id =:elementID AND property_id=:propID',
-                                                    'params' => array(':elementID' => $elementID,
-                                                        ':propID' => $propID)));
-                                                // 
-                                                $ElementProperty_IDlib->delete;
-                                                //====================
-                                            } 
+//                                            if ($unlink_New) { Can't
+//                                                //Desvincular Element_Library
+//                                                $propName = "library_id";
+//                                                $propContext = "multimidia";
+//                                                $propID = $this->getPropertyIDByName($propName, $propContext);
+//                                                //Id da Library-Img
+//                                                $ElementProperty_IDlib = EditorElementProperty::model()->find(array(
+//                                                    'condition' => 'element_id =:elementID AND property_id=:propID',
+//                                                    'params' => array(':elementID' => $elementID,
+//                                                        ':propID' => $propID)));
+//                                                // 
+//                                                $ElementProperty_IDlib->delete;
+//                                                //====================
+//                                            } 
                                             
                                                 $newLibrary = new Library();
                                                 $library_typeName = $_POST['library'];
