@@ -27,11 +27,11 @@
                         'columns' => array(
                             'name',
                             array(
-                                'name' => 'degreeID',
+                                'name' => Yii::t('default', 'Degree'),
                                 'value' => '$data->degree->name',
                             ),
                             array(
-                                'name' => 'disciplineID',
+                                'name' => Yii::t('default', 'Discipline'),
                                 'value' => '$data->discipline->name',
                             ),
                             array('class' => 'CButtonColumn',),),
