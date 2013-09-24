@@ -24,13 +24,13 @@ function editor () {
     this.uploadedElements = 0;
     this.uploadedLibraryIDs = new Array();
     this.isload = false;
+    this.orderDelets = [];
     this.TXT = new Array(2);
     this.MTE = new Array(3,4,5,6);
     this.PRE = new Array(7,8,9,10,11,12);
     this.AEL = new Array(13,14,15);
     this.unLinks = [];
     this.COTemplateTypeIn = function(array){
-        console.log(this.COtemplateType);
         return array.indexOf(this.COtemplateType) != -1 ;
     }
     
@@ -148,7 +148,6 @@ function editor () {
         '<li id="'+pieceID+'" class="piece" '+plus+'>'+
         '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>';
         //Se o Template for MTE
-        console.log(parent.COTemplateTypeIn(parent.MTE));
         if(parent.COTemplateTypeIn(parent.MTE) ){
             html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
         //Se o template for PRE
@@ -202,7 +201,7 @@ function editor () {
         var plus = "";
         //se estiver setado o novo id
         if(this.isset(idbd)){
-           plus += 'idbd="'+idbd+'" updated="'+0+'"'; 
+            plus += 'idbd="'+idbd+'" updated="'+0+'"'; 
         }
         
         var parent = this;
@@ -569,6 +568,12 @@ function editor () {
         var id = this.currentScreenId;
         //confirmação do ato de remover
         if(force || confirm(MSG_REMOVE_SCREEN)){
+            //Guarda o Tipo e ID do elemento
+            var iddb = $("#"+id).attr('idbd');
+            if(this.isset(iddb)){
+                //Adiciona num Array de objetos deletados em ordem.
+                this.orderDelets.push('S'+iddb);
+            }
             //remove o elemento
             $("#"+id).remove();
             //deleta o count do pieceset
@@ -580,6 +585,11 @@ function editor () {
 
     this.delPieceSet = function(id){
         if(confirm(MSG_REMOVE_PIECESET)){
+            var iddb = $("#"+id+"_list").attr('idbd');
+            if(this.isset(iddb)){
+                //Adiciona num Array de objetos deletados em ordem.
+                this.orderDelets.push('PS'+iddb);
+            }
             $("#"+id+"_list").remove();
             delete this.countPieces[id];
         }
@@ -587,12 +597,35 @@ function editor () {
 
     this.delPiece = function(id){
         if(confirm(MSG_REMOVE_PIECE)){
+            var iddb = $("#"+id).attr('idbd');
+            if(this.isset(iddb)){
+                //Adiciona num Array de objetos deletados em ordem.
+                this.orderDelets.push('P'+iddb);
+            }
             $("#"+id).remove();
             delete this.countElements[id];
         }
     }
     this.delElement = function(id){
         if(confirm(MSG_REMOVE_ELEMENT)){
+            var iddb = $("#"+id).attr('idbd');
+            var iddb_Piece = id.split('_');
+            var i;
+            var id_P = '';
+            for(i=0; i < (iddb_Piece.length-1); i++) {
+                //Menos o último
+                if(i == iddb_Piece.length-2){
+                    //É o último
+                    id_P += iddb_Piece[i];  
+                }else{
+                    id_P += iddb_Piece[i]+'_';
+                }
+            }
+            var iddb_P = $('#'+id_P).attr('idbd');
+            if(this.isset(iddb)){
+                //Adiciona num Array de objetos deletados em ordem.
+                this.orderDelets.push('E'+iddb+'P'+iddb_P);
+            }
             $("#"+id).remove();
         }
     }
@@ -604,6 +637,7 @@ function editor () {
     }
    
     this.saveData = function(data, sucess, beforeSend){
+        var parent = this;
         $.ajax({
             type: "POST",
             url: "/Editor/Json",
@@ -614,11 +648,21 @@ function editor () {
                     beforeSend(jqXHR, settings);
                 }
                 else{
-                    $('.savescreen').append('<br><p>Salvando '+data['step']+'...</p>');
+                    if(parent.isset(data['step'])) {
+                        $('.savescreen').append('<br><p>Salvando '+data['step']+'...</p>');  
+                    }else{
+                        $('.savescreen').append('<br><p>X Deletando Objetos!...</p>');    
+                    }
+                    
                 }    
             },
             error: function( jqXHR, textStatus, errorThrown ){
-                $('.savescreen').append('<br><p>Erro ao salvar '+data['step']+'.</p>');
+                if(parent.isset(data['step'])) {
+                    $('.savescreen').append('<br><p>Erro ao salvar '+data['step']+'.</p>'); 
+                }else{
+                    $('.savescreen').append('<br><p>Erro ao Deletar Objetos!...</p>');    
+                }
+                
                 $('.savescreen').append('<br><p>Error mensage:</p>');
                 $('.savescreen').append(jqXHR.responseText);
             },
@@ -725,7 +769,19 @@ function editor () {
         }        
         //======================
         
-        function posSaveCobject(response, textStatus, jqXHR ){
+        function posSaveCobject (response, textStatus, jqXHR ){
+            if(parent.orderDelets.length > 0 ) {
+                //Enviar array de objetos a serem excluidos 
+                parent.saveData({                   
+                    op:"delete", 
+                    array_del:parent.orderDelets
+                },
+                //função sucess do save Screen
+                function(response, textStatus, jqXHR){
+                    
+                    });
+            }
+            //==================================
             
             //atualiza o ID do CObject, com a resposta do Ajax          
             if(!parent.isset(parent.CObjectID) )  {

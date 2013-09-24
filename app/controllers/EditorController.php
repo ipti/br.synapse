@@ -268,6 +268,7 @@ class EditorController extends Controller {
     public function actionJson() {
         $json = array();
         if (isset($_POST['op'])) {
+
             if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
                 switch ($_POST['step']) {
                     case "CObject":
@@ -462,18 +463,18 @@ class EditorController extends Controller {
                                             array('piece_id' => $pieceID, 'element_id' => $newElement->id));
                                     $Element_Piece_Property = EditorPieceelementProperty::model()
                                             ->findAll(array(
-                                              'condition' => 'piece_element_id=:idPieceElement',
-                                              'params' => array(':idPieceElement' =>$Element_Piece->id)
-                                                ));
+                                        'condition' => 'piece_element_id=:idPieceElement',
+                                        'params' => array(':idPieceElement' => $Element_Piece->id)
+                                            ));
                                     $size_properties_Element_Piece = count($Element_Piece_Property);
-                                    $ls=null;
-                                    foreach($Element_Piece_Property as $ls ):
+                                    $ls = null;
+                                    foreach ($Element_Piece_Property as $ls):
                                         // Excluir cada propriedade do Element_Piece
                                         $ls->delete();
                                     endforeach;
                                     //Depois, Desvincula o elemento da peça.                                  
-                                    $Element_Piece->delete(); 
-                                    
+                                    $Element_Piece->delete();
+
                                     $unlink_New = true;
                                 } elseif ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 0) {
@@ -519,8 +520,9 @@ class EditorController extends Controller {
                                             $ext = explode(".", $nome);
                                             $ext = $ext[1];
                                             //Pegar informações da imagem
-                                            $url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
-                                            list($width, $height, $type) = getimagesize("$url$src");
+                                            //$url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
+                                            $path = Yii::app()->basePath;
+                                            list($width, $height, $type) = getimagesize($path."/../".$src);                   
                                             //Salva library
                                             //type 9 
 //                                            if ($unlink_New) { Can't
@@ -537,75 +539,73 @@ class EditorController extends Controller {
 //                                                $ElementProperty_IDlib->delete;
 //                                                //====================
 //                                            } 
-                                            
-                                                $newLibrary = new Library();
-                                                $library_typeName = $_POST['library'];
-                                                $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
-                                                $newLibrary->insert();
-                                                //Pegar o ID do ultimo adicionado.
-                                                $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
-                                                $libraryID = $library->id;
-                                                //Salva library_property 's
-                                                //1 width
-                                                $propertyName = "width";
-                                                $propertyContext = $libraryTypeName;
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
 
-                                                $newLibraryProperty = new LibraryProperty();
+                                            $newLibrary = new Library();
+                                            $library_typeName = $_POST['library'];
+                                            $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
+                                            $newLibrary->insert();
+                                            //Pegar o ID do ultimo adicionado.
+                                            $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                            $libraryID = $library->id;
+                                            //Salva library_property 's
+                                            //1 width
+                                            $propertyName = "width";
+                                            $propertyContext = $libraryTypeName;
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
 
-                                                $newLibraryProperty->library_id = $libraryID;
-                                                $newLibraryProperty->property_id = $propertyID;
-                                                $newLibraryProperty->value = $width;
-                                                $newLibraryProperty->insert();
+                                            $newLibraryProperty = new LibraryProperty();
 
-                                                //2 height
-                                                $propertyName = "height";
-                                                $propertyContext = $libraryTypeName;
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                                $newLibraryProperty = new LibraryProperty();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $width;
+                                            $newLibraryProperty->insert();
 
-                                                $newLibraryProperty->library_id = $libraryID;
-                                                $newLibraryProperty->property_id = $propertyID;
-                                                $newLibraryProperty->value = $height;
-                                                $newLibraryProperty->insert();
+                                            //2 height
+                                            $propertyName = "height";
+                                            $propertyContext = $libraryTypeName;
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newLibraryProperty = new LibraryProperty();
 
-                                                //5 src
-                                                $propertyName = "src";
-                                                $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                                $newLibraryProperty = new LibraryProperty();
-                                                $newLibraryProperty->library_id = $libraryID;
-                                                $newLibraryProperty->property_id = $propertyID;
-                                                $newLibraryProperty->value = $nome; //apenas o nome do arquivo
-                                                $newLibraryProperty->insert();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $height;
+                                            $newLibraryProperty->insert();
 
-                                                //12 extension
-                                                $propertyName = "extension";
-                                                $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                                $newLibraryProperty = new LibraryProperty();
-                                                $newLibraryProperty->library_id = $libraryID;
-                                                $newLibraryProperty->property_id = $propertyID;
-                                                $newLibraryProperty->value = $ext;
-                                                $newLibraryProperty->insert();
+                                            //5 src
+                                            $propertyName = "src";
+                                            $propertyContext = "library";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newLibraryProperty = new LibraryProperty();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $nome; //apenas o nome do arquivo
+                                            $newLibraryProperty->insert();
 
-                                                //Salva a editor_element_property
-                                                //4 libraryID
-                                                $propertyName = "library_id";
-                                                $propertyContext = $typeName;
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                                $newElementProperty = new EditorElementProperty();
+                                            //12 extension
+                                            $propertyName = "extension";
+                                            $propertyContext = "library";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newLibraryProperty = new LibraryProperty();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $ext;
+                                            $newLibraryProperty->insert();
 
-                                                $newElementProperty->element_id = $elementID;
-                                                $newElementProperty->property_id = $propertyID;
-                                                $newElementProperty->value = $libraryID;
-                                                $newElementProperty->insert();
-                                                $json['LibraryID'] = $libraryID;
-                                            
-                                        }elseif(false){
+                                            //Salva a editor_element_property
+                                            //4 libraryID
+                                            $propertyName = "library_id";
+                                            $propertyContext = $typeName;
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newElementProperty = new EditorElementProperty();
+
+                                            $newElementProperty->element_id = $elementID;
+                                            $newElementProperty->property_id = $propertyID;
+                                            $newElementProperty->value = $libraryID;
+                                            $newElementProperty->insert();
+                                            $json['LibraryID'] = $libraryID;
+                                        } elseif (false) {
                                             //Verificar - Se for um som.
                                         }
-                                        
                                     } elseif ($typeName == $this->TYPE_ELEMENT_TEXT) {  //text
                                         //salva editor_element_property 's
                                         //text                                        
@@ -630,9 +630,9 @@ class EditorController extends Controller {
                                     } else {
                                         throw new Exception("ERROR: Tipo inválido.<br>");
                                     }
-                                }elseif($delete){
+                                } elseif ($delete) {
                                     // Se deletou o Element                                  
-                                }elseif($doNothing){
+                                } elseif ($doNothing) {
                                     // Não realiza Ação
                                 }
                             } else {
@@ -698,8 +698,36 @@ class EditorController extends Controller {
                         endforeach;
                     endforeach;
                 }
-            } elseif ($_POST['op'] == 'update') {
-                
+            } elseif ($_POST['op'] == 'delete') {
+                //Verificar Array de objetos para deletá-los
+                $array_del = $_POST['array_del'];
+                $size = count($array_del);
+                $type = null;
+                $id = null;
+                // Para cada elemento Excluído
+                foreach ($array_del as $ls):
+                    if ($ls[0] . $ls[1] == 'PS') {
+                        $type = $ls[0] . $ls[1];
+                        $id = str_replace($type, '', $ls);
+                    } else {
+                        $type = $ls[0];
+                        $id = str_replace($type, '', $ls);
+                    }
+                    switch ($type) {
+                        case 'S':$this->delScreen($id);
+                            break;
+                        case 'PS':$this->delPieceset($id);
+                            break;
+                        case 'P':$this->delPiece($id);
+                            break;
+                        case 'E':
+                            $expl_element = explode('P', $id);
+                            $id_element = $expl_element[0];
+                            $id_piece = $expl_element[1];
+                            $this->delElement($id_element, $id_piece);
+                    }
+                endforeach;
+                //--------------------------
             } else {
                 throw new Exception("ERROR: Operação inválida.<br>");
             }
@@ -711,6 +739,76 @@ class EditorController extends Controller {
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
         header('Content-type: application/json');
         echo json_encode($json);
+    }
+
+    private function delScreen($id) {
+        //Excluir Screen
+        $delScreen = EditorScreen::model()->findByPk($id);
+        $delPS = EditorScreenPieceset::model()->findAllByAttributes(
+                array('screen_id' => $delScreen->id));
+        foreach ($delPS as $dps):
+            $pieceset_id = $dps->pieceset_id;
+            //Deletar cada PieceSet
+            $this->delPieceset($pieceset_id);
+        endforeach;
+        //Depois, Exclui a Screen                       
+        $delScreen->delete();
+        //============================ 
+    }
+
+    private function delPieceset($id) {
+        $delPS = EditorScreenPieceset::model()->findByAttributes(
+                array('pieceset_id' => $id));
+        //Deleta 1° a relação ScreenPieceset
+        $delPS->delete();
+        $delP = EditorPiecesetPiece::model()->findAllByAttributes(
+                array('pieceset_id' => $id));
+        foreach ($delP as $dp):
+            $piece_id = $dp->piece_id;
+            //Deletar cada Piece
+            $this->delPiece($piece_id);
+        endforeach;
+        //Depois, Exclui o PieceSet
+        $delete_pieceSet = EditorPieceset::model()->findByPk($id);
+        $delete_pieceSet->delete();
+        //============================
+    }
+
+    private function delPiece($id) {
+            $delP = EditorPiecesetPiece::model()->findByAttributes(
+                array('piece_id' => $id));
+            //Deleta 1° a relação Pieceset_Piece
+            $delP->delete();
+        $delE = EditorPieceElement::model()->findAllByAttributes(
+                array('piece_id' => $id));
+        foreach ($delE as $el):
+            //Desvincular cada Elemento 
+            $this->delElement($el->element_id, $id);
+        endforeach;
+        //Depois, Exclui a peça
+        $delete_piece = EditorPiece::model()->findByPk($id);
+        $delete_piece->delete();
+    }
+
+    // Dois argumentos, pois, um elemento pode está em várias pieces
+    private function delElement($id, $piece_id) {
+        $newElement = EditorElement::model()->findByPk($id);
+        $Element_Piece = EditorPieceElement::model()->findByAttributes(
+                array('piece_id' => $piece_id, 'element_id' => $newElement->id));
+        $Element_Piece_Property = EditorPieceelementProperty::model()
+                ->findAll(array(
+            'condition' => 'piece_element_id=:idPieceElement',
+            'params' => array(':idPieceElement' => $Element_Piece->id)
+                ));
+        $size_properties_Element_Piece = count($Element_Piece_Property);
+        $ls = null;
+        foreach ($Element_Piece_Property as $ls):
+            // Excluir cada propriedade do Element_Piece
+            $ls->delete();
+        endforeach;
+        //Depois, Desvincula o elemento da peça.                                  
+        $Element_Piece->delete();
+        //==========================
     }
 
     public function actionUpload() {
