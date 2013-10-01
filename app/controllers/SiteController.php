@@ -225,10 +225,10 @@ class SiteController extends Controller {
                         $this->redirPersonage($nome_personage,$idActor,$unityIdActor);
                     }
                 } else {
-                    throw new Exception("Não há Atores Ativos para este Usuário!");
+                    echo "Não há Atores Ativos para este Usuário!";
                 }
             } else {
-                 throw new Exception($identity->errorMessage);
+                echo $identity->errorMessage;
             }
 
             exit;

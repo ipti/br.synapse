@@ -184,8 +184,11 @@ function editor () {
         }else if(parent.COTemplateTypeIn(parent.PRE)){
             //altera a seleção de piece
             parent.changePiece($('#'+pieceID));
-            //adiciona um elemento neste piece
-            parent.addElement();
+            var iddb =  $('#'+pieceID).attr('idbd');
+            if( !this.isset(iddb) ) {
+                //adiciona um elemento neste piece se for uma Nova Piece
+                parent.addElement();
+            }
         }
         
         //adiciona a função do botão delPiece
@@ -203,7 +206,7 @@ function editor () {
         if(this.isset(idbd)){
             plus += 'idbd="'+idbd+'" updated="'+0+'"'; 
         }
-        
+
         var parent = this;
         
         var html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+
@@ -559,7 +562,7 @@ function editor () {
             $(buttonDelID).click(function(){
                 parent.delElement(elementID);
             });
-        }else if(parent.COTemplateTypeIn(parent.PRE)){
+        }else if(parent.COTemplateTypeIn(parent.PRE) && (!this.isset(loaddata))){
             parent.addText(elementID);
         }
     }
@@ -986,7 +989,7 @@ function editor () {
                                                                 //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
                                                                 parent.uploadedLibraryIDs[parent.uploadedElements++] = response['LibraryID'];
 
-                                                                //chama o posRender
+                                                                //chama o posEditor
                                                                 parent.posEditor();
                                                             });
                                                     },
