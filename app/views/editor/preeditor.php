@@ -2,7 +2,7 @@
  //veriricar Atualização
      $commonType =  Yii::app()->db->createCommand('SELECT ID, name FROM common_type WHERE context LIKE \'Cobject\' ')->queryAll(); 
      $count_CT = count($commonType);
-     $cobjectTemplate = Yii::app()->db->createCommand('SELECT ID, name FROM cobject_template')->queryAll();
+     $cobjectTemplate = Yii::app()->db->createCommand('SELECT ID, name FROM cobject_template GROUP BY code')->queryAll();
      $count_Ctemp = count($cobjectTemplate);
      $cobjectTheme = Yii::app()->db->createCommand('SELECT ID, name FROM cobject_theme')->queryAll();
      $count_Cthem = count($cobjectTheme);

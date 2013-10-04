@@ -453,7 +453,7 @@ class EditorController extends Controller {
                                 $new = false;
                                 $unlink_New = false;
                                 $delete = false;
-                                $doNothing = false;
+                                $justFlag = false;
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 1) {
                                     //Desvincula e Cria um novo elemento !
@@ -478,8 +478,9 @@ class EditorController extends Controller {
                                     $unlink_New = true;
                                 } elseif ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 0) {
-                                    // Não faz nada
-                                    $doNothing = true;
+                                    // Somente Atualiza a FLag
+                                    $justFlag = true;
+              
                                 } else {
                                     //Cria um novo somente.
                                     $new = true;
@@ -507,9 +508,8 @@ class EditorController extends Controller {
                                     $newPieceElementProperty = new EditorPieceelementProperty();
                                     $newPieceElementProperty->piece_element_id = $pieceElementID;
                                     $newPieceElementProperty->property_id = $propertyID;
-                                    $newPieceElementProperty->value = $flag == 1 ? 'Correto' : 'Errado';
+                                    $newPieceElementProperty->value = $flag == "true" ? 'Correto' : 'Errado';
                                     $newPieceElementProperty->insert();
-
                                     if (isset($_POST["library"])) {
                                         $libraryTypeName = $_POST["library"];
                                         $libraryTypeID = $this->getTypeIDByName($libraryTypeName);
@@ -632,8 +632,17 @@ class EditorController extends Controller {
                                     }
                                 } elseif ($delete) {
                                     // Se deletou o Element                                  
-                                } elseif ($doNothing) {
-                                    // Não realiza Ação
+                                } elseif ($justFlag) {
+                                    // Apenas Atualiza as Flags
+                                    $IDDB = $_POST['ID_BD'];
+                                    $pieceElement= EditorPieceElement::model()->findByAttributes(array(
+                                            'piece_id'=>$pieceID,
+                                            'element_id'=>$IDDB));                                       
+                                    $change_flag = EditorPieceelementProperty::model()->findByAttributes(
+                                            array('piece_element_id'=>$pieceElement->id,
+                                               'property_id'=>$this->getPropertyIDByName('layertype','piecelement')));
+                                    $change_flag->value = $flag=="true"?"Correto":"Errado";
+                                    $change_flag->save();
                                 }
                             } else {
                                 throw new Exception("ERROR: Dados da Element insuficientes.<br>");
@@ -677,7 +686,11 @@ class EditorController extends Controller {
                                 foreach ($PieceElement as $pe):
                                     $Element = EditorElement::model()->findByAttributes(array('id' => $pe->element_id));
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id] = array();
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name; // $this->getTypeNameByID($Element->type_id);
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name;
+                                    $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id, 
+                                        'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
+                                    //var_dump($pe_property->value); exit();
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
 
                                     $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                     foreach ($ElementProperty as $ep):
