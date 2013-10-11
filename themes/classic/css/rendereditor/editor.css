@@ -26,6 +26,7 @@
 .theme div.canvas button#delscreen{float:left;font-size:12px; height:28px;font-weight:bold;color:#fff;}
 .theme div.canvas ul.navscreen{float:left; width:430px;height:28px;margin-left:326px;}
 .theme div.canvas div.screen{background:#fff;min-height: 500px}
+.theme div.canvas li.title{color:#fff; text-decoration: none; list-style: none; font-size:14px; text-align: center; font-weight: bold;}
 .theme ul.navscreen li{float:left;}
 .theme ul.navscreen li#back,.theme ul.navscreen li#next{width:28px;height:23px;text-align:center;font-size:22px; font-family:serif;font-weight:bold;color:#fff;}
 .theme ul.navscreen li#position{width:100px;text-align:center;height:23px;font-size:12px; line-height:22px;font-weight:bold;color:#fff;}
