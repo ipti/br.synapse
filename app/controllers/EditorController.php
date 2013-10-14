@@ -194,7 +194,6 @@ class EditorController extends Controller {
                     $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
                 });
                 $('#actGoal').change(function(){
-                    window.alert('Change Act_Goal');
                     $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
                 });
                 $('#actGoal,#actDegree,#actDiscipline').change(function(){
