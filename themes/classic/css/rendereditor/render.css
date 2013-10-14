@@ -140,4 +140,4 @@
     padding: 5px
 }
 #nextButton{width: 200px;margin:0 auto;display:block;}
-
+ul.vertical li{float:left!important;}

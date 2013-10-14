@@ -34,7 +34,7 @@
     NEWRENDER.scriptID = 1;
     NEWRENDER.actorID = <?php echo $actor->id?>;
     NEWRENDER.actorName = '<?php echo $actor->person->name?>';
-    NEWRENDER.atdID = 'exam';
+    NEWRENDER.atdID = 'trial';
     
     $(function() {
         var json = <?php echo $json ?>;
