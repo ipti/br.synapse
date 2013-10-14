@@ -22,6 +22,7 @@ function editor () {
     this.currentPieceSet = 'sc0_ps0';
     this.currentPiece = 'sc0_ps0_p0';
     this.uploadedElements = 0;
+    this.uploadedFlags = 0;
     this.uploadedPieces = 0;
     this.uploadedPiecesets = 0;
     this.uploadedScreens = 0;
@@ -662,11 +663,16 @@ function editor () {
                 }
                 else{
                     if(parent.isset(data['step'])) {
-                        if(!parent.isload){
-                            $('.savescreen').append('<br><p>Salvando '+data['step']+'...</p>'); 
+                        if(parent.isset(data["justFlag"]) && data["justFlag"] == 1){
+                            $('.savescreen').append('<br><p>Atualizando a Flag do Element...</p>');  
                         }else{
-                            $('.savescreen').append('<br><p>Atualizando '+data['step']+'...</p>');     
+                            if(!parent.isload){
+                                $('.savescreen').append('<br><p>Salvando '+data['step']+'...</p>'); 
+                            }else{
+                                $('.savescreen').append('<br><p>Atualizando '+data['step']+'...</p>');     
+                            }
                         }
+                        
                     }else{
                         $('.savescreen').append('<br><p>X Deletando Objetos!...</p>');    
                     }
@@ -755,11 +761,12 @@ function editor () {
         
         //Total de elementos e o Total alterados
         this.totalElements = $('.element').size();
+        //this.totalElementsImgNoSent = $('.element .image[updated="0"]').size();
         this.load_totalElements = $('.element[updated="1"]').size();
+        this.load_totalElements_Invert = $('.element[updated="0"]').size(); 
         this.totalPieces = $('.piece').size();
         this.totalPiecesets = $('.PieceSet').size();
         this.totalScreens = $('.screen').size();
-        
         this.uploadedLibraryIDs = new Array();
         
         //cria tela de log
@@ -849,7 +856,8 @@ function editor () {
                         (parent.totalPiecesets == parent.uploadedPiecesets) &&
                         (parent.totalPieces == parent.uploadedPieces) && 
                         ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                            (parent.isload && parent.load_totalElements == parent.uploadedElements))){
+                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                                parent.uploadedFlags == parent.load_totalElements_Invert))){
                         //chama o posEditor
                         $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
                         parent.posEditor();  
@@ -897,7 +905,8 @@ function editor () {
                                 (parent.totalPiecesets == parent.uploadedPiecesets) &&
                                 (parent.totalPieces == parent.uploadedPieces) && 
                                 ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                    (parent.isload && parent.load_totalElements == parent.uploadedElements))){
+                                    (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                                        parent.uploadedFlags == parent.load_totalElements_Invert))){
                                 //chama o posEditor
                                 $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
                                 parent.posEditor();  
@@ -939,17 +948,18 @@ function editor () {
                                         $('.savescreen').append('<br><p>Salvou Todas as Pieces!</p>');    
                                     }
                                     
-//                                    window.alert(parent.totalScreens + parent.uploadedScreens
-//                                        +parent.totalPiecesets+ parent.uploadedPiecesets+
-//                                        parent.totalPieces + parent.uploadedPieces
-//                                        +!parent.isload + parent.totalElements + parent.uploadedElements+
-//                                            parent.isload + parent.load_totalElements + parent.uploadedElements);   
+                                    //                                    window.alert(parent.totalScreens + parent.uploadedScreens
+                                    //                                        +parent.totalPiecesets+ parent.uploadedPiecesets+
+                                    //                                        parent.totalPieces + parent.uploadedPieces
+                                    //                                        +!parent.isload + parent.totalElements + parent.uploadedElements+
+                                    //                                            parent.isload + parent.load_totalElements + parent.uploadedElements);   
                                     //VER : MENSAGEM DE SANVALNDO S,P,PS,E desnecessária no load!
                                     if((parent.totalScreens == parent.uploadedScreens) && 
                                         (parent.totalPiecesets == parent.uploadedPiecesets) &&
                                         (parent.totalPieces == parent.uploadedPieces) && 
                                         ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                            (parent.isload && parent.load_totalElements == parent.uploadedElements))){
+                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
                                         //chama o posEditor
                                         $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
                                         parent.posEditor();  
@@ -968,7 +978,7 @@ function editor () {
                                         ElementFlag_Updated = $(this).attr('updated');
                                         Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
                                         Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);
-                                            
+                                        
                                         //declaração das variáveis que serão passadas por ajax
                                         var type;
                                         var value;
@@ -981,6 +991,8 @@ function editor () {
                                         var input_NameCurrent_ID = "#"+ElementID+"_image_input";
                                             
                                         var ElementRespID = "#"+ElementID+"_resp_text";
+                                        
+                                      
                                         //Dados que serão passados pelo ajax
                                         var data = {
                                             //Operação Salvar, Element, Type, ID no DOM
@@ -997,136 +1009,201 @@ function editor () {
                                             ID_BD:  ElementID_BD,
                                             updated: ElementFlag_Updated
                                         };
-                                        // HERE !!! verificar os IDS das librarys
-                                        //Se for um Texto
-                                        if(parent.existID(ElementTextID)){
-                                            //Salva Elemento
-                                            data["typeID"] = TYPE.ELEMENT.TEXT;
-                                            data["value"] = $(ElementTextID+" > font").html();
-                                            parent.saveData(
-                                                //Variáveis dados
-                                                data,
-                                                //Função de sucess do Save Element
-                                                function(response, textStatus, jqXHR){
-                                                    if(!parent.isload) {
-                                                        $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
-                                                    }else{
-                                                        $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
-                                                    }
-                                                    parent.uploadedElements++;
-                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                            
-                                                    }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                              
-                                                    }
-                                                });
+                                        if(!(parent.isload && parent.isset(ElementFlag_Updated) && ElementFlag_Updated == 0)) {
+                                            // Precisa Salvar ou Atualizar
+                                            // 
+                                            //Se for um Texto
+                                            if(parent.existID(ElementTextID)){
+                                                //Salva Elemento
+                                                data["typeID"] = TYPE.ELEMENT.TEXT;
+                                                data["value"] = $(ElementTextID+" > font").html();
+                                                parent.saveData(
+                                                    //Variáveis dados
+                                                    data,
+                                                    //Função de sucess do Save Element
+                                                    function(response, textStatus, jqXHR){
+                                                        if(!parent.isload) {
+                                                            $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                                        }else{
+                                                            $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
+                                                        }
+                                                        parent.uploadedElements++;
+                                                    
+                                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                            
+                                                        }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                              
+                                                        }
+                                                       // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
+                                                      //  window.alert("Verificar se acabou as requisições...");
+                                                        //Verificar se acabou as requisições
+                                                        if((parent.totalScreens == parent.uploadedScreens) && 
+                                                            (parent.totalPiecesets == parent.uploadedPiecesets) &&
+                                                            (parent.totalPieces == parent.uploadedPieces) && 
+                                                            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
+                                                                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                                                                    parent.uploadedFlags == parent.load_totalElements_Invert))){
+                                                            //chama o posEditor
+                                                            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
+                                                            parent.posEditor();  
+                                                        }
+                                                    
+                                                    
+                                                    });
                                         
-                                        }
-                                        //Se for uma Resposta
-                                        if(parent.existID(ElementRespID)){
-                                            //Salva Elemento
-                                            data["typeID"] = TYPE.ELEMENT.TEXT;
-                                            data["value"] = $(ElementRespID+" > font").html();
-                                            parent.saveData(
-                                                //Variáveis dados
-                                                data,
-                                                //Função de sucess do Save Element
-                                                function(response, textStatus, jqXHR){
-                                                    if(!parent.isload) {
-                                                        $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
-                                                    }else{
-                                                        $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
-                                                    }
-                                                    parent.uploadedElements++;
-                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                             
-                                                    }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                               
-                                                    }
-                                                });
-                                        
-                                        }
-                                        //Se for uma Imagem
-                                        if(parent.existID(ElementImageID)){
-                                            var doUpload = true;
-                                            if ( parent.isload &&
-                                                ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
-                                                    || $(input_NameCurrent_ID).val() == '')
-                                                ) {
-                                                //Não faz upload, pois não houve alterações
-                                                doUpload = false;
                                             }
-                                            if(doUpload) {
-                                                data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
-                                                data["library"] = TYPE.LIBRARY.IMAGE;
-                                                //criar a função para envio de formulário via Ajax
+                                            //Se for uma Resposta
+                                            if(parent.existID(ElementRespID)){
+                                                //Salva Elemento
+                                                data["typeID"] = TYPE.ELEMENT.TEXT;
+                                                data["value"] = $(ElementRespID+" > font").html();
+                                                parent.saveData(
+                                                    //Variáveis dados
+                                                    data,
+                                                    //Função de sucess do Save Element
+                                                    function(response, textStatus, jqXHR){
+                                                        if(!parent.isload) {
+                                                            $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                                        }else{
+                                                            $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
+                                                        }
+                                                        parent.uploadedElements++;
+                                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                             
+                                                        }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                               
+                                                        }
+                                            
+                                                       // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
+                                                       // window.alert("Verificar se acabou as requisições...");
+                                                        //Verificar se acabou as requisições
+                                                        if((parent.totalScreens == parent.uploadedScreens) && 
+                                                            (parent.totalPiecesets == parent.uploadedPiecesets) &&
+                                                            (parent.totalPieces == parent.uploadedPieces) && 
+                                                            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
+                                                                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                                                                    parent.uploadedFlags == parent.load_totalElements_Invert))){
+                                                            //chama o posEditor
+                                                            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
+                                                            parent.posEditor();  
+                                                        }        
+                                               
+                                                    });
+                                        
+                                            }
+                                            //Se for uma Imagem
+                                            if(parent.existID(ElementImageID)){
+                                                var doUpload = true;
+                                                if ( parent.isload &&
+                                                    ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
+                                                        || $(input_NameCurrent_ID).val() == '')
+                                                    ) {
+                                                    //Não faz upload, pois não houve alterações
+                                                    doUpload = false;
+                                                }
+                                                if(doUpload) {
+                                                    data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
+                                                    data["library"] = TYPE.LIBRARY.IMAGE;
+                                                    //criar a função para envio de formulário via Ajax
 
 
-                                                $(FormElementImageID).ajaxForm({
-                                                    beforeSend: function() {
-                                                    //zerar barra de upload
-                                                    //$("#"+bar).width('0%')
-                                                    //$("#"+percent).html('0%');
-                                                    },
-                                                    uploadProgress: function(event, position, total, percentComplete) {
-                                                    //atualizar barra de upload
-                                                    //$("#"+bar).width(percentComplete + '%')
-                                                    //$("#"+percent).html(percentComplete + '%');
-                                                    },
-                                                    success: function(response) {
-                                                        //dados de retorno do upload
-                                                        data['value'] = {};
-                                                        data['value']['url'] = response['url'];
-                                                        data['value']['name'] = response['name'];
+                                                    $(FormElementImageID).ajaxForm({
+                                                        beforeSend: function() {
+                                                        //zerar barra de upload
+                                                        //$("#"+bar).width('0%')
+                                                        //$("#"+percent).html('0%');
+                                                        },
+                                                        uploadProgress: function(event, position, total, percentComplete) {
+                                                        //atualizar barra de upload
+                                                        //$("#"+bar).width(percentComplete + '%')
+                                                        //$("#"+percent).html(percentComplete + '%');
+                                                        },
+                                                        success: function(response) {
+                                                            //dados de retorno do upload
+                                                            data['value'] = {};
+                                                            data['value']['url'] = response['url'];
+                                                            data['value']['name'] = response['name'];
 
-                                                        //Salva Elemento
-                                                        parent.saveData(
-                                                            //Dados
-                                                            data,
-                                                            //Função de sucess do Save Element
-                                                            function(response, textStatus, jqXHR){
-                                                                if(!parent.isload) {
-                                                                    $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
-                                                                }else{
-                                                                    $('.savescreen').append('<br><p>ElementImage Atualizado com sucesso!</p>');    
-                                                                }
+                                                            //Salva Elemento
+                                                            parent.saveData(
+                                                                //Dados
+                                                                data,
+                                                                //Função de sucess do Save Element
+                                                                function(response, textStatus, jqXHR){
+                                                                    if(!parent.isload) {
+                                                                        $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
+                                                                    }else{
+                                                                        $('.savescreen').append('<br><p>ElementImage Atualizado com sucesso!</p>');    
+                                                                    }
 
-                                                                //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                                parent.uploadedLibraryIDs[parent.uploadedImages++] = response['LibraryID'];
-                                                                //Atualiza o contador dos Elementos
-                                                                parent.uploadedElements++; 
-                                                                if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                                    $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                         
-                                                                }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                                    $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                            
-                                                                }
+                                                                    //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
+                                                                    parent.uploadedLibraryIDs[parent.uploadedImages++] = response['LibraryID'];
+                                                                    //Atualiza o contador dos Elementos
+                                                                    parent.uploadedElements++; 
+                                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                         
+                                                                    }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                            
+                                                                    }
                                                                
-                                                            });
-                                                    },
-                                                    error: function(error, textStatus, errorThrown){
-                                                        //$("#"+form).html(error.responseText);
-                                                        alert(ERROR_FILE_UPLOAD);
-                                                        $(".savescreen").append(error.responseText);
-                                                    }
-                                                });
+                                                                  //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
+                                                                   // window.alert("Verificar se acabou as requisições...");
+                                                                    //Verificar se acabou as requisições
+                                                                    if((parent.totalScreens == parent.uploadedScreens) && 
+                                                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
+                                                                        (parent.totalPieces == parent.uploadedPieces) && 
+                                                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
+                                                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                                                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
+                                                                        //chama o posEditor
+                                                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
+                                                                        parent.posEditor();  
+                                                                    }
+                                                               
+                                                               
+                                                                });
+                                                        },
+                                                        error: function(error, textStatus, errorThrown){
+                                                            //$("#"+form).html(error.responseText);
+                                                            alert(ERROR_FILE_UPLOAD);
+                                                            $(".savescreen").append(error.responseText);
+                                                        }
+                                                    });
 
-                                                //Envia o formulário atual
-                                                $(FormElementImageID).submit();
+                                                    //Envia o formulário atual
+                                                    $(FormElementImageID).submit();
+                                                }
                                             }
-                                        }                                       
-                                        //Verificar se acabou as requisições
-                                        if((parent.totalScreens == parent.uploadedScreens) && 
-                                            (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                            (parent.totalPieces == parent.uploadedPieces) && 
-                                            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                (parent.isload && parent.load_totalElements == parent.uploadedElements))){
-                                            //chama o posEditor
-                                            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                            parent.posEditor();  
-                                        }
-                                                                               
                                         
-                                    });
+                                          
+                                                                               
+                                        }else{
+                                            //Atualiza Somente a Flag
+                                            data["justFlag"] = 1;
+                                            parent.saveData(
+                                                //Variáveis dados
+                                                data,                                                  
+                                                function(response, textStatus, jqXHR){
+                                                        
+                                                    $('.savescreen').append('<br><p>Atualizado a Flag do Element!</p>');                                                                                                      
+                                                    parent.uploadedFlags++;
+                                                       
+                                                    //window.alert("Verificar se acabou as requisições..."); Se deixar o contador continua a contar
+                                                    //Verificar se acabou as requisições
+                                                    if((parent.totalScreens == parent.uploadedScreens) && 
+                                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
+                                                        (parent.totalPieces == parent.uploadedPieces) && 
+                                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
+                                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
+                                                        //chama o posEditor
+                                                        $('.savescreen').append('<br><p> FIM das Flags! <a href="index"> Voltar </a> </p>'+parent.uploadedFlags);
+                                                        parent.posEditor();  
+                                                    }                                                   
+                                                    
+                                                });
+                                        }
+                                    }); // End Of EACH
                                 });
                             });
                         });

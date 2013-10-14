@@ -437,16 +437,22 @@ class EditorController extends Controller {
                         }
                         break;
                     case "Element":
-                        if (isset($_POST['typeID'])) {
-                            $typeName = $_POST['typeID'];
-                            $typeID = $this->getTypeIDByName($typeName);
+                        if (isset($_POST['typeID']) || isset($_POST['justFlag'])) {
+
+                            if (isset($_POST['typeID'])) {
+                                $typeName = $_POST['typeID'];
+                                $typeID = $this->getTypeIDByName($typeName);
+                            }
 
                             if (isset($_POST['pieceID']) && isset($_POST['flag']) && isset($_POST['ordem'])
-                                    && isset($_POST['value']) && isset($_POST['DomID'])) {
+                                    && (isset($_POST['value']) || isset($_POST['justFlag']) ) && isset($_POST['DomID'])) {
                                 $DomID = $_POST['DomID'];
                                 $pieceID = $_POST['pieceID'];
                                 $flag = $_POST['flag'];
-                                $value = $_POST['value'];
+                                if (isset($_POST['value'])) {
+                                    $value = $_POST['value'];
+                                }
+
                                 $order = $_POST['ordem'];
 
                                 $new = false;
@@ -479,7 +485,6 @@ class EditorController extends Controller {
                                         isset($_POST['updated']) && $_POST['updated'] == 0) {
                                     // Somente Atualiza a FLag
                                     $justFlag = true;
-              
                                 } else {
                                     //Cria um novo somente.
                                     $new = true;
@@ -521,7 +526,7 @@ class EditorController extends Controller {
                                             //Pegar informações da imagem
                                             //$url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
                                             $path = Yii::app()->basePath;
-                                            list($width, $height, $type) = getimagesize($path."/../".$src);                   
+                                            list($width, $height, $type) = getimagesize($path . "/../" . $src);
                                             //Salva library
                                             //type 9 
 //                                            if ($unlink_New) { Can't
@@ -634,13 +639,13 @@ class EditorController extends Controller {
                                 } elseif ($justFlag) {
                                     // Apenas Atualiza as Flags
                                     $IDDB = $_POST['ID_BD'];
-                                    $pieceElement= EditorPieceElement::model()->findByAttributes(array(
-                                            'piece_id'=>$pieceID,
-                                            'element_id'=>$IDDB));                                       
+                                    $pieceElement = EditorPieceElement::model()->findByAttributes(array(
+                                        'piece_id' => $pieceID,
+                                        'element_id' => $IDDB));
                                     $change_flag = EditorPieceelementProperty::model()->findByAttributes(
-                                            array('piece_element_id'=>$pieceElement->id,
-                                               'property_id'=>$this->getPropertyIDByName('layertype','piecelement')));
-                                    $change_flag->value = $flag=="true"?"Correto":"Errado";
+                                            array('piece_element_id' => $pieceElement->id,
+                                                'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
+                                    $change_flag->value = $flag == "true" ? "Correto" : "Errado";
                                     $change_flag->save();
                                 }
                             } else {
@@ -686,7 +691,7 @@ class EditorController extends Controller {
                                     $Element = EditorElement::model()->findByAttributes(array('id' => $pe->element_id));
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id] = array();
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name;
-                                    $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id, 
+                                    $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                         'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
                                     //var_dump($pe_property->value); exit();
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
@@ -787,10 +792,10 @@ class EditorController extends Controller {
     }
 
     private function delPiece($id) {
-            $delP = EditorPiecesetPiece::model()->findByAttributes(
+        $delP = EditorPiecesetPiece::model()->findByAttributes(
                 array('piece_id' => $id));
-            //Deleta 1° a relação Pieceset_Piece
-            $delP->delete();
+        //Deleta 1° a relação Pieceset_Piece
+        $delP->delete();
         $delE = EditorPieceElement::model()->findAllByAttributes(
                 array('piece_id' => $id));
         foreach ($delE as $el):
