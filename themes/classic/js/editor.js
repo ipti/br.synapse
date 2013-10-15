@@ -899,7 +899,7 @@ function editor () {
                             //Contador da quantidade de PieceSets Salva
                             parent.uploadedPiecesets++;
                             if(parent.totalPiecesets == parent.uploadedPiecesets) {
-                                $('.savescreen').append('<br><p>Salvou Todas as PieceSets!</p>');    
+                                $('.savescreen').append('<br><br><p>Salvou Todas as PieceSets!</p>');    
                             }
                             if((parent.totalScreens == parent.uploadedScreens) && 
                                 (parent.totalPiecesets == parent.uploadedPiecesets) &&
@@ -945,7 +945,7 @@ function editor () {
                                     //Contador da quantidade de Piece Salva
                                     parent.uploadedPieces++;
                                     if(parent.totalPieces == parent.uploadedPieces) {
-                                        $('.savescreen').append('<br><p>Salvou Todas as Pieces!</p>');    
+                                        $('.savescreen').append('<br><br><p>Salvou Todas as Pieces!</p>');    
                                     }
                                     
                                     //                                    window.alert(parent.totalScreens + parent.uploadedScreens
@@ -1030,9 +1030,9 @@ function editor () {
                                                         parent.uploadedElements++;
                                                     
                                                         if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                            
+                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
                                                         }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                              
+                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
                                                         }
                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
                                                       //  window.alert("Verificar se acabou as requisições...");
@@ -1069,9 +1069,9 @@ function editor () {
                                                         }
                                                         parent.uploadedElements++;
                                                         if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                             
+                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                             
                                                         }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                               
+                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                               
                                                         }
                                             
                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
@@ -1141,9 +1141,9 @@ function editor () {
                                                                     //Atualiza o contador dos Elementos
                                                                     parent.uploadedElements++; 
                                                                     if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                         
+                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
                                                                     }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                                        $('.savescreen').append('<br><p>Salvou Todos os Elements!</p>');                                                            
+                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
                                                                     }
                                                                
                                                                   //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
@@ -1197,7 +1197,7 @@ function editor () {
                                                             (parent.isload && parent.load_totalElements == parent.uploadedElements && 
                                                                 parent.uploadedFlags == parent.load_totalElements_Invert))){
                                                         //chama o posEditor
-                                                        $('.savescreen').append('<br><p> FIM das Flags! <a href="index"> Voltar </a> </p>'+parent.uploadedFlags);
+                                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
                                                         parent.posEditor();  
                                                     }                                                   
                                                     
