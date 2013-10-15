@@ -63,7 +63,7 @@ class RenderController extends Controller {
         }
         $a5 = $a2 = $a3 = -1;
         if (isset($cobject->editorScreens)) {
-            foreach ($cobject->editorScreens as $screen) {
+            foreach ($cobject->editorScreens(array('limit' =>1)) as $screen) {
                 $a2++;
                 $json['screens'][$a2] = $screen->attributes;
                 $a3 = -1;
@@ -88,6 +88,7 @@ class RenderController extends Controller {
                             foreach ($element->editorPieceelementProperties as $property) {
                                 $properties[] = array('name' => $property->property->name, 'value' => $property->value);
                             }
+                            $properties[] = array('name' => 'pieceset', 'value' => $pieceset->pieceset->id);
                             if ($cobject->template->code == 'AEL') {
                                 $properties[] = array('name' => 'match', 'value' => $piece->piece->id);
                                 $properties[] = array('name' => 'group', 'value' => $piece->piece->id);
@@ -269,7 +270,7 @@ class RenderController extends Controller {
           join act_goal_content a4 on(a3.id=a4.goal_id)
           join act_content a6 on(a6.id=a4.content_id)
           join act_degree a7 on(a3.degree_id=a7.id)";
-        $where = " where a1.status='on' and a7.stage = '2' and (year = '1' or year = '2') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
+        $where = " where a1.id not in('335','356','571','15','431','68','430','641','642','428','647','643','645','71','335','654','76') and a1.status='on' and a7.stage = '2' and (year = '1' or year = '2') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
         /* if (isset($contentsIn) && isset($contentOut)) {
           $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
           } else if (isset($contentsIn) && !isset($contentOut)) {
@@ -289,7 +290,7 @@ class RenderController extends Controller {
         if (isset($content)) {
             $where .="";
         }
-        $fsql = $sql . $join . $where . " order by a7.year,a7.grade,a1.id";
+        $fsql = $sql . $join . $where . " order by a7.year,a7.grade,a3.id,a1.id";
         $command = Yii::app()->db->createCommand($fsql);
         $command->execute();
         $reader = $command->queryAll();

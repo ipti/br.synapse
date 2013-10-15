@@ -150,7 +150,7 @@ function render () {
                 htmScreen = $('<div class="screen" id="SCR'+screen.id+'"></div>');
                 htmScreen.append(parent.mountHeader(cobject));
                 if(typeof(screen.piecesets) != "undefined"){
-                    htmScreen.append(parent.loadPiecesets(screen.piecesets,cobject.template_code));
+                    htmScreen.append(parent.loadPiecesets(screen.piecesets,cobject.template_code,cobject.format_code));
                     if(NEWRENDER.atdID == "exam"){
                         if(cobject.template_code== 'TXT'||cobject.template_code== 'PDC'){
                             htmScreen.append(parent.nextInFuction());
@@ -345,47 +345,50 @@ function render () {
     
    
                 
-    this.loadPiecesets = function(piecesets,template){
+    this.loadPiecesets = function(piecesets,template,format){
         var parent = this;
         htmPiecesets = $('<div class="piecesets"></div>');
         $.each(piecesets, function(i, pieceset) {
             htmPieceset = $('<div id="PCS_'+pieceset.id+'" class="pieceset"><h5>'+pieceset.description+'</h5></div>');
             if(typeof(pieceset.pieces) != "undefined"){
-                htmPieceset.append(parent.loadPieces(pieceset.pieces,template));
+                htmPieceset.append(parent.loadPieces(pieceset.pieces,template,format));
             }
             htmPiecesets.append(htmPieceset);
         });
         return htmPiecesets;
     };
                 
-    this.loadPieces = function(pieces,template){
+    this.loadPieces = function(pieces,template,format){
         var parent = this;
         htmPieces = $('<div class="pieces"></div>');
         $.each(pieces, function(i, piece) {
             if(typeof(piece.elements) != "undefined"){
                 htmPiece = $('<div id="PC_'+piece.id+'" class="piece"></div>');
-                htmPiece.append(parent.loadElements(piece.elements,template,piece.id));
+                htmPiece.append(parent.loadElements(piece.elements,template,piece.id,format));
                 htmPieces.append(htmPiece);
             }
         });
         return htmPieces;
     };
     
-    this.loadElements = function(elements,template,pieceID){
+    this.loadElements = function(elements,template,pieceID,format){
         var parent = this;
         htmFinal = $('<div id="BL_'+pieceID+'" class="blockElements"></div>');
         switch (template){
             case 'MTE':
+                domEnum = $('<div class="render_enunciation"></div>');
                 htmEnum = $('<ul id="ULE_'+pieceID+'" class="elements enum"></ul>');
                 htmOptions = $('<ul id="ULO_'+pieceID+'" class="elements options"></ul>')
                 break;
             case 'PRE':
+                domEnum = $('<div class="render_enunciation"></div>');
                 htmEnum = $('<ul id="ULE_'+pieceID+'" class="elements enum"></ul>');
-                htmOptions = $('<ul id="ULO_'+pieceID+'" class="elements options"></ul>')
+                htmOptions = $('<ul id="ULO_'+pieceID+'" class="elements options '+format.toLowerCase()+'"></ul>')
                 break;
             case 'AEL':
-                htmPair = $('<ul id="ULE_'+pieceID+'" class="elements pairs"></ul>');
-                htmGroup = $('<ul id="ULO_'+pieceID+'" class="elements groups"></ul>')
+                domEnum = $('<div class="render_enunciation"></div>');
+                htmPair = $('<ul id="ULE_'+pieceID+'" class="elements pairs '+format.toLowerCase()+'"></ul>');
+                htmGroup = $('<ul id="ULO_'+pieceID+'" class="elements groups '+format.toLowerCase()+'"></ul>')
                 break;
             case 'TXT':
                 htmText = $('<ul id="ULT_'+pieceID+'" class="lstexts"></ul>');
@@ -527,16 +530,24 @@ function render () {
                                         htmEnum.append(blockElement.append(htmElement));
                                         break;
                                     case 'PRE':
-                                        htmEnum.append(blockElement.append(htmElement));
+                                        if(element.type == 'multimidia' && element.typemulti == 'image'){
+                                            domEnum.append(blockElement.append(htmElement));
+                                        }else{
+                                            htmEnum.append(blockElement.append(htmElement));
+                                        }
                                         break;
                                     case 'AEL':
-                                        htmElement.attr('groupid','pairs');
-                                        htmElement.addClass('pclick');
-                                        htmElement.on('click',parent.matchElement);
-                                        if(htmPair.find('li.group'+htmElement.attr('group')).length!==0){
-                                            htmPair.find('li.group'+htmElement.attr('group')).append(htmElement);
+                                        if(element.type == 'multimidia' && element.typemulti == 'sound'){
+                                            domEnum.append(blockElement.append(htmElement));
                                         }else{
-                                            htmPair.append(blockElement.append(htmElement));
+                                            htmElement.attr('groupid','pairs');
+                                            htmElement.addClass('pclick');
+                                            htmElement.on('click',parent.matchElement);
+                                            if(htmPair.find('li.group'+htmElement.attr('group')).length!==0){
+                                                htmPair.find('li.group'+htmElement.attr('group')).append(htmElement);
+                                            }else{
+                                                htmPair.append(blockElement.append(htmElement));
+                                            }
                                         }
                                         break;
                                     case 'TXT':
@@ -621,10 +632,12 @@ function render () {
         switch (template){
             case 'MTE':
                 htmOptions.find('li').addClass('options'+htmOptions.find('li').length);
+                htmFinal.append(domEnum);
                 htmFinal.append(htmEnum);
                 htmFinal.append(htmOptions);
                 break;
             case 'PRE':
+                htmFinal.append(domEnum);
                 htmFinal.append(htmEnum);
                 htmFinal.append(htmOptions);
                 break;
@@ -639,6 +652,7 @@ function render () {
                 }))
                 htmPair2.find('li').addClass('stpair'+htmPair2.find('li').length);
                 htmGroup2.find('li').addClass('stgroup'+htmPair2.find('li').length);
+                htmFinal.append(domEnum);
                 htmFinal.append(htmPair2.append('<li style="clear:both;display:block"></li>'));
                 htmFinal.append(htmGroup2.append('<li style="clear:both;display:block"></li>'));
                 break;

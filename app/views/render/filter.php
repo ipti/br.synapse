@@ -30,6 +30,7 @@
 .prerender h1{margin-top:-28px;display:block;height:112px;width:317px;background: url('/themes/classic/images/theme_render_header.png')}
 .prerender form{display:block;padding:5px;}
 .rscripts,.students,.tutors{display:none;}
+.prerender .innerborder{width:400px !important}
 .prerender label{display:block;clear:both;height:20px;}
 .prerender font{float:left;width:120px;height:20px;text-align:right;margin-right:5px; line-height: 20px;}
 .start{display:block;clear:both;margin:0 auto}

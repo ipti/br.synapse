@@ -398,7 +398,7 @@ class DefaultController extends Controller {
                 foreach ($reader as $row) {
                     $src = $row['table_source'];
                     try {
-                        if ($src == 'sound' || $src == 'phrase_sound' || $src == 'word_sound' || $src == 'number_sound' || $src == 'morpheme_sound' || $src == 'paragraph_sound') {
+                        if ($src == 'sound' || $src == 'phrase_sound' || $src == 'word_sound' || $src == 'number_sound' || $src == 'morpheme_sound' || $src == 'paragraph_sound'||$src == 'noise') {
                             $src = 'sound';
                         }
                         if ($src == 'sound' || $src == 'movie' || $src == 'image') {
