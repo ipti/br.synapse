@@ -111,9 +111,9 @@ class EditorController extends Controller {
                 $tem_crop = false;
                 $img[$i] = '';
                 if (isset($name_img[$i])) {
-                    $newDir[$i] = Yii::app()->basePath . "/../rsc/upload/image/" . $name_img[$i];
+                    $newDir[$i] = Yii::app()->basePath . "/../rsc/library/images/" . $name_img[$i];
                     $newDir[$i] = str_replace('\\', "/", $newDir[$i]);
-                    $newUrl[$i] = "/rsc/upload/image/" . $name_img[$i];
+                    $newUrl[$i] = "/rsc/library/images/" . $name_img[$i];
                     $imagesize[$i] = getimagesize($newDir[$i]);
                     if ($imagesize[$i] !== false) {
                         $oImg = new cutImage($newDir[$i]);
@@ -286,10 +286,11 @@ class EditorController extends Controller {
 
                             $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
                             $cobjectID = $cobject->id;
-
+ 
+                            $type_id = $this->getTypeIDbyName_Context('CobjectData', 'goal_id');
                             $newCobjectMetadata = new CobjectMetadata();
                             $newCobjectMetadata->cobject_id = $cobjectID;
-                            $newCobjectMetadata->type_id = 6;
+                            $newCobjectMetadata->type_id = $type_id;
                             $newCobjectMetadata->value = $goalID;
                             $newCobjectMetadata->insert();
 
@@ -512,7 +513,7 @@ class EditorController extends Controller {
                                     $newPieceElementProperty = new EditorPieceelementProperty();
                                     $newPieceElementProperty->piece_element_id = $pieceElementID;
                                     $newPieceElementProperty->property_id = $propertyID;
-                                    $newPieceElementProperty->value = $flag == "true" ? 'Correto' : 'Errado';
+                                    $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
                                     $newPieceElementProperty->insert();
                                     if (isset($_POST["library"])) {
                                         $libraryTypeName = $_POST["library"];
@@ -645,7 +646,7 @@ class EditorController extends Controller {
                                     $change_flag = EditorPieceelementProperty::model()->findByAttributes(
                                             array('piece_element_id' => $pieceElement->id,
                                                 'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
-                                    $change_flag->value = $flag == "true" ? "Correto" : "Errado";
+                                    $change_flag->value = $flag == "true" ? "Acerto" : "Erro";
                                     $change_flag->save();
                                 }
                             } else {
@@ -854,9 +855,10 @@ class EditorController extends Controller {
                     $max_size = 1024 * 20; //20MB
                 }
                 //define qual o endereço que será guardado o arquivo
-                $path = Yii::app()->basePath . '/../rsc/upload/' . $_POST['op'] . '/';
+                $type_multimidia = $_POST['op'] == 'image' ? $_POST['op'].'s' : $_POST['op'] ;
+                $path = Yii::app()->basePath . '/../rsc/library/' . $type_multimidia . '/';
                 //define qual a url para visualização do arquivo
-                $url = "/rsc/upload/" . $_POST['op'] . "/";
+                $url = "/rsc/library/" . $type_multimidia . "/";
 
                 //pega o nome do arquivo
                 $file_name = $_FILES['file']['name'];
@@ -916,6 +918,10 @@ class EditorController extends Controller {
         $typeID = $type->id;
 
         return $typeID;
+    }
+    private function getTypeIDbyName_Context($context, $name){
+        $type = CommonType::model()->findByAttributes(array('context'=>$context, 'name'=>$name));
+        return $type->id;
     }
 
     private function getTypeNameByID($str) {

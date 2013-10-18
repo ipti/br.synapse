@@ -52,12 +52,13 @@ class RenderController extends Controller {
     }
 
     public function cobjectbyid($cobject_id) {
+        //Não possui na BD local a tabela render_cobjects
         $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
         $command = Yii::app()->db->createCommand($sql);
         $command->execute();
         $row = $command->queryRow();
         $json = $row;
-        $cobject = Cobject::model()->findByPk($row['cobject_id']);
+        $cobject = Cobject::model()->findByPk($row['id']); //$row['cobject_id']
         if (isset($cobject->father)) {
             $json['father'] = $cobject->father->id;
         }
@@ -238,6 +239,7 @@ class RenderController extends Controller {
     }
 
     public function actionStage() {
+       
         $cobject_id = @$_REQUEST['id'];
         $disciplineID = @$_REQUEST['disciplineID'];
         $script = @$_REQUEST['scriptID'];
@@ -298,6 +300,7 @@ class RenderController extends Controller {
         $json['size'] = count($reader);
         $json['pctitem'] = round(100 / count($reader), 1);
         $json = json_encode($json);
+        //var_dump($json);
         $this->render('stage', array('json' => $json,'actor'=>$actor));
     }
 

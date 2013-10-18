@@ -67,11 +67,12 @@ function render () {
         $.ajax({
             url:"/render/loadcobject",
             data:{
-                ID:id
+                ID:id// testar:829
             },
             type:"POST",
             dataType:"json",
             success:function(response){
+                console.log(response.goal);
                 parent.pctLoad = parent.pctLoad+json.pctitem;
                 parent.progressbar(parent.pctLoad, $('#progressBar'));
                 parent.messageload("Carregando "+response.cobject_type+" "+id+"...",response.goal);
