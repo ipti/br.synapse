@@ -282,6 +282,7 @@ class EditorController extends Controller {
                             $newCobject->type_id = $typeID;
                             $newCobject->template_id = $templateID;
                             $newCobject->theme_id = $themeID;
+                            $newCobject->status = 'on';
                             $newCobject->insert();
 
                             $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
