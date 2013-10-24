@@ -684,7 +684,7 @@ function editor () {
                 if(parent.isset(data['step'])) {
                     $('.savescreen').append('<br><p>Erro ao salvar '+data['step']+'.</p>'); 
                 }else{
-                    $('.savescreen').append('<br><p>Erro ao Deletar Objetos!...</p>');    
+                    $('.savescreen').append('<br><p>Erro ao Deletar TODOS os Objetos!...</p>');    
                 }
                 
                 $('.savescreen').append('<br><p>Error mensage:</p>');
@@ -809,9 +809,9 @@ function editor () {
                     op:"delete", 
                     array_del:parent.orderDelets
                 },
-                //função sucess do save Screen
+                //função sucess do saveData-DelAll
                 function(response, textStatus, jqXHR){
-                    
+                    $('.savescreen').append('<br><p>X Objetos Deletados!...</p>');
                     });
             }
             //==================================

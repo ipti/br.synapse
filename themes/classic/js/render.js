@@ -63,11 +63,12 @@ function render () {
         NEWRENDER.startTime = Math.round(+new Date()/1000);
     }
     this.ajaxrecursive = function(id,pos,json){
+        console.log(id);
         var parent = this;
         $.ajax({
             url:"/render/loadcobject",
             data:{
-                ID:id// testar:829
+                ID:741// testar:738
             },
             type:"POST",
             dataType:"json",

@@ -287,7 +287,7 @@ class EditorController extends Controller {
 
                             $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
                             $cobjectID = $cobject->id;
- 
+
                             $type_id = $this->getTypeIDbyName_Context('CobjectData', 'goal_id');
                             $newCobjectMetadata = new CobjectMetadata();
                             $newCobjectMetadata->cobject_id = $cobjectID;
@@ -723,6 +723,7 @@ class EditorController extends Controller {
                 $size = count($array_del);
                 $type = null;
                 $id = null;
+                $delAll_Ok = true;
                 // Para cada elemento Excluído
                 foreach ($array_del as $ls):
                     if ($ls[0] . $ls[1] == 'PS') {
@@ -732,20 +733,24 @@ class EditorController extends Controller {
                         $type = $ls[0];
                         $id = str_replace($type, '', $ls);
                     }
+                    
                     switch ($type) {
                         case 'S':$this->delScreen($id);
                             break;
                         case 'PS':$this->delPieceset($id);
                             break;
-                        case 'P':$this->delPiece($id);
+                        case 'P': $delAll_Ok = (!$this->delPiece($id)) ? false : $delAll_Ok;
                             break;
                         case 'E':
                             $expl_element = explode('P', $id);
                             $id_element = $expl_element[0];
                             $id_piece = $expl_element[1];
-                            $this->delElement($id_element, $id_piece);
+                            $delAll_Ok = (!$this->delElement($id_element, $id_piece)) ? false : $delAll_Ok ;
                     }
                 endforeach;
+                if(!$delAll_Ok) {
+                   throw new Exception("ERROR: NEM Todos os Objectos solicitados para deleção foram Deletados!<br>"); 
+                }
                 //--------------------------
             } else {
                 throw new Exception("ERROR: Operação inválida.<br>");
@@ -800,13 +805,18 @@ class EditorController extends Controller {
         $delP->delete();
         $delE = EditorPieceElement::model()->findAllByAttributes(
                 array('piece_id' => $id));
+        $delpiece = true;
         foreach ($delE as $el):
             //Desvincular cada Elemento 
-            $this->delElement($el->element_id, $id);
+            $delpiece = (!$this->delElement($el->element_id, $id)) ? false : $delpiece;
         endforeach;
-        //Depois, Exclui a peça
-        $delete_piece = EditorPiece::model()->findByPk($id);
-        $delete_piece->delete();
+        //Depois, Exclui a peça Se Não existir Algum piece_element <=> performance_actor
+        if ($delpiece) {
+            $delete_piece = EditorPiece::model()->findByPk($id);
+            $delete_piece->delete();
+        }
+        
+        return $delpiece;
     }
 
     // Dois argumentos, pois, um elemento pode está em várias pieces
@@ -814,20 +824,28 @@ class EditorController extends Controller {
         $newElement = EditorElement::model()->findByPk($id);
         $Element_Piece = EditorPieceElement::model()->findByAttributes(
                 array('piece_id' => $piece_id, 'element_id' => $newElement->id));
-        $Element_Piece_Property = EditorPieceelementProperty::model()
-                ->findAll(array(
-            'condition' => 'piece_element_id=:idPieceElement',
-            'params' => array(':idPieceElement' => $Element_Piece->id)
-                ));
-        $size_properties_Element_Piece = count($Element_Piece_Property);
-        $ls = null;
-        foreach ($Element_Piece_Property as $ls):
-            // Excluir cada propriedade do Element_Piece
-            $ls->delete();
-        endforeach;
-        //Depois, Desvincula o elemento da peça.                                  
-        $Element_Piece->delete();
-        //==========================
+        $Performance_Actor = PeformanceActor::model()->findByAttributes(
+                array('piece_element_id' => $Element_Piece->id));
+        //Somente DELETA se NÃO existir alguma PERFORMANCE ACTOR
+        if (!isset($Performance_Actor)) {
+            $Element_Piece_Property = EditorPieceelementProperty::model()
+                    ->findAll(array(
+                'condition' => 'piece_element_id=:idPieceElement',
+                'params' => array(':idPieceElement' => $Element_Piece->id)
+                    ));
+            $size_properties_Element_Piece = count($Element_Piece_Property);
+            $ls = null;
+            foreach ($Element_Piece_Property as $ls):
+                // Excluir cada propriedade do Element_Piece
+                $ls->delete();
+            endforeach;
+            //Depois, Desvincula o elemento da peça.                                  
+            $Element_Piece->delete();
+            return true;
+            //==========================
+        }
+
+        return false;
     }
 
     public function actionUpload() {
@@ -856,7 +874,7 @@ class EditorController extends Controller {
                     $max_size = 1024 * 20; //20MB
                 }
                 //define qual o endereço que será guardado o arquivo
-                $type_multimidia = $_POST['op'] == 'image' ? $_POST['op'].'s' : $_POST['op'] ;
+                $type_multimidia = $_POST['op'] == 'image' ? $_POST['op'] . 's' : $_POST['op'];
                 $path = Yii::app()->basePath . '/../rsc/library/' . $type_multimidia . '/';
                 //define qual a url para visualização do arquivo
                 $url = "/rsc/library/" . $type_multimidia . "/";
@@ -920,8 +938,9 @@ class EditorController extends Controller {
 
         return $typeID;
     }
-    private function getTypeIDbyName_Context($context, $name){
-        $type = CommonType::model()->findByAttributes(array('context'=>$context, 'name'=>$name));
+
+    private function getTypeIDbyName_Context($context, $name) {
+        $type = CommonType::model()->findByAttributes(array('context' => $context, 'name' => $name));
         return $type->id;
     }
 

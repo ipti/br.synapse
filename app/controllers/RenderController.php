@@ -58,13 +58,13 @@ class RenderController extends Controller {
         $command->execute();
         $row = $command->queryRow();
         $json = $row;
-        $cobject = Cobject::model()->findByPk($row['id']); //$row['cobject_id']
+        $cobject = Cobject::model()->findByPk($row['cobject_id']); //$row['cobject_id']
         if (isset($cobject->father)) {
             $json['father'] = $cobject->father->id;
         }
         $a5 = $a2 = $a3 = -1;
         if (isset($cobject->editorScreens)) {
-            foreach ($cobject->editorScreens(array('limit' =>1)) as $screen) {
+            foreach ($cobject->editorScreens(array('limit' => 1)) as $screen) {
                 $a2++;
                 $json['screens'][$a2] = $screen->attributes;
                 $a3 = -1;
@@ -115,12 +115,52 @@ class RenderController extends Controller {
                                 $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
                             }
 
+                            // 'Value' do Element
+//                            if (isset($element->element->id)) {
+//                                $element_propertyID = EditorElementProperty::model()->findAllByAttributes(array(
+//                                    'element_id' => $element->element->id
+//                                        ));
+//                         
+//                                foreach ($element_propertyID as $elem_prop):
+//                                    $propID = $elem_prop->property_id;
+//                                    $property = CommonProperty::model()->findByPk($propID);
+//                                    if ($property->name == 'text' || $property->name == 'library_id') {
+//                                        if ($property->name == 'library_id') {
+//                                            $library = Library::model()->findByPk($elem_prop->value);
+//                                            $typeID_img = CommonType::model()->findByAttributes(array(
+//                                                'context' => 'library', 'name' => 'image'
+//                                                    ));
+//                                            if ($library->type_id == $typeID_img->id) {
+//                                                //É Multimídia; Imagem;
+//                                                $library_propertyID = LibraryProperty::model()->findAllByAttributes(
+//                                                        array('library_id'=>$library->id));
+//                                                $lib_property_srcID = CommonProperty::model()->findByAttributes(array(
+//                                                   'context'=>'library', 'name' => 'src'
+//                                                ));
+//                                                foreach ($library_propertyID as $lib_property):
+//                                                   if($lib_property->property_id == $lib_property_srcID->id) {
+//                                                       //É o SRC
+//                                                      $value =  $lib_property->value;
+//                                                      break;
+//                                                   }  
+//                                                endforeach;                                             
+//                                            }
+//                                        }elseif($property->name == 'text'){
+//                                             $value = $elem_prop->value;
+//                                             break;
+//                                        }
+//                                    }
+//                                endforeach;
+//
+//                            }
+                            //======================================
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['code'] = 'EP' . $element->id;
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementProperties'] = $properties;
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementProperties'] = $properties;
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['events'] = $events;
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['generalProperties'] = $gproperties;
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['type'] = $element->element->type->name;
+                            //$json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['value'] = $value; 
                         }
                     }
                 }
@@ -239,7 +279,7 @@ class RenderController extends Controller {
     }
 
     public function actionStage() {
-       
+
         $cobject_id = @$_REQUEST['id'];
         $disciplineID = @$_REQUEST['disciplineID'];
         $script = @$_REQUEST['scriptID'];
@@ -301,7 +341,7 @@ class RenderController extends Controller {
         $json['pctitem'] = round(100 / count($reader), 1);
         $json = json_encode($json);
         //var_dump($json);
-        $this->render('stage', array('json' => $json,'actor'=>$actor));
+        $this->render('stage', array('json' => $json, 'actor' => $actor));
     }
 
     public function actionJson() {
