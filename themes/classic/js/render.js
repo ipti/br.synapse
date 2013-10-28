@@ -63,15 +63,17 @@ function render () {
         NEWRENDER.startTime = Math.round(+new Date()/1000);
     }
     this.ajaxrecursive = function(id,pos,json){
+        console.log(id);
         var parent = this;
         $.ajax({
             url:"/render/loadcobject",
             data:{
-                ID:id
+                ID:741// testar:738
             },
             type:"POST",
             dataType:"json",
             success:function(response){
+                console.log(response.goal);
                 parent.pctLoad = parent.pctLoad+json.pctitem;
                 parent.progressbar(parent.pctLoad, $('#progressBar'));
                 parent.messageload("Carregando "+response.cobject_type+" "+id+"...",response.goal);

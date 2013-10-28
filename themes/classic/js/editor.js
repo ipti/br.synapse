@@ -354,7 +354,8 @@ function editor () {
         $('#'+ID).append(html);
         
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
-            var src = '/rsc/upload/'+uploadType+'/'+loaddata['library']['src'];
+            var cam_uploadType = uploadType == 'image' ? uploadType+'s' : uploadType;
+            var src = '/rsc/library/'+cam_uploadType+'/'+loaddata['library']['src'];
             responseFunction(src, file, form); 
         }
         
@@ -445,7 +446,7 @@ function editor () {
         '<div>';
         if(parent.MTE.indexOf(parent.COtemplateType) != -1){
             var checked ="";
-            if(this.isset(flag) && flag == "Correto"){
+            if(this.isset(flag) && flag == "Acerto"){
                 checked = 'checked="checked"';
             }
             html += ''+
@@ -683,7 +684,7 @@ function editor () {
                 if(parent.isset(data['step'])) {
                     $('.savescreen').append('<br><p>Erro ao salvar '+data['step']+'.</p>'); 
                 }else{
-                    $('.savescreen').append('<br><p>Erro ao Deletar Objetos!...</p>');    
+                    $('.savescreen').append('<br><p>Erro ao Deletar TODOS os Objetos!...</p>');    
                 }
                 
                 $('.savescreen').append('<br><p>Error mensage:</p>');
@@ -808,9 +809,9 @@ function editor () {
                     op:"delete", 
                     array_del:parent.orderDelets
                 },
-                //função sucess do save Screen
+                //função sucess do saveData-DelAll
                 function(response, textStatus, jqXHR){
-                    
+                    $('.savescreen').append('<br><p>X Objetos Deletados!...</p>');
                     });
             }
             //==================================
