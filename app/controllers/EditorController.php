@@ -8,7 +8,10 @@ class EditorController extends Controller {
     public $TYPE_LIBRARY_IMAGE = "IMAGE";
     public $TYPE_LIBRARY_SOUND = "SOUND";
     public $TYPE_LIBRARY_MOVIE = "MOVIE";
+    //==== Transaction Variable-  ====//
+    private $transaction;
 
+    //=================================
     /**
      * @return array action filters
      */
@@ -267,8 +270,24 @@ class EditorController extends Controller {
     public function actionJson() {
         $json = array();
         if (isset($_POST['op'])) {
+            if (!isset($this->transaction->getActive()) && $_POST['op'] != 'load') {
+                //Criar Nova Transação
+                //======================
+                $this->transaction = Yii::app()->db->beginTransaction();
+                //======================
+            }
+
+            if ($_POST['op'] == 'finish') {
+                try {
+                    $this->transaction->commit();
+                } catch (Exception $e) {
+                    $this->transaction->rollback();
+                    throw $e;
+                }
+            }
 
             if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
+
                 switch ($_POST['step']) {
                     case "CObject":
                         if (isset($_POST['COtypeID']) && isset($_POST['COthemeID'])
@@ -733,7 +752,7 @@ class EditorController extends Controller {
                         $type = $ls[0];
                         $id = str_replace($type, '', $ls);
                     }
-                    
+
                     switch ($type) {
                         case 'S':$this->delScreen($id);
                             break;
@@ -745,11 +764,11 @@ class EditorController extends Controller {
                             $expl_element = explode('P', $id);
                             $id_element = $expl_element[0];
                             $id_piece = $expl_element[1];
-                            $delAll_Ok = (!$this->delElement($id_element, $id_piece)) ? false : $delAll_Ok ;
+                            $delAll_Ok = (!$this->delElement($id_element, $id_piece)) ? false : $delAll_Ok;
                     }
                 endforeach;
-                if(!$delAll_Ok) {
-                   throw new Exception("ERROR: NEM Todos os Objectos solicitados para deleção foram Deletados!<br>"); 
+                if (!$delAll_Ok) {
+                    throw new Exception("ERROR: NEM Todos os Objectos solicitados para deleção foram Deletados!<br>");
                 }
                 //--------------------------
             } else {
@@ -815,7 +834,7 @@ class EditorController extends Controller {
             $delete_piece = EditorPiece::model()->findByPk($id);
             $delete_piece->delete();
         }
-        
+
         return $delpiece;
     }
 

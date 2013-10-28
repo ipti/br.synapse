@@ -812,7 +812,7 @@ function editor () {
                 //função sucess do saveData-DelAll
                 function(response, textStatus, jqXHR){
                     $('.savescreen').append('<br><p>X Objetos Deletados!...</p>');
-                    });
+                });
             }
             //==================================
             
@@ -853,16 +853,7 @@ function editor () {
                     if(parent.totalScreens == parent.uploadedScreens) {
                         $('.savescreen').append('<br><br><p>Salvou Todas as Screens!</p>');    
                     }
-                    if((parent.totalScreens == parent.uploadedScreens) && 
-                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                        (parent.totalPieces == parent.uploadedPieces) && 
-                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                        //chama o posEditor
-                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                        parent.posEditor();  
-                    }
+                    parent.verify_requestFinish();
                     //Retorna o ID no DOM e o ID da ultima Tela no Banco.
                     curretScreenID = response['DomID'];
                     LastScreenID = response['screenID'];
@@ -902,16 +893,7 @@ function editor () {
                             if(parent.totalPiecesets == parent.uploadedPiecesets) {
                                 $('.savescreen').append('<br><br><p>Salvou Todas as PieceSets!</p>');    
                             }
-                            if((parent.totalScreens == parent.uploadedScreens) && 
-                                (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                (parent.totalPieces == parent.uploadedPieces) && 
-                                ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                    (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                        parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                //chama o posEditor
-                                $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                parent.posEditor();  
-                            }
+                            parent.verify_requestFinish();
                             curretPieceSetID = response['DomID'];
                             LastPieceSetID = response['PieceSetID'];
                             
@@ -955,16 +937,7 @@ function editor () {
                                     //                                        +!parent.isload + parent.totalElements + parent.uploadedElements+
                                     //                                            parent.isload + parent.load_totalElements + parent.uploadedElements);   
                                     //VER : MENSAGEM DE SANVALNDO S,P,PS,E desnecessária no load!
-                                    if((parent.totalScreens == parent.uploadedScreens) && 
-                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                        (parent.totalPieces == parent.uploadedPieces) && 
-                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                        //chama o posEditor
-                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                        parent.posEditor();  
-                                    }
+                                    parent.verify_requestFinish();
                                     
                                     curretPieceID = response['DomID'];
                                     LastPieceID = response['PieceID'];
@@ -1035,19 +1008,10 @@ function editor () {
                                                         }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
                                                         }
-                                                       // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
-                                                      //  window.alert("Verificar se acabou as requisições...");
+                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
+                                                        //  window.alert("Verificar se acabou as requisições...");
                                                         //Verificar se acabou as requisições
-                                                        if((parent.totalScreens == parent.uploadedScreens) && 
-                                                            (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                            (parent.totalPieces == parent.uploadedPieces) && 
-                                                            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                    parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                            //chama o posEditor
-                                                            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                            parent.posEditor();  
-                                                        }
+                                                        parent.verify_requestFinish();
                                                     
                                                     
                                                     });
@@ -1075,19 +1039,10 @@ function editor () {
                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                               
                                                         }
                                             
-                                                       // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
-                                                       // window.alert("Verificar se acabou as requisições...");
+                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
+                                                        // window.alert("Verificar se acabou as requisições...");
                                                         //Verificar se acabou as requisições
-                                                        if((parent.totalScreens == parent.uploadedScreens) && 
-                                                            (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                            (parent.totalPieces == parent.uploadedPieces) && 
-                                                            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                    parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                            //chama o posEditor
-                                                            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                            parent.posEditor();  
-                                                        }        
+                                                        parent.verify_requestFinish();       
                                                
                                                     });
                                         
@@ -1147,19 +1102,10 @@ function editor () {
                                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
                                                                     }
                                                                
-                                                                  //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
-                                                                   // window.alert("Verificar se acabou as requisições...");
+                                                                    //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
+                                                                    // window.alert("Verificar se acabou as requisições...");
                                                                     //Verificar se acabou as requisições
-                                                                    if((parent.totalScreens == parent.uploadedScreens) && 
-                                                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                                        (parent.totalPieces == parent.uploadedPieces) && 
-                                                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                                        //chama o posEditor
-                                                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                                        parent.posEditor();  
-                                                                    }
+                                                                    parent.verify_requestFinish();
                                                                
                                                                
                                                                 });
@@ -1191,16 +1137,7 @@ function editor () {
                                                        
                                                     //window.alert("Verificar se acabou as requisições..."); Se deixar o contador continua a contar
                                                     //Verificar se acabou as requisições
-                                                    if((parent.totalScreens == parent.uploadedScreens) && 
-                                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                        (parent.totalPieces == parent.uploadedPieces) && 
-                                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                        //chama o posEditor
-                                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                        parent.posEditor();  
-                                                    }                                                   
+                                                    parent.verify_requestFinish();                                                   
                                                     
                                                 });
                                         }
@@ -1215,6 +1152,51 @@ function editor () {
         } // End do PosSaveCobject
     //======================     
     } // End Form SaveAll
+    
+    //Verificar se acabou as requisições!
+    this.verify_requestFinish = function() {
+        var parent = this;
+        if((parent.totalScreens == parent.uploadedScreens) && 
+            (parent.totalPiecesets == parent.uploadedPiecesets) &&
+            (parent.totalPieces == parent.uploadedPieces) && 
+            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
+                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                    parent.uploadedFlags == parent.load_totalElements_Invert))){
+            //===========Envia solicitação de COMMIT==============//
+            $.ajax({
+                type: "POST",
+                url: "/Editor/Json",
+                dataType: 'json',
+                data: {op:'finish'},
+                beforeSend: function(jqXHR, settings ){
+//                    if(beforeSend){
+//                        beforeSend(jqXHR, settings);
+//                    }
+//                    else{
+                        $('.savescreen').append('<br><p>Concluíndo as Operações...</p>');         
+                   // }    
+                },
+                error: function( jqXHR, textStatus, errorThrown ){             
+                    $('.savescreen').append('<br><p>Erro ao COncluir as Operações!...</p>');    
+                
+                    $('.savescreen').append('<br><p>Error mensage:</p>');
+                    $('.savescreen').append(jqXHR.responseText);
+                },
+                success: function(response, textStatus, jqXHR){
+                    sucess(response, textStatus, jqXHR);
+                    
+                    //chama o posEditor
+                    $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
+                    parent.posEditor(); 
+                    
+                }
+            });
+        //=======================================================
+             
+        } 
+    }
+    
+    
     
     this.posEditor = function(){
         //quantidade de elementos.
