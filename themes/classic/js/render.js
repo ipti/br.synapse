@@ -407,7 +407,7 @@ function render () {
                             break;
                         case 'sound':
                             blockElement.prepend('<font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font>');
-                            htmElement = $('<audio controls="controls"></audio>');
+                            htmElement = $('<object type="application/x-shockwave-flash" data="" width="160" height="20" id="dewplayer-mini"><param name="wmode" value="transparent" /></object>');
                             break;
                     }
                     break;
@@ -445,9 +445,8 @@ function render () {
                         htmElement.text(gproperty.value);
                     }else if(gproperty.name == 'src'){
                         if(element.typemulti == 'sound'){
-                            htm = $('<source/>');
-                            htm.attr('src','/rsc/library/sound/'+gproperty.value);
-                            htmElement.append(htm);
+                            htmElement.attr('data','/rsc/js/player/dewplayer-mini.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3');
+                            htmElement.append('<param name="movie" value="dewplayer-mini.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3" />');
                         }else{
                             htmElement.attr(gproperty.name,'/rsc/library/images/'+gproperty.value);
                         }

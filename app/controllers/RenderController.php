@@ -73,6 +73,7 @@ class RenderController extends Controller {
                     }
                     $json['screens'][$a2]['piecesets'][$a3]['id'] = $pieceset->pieceset->id;
                     $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $pieceset->pieceset->template->code;
+                    $json['screens'][$a2]['piecesets'][$a3]['description'] = $pieceset->pieceset->description;
                     $a4 = -1;
                     foreach ($pieceset->pieceset->editorPiecesetPieces as $piece) {
                         $a4++;
@@ -120,6 +121,7 @@ class RenderController extends Controller {
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['events'] = $events;
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['generalProperties'] = $gproperties;
                             $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['type'] = $element->element->type->name;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementID'] = $element->element->id;
                         }
                     }
                 }
