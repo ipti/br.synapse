@@ -1163,34 +1163,29 @@ function editor () {
                 (parent.isload && parent.load_totalElements == parent.uploadedElements && 
                     parent.uploadedFlags == parent.load_totalElements_Invert))){
             //===========Envia solicitação de COMMIT==============//
-            $.ajax({
-                type: "POST",
-                url: "/Editor/Json",
-                dataType: 'json',
-                data: {op:'finish'},
-                beforeSend: function(jqXHR, settings ){
-//                    if(beforeSend){
-//                        beforeSend(jqXHR, settings);
-//                    }
-//                    else{
-                        $('.savescreen').append('<br><p>Concluíndo as Operações...</p>');         
-                   // }    
-                },
-                error: function( jqXHR, textStatus, errorThrown ){             
-                    $('.savescreen').append('<br><p>Erro ao COncluir as Operações!...</p>');    
-                
-                    $('.savescreen').append('<br><p>Error mensage:</p>');
-                    $('.savescreen').append(jqXHR.responseText);
-                },
-                success: function(response, textStatus, jqXHR){
-                    sucess(response, textStatus, jqXHR);
+//            $.ajax({
+//                type: "POST",
+//                url: "/Editor/Json",
+//                dataType: 'json',
+//                data: {op:'finish'},
+//                beforeSend: function(jqXHR, settings ){
+//                        $('.savescreen').append('<br><p>Concluíndo as Operações...</p>');                              
+//                },
+//                error: function( jqXHR, textStatus, errorThrown ){             
+//                    $('.savescreen').append('<br><p>Erro ao Concluir as Operações!...</p>');    
+//                
+//                    $('.savescreen').append('<br><p>Error mensage:</p>');
+//                    $('.savescreen').append(jqXHR.responseText);
+//                },
+//                success: function(response, textStatus, jqXHR){
+//                    $('.savescreen').append(' <br><p> Operações Concluídas! </p>'); 
                     
                     //chama o posEditor
                     $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
                     parent.posEditor(); 
                     
-                }
-            });
+//                }
+//            });
         //=======================================================
              
         } 

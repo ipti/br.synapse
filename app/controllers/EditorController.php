@@ -9,7 +9,7 @@ class EditorController extends Controller {
     public $TYPE_LIBRARY_SOUND = "SOUND";
     public $TYPE_LIBRARY_MOVIE = "MOVIE";
     //==== Transaction Variable-  ====//
-    private $transaction;
+   // private $transaction;
 
     //=================================
     /**
@@ -270,31 +270,33 @@ class EditorController extends Controller {
     public function actionJson() {
         $json = array();
         if (isset($_POST['op'])) {
-            if (!isset($this->transaction->getActive()) && $_POST['op'] != 'load') {
-                //Criar Nova Transação
-                //======================
-                $this->transaction = Yii::app()->db->beginTransaction();
-                //======================
-            }
-
-            if ($_POST['op'] == 'finish') {
-                try {
-                    $this->transaction->commit();
-                } catch (Exception $e) {
-                    $this->transaction->rollback();
-                    throw $e;
-                }
-            }
-
-            if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
+//            if (!isset($this->transaction) && $_POST['op'] != 'load') {
+//                //Criar Nova Transação
+//                //======================
+//                $this->transaction = Yii::app()->db->beginTransaction();
+//                //======================
+//            }
+            
+//            if ($_POST['op'] == 'finish') {
+//                try {
+//                    var_dump($this->transaction);exit();
+//                    $this->transaction->commit();
+//                    
+//                } catch (Exception $e) {
+//                    $this->transaction->rollback();
+//                    throw $e;
+//                }
+//            }else
+            
+                if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
 
                 switch ($_POST['step']) {
                     case "CObject":
-                        if (isset($_POST['COtypeID']) && isset($_POST['COthemeID'])
+                        if (isset($_POST['COtypeID']) 
                                 && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])) {
                             $typeID = $_POST['COtypeID'];
                             $templateID = $_POST['COtemplateType'];
-                            $themeID = $_POST['COthemeID'];
+                            $themeID = ($_POST['COthemeID']!='-1') ? $_POST['COthemeID'] : NULL;
                             $goalID = $_POST['COgoalID'];
 
                             $newCobject = new Cobject();

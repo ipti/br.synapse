@@ -11,7 +11,7 @@ if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate'])
     $name_cobjectTemplate = CobjectTemplate::model()->findByPk($cobjectTemplate);
     $name_cobjectTemplate = $name_cobjectTemplate->name;
     $name_cobjectTheme = CobjectTheme::model()->findByPk($cobjectTheme);
-    $name_cobjectTheme = $name_cobjectTheme->name;
+    $name_cobjectTheme = isset($name_cobjectTheme)? $name_cobjectTheme->name : "SEM TEMA";
     $name_actGoal = ActGoal::model()->findByPk($actGoal);
     $name_actGoal = $name_actGoal->name;
 } elseif (isset($_GET['cID'])) {
@@ -30,6 +30,7 @@ $this->breadcrumbs = array(
 <script language ="javascript" type="text/javascript">
 <?php
 if ($load == 'false') {
+    $cobjectTheme = ($cobjectTheme!='') ? $cobjectTheme : -1 ;
     echo "newEditor.COtypeID = $commonType ; \n";
     echo "newEditor.COthemeID = $cobjectTheme; \n";
     echo "newEditor.COtemplateType = $cobjectTemplate; \n";
