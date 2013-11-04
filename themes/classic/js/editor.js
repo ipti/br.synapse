@@ -30,7 +30,8 @@ function editor () {
     this.uploadedLibraryIDs = new Array();
     this.isload = false;
     this.orderDelets = [];
-    this.TXT = new Array(2);
+    this.TXT = new Array();
+    this.TXT.push(2);
     this.MTE = new Array(3,4,5,6);
     this.PRE = new Array(7,8,9,10,11,12);
     this.AEL = new Array(13,14,15);
@@ -47,6 +48,7 @@ function editor () {
     }
     
     this.addScreen = function(id){
+        
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = "";
         //se estiver setado o novo id
@@ -132,74 +134,77 @@ function editor () {
     
     this.addPiece = function(id, idbd){
         var parent = this;
-        
-        //variável para adição do ID do banco, se ele não existir ficará vazio.
-        var plus = "";
-        //se estiver setado o novo id
-        if(this.isset(idbd)){
-            //adiciona o código na varíavel
-            plus = ' idBD="'+idbd+'" ';
-        }
-        
         var PieceSetid = id.replace("pie_", "");
         this.currentPieceSet = PieceSetid;
+        //Se for PRE OU TXT
+        //E Verificar se possui classe Piece dentro deste PieceSet 
+        if( !((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) 
+            && $('#'+PieceSetid+' .piece').length) ) { 
+            //variável para adição do ID do banco, se ele não existir ficará vazio.
+            var plus = "";
+            //se estiver setado o novo id
+            if(this.isset(idbd)){
+                //adiciona o código na varíavel
+                plus = ' idBD="'+idbd+'" ';
+            }   
         
-        //Monta o id do Piece
-        var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
-        //Adiciona na array de contadores
-        this.countElements[pieceID] = 0;
-        //inicia o html do piece
-        var html = ''+
-        '<li id="'+pieceID+'" class="piece" '+plus+'>'+
-        '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>';
-        //Se o Template for MTE
-        if(parent.COTemplateTypeIn(parent.MTE) ){
-            html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
-        //Se o template for PRE
-        }else if(parent.COTemplateTypeIn(parent.PRE)){
-            html+= '<div class="tplMulti"></div>';
-        }else if(parent.COTemplateTypeIn(parent.AEL)){
-            html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
-            "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
-            "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
-        }
-        //finaliza o html
-        html+= '</li>';
-        //appenda o html do piece no pieceset
-        $('#'+PieceSetid).append(html);
+            //Monta o id do Piece
+            var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
+            //Adiciona na array de contadores
+            this.countElements[pieceID] = 0;
+            //inicia o html do piece
+            var html = ''+
+            '<li id="'+pieceID+'" class="piece" '+plus+'>'+
+            '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>';
+            //Se o Template for MTE
+            if(parent.COTemplateTypeIn(parent.MTE) ){
+                html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
+            //Se o template for PRE
+            }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT) ){
+                html+= '<div class="tplMulti"></div>';
+            }else if(parent.COTemplateTypeIn(parent.AEL)){
+                html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
+                "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
+                "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
+            }
+            //finaliza o html
+            html+= '</li>';
+            //appenda o html do piece no pieceset
+            $('#'+PieceSetid).append(html);
         
-        //incrementa o contador de piece
-        this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
+            //incrementa o contador de piece
+            this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
         
-        //se template for MTE
-        if(parent.COTemplateTypeIn(parent.MTE)
-            || parent.COTemplateTypeIn(parent.AEL)){
-            //adiciona a função do botão addElement
-            $("#"+pieceID+"> div > button.newElement").click(function(){
-                parent.addElement();
-            });
-            if(parent.COTemplateTypeIn(parent.AEL)){
-            //$('#'+pieceID+'_query').sortable();
-            //$('#'+pieceID+'_query').disableSelection();
-            //$('#'+pieceID+'_query_resp').sortable();
-            //$('#'+pieceID+'_query_resp').disableSelection();
+            //se template for MTE ou AEL
+            if(parent.COTemplateTypeIn(parent.MTE)
+                || parent.COTemplateTypeIn(parent.AEL)){
+                //adiciona a função do botão addElement
+                $("#"+pieceID+"> div > button.newElement").click(function(){
+                    parent.addElement();
+                });
+                if(parent.COTemplateTypeIn(parent.AEL)){
+                //$('#'+pieceID+'_query').sortable();
+                //$('#'+pieceID+'_query').disableSelection();
+                //$('#'+pieceID+'_query_resp').sortable();
+                //$('#'+pieceID+'_query_resp').disableSelection();
                 
+                }
+            //se template for PRE ou TXT
+            }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)){
+                //altera a seleção de piece
+                parent.changePiece($('#'+pieceID));
+                var iddb =  $('#'+pieceID).attr('idbd');
+                if( !this.isset(iddb) ) {
+                    //adiciona um elemento neste piece se for uma Nova Piece
+                    parent.addElement();
+                }
             }
-        //se template for PRE
-        }else if(parent.COTemplateTypeIn(parent.PRE)){
-            //altera a seleção de piece
-            parent.changePiece($('#'+pieceID));
-            var iddb =  $('#'+pieceID).attr('idbd');
-            if( !this.isset(iddb) ) {
-                //adiciona um elemento neste piece se for uma Nova Piece
-                parent.addElement();
-            }
-        }
         
-        //adiciona a função do botão delPiece
-        $("#"+pieceID+"> button.delPiece").click(function(){
-            parent.delPiece(pieceID);
-        });
+            //adiciona a função do botão delPiece
+            $("#"+pieceID+"> button.delPiece").click(function(){
+                parent.delPiece(pieceID);
+            });
+        }
     }
     
     this.addText = function(ID, loaddata, idbd){       
@@ -211,11 +216,18 @@ function editor () {
         if(this.isset(idbd)){
             plus += 'idbd="'+idbd+'" updated="'+0+'"'; 
         }
-
-        var parent = this;
+        var parent = this;    
         
-        var html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+
-        '<font class="editable" id="'+ID+'_flag">'+initial_text+'</font>';
+        //=============  Edit or TextArea =============
+        var input_text = "";
+        if(parent.COTemplateTypeIn(parent.TXT)) {
+            input_text+= "<textarea name='"+ID+"_flag' class='TXT' id='"+ID+"_flag' style='width:100%' > </textarea>";
+            
+        }else{
+            input_text+='<font class="editable" id="'+ID+'_flag">'+initial_text+'</font>';
+        }          
+        
+        var html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+ input_text;
         if(parent.COTemplateTypeIn(parent.MTE)){
             html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
         } else if(parent.COTemplateTypeIn(parent.PRE)){
@@ -224,9 +236,14 @@ function editor () {
         
         html += '</div>';
         $('#'+ID).append(html);
-             
+        //Para os textarea !
+        tinymce.init({
+            selector: "textarea#"+ID+"_flag"
+        }); 
+        
         var text_element = "#"+ID;
         var text_div = "#"+ID+"_text";
+             
         var editable = text_div+" > font.editable";
         var value_txt = "#"+ID+"_flag.editable";
         $(text_div+" > button.delText").click(function(){
@@ -289,7 +306,6 @@ function editor () {
             $(input).focus();
             
         });
-        
     }
     
     this.addUploadForm = function(ID, type, responseFunction, loaddata){
@@ -574,7 +590,8 @@ function editor () {
             $(buttonDelID).click(function(){
                 parent.delElement(elementID);
             });
-        }else if(parent.COTemplateTypeIn(parent.PRE) && (!this.isset(loaddata))){
+        }else if((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT))
+            && (!this.isset(loaddata))){
             parent.addText(elementID);
         }
     }
@@ -990,7 +1007,12 @@ function editor () {
                                             if(parent.existID(ElementTextID)){
                                                 //Salva Elemento
                                                 data["typeID"] = TYPE.ELEMENT.TEXT;
-                                                data["value"] = $(ElementTextID+" > font").html();
+                                                if(parent.COTemplateTypeIn(parent.TXT)) {
+                                                    data["value"] = $('body',$('#'+ElementID+'_flag_ifr').contents()).html();                                                                                                        
+                                                   
+                                                }else{
+                                                    data["value"] = $(ElementTextID+" > font").html();
+                                                }
                                                 parent.saveData(
                                                     //Variáveis dados
                                                     data,
@@ -1163,29 +1185,29 @@ function editor () {
                 (parent.isload && parent.load_totalElements == parent.uploadedElements && 
                     parent.uploadedFlags == parent.load_totalElements_Invert))){
             //===========Envia solicitação de COMMIT==============//
-//            $.ajax({
-//                type: "POST",
-//                url: "/Editor/Json",
-//                dataType: 'json',
-//                data: {op:'finish'},
-//                beforeSend: function(jqXHR, settings ){
-//                        $('.savescreen').append('<br><p>Concluíndo as Operações...</p>');                              
-//                },
-//                error: function( jqXHR, textStatus, errorThrown ){             
-//                    $('.savescreen').append('<br><p>Erro ao Concluir as Operações!...</p>');    
-//                
-//                    $('.savescreen').append('<br><p>Error mensage:</p>');
-//                    $('.savescreen').append(jqXHR.responseText);
-//                },
-//                success: function(response, textStatus, jqXHR){
-//                    $('.savescreen').append(' <br><p> Operações Concluídas! </p>'); 
+            //            $.ajax({
+            //                type: "POST",
+            //                url: "/Editor/Json",
+            //                dataType: 'json',
+            //                data: {op:'finish'},
+            //                beforeSend: function(jqXHR, settings ){
+            //                        $('.savescreen').append('<br><p>Concluíndo as Operações...</p>');                              
+            //                },
+            //                error: function( jqXHR, textStatus, errorThrown ){             
+            //                    $('.savescreen').append('<br><p>Erro ao Concluir as Operações!...</p>');    
+            //                
+            //                    $('.savescreen').append('<br><p>Error mensage:</p>');
+            //                    $('.savescreen').append(jqXHR.responseText);
+            //                },
+            //                success: function(response, textStatus, jqXHR){
+            //                    $('.savescreen').append(' <br><p> Operações Concluídas! </p>'); 
                     
-                    //chama o posEditor
-                    $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                    parent.posEditor(); 
+            //chama o posEditor
+            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
+            parent.posEditor(); 
                     
-//                }
-//            });
+        //                }
+        //            });
         //=======================================================
              
         } 
