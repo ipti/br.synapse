@@ -160,12 +160,14 @@ function editor () {
             if(parent.COTemplateTypeIn(parent.MTE) ){
                 html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
             //Se o template for PRE
-            }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT) ){
+            }else if(parent.COTemplateTypeIn(parent.PRE)){
                 html+= '<div class="tplMulti"></div>';
             }else if(parent.COTemplateTypeIn(parent.AEL)){
                 html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
                 "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
                 "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
+            }else if(parent.COTemplateTypeIn(parent.TXT)){
+                html+= '<div class="tplTxt" ></div>';
             }
             //finaliza o html
             html+= '</li>';
@@ -207,21 +209,27 @@ function editor () {
         }
     }
     
-    this.addText = function(ID, loaddata, idbd){       
+    this.addText = function(ID, loaddata, idbd){
         //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
+        var parent = this;   
         var txt0 = LABEL_INITIAL_TEXT;
-        var initial_text = this.isset(loaddata) ? loaddata['text'] : txt0;
+        var initial_text;
+        if(parent.COTemplateTypeIn(parent.TXT)) {
+           initial_text = this.isset(loaddata) ? loaddata['text'] : ""; 
+        }else{
+            initial_text = this.isset(loaddata) ? loaddata['text'] : txt0;
+        }
         var plus = "";
         //se estiver setado o novo id
         if(this.isset(idbd)){
             plus += 'idbd="'+idbd+'" updated="'+0+'"'; 
         }
-        var parent = this;    
+         
         
         //=============  Edit or TextArea =============
         var input_text = "";
         if(parent.COTemplateTypeIn(parent.TXT)) {
-            input_text+= "<textarea name='"+ID+"_flag' class='TXT' id='"+ID+"_flag' style='width:100%' > </textarea>";
+            input_text+= "<textarea name='"+ID+"_flag' class='TXT' id='"+ID+"_flag' style='width:100%' >"+initial_text+"</textarea>";
             
         }else{
             input_text+='<font class="editable" id="'+ID+'_flag">'+initial_text+'</font>';
@@ -235,77 +243,88 @@ function editor () {
         } 
         
         html += '</div>';
-        $('#'+ID).append(html);
-        //Para os textarea !
-        tinymce.init({
-            selector: "textarea#"+ID+"_flag"
-        }); 
-        
+        $('#'+ID).append(html);  
         var text_element = "#"+ID;
         var text_div = "#"+ID+"_text";
+        
+        if(parent.COTemplateTypeIn(parent.TXT)) {
+            //Para os textarea !      
+            tinymce.init({
+                selector: "textarea#"+ID+"_flag"
+            });            
+                  
+        }else{     
              
-        var editable = text_div+" > font.editable";
-        var value_txt = "#"+ID+"_flag.editable";
-        $(text_div+" > button.delText").click(function(){
-            parent.delObject(ID+"_text");
-        });
-        $(editable).editable(function(value, settings) { 
-            //console.log(this);
-            //console.log(value);
-            //console.log(settings);
-            return(value);
-        },{ //save function(or page)
-            submitdata  : {
-                op: "save"
-            },     //$_POST['op'] on save
-            id      : "elementID",          //$_POST['elementID'] on save
-            name    : "newValue",           //$_POST['newValue'] on save
-            type    : "text",               //input type ex: text, textarea, select
-            submit  : "Update",
-            cancel  : "Calcel",
-            //loadurl : "/editor/json",       //load function(or page), json
-            loadtype: "POST",                 //Load method
-            loaddata: {
-                op: "load"
-            },         //$_POST['op'] on load
-            indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
-            tooltip   : initial_text
-        });      
-        //Quando clicar no editable
-        $(editable).on('click',function(){ 
-            var form = editable+" > form";
-            var input = form+" > input";
-            var submit = form+" > button[type=submit]";
-            //adiciona a função de foco ao input
-            $(input).on("focus",function(){
-                //se o valor for igual ao initial_text
-                if($(input).val() == initial_text && initial_text == txt0){
-                    //remove o texto
-                    $(input).val("");
-                }
+            var editable = text_div+" > font.editable";
+            var value_txt = "#"+ID+"_flag.editable";  
+            $(text_div+" > button.delText").click(function(){
+                parent.delObject(ID+"_text");
             });
-            //adiciona a função de perda de foco do input
-            $(input).on("focusout",function(){
-                //se não houver textoo
-                if($(input).val() == ""){
-                    //adiciona o texto initial_text
-                    $(input).val(initial_text);
-                }
-                //da submit no formulário
-                $(form).submit();
-                //Verificar se foi Alterado em relação a do DB 
-                if(initial_text != $(value_txt).text()) {      
-                    $(text_element).attr('updated',1); // Fora Alterado!
-                    $(text_div).attr('updated',1); 
-                }else{                  
-                    $(text_element).attr('updated',0); // NÃO foi alterado!
-                    $(text_div).attr('updated',0); 
-                }
-            });
-            //seta o foco no input
-            $(input).focus();
+            $(editable).editable(function(value, settings) { 
+                //console.log(this);
+                //console.log(value);
+                //console.log(settings);
+                return(value);
+            },{ //save function(or page)
+                submitdata  : {
+                    op: "save"
+                },     //$_POST['op'] on save
+                id      : "elementID",          //$_POST['elementID'] on save
+                name    : "newValue",           //$_POST['newValue'] on save
+                type    : "text",               //input type ex: text, textarea, select
+                submit  : "Update",
+                cancel  : "Calcel",
+                //loadurl : "/editor/json",       //load function(or page), json
+                loadtype: "POST",                 //Load method
+                loaddata: {
+                    op: "load"
+                },         //$_POST['op'] on load
+                indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
+                tooltip   : initial_text
+            });      
+            //Quando clicar no editable
+            $(editable).on('click',function(){ 
+                var form = editable+" > form";
+                var input = form+" > input";
+                var submit = form+" > button[type=submit]";
+                //adiciona a função de foco ao input
+                $(input).on("focus",function(){
+                    //se o valor for igual ao initial_text
+                    if($(input).val() == initial_text && initial_text == txt0){
+                        //remove o texto
+                        $(input).val("");
+                    }
+                });
+                //adiciona a função de perda de foco do input
+                $(input).on("focusout",function(){
+                    //se não houver textoo
+                    if($(input).val() == ""){
+                        //adiciona o texto initial_text
+                        $(input).val(initial_text);
+                    }
+                    //da submit no formulário
+                    $(form).submit();
+                    //Verificar se foi Alterado em relação a do DB             
+                    parent.textChanged(initial_text, value_txt, text_element, text_div );
+                
+                });
+                //seta o foco no input
+                $(input).focus();
             
-        });
+            });
+        }
+    }
+    
+    //Verificar se foi Alterado em relação a do DB
+    this.textChanged = function(initial_text, value_txt, text_element, text_div ){ 
+        value_txt = (this.COTemplateTypeIn(this.TXT)) ? value_txt : $(value_txt).text();
+        if(initial_text != value_txt) {      
+            $(text_element).attr('updated',1); // Fora Alterado!
+            $(text_div).attr('updated',1); 
+        }else{                  
+            $(text_element).attr('updated',0); // NÃO foi alterado!
+            $(text_div).attr('updated',0); 
+        }
     }
     
     this.addUploadForm = function(ID, type, responseFunction, loaddata){
@@ -396,7 +415,8 @@ function editor () {
                 }else{
                     alert(ERROR_INCOMPATIBLE_TYPE);
                 }
-            }else{
+            }
+            else{
                 alert(ERROR_FILE_SIZE +uploadMaxSize+'MB');
             }
             
@@ -499,9 +519,13 @@ function editor () {
             
         }
     
-        if(!(parent.COTemplateTypeIn(parent.AEL))){
+        if(!(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.TXT) )){
             html += '</span>';
             $('#'+parent.currentPiece+" > div.tplMulti").append(html);
+        }else if(parent.COTemplateTypeIn(parent.TXT)){
+            // Se for TXT
+            html += '</span>';
+            $('#'+parent.currentPiece+" > div.tplTxt").append(html);
         }
         
         if(this.isset(loaddata)){
@@ -966,6 +990,19 @@ function editor () {
                                     $('#'+curretPieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
                                         ElementID_BD = $(this).attr('idBD');
+                                    
+                                        if(parent.COTemplateTypeIn(parent.TXT)) {
+                                            var text_element = '#'+ ElementID;
+                                            var txt_BD = $(text_element+"_flag").val() ;
+                                            var txt_NEW = $("body", $(text_element+"_flag_ifr").contents()).html();
+                                            var text_div = text_element+'_text';                 
+                                            //Verificar se foi Alterado em relação a do DB        
+                                            parent.textChanged(txt_BD, txt_NEW, text_element, text_div );
+                                            //Atualizar a variável load_totalElements & Invert
+                                            parent.load_totalElements = $('.element[updated="1"]').size();
+                                            parent.load_totalElements_Invert = $('.element[updated="0"]').size();
+                                        }                                                               
+                                    
                                         ElementFlag_Updated = $(this).attr('updated');
                                         Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
                                         Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);
