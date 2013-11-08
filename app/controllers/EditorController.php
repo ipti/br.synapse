@@ -245,8 +245,12 @@ class EditorController extends Controller {
         $IDActGoal = (isset($actGoal_id) ? $actGoal_id : -1);
         //Selecionando ou não algum Degree
         //==========Editar os Cobjects Existentes - As atividades========//
+        //context = CobjectData  ; name = goal_id
+        $context = "CobjectData";
+        $name = "goal_id";
+        $Cobj_met_typeID = $this->getTypeIDbyName_Context($context, $name);
         $cobject_metadata = Yii::app()->db->createCommand('SELECT cobject_id FROM cobject_metadata
-            WHERE value = ' . $IDActGoal)->queryAll();
+            WHERE type_id ='. $Cobj_met_typeID .' AND  value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata);
         if ($count_CobjMdata > 0) {
             $str2 = "<div id='showCobjectIDs' align='left'>
@@ -254,8 +258,19 @@ class EditorController extends Controller {
                 <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
                 <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for ($i = 0; $i < $count_CobjMdata; $i++) {
+                $First_screen = EditorScreen::model()->findByAttributes(array('cobject_id' => $cobject_metadata[$i]['cobject_id']));
+                if(isset($First_screen)){
+                    //Existe Pelo menos uma Screen
+                    $First_screen_pieceSet = EditorScreenPieceset::model()->findByAttributes(
+                            array('screen_id'=>$First_screen->id));
+                    if(isset($First_screen_pieceSet)){
+                        //Existe Pelo Menos Um PieceSet
+                        $First_pieceSet = EditorPieceset::model()->findByPk($First_screen_pieceSet->pieceset_id);
+                    }
+                }
+                $innerHtml = isset($First_pieceSet) ? $cobject_metadata[$i]['cobject_id']." ['". $First_pieceSet->description ."']" : $cobject_metadata[$i]['cobject_id'];
                 $str2.= "<option value=" . $cobject_metadata[$i]['cobject_id'] . ">"
-                        . $cobject_metadata[$i]['cobject_id'] . "</option>";
+                        . $innerHtml . "</option>";
             }
             $str2.= "</select>
                     <input type='hidden' name='op' value='load'> 
