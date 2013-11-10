@@ -8,7 +8,10 @@ class EditorController extends Controller {
     public $TYPE_LIBRARY_IMAGE = "IMAGE";
     public $TYPE_LIBRARY_SOUND = "SOUND";
     public $TYPE_LIBRARY_MOVIE = "MOVIE";
+    //==== Transaction Variable-  ====//
+   // private $transaction;
 
+    //=================================
     /**
      * @return array action filters
      */
@@ -179,7 +182,7 @@ class EditorController extends Controller {
                         $count_Agoal_d = count($actGoal_d);
                         // No mínimo possui 1 registro
                         $str.= "<div id='propertyAgoal' class='propertyAgoal' align='center'>
-                      <br> Nível&nbsp;:&nbsp;
+                      <br> Objetivo&nbsp;:&nbsp;
                       <select id='actGoal' name='actGoal' style='width:430px'> ";
                         for ($i = 0; $i < $count_Agoal_d; $i++) {
                             $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
@@ -215,7 +218,7 @@ class EditorController extends Controller {
                      WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $idDegree)->queryAll();
                 $count_Agoal_d = count($actGoal_d);
                 // No mínimo possui 1 registro
-                $str = "<br> Nível&nbsp;:&nbsp;
+                $str = "<br> Objetivo&nbsp;:&nbsp;
                       <select id='actGoal' name='actGoal' style='width:430px'> ";
                 for ($i = 0; $i < $count_Agoal_d; $i++) {
                     $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
@@ -242,8 +245,12 @@ class EditorController extends Controller {
         $IDActGoal = (isset($actGoal_id) ? $actGoal_id : -1);
         //Selecionando ou não algum Degree
         //==========Editar os Cobjects Existentes - As atividades========//
+        //context = CobjectData  ; name = goal_id
+        $context = "CobjectData";
+        $name = "goal_id";
+        $Cobj_met_typeID = $this->getTypeIDbyName_Context($context, $name);
         $cobject_metadata = Yii::app()->db->createCommand('SELECT cobject_id FROM cobject_metadata
-            WHERE value = ' . $IDActGoal)->queryAll();
+            WHERE type_id ='. $Cobj_met_typeID .' AND  value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata);
         if ($count_CobjMdata > 0) {
             $str2 = "<div id='showCobjectIDs' align='left'>
@@ -251,8 +258,19 @@ class EditorController extends Controller {
                 <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
                 <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for ($i = 0; $i < $count_CobjMdata; $i++) {
+                $First_screen = EditorScreen::model()->findByAttributes(array('cobject_id' => $cobject_metadata[$i]['cobject_id']));
+                if(isset($First_screen)){
+                    //Existe Pelo menos uma Screen
+                    $First_screen_pieceSet = EditorScreenPieceset::model()->findByAttributes(
+                            array('screen_id'=>$First_screen->id));
+                    if(isset($First_screen_pieceSet)){
+                        //Existe Pelo Menos Um PieceSet
+                        $First_pieceSet = EditorPieceset::model()->findByPk($First_screen_pieceSet->pieceset_id);
+                    }
+                }
+                $innerHtml = isset($First_pieceSet) ? $cobject_metadata[$i]['cobject_id']." ['". $First_pieceSet->description ."']" : $cobject_metadata[$i]['cobject_id'];
                 $str2.= "<option value=" . $cobject_metadata[$i]['cobject_id'] . ">"
-                        . $cobject_metadata[$i]['cobject_id'] . "</option>";
+                        . $innerHtml . "</option>";
             }
             $str2.= "</select>
                     <input type='hidden' name='op' value='load'> 
@@ -267,15 +285,33 @@ class EditorController extends Controller {
     public function actionJson() {
         $json = array();
         if (isset($_POST['op'])) {
+//            if (!isset($this->transaction) && $_POST['op'] != 'load') {
+//                //Criar Nova Transação
+//                //======================
+//                $this->transaction = Yii::app()->db->beginTransaction();
+//                //======================
+//            }
+            
+//            if ($_POST['op'] == 'finish') {
+//                try {
+//                    var_dump($this->transaction);exit();
+//                    $this->transaction->commit();
+//                    
+//                } catch (Exception $e) {
+//                    $this->transaction->rollback();
+//                    throw $e;
+//                }
+//            }else
+            
+                if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
 
-            if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
                 switch ($_POST['step']) {
                     case "CObject":
-                        if (isset($_POST['COtypeID']) && isset($_POST['COthemeID'])
+                        if (isset($_POST['COtypeID']) 
                                 && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])) {
                             $typeID = $_POST['COtypeID'];
                             $templateID = $_POST['COtemplateType'];
-                            $themeID = $_POST['COthemeID'];
+                            $themeID = ($_POST['COthemeID']!='-1') ? $_POST['COthemeID'] : NULL;
                             $goalID = $_POST['COgoalID'];
 
                             $newCobject = new Cobject();
@@ -733,7 +769,7 @@ class EditorController extends Controller {
                         $type = $ls[0];
                         $id = str_replace($type, '', $ls);
                     }
-                    
+
                     switch ($type) {
                         case 'S':$this->delScreen($id);
                             break;
@@ -745,11 +781,11 @@ class EditorController extends Controller {
                             $expl_element = explode('P', $id);
                             $id_element = $expl_element[0];
                             $id_piece = $expl_element[1];
-                            $delAll_Ok = (!$this->delElement($id_element, $id_piece)) ? false : $delAll_Ok ;
+                            $delAll_Ok = (!$this->delElement($id_element, $id_piece)) ? false : $delAll_Ok;
                     }
                 endforeach;
-                if(!$delAll_Ok) {
-                   throw new Exception("ERROR: NEM Todos os Objectos solicitados para deleção foram Deletados!<br>"); 
+                if (!$delAll_Ok) {
+                    throw new Exception("ERROR: NEM Todos os Objectos solicitados para deleção foram Deletados!<br>");
                 }
                 //--------------------------
             } else {
@@ -815,7 +851,7 @@ class EditorController extends Controller {
             $delete_piece = EditorPiece::model()->findByPk($id);
             $delete_piece->delete();
         }
-        
+
         return $delpiece;
     }
 

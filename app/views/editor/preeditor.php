@@ -61,6 +61,7 @@
           <div id='propertyCthem'  > 
           Tema&nbsp;:&nbsp;
           <select id='cobjectTheme' name='cobjectTheme'> 
+              <option value =""> SEM TEMA </option> 
            <?php   
             for ($i = 0; $i < $count_Cthem; $i++) {
                 echo "<option value=" . $cobjectTheme[$i]['ID'] . ">" . $cobjectTheme[$i]['name'] . "</option>" ; 

@@ -30,7 +30,8 @@ function editor () {
     this.uploadedLibraryIDs = new Array();
     this.isload = false;
     this.orderDelets = [];
-    this.TXT = new Array(2);
+    this.TXT = new Array();
+    this.TXT.push(2);
     this.MTE = new Array(3,4,5,6);
     this.PRE = new Array(7,8,9,10,11,12);
     this.AEL = new Array(13,14,15);
@@ -47,6 +48,7 @@ function editor () {
     }
     
     this.addScreen = function(id){
+        
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = "";
         //se estiver setado o novo id
@@ -132,90 +134,108 @@ function editor () {
     
     this.addPiece = function(id, idbd){
         var parent = this;
-        
-        //variável para adição do ID do banco, se ele não existir ficará vazio.
-        var plus = "";
-        //se estiver setado o novo id
-        if(this.isset(idbd)){
-            //adiciona o código na varíavel
-            plus = ' idBD="'+idbd+'" ';
-        }
-        
         var PieceSetid = id.replace("pie_", "");
         this.currentPieceSet = PieceSetid;
+        //Se for PRE OU TXT
+        //E Verificar se possui classe Piece dentro deste PieceSet 
+        if( !((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) 
+            && $('#'+PieceSetid+' .piece').length) ) { 
+            //variável para adição do ID do banco, se ele não existir ficará vazio.
+            var plus = "";
+            //se estiver setado o novo id
+            if(this.isset(idbd)){
+                //adiciona o código na varíavel
+                plus = ' idBD="'+idbd+'" ';
+            }   
         
-        //Monta o id do Piece
-        var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
-        //Adiciona na array de contadores
-        this.countElements[pieceID] = 0;
-        //inicia o html do piece
-        var html = ''+
-        '<li id="'+pieceID+'" class="piece" '+plus+'>'+
-        '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>';
-        //Se o Template for MTE
-        if(parent.COTemplateTypeIn(parent.MTE) ){
-            html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
-        //Se o template for PRE
-        }else if(parent.COTemplateTypeIn(parent.PRE)){
-            html+= '<div class="tplMulti"></div>';
-        }else if(parent.COTemplateTypeIn(parent.AEL)){
-            html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
-            "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
-            "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
-        }
-        //finaliza o html
-        html+= '</li>';
-        //appenda o html do piece no pieceset
-        $('#'+PieceSetid).append(html);
+            //Monta o id do Piece
+            var pieceID = this.currentPieceSet+'_p'+this.countPieces[this.currentPieceSet];
+            //Adiciona na array de contadores
+            this.countElements[pieceID] = 0;
+            //inicia o html do piece
+            var html = ''+
+            '<li id="'+pieceID+'" class="piece" '+plus+'>'+
+            '<button class="del delPiece">'+LABEL_REMOVE_PIECE+'</button>';
+            //Se o Template for MTE
+            if(parent.COTemplateTypeIn(parent.MTE) ){
+                html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
+            //Se o template for PRE
+            }else if(parent.COTemplateTypeIn(parent.PRE)){
+                html+= '<div class="tplMulti"></div>';
+            }else if(parent.COTemplateTypeIn(parent.AEL)){
+                html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
+                "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
+                "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
+            }else if(parent.COTemplateTypeIn(parent.TXT)){
+                html+= '<div class="tplTxt" ></div>';
+            }
+            //finaliza o html
+            html+= '</li>';
+            //appenda o html do piece no pieceset
+            $('#'+PieceSetid).append(html);
         
-        //incrementa o contador de piece
-        this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
+            //incrementa o contador de piece
+            this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
         
-        //se template for MTE
-        if(parent.COTemplateTypeIn(parent.MTE)
-            || parent.COTemplateTypeIn(parent.AEL)){
-            //adiciona a função do botão addElement
-            $("#"+pieceID+"> div > button.newElement").click(function(){
-                parent.addElement();
-            });
-            if(parent.COTemplateTypeIn(parent.AEL)){
-            //$('#'+pieceID+'_query').sortable();
-            //$('#'+pieceID+'_query').disableSelection();
-            //$('#'+pieceID+'_query_resp').sortable();
-            //$('#'+pieceID+'_query_resp').disableSelection();
+            //se template for MTE ou AEL
+            if(parent.COTemplateTypeIn(parent.MTE)
+                || parent.COTemplateTypeIn(parent.AEL)){
+                //adiciona a função do botão addElement
+                $("#"+pieceID+"> div > button.newElement").click(function(){
+                    parent.addElement();
+                });
+                if(parent.COTemplateTypeIn(parent.AEL)){
+                //$('#'+pieceID+'_query').sortable();
+                //$('#'+pieceID+'_query').disableSelection();
+                //$('#'+pieceID+'_query_resp').sortable();
+                //$('#'+pieceID+'_query_resp').disableSelection();
                 
+                }
+            //se template for PRE ou TXT
+            }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)){
+                //altera a seleção de piece
+                parent.changePiece($('#'+pieceID));
+                var iddb =  $('#'+pieceID).attr('idbd');
+                if( !this.isset(iddb) ) {
+                    //adiciona um elemento neste piece se for uma Nova Piece
+                    parent.addElement();
+                }
             }
-        //se template for PRE
-        }else if(parent.COTemplateTypeIn(parent.PRE)){
-            //altera a seleção de piece
-            parent.changePiece($('#'+pieceID));
-            var iddb =  $('#'+pieceID).attr('idbd');
-            if( !this.isset(iddb) ) {
-                //adiciona um elemento neste piece se for uma Nova Piece
-                parent.addElement();
-            }
-        }
         
-        //adiciona a função do botão delPiece
-        $("#"+pieceID+"> button.delPiece").click(function(){
-            parent.delPiece(pieceID);
-        });
+            //adiciona a função do botão delPiece
+            $("#"+pieceID+"> button.delPiece").click(function(){
+                parent.delPiece(pieceID);
+            });
+        }
     }
     
-    this.addText = function(ID, loaddata, idbd){       
+    this.addText = function(ID, loaddata, idbd){
         //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
+        var parent = this;   
         var txt0 = LABEL_INITIAL_TEXT;
-        var initial_text = this.isset(loaddata) ? loaddata['text'] : txt0;
+        var initial_text;
+        if(parent.COTemplateTypeIn(parent.TXT)) {
+           initial_text = this.isset(loaddata) ? loaddata['text'] : ""; 
+        }else{
+            initial_text = this.isset(loaddata) ? loaddata['text'] : txt0;
+        }
         var plus = "";
         //se estiver setado o novo id
         if(this.isset(idbd)){
             plus += 'idbd="'+idbd+'" updated="'+0+'"'; 
         }
-
-        var parent = this;
+         
         
-        var html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+
-        '<font class="editable" id="'+ID+'_flag">'+initial_text+'</font>';
+        //=============  Edit or TextArea =============
+        var input_text = "";
+        if(parent.COTemplateTypeIn(parent.TXT)) {
+            input_text+= "<textarea name='"+ID+"_flag' class='TXT' id='"+ID+"_flag' style='width:100%' >"+initial_text+"</textarea>";
+            
+        }else{
+            input_text+='<font class="editable" id="'+ID+'_flag">'+initial_text+'</font>';
+        }          
+        
+        var html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+ input_text;
         if(parent.COTemplateTypeIn(parent.MTE)){
             html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
         } else if(parent.COTemplateTypeIn(parent.PRE)){
@@ -223,73 +243,88 @@ function editor () {
         } 
         
         html += '</div>';
-        $('#'+ID).append(html);
-             
+        $('#'+ID).append(html);  
         var text_element = "#"+ID;
         var text_div = "#"+ID+"_text";
-        var editable = text_div+" > font.editable";
-        var value_txt = "#"+ID+"_flag.editable";
-        $(text_div+" > button.delText").click(function(){
-            parent.delObject(ID+"_text");
-        });
-        $(editable).editable(function(value, settings) { 
-            //console.log(this);
-            //console.log(value);
-            //console.log(settings);
-            return(value);
-        },{ //save function(or page)
-            submitdata  : {
-                op: "save"
-            },     //$_POST['op'] on save
-            id      : "elementID",          //$_POST['elementID'] on save
-            name    : "newValue",           //$_POST['newValue'] on save
-            type    : "text",               //input type ex: text, textarea, select
-            submit  : "Update",
-            cancel  : "Calcel",
-            //loadurl : "/editor/json",       //load function(or page), json
-            loadtype: "POST",                 //Load method
-            loaddata: {
-                op: "load"
-            },         //$_POST['op'] on load
-            indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
-            tooltip   : initial_text
-        });      
-        //Quando clicar no editable
-        $(editable).on('click',function(){ 
-            var form = editable+" > form";
-            var input = form+" > input";
-            var submit = form+" > button[type=submit]";
-            //adiciona a função de foco ao input
-            $(input).on("focus",function(){
-                //se o valor for igual ao initial_text
-                if($(input).val() == initial_text && initial_text == txt0){
-                    //remove o texto
-                    $(input).val("");
-                }
-            });
-            //adiciona a função de perda de foco do input
-            $(input).on("focusout",function(){
-                //se não houver textoo
-                if($(input).val() == ""){
-                    //adiciona o texto initial_text
-                    $(input).val(initial_text);
-                }
-                //da submit no formulário
-                $(form).submit();
-                //Verificar se foi Alterado em relação a do DB 
-                if(initial_text != $(value_txt).text()) {      
-                    $(text_element).attr('updated',1); // Fora Alterado!
-                    $(text_div).attr('updated',1); 
-                }else{                  
-                    $(text_element).attr('updated',0); // NÃO foi alterado!
-                    $(text_div).attr('updated',0); 
-                }
-            });
-            //seta o foco no input
-            $(input).focus();
-            
-        });
         
+        if(parent.COTemplateTypeIn(parent.TXT)) {
+            //Para os textarea !      
+            tinymce.init({
+                selector: "textarea#"+ID+"_flag"
+            });            
+                  
+        }else{     
+             
+            var editable = text_div+" > font.editable";
+            var value_txt = "#"+ID+"_flag.editable";  
+            $(text_div+" > button.delText").click(function(){
+                parent.delObject(ID+"_text");
+            });
+            $(editable).editable(function(value, settings) { 
+                //console.log(this);
+                //console.log(value);
+                //console.log(settings);
+                return(value);
+            },{ //save function(or page)
+                submitdata  : {
+                    op: "save"
+                },     //$_POST['op'] on save
+                id      : "elementID",          //$_POST['elementID'] on save
+                name    : "newValue",           //$_POST['newValue'] on save
+                type    : "text",               //input type ex: text, textarea, select
+                submit  : "Update",
+                cancel  : "Calcel",
+                //loadurl : "/editor/json",       //load function(or page), json
+                loadtype: "POST",                 //Load method
+                loaddata: {
+                    op: "load"
+                },         //$_POST['op'] on load
+                indicator : 'Saving...',        //HTML witch indicates the save process ex: <img src="img/indicator.gif">
+                tooltip   : initial_text
+            });      
+            //Quando clicar no editable
+            $(editable).on('click',function(){ 
+                var form = editable+" > form";
+                var input = form+" > input";
+                var submit = form+" > button[type=submit]";
+                //adiciona a função de foco ao input
+                $(input).on("focus",function(){
+                    //se o valor for igual ao initial_text
+                    if($(input).val() == initial_text && initial_text == txt0){
+                        //remove o texto
+                        $(input).val("");
+                    }
+                });
+                //adiciona a função de perda de foco do input
+                $(input).on("focusout",function(){
+                    //se não houver textoo
+                    if($(input).val() == ""){
+                        //adiciona o texto initial_text
+                        $(input).val(initial_text);
+                    }
+                    //da submit no formulário
+                    $(form).submit();
+                    //Verificar se foi Alterado em relação a do DB             
+                    parent.textChanged(initial_text, value_txt, text_element, text_div );
+                
+                });
+                //seta o foco no input
+                $(input).focus();
+            
+            });
+        }
+    }
+    
+    //Verificar se foi Alterado em relação a do DB
+    this.textChanged = function(initial_text, value_txt, text_element, text_div ){ 
+        value_txt = (this.COTemplateTypeIn(this.TXT)) ? value_txt : $(value_txt).text();
+        if(initial_text != value_txt) {      
+            $(text_element).attr('updated',1); // Fora Alterado!
+            $(text_div).attr('updated',1); 
+        }else{                  
+            $(text_element).attr('updated',0); // NÃO foi alterado!
+            $(text_div).attr('updated',0); 
+        }
     }
     
     this.addUploadForm = function(ID, type, responseFunction, loaddata){
@@ -380,7 +415,8 @@ function editor () {
                 }else{
                     alert(ERROR_INCOMPATIBLE_TYPE);
                 }
-            }else{
+            }
+            else{
                 alert(ERROR_FILE_SIZE +uploadMaxSize+'MB');
             }
             
@@ -483,9 +519,13 @@ function editor () {
             
         }
     
-        if(!(parent.COTemplateTypeIn(parent.AEL))){
+        if(!(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.TXT) )){
             html += '</span>';
             $('#'+parent.currentPiece+" > div.tplMulti").append(html);
+        }else if(parent.COTemplateTypeIn(parent.TXT)){
+            // Se for TXT
+            html += '</span>';
+            $('#'+parent.currentPiece+" > div.tplTxt").append(html);
         }
         
         if(this.isset(loaddata)){
@@ -574,7 +614,8 @@ function editor () {
             $(buttonDelID).click(function(){
                 parent.delElement(elementID);
             });
-        }else if(parent.COTemplateTypeIn(parent.PRE) && (!this.isset(loaddata))){
+        }else if((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT))
+            && (!this.isset(loaddata))){
             parent.addText(elementID);
         }
     }
@@ -812,7 +853,7 @@ function editor () {
                 //função sucess do saveData-DelAll
                 function(response, textStatus, jqXHR){
                     $('.savescreen').append('<br><p>X Objetos Deletados!...</p>');
-                    });
+                });
             }
             //==================================
             
@@ -853,16 +894,7 @@ function editor () {
                     if(parent.totalScreens == parent.uploadedScreens) {
                         $('.savescreen').append('<br><br><p>Salvou Todas as Screens!</p>');    
                     }
-                    if((parent.totalScreens == parent.uploadedScreens) && 
-                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                        (parent.totalPieces == parent.uploadedPieces) && 
-                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                        //chama o posEditor
-                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                        parent.posEditor();  
-                    }
+                    parent.verify_requestFinish();
                     //Retorna o ID no DOM e o ID da ultima Tela no Banco.
                     curretScreenID = response['DomID'];
                     LastScreenID = response['screenID'];
@@ -902,16 +934,7 @@ function editor () {
                             if(parent.totalPiecesets == parent.uploadedPiecesets) {
                                 $('.savescreen').append('<br><br><p>Salvou Todas as PieceSets!</p>');    
                             }
-                            if((parent.totalScreens == parent.uploadedScreens) && 
-                                (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                (parent.totalPieces == parent.uploadedPieces) && 
-                                ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                    (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                        parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                //chama o posEditor
-                                $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                parent.posEditor();  
-                            }
+                            parent.verify_requestFinish();
                             curretPieceSetID = response['DomID'];
                             LastPieceSetID = response['PieceSetID'];
                             
@@ -955,16 +978,7 @@ function editor () {
                                     //                                        +!parent.isload + parent.totalElements + parent.uploadedElements+
                                     //                                            parent.isload + parent.load_totalElements + parent.uploadedElements);   
                                     //VER : MENSAGEM DE SANVALNDO S,P,PS,E desnecessária no load!
-                                    if((parent.totalScreens == parent.uploadedScreens) && 
-                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                        (parent.totalPieces == parent.uploadedPieces) && 
-                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                        //chama o posEditor
-                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                        parent.posEditor();  
-                                    }
+                                    parent.verify_requestFinish();
                                     
                                     curretPieceID = response['DomID'];
                                     LastPieceID = response['PieceID'];
@@ -976,6 +990,19 @@ function editor () {
                                     $('#'+curretPieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
                                         ElementID_BD = $(this).attr('idBD');
+                                    
+                                        if(parent.COTemplateTypeIn(parent.TXT)) {
+                                            var text_element = '#'+ ElementID;
+                                            var txt_BD = $(text_element+"_flag").val() ;
+                                            var txt_NEW = $("body", $(text_element+"_flag_ifr").contents()).html();
+                                            var text_div = text_element+'_text';                 
+                                            //Verificar se foi Alterado em relação a do DB        
+                                            parent.textChanged(txt_BD, txt_NEW, text_element, text_div );
+                                            //Atualizar a variável load_totalElements & Invert
+                                            parent.load_totalElements = $('.element[updated="1"]').size();
+                                            parent.load_totalElements_Invert = $('.element[updated="0"]').size();
+                                        }                                                               
+                                    
                                         ElementFlag_Updated = $(this).attr('updated');
                                         Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
                                         Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);
@@ -1017,7 +1044,12 @@ function editor () {
                                             if(parent.existID(ElementTextID)){
                                                 //Salva Elemento
                                                 data["typeID"] = TYPE.ELEMENT.TEXT;
-                                                data["value"] = $(ElementTextID+" > font").html();
+                                                if(parent.COTemplateTypeIn(parent.TXT)) {
+                                                    data["value"] = $('body',$('#'+ElementID+'_flag_ifr').contents()).html();                                                                                                        
+                                                   
+                                                }else{
+                                                    data["value"] = $(ElementTextID+" > font").html();
+                                                }
                                                 parent.saveData(
                                                     //Variáveis dados
                                                     data,
@@ -1035,19 +1067,10 @@ function editor () {
                                                         }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
                                                         }
-                                                       // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
-                                                      //  window.alert("Verificar se acabou as requisições...");
+                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
+                                                        //  window.alert("Verificar se acabou as requisições...");
                                                         //Verificar se acabou as requisições
-                                                        if((parent.totalScreens == parent.uploadedScreens) && 
-                                                            (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                            (parent.totalPieces == parent.uploadedPieces) && 
-                                                            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                    parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                            //chama o posEditor
-                                                            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                            parent.posEditor();  
-                                                        }
+                                                        parent.verify_requestFinish();
                                                     
                                                     
                                                     });
@@ -1075,19 +1098,10 @@ function editor () {
                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                               
                                                         }
                                             
-                                                       // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
-                                                       // window.alert("Verificar se acabou as requisições...");
+                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
+                                                        // window.alert("Verificar se acabou as requisições...");
                                                         //Verificar se acabou as requisições
-                                                        if((parent.totalScreens == parent.uploadedScreens) && 
-                                                            (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                            (parent.totalPieces == parent.uploadedPieces) && 
-                                                            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                    parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                            //chama o posEditor
-                                                            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                            parent.posEditor();  
-                                                        }        
+                                                        parent.verify_requestFinish();       
                                                
                                                     });
                                         
@@ -1147,19 +1161,10 @@ function editor () {
                                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
                                                                     }
                                                                
-                                                                  //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
-                                                                   // window.alert("Verificar se acabou as requisições...");
+                                                                    //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
+                                                                    // window.alert("Verificar se acabou as requisições...");
                                                                     //Verificar se acabou as requisições
-                                                                    if((parent.totalScreens == parent.uploadedScreens) && 
-                                                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                                        (parent.totalPieces == parent.uploadedPieces) && 
-                                                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                                        //chama o posEditor
-                                                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                                        parent.posEditor();  
-                                                                    }
+                                                                    parent.verify_requestFinish();
                                                                
                                                                
                                                                 });
@@ -1191,16 +1196,7 @@ function editor () {
                                                        
                                                     //window.alert("Verificar se acabou as requisições..."); Se deixar o contador continua a contar
                                                     //Verificar se acabou as requisições
-                                                    if((parent.totalScreens == parent.uploadedScreens) && 
-                                                        (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                                        (parent.totalPieces == parent.uploadedPieces) && 
-                                                        ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                                                            (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                                                                parent.uploadedFlags == parent.load_totalElements_Invert))){
-                                                        //chama o posEditor
-                                                        $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-                                                        parent.posEditor();  
-                                                    }                                                   
+                                                    parent.verify_requestFinish();                                                   
                                                     
                                                 });
                                         }
@@ -1215,6 +1211,46 @@ function editor () {
         } // End do PosSaveCobject
     //======================     
     } // End Form SaveAll
+    
+    //Verificar se acabou as requisições!
+    this.verify_requestFinish = function() {
+        var parent = this;
+        if((parent.totalScreens == parent.uploadedScreens) && 
+            (parent.totalPiecesets == parent.uploadedPiecesets) &&
+            (parent.totalPieces == parent.uploadedPieces) && 
+            ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
+                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
+                    parent.uploadedFlags == parent.load_totalElements_Invert))){
+            //===========Envia solicitação de COMMIT==============//
+            //            $.ajax({
+            //                type: "POST",
+            //                url: "/Editor/Json",
+            //                dataType: 'json',
+            //                data: {op:'finish'},
+            //                beforeSend: function(jqXHR, settings ){
+            //                        $('.savescreen').append('<br><p>Concluíndo as Operações...</p>');                              
+            //                },
+            //                error: function( jqXHR, textStatus, errorThrown ){             
+            //                    $('.savescreen').append('<br><p>Erro ao Concluir as Operações!...</p>');    
+            //                
+            //                    $('.savescreen').append('<br><p>Error mensage:</p>');
+            //                    $('.savescreen').append(jqXHR.responseText);
+            //                },
+            //                success: function(response, textStatus, jqXHR){
+            //                    $('.savescreen').append(' <br><p> Operações Concluídas! </p>'); 
+                    
+            //chama o posEditor
+            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
+            parent.posEditor(); 
+                    
+        //                }
+        //            });
+        //=======================================================
+             
+        } 
+    }
+    
+    
     
     this.posEditor = function(){
         //quantidade de elementos.
