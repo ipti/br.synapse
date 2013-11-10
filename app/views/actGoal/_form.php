@@ -39,7 +39,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php
             if (isset($modalities)) {
                 foreach ($modalities as $modality) {
-                    echo '<li><input type="hidden" value="' . $modality->modalityID . '" name="ActGoalModality[]">' . $modality->modality->name . ' - <a id="' . $modality->modalityID . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
+                    echo '<li><input type="hidden" value="' . $modality->modality_id . '" name="ActGoalModality[]">' . $modality->modality->name . ' - <a id="' . $modality->modality_id . '" onclick="delItem($(this))" href="javascript:void(0)">' . Yii::t('default', 'Remove') . '</a>';
                 }
             }
             ?>

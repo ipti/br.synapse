@@ -313,7 +313,7 @@ class RenderController extends Controller {
           join act_goal_content a4 on(a3.id=a4.goal_id)
           join act_content a6 on(a6.id=a4.content_id)
           join act_degree a7 on(a3.degree_id=a7.id)";
-        $where = " where a1.id not in('335','356','571','15','431','68','430','641','642','428','647','643','645','71','335','654','76') and a1.status='on' and a7.stage = '2' and (year = '1' or year = '2') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
+        $where = " where a1.id not in('335','356','571','15','431','68','430','641','642','428','647','643','645','71','335','654','76') and a1.status='on' and a7.stage = '2' and (year = '1') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
         /* if (isset($contentsIn) && isset($contentOut)) {
           $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
           } else if (isset($contentsIn) && !isset($contentOut)) {
