@@ -63,17 +63,15 @@ function render () {
         NEWRENDER.startTime = Math.round(+new Date()/1000);
     }
     this.ajaxrecursive = function(id,pos,json){
-        console.log(id);
         var parent = this;
         $.ajax({
             url:"/render/loadcobject",
             data:{
-                ID:741// testar:738
+                ID:id
             },
             type:"POST",
             dataType:"json",
             success:function(response){
-                console.log(response.goal);
                 parent.pctLoad = parent.pctLoad+json.pctitem;
                 parent.progressbar(parent.pctLoad, $('#progressBar'));
                 parent.messageload("Carregando "+response.cobject_type+" "+id+"...",response.goal);
@@ -240,19 +238,19 @@ function render () {
                 NEWRENDER.compute('wrong',$(this),match);
             }
             if($(this).attr('groupid') != 'pairs'){
-                $(this).off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+                $(this).off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0');
                 $(this).parent().addClass('clicked_element').removeClass('click_element');
             }
             var ID = $('#'+NEWRENDER.lastClick).attr('groupid');
             $('.currentScreen .'+ID+' li').css('opacity','1');
             $('.currentScreen .'+ID+' .ielement').on('click',NEWRENDER.matchElement);
             if($(this).attr('groupid') == 'pairs'){
-                $('#'+NEWRENDER.lastClick).css('border','none').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+                $('#'+NEWRENDER.lastClick).css('border','none').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0');
                 $('#'+NEWRENDER.lastClick).parent().addClass('clicked_element').removeClass('click_element');
             }
             NEWRENDER.lastClick = -1;
             if($('.currentScreen .groups li.click_element').length == 0){
-                $('.currentScreen .pairs .ielement').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0.3');
+                $('.currentScreen .pairs .ielement').off('click').addClass('delement').removeClass('ielement').parent().css('opacity','0');
                 if(NEWRENDER.atdID == "exam"){
                     $('.currentScreen').append(NEWRENDER.nextInFuction());
                 }else{
@@ -264,8 +262,8 @@ function render () {
             }
         }else{
             var classID = $(this).attr('groupid');
-            $('.currentScreen .'+classID+' li').css('opacity','0.3');
-            $(this).parent().css('opacity','0.9');
+            $('.currentScreen .'+classID+' li').css('opacity','0');
+            $(this).parent().css('opacity','1');
             $('.currentScreen .'+classID+' .ielement').css('border','none');
             $('.currentScreen .'+classID+' .ielement').off('click');
             $(this).css('border','1px dotted #000');
@@ -409,7 +407,7 @@ function render () {
                             break;
                         case 'sound':
                             blockElement.prepend('<font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font>');
-                            htmElement = $('<object type="application/x-shockwave-flash" data="" width="160" height="20" id="dewplayer-mini"><param name="wmode" value="transparent" /></object>');
+                            htmElement = $('<object type="application/x-shockwave-flash" data="" width="250" height="65" id="dewplayer-mini"><param name="wmode" value="transparent" /></object>');
                             break;
                     }
                     break;
@@ -447,8 +445,8 @@ function render () {
                         htmElement.text(gproperty.value);
                     }else if(gproperty.name == 'src'){
                         if(element.typemulti == 'sound'){
-                            htmElement.attr('data','/rsc/js/player/dewplayer-mini.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3');
-                            htmElement.append('<param name="movie" value="dewplayer-mini.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3" />');
+                            htmElement.attr('data','/rsc/js/player/dewplayer.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3');
+                            htmElement.append('<param name="movie" value="dewplayer.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3" />');
                         }else{
                             htmElement.attr(gproperty.name,'/rsc/library/images/'+gproperty.value);
                         }
