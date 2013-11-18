@@ -215,7 +215,7 @@ function editor () {
         var txt0 = LABEL_INITIAL_TEXT;
         var initial_text;
         if(parent.COTemplateTypeIn(parent.TXT)) {
-           initial_text = this.isset(loaddata) ? loaddata['text'] : ""; 
+            initial_text = this.isset(loaddata) ? loaddata['text'] : ""; 
         }else{
             initial_text = this.isset(loaddata) ? loaddata['text'] : txt0;
         }
@@ -474,6 +474,7 @@ function editor () {
             //adiciona o código na varíavel e também uma flag de alteração
             plus = ' idBD="'+idbd+'" updated="'+0+'"';
             var flag = loaddata['flag'];
+            var match = loaddata['match'];
         }
         
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
@@ -500,22 +501,66 @@ function editor () {
         }else if(parent.COTemplateTypeIn(parent.PRE)){
             html += '<label>'+LABEL_CORRECT+' </label>';
         }else if(parent.COTemplateTypeIn(parent.AEL)){
-            var group = $("#"+parent.currentPiece+"_query > .element").length+1;
-            html = '<li id="'+elementID+'" '+plus+' class="element moptions" match="'+group+'">'+
-            '<div>'+
-            '<spam>('+group+')</spam>'+
-            '<button class="insertImage" group="'+group+'">'+LABEL_ADD_IMAGE+'</button>'+
-            '<button class="insertText" group="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
-            '</div>'+
-            '</li>';
-            var html2 = '<li id="'+elementID+'_resp" class=" .elementresp" match="'+group+'">'+
-            '<div>'+
-            '<spam>('+group+')</spam>'+
-            '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
-            '</div>'+
-            '</li>';
-            $("#"+parent.currentPiece+"_query").append(html);
-            $("#"+parent.currentPiece+"_query_resp").append(html2);
+            var group;
+            var isResp;
+            if(this.isset(match) && match != -1) {
+                // É um load
+                var right_match;
+                right_match = match.split('.')[1];
+                isResp = this.isset(right_match)
+                //If true é a resposta   
+                group = match;
+                var sameElement = false;
+                //Já existe o li[elementID]
+                if(!isResp){
+                    sameElement = $('li[match='+match+']').length == '1';
+                }
+            }else{
+                group = $("#"+parent.currentPiece+"_query > .element").length+1; 
+            }
+            
+            if(!sameElement) {
+                if(!this.isset(isResp) || !isResp){
+                    html = '<li id="'+elementID+'" '+plus+' class="element moptions" match="'+group+'">'+
+                    '<div>'+
+                    '<spam>('+group+')</spam>'+
+                    '<button class="insertImage" match="'+group+'">'+LABEL_ADD_IMAGE+'</button>'+
+                    '<button class="insertText" match="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
+                    '</div>'+
+                    '</li>';           
+                }else{
+                    html = "";  
+                }
+            
+            
+                var isAddTwoElementsAel = false;
+                if(!this.isset(isResp) || isResp) {
+                    if(!this.isset(isResp)){
+                        group += '.1';
+                    }
+                    if(!this.isset(isResp)){
+                        //Então adciona mais 1 no contador de IDS dos elements
+                        this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
+                        elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
+                        isAddTwoElementsAel = true;
+                    }
+                    var html2 = '<li id="'+elementID+'" '+plus+' class="element moptions" match="'+group+'">'+
+                    '<div>'+
+                    '<spam>('+group+')</spam>'+
+                    '<button class="insertText" match="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
+                    '</div>'+
+                    '</li>';
+                }
+                        
+                $("#"+parent.currentPiece+"_query").append(html);
+                if(this.isset(html2)) {
+                    $("#"+parent.currentPiece+"_query_resp").append(html2); 
+                }            
+            
+            }else{
+                //muda o Element para da um append no elemento Pergunta Existente
+                elementID = $('li[match='+match+']').attr('id');
+            }
             
         }
     
@@ -554,8 +599,13 @@ function editor () {
             //console.log(elementID+' '+type+' '+loaddata);
             }
         }
+       
         this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
-        
+        //Verificar se foi adicionado 2 elementos no AEL DE UMA ÚNICA VEZ
+        if(isAddTwoElementsAel){
+            var elementID_Resp = elementID;
+            elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1])-1);   
+        }
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
         var buttonImageID = "#"+elementID+" > div > button.insertImage";
         var buttonDelID = "#"+elementID+" > div > button.delElement";
@@ -565,15 +615,19 @@ function editor () {
         if(parent.COTemplateTypeIn(parent.MTE)
             || parent.COTemplateTypeIn(parent.AEL)){
             if(parent.COTemplateTypeIn(parent.AEL)){
-                var buttonTextoRespID = "#"+elementID+ (parent.COTemplateTypeIn(parent.AEL) ? "_resp" : "") + "> div > button.insertText";
+                //var buttonTextoRespID = "#"+elementID+ (parent.COTemplateTypeIn(parent.AEL) ? "_resp" : "") + "> div > button.insertText";
+                var buttonTextoRespID = "#"+elementID_Resp + "> div > button.insertText";
+                var ElementTextRespID = "#"+elementID_Resp+"_text";
                 //if(parent.COTemplateTypeIn(parent.AEL))
                 //    buttonTextoRespID = "#"+elementID+"_resp > div > button.insertText";
                 //else
                 //    buttonTextoRespID = "#"+elementID+" > div > button.insertText";
                 $(buttonTextoRespID).click(function(){
-                    parent.addText(elementID+"_resp");
-                    $(buttonTextoRespID).remove();
+                    if(!parent.existID(ElementTextRespID)) {
+                        parent.addText(elementID_Resp);
+                    }
                 });
+                
             }
             var buttonTextoID = "#"+elementID+"> div > button.insertText";
             var buttonImageID = "#"+elementID+" > div > button.insertImage";
@@ -586,28 +640,42 @@ function editor () {
             var ElementImageID = "#"+elementID+"_image";
 
             $(buttonTextoID).click(function(){
-                if(parent.COTemplateTypeIn(parent.AEL)){
-                    parent.addText(elementID);
-                    $(buttonTextoID).remove();
-                }
-                else if(!parent.existID(ElementImageID) || 
-                    confirm(MSG_CHANGE_ELEMENT)){
-                    if(!parent.existID(ElementTextID)){
-                        parent.addText(elementID);
-                        $(imageID).remove();
+                //                if(parent.COTemplateTypeIn(parent.AEL)){
+                //                    parent.addText(elementID);
+                //                    $(buttonTextoID).remove();
+                //                }
+                //                else 
+                if(!parent.COTemplateTypeIn(parent.AEL)){
+                    if(!parent.existID(ElementImageID) || 
+                        confirm(MSG_CHANGE_ELEMENT)){
+                        if(!parent.existID(ElementTextID)){
+                            parent.addText(elementID);
+                            $(imageID).remove();                       
+                        }
                     }
+                }else{
+                    if(!parent.existID(ElementTextID)){
+                        parent.addText(elementID);                    
+                    } 
                 }
             });
             $(buttonImageID).click(function(){
-                if(parent.COTemplateTypeIn(parent.AEL)){
-                    parent.addImage(elementID);
-                    $(buttonImageID).remove();
-                }
-                else if(!parent.existID(ElementTextID) ||
-                    confirm(MSG_CHANGE_ELEMENT)){
+                //                if(parent.COTemplateTypeIn(parent.AEL)){
+                //                    parent.addImage(elementID);
+                //                    $(buttonImageID).remove();
+                //                }
+                //                else 
+                if(!parent.COTemplateTypeIn(parent.AEL)){
+                    if(!parent.existID(ElementTextID) ||
+                        confirm(MSG_CHANGE_ELEMENT)){
+                        if(!parent.existID(ElementImageID)){
+                            parent.addImage(elementID);
+                            $(textoID).remove();
+                        }
+                    }
+                }else{
                     if(!parent.existID(ElementImageID)){
                         parent.addImage(elementID);
-                        $(textoID).remove();
                     }
                 }
             });
@@ -1005,8 +1073,7 @@ function editor () {
                                     
                                         ElementFlag_Updated = $(this).attr('updated');
                                         Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
-                                        Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);
-                                        
+                                        Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);                       
                                         //declaração das variáveis que serão passadas por ajax
                                         var type;
                                         var value;
@@ -1018,7 +1085,7 @@ function editor () {
                                         var input_NameDB_ID = "#"+ElementID+"_image_nameDB";
                                         var input_NameCurrent_ID = "#"+ElementID+"_image_input";
                                             
-                                        var ElementRespID = "#"+ElementID+"_resp_text";
+                                        //var ElementRespID = "#"+ElementID+"_resp_text";
                                         
                                       
                                         //Dados que serão passados pelo ajax
@@ -1077,35 +1144,36 @@ function editor () {
                                         
                                             }
                                             //Se for uma Resposta
-                                            if(parent.existID(ElementRespID)){
-                                                //Salva Elemento
-                                                data["typeID"] = TYPE.ELEMENT.TEXT;
-                                                data["value"] = $(ElementRespID+" > font").html();
-                                                parent.saveData(
-                                                    //Variáveis dados
-                                                    data,
-                                                    //Função de sucess do Save Element
-                                                    function(response, textStatus, jqXHR){
-                                                        if(!parent.isload) {
-                                                            $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
-                                                        }else{
-                                                            $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
-                                                        }
-                                                        parent.uploadedElements++;
-                                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                             
-                                                        }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                               
-                                                        }
+                                            //                                            if(parent.existID(ElementRespID)){
+                                            //                                                //Salva Elemento
+                                            //                                                data["typeID"] = TYPE.ELEMENT.TEXT;
+                                            //                                                data["value"] = $(ElementRespID+" > font").html();
+                                            //                                                parent.saveData(
+                                            //                                                    //Variáveis dados
+                                            //                                                    data,
+                                            //                                                    //Função de sucess do Save Element
+                                            //                                                    function(response, textStatus, jqXHR){
+                                            //                                                        if(!parent.isload) {
+                                            //                                                            $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                            //                                                        }else{
+                                            //                                                            $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
+                                            //                                                        }
+                                            //                                                        parent.uploadedElements++;
+                                            //                                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                            //                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                             
+                                            //                                                        }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                            //                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                               
+                                            //                                                        }
+                                            //                                            
+                                            //                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
+                                            //                                                        // window.alert("Verificar se acabou as requisições...");
+                                            //                                                        //Verificar se acabou as requisições
+                                            //                                                        parent.verify_requestFinish();       
+                                            //                                               
+                                            //                                                    });
+                                            //                                        
+                                            //                                            }
                                             
-                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);
-                                                        // window.alert("Verificar se acabou as requisições...");
-                                                        //Verificar se acabou as requisições
-                                                        parent.verify_requestFinish();       
-                                               
-                                                    });
-                                        
-                                            }
                                             //Se for uma Imagem
                                             if(parent.existID(ElementImageID)){
                                                 var doUpload = true;
@@ -1370,6 +1438,7 @@ function editor () {
                                                         //declara a array de dados das propriedades do elemento
                                                         var data = new Array();
                                                         data['flag'] = item['flag'];
+                                                        data['match'] = item['match'];
                                                         //preenchimento do array de dados
                                                         $.each(item, function(i,item){
                                                             if(i.slice(0,1) == "L"){

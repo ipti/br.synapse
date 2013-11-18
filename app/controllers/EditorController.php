@@ -8,9 +8,9 @@ class EditorController extends Controller {
     public $TYPE_LIBRARY_IMAGE = "IMAGE";
     public $TYPE_LIBRARY_SOUND = "SOUND";
     public $TYPE_LIBRARY_MOVIE = "MOVIE";
-    //==== Transaction Variable-  ====//
-   // private $transaction;
 
+    //==== Transaction Variable-  ====//
+    // private $transaction;
     //=================================
     /**
      * @return array action filters
@@ -250,7 +250,7 @@ class EditorController extends Controller {
         $name = "goal_id";
         $Cobj_met_typeID = $this->getTypeIDbyName_Context($context, $name);
         $cobject_metadata = Yii::app()->db->createCommand('SELECT cobject_id FROM cobject_metadata
-            WHERE type_id ='. $Cobj_met_typeID .' AND  value = ' . $IDActGoal)->queryAll();
+            WHERE type_id =' . $Cobj_met_typeID . ' AND  value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata);
         if ($count_CobjMdata > 0) {
             $str2 = "<div id='showCobjectIDs' align='left'>
@@ -259,16 +259,16 @@ class EditorController extends Controller {
                 <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for ($i = 0; $i < $count_CobjMdata; $i++) {
                 $First_screen = EditorScreen::model()->findByAttributes(array('cobject_id' => $cobject_metadata[$i]['cobject_id']));
-                if(isset($First_screen)){
+                if (isset($First_screen)) {
                     //Existe Pelo menos uma Screen
                     $First_screen_pieceSet = EditorScreenPieceset::model()->findByAttributes(
-                            array('screen_id'=>$First_screen->id));
-                    if(isset($First_screen_pieceSet)){
+                            array('screen_id' => $First_screen->id));
+                    if (isset($First_screen_pieceSet)) {
                         //Existe Pelo Menos Um PieceSet
                         $First_pieceSet = EditorPieceset::model()->findByPk($First_screen_pieceSet->pieceset_id);
                     }
                 }
-                $innerHtml = isset($First_pieceSet) ? $cobject_metadata[$i]['cobject_id']." ['". $First_pieceSet->description ."']" : $cobject_metadata[$i]['cobject_id'];
+                $innerHtml = isset($First_pieceSet) ? $cobject_metadata[$i]['cobject_id'] . " ['" . $First_pieceSet->description . "']" : $cobject_metadata[$i]['cobject_id'];
                 $str2.= "<option value=" . $cobject_metadata[$i]['cobject_id'] . ">"
                         . $innerHtml . "</option>";
             }
@@ -291,7 +291,6 @@ class EditorController extends Controller {
 //                $this->transaction = Yii::app()->db->beginTransaction();
 //                //======================
 //            }
-            
 //            if ($_POST['op'] == 'finish') {
 //                try {
 //                    var_dump($this->transaction);exit();
@@ -302,16 +301,16 @@ class EditorController extends Controller {
 //                    throw $e;
 //                }
 //            }else
-            
-                if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
+
+            if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
 
                 switch ($_POST['step']) {
                     case "CObject":
-                        if (isset($_POST['COtypeID']) 
+                        if (isset($_POST['COtypeID'])
                                 && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])) {
                             $typeID = $_POST['COtypeID'];
                             $templateID = $_POST['COtemplateType'];
-                            $themeID = ($_POST['COthemeID']!='-1') ? $_POST['COthemeID'] : NULL;
+                            $themeID = ($_POST['COthemeID'] != '-1') ? $_POST['COthemeID'] : NULL;
                             $goalID = $_POST['COgoalID'];
 
                             $newCobject = new Cobject();
@@ -487,6 +486,7 @@ class EditorController extends Controller {
                                 $DomID = $_POST['DomID'];
                                 $pieceID = $_POST['pieceID'];
                                 $flag = $_POST['flag'];
+                                $match = isset($_POST['match']) ? $_POST['match'] : -1;
                                 if (isset($_POST['value'])) {
                                     $value = $_POST['value'];
                                 }
@@ -547,11 +547,24 @@ class EditorController extends Controller {
                                     $propertyName = "layertype";
                                     $propertyContext = "piecelement";
                                     $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                    //===========================================================
                                     $newPieceElementProperty = new EditorPieceelementProperty();
                                     $newPieceElementProperty->piece_element_id = $pieceElementID;
                                     $newPieceElementProperty->property_id = $propertyID;
                                     $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
                                     $newPieceElementProperty->insert();
+
+                                    // grouping
+                                    $propertyName = "grouping";
+                                    $propertyContext = "piecelement";
+                                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                    //===========================================================
+                                    $newPieceElementProperty = new EditorPieceelementProperty();
+                                    $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                    $newPieceElementProperty->property_id = $propertyID;
+                                    $newPieceElementProperty->value = $match;
+                                    $newPieceElementProperty->insert();
+
                                     if (isset($_POST["library"])) {
                                         $libraryTypeName = $_POST["library"];
                                         $libraryTypeID = $this->getTypeIDByName($libraryTypeName);
@@ -733,7 +746,12 @@ class EditorController extends Controller {
                                         'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
                                     //var_dump($pe_property->value); exit();
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
-
+                                    //=============== grouping ===============================
+                                    $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                        'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
+                                    //var_dump($pe_property->value); exit();
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
+                                    
                                     $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                     foreach ($ElementProperty as $ep):
                                         if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
