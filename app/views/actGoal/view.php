@@ -13,7 +13,7 @@ $this->menu = array(
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">
             <div class="panelGroup form">
-                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View ActGoal # ' . $model->ID . ' :') ?></div></div>
+                <div class="panelGroupHeader"><div class=""><?php echo Yii::t('default', 'View ActGoal # ' . $model->id . ' :') ?></div></div>
                 <div class="panelGroupBody">
                     <?php
                     $this->widget('zii.widgets.CDetailView', array(
