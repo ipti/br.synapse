@@ -8,17 +8,17 @@ function updateLoad(type){
     switch(type)
     {
         case 'actGoal':
-            url = '<?php echo $this->createUrl("/actgoal/loadcontent");?>';
+            url = '<?php echo $this->createUrl("/actGoal/loadcontent");?>';
             formID = '#act-goal-form';
             updateID = '#contentID';    
             break;
         case 'actMatrix':
-            url = '<?php echo $this->createUrl("/actmatrix/loadgoal");?>';
+            url = '<?php echo $this->createUrl("/actMatrix/loadgoal");?>';
             formID = '#act-matrix-form';
             updateID = '#goalID';    
             break;
         case 'actScript':
-            url = '<?php echo $this->createUrl("/actscript/loadcontents");?>';
+            url = '<?php echo $this->createUrl("/actScript/loadcontents");?>';
             formID = '#act-script-form';
             updateID = '.contents'; 
             break;

@@ -23,7 +23,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
         <div class="formField">
             <?php echo $form->labelEx($model, 'discipline_id'); ?>
-            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actgoal/loadcontent'), 'update' => '#contentID'))); ?>                    
+            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actGoal/loadcontent'), 'update' => '#contentID'))); ?>                    
             <?php echo $form->error($model, 'discipline_id'); ?>
         </div>
  </div>
