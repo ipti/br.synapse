@@ -235,7 +235,13 @@ function editor () {
             input_text+='<font class="editable" id="'+ID+'_flag">'+initial_text+'</font>';
         }          
         
-        var html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+ input_text;
+        var html;
+        if(parent.COTemplateTypeIn(parent.AEL)){
+            html = '<div id="'+ID+'_text" class="text element moptions"'+ plus +'>'+ input_text;
+        }else{
+            html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+ input_text;
+        }
+        
         if(parent.COTemplateTypeIn(parent.MTE)){
             html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
         } else if(parent.COTemplateTypeIn(parent.PRE)){
@@ -366,8 +372,13 @@ function editor () {
                 ld_src  + '" + id="'+ name_DB +'">' ;
             }
         }
-       
-        var html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">';
+        var html;
+        if(parent.COTemplateTypeIn(parent.AEL)){
+            html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+' element moptions">'; 
+        }else{
+            html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">'; 
+        }
+        
         if(parent.COTemplateTypeIn(parent.MTE)){
             html += '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>';
         }     
@@ -521,7 +532,8 @@ function editor () {
             
             if(!sameElement) {
                 if(!this.isset(isResp) || !isResp){
-                    html = '<li id="'+elementID+'" '+plus+' class="element moptions" match="'+group+'">'+
+                    //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
+                    html = '<li id="'+elementID+'"  match="'+group+'">'+
                     '<div>'+
                     '<spam>('+group+')</spam>'+
                     '<button class="insertImage" match="'+group+'">'+LABEL_ADD_IMAGE+'</button>'+

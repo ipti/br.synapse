@@ -1,5 +1,25 @@
 <?php
 
+//@todo 1 - Criação da tabela PieceSet-Element
+//@todo 2 - Criação do modelo PieceSet-Element
+//@todo 3 - Removero botão de Som e Imagem no enunciado do pieceset
+//@todo 4 - Adicionar o botão Inserir Elementos
+//@todo 5 - Criação uma função em JS para adicionar N elementos ao PieceSet de qualquer tipo
+//@todo 6 - Criar função de associar elementos através do group ID 
+//@todo 7 - Modificar no rendenrizador o template de texto para exibir o texto em HTML.
+//@todo 8 - Mudar o método do editor para receber o CObjectID via get.
+//@todo 9 - Possibilidade de Lincar ou anexar um texto à atividade.
+//@todo 10- Modificar um input da descrition do PieceSet para textArea
+//@todo 11- Versão offiline (Ruan)
+//@todo 12 - Cadastrar blocos
+//@todo 13 - Redenrizar blocos
+//@todo 14 - Linque para visualizar atividade
+//@todo 15- Terminar o Associar Elementos
+//@todo 16 - Listar TODAS as atividade prontas.
+
+
+
+
 class EditorController extends Controller {
 
     public $layout = 'editor';
@@ -504,6 +524,9 @@ class EditorController extends Controller {
                                     $newElement = EditorElement::model()->findByPk($IDDB);
                                     $Element_Piece = EditorPieceElement::model()->findByAttributes(
                                             array('piece_id' => $pieceID, 'element_id' => $newElement->id));
+                                    
+                                      var_dump($pieceID .' -- '.$newElement->id);
+                                      
                                     $Element_Piece_Property = EditorPieceelementProperty::model()
                                             ->findAll(array(
                                         'condition' => 'piece_element_id=:idPieceElement',
