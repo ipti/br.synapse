@@ -11066,3 +11066,1274 @@ Stack trace:
 REQUEST_URI=/favicon.ico
 HTTP_REFERER=http://synapse.ipti.org.br/site/login
 ---
+2014/01/14 16:54:12 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:12 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:12 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:12 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:12 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:12 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:12 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:13 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:14 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:14 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:14 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:14 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:14 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:28 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:28 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:28 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:28 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:28 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:28 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:29 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:30 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:30 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:30 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:30 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:30 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:30 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:54:30 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:58:57 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "Z:\ipti.projetos\synapse.dev\assets" é inválido. Por favor, tenha certeza que o diretório existe e que o servidor Web possa escrever nele.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php:138
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(123): CAssetManager->setBasePath('Z:\ipti.projeto...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CAssetManager.php(217): CAssetManager->getBasePath()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(510): CAssetManager->publish('Z:\dev.runtime....')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(547): CClientScript->getCoreScriptUrl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(348): CClientScript->getPackageBaseUrl('jquery')
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(351): CClientScript->render('<!DOCTYPE html ...')
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(788): CController->processOutput('<!DOCTYPE html ...')
+#8 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(247): CController->render('login', Array)
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#21 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/site/login
+---
+2014/01/14 16:59:33 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [1049] Unknown database 'synapse_import'' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbConnection.php:382
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbConnection.php(330): CDbConnection->open()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbConnection.php(308): CDbConnection->setActive(true)
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CModule.php(387): CDbConnection->init()
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(450): CModule->getComponent('db')
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\ar\CActiveRecord.php(634): CApplication->getDb()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\ar\CActiveRecord.php(1428): CActiveRecord->getDbConnection()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\ar\CActiveRecord.php(1517): CActiveRecord->getTableAlias(true)
+#7 Z:\ipti.projetos\synapse.dev\app\components\UserIdentity.php(40): CActiveRecord->findByAttributes(Array)
+#8 Z:\ipti.projetos\synapse.dev\app\models\LoginForm.php(54): UserIdentity->authenticate()
+#9 Z:\ipti.projetos\synapse.dev\app\controllers\SiteController.php(176): LoginForm->authenticate()
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#14 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#15 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#16 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#18 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('login')
+#20 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#21 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#22 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#23 {main}
+REQUEST_URI=/site/login
+HTTP_REFERER=http://synapse.dev/site/login
+---
+2014/01/14 17:28:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:47 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:53 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:55 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/14 17:28:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---

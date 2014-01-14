@@ -442,7 +442,7 @@ function render () {
                 $.each(element.generalProperties, function(i, gproperty) {
                     htmElement.attr('ID',element.code);
                     if(gproperty.name == 'text'){
-                        htmElement.text(gproperty.value);
+                        htmElement.html(gproperty.value);
                     }else if(gproperty.name == 'src'){
                         if(element.typemulti == 'sound'){
                             htmElement.attr('data','/rsc/js/player/dewplayer.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3');
