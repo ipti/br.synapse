@@ -14,9 +14,14 @@
 //@todo 12 - Cadastrar blocos
 //@todo 13 - Redenrizar blocos
 //@todo 14 - Linque para visualizar atividade
-//@todo 15- Terminar o Associar Elementos
+//@done 15- Quantificar elementos do AEL a partir dos elementos respostas.
 //@todo 16 - Listar TODAS as atividade prontas.
+//@todo 17 - Terminar o Associar Elementos
+//@done 18 - Corrigir os tipos das classes .element
+//@done 19 - Modificar alguns eventos para usar o .live
 
+// 14-01 := 3 
+// 15-01 := 
 
 
 

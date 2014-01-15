@@ -209,7 +209,13 @@ function editor () {
         }
     }
     
-    this.addText = function(ID, loaddata, idbd){
+    this.addText = function(tagAdd, loaddata, idbd){
+        
+             this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
+             ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
+     
+         
+         
         //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
         var parent = this;   
         var txt0 = LABEL_INITIAL_TEXT;
@@ -239,7 +245,7 @@ function editor () {
         if(parent.COTemplateTypeIn(parent.AEL)){
             html = '<div id="'+ID+'_text" class="text element moptions"'+ plus +'>'+ input_text;
         }else{
-            html = '<div id="'+ID+'_text" class="text"'+ plus +'>'+ input_text;
+            html = '<div id="'+ID+'_text" class="text element"'+ plus +'>'+ input_text;
         }
         
         if(parent.COTemplateTypeIn(parent.MTE)){
@@ -249,7 +255,9 @@ function editor () {
         } 
         
         html += '</div>';
-        $('#'+ID).append(html);  
+        //$('#'+ID).append(html);
+        $(tagAdd).append(html);
+        
         var text_element = "#"+ID;
         var text_div = "#"+ID+"_text";
         
@@ -333,7 +341,10 @@ function editor () {
         }
     }
     
-    this.addUploadForm = function(ID, type, responseFunction, loaddata){
+    this.addUploadForm = function(tagAdd, type, responseFunction, loaddata){
+        this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
+        ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
+             
         var parent = this; 
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var libBDID = "";
@@ -397,7 +408,7 @@ function editor () {
         '</form>'+
         '</div>';
         
-        $('#'+ID).append(html);
+        $(tagAdd).append(html);
         
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
             var cam_uploadType = uploadType == 'image' ? uploadType+'s' : uploadType;
@@ -434,8 +445,8 @@ function editor () {
         });
     }
     
-    this.addImage = function(id, loaddata){
-        this.addUploadForm(id, {
+    this.addImage = function(tagAdd, loaddata){
+        this.addUploadForm(tagAdd, {
             type: 'image',
             accept: Array("png","gif","bmp","jpeg","jsc","ico"),
             maxsize: (1024 * 5) //5MB
@@ -446,9 +457,9 @@ function editor () {
         },loaddata);
     }
     
-    this.addSound = function(id, loaddata){
+    this.addSound = function(tagAdd, loaddata){
         var parent = this;
-        this.addUploadForm(id, {
+        this.addUploadForm(tagAdd, {
             type: 'audio',
             accept: Array("mp3","wav","ogg"),
             maxsize: (1024 * 10) //10MB
@@ -461,9 +472,9 @@ function editor () {
         },loaddata);
     }
     
-    this.addVideo = function(id, loaddata){
+    this.addVideo = function(tagAdd, loaddata){
         var parent = this;
-        this.addUploadForm(id, {
+        this.addUploadForm(tagAdd, {
             type: 'video',
             accept: Array("mp4","wmv","ogg"),
             maxsize: (1024 * 20) //10MB
@@ -490,9 +501,28 @@ function editor () {
         
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         
-        var html = '<span id="'+elementID+'" '+plus+' class="element moptions">'+
-        '<div>';
+    
+   
+    
+    if(parent.MTE.indexOf(parent.COtemplateType) != -1){
+          
+     }
+     
         if(parent.MTE.indexOf(parent.COtemplateType) != -1){
+            var group;
+            if(this.isset(match) && match != -1) {
+                // É um load
+                group = match;
+                var sameElement = false;
+                //Já existe o li[elementID]
+                    sameElement = $('li[match='+match+']').length == '1';
+            }else{
+                group = $("#"+parent.currentPiece+"_query_resp > .element").length+1; 
+            }
+            var htmlDefault = '<div  match="'+group+'">';
+            var html = htmlDefault+'<span>'+
+            '<div>'; 
+    
             var checked ="";
             if(this.isset(flag) && flag == "Acerto"){
                 checked = 'checked="checked"';
@@ -517,7 +547,7 @@ function editor () {
             if(this.isset(match) && match != -1) {
                 // É um load
                 var right_match;
-                right_match = match.split('.')[1];
+                right_match = match.split('_')[1];
                 isResp = this.isset(right_match)
                 //If true é a resposta   
                 group = match;
@@ -527,13 +557,14 @@ function editor () {
                     sameElement = $('li[match='+match+']').length == '1';
                 }
             }else{
-                group = $("#"+parent.currentPiece+"_query > .element").length+1; 
+                group = $("#"+parent.currentPiece+"_query_resp > .element").length+1; 
             }
+            
             
             if(!sameElement) {
                 if(!this.isset(isResp) || !isResp){
                     //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
-                    html = '<li id="'+elementID+'"  match="'+group+'">'+
+                    html = '<li  match="'+group+'">'+
                     '<div>'+
                     '<spam>('+group+')</spam>'+
                     '<button class="insertImage" match="'+group+'">'+LABEL_ADD_IMAGE+'</button>'+
@@ -548,19 +579,20 @@ function editor () {
                 var isAddTwoElementsAel = false;
                 if(!this.isset(isResp) || isResp) {
                     if(!this.isset(isResp)){
-                        group += '.1';
+                        group += '_1';
                     }
+                    
+                   //this.countElements[this.currentPiece] varia de 2 a 2 no AEL
+                    
                     if(!this.isset(isResp)){
                         //Então adciona mais 1 no contador de IDS dos elements
-                        this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
-                        elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
+//  DEl                   this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
+//                        elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
                         isAddTwoElementsAel = true;
                     }
-                    var html2 = '<li id="'+elementID+'" '+plus+' class="element moptions" match="'+group+'">'+
-                    '<div>'+
+                    var html2 = '<li match="'+group+'">'+
                     '<spam>('+group+')</spam>'+
                     '<button class="insertText" match="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
-                    '</div>'+
                     '</li>';
                 }
                         
@@ -577,14 +609,15 @@ function editor () {
         }
     
         if(!(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.TXT) )){
-            html += '</span>';
+            html += '</span></div>';
             $('#'+parent.currentPiece+" > div.tplMulti").append(html);
         }else if(parent.COTemplateTypeIn(parent.TXT)){
             // Se for TXT
-            html += '</span>';
+            html += '</span></div>';
             $('#'+parent.currentPiece+" > div.tplTxt").append(html);
         }
         
+        var liMatchElement = $('li[match='+group+']');
         if(this.isset(loaddata)){
             switch(type){
                 case 'text'://text
@@ -592,18 +625,18 @@ function editor () {
                 case 'paragraph'://paragraph
                 case 'morphem'://morphem
                 case 'number'://number
-                    this.addText(elementID, loaddata, idbd);
+                    this.addText(liMatchElement, loaddata, idbd);
                     break;
                 case 'multimidia'://Library                   
                     switch(loaddata['library']['type']){
                         case 'image'://image
-                            this.addImage(elementID, loaddata);
+                            this.addImage(liMatchElement, loaddata);
                             break;
                         case 'movie'://movie
-                            this.addVideo(elementID, loaddata);
+                            this.addVideo(liMatchElement, loaddata);
                             break;
                         case 'sound'://sound
-                            this.addSound(elementID, loaddata);
+                            this.addSound(liMatchElement, loaddata);
                             break;
                     }
                     break;
@@ -883,6 +916,7 @@ function editor () {
         
         //Total de elementos e o Total alterados
         this.totalElements = $('.element').size();
+       
         //this.totalElementsImgNoSent = $('.element .image[updated="0"]').size();
         this.load_totalElements = $('.element[updated="1"]').size();
         this.load_totalElements_Invert = $('.element[updated="0"]').size(); 
@@ -1070,7 +1104,7 @@ function editor () {
                                     $('#'+curretPieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
                                         ElementID_BD = $(this).attr('idBD');
-                                    
+                                   
                                         if(parent.COTemplateTypeIn(parent.TXT)) {
                                             var text_element = '#'+ ElementID;
                                             var txt_BD = $(text_element+"_flag").val() ;
@@ -1118,7 +1152,8 @@ function editor () {
                                         };
                                         if(!(parent.isload && parent.isset(ElementFlag_Updated) && ElementFlag_Updated == 0)) {
                                             // Precisa Salvar ou Atualizar
-                                            // 
+                                            
+                                            
                                             //Se for um Texto
                                             if(parent.existID(ElementTextID)){
                                                 //Salva Elemento

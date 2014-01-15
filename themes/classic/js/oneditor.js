@@ -25,11 +25,13 @@ $(function() {
     $("#delScreen").click(function(){
         newEditor.delScreen(false);
     });
-    $(".insertText").click(function(){
-        newEditor.addText();
+    $(".insertText").live('click',function(){
+        //window.alert('ok');
+        newEditor.addText($(this).parent());
     });
-    $(".insertImage").last().click(function(){
-        newEditor.addImage();
+    $(".insertImage").live('click',function(){ //.last()
+        //window.alert('ok');
+        newEditor.addImage($(this).parent());
     });
     $("#addPieceSet").click(function(){
         newEditor.addPieceSet();
