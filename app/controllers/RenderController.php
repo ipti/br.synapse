@@ -3,7 +3,7 @@
 class RenderController extends Controller {
 
     public $layout = 'cbjrender';
-
+   
     /**
      * @return array action filters
      */
@@ -13,6 +13,7 @@ class RenderController extends Controller {
         );
     }
 
+   
     public function elog($text) {
         $this->http_response_code(200);
         echo json_encode($text);
@@ -116,6 +117,7 @@ class RenderController extends Controller {
                                 $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
                             }
 
+                           
                             // 'Value' do Element
 //                            if (isset($element->element->id)) {
 //                                $element_propertyID = EditorElementProperty::model()->findAllByAttributes(array(

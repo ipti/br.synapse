@@ -43,6 +43,9 @@ class ActContent extends CActiveRecord
 	 */
 	public function rules()
 	{
+		// @TODO: TESTANDOS
+		// @todo testando 23
+		// @AWESOME: testeando
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
@@ -59,7 +62,7 @@ class ActContent extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
+		// NOTE: ydddou may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
 			'contentParent' => array(self::BELONGS_TO, 'ActContent', 'content_parent'),
