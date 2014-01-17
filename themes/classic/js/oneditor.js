@@ -27,7 +27,7 @@ $(function() {
     });
     $(".insertText").live('click',function(){
         //window.alert('ok');
-        newEditor.addText($(this).parent());
+        newEditor.addText($(this).closest('div[match]'));
     });
     $(".insertImage").live('click',function(){ //.last()
         //window.alert('ok');

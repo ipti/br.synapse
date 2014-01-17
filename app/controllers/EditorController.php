@@ -2,7 +2,7 @@
 
 //@todo 1 - Criação da tabela PieceSet-Element
 //@todo 2 - Criação do modelo PieceSet-Element
-//@todo 3 - Removero botão de Som e Imagem no enunciado do pieceset
+//@done 3 - Remover o botão de Som e Imagem no enunciado do pieceset
 //@todo 4 - Adicionar o botão Inserir Elementos
 //@todo 5 - Criação uma função em JS para adicionar N elementos ao PieceSet de qualquer tipo
 //@todo 6 - Criar função de associar elementos através do group ID 
@@ -19,6 +19,13 @@
 //@todo 17 - Terminar o Associar Elementos
 //@done 18 - Corrigir os tipos das classes .element
 //@done 19 - Modificar alguns eventos para usar o .live
+//@done 20 - Pôr o agrupamento match nas divs('divs default') compostas por elemenstos do mesmo grupo
+//@done 21 - Corrigir o SaveAll para se adequar aos matchs
+//@done 22 - Corrigir o EditorControle para se adequar aos matchs
+//@done 23 - Contabilizar a ordem dos matchs no add para o MTE
+//@done 24 - Contabilizar a ordem dos matchs no add para o AEL
+//@todo 24 - Contabilizar a ordem dos matchs no update para o MTE
+//@todo 25 - Contabilizar a ordem dos matchs no update para o AEL
 
 // 14-01 := 3 
 // 15-01 := 
@@ -691,7 +698,7 @@ class EditorController extends Controller {
                                         }
                                     } elseif ($typeName == $this->TYPE_ELEMENT_TEXT) {  //text
                                         //salva editor_element_property 's
-                                        //text                                        
+                                        //text   
                                         $propertyName = "text";
                                         $propertyContext = "phrase";
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);

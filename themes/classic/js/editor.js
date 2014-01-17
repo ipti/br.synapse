@@ -106,8 +106,6 @@ function editor () {
         this.countPieces[piecesetID] = 0;
         $('#'+this.currentScreenId).append(''+
             '<div class="PieceSet" id="'+piecesetID+'_list" '+plus+'>'+
-            '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
-            '<button class="insertSound">'+LABEL_ADD_SOUND+'</button>'+
             '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
             '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
             '<input type="text" class="actName" value="'+plusdesc+'" />'+
@@ -228,10 +226,13 @@ function editor () {
         var plus = "";
         //se estiver setado o novo id
         if(this.isset(idbd)){
-            plus += 'idbd="'+idbd+'" updated="'+0+'"'; 
+            var match = loaddata['match'];
+            plus += 'idbd="'+idbd+'" updated="'+0+'"  match="' +match+ '"'; 
+        }else{
+             var match = $(tagAdd).attr('match');
+             plus += 'match="' +match+ '"';
         }
          
-        
         //=============  Edit or TextArea =============
         var input_text = "";
         if(parent.COTemplateTypeIn(parent.TXT)) {
@@ -256,7 +257,11 @@ function editor () {
         
         html += '</div>';
         //$('#'+ID).append(html);
-        $(tagAdd).append(html);
+         if(parent.COTemplateTypeIn(parent.AEL)){
+             $(tagAdd).append(html);
+         }else if(parent.COTemplateTypeIn(parent.MTE)){
+             $(tagAdd).find('span:eq(0)').append(html);
+         }
         
         var text_element = "#"+ID;
         var text_div = "#"+ID+"_text";
@@ -502,11 +507,6 @@ function editor () {
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         
     
-   
-    
-    if(parent.MTE.indexOf(parent.COtemplateType) != -1){
-          
-     }
      
         if(parent.MTE.indexOf(parent.COtemplateType) != -1){
             var group;
@@ -515,11 +515,11 @@ function editor () {
                 group = match;
                 var sameElement = false;
                 //Já existe o li[elementID]
-                    sameElement = $('li[match='+match+']').length == '1';
+                    sameElement = $('div[match='+match+']').length == '1';
             }else{
-                group = $("#"+parent.currentPiece+"_query_resp > .element").length+1; 
+                group = $("#"+parent.currentPiece+" div[match]").length+1; 
             }
-            var htmlDefault = '<div  match="'+group+'">';
+            var htmlDefault = '<div match="'+group+'">';
             var html = htmlDefault+'<span>'+
             '<div>'; 
     
@@ -554,21 +554,23 @@ function editor () {
                 var sameElement = false;
                 //Já existe o li[elementID]
                 if(!isResp){
-                    sameElement = $('li[match='+match+']').length == '1';
+                    sameElement = $('div[match='+match+']').length == '1';
                 }
             }else{
-                group = $("#"+parent.currentPiece+"_query_resp > .element").length+1; 
+                group = $("#"+parent.currentPiece+" div[match]").length+1;
+                //group = $("#"+parent.currentPiece+"_query_resp > .element").length+1; 
             }
             
+            var htmlDefault = '<div  match="'+group+'">';
             
             if(!sameElement) {
                 if(!this.isset(isResp) || !isResp){
                     //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
-                    html = '<li  match="'+group+'">'+
-                    '<div>'+
+                    html = '<li>'+
+                    htmlDefault+
                     '<spam>('+group+')</spam>'+
-                    '<button class="insertImage" match="'+group+'">'+LABEL_ADD_IMAGE+'</button>'+
-                    '<button class="insertText" match="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
+                    '<button class="insertImage" >'+LABEL_ADD_IMAGE+'</button>'+
+                    '<button class="insertText" >'+LABEL_ADD_TEXT+'</button>'+
                     '</div>'+
                     '</li>';           
                 }else{
@@ -590,9 +592,9 @@ function editor () {
 //                        elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
                         isAddTwoElementsAel = true;
                     }
-                    var html2 = '<li match="'+group+'">'+
+                    var html2 = '<li>'+
                     '<spam>('+group+')</spam>'+
-                    '<button class="insertText" match="'+group+'">'+LABEL_ADD_TEXT+'</button>'+
+                    '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
                     '</li>';
                 }
                         
@@ -603,13 +605,13 @@ function editor () {
             
             }else{
                 //muda o Element para da um append no elemento Pergunta Existente
-                elementID = $('li[match='+match+']').attr('id');
+                elementID = $('div[match='+match+']').attr('id');
             }
             
         }
     
         if(!(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.TXT) )){
-            html += '</span></div>';
+            html += '</span>';
             $('#'+parent.currentPiece+" > div.tplMulti").append(html);
         }else if(parent.COTemplateTypeIn(parent.TXT)){
             // Se for TXT
@@ -617,7 +619,7 @@ function editor () {
             $('#'+parent.currentPiece+" > div.tplTxt").append(html);
         }
         
-        var liMatchElement = $('li[match='+group+']');
+        var divMatchElement = $('div[match='+group+']');
         if(this.isset(loaddata)){
             switch(type){
                 case 'text'://text
@@ -625,18 +627,18 @@ function editor () {
                 case 'paragraph'://paragraph
                 case 'morphem'://morphem
                 case 'number'://number
-                    this.addText(liMatchElement, loaddata, idbd);
+                    this.addText(divMatchElement, loaddata, idbd);
                     break;
                 case 'multimidia'://Library                   
                     switch(loaddata['library']['type']){
                         case 'image'://image
-                            this.addImage(liMatchElement, loaddata);
+                            this.addImage(divMatchElement, loaddata);
                             break;
                         case 'movie'://movie
-                            this.addVideo(liMatchElement, loaddata);
+                            this.addVideo(divMatchElement, loaddata);
                             break;
                         case 'sound'://sound
-                            this.addSound(liMatchElement, loaddata);
+                            this.addSound(divMatchElement, loaddata);
                             break;
                     }
                     break;
@@ -1101,10 +1103,22 @@ function editor () {
                                     elementPosition = 0;
                                     
                                     //Para cada Elemento no Piece
+                                   
                                     $('#'+curretPieceID+' .element').each(function(){
                                         ElementID = $(this).attr('id');
                                         ElementID_BD = $(this).attr('idBD');
-                                   
+                                        var newElem='';
+                                        var ElementIDSplit = ElementID.split('_');
+                                        for(var i=0; i < ElementIDSplit.length-1; i++) {
+                                            if(i == ElementIDSplit.length-2) {
+                                                newElem+=ElementIDSplit[i];
+                                            }else{
+                                                 newElem+=ElementIDSplit[i]+'_';
+                                            }
+                                               
+                                        }
+                                         ElementID = newElem;
+                                         
                                         if(parent.COTemplateTypeIn(parent.TXT)) {
                                             var text_element = '#'+ ElementID;
                                             var txt_BD = $(text_element+"_flag").val() ;
@@ -1119,7 +1133,8 @@ function editor () {
                                     
                                         ElementFlag_Updated = $(this).attr('updated');
                                         Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
-                                        Match = ((parent.COTemplateTypeIn(parent.AEL)) ? $(this).attr('match') : -1);                       
+                                        Match = ((parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE)) 
+                                            ? $(this).attr('match') : -1);                       
                                         //declaração das variáveis que serão passadas por ajax
                                         var type;
                                         var value;
