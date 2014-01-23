@@ -26,12 +26,10 @@ $(function() {
         newEditor.delScreen(false);
     });
     $(".insertText").live('click',function(){
-        //window.alert('ok');
         newEditor.addText($(this).closest('div[match]'));
     });
     $(".insertImage").live('click',function(){ //.last()
-        //window.alert('ok');
-        newEditor.addImage($(this).parent());
+        newEditor.addImage($(this).closest('div[match]'));
     });
     $("#addPieceSet").click(function(){
         newEditor.addPieceSet();

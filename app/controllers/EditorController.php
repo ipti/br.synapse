@@ -24,11 +24,14 @@
 //@done 22 - Corrigir o EditorControle para se adequar aos matchs
 //@done 23 - Contabilizar a ordem dos matchs no add para o MTE
 //@done 24 - Contabilizar a ordem dos matchs no add para o AEL
-//@todo 24 - Contabilizar a ordem dos matchs no update para o MTE
-//@todo 25 - Contabilizar a ordem dos matchs no update para o AEL
+//@todo 25 - Contabilizar a ordem dos matchs no update para o MTE
+//@todo 26 - Contabilizar a ordem dos matchs no update para o AEL
+//@done 27 - Pôr imagem,texto na mesma div
+//@done 28 - Criar contadores separados dos grupos para cada Template
+//@done 29 - Corrigir o load das imagens do Associar Elementos
+//@done 30 - Corrigir o load das imagens do Multiple Escolha
 
-// 14-01 := 3 
-// 15-01 := 
+// 23-01 := 4;
 
 
 

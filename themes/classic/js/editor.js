@@ -118,7 +118,7 @@ function editor () {
 
         $("#"+piecesetID+"_list > button.insertImage").click(function(){
             if (!parent.existID('#'+piecesetID+"_forms_image_form"))
-                parent.addImage(piecesetID+"_forms");
+                parent.addImage(piecesetID+"_forms"); 
         });
         $("#"+piecesetID+"_list > button.insertSound").click(function(){
             if (!parent.existID('#'+piecesetID+"_forms_audio_form"))
@@ -209,10 +209,17 @@ function editor () {
     
     this.addText = function(tagAdd, loaddata, idbd){
         
-             this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
-             ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
+        ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
+        this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
+        //Adciona mais um no contador de elementos dessa peça
      
-         
+        if(this.isset(idbd)){
+            var flag = loaddata['flag'];
+        }
+        var checked ="";
+        if(this.isset(flag) && flag == "Acerto"){
+            checked = 'checked="checked"';
+        }
          
         //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
         var parent = this;   
@@ -229,8 +236,8 @@ function editor () {
             var match = loaddata['match'];
             plus += 'idbd="'+idbd+'" updated="'+0+'"  match="' +match+ '"'; 
         }else{
-             var match = $(tagAdd).attr('match');
-             plus += 'match="' +match+ '"';
+            var match = $(tagAdd).attr('match');
+            plus += 'match="' +match+ '"';
         }
          
         //=============  Edit or TextArea =============
@@ -246,7 +253,16 @@ function editor () {
         if(parent.COTemplateTypeIn(parent.AEL)){
             html = '<div id="'+ID+'_text" class="text element moptions"'+ plus +'>'+ input_text;
         }else{
-            html = '<div id="'+ID+'_text" class="text element"'+ plus +'>'+ input_text;
+           var inputCorrect ="";
+           var search_inputCorrect = $(tagAdd).closest('div[match]').find('input[type="checkbox"]').size();
+           if(search_inputCorrect == 0) {
+              inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
+               'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
+               '</label><br>';
+           }
+            
+            html = '<div id="'+ID+'_text" class="text element"'+ plus +'>'+ inputCorrect
+                + input_text;
         }
         
         if(parent.COTemplateTypeIn(parent.MTE)){
@@ -257,11 +273,11 @@ function editor () {
         
         html += '</div>';
         //$('#'+ID).append(html);
-         if(parent.COTemplateTypeIn(parent.AEL)){
-             $(tagAdd).append(html);
-         }else if(parent.COTemplateTypeIn(parent.MTE)){
-             $(tagAdd).find('span:eq(0)').append(html);
-         }
+        if(parent.COTemplateTypeIn(parent.AEL)){
+            $(tagAdd).append(html);
+        }else if(parent.COTemplateTypeIn(parent.MTE)){
+            $(tagAdd).find('span:eq(0)').append(html);
+        }
         
         var text_element = "#"+ID;
         var text_div = "#"+ID+"_text";
@@ -346,18 +362,35 @@ function editor () {
         }
     }
     
-    this.addUploadForm = function(tagAdd, type, responseFunction, loaddata){
+    this.addUploadForm = function(tagAdd, type, responseFunction, loaddata, idbd){
+        
+         ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
         this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
-        ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
+        //Adciona mais um no contador de elementos dessa peça
+     
+        if(this.isset(idbd)){
+            var flag = loaddata['flag'];
+        }
+        var checked ="";
+        if(this.isset(flag) && flag == "Acerto"){
+            checked = 'checked="checked"';
+        }
              
         var parent = this; 
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var libBDID = "";
         
+        
         //se estiver setado o novo id
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
+            var match = loaddata['match'];
             //adiciona o código na varíavel
-            libBDID = ' idBD="'+loaddata['library']['ID']+'" updated = "'+0+'" ';
+            libBDID = ' idbd="'+idbd+'" library_idbd ="'+loaddata['library']['ID']+'"\n\
+                        updated = "'+0+'" match="' +match+ '" ';
+        }else{
+            var match = $(tagAdd).attr('match');
+            console.log(tagAdd);
+            libBDID = 'match="' +match+ '"';
         }
         
         //Default Image
@@ -388,11 +421,21 @@ function editor () {
                 ld_src  + '" + id="'+ name_DB +'">' ;
             }
         }
+        
+        var inputCorrect ="";
+           var search_inputCorrect = $(tagAdd).closest('div[match]').find('input[type="checkbox"]').size();
+           if(search_inputCorrect == 0) {
+              inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
+               'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
+               '</label><br>';
+           }
+        
         var html;
         if(parent.COTemplateTypeIn(parent.AEL)){
             html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+' element moptions">'; 
         }else{
-            html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">'; 
+            html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+' element">'+
+                inputCorrect; 
         }
         
         if(parent.COTemplateTypeIn(parent.MTE)){
@@ -412,8 +455,13 @@ function editor () {
         '</label>'+
         '</form>'+
         '</div>';
+    
+        if(parent.COTemplateTypeIn(parent.MTE)){
+            $(tagAdd).find('span:eq(0)').append(html);
+        }else if (parent.COTemplateTypeIn(parent.AEL)){
+             $(tagAdd).append(html);
+        }
         
-        $(tagAdd).append(html);
         
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
             var cam_uploadType = uploadType == 'image' ? uploadType+'s' : uploadType;
@@ -450,7 +498,7 @@ function editor () {
         });
     }
     
-    this.addImage = function(tagAdd, loaddata){
+    this.addImage = function(tagAdd, loaddata, idbd){
         this.addUploadForm(tagAdd, {
             type: 'image',
             accept: Array("png","gif","bmp","jpeg","jsc","ico"),
@@ -459,7 +507,7 @@ function editor () {
         },function(src, fileid, formid){
             $("#"+fileid+" > img").remove("img");
             $("#"+fileid).append('<img  src="'+src+'" width="320" height="240" alt="Image"/>');
-        },loaddata);
+        },loaddata, idbd);
     }
     
     this.addSound = function(tagAdd, loaddata){
@@ -500,7 +548,6 @@ function editor () {
         if(this.isset(idbd)){
             //adiciona o código na varíavel e também uma flag de alteração
             plus = ' idBD="'+idbd+'" updated="'+0+'"';
-            var flag = loaddata['flag'];
             var match = loaddata['match'];
         }
         
@@ -515,7 +562,7 @@ function editor () {
                 group = match;
                 var sameElement = false;
                 //Já existe o li[elementID]
-                    sameElement = $('div[match='+match+']').length == '1';
+                sameElement = $('div[match='+match+']').length == '1';
             }else{
                 group = $("#"+parent.currentPiece+" div[match]").length+1; 
             }
@@ -523,10 +570,6 @@ function editor () {
             var html = htmlDefault+'<span>'+
             '<div>'; 
     
-            var checked ="";
-            if(this.isset(flag) && flag == "Acerto"){
-                checked = 'checked="checked"';
-            }
             html += ''+
             '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
             '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
@@ -535,9 +578,6 @@ function editor () {
             '<br>'+
             '<br>'+
             '<label>'+
-            '<input type="checkbox" id="'+elementID+'_flag" name="'+elementID+'_flag" value="Correct"\n\
-               '+ checked +'/>'+LABEL_CORRECT+
-            '</label>'+
             '</div>';
         }else if(parent.COTemplateTypeIn(parent.PRE)){
             html += '<label>'+LABEL_CORRECT+' </label>';
@@ -557,8 +597,7 @@ function editor () {
                     sameElement = $('div[match='+match+']').length == '1';
                 }
             }else{
-                group = $("#"+parent.currentPiece+" div[match]").length+1;
-                //group = $("#"+parent.currentPiece+"_query_resp > .element").length+1; 
+                group = ($("#"+parent.currentPiece+" div[match]").length+2)/2;
             }
             
             var htmlDefault = '<div  match="'+group+'">';
@@ -583,19 +622,19 @@ function editor () {
                     if(!this.isset(isResp)){
                         group += '_1';
                     }
-                    
-                   //this.countElements[this.currentPiece] varia de 2 a 2 no AEL
+                    var htmlDefault = '<div  match="'+group+'">';
+                    //this.countElements[this.currentPiece] varia de 2 a 2 no AEL
                     
                     if(!this.isset(isResp)){
                         //Então adciona mais 1 no contador de IDS dos elements
-//  DEl                   this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
-//                        elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
+                        //  DEl                   this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
+                        //                        elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
                         isAddTwoElementsAel = true;
                     }
-                    var html2 = '<li>'+
+                    var html2 = '<li>'+ htmlDefault+
                     '<spam>('+group+')</spam>'+
                     '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
-                    '</li>';
+                    '</div></li>';
                 }
                         
                 $("#"+parent.currentPiece+"_query").append(html);
@@ -619,7 +658,15 @@ function editor () {
             $('#'+parent.currentPiece+" > div.tplTxt").append(html);
         }
         
-        var divMatchElement = $('div[match='+group+']');
+        var tagAdd = "";
+//        if(parent.COTemplateTypeIn(parent.MTE)){
+//            tagAdd = $('div[match='+group+']');
+//        }else{
+//            tagAdd= $('div[match='+group+']');
+//        }
+
+        tagAdd= $('div[match='+group+']');
+        
         if(this.isset(loaddata)){
             switch(type){
                 case 'text'://text
@@ -627,18 +674,18 @@ function editor () {
                 case 'paragraph'://paragraph
                 case 'morphem'://morphem
                 case 'number'://number
-                    this.addText(divMatchElement, loaddata, idbd);
+                    this.addText(tagAdd, loaddata, idbd);
                     break;
                 case 'multimidia'://Library                   
                     switch(loaddata['library']['type']){
                         case 'image'://image
-                            this.addImage(divMatchElement, loaddata);
+                            this.addImage(tagAdd, loaddata, idbd);
                             break;
                         case 'movie'://movie
-                            this.addVideo(divMatchElement, loaddata);
+                            this.addVideo(tagAdd, loaddata);
                             break;
                         case 'sound'://sound
-                            this.addSound(divMatchElement, loaddata);
+                            this.addSound(tagAdd, loaddata);
                             break;
                     }
                     break;
@@ -1113,11 +1160,12 @@ function editor () {
                                             if(i == ElementIDSplit.length-2) {
                                                 newElem+=ElementIDSplit[i];
                                             }else{
-                                                 newElem+=ElementIDSplit[i]+'_';
+                                                newElem+=ElementIDSplit[i]+'_';
                                             }
                                                
                                         }
-                                         ElementID = newElem;
+                                        ElementID = newElem;
+                                         
                                          
                                         if(parent.COTemplateTypeIn(parent.TXT)) {
                                             var text_element = '#'+ ElementID;
@@ -1133,6 +1181,7 @@ function editor () {
                                     
                                         ElementFlag_Updated = $(this).attr('updated');
                                         Flag = $('#'+ElementID+'_flag').is(':checked') || (parent.COTemplateTypeIn(parent.PRE));
+                                        
                                         Match = ((parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE)) 
                                             ? $(this).attr('match') : -1);                       
                                         //declaração das variáveis que serão passadas por ajax
@@ -1167,7 +1216,6 @@ function editor () {
                                         };
                                         if(!(parent.isload && parent.isset(ElementFlag_Updated) && ElementFlag_Updated == 0)) {
                                             // Precisa Salvar ou Atualizar
-                                            
                                             
                                             //Se for um Texto
                                             if(parent.existID(ElementTextID)){
@@ -1236,8 +1284,10 @@ function editor () {
                                             //                                        
                                             //                                            }
                                             
+                                            
                                             //Se for uma Imagem
                                             if(parent.existID(ElementImageID)){
+                                                  
                                                 var doUpload = true;
                                                 if ( parent.isload &&
                                                     ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
@@ -1246,6 +1296,7 @@ function editor () {
                                                     //Não faz upload, pois não houve alterações
                                                     doUpload = false;
                                                 }
+                                              
                                                 if(doUpload) {
                                                     data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
                                                     data["library"] = TYPE.LIBRARY.IMAGE;
