@@ -30,9 +30,11 @@
 //@done 28 - Criar contadores separados dos grupos para cada Template
 //@done 29 - Corrigir o load das imagens do Associar Elementos
 //@done 30 - Corrigir o load das imagens do Multiple Escolha
+//@done 31 - Corrigir o load de elementos com mesmo grupo do Associar Elementos
+//@todo 32 - Corrigir o load de elementos com mesmo grupo do Multiple Escola 
 
 // 23-01 := 4;
-
+// 24-01 := 1;
 
 
 class EditorController extends Controller {

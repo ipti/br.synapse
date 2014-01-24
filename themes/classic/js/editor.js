@@ -209,6 +209,7 @@ function editor () {
     
     this.addText = function(tagAdd, loaddata, idbd){
         
+        
         ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
         this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
         //Adciona mais um no contador de elementos dessa peça
@@ -236,7 +237,7 @@ function editor () {
             var match = loaddata['match'];
             plus += 'idbd="'+idbd+'" updated="'+0+'"  match="' +match+ '"'; 
         }else{
-            var match = $(tagAdd).attr('match');
+            var match = $(tagAdd).attr('group');
             plus += 'match="' +match+ '"';
         }
          
@@ -254,7 +255,7 @@ function editor () {
             html = '<div id="'+ID+'_text" class="text element moptions"'+ plus +'>'+ input_text;
         }else{
            var inputCorrect ="";
-           var search_inputCorrect = $(tagAdd).closest('div[match]').find('input[type="checkbox"]').size();
+           var search_inputCorrect = $(tagAdd).closest('div[group]').find('input[type="checkbox"]').size();
            if(search_inputCorrect == 0) {
               inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
                'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
@@ -388,8 +389,7 @@ function editor () {
             libBDID = ' idbd="'+idbd+'" library_idbd ="'+loaddata['library']['ID']+'"\n\
                         updated = "'+0+'" match="' +match+ '" ';
         }else{
-            var match = $(tagAdd).attr('match');
-            console.log(tagAdd);
+            var match = $(tagAdd).attr('group');
             libBDID = 'match="' +match+ '"';
         }
         
@@ -423,7 +423,7 @@ function editor () {
         }
         
         var inputCorrect ="";
-           var search_inputCorrect = $(tagAdd).closest('div[match]').find('input[type="checkbox"]').size();
+           var search_inputCorrect = $(tagAdd).closest('div[group]').find('input[type="checkbox"]').size();
            if(search_inputCorrect == 0) {
               inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
                'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
@@ -561,12 +561,12 @@ function editor () {
                 // É um load
                 group = match;
                 var sameElement = false;
-                //Já existe o li[elementID]
-                sameElement = $('div[match='+match+']').length == '1';
+                //Já existe o div[elementID]
+                sameElement = $('div[group='+match+']').length == '1';
             }else{
-                group = $("#"+parent.currentPiece+" div[match]").length+1; 
+                group = $("#"+parent.currentPiece+" div[group]").length+1; 
             }
-            var htmlDefault = '<div match="'+group+'">';
+            var htmlDefault = '<div group="'+group+'">';
             var html = htmlDefault+'<span>'+
             '<div>'; 
     
@@ -594,14 +594,14 @@ function editor () {
                 var sameElement = false;
                 //Já existe o li[elementID]
                 if(!isResp){
-                    sameElement = $('div[match='+match+']').length == '1';
+                    sameElement = $('div[group='+match+']').length == '1';
                 }
             }else{
-                group = ($("#"+parent.currentPiece+" div[match]").length+2)/2;
+                group = ($("#"+parent.currentPiece+" div[group]").length+2)/2;
             }
             
-            var htmlDefault = '<div  match="'+group+'">';
-            
+            var htmlDefault = '<div group="'+group+'">';
+           
             if(!sameElement) {
                 if(!this.isset(isResp) || !isResp){
                     //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
@@ -622,7 +622,7 @@ function editor () {
                     if(!this.isset(isResp)){
                         group += '_1';
                     }
-                    var htmlDefault = '<div  match="'+group+'">';
+                    var htmlDefault = '<div group="'+group+'">';
                     //this.countElements[this.currentPiece] varia de 2 a 2 no AEL
                     
                     if(!this.isset(isResp)){
@@ -636,7 +636,8 @@ function editor () {
                     '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
                     '</div></li>';
                 }
-                        
+                      
+                      
                 $("#"+parent.currentPiece+"_query").append(html);
                 if(this.isset(html2)) {
                     $("#"+parent.currentPiece+"_query_resp").append(html2); 
@@ -665,7 +666,7 @@ function editor () {
 //            tagAdd= $('div[match='+group+']');
 //        }
 
-        tagAdd= $('div[match='+group+']');
+        tagAdd= $('div[group='+group+']');
         
         if(this.isset(loaddata)){
             switch(type){
@@ -1544,7 +1545,7 @@ function editor () {
                                                 parent.addPiece(DOMpiecesetID,pieceID);
                                                 //seleciona o piece adicionado
                                                 parent.changePiece($('.piece').last());
-                                                //para cada item do pieceset
+                                                //para cada item da piece
                                                 $.each(item, function(i,item){
                                                     //se for um elemento
                                                     if(i.slice(0,1) == "E"){
@@ -1584,7 +1585,7 @@ function editor () {
                                                         //pega o tipo do element
                                                         var type = item['type_name'];
                                                         //pega o id do element a partir do indice
-                                                        var elementID = i.slice(1);                         
+                                                        var elementID = i.slice(1);  
                                                         parent.addElement(elementID,type,data);
                                                         
                                                     }
