@@ -26,10 +26,17 @@ $(function() {
         newEditor.delScreen(false);
     });
     $(".insertText").live('click',function(){
-        newEditor.addText($(this).closest('div[group]'));
+        //Somente adiciona se não possui outro elemento texto neste grupo
+        if($(this).closest('div[group]').find('div.text').size() == 0){
+            newEditor.addText($(this).closest('div[group]'));
+        }
+        
     });
-    $(".insertImage").live('click',function(){ //.last()
-        newEditor.addImage($(this).closest('div[group]'));
+    $(".insertImage").live('click',function(){ //
+         //Somente adiciona se não possui outro elemento imagem neste grupo
+        if($(this).closest('div[group]').find('div.image').size() == 0){
+           newEditor.addImage($(this).closest('div[group]'));
+        }
     });
     $("#addPieceSet").click(function(){
         newEditor.addPieceSet();

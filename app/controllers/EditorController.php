@@ -16,7 +16,7 @@
 //@todo 14 - Linque para visualizar atividade
 //@done 15- Quantificar elementos do AEL a partir dos elementos respostas.
 //@todo 16 - Listar TODAS as atividade prontas.
-//@todo 17 - Terminar o Associar Elementos
+//@done 17 - deixar básico as funcionalidade do Associar Elementos para as novas modificações
 //@done 18 - Corrigir os tipos das classes .element
 //@done 19 - Modificar alguns eventos para usar o .live
 //@done 20 - Pôr o agrupamento match nas divs('divs default') compostas por elemenstos do mesmo grupo
@@ -31,10 +31,27 @@
 //@done 29 - Corrigir o load das imagens do Associar Elementos
 //@done 30 - Corrigir o load das imagens do Multiple Escolha
 //@done 31 - Corrigir o load de elementos com mesmo grupo do Associar Elementos
-//@todo 32 - Corrigir o load de elementos com mesmo grupo do Multiple Escola 
+//@done 32 - Corrigir o load de elementos com mesmo grupo do Multiple Escolha 
+//@done 33 - Corrigir limitação de cliques para adicionar elementos no mesmo match
+//@todo 34 - Corrigir o Save do Multiple Escolha 
+//@todo 35 - Corrigir o Save do Associar Elementos
+//@todo 36 - Corrigir o Update do Multiple Escolha 
+//@todo 37 - Corrigir o Update do Associar Elementos
+//@todo 38 - Contabilizar a ordem dos matchs no add para o TXT
+//@todo 39 - Contabilizar a ordem dos matchs no update para o TXT
+//@todo 40 - Contabilizar a ordem dos matchs no add para o PRE
+//@todo 41 - Contabilizar a ordem dos matchs no update para o PRE
+//@todo 42 - Corrigir o Save do TXT
+//@todo 43 - Corrigir o Save do PRE
+//@todo 44 - Corrigir o Update do TXT
+//@todo 45 - Corrigir o Update do PRE
+//@todo 46 - Corrigir o contador dos elementos
+//@todo 47 - Corrigir o log das flags
+
 
 // 23-01 := 4;
-// 24-01 := 1;
+// 24-01 := 2;
+// 27-01 := 2;
 
 
 class EditorController extends Controller {

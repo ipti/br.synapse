@@ -209,7 +209,6 @@ function editor () {
     
     this.addText = function(tagAdd, loaddata, idbd){
         
-        
         ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
         this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
         //Adciona mais um no contador de elementos dessa peça
@@ -277,6 +276,7 @@ function editor () {
         if(parent.COTemplateTypeIn(parent.AEL)){
             $(tagAdd).append(html);
         }else if(parent.COTemplateTypeIn(parent.MTE)){
+            console.log(tagAdd);
             $(tagAdd).find('span:eq(0)').append(html);
         }
         
@@ -541,6 +541,7 @@ function editor () {
     }
     
     this.addElement = function(idbd, type, loaddata){
+         
         var parent = this;
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = "";
@@ -551,9 +552,9 @@ function editor () {
             var match = loaddata['match'];
         }
         
+         
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         
-    
      
         if(parent.MTE.indexOf(parent.COtemplateType) != -1){
             var group;
@@ -566,19 +567,32 @@ function editor () {
             }else{
                 group = $("#"+parent.currentPiece+" div[group]").length+1; 
             }
-            var htmlDefault = '<div group="'+group+'">';
-            var html = htmlDefault+'<span>'+
-            '<div>'; 
-    
-            html += ''+
-            '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
-            '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
-            '<button class="del delElement">'+LABEL_REMOVE_ELEMENT+'</button>'+
-            '<br>'+
-            '<br>'+
-            '<br>'+
-            '<label>'+
-            '</div>';
+            
+            var newDivMatch = false;
+            //Verificar se já existe essa div group 
+            if($("#"+parent.currentPiece+" div[group="+group+"]").length == 0){
+                //Não existe, então cria um novo
+                newDivMatch = true;
+                var htmlDefault = '<div group="'+group+'">';
+                var html = htmlDefault+'<span>'+
+                '<div>'; 
+
+                html += ''+
+                '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
+                '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
+                '<button class="del delElement">'+LABEL_REMOVE_ELEMENT+'</button>'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<label>'+
+                '</div>';
+            }else{
+               // Já existe, html = '';
+               html="";
+            }
+                
+            
+        
         }else if(parent.COTemplateTypeIn(parent.PRE)){
             html += '<label>'+LABEL_CORRECT+' </label>';
         }else if(parent.COTemplateTypeIn(parent.AEL)){
@@ -650,9 +664,12 @@ function editor () {
             
         }
     
-        if(!(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.TXT) )){
-            html += '</span>';
-            $('#'+parent.currentPiece+" > div.tplMulti").append(html);
+        if(!(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.TXT) )){ // Verificar condição
+            if(newDivMatch){
+                html += '</span></div>';
+                $('#'+parent.currentPiece+" > div.tplMulti").append(html);
+            }
+            
         }else if(parent.COTemplateTypeIn(parent.TXT)){
             // Se for TXT
             html += '</span></div>';
@@ -1586,6 +1603,7 @@ function editor () {
                                                         var type = item['type_name'];
                                                         //pega o id do element a partir do indice
                                                         var elementID = i.slice(1);  
+                                                      
                                                         parent.addElement(elementID,type,data);
                                                         
                                                     }
