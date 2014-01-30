@@ -45,13 +45,20 @@
 //@todo 43 - Corrigir o Save do PRE
 //@todo 44 - Corrigir o Update do TXT
 //@todo 45 - Corrigir o Update do PRE
-//@todo 46 - Corrigir o contador dos elementos
+//@done 46 - Corrigir o contador dos elementos 
 //@todo 47 - Corrigir o log das flags
-
-
+//
+//@todo 48 - Corrigir o excluir do MTE
+//@todo 49 - COrrigir o excluir do AEL
+//@done 50 - salvar elemento Resposta do AEL Obrigatoriamente,quando alguma Pergunta é alterada
+//@done 51 - Corrigir o excluir Objeto[elementos] do AEL 
+//@todo 52 - Corrigir o excluir divGroup do AEL 
+//
 // 23-01 := 4;
 // 24-01 := 2;
+
 // 27-01 := 2;
+// 30-01 := 3;
 
 
 class EditorController extends Controller {

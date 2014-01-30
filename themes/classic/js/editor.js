@@ -208,10 +208,10 @@ function editor () {
     }
     
     this.addText = function(tagAdd, loaddata, idbd){
-        
         ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
-        this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
         //Adciona mais um no contador de elementos dessa peça
+        this.countElements[this.currentPiece]++;
+        
      
         if(this.isset(idbd)){
             var flag = loaddata['flag'];
@@ -253,22 +253,22 @@ function editor () {
         if(parent.COTemplateTypeIn(parent.AEL)){
             html = '<div id="'+ID+'_text" class="text element moptions"'+ plus +'>'+ input_text;
         }else{
-           var inputCorrect ="";
-           var search_inputCorrect = $(tagAdd).closest('div[group]').find('input[type="checkbox"]').size();
-           if(search_inputCorrect == 0) {
-              inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
-               'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
-               '</label><br>';
-           }
+            var inputCorrect ="";
+            var search_inputCorrect = $(tagAdd).closest('div[group]').find('input[type="checkbox"]').size();
+            if(search_inputCorrect == 0) {
+                inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
+                'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
+                '</label><br>';
+            }
             
             html = '<div id="'+ID+'_text" class="text element"'+ plus +'>'+ inputCorrect
-                + input_text;
+            + input_text;
         }
         
-        if(parent.COTemplateTypeIn(parent.MTE)){
+        if(parent.COTemplateTypeIn(parent.MTE) || 
+            (parent.COTemplateTypeIn(parent.AEL) && tagAdd.attr('group').split('_').length == 1)){
+            //Se for MTE ou (AEL e For uma PERGUNTA)
             html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
-        } else if(parent.COTemplateTypeIn(parent.PRE)){
-            html += '';
         } 
         
         html += '</div>';
@@ -276,7 +276,6 @@ function editor () {
         if(parent.COTemplateTypeIn(parent.AEL)){
             $(tagAdd).append(html);
         }else if(parent.COTemplateTypeIn(parent.MTE)){
-            console.log(tagAdd);
             $(tagAdd).find('span:eq(0)').append(html);
         }
         
@@ -293,8 +292,10 @@ function editor () {
              
             var editable = text_div+" > font.editable";
             var value_txt = "#"+ID+"_flag.editable";  
+            var id_const = ID;
+            //ID sempre muda, logo criar outra variável local id_const, quando o evento é chamado
             $(text_div+" > button.delText").click(function(){
-                parent.delObject(ID+"_text");
+                parent.delElement(id_const+"_text");
             });
             $(editable).editable(function(value, settings) { 
                 //console.log(this);
@@ -361,15 +362,24 @@ function editor () {
             $(text_element).attr('updated',0); // NÃO foi alterado!
             $(text_div).attr('updated',0); 
         }
+        
+        //Verificar se precisa mudar a resposta do AEL
+        var match_text_div = $(text_div).attr('match');
+        var separator = match_text_div.split('_');
+        if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
+            this.changeRespAEL(separator[0]);
+        }
+        
     }
     
     this.addUploadForm = function(tagAdd, type, responseFunction, loaddata, idbd){
-        
-         ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
-        this.countElements[this.currentPiece] = this.countElements[this.currentPiece]+1;
-        //Adciona mais um no contador de elementos dessa peça
-     
+         
+        ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
+        var parent = this; 
+          
         if(this.isset(idbd)){
+            // Se existe no banco, então foi salvo no elemento
+            parent.countElements[parent.currentPiece]++;
             var flag = loaddata['flag'];
         }
         var checked ="";
@@ -377,7 +387,7 @@ function editor () {
             checked = 'checked="checked"';
         }
              
-        var parent = this; 
+       
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var libBDID = "";
         
@@ -423,30 +433,30 @@ function editor () {
         }
         
         var inputCorrect ="";
-           var search_inputCorrect = $(tagAdd).closest('div[group]').find('input[type="checkbox"]').size();
-           if(search_inputCorrect == 0) {
-              inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
-               'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
-               '</label><br>';
-           }
+        var search_inputCorrect = $(tagAdd).closest('div[group]').find('input[type="checkbox"]').size();
+        if(search_inputCorrect == 0) {
+            inputCorrect='<input type="checkbox" id="'+ID+'_flag" name="'+ID+'_flag"'+ 
+            'value="Correct"'+ checked +'/>'+LABEL_CORRECT+
+            '</label><br>';
+        }
         
         var html;
         if(parent.COTemplateTypeIn(parent.AEL)){
             html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+' element moptions">'; 
         }else{
             html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+' element">'+
-                inputCorrect; 
+            inputCorrect; 
         }
         
         if(parent.COTemplateTypeIn(parent.MTE)){
-            html += '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>';
+            html += '<button class="del delElement">'+LABEL_REMOVE_OBJECT+'</button>';
         }     
         else {
             html +="";
         }
         html += '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
         '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">'+
-        '<button class="del delObject">'+LABEL_REMOVE_OBJECT+'</button>'+
+        '<button class="del delElement">'+LABEL_REMOVE_OBJECT+'</button>'+
         '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
         '<input type="hidden" name="op" value="'+uploadType+'"/>'+
         name_db +
@@ -457,9 +467,9 @@ function editor () {
         '</div>';
     
         if(parent.COTemplateTypeIn(parent.MTE)){
-            $(tagAdd).find('span:eq(0)').append(html);
+            $(tagAdd).find('span:eq(0)').append(html); 
         }else if (parent.COTemplateTypeIn(parent.AEL)){
-             $(tagAdd).append(html);
+            $(tagAdd).append(html);
         }
         
         
@@ -469,8 +479,16 @@ function editor () {
             responseFunction(src, file, form); 
         }
         
-        $("#"+file+"> button.delObject").click(function(){
-            parent.delObject(file);
+        $("#"+file+"> button.delElement").click(function(){
+            parent.delElement(file);
+        });
+        
+        $("#"+file+" .input_element").change(function(){
+            //Se o input do Upload alterou, então verifica se NÃO existe IMG
+            if($("#"+file+" img").size() == 0) {
+                // Não existe IMG, logo adicionar uma nova e incrementa o contador do elements
+                parent.countElements[parent.currentPiece]++;
+            }
         });
         
         $("#"+input).bind('change', function() {
@@ -587,8 +605,8 @@ function editor () {
                 '<label>'+
                 '</div>';
             }else{
-               // Já existe, html = '';
-               html="";
+                // Já existe, html = '';
+                html="";
             }
                 
             
@@ -677,12 +695,13 @@ function editor () {
         }
         
         var tagAdd = "";
-//        if(parent.COTemplateTypeIn(parent.MTE)){
-//            tagAdd = $('div[match='+group+']');
-//        }else{
-//            tagAdd= $('div[match='+group+']');
-//        }
-
+        //        if(parent.COTemplateTypeIn(parent.MTE)){
+        //            tagAdd = $('div[match='+group+']');
+        //        }else{
+        //            tagAdd= $('div[match='+group+']');
+        //        }
+        
+        //TagAdd para o load
         tagAdd= $('div[group='+group+']');
         
         if(this.isset(loaddata)){
@@ -710,9 +729,11 @@ function editor () {
                 default:
             //console.log(elementID+' '+type+' '+loaddata);
             }
+        }else if(parent.COTemplateTypeIn(parent.AEL)){
+            // o group é a Resposta '_'
+            this.addText(tagAdd);
         }
        
-        this.countElements[this.currentPiece] =  this.countElements[this.currentPiece]+1;
         //Verificar se foi adicionado 2 elementos no AEL DE UMA ÚNICA VEZ
         if(isAddTwoElementsAel){
             var elementID_Resp = elementID;
@@ -843,14 +864,36 @@ function editor () {
         }
     }
     this.delElement = function(id){
+        
+        //Desconsiderar a última parte do último '_' que é o tipo do elemento
         if(confirm(MSG_REMOVE_ELEMENT)){
+            
+            //Verificar se precisa mudar a resposta do AEL
+            var match_div = $('#'+id).attr('match');
+            var separator = match_div.split('_');
+            if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
+               var match_ask = separator[0];
+                //Verificar se este Elemento a ser exluído é o último do grupo
+                var elements_answer = $('div[group='+match_ask+']').find('div[updated]');
+                if(elements_answer.size() == 1 ){
+                    //Ele é o único, então exclui o seu Elemento Resposta
+                    var element_answer_id = elements_answer.attr('id');
+                    this.delElement(element_answer_id);
+                }
+            }
+           
+            
+            //=========
+            
+            
             var iddb = $("#"+id).attr('idbd');
             var iddb_Piece = id.split('_');
             var i;
             var id_P = '';
-            for(i=0; i < (iddb_Piece.length-1); i++) {
+            var limitSuper = iddb_Piece.length-2; // 2=> desconsidera o element e seu tipo
+            for(i=0; i < limitSuper; i++) {
                 //Menos o último
-                if(i == iddb_Piece.length-2){
+                if(i == limitSuper-1){
                     //É o último
                     id_P += iddb_Piece[i];  
                 }else{
@@ -862,14 +905,23 @@ function editor () {
                 //Adiciona num Array de objetos deletados em ordem.
                 this.orderDelets.push('E'+iddb+'P'+iddb_P);
             }
-            $("#"+id).remove();
+            //$("#"+id).remove();
+            this.delObject(id);
         }
     }
     
     this.delObject = function(id){
-        if(confirm(MSG_REMOVE_OBJECT)){
-            $("#"+id).remove();
+        var match_div = $('#'+id).attr('match');
+        //if(confirm(MSG_REMOVE_OBJECT)){
+        $("#"+id).remove();
+        // }
+        
+        //Verificar se precisa mudar a resposta do AEL
+        var separator = match_div.split('_');
+        if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
+            this.changeRespAEL(separator[0]);
         }
+        
     }
    
     this.saveData = function(data, sucess, beforeSend){
@@ -1169,7 +1221,8 @@ function editor () {
                                     
                                     //Para cada Elemento no Piece
                                    
-                                    $('#'+curretPieceID+' .element').each(function(){
+                                    // Só Salva ou faz Update dos elementos que foram alimentados
+                                    $('#'+curretPieceID+' .element[updated="1"]').each(function(){
                                         ElementID = $(this).attr('id');
                                         ElementID_BD = $(this).attr('idBD');
                                         var newElem='';
@@ -1629,9 +1682,29 @@ function editor () {
     }
         
     this.elementChanged = function(input_element){
+        // Change imagens
         var id_div = input_element.attr("id").replace('_input', '');
         var id_span = id_div.replace('_image', '');
         $('#'+id_div+'.image, #'+id_span).attr('updated',1); 
+        
+        //Verificar se precisa mudar a resposta do AEL
+        var match_img_div = $('#'+id_div).attr('match');
+        var separator = match_img_div.split('_');
+        if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
+            this.changeRespAEL(separator[0]);
+        }
+        
+    }
+    
+    this.changeRespAEL = function(match_ask){
+        //Verificar se possui alguma div com update == 1 neste grupo de Pergunta
+        if($('div[group='+match_ask+']').find('div[updated=1]').size() > 0 ){
+            //Realiza o Update = '1' no elemento Resposta
+            $('div[match='+match_ask+'_1]').attr('updated',1);
+        }else{
+            //Realiza o Update = '0' no elemento Resposta, pois não existe nenhum elemento Pergunta
+            $('div[match='+match_ask+'_1]').attr('updated',0);
+        }
     }
         
 }
