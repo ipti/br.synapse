@@ -159,7 +159,7 @@ function editor () {
                 html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>';
             //Se o template for PRE
             }else if(parent.COTemplateTypeIn(parent.PRE)){
-                html+= '<div class="tplMulti"></div>';
+                html+= '<div class="tplPre"></div>';
             }else if(parent.COTemplateTypeIn(parent.AEL)){
                 html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
                 "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
@@ -268,7 +268,7 @@ function editor () {
         if(parent.COTemplateTypeIn(parent.MTE) || 
             (parent.COTemplateTypeIn(parent.AEL) && tagAdd.attr('group').split('_').length == 1)){
             //Se for MTE ou (AEL e For uma PERGUNTA)
-            html += '<button class="del delText">'+LABEL_REMOVE_TEXT+'</button>';
+            html += '<input type="button" class="del delElement" value="'+LABEL_REMOVE_TEXT+'">'
         } 
         
         html += '</div>';
@@ -294,7 +294,7 @@ function editor () {
             var value_txt = "#"+ID+"_flag.editable";  
             var id_const = ID;
             //ID sempre muda, logo criar outra variável local id_const, quando o evento é chamado
-            $(text_div+" > button.delText").click(function(){
+            $(text_div+" > input.delElement").click(function(){
                 parent.delElement(id_const+"_text");
             });
             $(editable).editable(function(value, settings) { 
@@ -449,14 +449,14 @@ function editor () {
         }
         
         if(parent.COTemplateTypeIn(parent.MTE)){
-            html += '<button class="del delElement">'+LABEL_REMOVE_OBJECT+'</button>';
+            html += '<input type="button" class="del delElement" value="'+LABEL_REMOVE_OBJECT+'">';
         }     
         else {
             html +="";
         }
         html += '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
         '<div id="'+file+'" '+libBDID+' class="'+uploadType+'">'+
-        '<button class="del delElement">'+LABEL_REMOVE_OBJECT+'</button>'+
+        '<input type="button" class="del delElement" value="'+LABEL_REMOVE_OBJECT+'">'+
         '<form enctype="multipart/form-data" id="'+form+'" method="post" action="/Editor/upload">'+
         '<input type="hidden" name="op" value="'+uploadType+'"/>'+
         name_db +
@@ -479,7 +479,7 @@ function editor () {
             responseFunction(src, file, form); 
         }
         
-        $("#"+file+"> button.delElement").click(function(){
+        $("#"+file+"> input.delElement").click(function(){
             parent.delElement(file);
         });
         
@@ -741,7 +741,7 @@ function editor () {
         }
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
         var buttonImageID = "#"+elementID+" > div > button.insertImage";
-        var buttonDelID = "#"+elementID+" > div > button.delElement";
+        var buttonDelID = "#"+elementID+" > div > input.delElement";
         var textoID = "#"+elementID+"_text";
         var imageID = "#"+elementID+"_image";
         
@@ -765,7 +765,7 @@ function editor () {
             var buttonTextoID = "#"+elementID+"> div > button.insertText";
             var buttonImageID = "#"+elementID+" > div > button.insertImage";
             
-            var buttonDelID = "#"+elementID+" > div > button.delElement";
+            var buttonDelID = "#"+elementID+" > div > input.delElement";
             var textoID = "#"+elementID+"_text";
             var imageID = "#"+elementID+"_image";
 
@@ -817,9 +817,11 @@ function editor () {
             });
         }else if((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT))
             && (!this.isset(loaddata))){
-            parent.addText(elementID);
+            window.alert(elementID+'_text');
+            parent.addText($('div.tplPre'));
         }
     }
+    
     this.delScreen = function(force){
         //pega o id da screen atual
         var id = this.currentScreenId;
@@ -863,10 +865,12 @@ function editor () {
             delete this.countElements[id];
         }
     }
-    this.delElement = function(id){
+    this.delElement = function(id, ael_resp){
         
+        var doDel = (!this.isset(ael_resp) || !ael_resp) ? confirm(MSG_REMOVE_ELEMENT):true; 
+      
         //Desconsiderar a última parte do último '_' que é o tipo do elemento
-        if(confirm(MSG_REMOVE_ELEMENT)){
+        if(doDel){
             
             //Verificar se precisa mudar a resposta do AEL
             var match_div = $('#'+id).attr('match');
@@ -874,11 +878,13 @@ function editor () {
             if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
                var match_ask = separator[0];
                 //Verificar se este Elemento a ser exluído é o último do grupo
-                var elements_answer = $('div[group='+match_ask+']').find('div[updated]');
-                if(elements_answer.size() == 1 ){
+                var elements_ask = $('div[group='+match_ask+']').find('div[updated]');
+                //alert(elements_answer.size());
+                if(elements_ask.size() == 1 ){
                     //Ele é o único, então exclui o seu Elemento Resposta
-                    var element_answer_id = elements_answer.attr('id');
-                    this.delElement(element_answer_id);
+                    var element_answer = $('div[group='+match_ask+'_1]').find('div[updated]');
+                    var element_answer_id = element_answer.attr('id');
+                    this.delElement(element_answer_id,true);
                 }
             }
            

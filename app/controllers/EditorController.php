@@ -33,10 +33,10 @@
 //@done 31 - Corrigir o load de elementos com mesmo grupo do Associar Elementos
 //@done 32 - Corrigir o load de elementos com mesmo grupo do Multiple Escolha 
 //@done 33 - Corrigir limitação de cliques para adicionar elementos no mesmo match
-//@todo 34 - Corrigir o Save do Multiple Escolha 
-//@todo 35 - Corrigir o Save do Associar Elementos
-//@todo 36 - Corrigir o Update do Multiple Escolha 
-//@todo 37 - Corrigir o Update do Associar Elementos
+//@done 34 - Corrigir o Save do Multiple Escolha 
+//@done 35 - Corrigir o Save do Associar Elementos
+//@done 36 - Corrigir o Update do Multiple Escolha 
+//@done 37 - Corrigir o Update do Associar Elementos
 //@todo 38 - Contabilizar a ordem dos matchs no add para o TXT
 //@todo 39 - Contabilizar a ordem dos matchs no update para o TXT
 //@todo 40 - Contabilizar a ordem dos matchs no add para o PRE
@@ -48,18 +48,20 @@
 //@done 46 - Corrigir o contador dos elementos 
 //@todo 47 - Corrigir o log das flags
 //
-//@todo 48 - Corrigir o excluir do MTE
-//@todo 49 - COrrigir o excluir do AEL
-//@done 50 - salvar elemento Resposta do AEL Obrigatoriamente,quando alguma Pergunta é alterada
+//@done 48 - Corrigir o excluir do MTE
+//@done 49 - Corrigir o excluir do AEL
+//@done 50 - Salvar elemento Resposta do AEL Obrigatoriamente,quando alguma Pergunta é alterada
 //@done 51 - Corrigir o excluir Objeto[elementos] do AEL 
 //@todo 52 - Corrigir o excluir divGroup do AEL 
+//@todo - IMPORTANT ! 53 - Verificar se a Resposta do AEL precisa ser armazena na library. (pode deletar esse element?)
 //
 // 23-01 := 4;
 // 24-01 := 2;
 
 // 27-01 := 2;
 // 30-01 := 3;
-
+// 29-01 := 0;
+// 31-01 := 6;
 
 class EditorController extends Controller {
 
@@ -566,8 +568,6 @@ class EditorController extends Controller {
                                     $Element_Piece = EditorPieceElement::model()->findByAttributes(
                                             array('piece_id' => $pieceID, 'element_id' => $newElement->id));
                                     
-                                      var_dump($pieceID .' -- '.$newElement->id);
-                                      
                                     $Element_Piece_Property = EditorPieceelementProperty::model()
                                             ->findAll(array(
                                         'condition' => 'piece_element_id=:idPieceElement',
