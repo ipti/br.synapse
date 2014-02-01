@@ -31,6 +31,8 @@ if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
             v = $("#rblockscript select").val();
             $('#'+v).show();
         });
+
+
         $('#rdiscipline').change(function(){
             $('.rscripts').hide();
             $('.rblocks').hide();
@@ -41,10 +43,12 @@ if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
         });
         $('.start').click(function(){
             newRender.scriptID = $('select#rscript'+newRender.disciplineID).val();
+            newRender.blockID = $('select#rblock'+newRender.disciplineID).val();
             newRender.typeID = $('#typeID').val();
             newRender.atdID = $('#atdID').val();
             $('#disciplineID').val(newRender.disciplineID);
             $('#scriptID').val(newRender.scriptID);
+            $('#blockID').val(newRender.blockID);
             $('form').submit();
             //            
             //           
@@ -77,20 +81,20 @@ if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
     <div class="innerborder">
         <h1></h1>
         <form action="/render/stage" method="POST">
-            <!--<label>
+            <label>
                 <font>Tipo de Atendimento:</font>
                 <select id="atdID">
                     <option value="exam">AVALIAÇÃO</option>
                     <option value="training">TREINO</option>
                 </select>
-            </label>-->
-            <!--<label id="rblockscript">
+            </label>
+            <label id="rblockscript">
                 <font>Bloco/Roteiro:</font>
                 <select id="typeID">
                     <option value="rscript">ROTEIRO</option>
                     <option value="rblock">BLOCO</option>
                 </select>
-            </label>-->
+            </label>
             <label id="rdiscipline">
                 <font>Disciplina:</font>
             </label>
@@ -101,22 +105,22 @@ if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
             <label id="robjective">
                 <font>Objetivo:</font>
             </label>-->
-            <!--<label class="blockscript" id="rblock">
+            <label class="blockscript" id="rblock">
                 <font>Bloco:</font>
-            </label>-->
+            </label>
             <label class="blockscript" id="rscript">
                 <font>Roteiro:</font>
             </label>
            <label id="rtheme">
                 <font>Tema:</font>
             </label>
-            <!--<label>
+            <label>
                 <font>Seguir a matriz:</font>
                 <select>
                     <option>SIM</option>
                     <option>NÃO</option>
                 </select>
-            </label>-->
+            </label>
             <label id="rclasses">
                 <font>Turma:</font><?php echo $class->name ?>
             </label>
@@ -131,6 +135,7 @@ if (isset($_SESSION['idActor'])&&!(isset($_REQUEST['actor']))) {
             <input name="actorID" type="hidden" id="actorID" value="<?php echo $act->id; ?>"/>
             <input name="scriptID" type="hidden" id="scriptID" value=""/>
             <input name="disciplineID" type="hidden" id="disciplineID" value=""/>
+             <input name="blockID" type="hidden" id="blockID" value=""/>
         </form>
     </div>
 </div>
