@@ -59,7 +59,7 @@
 // 24-01 := 2;
 
 // 27-01 := 2;
-// 30-01 := 3;
+// 28-01 := 3;
 // 29-01 := 0;
 // 31-01 := 6;
 
@@ -560,6 +560,7 @@ class EditorController extends Controller {
                                 $unlink_New = false;
                                 $delete = false;
                                 $justFlag = false;
+                              
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 1) {
                                     //Desvincula e Cria um novo elemento !
@@ -579,7 +580,7 @@ class EditorController extends Controller {
                                         // Excluir cada propriedade do Element_Piece
                                         $ls->delete();
                                     endforeach;
-                                    //Depois, Desvincula o elemento da peça.                                  
+                                    //Depois, Desvincula o elemento da peça. 
                                     $Element_Piece->delete();
 
                                     $unlink_New = true;

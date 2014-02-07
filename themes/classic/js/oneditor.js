@@ -56,7 +56,7 @@ $(function() {
     }
     
     $('.input_element').live("change",function() {
-        newEditor.elementChanged($(this));
+        newEditor.imageChanged($(this));
     });
     
     
