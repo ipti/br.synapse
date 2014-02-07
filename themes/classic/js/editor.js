@@ -301,9 +301,7 @@ function editor () {
                 selector: "textarea#"+ID+"_flag"
             });            
               
-            console.log($("body", $(text_element+"_flag_ifr").contents()).html());
             $(text_element+"_flag").live('change', function(){
-                window.alert('okkk');
                 var txt_BD = $(text_element+"_flag").val();
                 var txt_NEW = $("body", $(text_element+"_flag_ifr").contents()).html();
                 var text_div = text_element+'_text';                 
@@ -369,7 +367,37 @@ function editor () {
                     $(form).submit();
                     //Verificar se foi Alterado em relação a do DB             
                     parent.textChanged(initial_text, value_txt, text_element, text_div );
-                
+                    var txt_New_noHtml = $(value_txt).text();
+                    //===========================
+                    if(parent.COTemplateTypeIn(parent.PRE) && (txt_New_noHtml == "" || 
+                        txt_New_noHtml == "Clique para Alterar...")) {
+                        // O template é do tipo PRE  e o elemento está vazio
+                        //Deleta o PieceSet
+                        parent.delPieceSet(parent.currentPieceSet,true); // TODO
+                        //Atualiza Total de elementos e o Total alterados
+                        parent.totalElements = $('.element').size();
+                        parent.load_totalElements = $('.element[updated="1"]').size();
+                        parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
+                        parent.totalPieces = $('.piece').size();
+                        parent.totalPiecesets = $('.PieceSet').size();
+                                            
+                        if(parent.isset(idbd)){
+                            //Enviar array de objetos a serem excluidos 
+                            parent.saveData({                   
+                                op:"delete", 
+                                array_del:parent.orderDelets
+                            },
+                            //função sucess
+                            function(response, textStatus, jqXHR){
+                                parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
+                                $('.savescreen').append('<br><p> Objeto PRE Deletado!...</p>');
+                                //Verificar se acabou as requisições
+                                parent.verify_requestFinish();   
+                            });
+                        }
+                                           
+                    }
+                //===========================
                 });
                 //seta o foco no input
                 $(input).focus();
@@ -884,7 +912,8 @@ function editor () {
             $("#"+id+"_list").remove();
             delete this.countPieces[id];
                 
-        }else{
+        }
+        else{
             if(confirm(MSG_REMOVE_PIECESET)){
                 var iddb = $("#"+id+"_list").attr('idbd');
                 if(this.isset(iddb)){
@@ -996,7 +1025,8 @@ function editor () {
                             }
                         }
                         
-                    }else{
+                    }
+                    else{
                         $('.savescreen').append('<br><p>X Deletando Objetos!...</p>');    
                     }
                     
@@ -1454,7 +1484,8 @@ function editor () {
                                                                         parent.uploadedElements++; 
                                                                         if(!parent.isload && parent.totalElements == parent.uploadedElements) {
                                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
-                                                                        }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                                        }
+                                                                        else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
                                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
                                                                         }
                                                                
@@ -1537,10 +1568,6 @@ function editor () {
     //Verificar se acabou as requisições!
     this.verify_requestFinish = function() {
         var parent = this;
-        console.log(
-            ( 
-                ( 
-                    parent.uploadedFlags +"  "+ parent.load_totalElements_Invert)));
         
         if((parent.totalScreens == parent.uploadedScreens) && 
             (parent.totalPiecesets == parent.uploadedPiecesets) &&
