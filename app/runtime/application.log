@@ -12337,3 +12337,671 @@ Stack trace:
 REQUEST_URI=/rsc/library/images/none.jpg
 HTTP_REFERER=http://synapse.dev/render/stage
 ---
+2014/01/30 11:41:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/01/30 11:41:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/01/30 11:42:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:34 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/30 11:42:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 13:58:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'O sistema não foi capaz de encontrar a ação "loadCobject=318" solicitada.' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php:483
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(270): CController->missingAction('loadCobject=318')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('loadCobject=318')
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('render/loadCobj...')
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#4 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#5 {main}
+REQUEST_URI=/render/loadCobject=318
+---
+2014/01/31 13:58:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/01/31 13:58:27 [error] [php] Undefined index: ID (Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php:179)
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): RenderController->runAction()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CAccessControlFilter->filter()
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): RenderController->filterAccessControl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): RenderController->runActionWithFilters()
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): RenderController->run()
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#10 Z:\ipti.projetos\synapse.dev\index.php(18): CWebApplication->run()
+REQUEST_URI=/render/loadCobject?id=318
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (179)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/01/31 15:30:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:30:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:30:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:30:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:30:55 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:30:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:31:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:31:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:31:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:31:04 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 15:31:05 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:55:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/01/31 21:56:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/01/31 21:56:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/02/01 16:43:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:43:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 16:51:30 [error] [php] Trying to get property of non-object (Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php:296)
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): RenderController->runAction()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CAccessControlFilter->filter()
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): RenderController->filterAccessControl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): RenderController->runActionWithFilters()
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): RenderController->run()
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#10 Z:\ipti.projetos\synapse.dev\index.php(18): CWebApplication->run()
+REQUEST_URI=/render/stage
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (296)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:52:22 [error] [php] Trying to get property of non-object (Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php:297)
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): RenderController->runAction()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CAccessControlFilter->filter()
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): RenderController->filterAccessControl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): RenderController->runActionWithFilters()
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): RenderController->run()
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#10 Z:\ipti.projetos\synapse.dev\index.php(18): CWebApplication->run()
+REQUEST_URI=/render/stage
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (297)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:52:59 [error] [php] Undefined variable: where (Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php:331)
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): RenderController->runAction()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CAccessControlFilter->filter()
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): RenderController->filterAccessControl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): RenderController->runActionWithFilters()
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): RenderController->run()
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#10 Z:\ipti.projetos\synapse.dev\index.php(18): CWebApplication->run()
+REQUEST_URI=/render/stage
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (331)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:55:39 [error] [system.db.CDbCommand] Falha ao executar CDbCommand::execute(): SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status ' at line 1. A declaração SQL executada foi: select distinct(cobject_id) as id from render_cobjects ro where status='on' left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id.
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (347)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:55:39 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand falhou ao executar o comando SQL: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status ' at line 1. The SQL statement executed was: select distinct(cobject_id) as id from render_cobjects ro where status='on' left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbCommand.php:358
+Stack trace:
+#0 Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php(347): CDbCommand->execute()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): RenderController->actionStage()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('stage')
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('render/stage')
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#13 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#14 {main}
+REQUEST_URI=/render/stage
+HTTP_REFERER=http://synapse.dev/render/canvas
+---
+2014/02/01 16:58:01 [error] [system.db.CDbCommand] Falha ao executar CDbCommand::execute(): SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'cobject_id' in field list is ambiguous. A declaração SQL executada foi: select distinct(cobject_id) as id from render_cobjects left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id.
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (347)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:58:01 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand falhou ao executar o comando SQL: SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'cobject_id' in field list is ambiguous. The SQL statement executed was: select distinct(cobject_id) as id from render_cobjects left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbCommand.php:358
+Stack trace:
+#0 Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php(347): CDbCommand->execute()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): RenderController->actionStage()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('stage')
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('render/stage')
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#13 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#14 {main}
+REQUEST_URI=/render/stage
+HTTP_REFERER=http://synapse.dev/render/canvas
+---
+2014/02/01 16:58:24 [error] [system.db.CDbCommand] Falha ao executar CDbCommand::execute(): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ro.cobject_id' in 'field list'. A declaração SQL executada foi: select distinct(ro.cobject_id) as id from render_cobjects left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id.
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (347)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:58:24 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand falhou ao executar o comando SQL: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ro.cobject_id' in 'field list'. The SQL statement executed was: select distinct(ro.cobject_id) as id from render_cobjects left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbCommand.php:358
+Stack trace:
+#0 Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php(347): CDbCommand->execute()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): RenderController->actionStage()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('stage')
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('render/stage')
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#13 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#14 {main}
+REQUEST_URI=/render/stage
+HTTP_REFERER=http://synapse.dev/render/canvas
+---
+2014/02/01 16:58:40 [error] [system.db.CDbCommand] Falha ao executar CDbCommand::execute(): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ro.id' in 'field list'. A declaração SQL executada foi: select distinct(ro.id) as id from render_cobjects left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id.
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (347)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:58:40 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand falhou ao executar o comando SQL: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ro.id' in 'field list'. The SQL statement executed was: select distinct(ro.id) as id from render_cobjects left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbCommand.php:358
+Stack trace:
+#0 Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php(347): CDbCommand->execute()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): RenderController->actionStage()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('stage')
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('render/stage')
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#13 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#14 {main}
+REQUEST_URI=/render/stage
+HTTP_REFERER=http://synapse.dev/render/canvas
+---
+2014/02/01 16:58:54 [error] [system.db.CDbCommand] Falha ao executar CDbCommand::execute(): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a7.year' in 'order clause'. A declaração SQL executada foi: select distinct(ro.id) as id from render_cobjects ro left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id.
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (347)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 16:58:54 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand falhou ao executar o comando SQL: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a7.year' in 'order clause'. The SQL statement executed was: select distinct(ro.id) as id from render_cobjects ro left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.id) where ro.status = 'on' and ccobj.cobject_block_id=1 order by a7.year,a7.grade,a3.id,a1.id' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\db\CDbCommand.php:358
+Stack trace:
+#0 Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php(347): CDbCommand->execute()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\actions\CInlineAction.php(49): RenderController->actionStage()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): CController->run('stage')
+#11 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('render/stage')
+#12 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#13 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#14 {main}
+REQUEST_URI=/render/stage
+HTTP_REFERER=http://synapse.dev/render/canvas
+---
+2014/02/01 17:00:03 [error] [php] Division by zero (Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php:351)
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): RenderController->runAction()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CAccessControlFilter->filter()
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): RenderController->filterAccessControl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): RenderController->runActionWithFilters()
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): RenderController->run()
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#10 Z:\ipti.projetos\synapse.dev\index.php(18): CWebApplication->run()
+REQUEST_URI=/render/stage
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (351)
+in Z:\ipti.projetos\synapse.dev\index.php (18)

@@ -23,6 +23,7 @@ function showtext(id) {
 }
 function render () {
     var html;
+    this.peformance = [];
     this.actorName ='NENHUM';
     this.templateType;
     this.disciplineID;
@@ -62,6 +63,22 @@ function render () {
         $('.screen').first().addClass('currentScreen');
         NEWRENDER.startTime = Math.round(+new Date()/1000);
     }
+    this.loadrecursive = function(id,pos,json){
+            var parent = this;
+            eval('response'+' = '+'cobject_'+id);
+            parent.pctLoad = parent.pctLoad+json.pctitem;
+            parent.progressbar(parent.pctLoad, $('#progressBar'));
+            parent.messageload("Carregando "+response.cobject_type+" "+id+"...",response.goal);
+            parent.loadcobject(response);
+            if(pos+1 >= json.size){
+                    $('#msgload').hide();
+                    parent.messageload("Concluido");
+                    $("#start").show();
+                    NEWRENDER.mountReportScreen();
+            }else{
+                    parent.loadrecursive(json.ids[pos+1].id,pos+1,json);
+            }
+    }
     this.ajaxrecursive = function(id,pos,json){
         var parent = this;
         $.ajax({
@@ -90,7 +107,7 @@ function render () {
         });
     }
     this.progresiveLoad = function(json,id){
-        this.ajaxrecursive(json.ids[0].id,0,json);
+        this.loadrecursive(json.ids[0].id,0,json);
     }
     this.mountHeader = function(cobject){
         var parent = this;
@@ -125,6 +142,10 @@ function render () {
         }
         return infoScreen;
     }
+    this.savePeformance = function(parent){
+        var blob = new Blob([JSON.stringify(NEWRENDER.peformance,"\t")], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "DESEMPENHO_"+NEWRENDER.actorID+"_"+NEWRENDER.actorName+".txt");
+    }
     this.mountReportScreen = function(){
         htmlScreen = $('<div class="screen" id="SCRLAST"></div>');
         infoScreenl = $('<div class="screenInfo"></div>');
@@ -141,6 +162,8 @@ function render () {
         infoScreenl.append('<span class="clear"></span>');
         htmlScreen.append(infoScreenl);
         htmlScreen.append('<div class="sps_render_ending"><strong>FIM</strong><span>Você obteve: <font class="ctCorrect">0</font> Acerto(s) e <font class="ctWrong">0</font> Erro(s).</span></div>');
+        htmlPeformance = $('<textarea style="width:100%;height:250px" id="peformance_feedback"></textarea>').on('click',this.savePeformance);
+        htmlScreen.append(htmlPeformance);
         $(".cobjects").append(htmlScreen);
     }
     this.loadcobject = function(cobject){
@@ -193,7 +216,9 @@ function render () {
             $('.ctWrong').text(NEWRENDER.ctWrong);
             iscorrect = false;
         }
-        $.ajax({
+        this.peformance.push([{'pieceID':pieceID,'elementID':elementID,'actorID':NEWRENDER.actorID,'finalTime':finaltime,'startTime':NEWRENDER.startTime,'isCorrect': iscorrect,'value': value}]);
+        $('#peformance_feedback').html(JSON.stringify(this.peformance,"\t"));
+        /*$.ajax({
             url:"/render/compute",
             data:{
                 pieceID:pieceID,
@@ -206,7 +231,7 @@ function render () {
             },
             type:"POST",
             dataType:"json"
-        });
+        });*/
     }
     this.showMessage = function(type){
         if(type == 'correct'){
@@ -332,11 +357,10 @@ function render () {
                 });
                 $('#rscript').append(htmScript);
             }
-            if(typeof(discipline.blocks[0]) != "undefined"){
+            if(typeof(discipline.blocks) != "undefined"){
                 htmScript = $('<select class="rblocks" id="rblock'+discipline.id+'"></select>');
-                htmScript.append('<option value="0">TODOS</option>');
                 $.each(discipline.blocks, function(i, block) {
-                    htmScript.append('<option value="'+block.id+'">'+block.name+'</option>');
+                    htmScript.append('<option value="'+block.ID+'">'+block.name+'</option>');
                 });
                 $('#rblock').append(htmScript);
             }
@@ -404,7 +428,7 @@ function render () {
                 case 'multimidia':
                     switch(element.typemulti){
                         case 'image':
-                            htmElement = $('<img src="/rsc/library/images/none.jpg"/>');
+                            htmElement = $('<img src="./rsc/library/images/none.jpg"/>');
                             break;
                         case 'sound':
                             blockElement.prepend('<font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font>');
@@ -446,10 +470,10 @@ function render () {
                         htmElement.html(gproperty.value);
                     }else if(gproperty.name == 'src'){
                         if(element.typemulti == 'sound'){
-                            htmElement.attr('data','/rsc/js/player/dewplayer.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3');
-                            htmElement.append('<param name="movie" value="dewplayer.swf?mp3=/rsc/library/sound/'+gproperty.value+'.MP3" />');
+                            htmElement.attr('data','./rsc/js/player/dewplayer.swf?mp3=./rsc/library/sound/'+gproperty.value+'.MP3');
+                            htmElement.append('<param name="movie" value="dewplayer.swf?mp3=./rsc/library/sound/'+gproperty.value+'.MP3" />');
                         }else{
-                            htmElement.attr(gproperty.name,'/rsc/library/images/'+gproperty.value);
+                            htmElement.attr(gproperty.name,'./rsc/library/images/'+gproperty.value);
                         }
                     }else{
                         htmElement.attr(gproperty.name,gproperty.value);
