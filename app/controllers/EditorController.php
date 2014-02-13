@@ -24,8 +24,8 @@
 //@done 22 - Corrigir o EditorControle para se adequar aos matchs
 //@done 23 - Contabilizar a ordem dos matchs no add para o MTE
 //@done 24 - Contabilizar a ordem dos matchs no add para o AEL
-//@todo 25 - Contabilizar a ordem dos matchs no update para o MTE
-//@todo 26 - Contabilizar a ordem dos matchs no update para o AEL
+//@done 25 - Contabilizar a ordem dos matchs no update para o MTE
+//@done 26 - Contabilizar a ordem dos matchs no update para o AEL
 //@done 27 - Pôr imagem,texto na mesma div
 //@done 28 - Criar contadores separados dos grupos para cada Template
 //@done 29 - Corrigir o load das imagens do Associar Elementos
@@ -37,14 +37,14 @@
 //@done 35 - Corrigir o Save do Associar Elementos
 //@done 36 - Corrigir o Update do Multiple Escolha 
 //@done 37 - Corrigir o Update do Associar Elementos
-//@todo 38 - Contabilizar a ordem dos matchs no add para o TXT
-//@todo 39 - Contabilizar a ordem dos matchs no update para o TXT
-//@todo 40 - Contabilizar a ordem dos matchs no add para o PRE
-//@todo 41 - Contabilizar a ordem dos matchs no update para o PRE
-//@todo 42 - Corrigir o Save do TXT
-//@todo 43 - Corrigir o Save do PRE
-//@todo 44 - Corrigir o Update do TXT
-//@todo 45 - Corrigir o Update do PRE
+//@done 38 - Contabilizar a ordem dos matchs no add para o TXT
+//@done 39 - Contabilizar a ordem dos matchs no update para o TXT
+//@done 40 - Contabilizar a ordem dos matchs no add para o PRE
+//@done 41 - Contabilizar a ordem dos matchs no update para o PRE
+//@done 42 - Corrigir o Save do TXT
+//@done 43 - Corrigir o Save do PRE
+//@done 44 - Corrigir o Update do TXT
+//@done 45 - Corrigir o Update do PRE
 //@done 46 - Corrigir o contador dos elementos 
 //@todo 47 - Corrigir o log das flags
 //
@@ -57,11 +57,15 @@
 //
 // 23-01 := 4;
 // 24-01 := 2;
-
 // 27-01 := 2;
 // 28-01 := 3;
 // 29-01 := 0;
 // 31-01 := 6;
+//03-03 := 0;
+//03-04 := 2;
+//03-05 := 4;
+//03-06 := 0;
+//03-07 := 4;
 
 class EditorController extends Controller {
 
@@ -543,12 +547,13 @@ class EditorController extends Controller {
                                 $typeName = $_POST['typeID'];
                                 $typeID = $this->getTypeIDByName($typeName);
                             }
+                            $justFlag = false;
 
-                            if (isset($_POST['pieceID']) && isset($_POST['flag']) && isset($_POST['ordem'])
-                                    && (isset($_POST['value']) || isset($_POST['justFlag']) ) && isset($_POST['DomID'])) {
+                            if (isset($_POST['pieceID']) && isset($_POST['ordem'])
+                                    && isset($_POST['value']) && isset($_POST['DomID'])) {
                                 $DomID = $_POST['DomID'];
                                 $pieceID = $_POST['pieceID'];
-                                $flag = $_POST['flag'];
+                                $flag = isset($_POST['flag']) ? $_POST['flag'] : -1;
                                 $match = isset($_POST['match']) ? $_POST['match'] : -1;
                                 if (isset($_POST['value'])) {
                                     $value = $_POST['value'];
@@ -559,8 +564,7 @@ class EditorController extends Controller {
                                 $new = false;
                                 $unlink_New = false;
                                 $delete = false;
-                                $justFlag = false;
-                              
+
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 1) {
                                     //Desvincula e Cria um novo elemento !
@@ -568,7 +572,7 @@ class EditorController extends Controller {
                                     $newElement = EditorElement::model()->findByPk($IDDB);
                                     $Element_Piece = EditorPieceElement::model()->findByAttributes(
                                             array('piece_id' => $pieceID, 'element_id' => $newElement->id));
-                                    
+
                                     $Element_Piece_Property = EditorPieceelementProperty::model()
                                             ->findAll(array(
                                         'condition' => 'piece_element_id=:idPieceElement',
@@ -584,14 +588,11 @@ class EditorController extends Controller {
                                     $Element_Piece->delete();
 
                                     $unlink_New = true;
-                                } elseif ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
-                                        isset($_POST['updated']) && $_POST['updated'] == 0) {
-                                    // Somente Atualiza a FLag
-                                    $justFlag = true;
-                                } else {
+                                }else {
                                     //Cria um novo somente.
                                     $new = true;
                                 }
+
 
                                 if ($new || $unlink_New) {
                                     $newElement = new EditorElement(); // Cria um novo
@@ -608,27 +609,32 @@ class EditorController extends Controller {
                                     $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $pieceID, 'element_id' => $elementID), array('order' => 'id desc'));
                                     $pieceElementID = $pieceElement->id;
 
-                                    //layertype
-                                    $propertyName = "layertype";
-                                    $propertyContext = "piecelement";
-                                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
                                     //===========================================================
-                                    $newPieceElementProperty = new EditorPieceelementProperty();
-                                    $newPieceElementProperty->piece_element_id = $pieceElementID;
-                                    $newPieceElementProperty->property_id = $propertyID;
-                                    $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
-                                    $newPieceElementProperty->insert();
-
-                                    // grouping
-                                    $propertyName = "grouping";
-                                    $propertyContext = "piecelement";
-                                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                    //===========================================================
-                                    $newPieceElementProperty = new EditorPieceelementProperty();
-                                    $newPieceElementProperty->piece_element_id = $pieceElementID;
-                                    $newPieceElementProperty->property_id = $propertyID;
-                                    $newPieceElementProperty->value = $match;
-                                    $newPieceElementProperty->insert();
+                                    if ($match != -1) {
+                                        // grouping
+                                        $propertyName = "grouping";
+                                        $propertyContext = "piecelement";
+                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                        //===========================================================
+                                        $newPieceElementProperty = new EditorPieceelementProperty();
+                                        $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                        $newPieceElementProperty->property_id = $propertyID;
+                                        $newPieceElementProperty->value = $match;
+                                        $newPieceElementProperty->insert();
+                                    }
+                                    if($flag != -1) {
+                                        //Inseri a Flag
+                                        $propertyName = "layertype";
+                                        $propertyContext = "piecelement";
+                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                        //===========================================================
+                                        $newPieceElementProperty = new EditorPieceelementProperty();
+                                        $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                        $newPieceElementProperty->property_id = $propertyID;
+                                        $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
+                                        $newPieceElementProperty->insert();
+                                        //====================
+                                    }
 
                                     if (isset($_POST["library"])) {
                                         $libraryTypeName = $_POST["library"];
@@ -643,22 +649,6 @@ class EditorController extends Controller {
                                             //$url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
                                             $path = Yii::app()->basePath;
                                             list($width, $height, $type) = getimagesize($path . "/../" . $src);
-                                            //Salva library
-                                            //type 9 
-//                                            if ($unlink_New) { Can't
-//                                                //Desvincular Element_Library
-//                                                $propName = "library_id";
-//                                                $propContext = "multimidia";
-//                                                $propID = $this->getPropertyIDByName($propName, $propContext);
-//                                                //Id da Library-Img
-//                                                $ElementProperty_IDlib = EditorElementProperty::model()->find(array(
-//                                                    'condition' => 'element_id =:elementID AND property_id=:propID',
-//                                                    'params' => array(':elementID' => $elementID,
-//                                                        ':propID' => $propID)));
-//                                                // 
-//                                                $ElementProperty_IDlib->delete;
-//                                                //====================
-//                                            } 
 
                                             $newLibrary = new Library();
                                             $library_typeName = $_POST['library'];
@@ -752,9 +742,15 @@ class EditorController extends Controller {
                                     }
                                 } elseif ($delete) {
                                     // Se deletou o Element                                  
-                                } elseif ($justFlag) {
-                                    // Apenas Atualiza as Flags
+                                }
+                            } else if (isset($_POST['justFlag']) && $_POST['justFlag'] == 1) {
+                                // Somente a Flag
+                                $flag = $_POST['flag'];
+                                // Apenas Atualiza as Flags dos elementos
+                                if (isset($_POST['ID_BD'])) {
+                                    //Atualiza as Flags
                                     $IDDB = $_POST['ID_BD'];
+                                    $pieceID = $_POST['pieceID'];
                                     $pieceElement = EditorPieceElement::model()->findByAttributes(array(
                                         'piece_id' => $pieceID,
                                         'element_id' => $IDDB));
@@ -763,7 +759,7 @@ class EditorController extends Controller {
                                                 'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
                                     $change_flag->value = $flag == "true" ? "Acerto" : "Erro";
                                     $change_flag->save();
-                                }
+                                } 
                             } else {
                                 throw new Exception("ERROR: Dados da Element insuficientes.<br>");
                             }
@@ -816,7 +812,7 @@ class EditorController extends Controller {
                                         'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
                                     //var_dump($pe_property->value); exit();
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
-                                    
+
                                     $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                     foreach ($ElementProperty as $ep):
                                         if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
