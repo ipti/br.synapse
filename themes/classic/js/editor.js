@@ -631,7 +631,15 @@ function editor () {
                 //Já existe o div[elementID]
                 sameElement = $('div[group='+match+']').length == '1';
             }else{
-                group = $("#"+parent.currentPiece+" div[group]").length+1; 
+                var last_group = $('#'+parent.currentPiece).find('div[group]').last().attr('group');
+                var next_group;
+                if(parent.isset(last_group)){
+                    next_group = parseInt(last_group);
+                    next_group++;
+                }else{
+                    next_group = 1;
+                }
+                group = next_group;
             }
             
             var newDivMatch = false;
@@ -646,7 +654,7 @@ function editor () {
                 html += ''+
                 '<button class="insertImage">'+LABEL_ADD_IMAGE+'</button>'+
                 '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
-                '<button class="del delElement">'+LABEL_REMOVE_ELEMENT+'</button>'+
+                '<input type="button" class="del delElement" value="'+LABEL_REMOVE_ELEMENT+'">'+
                 '<br>'+
                 '<br>'+
                 '<br>'+
@@ -679,7 +687,16 @@ function editor () {
                     sameElement = $('div[group='+match+']').length == '1';
                 }
             }else{
-                group = ($("#"+parent.currentPiece+" div[group]").length+2)/2;
+                var last_group = $('#'+parent.currentPiece).find('div[group]').last().attr('group');
+                var next_group;
+                if(parent.isset(last_group)){
+                    last_group = last_group.split('_')[0];
+                    next_group = parseInt(last_group);
+                    next_group++;
+                }else{
+                    next_group = 1;
+                }
+                group = next_group;
             }
             
             var htmlDefault = '<div group="'+group+'">';
@@ -692,6 +709,7 @@ function editor () {
                     '<spam>('+group+')</spam>'+
                     '<button class="insertImage" >'+LABEL_ADD_IMAGE+'</button>'+
                     '<button class="insertText" >'+LABEL_ADD_TEXT+'</button>'+
+                    '<input type="button" class="del delElement" value="'+LABEL_REMOVE_ELEMENT+'">'+
                     '</div>'+
                     '</li>';           
                 }else{
@@ -791,12 +809,18 @@ function editor () {
             var elementID_Resp = elementID;
             elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1])-1);   
         }
+        if(typeof group == 'number'){
+            //É um split Pergunta qualquer do AEL ou do MTE
+            var buttonDelID = "div[group='"+group+"'] > input.delElement";
+        }else{
+            var buttonDelID = "div[group='"+group.split('_')[0]+"'] > input.delElement";
+        }
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
         var buttonImageID = "#"+elementID+" > div > button.insertImage";
-        var buttonDelID = "#"+elementID+" > div > input.delElement";
+    
+        
         var textoID = "#"+elementID+"_text";
         var imageID = "#"+elementID+"_image";
-        
         if(parent.COTemplateTypeIn(parent.MTE)
             || parent.COTemplateTypeIn(parent.AEL)){
             if(parent.COTemplateTypeIn(parent.AEL)){
@@ -814,12 +838,6 @@ function editor () {
                 });
                 
             }
-            var buttonTextoID = "#"+elementID+"> div > button.insertText";
-            var buttonImageID = "#"+elementID+" > div > button.insertImage";
-            
-            var buttonDelID = "#"+elementID+" > div > input.delElement";
-            var textoID = "#"+elementID+"_text";
-            var imageID = "#"+elementID+"_image";
 
             var ElementTextID = "#"+elementID+"_text";
             var ElementImageID = "#"+elementID+"_image";
@@ -865,7 +883,11 @@ function editor () {
                 }
             });
             $(buttonDelID).click(function(){
-                parent.delElement(elementID);
+                //$(buttonDelID).size();  VERIFICAR !!!
+                if($(buttonDelID).size() == 1) {
+                    parent.delElement($(this).closest('div[group]').closest('li'));
+                }
+                
             });
         }else if((parent.COTemplateTypeIn(parent.PRE)||parent.COTemplateTypeIn(parent.TXT))
             && (!this.isset(loaddata))){
@@ -930,61 +952,75 @@ function editor () {
         }
     }
     this.delElement = function(id, ael_resp){
-        
         var doDel = (!this.isset(ael_resp) || !ael_resp) ? confirm(MSG_REMOVE_ELEMENT):true; 
-      
-        //Desconsiderar a última parte do último '_' que é o tipo do elemento
-        if(doDel){
+        if(typeof id != 'object') {
+            //Desconsiderar a última parte do último '_' que é o tipo do elemento
+            if(doDel){
             
-            //Verificar se precisa mudar a resposta do AEL
-            var match_div = $('#'+id).attr('match');
-            var separator = match_div.split('_');
-            if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
-                var match_ask = separator[0];
-                //Verificar se este Elemento a ser exluído é o último do grupo
-                var elements_ask = $('div[group='+match_ask+']').find('div[updated]');
-                //alert(elements_answer.size());
-                if(elements_ask.size() == 1 ){
-                    //Ele é o único, então exclui o seu Elemento Resposta
-                    var element_answer = $('div[group='+match_ask+'_1]').find('div[updated]');
-                    var element_answer_id = element_answer.attr('id');
-                    this.delElement(element_answer_id,true);
+                //Verificar se precisa mudar a resposta do AEL
+                var match_div = $('#'+id).attr('match');
+                var separator = match_div.split('_');
+                if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
+                    var match_ask = separator[0];
+                    
+                    //Verificar se este Elemento a ser exluído é o último do grupo
+                    var elements_ask = $('div[group='+match_ask+']').find('div.element'); //div[updated]
+                    //alert(elements_answer.size());
+                    if(elements_ask.size() == 1 ){
+                        //Ele é o único, então exclui o seu Elemento Resposta
+                        var element_answer = $('div[group='+match_ask+'_1]').find('div.element'); //div[updated]
+                        var element_answer_id = element_answer.attr('id');
+                        this.delElement(element_answer_id,true);
+                    }
                 }
-            }
            
+                //=========
             
-            //=========
+                var iddb = $("#"+id).attr('idbd');
+                var iddb_Piece = id.split('_');
+                var i;
+                var id_P = '';
+                var limitSuper = iddb_Piece.length-2; // 2=> desconsidera o element e seu tipo
+                for(i=0; i < limitSuper; i++) {
+                    //Menos o último
+                    if(i == limitSuper-1){
+                        //É o último
+                        id_P += iddb_Piece[i];  
+                    }else{
+                        id_P += iddb_Piece[i]+'_';
+                    }
+                }
+                var iddb_P = $('#'+id_P).attr('idbd');
+                if(this.isset(iddb)){
+                    //Adiciona num Array de objetos deletados em ordem.
+                    this.orderDelets.push('E'+iddb+'P'+iddb_P);
+                }
+                this.delObject(id);
+            }
+        }else{
+            if(doDel){
+                var parent = this;
+                //deleta todo o grupo de elementos
+                //Deletar todos os objeto, se existir
+                $(id).find('div[group] div.element').each(function(){
+                    var id_Element_del = $(this).attr('id');
+                    parent.delElement(id_Element_del,true);
+                });
             
-            
-            var iddb = $("#"+id).attr('idbd');
-            var iddb_Piece = id.split('_');
-            var i;
-            var id_P = '';
-            var limitSuper = iddb_Piece.length-2; // 2=> desconsidera o element e seu tipo
-            for(i=0; i < limitSuper; i++) {
-                //Menos o último
-                if(i == limitSuper-1){
-                    //É o último
-                    id_P += iddb_Piece[i];  
-                }else{
-                    id_P += iddb_Piece[i]+'_';
+                //Por fim Deleta o grupo, a div agora sem elements
+                var group = $(id).find('div[group]').attr('group');
+                $(id).remove();
+                if(parent.COTemplateTypeIn(parent.AEL)){
+                    // Deleta também o seu Grupo de Resposta
+                    $('div[group='+group+'_1]').remove();
                 }
             }
-            var iddb_P = $('#'+id_P).attr('idbd');
-            if(this.isset(iddb)){
-                //Adiciona num Array de objetos deletados em ordem.
-                this.orderDelets.push('E'+iddb+'P'+iddb_P);
-            }
-            //$("#"+id).remove();
-            this.delObject(id);
         }
     }
     
     this.delObject = function(id){
         var match_div = $('#'+id).attr('match');
-        //if(confirm(MSG_REMOVE_OBJECT)){
         $("#"+id).remove();
-        // }
         
         //Verificar se precisa mudar a resposta do AEL
         var separator = match_div.split('_');
@@ -1315,7 +1351,7 @@ function editor () {
                                             Flag = $(this).closest('div[group]').find('input[type="checkbox"]').is(':checked');
                                         
                                             Match = (parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE)) 
-                                                ? $(this).attr('match') : null;                       
+                                            ? $(this).attr('match') : null;                       
                                             //declaração das variáveis que serão passadas por ajax
                                             var type;
                                             var value;
