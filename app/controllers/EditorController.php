@@ -52,16 +52,15 @@
 //@done 49 - Corrigir o excluir Objects do AEL
 //@done 50 - Salvar elemento Resposta do AEL Obrigatoriamente,quando alguma Pergunta é alterada
 //@done 51 - Corrigir o excluir Objeto[elementos] do AEL 
-//@todo 52 - Corrigir o excluir divGroup do AEL 
-//@todo - IMPORTANT ! 53 - Verificar se a Resposta do AEL precisa ser armazena na library. (pode deletar esse element?)
+//@done 52 - Corrigir o excluir divGroup do AEL 
+//@done - IMPORTANT ! 53 - Verificar se a Resposta do AEL precisa ser armazena na library. (pode deletar esse element?)
 //@done 54- Corrigir o excluir 
 
-//@todo 55 - Corrigir o excluir Elements do MTE
+//@done 55 - Corrigir o excluir Elements do MTE
 //@done 56 - Corrigir o excluir Elements do AEL
 
 //@done 57 - Corrigir a falha ou evitar o Count match, quando o elemento é excluido no MTE
 //@done 58 - Corrigir a falha ou evitar o Count match, quando o elemento é excluido no AEL
-
 
 
 // 23-01 := 4;
@@ -70,14 +69,19 @@
 // 28-01 := 3;
 // 29-01 := 0;
 // 31-01 := 6;
+
 //03-03 := 0;
 //03-04 := 2;
 //03-05 := 4;
 //03-06 := 0;
 //03-07 := 4;
-
+// DONES & TODOS
 //17-02 := 2:2;
 //18-02 := 2:0;
+//19-02 := 0:0;
+//20-02 := 0:0;
+//21-02 := 3:0;
+
 
 
 class EditorController extends Controller {

@@ -810,9 +810,10 @@ function editor () {
             elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1])-1);   
         }
         if(typeof group == 'number'){
-            //É um split Pergunta qualquer do AEL ou do MTE
-            var buttonDelID = "div[group='"+group+"'] > input.delElement";
+            //É MTE
+            var buttonDelID = "div[group='"+group+"'] > span > div > input.delElement:eq(0)";
         }else{
+            //É AEL
             var buttonDelID = "div[group='"+group.split('_')[0]+"'] > input.delElement";
         }
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
@@ -882,10 +883,16 @@ function editor () {
                     }
                 }
             });
+            console.log(buttonDelID);
             $(buttonDelID).click(function(){
                 //$(buttonDelID).size();  VERIFICAR !!!
                 if($(buttonDelID).size() == 1) {
-                    parent.delElement($(this).closest('div[group]').closest('li'));
+                    if(parent.COTemplateTypeIn(parent.AEL)) {
+                        parent.delElement($(this).closest('div[group]').closest('li'));
+                    }else if(parent.COTemplateTypeIn(parent.MTE)) {
+                        parent.delElement($(this).closest('div[group]'));
+                    }
+                    
                 }
                 
             });
@@ -1002,17 +1009,27 @@ function editor () {
                 var parent = this;
                 //deleta todo o grupo de elementos
                 //Deletar todos os objeto, se existir
-                $(id).find('div[group] div.element').each(function(){
-                    var id_Element_del = $(this).attr('id');
-                    parent.delElement(id_Element_del,true);
-                });
+                //id é um li que possui o div-grupo
+                if(parent.COTemplateTypeIn(parent.AEL)) {
+                    $(id).find('div[group] div.element').each(function(){
+                        var id_Element_del = $(this).attr('id');
+                        parent.delElement(id_Element_del,true);
+                    });
             
-                //Por fim Deleta o grupo, a div agora sem elements
-                var group = $(id).find('div[group]').attr('group');
-                $(id).remove();
-                if(parent.COTemplateTypeIn(parent.AEL)){
+                    //Por fim Deleta o grupo, a div agora sem elements
+                    var group = $(id).find('div[group]').attr('group');
+                    $(id).remove();
                     // Deleta também o seu Grupo de Resposta
                     $('div[group='+group+'_1]').remove();
+                }else if(parent.COTemplateTypeIn(parent.MTE)) {
+                    //id é o div-grupo a ser excluído
+                    $(id).find('div.element').each(function(){
+                        var id_Element_del = $(this).attr('id');
+                        parent.delElement(id_Element_del,true);
+                    });
+                    //Por fim Deleta o grupo, a div agora sem elements
+                    var group = $(id).attr('group');
+                    $(id).remove();
                 }
             }
         }
