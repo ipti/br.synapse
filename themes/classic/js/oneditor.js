@@ -25,14 +25,15 @@ $(function() {
     $("#delScreen").click(function(){
         newEditor.delScreen(false);
     });
-    $(".insertText").live('click',function(){
+    
+    $(document).on('click',".insertText",function(){
         //Somente adiciona se não possui outro elemento texto neste grupo
         if($(this).closest('div[group]').find('div.text').size() == 0){
             newEditor.addText($(this).closest('div[group]'));
         }
         
     });
-    $(".insertImage").live('click',function(){ //
+    $(document).on('click',".insertImage",function(){ //
          //Somente adiciona se não possui outro elemento imagem neste grupo
         if($(this).closest('div[group]').find('div.image').size() == 0){
            newEditor.addImage($(this).closest('div[group]'));
@@ -41,10 +42,10 @@ $(function() {
     $("#addPieceSet").click(function(){
         newEditor.addPieceSet();
     })
-    $(".addPiece").live("click",(function(){
+    $(document).on("click",".addPiece",(function(){
         newEditor.addPiece($(this).attr('id'));
     }));
-    $('.piece').live("mousedown",function(){
+    $(document).on("mousedown",'.piece',function(){
         newEditor.changePiece($(this));
     });
     $('.save').click(function(){
@@ -55,7 +56,7 @@ $(function() {
         newEditor.load();
     }
     
-    $('.input_element').live("change",function() {
+    $(document).on("change",'.input_element',function() {
         newEditor.imageChanged($(this));
     });
     

@@ -19,6 +19,7 @@ function editor () {
     this.countPieceSet = new Array();
     this.countPieces = new Array();
     this.countElements = new Array();
+    this.countElementsPS = new Array();
     this.currentPieceSet = 'sc0_ps0';
     this.currentPiece = 'sc0_ps0_p0';
     this.uploadedElements = 0;
@@ -104,10 +105,13 @@ function editor () {
         
         var parent = this;
         var piecesetID = this.currentScreenId+'_ps'+this.countPieceSet[this.currentScreenId];
-        this.countPieces[piecesetID] = 0;
+        this.countPieces[piecesetID] = 0;  
+        // STOP HERE - CRIAR CLASSE PARA ESTA DIV DE ELEMENTOS
         $('#'+this.currentScreenId).append(''+
             '<div class="PieceSet" id="'+piecesetID+'_list" '+plus+'>'+
             '<button class="addPiece" id="pie_'+piecesetID+'">'+LABEL_ADD_PIECE+'</button>'+
+            '<button class="insertImage" id="pie_'+piecesetID+'"></button>'+
+            '<button class="insertSound" id="pie_'+piecesetID+'"></button>'+
             '<button class="del delPieceSet">'+LABEL_REMOVE_PIECESET+'</button>'+
             '<input type="text" class="actName" value="'+plusdesc+'" />'+
             '<div id="'+piecesetID+'_forms"></div>'+
@@ -115,16 +119,19 @@ function editor () {
             '<span class="clear"></span>'+
             '</div>');
 
-        this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;          
-
+        this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;    
+        
+        
+        
         $("#"+piecesetID+"_list > button.insertImage").click(function(){
-            if (!parent.existID('#'+piecesetID+"_forms_image_form"))
-                parent.addImage(piecesetID+"_forms"); 
+            parent.insertImgPieceSet(piecesetID,null,null);
         });
         $("#"+piecesetID+"_list > button.insertSound").click(function(){
-            if (!parent.existID('#'+piecesetID+"_forms_audio_form"))
-                parent.addSound(piecesetID+"_forms");
+            parent.insertAudioPieceSet(piecesetID,null);
         });
+        
+       
+            
         $("#"+piecesetID+"_list > button.delPieceSet").click(function(){
             parent.delPieceSet(piecesetID);
         });
@@ -202,13 +209,22 @@ function editor () {
     }
     
     this.addText = function(tagAdd, loaddata, idbd){
+        var parent = this; 
         ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
         //Adciona mais um no contador de elementos dessa peça
         this.countElements[this.currentPiece]++;
         
-     
+        //Posição Default !!
+        var position=0;
         if(this.isset(idbd)){
             var flag = loaddata['flag'];
+            position = loaddata['position'];
+        }else{
+            if(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE) ){
+                //Sua Posição dentro do Grupo
+                position = $(tagAdd).find(".element").size()+1;
+            }
+            
         }
         var checked ="";
         if(this.isset(flag) && flag == "Acerto"){
@@ -216,7 +232,7 @@ function editor () {
         }
          
         //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
-        var parent = this;   
+         
         var txt0 = LABEL_INITIAL_TEXT;
         var initial_text;
         if(parent.COTemplateTypeIn(parent.TXT)) {
@@ -224,7 +240,7 @@ function editor () {
         }else{
             initial_text = this.isset(loaddata) ? loaddata['text'] : txt0;
         }
-        var plus = "";
+        var plus = 'position="'+position+'" ';
         //se estiver setado o novo id
         var str_match = '';
         if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)) {
@@ -270,7 +286,7 @@ function editor () {
         }
         
         if(parent.COTemplateTypeIn(parent.MTE) || 
-            (parent.COTemplateTypeIn(parent.AEL) && tagAdd.attr('group').split('_').length == 1)){
+            parent.COTemplateTypeIn(parent.AEL)){
             //Se for MTE ou (AEL e For uma PERGUNTA)
             html += '<input type="button" class="del delElement" value="'+LABEL_REMOVE_TEXT+'">'
         } 
@@ -422,15 +438,46 @@ function editor () {
     }
     
     this.addUploadForm = function(tagAdd, type, responseFunction, loaddata, idbd){
-         
-        ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
-        var parent = this; 
-          
-        if(this.isset(idbd)){
-            // Se existe no banco, então foi salvo no elemento
-            parent.countElements[parent.currentPiece]++;
-            var flag = loaddata['flag'];
+        //Verificar se é um elemento da PieceSet
+        var isElementPieceSet = tagAdd.hasClass('elementPieceSet'); 
+        
+        if(isElementPieceSet){
+            var pieceSetID = tagAdd.closest('div').attr('id').split('_',2);
+            var pieceSetID = pieceSetID[0]+'_'+pieceSetID[1];
+            if( !this.isset(this.countElementsPS[pieceSetID])) {
+                //Se não existe algo
+                this.countElementsPS[pieceSetID]=0;
+            }
+            ID = pieceSetID+'_e'+this.countElementsPS[pieceSetID];
+            this.countElementsPS[pieceSetID]++;
+        }else{
+            ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
+            this.countElements[this.currentPiece]++;
         }
+        
+        var parent = this; 
+        
+        //Posição Default !!
+        var position=0;
+          
+        if(parent.isset(idbd)){
+            // Se existe no banco, então foi salvo no elemento o position
+            position = loaddata['position'];
+            if(!isElementPieceSet) {
+                // Se é um elemento da Piece
+                var flag = loaddata['flag'];
+            }
+            
+        }else{
+            if(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE) ){
+                //Sua Posição dentro do Grupo
+                position = $(tagAdd).find(".element").size()+1;
+            }
+            
+        }
+        
+        
+        
         var checked ="";
         if(this.isset(flag) && flag == "Acerto"){
             checked = 'checked="checked"';
@@ -438,19 +485,20 @@ function editor () {
              
        
         //variável para adição do ID do banco, se ele não existir ficará vazio.
-        var libBDID = "";
+        var libBDID = 'position="'+position+'" ';
         
         
         //se estiver setado o novo id
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
             var match = loaddata['match'];
             //adiciona o código na varíavel
-            libBDID = ' idbd="'+idbd+'" library_idbd ="'+loaddata['library']['ID']+'"\n\
+            libBDID += ' idbd="'+idbd+'" library_idbd ="'+loaddata['library']['ID']+'"\n\
                         updated = "'+0+'" match="' +match+ '" ';
         }else{
             var match = $(tagAdd).attr('group');
-            libBDID = 'match="' +match+ '"';
+            libBDID += 'match="' +match+ '"';
         }
+        
         
         //Default Image
         var uploadType = (type['type']?type['type']:'image'); 
@@ -508,11 +556,16 @@ function editor () {
         '</form>'+
         '</div>';
     
-        if(parent.COTemplateTypeIn(parent.MTE)){
-            $(tagAdd).find('span:eq(0)').append(html); 
-        }else if (parent.COTemplateTypeIn(parent.AEL)){
+        if(isElementPieceSet) {
             $(tagAdd).append(html);
+        }else{
+            if(parent.COTemplateTypeIn(parent.MTE)){
+                $(tagAdd).find('span:eq(0)').append(html); 
+            }else if (parent.COTemplateTypeIn(parent.AEL)){
+                $(tagAdd).append(html);
+            }
         }
+        
         
         
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
@@ -558,6 +611,36 @@ function editor () {
         });
     }
     
+    //Add imagem do PieceSet
+    this.insertImgPieceSet = function (piecesetID,idbd, loaddata){ // piecesetID e/ou idbd do element
+        if(this.isset(piecesetID)) {
+            var tagAdd = $('#'+piecesetID+"_forms");
+            if (!this.existID('#'+piecesetID+"_forms_image_form")){
+                tagAdd.append("<span class='elementPieceSet'></span>");
+                this.addImage(tagAdd.find('span:last'), loaddata,idbd); 
+            }
+        }else if(this.isset(loaddata['piecesetID'])) {
+            var psIDBD = loaddata['piecesetID'];
+            var psID = $('.PieceSet[idbd='+psIDBD+']').attr('id').split('_',2);
+            psID = psID[0]+"_"+psID[1];
+            var tagAdd = $('#'+psID+"_forms");
+            if (!this.existID('#'+psID+"_forms_image_form")){
+                tagAdd.append("<span class='elementPieceSet'></span>");
+                this.addImage(tagAdd.find('span:last'), loaddata,idbd); 
+            }
+            
+        }
+    }
+    
+    this.insertAudioPieceSet = function(piecesetID,idbd, loaddata){
+        var tagAdd = $('#'+piecesetID+"_forms");
+        if (!this.existID('#'+piecesetID+"_forms_audio_form")){
+            tagAdd.append("<span class='elementPieceSet'></span>");
+            this.addSound(tagAdd.find('span:last'), loaddata,idbd);
+        }
+    }
+    
+    
     this.addImage = function(tagAdd, loaddata, idbd){
         this.addUploadForm(tagAdd, {
             type: 'image',
@@ -570,7 +653,7 @@ function editor () {
         },loaddata, idbd);
     }
     
-    this.addSound = function(tagAdd, loaddata){
+    this.addSound = function(tagAdd, loaddata, idbd){
         var parent = this;
         this.addUploadForm(tagAdd, {
             type: 'audio',
@@ -582,7 +665,7 @@ function editor () {
                 '<audio src="'+src+'" controls="controls">'+
                 ERROR_BROWSER_SUPORT+
                 '</audio>');
-        },loaddata);
+        },loaddata, idbd);
     }
     
     this.addVideo = function(tagAdd, loaddata){
@@ -601,6 +684,7 @@ function editor () {
     }
     
     this.addElement = function(idbd, type, loaddata){
+        //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
          
         var parent = this;
         //variável para adição do ID do banco, se ele não existir ficará vazio.
@@ -683,9 +767,8 @@ function editor () {
                 group = match;
                 var sameElement = false;
                 //Já existe o li[elementID]
-                if(!isResp){
-                    sameElement = $('div[group='+match+']').length == '1';
-                }
+                sameElement = $('div[group='+match+']').length == '1';
+                    
             }else{
                 var last_group = $('#'+parent.currentPiece).find('div[group]').last().attr('group');
                 var next_group;
@@ -733,7 +816,9 @@ function editor () {
                     }
                     var html2 = '<li>'+ htmlDefault+
                     '<spam>('+group+')</spam>'+
-                    '<button class="insertText">'+LABEL_ADD_TEXT+'</button>'+
+                    '<button class="insertImage" >'+LABEL_ADD_IMAGE+'</button>'+
+                    '<button class="insertText" >'+LABEL_ADD_TEXT+'</button>'+
+                    '<input type="button" class="del delElement" value="'+LABEL_REMOVE_ELEMENT+'">'+
                     '</div></li>';
                 }
                       
@@ -793,15 +878,15 @@ function editor () {
                             this.addVideo(tagAdd, loaddata);
                             break;
                         case 'sound'://sound
-                            this.addSound(tagAdd, loaddata);
+                            this.addSound(tagAdd, loaddata, idbd);
                             break;
                     }
                     break;
                 default:
             }
         }else if(parent.COTemplateTypeIn(parent.AEL)){
-            // o group é a Resposta '_'
-            this.addText(tagAdd);
+        // o group é a Resposta '_'
+        //this.addText(tagAdd);
         }
        
         //Verificar se foi adicionado 2 elementos no AEL DE UMA ÚNICA VEZ
@@ -809,10 +894,10 @@ function editor () {
             var elementID_Resp = elementID;
             elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1])-1);   
         }
-        if(typeof group == 'number'){
+        if(typeof group == 'number' && parent.COTemplateTypeIn(parent.MTE)){
             //É MTE
             var buttonDelID = "div[group='"+group+"'] > span > div > input.delElement:eq(0)";
-        }else{
+        }else if(parent.COTemplateTypeIn(parent.AEL)){
             //É AEL
             var buttonDelID = "div[group='"+group.split('_')[0]+"'] > input.delElement";
         }
@@ -883,19 +968,20 @@ function editor () {
                     }
                 }
             });
-            console.log(buttonDelID);
-            $(buttonDelID).click(function(){
-                //$(buttonDelID).size();  VERIFICAR !!!
-                if($(buttonDelID).size() == 1) {
-                    if(parent.COTemplateTypeIn(parent.AEL)) {
-                        parent.delElement($(this).closest('div[group]').closest('li'));
-                    }else if(parent.COTemplateTypeIn(parent.MTE)) {
-                        parent.delElement($(this).closest('div[group]'));
+            
+            if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)){
+                $(buttonDelID).click(function(){
+                    if($(buttonDelID).size() == 1) {
+                        if(parent.COTemplateTypeIn(parent.AEL)) {
+                            parent.delElement($(this).closest('div[group]').closest('li'));
+                        }else if(parent.COTemplateTypeIn(parent.MTE)) {
+                            parent.delElement($(this).closest('div[group]'));
+                        }
                     }
-                    
-                }
                 
-            });
+                });
+            }
+            
         }else if((parent.COTemplateTypeIn(parent.PRE)||parent.COTemplateTypeIn(parent.TXT))
             && (!this.isset(loaddata))){
             parent.addText(tagAdd);
@@ -1261,9 +1347,277 @@ function editor () {
                                 $('.savescreen').append('<br><br><p>Salvou Todas as PieceSets!</p>');    
                             }
                             parent.verify_requestFinish();
+                            
                             curretPieceSetID = response['DomID'];
                             LastPieceSetID = response['PieceSetID'];
+                            //Salvar os Elementos da PieceSet
+                            saveElements(true, LastPieceSetID, curretPieceSetID);
+                            //===================================================================
                             
+                            function saveElements(isElementPieceSet, LastID, currentID, limit_element) {
+                                //inicializa o contador de posição do elemento
+                                elementPosition = 0;
+                                var str_seletor = "";
+                                        
+                                if(isElementPieceSet) {
+                                    //É um elemento da PieceSet
+                                    LastPieceSetID = LastID;
+                                    curretPieceSetID = currentID;
+                                    var idBDLastPieceSet = LastPieceSetID;
+                                    str_seletor = '#'+curretPieceSetID+' .elementPieceSet .element';
+                                }else{
+                                    // É um elemento da Piece
+                                    LastPieceID = LastID;
+                                    curretPieceID = currentID;
+                                    str_seletor = '#'+curretPieceID+' .element'+limit_element;
+                                }
+                                //Se for texto acessa todos os elementos para verificar se foram alterados
+                                $(str_seletor).each(function(){
+                                          
+                                    //Verificar se é um elemento da PieceSet
+                                    //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
+                                    ElementID = $(this).attr('id');
+                                    ElementID_BD = $(this).attr('idBD');
+                                    //get Atributo position
+                                    elementPosition = $(this).attr('position');
+                                    var continuar = true;
+                                    if(parent.COTemplateTypeIn(parent.TXT)) {
+                                        var text_element = '#'+ElementID;
+                                        var arrayText = text_element.split('_');
+                                        text_element = "";
+                                        for(var i=0; i < (arrayText.length-1);i++){
+                                            if(i<(arrayText.length-2)){
+                                                text_element+=arrayText[i]+"_";
+                                            }else{
+                                                text_element+=arrayText[i]; 
+                                            }
+                                        }
+                                        var txt_BD = $(text_element+"_flag").val();
+                                        var txt_New = $("body", $(text_element+"_flag_ifr").contents()).html();
+                                        var text_div = text_element+'_text';                 
+                                        //Verificar se foi Alterado em relação a do DB        
+                                        parent.textChanged(txt_BD, txt_New, text_element, text_div );
+                                        //atualiza o total de elementos atualizados e não atualizados
+                                        parent.load_totalElements = $('.element[updated="1"]').size();
+                                        parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
+                                            
+                                        var txt_New_noHtml =  $("body", $(text_element+"_flag_ifr").contents()).text();
+                                        //Foi alterado  
+                                        continuar = (txt_New_noHtml !="" && txt_BD != txt_New);
+                                            
+                                    }
+                                        
+                                    if(continuar) {
+                                            
+                                        var newElem='';
+                                        var ElementIDSplit = ElementID.split('_');
+                                        for(var i=0; i < ElementIDSplit.length-1; i++) {
+                                            if(i == ElementIDSplit.length-2) {
+                                                newElem+=ElementIDSplit[i];
+                                            }else{
+                                                newElem+=ElementIDSplit[i]+'_';
+                                            }
+                                               
+                                        }
+                                        ElementID = newElem;
+                                            
+                                        ElementFlag_Updated = $(this).attr('updated');
+                                        Flag = $(this).closest('div[group]').find('input[type="checkbox"]').is(':checked');
+                                        
+                                        Match = (parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE)) 
+                                        ? $(this).attr('match') : null;                       
+                                        //declaração das variáveis que serão passadas por ajax
+                                        var type;
+                                        var value;
+                                        
+                                        //IDs dos Formulários, textos e imagens
+                                        var ElementTextID = "#"+ElementID+"_text";
+                                        var ElementImageID = "#"+ElementID+"_image";
+                                        var FormElementImageID = "#"+ElementID+"_image_form";
+                                        var input_NameDB_ID = "#"+ElementID+"_image_nameDB";
+                                        var input_NameCurrent_ID = "#"+ElementID+"_image_input";
+                                            
+                                        //var ElementRespID = "#"+ElementID+"_resp_text";
+                                        
+                                        //Dados que serão passados pelo ajax
+                                        var data = {
+                                            //Operação Salvar, Element, Type, ID no DOM
+                                            op: parent.isload ? "update": "save", 
+                                            step: "Element",
+                                            DomID: ElementID,
+                                            //Dados do Element
+                                            ordem: elementPosition, //Ordem do Element
+                                            flag: Flag,
+                                            value: {},
+                                            match: Match,
+                                            isload: parent.isload,
+                                            ID_BD:  ElementID_BD,
+                                            updated: ElementFlag_Updated
+                                        };
+                                        
+                                                
+                                        if(isElementPieceSet){
+                                            data["pieceSetID"] =  idBDLastPieceSet;
+                                        }else{
+                                            data["pieceID"] = LastPieceID;
+                                        }
+                                                
+                                        if(parent.COTemplateTypeIn(parent.TXT) || !(parent.isload && parent.isset(ElementFlag_Updated) 
+                                            && ElementFlag_Updated == 0)) {
+                                            // Precisa Salvar ou Atualizar
+                                            //Se for um Texto
+                                            if(parent.existID(ElementTextID)){
+                                                //Salva Elemento
+                                                data["typeID"] = TYPE.ELEMENT.TEXT;
+                                                if(parent.COTemplateTypeIn(parent.TXT)) {
+                                                
+                                                    data["value"] = txt_New;                                                                                                        
+                                                   
+                                                }else{
+                                                    data["value"] = $(ElementTextID+" > font").html();
+                                                }
+                                                parent.saveData(
+                                                    //Variáveis dados
+                                                    data,
+                                                    //Função de sucess do Save Element
+                                                    function(response, textStatus, jqXHR){
+                                                        if(!parent.isload) {
+                                                            $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                                        }else{
+                                                            $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
+                                                        }
+                                                        parent.uploadedElements++;
+                                                    
+                                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
+                                                        }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
+                                                        }
+                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
+                                                        //  window.alert("Verificar se acabou as requisições...");
+                                                        //Verificar se acabou as requisições
+                                                        parent.verify_requestFinish();
+                                                    
+                                                    
+                                                    });
+                                        
+                                            }
+                                            
+                                            //Se for uma Imagem
+                                            if(parent.existID(ElementImageID)){
+                                                  
+                                                var doUpload = true;
+                                                if ( parent.isload &&
+                                                    ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
+                                                        || $(input_NameCurrent_ID).val() == '')
+                                                    ) {
+                                                    //Não faz upload, pois não houve alterações
+                                                    doUpload = false;
+                                                }
+                                              
+                                                if(doUpload) {
+                                                    data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
+                                                    data["library"] = TYPE.LIBRARY.IMAGE;
+                                                    //criar a função para envio de formulário via Ajax
+
+
+                                                    $(FormElementImageID).ajaxForm({
+                                                        beforeSend: function() {
+                                                        //zerar barra de upload
+                                                        //$("#"+bar).width('0%')
+                                                        //$("#"+percent).html('0%');
+                                                        },
+                                                        uploadProgress: function(event, position, total, percentComplete) {
+                                                        //atualizar barra de upload
+                                                        //$("#"+bar).width(percentComplete + '%')
+                                                        //$("#"+percent).html(percentComplete + '%');
+                                                        },
+                                                        success: function(response) {
+                                                            //dados de retorno do upload
+                                                            data['value'] = {};
+                                                            data['value']['url'] = response['url'];
+                                                            data['value']['name'] = response['name'];
+
+                                                            //Salva Elemento
+                                                            parent.saveData(
+                                                                //Dados
+                                                                data,
+                                                                //Função de sucess do Save Element
+                                                                function(response, textStatus, jqXHR){
+                                                                    if(!parent.isload) {
+                                                                        $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
+                                                                    }else{
+                                                                        $('.savescreen').append('<br><p>ElementImage Atualizado com sucesso!</p>');    
+                                                                    }
+
+                                                                    //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
+                                                                    parent.uploadedLibraryIDs[parent.uploadedImages++] = response['LibraryID'];
+                                                                    //Atualiza o contador dos Elementos
+                                                                    parent.uploadedElements++; 
+                                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
+                                                                    }
+                                                                    else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
+                                                                    }
+                                                               
+                                                                    //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
+                                                                    // window.alert("Verificar se acabou as requisições...");
+                                                                    //Verificar se acabou as requisições
+                                                                    parent.verify_requestFinish();
+                                                               
+                                                               
+                                                                });
+                                                        },
+                                                        error: function(error, textStatus, errorThrown){
+                                                            //$("#"+form).html(error.responseText);
+                                                            alert(ERROR_FILE_UPLOAD);
+                                                            $(".savescreen").append(error.responseText);
+                                                        }
+                                                    });
+
+                                                    //Envia o formulário atual
+                                                    $(FormElementImageID).submit();
+                                                }
+                                            }
+                                        
+                                                                               
+                                        }else{
+                                        //Atualiza Somente a Flag
+                                           
+                                        }
+                                    }else if(txt_New_noHtml == "") {
+                                        // O template é do tipo texto  e o elemento está vazio
+                                        //Deleta o PieceSet
+                                        parent.delPieceSet(parent.currentPieceSet,true);
+                                        //Atualiza Total de elementos e o Total alterados
+                                        parent.totalElements = $('.element').size();
+                                        parent.load_totalElements = $('.element[updated="1"]').size();
+                                        parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
+                                        parent.totalPieces = $('.piece').size();
+                                        parent.totalPiecesets = $('.PieceSet').size();
+                                            
+                                        if(parent.isset(ElementID_BD)){
+                                            //Enviar array de objetos a serem excluidos 
+                                            parent.saveData({                   
+                                                op:"delete", 
+                                                array_del:parent.orderDelets
+                                            },
+                                            //função sucess
+                                            function(response, textStatus, jqXHR){
+                                                parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
+                                                $('.savescreen').append('<br><p> Objeto TEXT Deletado!...</p>');
+                                                //Verificar se acabou as requisições
+                                                parent.verify_requestFinish();   
+                                            });
+                                        }
+                                           
+                                    }
+                                }); // End Of EACH ELEMENTS
+                                        
+                            }
+                            
+                            //===================================================================
                             //reiniciar o contador de posição da Piece no PieceSet
                             piecePosition = 0;
                             
@@ -1309,9 +1663,6 @@ function editor () {
                                     curretPieceID = response['DomID'];
                                     LastPieceID = response['PieceID'];
                                     
-                                    //inicializa o contador de posição do elemento
-                                    elementPosition = 0;
-                                    
                                     //Para cada Elemento no Piece
                                    
                                     // Só Salva ou faz Update dos elementos que foram alimentados
@@ -1319,238 +1670,10 @@ function editor () {
                                     if(!parent.COTemplateTypeIn(parent.TXT)){
                                         limit_element = '[updated="1"]';
                                     }
-                                    //Se for texto acessa todos os elementos para verificar se foram alterados
-                                    $('#'+curretPieceID+' .element'+limit_element).each(function(){
-                                        ElementID = $(this).attr('id');
-                                        ElementID_BD = $(this).attr('idBD');
-                                        var continuar = true;
-                                        if(parent.COTemplateTypeIn(parent.TXT)) {
-                                            var text_element = '#'+ElementID;
-                                            var arrayText = text_element.split('_');
-                                            text_element = "";
-                                            for(var i=0; i < (arrayText.length-1);i++){
-                                                if(i<(arrayText.length-2)){
-                                                    text_element+=arrayText[i]+"_";
-                                                }else{
-                                                    text_element+=arrayText[i]; 
-                                                }
-                                            }
-                                            var txt_BD = $(text_element+"_flag").val();
-                                            var txt_New = $("body", $(text_element+"_flag_ifr").contents()).html();
-                                            var text_div = text_element+'_text';                 
-                                            //Verificar se foi Alterado em relação a do DB        
-                                            parent.textChanged(txt_BD, txt_New, text_element, text_div );
-                                            //atualiza o total de elementos atualizados e não atualizados
-                                            parent.load_totalElements = $('.element[updated="1"]').size();
-                                            parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
-                                            
-                                            var txt_New_noHtml =  $("body", $(text_element+"_flag_ifr").contents()).text();
-                                            //Foi alterado  
-                                            continuar = (txt_New_noHtml !="" && txt_BD != txt_New);
-                                            
-                                        }
-                                        
-                                        if(continuar) {
-                                            
-                                            var newElem='';
-                                            var ElementIDSplit = ElementID.split('_');
-                                            for(var i=0; i < ElementIDSplit.length-1; i++) {
-                                                if(i == ElementIDSplit.length-2) {
-                                                    newElem+=ElementIDSplit[i];
-                                                }else{
-                                                    newElem+=ElementIDSplit[i]+'_';
-                                                }
-                                               
-                                            }
-                                            ElementID = newElem;
-                                            
-                                            ElementFlag_Updated = $(this).attr('updated');
-                                            Flag = $(this).closest('div[group]').find('input[type="checkbox"]').is(':checked');
-                                        
-                                            Match = (parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE)) 
-                                            ? $(this).attr('match') : null;                       
-                                            //declaração das variáveis que serão passadas por ajax
-                                            var type;
-                                            var value;
-                                        
-                                            //IDs dos Formulários, textos e imagens
-                                            var ElementTextID = "#"+ElementID+"_text";
-                                            var ElementImageID = "#"+ElementID+"_image";
-                                            var FormElementImageID = "#"+ElementID+"_image_form";
-                                            var input_NameDB_ID = "#"+ElementID+"_image_nameDB";
-                                            var input_NameCurrent_ID = "#"+ElementID+"_image_input";
-                                            
-                                            //var ElementRespID = "#"+ElementID+"_resp_text";
-                                        
-                                      
-                                            //Dados que serão passados pelo ajax
-                                            var data = {
-                                                //Operação Salvar, Element, Type, ID no DOM
-                                                op: parent.isload ? "update": "save", 
-                                                step: "Element",
-                                                DomID: ElementID,
-                                                //Dados do Element
-                                                ordem: ++elementPosition, //incrementa a Ordem do Element
-                                                pieceID: LastPieceID,
-                                                flag: Flag,
-                                                value: {},
-                                                match: Match,
-                                                isload: parent.isload,
-                                                ID_BD:  ElementID_BD,
-                                                updated: ElementFlag_Updated
-                                            };
-                                            if(parent.COTemplateTypeIn(parent.TXT) || !(parent.isload && parent.isset(ElementFlag_Updated) 
-                                                && ElementFlag_Updated == 0)) {
-                                                // Precisa Salvar ou Atualizar
-                                                //Se for um Texto
-                                                if(parent.existID(ElementTextID)){
-                                                    //Salva Elemento
-                                                    data["typeID"] = TYPE.ELEMENT.TEXT;
-                                                    if(parent.COTemplateTypeIn(parent.TXT)) {
-                                                
-                                                        data["value"] = txt_New;                                                                                                        
-                                                   
-                                                    }else{
-                                                        data["value"] = $(ElementTextID+" > font").html();
-                                                    }
-                                                    parent.saveData(
-                                                        //Variáveis dados
-                                                        data,
-                                                        //Função de sucess do Save Element
-                                                        function(response, textStatus, jqXHR){
-                                                            if(!parent.isload) {
-                                                                $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
-                                                            }else{
-                                                                $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
-                                                            }
-                                                            parent.uploadedElements++;
-                                                    
-                                                            if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                                $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
-                                                            }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                                $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
-                                                            }
-                                                            // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
-                                                            //  window.alert("Verificar se acabou as requisições...");
-                                                            //Verificar se acabou as requisições
-                                                            parent.verify_requestFinish();
-                                                    
-                                                    
-                                                        });
-                                        
-                                                }
-                                            
-                                                //Se for uma Imagem
-                                                if(parent.existID(ElementImageID)){
-                                                  
-                                                    var doUpload = true;
-                                                    if ( parent.isload &&
-                                                        ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
-                                                            || $(input_NameCurrent_ID).val() == '')
-                                                        ) {
-                                                        //Não faz upload, pois não houve alterações
-                                                        doUpload = false;
-                                                    }
-                                              
-                                                    if(doUpload) {
-                                                        data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
-                                                        data["library"] = TYPE.LIBRARY.IMAGE;
-                                                        //criar a função para envio de formulário via Ajax
-
-
-                                                        $(FormElementImageID).ajaxForm({
-                                                            beforeSend: function() {
-                                                            //zerar barra de upload
-                                                            //$("#"+bar).width('0%')
-                                                            //$("#"+percent).html('0%');
-                                                            },
-                                                            uploadProgress: function(event, position, total, percentComplete) {
-                                                            //atualizar barra de upload
-                                                            //$("#"+bar).width(percentComplete + '%')
-                                                            //$("#"+percent).html(percentComplete + '%');
-                                                            },
-                                                            success: function(response) {
-                                                                //dados de retorno do upload
-                                                                data['value'] = {};
-                                                                data['value']['url'] = response['url'];
-                                                                data['value']['name'] = response['name'];
-
-                                                                //Salva Elemento
-                                                                parent.saveData(
-                                                                    //Dados
-                                                                    data,
-                                                                    //Função de sucess do Save Element
-                                                                    function(response, textStatus, jqXHR){
-                                                                        if(!parent.isload) {
-                                                                            $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
-                                                                        }else{
-                                                                            $('.savescreen').append('<br><p>ElementImage Atualizado com sucesso!</p>');    
-                                                                        }
-
-                                                                        //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                                        parent.uploadedLibraryIDs[parent.uploadedImages++] = response['LibraryID'];
-                                                                        //Atualiza o contador dos Elementos
-                                                                        parent.uploadedElements++; 
-                                                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
-                                                                        }
-                                                                        else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
-                                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
-                                                                        }
-                                                               
-                                                                        //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
-                                                                        // window.alert("Verificar se acabou as requisições...");
-                                                                        //Verificar se acabou as requisições
-                                                                        parent.verify_requestFinish();
-                                                               
-                                                               
-                                                                    });
-                                                            },
-                                                            error: function(error, textStatus, errorThrown){
-                                                                //$("#"+form).html(error.responseText);
-                                                                alert(ERROR_FILE_UPLOAD);
-                                                                $(".savescreen").append(error.responseText);
-                                                            }
-                                                        });
-
-                                                        //Envia o formulário atual
-                                                        $(FormElementImageID).submit();
-                                                    }
-                                                }
-                                        
-                                                                               
-                                            }else{
-                                            //Atualiza Somente a Flag
-                                           
-                                            }
-                                        }else if(txt_New_noHtml == "") {
-                                            // O template é do tipo texto  e o elemento está vazio
-                                            //Deleta o PieceSet
-                                            parent.delPieceSet(parent.currentPieceSet,true);
-                                            //Atualiza Total de elementos e o Total alterados
-                                            parent.totalElements = $('.element').size();
-                                            parent.load_totalElements = $('.element[updated="1"]').size();
-                                            parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
-                                            parent.totalPieces = $('.piece').size();
-                                            parent.totalPiecesets = $('.PieceSet').size();
-                                            
-                                            if(parent.isset(ElementID_BD)){
-                                                //Enviar array de objetos a serem excluidos 
-                                                parent.saveData({                   
-                                                    op:"delete", 
-                                                    array_del:parent.orderDelets
-                                                },
-                                                //função sucess
-                                                function(response, textStatus, jqXHR){
-                                                    parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
-                                                    $('.savescreen').append('<br><p> Objeto TEXT Deletado!...</p>');
-                                                    //Verificar se acabou as requisições
-                                                    parent.verify_requestFinish();   
-                                                });
-                                            }
-                                           
-                                        }
-                                    }); // End Of EACH ELEMENTS
+                                    
+                                    
+                                    saveElements(false, LastPieceID, curretPieceID, limit_element);
+                                
                                     // REGISTRAR A FLAG DOS ELEMENTS
                                     if(parent.COTemplateTypeIn(parent.MTE)){
                                         $('div[group]').each(function(){
@@ -1745,6 +1868,7 @@ function editor () {
                                                     if(i.slice(0,1) == "E"){
                                                         //declara a array de dados das propriedades do elemento
                                                         var data = new Array();
+                                                        data['position'] = item['position'];
                                                         data['flag'] = item['flag'];
                                                         data['match'] = item['match'];
                                                         //preenchimento do array de dados
@@ -1785,7 +1909,77 @@ function editor () {
                                                         
                                                     }
                                                 });
+                                            }else if(i.slice(0,1) == "E"){
+                                                //se for um elemento
+                                                //declara a array de dados das propriedades do elemento
+                                                var data = new Array();
+                                                data['position'] = item['position'];
+                                                //preenchimento do array de dados
+                                                $.each(item, function(i,item){
+                                                    if(i.slice(0,1) == "L"){
+                                                        data['library'] = new Array();
+                                                        data['library']['ID'] = i.slice(1);
+                                                        data['library']['type'] = item['type_name'];
+                                                        if(parent.isset(item['width']))
+                                                            data['library']['width'] = item['width'];
+                                                        if(parent.isset(item['height']))
+                                                            data['library']['height'] = item['height'];
+                                                        if(parent.isset(item['src']))
+                                                            data['library']['src'] = item['src'];
+                                                        if(parent.isset(item['extension']))
+                                                            data['library']['extension'] = item['extension'];
+                                                        if(parent.isset(item['nstyle']))
+                                                            data['library']['nstyle'] = item['nstyle'];
+                                                        if(parent.isset(item['content']))
+                                                            data['library']['content'] = item['content'];
+                                                        if(parent.isset(item['color']))
+                                                            data['library']['color'] = item['color'];
+                                                    }
+                                                               
+                                                });
+                                                if(parent.isset(item['text']))
+                                                    data['text'] =item['text'];
+                                                if(parent.isset(item['language']))
+                                                    data['language'] = item['language'];
+                                                if(parent.isset(item['classification']))
+                                                    data['classification'] = item['classification'];
+                                                //pega o tipo do element
+                                                var type = item['type_name'];
+                                                //pega o id do element a partir do indice
+                                                var elementID = i.slice(1);  
+                                                        
+                                                var idbd = elementID; 
+                                                var loaddata = data;
+                                                loaddata['piecesetID'] = piecesetID;
+                                                //var tagAdd = $('#'+piecesetID+"_forms");
+                                                
+                                                
+                                                //Tipo do Elemento
+                                                switch(type){
+                                                    case 'multimidia'://Library                   
+                                                        switch(loaddata['library']['type']){
+                                                            case 'image'://image
+                                                                parent.insertImgPieceSet(null, idbd, loaddata);
+                                                                break;
+                                                            case 'movie'://movie
+                                                                // this.addVideo(tagAdd, loaddata, idbd);
+                                                                break;
+                                                            case 'sound'://sound
+                                                                parent.insertAudioPieceSet(null, idbd, loaddata);
+                                                                break;
+                                                        }
+                                                        break;
+                                                    default:
+                                                }
+                                                //================
+                                                        
+                                                        
+                                                parent.addElement(elementID,type,data);
                                             }
+                                                
+                                                
+                                                
+                                        //============
                                         });
                                     }
                                 });
@@ -1802,7 +1996,7 @@ function editor () {
         return $(id).size() > 0;
     }
     this.isset = function(variable){
-        return (typeof variable !== 'undefined');
+        return (typeof variable !== 'undefined' && variable!== null);
     }
         
     this.imageChanged = function(input_element){

@@ -3,9 +3,9 @@
 //@todo 1 - Criação da tabela PieceSet-Element
 //@todo 2 - Criação do modelo PieceSet-Element
 //@done 3 - Remover o botão de Som e Imagem no enunciado do pieceset
-//@todo 4 - Adicionar o botão Inserir Elementos
+//@done 4 - Adicionar o botão Inserir Elementos
 //@todo 5 - Criação uma função em JS para adicionar N elementos ao PieceSet de qualquer tipo
-//@todo 6 - Criar função de associar elementos através do group ID 
+//@done 6 - Criar função de associar elementos através do group ID 
 //@todo 7 - Modificar no rendenrizador o template de texto para exibir o texto em HTML.
 //@todo 8 - Mudar o método do editor para receber o CObjectID via get.
 //@todo 9 - Possibilidade de Lincar ou anexar um texto à atividade.
@@ -55,13 +55,29 @@
 //@done 52 - Corrigir o excluir divGroup do AEL 
 //@done - IMPORTANT ! 53 - Verificar se a Resposta do AEL precisa ser armazena na library. (pode deletar esse element?)
 //@done 54- Corrigir o excluir 
-
 //@done 55 - Corrigir o excluir Elements do MTE
 //@done 56 - Corrigir o excluir Elements do AEL
-
 //@done 57 - Corrigir a falha ou evitar o Count match, quando o elemento é excluido no MTE
 //@done 58 - Corrigir a falha ou evitar o Count match, quando o elemento é excluido no AEL
+//@todo 59 - Pular template somente
+//@todo 60 - Pen-Driver
+//@done 61 - Colocar imagem no resposta do Associar Elementos
+//@todo 62 - Abrir a caixa de diálogo assim que clicar no botão addImage
+//@done 63 - Mudar o BD na tabela element_piece (campo order para position), e o código referente. 
+//@done 64 - Retirar o add automático de um elemento texto da Resposta do AEL
 
+//@done 65 - Atualizar o Jquery
+//@done 66 - Corrigir no onEditor.js os eventos live
+//@done 67 - Pôr o botão excluir do elemento text, na reposta AEL
+
+//@done 68 -  Fix o position no saveAll no JS
+//@done 69 -  Fix o position no saveElementPiece no EditorController
+//@done 70  - Fix o position no load no JS
+//@done 71 -  Fix o position no load no EditorController
+//@done 72 - Definir o Contador do position no addText
+//@done 73 - Definir o Contador do position no addImagem
+//@done 74 - Definir o Contador do position no addSom
+//@done 75 - Atribuir o position do element no bd ao valor do seu atributo no html
 
 // 23-01 := 4;
 // 24-01 := 2;
@@ -69,7 +85,6 @@
 // 28-01 := 3;
 // 29-01 := 0;
 // 31-01 := 6;
-
 //03-03 := 0;
 //03-04 := 2;
 //03-05 := 4;
@@ -80,8 +95,18 @@
 //18-02 := 2:0;
 //19-02 := 0:0;
 //20-02 := 0:0;
-//21-02 := 3:0;
+//21-02 := 5:0;
 
+//--  
+//24-02 :=3:3;
+//25-02 :=2:2;
+//26-02 :=0:0;
+//27-02 :=2:2;
+//28-02 :=0:0;
+
+
+//06-03 := 2:2;
+//07-03 := 5:5;
 
 
 class EditorController extends Controller {
@@ -566,10 +591,19 @@ class EditorController extends Controller {
                             }
                             $justFlag = false;
 
-                            if (isset($_POST['pieceID']) && isset($_POST['ordem'])
+                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID'])) && isset($_POST['ordem'])
                                     && isset($_POST['value']) && isset($_POST['DomID'])) {
                                 $DomID = $_POST['DomID'];
-                                $pieceID = $_POST['pieceID'];
+
+                                $isElementPieceSet = false;
+                                if (isset($_POST['pieceID'])) {
+                                    $pieceID = $_POST['pieceID'];
+                                }elseif(isset($_POST['pieceSetID'])) {
+                                    $isElementPieceSet = true;
+                                    $pieceSetID = $_POST['pieceSetID'];
+                                }
+
+
                                 $flag = isset($_POST['flag']) ? $_POST['flag'] : -1;
                                 $match = isset($_POST['match']) ? $_POST['match'] : -1;
                                 if (isset($_POST['value'])) {
@@ -582,30 +616,43 @@ class EditorController extends Controller {
                                 $unlink_New = false;
                                 $delete = false;
 
+                                //var_dump(isset($_POST['pieceID']));exit();
+                                
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 1) {
                                     //Desvincula e Cria um novo elemento !
                                     $IDDB = $_POST['ID_BD'];
                                     $newElement = EditorElement::model()->findByPk($IDDB);
-                                    $Element_Piece = EditorPieceElement::model()->findByAttributes(
-                                            array('piece_id' => $pieceID, 'element_id' => $newElement->id));
 
-                                    $Element_Piece_Property = EditorPieceelementProperty::model()
-                                            ->findAll(array(
-                                        'condition' => 'piece_element_id=:idPieceElement',
-                                        'params' => array(':idPieceElement' => $Element_Piece->id)
-                                            ));
-                                    $size_properties_Element_Piece = count($Element_Piece_Property);
-                                    $ls = null;
-                                    foreach ($Element_Piece_Property as $ls):
-                                        // Excluir cada propriedade do Element_Piece
-                                        $ls->delete();
-                                    endforeach;
-                                    //Depois, Desvincula o elemento da peça. 
-                                    $Element_Piece->delete();
+                                    if (!$isElementPieceSet) {
+                                        //É um elemento da PIECE
+                                        $Element_Piece = EditorPieceElement::model()->findByAttributes(
+                                                array('piece_id' => $pieceID, 'element_id' => $newElement->id));
+
+                                        $Element_Piece_Property = EditorPieceelementProperty::model()
+                                                ->findAll(array(
+                                            'condition' => 'piece_element_id=:idPieceElement',
+                                            'params' => array(':idPieceElement' => $Element_Piece->id)
+                                                ));
+                                        $size_properties_Element_Piece = count($Element_Piece_Property);
+                                        $ls = null;
+                                        foreach ($Element_Piece_Property as $ls):
+                                            // Excluir cada propriedade do Element_Piece
+                                            $ls->delete();
+                                        endforeach;
+                                        //Depois, Desvincula o elemento da peça. 
+                                        $Element_Piece->delete();
+                                    }else {
+                                        //É um elemento da PIECESET
+                                        $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
+                                                array('pieceset_id' => $pieceSetID, 'element_id' => $newElement->id));
+
+                                        //Depois, Desvincula o elemento da PieceSet. 
+                                        $Element_PieceSet->delete();
+                                    }
 
                                     $unlink_New = true;
-                                }else {
+                                } else {
                                     //Cria um novo somente.
                                     $new = true;
                                 }
@@ -617,40 +664,52 @@ class EditorController extends Controller {
                                     $newElement->insert();
                                     $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
                                     $elementID = $element->id;
-                                    $newPieceElement = new EditorPieceElement();
-                                    $newPieceElement->piece_id = $pieceID;
-                                    $newPieceElement->element_id = $elementID;
-                                    $newPieceElement->order = $order;
-                                    $newPieceElement->insert();
-                                    $json['ElementID'] = $elementID;
-                                    $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $pieceID, 'element_id' => $elementID), array('order' => 'id desc'));
-                                    $pieceElementID = $pieceElement->id;
-
-                                    //===========================================================
-                                    if ($match != -1) {
-                                        // grouping
-                                        $propertyName = "grouping";
-                                        $propertyContext = "piecelement";
-                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        //===========================================================
-                                        $newPieceElementProperty = new EditorPieceelementProperty();
-                                        $newPieceElementProperty->piece_element_id = $pieceElementID;
-                                        $newPieceElementProperty->property_id = $propertyID;
-                                        $newPieceElementProperty->value = $match;
-                                        $newPieceElementProperty->insert();
+                                    if (!$isElementPieceSet) {
+                                        $newPieceElement = new EditorPieceElement();
+                                        $newPieceElement->piece_id = $pieceID;
+                                        $newPieceElement->element_id = $elementID;
+                                        $newPieceElement->position = $order;
+                                        $newPieceElement->insert();
+                                    } else {
+                                        //É um elemento da PIECESET
+                                        $newPieceSetElement = new EditorPiecesetElement();
+                                        $newPieceSetElement->pieceset_id = $pieceSetID;
+                                        $newPieceSetElement->element_id = $elementID;
+                                        $newPieceSetElement->position = $order;
+                                        $newPieceSetElement->insert();
                                     }
-                                    if($flag != -1) {
-                                        //Inseri a Flag
-                                        $propertyName = "layertype";
-                                        $propertyContext = "piecelement";
-                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                    $json['ElementID'] = $elementID;
+
+                                    if (!$isElementPieceSet) {
+                                        $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $pieceID, 'element_id' => $elementID), array('order' => 'id desc'));
+                                        $pieceElementID = $pieceElement->id;
+
                                         //===========================================================
-                                        $newPieceElementProperty = new EditorPieceelementProperty();
-                                        $newPieceElementProperty->piece_element_id = $pieceElementID;
-                                        $newPieceElementProperty->property_id = $propertyID;
-                                        $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
-                                        $newPieceElementProperty->insert();
-                                        //====================
+                                        if ($match != -1) {
+                                            // grouping
+                                            $propertyName = "grouping";
+                                            $propertyContext = "piecelement";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            //===========================================================
+                                            $newPieceElementProperty = new EditorPieceelementProperty();
+                                            $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                            $newPieceElementProperty->property_id = $propertyID;
+                                            $newPieceElementProperty->value = $match;
+                                            $newPieceElementProperty->insert();
+                                        }
+                                        if ($flag != -1) {
+                                            //Inseri a Flag
+                                            $propertyName = "layertype";
+                                            $propertyContext = "piecelement";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            //===========================================================
+                                            $newPieceElementProperty = new EditorPieceelementProperty();
+                                            $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                            $newPieceElementProperty->property_id = $propertyID;
+                                            $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
+                                            $newPieceElementProperty->insert();
+                                            //====================
+                                        }
                                     }
 
                                     if (isset($_POST["library"])) {
@@ -776,7 +835,7 @@ class EditorController extends Controller {
                                                 'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
                                     $change_flag->value = $flag == "true" ? "Acerto" : "Erro";
                                     $change_flag->save();
-                                } 
+                                }
                             } else {
                                 throw new Exception("ERROR: Dados da Element insuficientes.<br>");
                             }
@@ -806,6 +865,35 @@ class EditorController extends Controller {
                             $json['S' . $sc->id]['PS' . $PieceSet->id] = array();
                             $json['S' . $sc->id]['PS' . $PieceSet->id]['description'] = $PieceSet->description;
                             $json['S' . $sc->id]['PS' . $PieceSet->id]['template_id'] = $PieceSet->template_id;
+                            //===============PieceSet-Element===============
+                            
+                              $PieceSetElement = EditorPiecesetElement::model()->findAllByAttributes(array('pieceset_id' => $scps->pieceset_id), array('order' => '`position`'));
+
+                                foreach ($PieceSetElement as $pse):
+                                    $Element = EditorElement::model()->findByAttributes(array('id' => $pse->element_id));
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id] = array();
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['type_name'] = $Element->type->name;
+                                    
+                                    //=============POSITION==================================
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['position'] = $pse->position;
+
+                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
+                                    foreach ($ElementProperty as $ep):
+                                        if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                            $Library = Library::model()->findByAttributes(array('id' => $ep->value));
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id] = array();
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
+                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
+                                            foreach ($LibraryProperty as $lp):
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
+                                            endforeach;
+                                        }else {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id][$ep->property->name] = $ep->value;
+                                        }
+                                    endforeach;
+                                endforeach;
+                            
+                            //==============================================
 
                             $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('pieceset_id' => $PieceSet->id), array('order' => '`order`'));
                             foreach ($PieceSetPiece as $psp):
@@ -814,7 +902,7 @@ class EditorController extends Controller {
                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['description'] = $Piece->description;
                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['name'] = $Piece->name;
 
-                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('piece_id' => $psp->piece_id), array('order' => '`order`'));
+                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('piece_id' => $psp->piece_id), array('order' => '`position`'));
 
                                 foreach ($PieceElement as $pe):
                                     $Element = EditorElement::model()->findByAttributes(array('id' => $pe->element_id));
@@ -822,7 +910,10 @@ class EditorController extends Controller {
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name;
                                     $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                         'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
-                                    //var_dump($pe_property->value); exit();
+                                    
+                                    //=============POSITION==================================
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['position'] = $pe->position;
+                                    //==============Flag=====================================
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
                                     //=============== grouping ===============================
                                     $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,

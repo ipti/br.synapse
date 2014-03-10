@@ -8,7 +8,7 @@
             <!--[if lt IE 8]>
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
             <![endif]-->
-            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery/jquery-1.7.2.js"></script>
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery/jquery-2.0.2.min.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/jquery/jquery.ui.all.css" />
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/theme/yvj.full.css" />
             <title><?php echo CHtml::encode($this->pageTitle); ?></title>
