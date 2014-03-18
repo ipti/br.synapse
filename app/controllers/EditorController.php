@@ -65,11 +65,9 @@
 //@todo 62 - Abrir a caixa de diálogo assim que clicar no botão addImage
 //@done 63 - Mudar o BD na tabela element_piece (campo order para position), e o código referente. 
 //@done 64 - Retirar o add automático de um elemento texto da Resposta do AEL
-
 //@done 65 - Atualizar o Jquery
 //@done 66 - Corrigir no onEditor.js os eventos live
 //@done 67 - Pôr o botão excluir do elemento text, na reposta AEL
-
 //@done 68 -  Fix o position no saveAll no JS
 //@done 69 -  Fix o position no saveElementPiece no EditorController
 //@done 70  - Fix o position no load no JS
@@ -78,6 +76,22 @@
 //@done 73 - Definir o Contador do position no addImagem
 //@done 74 - Definir o Contador do position no addSom
 //@done 75 - Atribuir o position do element no bd ao valor do seu atributo no html
+//
+//@done 76 - Retirar o método de DELETAR texto automático na Resposta do Associar Elementos
+//@done 77 - Adicionar imagem na div do Pieceset no editor.js
+//@done 78 - Adicionar a função de Add no banco o elemento IMAGE da PieceSet
+//@done 79 - Adicionar a função de load do elemento IMAGE da PieceSet no JS
+//@done 80 - Adicionar a função de load do elemento IMAGE da PieceSet no EditorController
+//@done 81 - Adicionar a função de DELETAR o elemento IMAGE da PieceSet no JS
+//@done 82 - Adicionar a função de DELETAR o elemento IMAGE da PieceSet no EditorController
+//@done 83 - Adicionar o SOM na div do Pieceset no editor.js
+//@done 84 - Adicionar a função de Add no banco o elemento SOM da PieceSet
+//@done 85 - Encontrar problema de Upload de arquivos 'grandes' de Audio
+//@done 86 - Adicionar a função de DELETAR o elemento SOM da PieceSet no JS
+//@done 87 - Adicionar a função de DELETAR o elemento SOM da PieceSet no EditorController
+//@done 88 - Adicionar a função de load do elemento SOM da PieceSet no JS
+//@done 89 - Adicionar a função de load do elemento SOM da PieceSet no EditorController
+
 
 // 23-01 := 4;
 // 24-01 := 2;
@@ -96,18 +110,20 @@
 //19-02 := 0:0;
 //20-02 := 0:0;
 //21-02 := 5:0;
-
 //--  
 //24-02 :=3:3;
 //25-02 :=2:2;
 //26-02 :=0:0;
 //27-02 :=2:2;
 //28-02 :=0:0;
-
-
 //06-03 := 2:2;
 //07-03 := 5:5;
 
+//10-03 := 5:5;
+//11-03 := 3:3;
+//12-03:= 5:5;
+//13-03:= 4:4;
+//14-03:= 4:4;
 
 class EditorController extends Controller {
 
@@ -598,7 +614,7 @@ class EditorController extends Controller {
                                 $isElementPieceSet = false;
                                 if (isset($_POST['pieceID'])) {
                                     $pieceID = $_POST['pieceID'];
-                                }elseif(isset($_POST['pieceSetID'])) {
+                                } elseif (isset($_POST['pieceSetID'])) {
                                     $isElementPieceSet = true;
                                     $pieceSetID = $_POST['pieceSetID'];
                                 }
@@ -616,8 +632,7 @@ class EditorController extends Controller {
                                 $unlink_New = false;
                                 $delete = false;
 
-                                //var_dump(isset($_POST['pieceID']));exit();
-                                
+
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 1) {
                                     //Desvincula e Cria um novo elemento !
@@ -789,8 +804,53 @@ class EditorController extends Controller {
                                             $newElementProperty->value = $libraryID;
                                             $newElementProperty->insert();
                                             $json['LibraryID'] = $libraryID;
-                                        } elseif (false) {
-                                            //Verificar - Se for um som.
+                                        } elseif ($libraryTypeName == $this->TYPE_LIBRARY_SOUND) {
+                                            
+                                            $src = $value['url'];
+                                            $nome = $value['name'];
+                                            $ext = explode(".", $nome);
+                                            $ext = $ext[1];
+
+                                            $newLibrary = new Library();
+                                            $library_typeName = $_POST['library'];
+                                            $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
+                                            $newLibrary->insert();
+                                            //Pegar o ID do ultimo adicionado.
+                                            $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                            $libraryID = $library->id;
+                                            //Salva library_property 's
+                                            //5 src
+                                            $propertyName = "src";
+                                            $propertyContext = "library";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newLibraryProperty = new LibraryProperty();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $nome; //apenas o nome do arquivo
+                                            $newLibraryProperty->insert();
+
+                                            //12 extension
+                                            $propertyName = "extension";
+                                            $propertyContext = "library";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newLibraryProperty = new LibraryProperty();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $ext;
+                                            $newLibraryProperty->insert();
+
+                                            //Salva a editor_element_property
+                                            //4 libraryID
+                                            $propertyName = "library_id";
+                                            $propertyContext = $typeName;
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newElementProperty = new EditorElementProperty();
+
+                                            $newElementProperty->element_id = $elementID;
+                                            $newElementProperty->property_id = $propertyID;
+                                            $newElementProperty->value = $libraryID;
+                                            $newElementProperty->insert();
+                                            $json['LibraryID'] = $libraryID;
                                         }
                                     } elseif ($typeName == $this->TYPE_ELEMENT_TEXT) {  //text
                                         //salva editor_element_property 's
@@ -866,33 +926,33 @@ class EditorController extends Controller {
                             $json['S' . $sc->id]['PS' . $PieceSet->id]['description'] = $PieceSet->description;
                             $json['S' . $sc->id]['PS' . $PieceSet->id]['template_id'] = $PieceSet->template_id;
                             //===============PieceSet-Element===============
-                            
-                              $PieceSetElement = EditorPiecesetElement::model()->findAllByAttributes(array('pieceset_id' => $scps->pieceset_id), array('order' => '`position`'));
 
-                                foreach ($PieceSetElement as $pse):
-                                    $Element = EditorElement::model()->findByAttributes(array('id' => $pse->element_id));
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id] = array();
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['type_name'] = $Element->type->name;
-                                    
-                                    //=============POSITION==================================
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['position'] = $pse->position;
+                            $PieceSetElement = EditorPiecesetElement::model()->findAllByAttributes(array('pieceset_id' => $scps->pieceset_id), array('order' => '`position`'));
 
-                                    $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
-                                    foreach ($ElementProperty as $ep):
-                                        if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
-                                            $Library = Library::model()->findByAttributes(array('id' => $ep->value));
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id] = array();
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
-                                            $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
-                                            foreach ($LibraryProperty as $lp):
-                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
-                                            endforeach;
-                                        }else {
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id][$ep->property->name] = $ep->value;
-                                        }
-                                    endforeach;
+                            foreach ($PieceSetElement as $pse):
+                                $Element = EditorElement::model()->findByAttributes(array('id' => $pse->element_id));
+                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id] = array();
+                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['type_name'] = $Element->type->name;
+
+                                //=============POSITION==================================
+                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['position'] = $pse->position;
+
+                                $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
+                                foreach ($ElementProperty as $ep):
+                                    if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                        $Library = Library::model()->findByAttributes(array('id' => $ep->value));
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id] = array();
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
+                                        $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
+                                        foreach ($LibraryProperty as $lp):
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
+                                        endforeach;
+                                    }else {
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id][$ep->property->name] = $ep->value;
+                                    }
                                 endforeach;
-                            
+                            endforeach;
+
                             //==============================================
 
                             $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('pieceset_id' => $PieceSet->id), array('order' => '`order`'));
@@ -910,7 +970,7 @@ class EditorController extends Controller {
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name;
                                     $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                         'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
-                                    
+
                                     //=============POSITION==================================
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['position'] = $pe->position;
                                     //==============Flag=====================================
@@ -962,13 +1022,23 @@ class EditorController extends Controller {
                             break;
                         case 'PS':$this->delPieceset($id);
                             break;
-                        case 'P': $delAll_Ok = (!$this->delPiece($id)) ? false : $delAll_Ok;
+                        case 'P': $delAll_Ok = $this->delPiece($id);
                             break;
                         case 'E':
-                            $expl_element = explode('P', $id);
-                            $id_element = $expl_element[0];
-                            $id_piece = $expl_element[1];
-                            $delAll_Ok = (!$this->delElement($id_element, $id_piece)) ? false : $delAll_Ok;
+
+                            $expl_element = explode('PS', $id);
+                            if (count($expl_element) == 2) {
+                                //Então realmente é uma PS
+                                $id_element = $expl_element[0];
+                                $id_pieceSet = $expl_element[1];
+                                $delAll_Ok = $this->delElement($id_element, $id_pieceSet, true);
+                            } else {
+                                //É uma P -> piece
+                                $expl_element = explode('P', $id);
+                                $id_element = $expl_element[0];
+                                $id_piece = $expl_element[1];
+                                $delAll_Ok = $this->delElement($id_element, $id_piece);
+                            }
                     }
                 endforeach;
                 if (!$delAll_Ok) {
@@ -1043,29 +1113,40 @@ class EditorController extends Controller {
     }
 
     // Dois argumentos, pois, um elemento pode está em várias pieces
-    private function delElement($id, $piece_id) {
+    private function delElement($id, $pieceOrPset_id, $isElementPieceSet) {
+        $isElementPieceSet = isset($isElementPieceSet) && $isElementPieceSet;
         $newElement = EditorElement::model()->findByPk($id);
-        $Element_Piece = EditorPieceElement::model()->findByAttributes(
-                array('piece_id' => $piece_id, 'element_id' => $newElement->id));
-        $Performance_Actor = PeformanceActor::model()->findByAttributes(
-                array('piece_element_id' => $Element_Piece->id));
-        //Somente DELETA se NÃO existir alguma PERFORMANCE ACTOR
-        if (!isset($Performance_Actor)) {
-            $Element_Piece_Property = EditorPieceelementProperty::model()
-                    ->findAll(array(
-                'condition' => 'piece_element_id=:idPieceElement',
-                'params' => array(':idPieceElement' => $Element_Piece->id)
-                    ));
-            $size_properties_Element_Piece = count($Element_Piece_Property);
-            $ls = null;
-            foreach ($Element_Piece_Property as $ls):
-                // Excluir cada propriedade do Element_Piece
-                $ls->delete();
-            endforeach;
-            //Depois, Desvincula o elemento da peça.                                  
-            $Element_Piece->delete();
-            return true;
-            //==========================
+        if (!$isElementPieceSet) {
+            $Element_Piece = EditorPieceElement::model()->findByAttributes(
+                    array('piece_id' => $pieceOrPset_id, 'element_id' => $newElement->id));
+            $Performance_Actor = PeformanceActor::model()->findByAttributes(
+                    array('piece_element_id' => $Element_Piece->id));
+            //Somente DELETA se NÃO existir alguma PERFORMANCE ACTOR
+            if (!isset($Performance_Actor)) {
+                $Element_Piece_Property = EditorPieceelementProperty::model()
+                        ->findAll(array(
+                    'condition' => 'piece_element_id=:idPieceElement',
+                    'params' => array(':idPieceElement' => $Element_Piece->id)
+                        ));
+                $size_properties_Element_Piece = count($Element_Piece_Property);
+                $ls = null;
+                foreach ($Element_Piece_Property as $ls):
+                    // Excluir cada propriedade do Element_Piece
+                    $ls->delete();
+                endforeach;
+                //Depois, Desvincula o elemento da peça.                                  
+                $Element_Piece->delete();
+                return true;
+                //==========================
+            }
+        }else {
+            //É um elemento da PieceSet
+            $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
+                    array('pieceset_id' => $pieceOrPset_id, 'element_id' => $newElement->id));
+               //Desvincula o elemento da PieceSet. 
+                $Element_PieceSet->delete();
+                return true;
+                //==========================
         }
 
         return false;
@@ -1126,10 +1207,11 @@ class EditorController extends Controller {
                         //tenta
                         try {
                             //move o arquivo temporário para o novo local
-                            move_uploaded_file($tmp, $path . $name);
+                           $varMUF = move_uploaded_file($tmp, $path . $name);
                             //adiciona ao retorno do json a URL e o nome do arquivo
                             $json['url'] = $url . $name;
                             $json['name'] = $name;
+                            $json['varMUF'] = $varMUF;
                             //se não funcionar
                         } catch (Exception $e) {
                             throw new Exception("ERROR: Falha ao enviar.<br>");

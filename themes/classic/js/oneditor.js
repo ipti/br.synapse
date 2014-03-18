@@ -39,6 +39,13 @@ $(function() {
            newEditor.addImage($(this).closest('div[group]'));
         }
     });
+     $(document).on('click',".insertSound",function(){ //
+         //Somente adiciona se não possui outro elemento imagem neste grupo
+        if($(this).closest('div[group]').find('div.audio').size() == 0){
+           newEditor.addSound($(this).closest('div[group]'));
+        }
+    });
+    
     $("#addPieceSet").click(function(){
         newEditor.addPieceSet();
     })
