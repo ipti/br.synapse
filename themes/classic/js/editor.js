@@ -28,7 +28,7 @@ function editor () {
     this.uploadedPiecesets = 0;
     this.uploadedScreens = 0;
     this.totalElements = 0;
-    this.uploadedLibraryIDs = new Array();
+    this.uploaded_ImagesIDs = new Array();
     this.uploadedImages = 0;
     this.uploadedSounds = 0;
     this.isload = false;
@@ -311,15 +311,15 @@ function editor () {
                 selector: "textarea#"+ID+"_flag"
             });            
               
-            $(text_element+"_flag").live('change', function(){
+            $(text_element+"_flag").on('change', function(){
                 var txt_BD = $(text_element+"_flag").val();
                 var txt_NEW = $("body", $(text_element+"_flag_ifr").contents()).html();
                 var text_div = text_element+'_text';                 
                 //Verificar se foi Alterado em relação a do DB        
                 this.textChanged(txt_BD, txt_NEW, text_element, text_div );
-            //Atualizar a variável load_totalElements & Invert É PRECISO AQUI ?
-            //                this.load_totalElements = $('.element[updated="1"]').size();
-            //                this.load_totalElements_Invert = $('.element[updated="0"]').size();
+            //Atualizar a variável totalElementsChanged & Invert É PRECISO AQUI ?
+            //                this.totalElementsChanged = $('.element[updated="1"]').size();
+            //                this.totalElementsNOchanged = $('.element[updated="0"]').size();
             });
               
         }else{     
@@ -386,8 +386,8 @@ function editor () {
                         parent.delPieceSet(parent.currentPieceSet,true); // TODO
                         //Atualiza Total de elementos e o Total alterados
                         parent.totalElements = $('.element').size();
-                        parent.load_totalElements = $('.element[updated="1"]').size();
-                        parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
+                        parent.totalElementsChanged = $('.element[updated="1"]').size();
+                        parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
                         parent.totalPieces = $('.piece').size();
                         parent.totalPiecesets = $('.PieceSet').size();
                                             
@@ -425,15 +425,6 @@ function editor () {
         }else{                  
             $(text_element).attr('updated',0); // NÃO foi alterado!
             $(text_div).attr('updated',0); 
-        }
-        
-        if(this.COTemplateTypeIn(this.AEL)){
-            //Verificar se precisa mudar a resposta do AEL
-            var match_text_div = $(text_div).attr('match');
-            var separator = match_text_div.split('_');
-            if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
-                this.changeRespAEL(separator[0]);
-            }
         }
         
     }
@@ -631,7 +622,7 @@ function editor () {
     }
     
     this.insertAudioPieceSet = function(piecesetID,idbd, loaddata){
-          if(this.isset(piecesetID)) {
+        if(this.isset(piecesetID)) {
             var tagAdd = $('#'+piecesetID+"_forms");
             if (!this.existID('#'+piecesetID+"_forms_audio_form")){
                 tagAdd.append("<span class='elementPieceSet'></span>");
@@ -831,7 +822,6 @@ function editor () {
                     '<button class="insertImage" >'+LABEL_ADD_IMAGE+'</button>'+
                     '<button class="insertSound"></button>'+
                     '<button class="insertText" >'+LABEL_ADD_TEXT+'</button>'+
-                    '<input type="button" class="del delElement" value="'+LABEL_REMOVE_ELEMENT+'">'+
                     '</div></li>';
                 }
                       
@@ -870,8 +860,6 @@ function editor () {
         }else if(parent.COTemplateTypeIn(parent.TXT)){
             tagAdd= $('li[id="'+parent.currentPiece+'"] div.tplTxt'); 
         }
-    
-        
         
         if(this.isset(loaddata)){
             switch(type){
@@ -907,7 +895,9 @@ function editor () {
             var elementID_Resp = elementID;
             elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1])-1);   
         }
-        if(typeof group == 'number' && parent.COTemplateTypeIn(parent.MTE)){
+        
+        if((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1)) 
+                && parent.COTemplateTypeIn(parent.MTE)){
             //É MTE
             var buttonDelID = "div[group='"+group+"'] > span > div > input.delElement:eq(0)";
         }else if(parent.COTemplateTypeIn(parent.AEL)){
@@ -1062,10 +1052,11 @@ function editor () {
             delete this.countElements[id];
         }
     }
-    this.delElement = function(id){
+    this.delElement = function(id, isRecursion){
+        var isRecursion = this.isset(isRecursion) && isRecursion;
         var isPiecesetElement = false;
         
-        var doDel = confirm(MSG_REMOVE_ELEMENT); 
+        var doDel = isRecursion ? true :confirm(MSG_REMOVE_ELEMENT); 
         if(typeof id != 'object') {
             //Desconsiderar a última parte do último '_' que é o tipo do elemento
             if(doDel){
@@ -1120,6 +1111,13 @@ function editor () {
                     //Por fim Deleta o grupo, a div agora sem elements
                     var group = $(id).find('div[group]').attr('group');
                     $(id).remove();
+                    
+                    //Deleta todo o grupo RESPOSTA de elementos
+                    //Deletar todos os objeto do GRUPO RESPOSTA, se existir
+                    $('div[group='+group+'_1] div.element').each(function(){
+                        var id_ElementResp_del = $(this).attr('id');
+                        parent.delElement(id_ElementResp_del,true);
+                    });
                     // Deleta também o seu Grupo de Resposta
                     $('div[group='+group+'_1]').remove();
                 }else if(parent.COTemplateTypeIn(parent.MTE)) {
@@ -1134,6 +1132,7 @@ function editor () {
                 }
             }
         }
+        
     }
     
     this.delObject = function(id){
@@ -1143,13 +1142,6 @@ function editor () {
             $('#'+id).closest('span.elementPieceSet').remove();
         }else{
             $("#"+id).remove();
-        }
-        
-        
-        //Verificar se precisa mudar a resposta do AEL
-        var separator = match_div.split('_');
-        if(this.COTemplateTypeIn(this.AEL) && separator.length == 1){
-            this.changeRespAEL(separator[0]);
         }
         
     }
@@ -1283,8 +1275,8 @@ function editor () {
         
             //Total de elementos e o Total alterados
             parent.totalElements = $('.element').size();
-            parent.load_totalElements = $('.element[updated="1"]').size();
-            parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
+            parent.totalElementsChanged = $('.element[updated="1"]').size();
+            parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
             parent.totalPieces = $('.piece').size();
             parent.totalPiecesets = $('.PieceSet').size();
             parent.totalScreens = $('.screen').size();
@@ -1419,8 +1411,8 @@ function editor () {
                                         //Verificar se foi Alterado em relação a do DB        
                                         parent.textChanged(txt_BD, txt_New, text_element, text_div );
                                         //atualiza o total de elementos atualizados e não atualizados
-                                        parent.load_totalElements = $('.element[updated="1"]').size();
-                                        parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
+                                        parent.totalElementsChanged = $('.element[updated="1"]').size();
+                                        parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
                                             
                                         var txt_New_noHtml =  $("body", $(text_element+"_flag_ifr").contents()).text();
                                         //Foi alterado  
@@ -1511,14 +1503,12 @@ function editor () {
                                                             $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
                                                         }
                                                         parent.uploadedElements++;
-                                                    
+                                                          
                                                         if(!parent.isload && parent.totalElements == parent.uploadedElements) {
                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
-                                                        }else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                        }else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
                                                         }
-                                                        // window.alert("LOad_totalELements" +parent.load_totalElements+" uploadedELements"+parent.uploadedElements);                                                    
-                                                        //  window.alert("Verificar se acabou as requisições...");
                                                         //Verificar se acabou as requisições
                                                         parent.verify_requestFinish();
                                                     
@@ -1575,21 +1565,18 @@ function editor () {
                                                                     }
 
                                                                     //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                                    parent.uploadedLibraryIDs[parent.uploadedImages++] = response['LibraryID'];
+                                                                    parent.uploaded_ImagesIDs[parent.uploadedImages++] = response['LibraryID'];
                                                                     //Atualiza o contador dos Elementos
                                                                     parent.uploadedElements++; 
+                                                                    
                                                                     if(!parent.isload && parent.totalElements == parent.uploadedElements) {
                                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
                                                                     }
-                                                                    else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                                    else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
                                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
                                                                     }
-                                                               
-                                                                    //  window.alert("totalELements" +parent.totalElements+" uploadedELements"+parent.uploadedElements);
-                                                                    // window.alert("Verificar se acabou as requisições...");
                                                                     //Verificar se acabou as requisições
                                                                     parent.verify_requestFinish();
-                                                               
                                                                
                                                                 });
                                                         },
@@ -1636,7 +1623,6 @@ function editor () {
                                                             data['value'] = {};
                                                             data['value']['url'] = response['url'];
                                                             data['value']['name'] = response['name'];
-                                                            console.log(data['value']['url']);   
                                                             //Salva Elemento
                                                             parent.saveData(
                                                                 //Dados
@@ -1650,13 +1636,13 @@ function editor () {
                                                                     }
 
                                                                     //atualiza o contador de Sons enviados
-                                                                    parent.uploadedLibraryIDs[parent.uploadedSounds++] = response['LibraryID'];
+                                                                    parent.uploadedSounds++;
                                                                     //Atualiza o contador dos Elementos
                                                                     parent.uploadedElements++; 
                                                                     if(!parent.isload && parent.totalElements == parent.uploadedElements) {
                                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
                                                                     }
-                                                                    else if(parent.isload && parent.load_totalElements == parent.uploadedElements) {
+                                                                    else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
                                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
                                                                     }
                                                                  
@@ -1664,7 +1650,6 @@ function editor () {
                                                                 });
                                                         },
                                                         error: function(error, textStatus, errorThrown){
-                                                            //$("#"+form).html(error.responseText);
                                                             alert(ERROR_FILE_UPLOAD);
                                                             $(".savescreen").append(error.responseText);
                                                         }
@@ -1686,8 +1671,8 @@ function editor () {
                                         parent.delPieceSet(parent.currentPieceSet,true);
                                         //Atualiza Total de elementos e o Total alterados
                                         parent.totalElements = $('.element').size();
-                                        parent.load_totalElements = $('.element[updated="1"]').size();
-                                        parent.load_totalElements_Invert = $('.element[updated="0"]').size(); 
+                                        parent.totalElementsChanged = $('.element[updated="1"]').size();
+                                        parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
                                         parent.totalPieces = $('.piece').size();
                                         parent.totalPiecesets = $('.PieceSet').size();
                                             
@@ -1750,7 +1735,7 @@ function editor () {
                                     //                                        +parent.totalPiecesets+ parent.uploadedPiecesets+
                                     //                                        parent.totalPieces + parent.uploadedPieces
                                     //                                        +!parent.isload + parent.totalElements + parent.uploadedElements+
-                                    //                                            parent.isload + parent.load_totalElements + parent.uploadedElements);   
+                                    //                                            parent.isload + parent.totalElementsChanged + parent.uploadedElements);   
                                     //VER : MENSAGEM DE SANVALNDO S,P,PS,E desnecessária no load!
                                     parent.verify_requestFinish();
                                     
@@ -1828,13 +1813,14 @@ function editor () {
     //Verificar se acabou as requisições!
     this.verify_requestFinish = function() {
         var parent = this;
+        var totalElementsPieceSet = $('span.elementPieceSet > div.element').size();
         
         if((parent.totalScreens == parent.uploadedScreens) && 
             (parent.totalPiecesets == parent.uploadedPiecesets) &&
             (parent.totalPieces == parent.uploadedPieces) && 
             ( (!parent.isload && parent.totalElements == parent.uploadedElements) || 
-                (parent.isload && parent.load_totalElements == parent.uploadedElements && 
-                    (parent.COTemplateTypeIn(parent.TXT) || (parent.uploadedFlags == parent.load_totalElements_Invert))))){
+                (parent.isload && parent.totalElementsChanged == parent.uploadedElements && 
+                    ( !parent.COTemplateTypeIn(parent.MTE) || ((parent.uploadedFlags+totalElementsPieceSet) == parent.totalElementsNOchanged))))){
             //chama o posEditor
             $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
             parent.posEditor(); 
@@ -1853,27 +1839,13 @@ function editor () {
             var parent = this;          
             var inputs = "";
             //cria os inputs para ser enviados por Post
-            for (var i in parent.uploadedLibraryIDs){
-                inputs += '<input type="hidden" name="uploadedLibraryIDs['+i+']" value="'+parent.uploadedLibraryIDs[i]+'">';
+            for (var i in parent.uploaded_ImagesIDs){
+                inputs += '<input type="hidden" name="uploaded_ImagesIDs['+i+']" value="'+parent.uploaded_ImagesIDs[i]+'">';
             }
             
             //cria formulário para enviar o array de library para o poseditor
             $('.savescreen').append('<form action="/editor/poseditor" method="post">'+inputs+'<input type="submit" value="PosEditor"></form>');
-            
-        /*$.ajax({
-                type: "POST",
-                url: "/Editor/poseditor",
-                dataType: 'json',
-                ids: parent.uploadedLibraryIDs,                
-                error: function( jqXHR, textStatus, errorThrown ){
-                    $('.savescreen').append('<br><p>Erro ao inviar ids ao poseditor.</p>');
-                    $('.savescreen').append('<br><p>Error mensage:</p>');
-                    $('html').html(jqXHR.responseText);
-                },
-                success: function(response, textStatus, jqXHR){
-                    alert('Save complet!');
-                }
-            });*/
+             
         }
         
     }
@@ -2100,32 +2072,10 @@ function editor () {
     }
         
     this.imageChanged = function(input_element){
-        
         // Change imagens
         var id_div = input_element.attr("id").replace('_input', '');
         var id_span = id_div.replace('_image', '');
         $('#'+id_div+'.image, #'+id_span).attr('updated',1); 
-        
-        if(this.COTemplateTypeIn(this.AEL)) {
-            //Verificar se precisa mudar a resposta do AEL
-            var match_img_div = $('#'+id_div).attr('match');
-            var separator = match_img_div.split('_');
-            if(separator.length == 1){
-                this.changeRespAEL(separator[0]);
-            }
-        }
-        
     }
     
-    this.changeRespAEL = function(match_ask){
-        //Verificar se possui alguma div com update == 1 neste grupo de Pergunta
-        if($('div[group='+match_ask+']').find('div[updated=1]').size() > 0 ){
-            //Realiza o Update = '1' no elemento Resposta
-            $('div[match='+match_ask+'_1]').attr('updated',1);
-        }else{
-            //Realiza o Update = '0' no elemento Resposta, pois não existe nenhum elemento Pergunta
-            $('div[match='+match_ask+'_1]').attr('updated',0);
-        }
-    }
-        
 }

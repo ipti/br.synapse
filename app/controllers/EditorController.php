@@ -92,6 +92,18 @@
 //@done 88 - Adicionar a função de load do elemento SOM da PieceSet no JS
 //@done 89 - Adicionar a função de load do elemento SOM da PieceSet no EditorController
 
+//@done 90 - Adicionar novo Parâmetro e adaptação para o ElementPieceset no delElement() no EditorController
+//@done 91 - Retirar O botão excluir do Grupo Resposta do AEL 
+//@done 92 - Tratar a Recursividade da Função delElement() no editor.js
+//@done 93 - Editar os nomes das variáveis que representam os elementos alterados e novos
+//@done 94 - Modificação da Condicional para verificação do final das requisições
+//@done 95 - Corrigir o problema do array POST enviado ao PosEditor
+//@done 96 - Não atualizar auto os elementos Respostas do AEL quando algum elemento Pergunta é atualizado!
+//@done 97 - No MTE, incrementar na condicional para a verificação do log,  o contador das Flags + os elementos da PieceSet sem Flag
+//@done 98 - Corrigir o evento de deletar o grupo de elementos quando o grupo é load
+//@todo 99 - Sincronizar a chegada dos elementos pelo AJAX no onload
+//@done 100 - Corrigir o evento no Load elemento TXT no editor.js(Erro na Screnn-2)
+//@todo 101 - Corrigir problema do carregamento de elementos na Screen > 1 
 
 // 23-01 := 4;
 // 24-01 := 2;
@@ -124,6 +136,11 @@
 //12-03:= 5:5;
 //13-03:= 4:4;
 //14-03:= 4:4;
+
+//18-03:= 3:3;
+//19-03:= 5:5;
+//20-03:= 2:4;
+
 
 class EditorController extends Controller {
 
@@ -208,15 +225,15 @@ class EditorController extends Controller {
             set_time_limit(0);
 
             //--------------------------------------------
-            $uploadedLibraryIDs = isset($_POST['uploadedLibraryIDs']) ? $_POST['uploadedLibraryIDs'] : null;
-            if ($uploadedLibraryIDs == null) {
+            $uploaded_ImagesIDs = isset($_POST['uploaded_ImagesIDs']) ? $_POST['uploaded_ImagesIDs'] : null;
+            if ($uploaded_ImagesIDs == null) {
                 $this->redirect('/editor');
             }
 
-            $num_img = count($uploadedLibraryIDs);
+            $num_img = count($uploaded_ImagesIDs);
             $i = 0;
             $idPropertySrc = $this->getPropertyIDByName('src', 'library');
-            foreach ($uploadedLibraryIDs as $upLibId):
+            foreach ($uploaded_ImagesIDs as $upLibId):
                 $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('library_id' => $upLibId,
                     'property_id' => $idPropertySrc));
                 $i++;
@@ -1037,7 +1054,7 @@ class EditorController extends Controller {
                                 $expl_element = explode('P', $id);
                                 $id_element = $expl_element[0];
                                 $id_piece = $expl_element[1];
-                                $delAll_Ok = $this->delElement($id_element, $id_piece);
+                                $delAll_Ok = $this->delElement($id_element, $id_piece, false);
                             }
                     }
                 endforeach;
@@ -1101,7 +1118,7 @@ class EditorController extends Controller {
         $delpiece = true;
         foreach ($delE as $el):
             //Desvincular cada Elemento 
-            $delpiece = (!$this->delElement($el->element_id, $id)) ? false : $delpiece;
+            $delpiece = (!$this->delElement($el->element_id, $id, false)) ? false : $delpiece;
         endforeach;
         //Depois, Exclui a peça Se Não existir Algum piece_element <=> performance_actor
         if ($delpiece) {
