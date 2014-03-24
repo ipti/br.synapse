@@ -103,8 +103,10 @@
 //@done 98 - Corrigir o evento de deletar o grupo de elementos quando o grupo é load
 //@todo 99 - Sincronizar a chegada dos elementos pelo AJAX no onload
 //@done 100 - Corrigir o evento no Load elemento TXT no editor.js(Erro na Screnn-2)
-//@todo 101 - Corrigir problema do carregamento de elementos na Screen > 1 
-
+//@done 101 - Corrigir problema do carregamento de elementos na Screen > 1 
+//@done 102 - Modificar os seletores para os diferentes grupos. Grupos que pertecem a Piece.
+//
+//
 // 23-01 := 4;
 // 24-01 := 2;
 // 27-01 := 2;
@@ -140,7 +142,9 @@
 //18-03:= 3:3;
 //19-03:= 5:5;
 //20-03:= 2:4;
+//21-03:= 1:0;
 
+//24-03:= 1:1;
 
 class EditorController extends Controller {
 

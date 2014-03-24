@@ -549,6 +549,7 @@ function editor () {
             $(tagAdd).append(html);
         }else{
             if(parent.COTemplateTypeIn(parent.MTE)){
+                console.log(tagAdd);
                 $(tagAdd).find('span:eq(0)').append(html); 
             }else if (parent.COTemplateTypeIn(parent.AEL)){
                 $(tagAdd).append(html);
@@ -714,7 +715,7 @@ function editor () {
                 group = match;
                 var sameElement = false;
                 //Já existe o div[elementID]
-                sameElement = $('div[group='+match+']').length == '1';
+                sameElement = $('#'+parent.currentPiece+' div[group='+match+']').length == '1';
             }else{
                 var last_group = $('#'+parent.currentPiece).find('div[group]').last().attr('group');
                 var next_group;
@@ -769,7 +770,7 @@ function editor () {
                 group = match;
                 var sameElement = false;
                 //Já existe o li[elementID]
-                sameElement = $('div[group='+match+']').length == '1';
+                sameElement = $('#'+parent.currentPiece+' div[group='+match+']').length == '1';
                     
             }else{
                 var last_group = $('#'+parent.currentPiece).find('div[group]').last().attr('group');
@@ -785,7 +786,6 @@ function editor () {
             }
             
             var htmlDefault = '<div group="'+group+'">';
-           
             if(!sameElement) {
                 if(!this.isset(isResp) || !isResp){
                     //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
@@ -824,8 +824,8 @@ function editor () {
                     '<button class="insertText" >'+LABEL_ADD_TEXT+'</button>'+
                     '</div></li>';
                 }
-                      
-                      
+                  
+                  
                 $("#"+parent.currentPiece+"_query").append(html);
                 if(this.isset(html2)) {
                     $("#"+parent.currentPiece+"_query_resp").append(html2); 
@@ -838,7 +838,7 @@ function editor () {
             
         }
     
-        if((parent.COTemplateTypeIn(parent.MTE))){ 
+        if((parent.COTemplateTypeIn(parent.MTE))){
             if(newDivMatch){
                 html += '</span></div>';
                 $('#'+parent.currentPiece+" > div.tplMulti").append(html);
@@ -854,7 +854,7 @@ function editor () {
         var tagAdd = "";
         if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)){
             //TagAdd para o load
-            tagAdd= $('div[group='+group+']');
+            tagAdd= $('#'+parent.currentPiece+' div[group='+group+']');
         }else if(parent.COTemplateTypeIn(parent.PRE)){
             tagAdd= $('li[id="'+parent.currentPiece+'"] div.tplPre'); 
         }else if(parent.COTemplateTypeIn(parent.TXT)){
@@ -1924,9 +1924,10 @@ function editor () {
                                                 //pega o id do pieceset a partir do indice
                                                 var pieceID = i.slice(1);
                                                 var DOMpiecesetID = $('.piecelist').last().attr('id');
-                                                //adiciona o pieceset
+                                                //adiciona a piece
                                                 parent.addPiece(DOMpiecesetID,pieceID);
                                                 //seleciona o piece adicionado
+                                                console.log($('.piece').last()); //STOP HERE !!
                                                 parent.changePiece($('.piece').last());
                                                 //para cada item da piece
                                                 $.each(item, function(i,item){
