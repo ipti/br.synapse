@@ -549,7 +549,6 @@ function editor () {
             $(tagAdd).append(html);
         }else{
             if(parent.COTemplateTypeIn(parent.MTE)){
-                console.log(tagAdd);
                 $(tagAdd).find('span:eq(0)').append(html); 
             }else if (parent.COTemplateTypeIn(parent.AEL)){
                 $(tagAdd).append(html);
@@ -845,11 +844,6 @@ function editor () {
             }
             
         }
-        //        else if(parent.COTemplateTypeIn(parent.TXT)){
-        //            // Se for TXT
-        //            html += '</span></div>';
-        //            $('#'+parent.currentPiece+" > div.tplTxt").append(html);
-        //        }
         
         var tagAdd = "";
         if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)){
@@ -899,10 +893,10 @@ function editor () {
         if((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1)) 
                 && parent.COTemplateTypeIn(parent.MTE)){
             //É MTE
-            var buttonDelID = "div[group='"+group+"'] > span > div > input.delElement:eq(0)";
+            var buttonDelID = "#"+parent.currentPiece+" div[group='"+group+"'] > span > div > input.delElement:eq(0)";
         }else if(parent.COTemplateTypeIn(parent.AEL)){
             //É AEL
-            var buttonDelID = "div[group='"+group.split('_')[0]+"'] > input.delElement";
+            var buttonDelID = "#"+parent.currentPiece+" div[group='"+group.split('_')[0]+"'] > input.delElement";
         }
         var buttonTextoID = "#"+elementID+" > div > button.insertText";
         var buttonImageID = "#"+elementID+" > div > button.insertImage";
@@ -1110,16 +1104,17 @@ function editor () {
             
                     //Por fim Deleta o grupo, a div agora sem elements
                     var group = $(id).find('div[group]').attr('group');
+                    var idCurrentPiece = $(id).closest('.piece').attr('id');
                     $(id).remove();
                     
                     //Deleta todo o grupo RESPOSTA de elementos
-                    //Deletar todos os objeto do GRUPO RESPOSTA, se existir
-                    $('div[group='+group+'_1] div.element').each(function(){
+                    //Deletar todos os objetos do GRUPO RESPOSTA, se existir
+                    $('#'+idCurrentPiece+' div[group='+group+'_1] div.element').each(function(){
                         var id_ElementResp_del = $(this).attr('id');
                         parent.delElement(id_ElementResp_del,true);
                     });
                     // Deleta também o seu Grupo de Resposta
-                    $('div[group='+group+'_1]').remove();
+                    $('#'+idCurrentPiece+' div[group='+group+'_1]').remove();
                 }else if(parent.COTemplateTypeIn(parent.MTE)) {
                     //id é o div-grupo a ser excluído
                     $(id).find('div.element').each(function(){
@@ -1391,6 +1386,7 @@ function editor () {
                                     //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                                     ElementID = $(this).attr('id');
                                     ElementID_BD = $(this).attr('idBD');
+                                    console.log(ElementID_BD);
                                     //get Atributo position
                                     elementPosition = $(this).attr('position');
                                     var continuar = true;
@@ -1736,7 +1732,7 @@ function editor () {
                                     //                                        parent.totalPieces + parent.uploadedPieces
                                     //                                        +!parent.isload + parent.totalElements + parent.uploadedElements+
                                     //                                            parent.isload + parent.totalElementsChanged + parent.uploadedElements);   
-                                    //VER : MENSAGEM DE SANVALNDO S,P,PS,E desnecessária no load!
+                                    //VER : MENSAGEM DE SALVANDO S,P,PS,E desnecessária no load!
                                     parent.verify_requestFinish();
                                     
                                     curretPieceID = response['DomID'];
@@ -1755,7 +1751,7 @@ function editor () {
                                 
                                     // REGISTRAR A FLAG DOS ELEMENTS
                                     if(parent.COTemplateTypeIn(parent.MTE)){
-                                        $('div[group]').each(function(){
+                                        $("#"+curretPieceID+' div[group]').each(function(){
                                             //ElementFlag_Updated = $(this).attr('updated');
                                             var group = $(this).attr('group');
                                             var contElements =$(this).find('div.element[match="'+group+'"][updated="0"]').size();
@@ -1927,7 +1923,6 @@ function editor () {
                                                 //adiciona a piece
                                                 parent.addPiece(DOMpiecesetID,pieceID);
                                                 //seleciona o piece adicionado
-                                                console.log($('.piece').last()); //STOP HERE !!
                                                 parent.changePiece($('.piece').last());
                                                 //para cada item da piece
                                                 $.each(item, function(i,item){

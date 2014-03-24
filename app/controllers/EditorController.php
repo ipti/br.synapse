@@ -105,6 +105,14 @@
 //@done 100 - Corrigir o evento no Load elemento TXT no editor.js(Erro na Screnn-2)
 //@done 101 - Corrigir problema do carregamento de elementos na Screen > 1 
 //@done 102 - Modificar os seletores para os diferentes grupos. Grupos que pertecem a Piece.
+//@done 103 - Incluir no seletor dos grupos a peça atual, no salvamento das flags dos elementos
+//@done 104 - Incluir no seletor dos grupos a peça atual, no btn deletar dos grupos de elementos
+//@done 105 - Incluir no seletor dos grupos a peça atual, no deletar todos os objetos do GRUPO RESPOSTA, se existir
+//
+//
+//
+//
+//
 //
 //
 // 23-01 := 4;
@@ -144,7 +152,12 @@
 //20-03:= 2:4;
 //21-03:= 1:0;
 
-//24-03:= 1:1;
+//24-03:= 4:4;
+
+
+
+
+
 
 class EditorController extends Controller {
 
