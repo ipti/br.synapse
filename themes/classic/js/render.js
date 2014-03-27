@@ -29,16 +29,16 @@ function render () {
     this.scriptID;
     this.classID;
     this.actorID;
-    this.typeID;
+    //this.typeID;
     this.atdID;
-    this.startTime;
+    //this.startTime;
     this.lastClick = -1;
     this.ctCorrect = 0;
     this.ctWrong = 0;
     this.pctLoad = 0;
     
     this.init = function(){
-        $("#start").on('click',NEWRENDER.start);
+        $("#start").on('click',NEWRENDER-start);
     }
     this.progressbar = function(percent, $element) {
         if(percent > 100){
@@ -82,7 +82,7 @@ function render () {
                     $("#start").show();
                     NEWRENDER.mountReportScreen();
                 }else{
-                    parent.ajaxrecursive(json.ids[pos+1].id,pos+1,json);
+                        parent.ajaxrecursive(json.ids[pos+1].id,pos+1,json);
                 }
             },
             error:function(){
