@@ -13005,3 +13005,94 @@ Stack trace:
 REQUEST_URI=/render/stage
 in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (351)
 in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/01 20:50:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/01 20:51:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/03 18:11:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/02/03 18:12:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/02/03 18:14:35 [error] [php] Division by zero (Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php:351)
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(133): RenderController->runAction()
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilter.php(40): CFilterChain->run()
+#2 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(1145): CAccessControlFilter->filter()
+#3 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CInlineFilter.php(58): RenderController->filterAccessControl()
+#4 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(291): CFilterChain->run()
+#6 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CController.php(265): RenderController->runActionWithFilters()
+#7 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(282): RenderController->run()
+#8 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#10 Z:\ipti.projetos\synapse.dev\index.php(18): CWebApplication->run()
+REQUEST_URI=/render/stage
+in Z:\ipti.projetos\synapse.dev\app\controllers\RenderController.php (351)
+in Z:\ipti.projetos\synapse.dev\index.php (18)
+2014/02/03 18:14:53 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/images/none.jpg".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/images/none.jpg
+HTTP_REFERER=http://synapse.dev/render/stage
+---
+2014/02/07 13:38:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/02/07 13:38:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/02/07 13:38:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/02/07 13:38:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 Z:\dev.runtime.wamp\bin\php\php5.4.12\includes\frameworks\yii\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\ipti.projetos\synapse.dev\index.php(18): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
