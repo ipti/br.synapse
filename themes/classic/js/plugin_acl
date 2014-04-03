@@ -1,0 +1,6 @@
+ this.buildScreen_ACL = function(){
+                this.htmScreen = '<div class="screen" xyz='ACL' id="S'+self.id.screen+'"></div>';
+                  
+            }
+
+            

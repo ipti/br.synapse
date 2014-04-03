@@ -105,7 +105,12 @@ var ClassRender = function($options) {
             sucess_function: function(response){
                 self.cobject = response;
                 self.loadBar();
-                self.buildCobject();
+                var bd = new DomCobject(self.cobject);
+                bd.pos.screen = 2;
+                bd.pos.pieceset = 1;
+                bd.buildPieceset();
+                bd.htmlPiece.html;
+                //self.buildCobject();
                 if(position+1 >= self.cobjects.size){
                     $($_BL_MSG_LOAD).hide();
                     $($_BL_TITLE_LOAD).text(MSG_COMPLETED);
@@ -140,20 +145,18 @@ var ClassRender = function($options) {
         $(this.window_id).find('div').hide();
         $(this.canvas_id).show();
     }
-
+    /*
     this.mount = function(screen){
-            for (var i = 0; i < cobject.screens.length; i++) {
-                self.positions.screen = i;
-                $(self.html.screen).append(self.html);
-
-                self.tmphtm = $('<div class="screen" id="SCR'+screen.id+'"></div>');
-
+            for (var self.positions.screen = 0; i < cobject.screens.length; self.positions.screen++) {
+                
+                //$(self.html.screen).append();
             };
             
-    }
+    }*/
    
     this.buildCobject = function(){
         if(typeof(cobject.screens) != "undefined"){
+
 
             $.each(cobject.screens, function(i, screen) {
 
