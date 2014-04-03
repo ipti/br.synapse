@@ -14,12 +14,10 @@
  RENDER_DEFAULT_MEET = new ClassMeet({student_id:0,student_name:'Teste'});
  RENDER_DEFAULT_COBJECTS = {};
 
-
  GETDATA_COBJET = "loadcobject"
 
  REQUEST_AJAX = "ajax";
  DEFAULT_RENDER_TYPE = "";
- 
 
 
  $_BL_PROGRESS_BAR = "#progressBar";
@@ -60,7 +58,6 @@ this.getData = function($options){
             error:$options.error_function(response)
         });
     }
-    
 }
 
 var ClassMeet = function($options){
@@ -71,7 +68,7 @@ var ClassMeet = function($options){
     this.script_id = 0;
     this.start_time = 0;
     this.final_time = 0;
-    this.type = $options.meet_type || 
+    this.type = $options.meet_type || 0; //DEFAULT_MEET_TYPE
 }
 
 var ClassRender = function($options) {
@@ -91,8 +88,6 @@ var ClassRender = function($options) {
     this.html = {
         screen:'<div class="screen" id="SCR'+this.cobject[this.position.screen].id+'"></div>',
         pieceset:'',
-
-
     }
     this.pct_load = 0;
     var self = this;
@@ -121,7 +116,7 @@ var ClassRender = function($options) {
                 }
             } ,
             error_function: function(){
-
+                
             }
         });
     }
@@ -153,9 +148,6 @@ var ClassRender = function($options) {
 
                 self.tmphtm = $('<div class="screen" id="SCR'+screen.id+'"></div>');
 
-
-
-
             };
             
     }
@@ -169,13 +161,13 @@ var ClassRender = function($options) {
 
                 self.mountDiv();
 
-
-
                 htmScreen = $('<div class="screen" id="SCR'+screen.id+'"></div>');
-                htmScreen.append(parent.mountHeader(cobject));
+                htmScreen.append(self.mountHeader(cobject));
                 if(typeof(screen.piecesets) != "undefined"){
+                    htmScreen.append(self.loadPiecesets(screen.piecesets,cobject.template_code,cobject.format_code));
+                    
+                    
 
-                    htmScreen.append(parent.loadPiecesets(screen.piecesets,cobject.template_code,cobject.format_code));
 
                     if(NEWRENDER.atdID == "exam"){
                         if(cobject.template_code== 'TXT'||cobject.template_code== 'PDC'){

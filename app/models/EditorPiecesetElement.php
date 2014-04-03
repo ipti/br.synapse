@@ -7,8 +7,12 @@
  * @property integer $id
  * @property integer $pieceset_id
  * @property integer $element_id
- * @property integer $order
+ * @property integer $position
  * @property integer $oldID
+ *
+ * The followings are the available model relations:
+ * @property EditorPieceset $pieceset
+ * @property EditorElement $element
  */
 class EditorPiecesetElement extends CActiveRecord
 {
@@ -39,10 +43,10 @@ class EditorPiecesetElement extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('pieceset_id, element_id', 'required'),
-			array('pieceset_id, element_id, order, oldID', 'numerical', 'integerOnly'=>true),
+			array('pieceset_id, element_id, position, oldID', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, pieceset_id, element_id, order, oldID', 'safe', 'on'=>'search'),
+			array('id, pieceset_id, element_id, position, oldID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,6 +58,8 @@ class EditorPiecesetElement extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'pieceset' => array(self::BELONGS_TO, 'EditorPieceset', 'pieceset_id'),
+			'element' => array(self::BELONGS_TO, 'EditorElement', 'element_id'),
 		);
 	}
 
@@ -66,7 +72,7 @@ class EditorPiecesetElement extends CActiveRecord
 			'id' => Yii::t('default', 'ID'),
 			'pieceset_id' => Yii::t('default', 'Pieceset'),
 			'element_id' => Yii::t('default', 'Element'),
-			'order' => Yii::t('default', 'Order'),
+			'position' => Yii::t('default', 'Position'),
 			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
@@ -85,7 +91,7 @@ class EditorPiecesetElement extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('pieceset_id',$this->pieceset_id);
 		$criteria->compare('element_id',$this->element_id);
-		$criteria->compare('order',$this->order);
+		$criteria->compare('position',$this->position);
 		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(

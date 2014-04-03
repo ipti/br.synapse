@@ -13,6 +13,7 @@
  * @property CobjectTemplate $template
  * @property EditorPiecesetPiece[] $editorPiecesetPieces
  * @property EditorScreenPieceset[] $editorScreenPiecesets
+ * @property EditorPiecesetElement[] $editorPiecesetElements
  */
 class EditorPieceset extends CActiveRecord
 {
@@ -61,6 +62,7 @@ class EditorPieceset extends CActiveRecord
 			'template' => array(self::BELONGS_TO, 'CobjectTemplate', 'template_id'),
 			'editorPiecesetPieces' => array(self::HAS_MANY, 'EditorPiecesetPiece', 'pieceset_id'),
 			'editorScreenPiecesets' => array(self::HAS_MANY, 'EditorScreenPieceset', 'pieceset_id'),
+                        'editorPiecesetElements' => array(self::HAS_MANY, 'EditorPiecesetElement', 'pieceset_id'),
 		);
 	}
 
