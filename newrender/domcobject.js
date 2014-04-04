@@ -87,10 +87,6 @@ var DomCobject = function(cobject){
               alert(10);
             }
 
-            this.runMe = function(){
-              alert(20)
-            }
-
 
            
       }
