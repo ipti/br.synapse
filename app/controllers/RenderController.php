@@ -1,5 +1,15 @@
+
 <?php
 
+/*
+ @done-1 - Correções nas condicionais do método loadCobject
+ @done-2 - Agrupar elementos no Json 
+ * 
+ * 
+ * 
+ * 
+ * 
+*/
 class RenderController extends Controller {
 
     public $layout = 'cbjrender';
@@ -111,10 +121,28 @@ class RenderController extends Controller {
         //Begin Function Element =======================================
         // $gproperties = ELEMENT_PROPERTY + LIBRARY_PROPERTY
         $pe_properties = $events = $gproperties = array();
-        if (!$isPiecesetElement) {
+        
+        if(!$isPiecesetElement) {
+            
             foreach ($pieceOrPieceSet_element->editorPieceelementProperties as $property) {
-                $pe_properties[] = array('name' => $property->property->name, 'value' => $property->value);
+                $pe_properties[$property->property->name] =  $property->value;
             }
+            
+        //===== Agrupar os elementos no Json 
+       //if($json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'MTE' ||
+        //    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'AEL'){
+                //Grouping
+                $sizeGrouping = count(explode('_',$pe_properties["grouping"]));
+                $grouping = $pe_properties["grouping"];
+                if($sizeGrouping == 1) {
+                    $type_group = "ask_group_".$grouping;
+                }else if($sizeGrouping == 2){
+                    $type_group = "answer_group_".$grouping;
+                }
+       // }
+        
+        //===================================
+           
 
             //$properties[] = array('name' => 'pieceset', 'value' => $screen_pieceset->pieceset->id);
             // match é somente do AEL
@@ -150,12 +178,14 @@ class RenderController extends Controller {
         }
 
         if (!$isPiecesetElement) {
+            //var_dump($type_group);
             // $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['code'] = 'EP' . $piece_element->id;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$as['a5']]['pieceElement_Properties'] = $pe_properties;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$as['a5']]['events'] = $events;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$as['a5']]['generalProperties'] = $gproperties;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$as['a5']]['type'] = $pieceOrPieceSet_element->element->type->name;
+            //$json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group];
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['pieceElement_Properties'] = $pe_properties;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['events'] = $events;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['generalProperties'] = $gproperties;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['type'] = $pieceOrPieceSet_element->element->type->name;
             //$json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementID'] = $piece_element->element->id;
         } else{
             $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;

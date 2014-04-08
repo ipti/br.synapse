@@ -64,27 +64,6 @@
                   var length = this.currentPiece.elements[this.pos.element].properties.length;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                   for(this.pos.elementProperties = 0; this.pos.elementProperties < length; this.pos.elementProperties++) {
                      this.domElement.append(this.buildElementHTML());
                   };
