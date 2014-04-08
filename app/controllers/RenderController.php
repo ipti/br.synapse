@@ -251,7 +251,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview'),
+                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview', 'render'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -262,6 +262,10 @@ class RenderController extends Controller {
                 'users' => array('*'),
             ),
         );
+    }
+    
+    public function actionRender() {
+        $this->render("render");
     }
 
     public function actionIndex() {

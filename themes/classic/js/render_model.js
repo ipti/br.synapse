@@ -10,6 +10,7 @@
             this.domPieceSet = '';
             this.domPiece = '';
             this.domElement = '';
+            var self = this;
             
             this.pos = {
                screen:0,
@@ -25,19 +26,20 @@
             }
 
             this.buildAll = function(){
-               for (this.pos.screen = 0; i < this.cobject.screens.length; this.pos.screen++) {
+               for (this.pos.screen = 0; this.pos.screen < this.cobject.screens.length; this.pos.screen++) {
                      self.id.screen = this.cobject.screens[this.pos.screen].id;
                      self.buildScreen(this.cobject.screens[this.pos.screen]);
                };
             }
 
             this.buildScreen = function(){
-                  this.domScreen = '<div class="screen" id="S'+self.id.screen+'"></div>';
+                  this.domScreen = $('<div class="screen" id="S'+self.id.screen+'"></div>');
                   var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
                   for(this.pos.pieceset = 0; this.pos.pieceset < piecesets_length; this.pos.pieceset++) {
                      self.id.pieceset =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].id;
                      this.domScreen.append(this.buildPieceSet());
                   };
+                  return this.domScreen;
                   //eval('this.buildScreen_'+this.cobject.template);
             }
             
@@ -48,6 +50,7 @@
                      self.id.piece =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces[this.pos.piece].id;
                      this.domPieceSet.append(this.buildPiece());
                   };
+                  return this.domPieceSet;
             }
             
             this.buildPiece = function(){
@@ -57,16 +60,17 @@
                      self.id.element =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces[this.pos.piece].elements[this.pos.element].id;
                      this.domPiece.append(this.buildElement());
                   };
+                   return this.domPiece;
             }
             
              this.buildElement = function(){
                   this.domElement = $('<div class="element" id="'+self.id.element+'"></div>');
                   var length = this.currentPiece.elements[this.pos.element].properties.length;
 
-
                   for(this.pos.elementProperties = 0; this.pos.elementProperties < length; this.pos.elementProperties++) {
                      this.domElement.append(this.buildElementHTML());
                   };
+                   return this.domElement;
             }
             
             this.buildElementHTML = function(){
