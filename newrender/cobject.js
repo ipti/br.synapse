@@ -32,7 +32,15 @@ var cobject = {
 				"id": "1458",
 				"name": null,
 				"description": null,
-				"elements": [{
+				"elements": [
+
+					/**
+					 *TRABALHAR AQUI PARA CRIAR MODELO IDEAL DE COMO AS INFORMAÇÕES DEVEM SER PASSADAS DOS ELEMENTOS DE MANEIRA
+					 *HIERAQUICA
+					 *
+					 * 
+					 */
+					{
 					"code": "EP5795",
 					"elementProperties": [{
 						"name": "layertype",
@@ -44,6 +52,7 @@ var cobject = {
 						"name": "pieceset",
 						"value": "1457"
 					}],
+
 					"events": [],
 					"generalProperties": [{
 						"name": "text",

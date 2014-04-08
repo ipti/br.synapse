@@ -62,6 +62,13 @@ class RenderController extends Controller {
     }
 
     public function cobjectbyid($cobject_id) {
+
+    /**
+     *RECONSTRUIR TUDO PARA DO PONTO DE VISTA DE SEMATICA FICA EXATAMENTE IDENTICO A ESTRUTURA QUE O RENDER PRECISARÁ, REMOVENDO DO EDITOR
+     *COMPLEXIDADES NO TRATAMENTO DOS ELEMENTOS E AGRUPAMENTO. OU SEJA TRAZER AS REGRAS DE NEGÓCIO DO RENDER PARA AQUI.
+     *
+     */
+
         $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
         $command = Yii::app()->db->createCommand($sql);
         $command->execute();
@@ -72,8 +79,9 @@ class RenderController extends Controller {
             $json['father'] = $cobject->father->id;
         }
         $a5 = $a2 = $a3 = -1;
+
         if (isset($cobject->editorScreens)) {
-            foreach ($cobject->editorScreens(array('limit' => 1)) as $screen) {
+            foreach ($cobject->editorScreens as $screen) {
                 $a2++;
                 $json['screens'][$a2] = $screen->attributes;
                 $a3 = -1;
