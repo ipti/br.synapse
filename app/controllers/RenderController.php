@@ -2,14 +2,17 @@
 <?php
 
 /*
- @done-1 - Correções nas condicionais do método loadCobject
- @done-2 - Agrupar elementos no Json 
- * 
- * 
- * 
- * 
- * 
-*/
+  @done-1 - Correções nas condicionais do método loadCobject
+  @done-2 - Agrupar elementos no Json
+  @done-3 - Criar Arrays para a tree da atividade para todos os templates  
+  @done 4 - Criação do método no controller para acesso ao novo render
+  @done 5 - Criar função ajax para carregar um Cobject específico.
+  @todo 6 - Corrigir o que é array e objeto nos grupos de elementos
+  @todo 7 - Corrigir o que é array e objeto nos elementos
+  
+  
+ */
+
 class RenderController extends Controller {
 
     public $layout = 'cbjrender';
@@ -63,12 +66,11 @@ class RenderController extends Controller {
 
     public function cobjectbyid($cobject_id) {
 
-    /**
-     *RECONSTRUIR TUDO PARA DO PONTO DE VISTA DE SEMATICA FICA EXATAMENTE IDENTICO A ESTRUTURA QUE O RENDER PRECISARÁ, REMOVENDO DO EDITOR
-     *COMPLEXIDADES NO TRATAMENTO DOS ELEMENTOS E AGRUPAMENTO. OU SEJA TRAZER AS REGRAS DE NEGÓCIO DO RENDER PARA AQUI.
-     *
-     */
-
+        /**
+         * RECONSTRUIR TUDO PARA DO PONTO DE VISTA DE SEMATICA FICA EXATAMENTE IDENTICO A ESTRUTURA QUE O RENDER PRECISARÁ, REMOVENDO DO EDITOR
+         * COMPLEXIDADES NO TRATAMENTO DOS ELEMENTOS E AGRUPAMENTO. OU SEJA TRAZER AS REGRAS DE NEGÓCIO DO RENDER PARA AQUI.
+         *
+         */
         $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
         $command = Yii::app()->db->createCommand($sql);
         $command->execute();
@@ -86,16 +88,14 @@ class RenderController extends Controller {
                 $json['screens'][$a2] = $screen->attributes;
                 $a3 = -1;
                 foreach ($screen->editorScreenPiecesets as $screen_pieceset) {
-                    if ($cobject->template->code != 'AEL') {
-                        $a3++;
-                    }
+                    $a3++;
                     $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
                     $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
                     $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
 
                     //=======================================
                     //For each elements in this pieceset
-                     $a5 = -1;
+                    $a5 = -1;
                     foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
                         //build elements of the PieceSet
                         $a5++;
@@ -108,9 +108,7 @@ class RenderController extends Controller {
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
-                        if ($cobject->template->code != 'AEL') {
-                            $a5 = -1;
-                        }
+                        $a5 = -1;
                         foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
                             $a5++;
                             $this->buildJsonElement(false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5]);
@@ -129,29 +127,26 @@ class RenderController extends Controller {
         //Begin Function Element =======================================
         // $gproperties = ELEMENT_PROPERTY + LIBRARY_PROPERTY
         $pe_properties = $events = $gproperties = array();
-        
-        if(!$isPiecesetElement) {
-            
+
+        if (!$isPiecesetElement) {
             foreach ($pieceOrPieceSet_element->editorPieceelementProperties as $property) {
-                $pe_properties[$property->property->name] =  $property->value;
+                $pe_properties[$property->property->name] = $property->value;
+            }
+
+            //===== Agrupar os elementos no Json 
+            //if($json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'MTE' ||
+            //    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'AEL'){
+            //Grouping
+            $sizeGrouping = count(explode('_', $pe_properties["grouping"]));
+            $grouping = $pe_properties["grouping"];
+            if ($sizeGrouping == 1) {
+                $type_group = $grouping;
+            } else if ($sizeGrouping == 2) {
+                $type_group = $grouping;
             }
             
-        //===== Agrupar os elementos no Json 
-       //if($json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'MTE' ||
-        //    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'AEL'){
-                //Grouping
-                $sizeGrouping = count(explode('_',$pe_properties["grouping"]));
-                $grouping = $pe_properties["grouping"];
-                if($sizeGrouping == 1) {
-                    $type_group = "ask_group_".$grouping;
-                }else if($sizeGrouping == 2){
-                    $type_group = "answer_group_".$grouping;
-                }
-       // }
-        
-        //===================================
-           
-
+            // }
+            //===================================
             //$properties[] = array('name' => 'pieceset', 'value' => $screen_pieceset->pieceset->id);
             // match é somente do AEL
             /* if ($cobject->template->code == 'AEL') {
@@ -189,13 +184,14 @@ class RenderController extends Controller {
             //var_dump($type_group);
             // $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['code'] = 'EP' . $piece_element->id;
             //$json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group];
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['pieceElement_Properties'] = $pe_properties;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['events'] = $events;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['generalProperties'] = $gproperties;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group][$as['a5']]['type'] = $pieceOrPieceSet_element->element->type->name;
+            //var_dump(intval($type_group));exit();
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['pieceElement_Properties'] = $pe_properties;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['events'] = $events;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['generalProperties'] = $gproperties;
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['type'] = $pieceOrPieceSet_element->element->type->name;
             //$json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementID'] = $piece_element->element->id;
-        } else{
+        } else {
             $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;
             $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']]['generalProperties'] = $gproperties;
             $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']]['type'] = $pieceOrPieceSet_element->element->type->name;
@@ -251,7 +247,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview', 'render'),
+                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview', 'domcobject'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -263,9 +259,9 @@ class RenderController extends Controller {
             ),
         );
     }
-    
-    public function actionRender() {
-        $this->render("render");
+
+    public function actionDomcobject() {
+        $this->render("domcobject");
     }
 
     public function actionIndex() {

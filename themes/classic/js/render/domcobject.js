@@ -27,7 +27,6 @@ var DomCobject = function(cobject){
 
             this.buildAll = function(){
                for (this.pos.screen = 0; this.pos.screen < this.cobject.screens.length; this.pos.screen++) {
-                     console.log('SCREEN:'+this.pos.screen);
                      self.id.screen = this.cobject.screens[this.pos.screen].id;
                      self.dom.append(self.buildScreen());
                };
@@ -38,7 +37,6 @@ var DomCobject = function(cobject){
                   self.domScreen = $('<div class="screen" id="S'+self.id.screen+'"></div>');
                   var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
                   for(this.pos.pieceset = 0; this.pos.pieceset < piecesets_length; this.pos.pieceset++) {
-                     console.log('PIECESET:'+this.pos.pieceset);
                      self.id.pieceset =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].id;
                      self.domScreen.append(this.buildPieceSet());
                   };
@@ -50,7 +48,6 @@ var DomCobject = function(cobject){
                   self.domPieceSet = $('<div class="pieceset" id="'+self.id.pieceset+'"></div>');
                   var pieces_length =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces.length;
                   for(this.pos.piece = 0; this.pos.piece < pieces_length; this.pos.piece++) {
-                    console.log('PIECE:'+this.pos.piece);
                      self.id.piece =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces[this.pos.piece].id;
                      self.domPieceSet.append(this.buildPiece());
                   };
@@ -59,12 +56,28 @@ var DomCobject = function(cobject){
             
             this.buildPiece = function(){
                   self.domPiece = $('<div class="piece" id="'+self.id.piece+'"></div>');
-                  self.domPiece.append(self.buildEnum());
-                  var elements_length = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements.length;
-                  for(self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
-                     self.id.element =  self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements[self.pos.element].elementID;
-                     self.domPiece.append(self.buildElement());
-                  };
+                  //self.domPiece.append(self.buildEnum());
+                 // var elements_length = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements.length;
+                // console.log(self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements);
+//                 for(self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
+//                     self.id.element =  self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements[self.pos.element].elementID;
+//                     self.domPiece.append(self.buildElement());
+//                  };
+                    var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
+                    $.each(groups, function(current_group, elements_group){
+                        
+                   var elements_length = elements_group.elements.length;
+                   console.log(elements_group);
+                // console.log(self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements);
+                   for(self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
+                       self.id.element =  elements_group.elements[self.pos.element].elementID;
+                       self.domPiece.append(self.buildElement());
+                      };
+                        
+                    });
+                    
+                    
+                    
                   return self.domPiece;
             }
 
@@ -74,20 +87,28 @@ var DomCobject = function(cobject){
             }
             
              this.buildElement = function(){
-                  self.domElement = $('<li class="element" id="'+self.id.element+'"><span>'+self.id.element+'</span></li>');
-                  eval("self.buildElement_"+cobject.template_code+"();");
-                  return self.domElement;
+                return eval("self.buildElement_"+cobject.template_code+"();");
             }
 
             this.buildEnum_MTE = function(){
-              self.domEnum
+              //self.domEnum
             }
             
-            this.buildElement_MTE = function(){
-              alert(10);
+             this.buildElement_MTE = function(){
             }
-
-
+            
+            this.buildElement_AEL = function(){
+                self.domElement = $('<li class="element" id="'+self.id.element+'"><span>'+self.id.element+'</span></li>');
+                return self.domElement;
+            }
+            
+            this.buildElement_PRE = function(){
+            }
+            
+            this.buildElement_TXT = function(){
+            }
+            
+            
            
       }
 
