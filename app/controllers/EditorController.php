@@ -91,7 +91,6 @@
 //@done 87 - Adicionar a função de DELETAR o elemento SOM da PieceSet no EditorController
 //@done 88 - Adicionar a função de load do elemento SOM da PieceSet no JS
 //@done 89 - Adicionar a função de load do elemento SOM da PieceSet no EditorController
-
 //@done 90 - Adicionar novo Parâmetro e adaptação para o ElementPieceset no delElement() no EditorController
 //@done 91 - Retirar O botão excluir do Grupo Resposta do AEL 
 //@done 92 - Tratar a Recursividade da Função delElement() no editor.js
@@ -140,18 +139,15 @@
 //28-02 :=0:0;
 //06-03 := 2:2;
 //07-03 := 5:5;
-
 //10-03 := 5:5;
 //11-03 := 3:3;
 //12-03:= 5:5;
 //13-03:= 4:4;
 //14-03:= 4:4;
-
 //18-03:= 3:3;
 //19-03:= 5:5;
 //20-03:= 2:4;
 //21-03:= 1:0;
-
 //24-03:= 4:4;
 
 
@@ -839,7 +835,7 @@ class EditorController extends Controller {
                                             $newElementProperty->insert();
                                             $json['LibraryID'] = $libraryID;
                                         } elseif ($libraryTypeName == $this->TYPE_LIBRARY_SOUND) {
-                                            
+
                                             $src = $value['url'];
                                             $nome = $value['name'];
                                             $ext = explode(".", $nome);
@@ -1008,13 +1004,16 @@ class EditorController extends Controller {
                                     //=============POSITION==================================
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['position'] = $pe->position;
                                     //==============Flag=====================================
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
+                                    if(isset($pe_property)){
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
+                                    }
                                     //=============== grouping ===============================
                                     $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                         'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
                                     //var_dump($pe_property->value); exit();
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
-
+                                    if (isset($pe_property)) {
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
+                                    }
                                     $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                     foreach ($ElementProperty as $ep):
                                         if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
@@ -1177,10 +1176,10 @@ class EditorController extends Controller {
             //É um elemento da PieceSet
             $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
                     array('pieceset_id' => $pieceOrPset_id, 'element_id' => $newElement->id));
-               //Desvincula o elemento da PieceSet. 
-                $Element_PieceSet->delete();
-                return true;
-                //==========================
+            //Desvincula o elemento da PieceSet. 
+            $Element_PieceSet->delete();
+            return true;
+            //==========================
         }
 
         return false;
@@ -1241,7 +1240,7 @@ class EditorController extends Controller {
                         //tenta
                         try {
                             //move o arquivo temporário para o novo local
-                           $varMUF = move_uploaded_file($tmp, $path . $name);
+                            $varMUF = move_uploaded_file($tmp, $path . $name);
                             //adiciona ao retorno do json a URL e o nome do arquivo
                             $json['url'] = $url . $name;
                             $json['name'] = $name;
