@@ -7,10 +7,11 @@
   @done-3 - Criar Arrays para a tree da atividade para todos os templates  
   @done 4 - Criação do método no controller para acesso ao novo render
   @done 5 - Criar função ajax para carregar um Cobject específico.
-  @todo 6 - Corrigir o que é array e objeto nos grupos de elementos
-  @todo 7 - Corrigir o que é array e objeto nos elementos
-  
-  
+  @done 6 - Corrigir o que é array e objeto nos grupos de elementos
+  @done 7 - Corrigir o que é array e objeto nos elementos
+  @done 8 - Construção da estrutura principal do build_image
+  today: 4 ;
+ * 
  */
 
 class RenderController extends Controller {
@@ -108,7 +109,7 @@ class RenderController extends Controller {
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
-                        $a5 = -1;
+                        $a5 = (int)-1;
                         foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
                             $a5++;
                             $this->buildJsonElement(false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5]);
@@ -179,22 +180,22 @@ class RenderController extends Controller {
         foreach ($pieceOrPieceSet_element->element->editorElementAliases as $alias) {
             $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
         }
-
+        
+        $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
+        $aTemp = array(); 
+        
         if (!$isPiecesetElement) {
-            //var_dump($type_group);
-            // $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['code'] = 'EP' . $piece_element->id;
-            //$json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['elements'][$type_group];
-            //var_dump(intval($type_group));exit();
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['pieceElement_Properties'] = $pe_properties;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['events'] = $events;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['generalProperties'] = $gproperties;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']]['type'] = $pieceOrPieceSet_element->element->type->name;
-            //$json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['elements'][$a5]['elementID'] = $piece_element->element->id;
+            $aTemp["id"] = $pieceOrPieceSet_element->element->id;
+            $aTemp['pieceElement_Properties'] = $pe_properties;
+            $aTemp['events'] = $events;
+            $aTemp['generalProperties'] = $gproperties;
+            $aTemp['type'] = (string)$pieceOrPieceSet_element->element->type->name;
+            array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'], $aTemp);
         } else {
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']]['id'] = $pieceOrPieceSet_element->element->id;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']]['generalProperties'] = $gproperties;
-            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']]['type'] = $pieceOrPieceSet_element->element->type->name;
+            $aTemp['id'] = $pieceOrPieceSet_element->element->id;
+            $aTemp['generalProperties'] = $gproperties;
+            $aTemp['type'] = $pieceOrPieceSet_element->element->type->name;
+            array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']],$aTemp);
         }
         // End Function Element=========================================
     }
