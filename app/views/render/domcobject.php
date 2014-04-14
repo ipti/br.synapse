@@ -11,9 +11,9 @@ To change this template, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl;?>/js/render/cobject.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl;?>/js/render/domcobject.js"></script>
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> -->
+
+
 <script>
    
     $(document).ready(function(){

@@ -10,13 +10,22 @@
   @done 6 - Corrigir o que é array e objeto nos grupos de elementos
   @done 7 - Corrigir o que é array e objeto nos elementos
   @done 8 - Construção da estrutura principal do build_image
-  today: 4 ;
+  @done 9 - Criação do render.css 
+  @done 10 - Listar html básico do elememt Img
+  @done 11 - Listar html básico do elememt sound
+  @done 12 - Listar html básico do element Text
+  @done 13 - Criação de um novo layout para o render
+  @done 14 - Correção do seletor de elementos img do render.css
+  @todo 15 - Corrigir a substituição de elementos de mesmo grupo na rendenrização do elemento na tela
+ * 
+ * 
+  today: 3:4;
  * 
  */
 
 class RenderController extends Controller {
 
-    public $layout = 'cbjrender';
+    public $layout = 'render';
 
     /**
      * @return array action filters
