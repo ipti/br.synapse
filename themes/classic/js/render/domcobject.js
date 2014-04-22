@@ -1,11 +1,18 @@
+COBJECT_GOAL = "Goal";
+COBJECT_TYPE = "Type";
+COBJECT_DEGREE_NAME = "Degree Name";
+COBJECT_DISCIPLINE = "Discipline";
+COBJECT_CONTENT = "Content";
+
 var DomCobject = function(cobject){
     this.cobject = cobject;
     this.currentScreen = '';
     this.currentPieceSet = '';
     this.currentPiece = '';
     this.currentElement = '';
-    this.domDefault = '<div class="render"></div>';
+    this.domCobject = '';
     this.dom = $('<div class="cobjects"></div>');
+    this.domContent = $('<div class="content"></div>');
     this.domScreen = '';
     this.domPieceSet = '';
     this.domPiece = '';
@@ -28,55 +35,57 @@ var DomCobject = function(cobject){
     }
 
     this.buildAll = function(){
+        self.dom.append(self.buildInfo_Cobject);
+        self.dom.append(self.buildToolBar);
+        self.dom.append(self.domContent);
         for (this.pos.screen = 0; this.pos.screen < this.cobject.screens.length; this.pos.screen++) {
             self.id.screen = this.cobject.screens[this.pos.screen].id;
-            self.dom.append(self.buildScreen());
+            self.domContent.append(self.buildScreen());
         };
         return self.dom;
     }
 
     this.buildScreen = function(){
-        self.domScreen = $('<div class="T_screen" id="S'+self.id.screen+'"></div>');
+        if(this.pos.screen == 0){
+            // É a primeira Screen
+           self.domScreen = $('<div class="T_screen currentScreen" id="S'+self.id.screen+'"></div>');  
+        }else{
+           self.domScreen = $('<div class="T_screen" id="S'+self.id.screen+'"></div>'); 
+        }
+        
         var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
         for(this.pos.pieceset = 0; this.pos.pieceset < piecesets_length; this.pos.pieceset++) {
             self.id.pieceset =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].id;
             self.domScreen.append(this.buildPieceSet());
         };
         return self.domScreen;
-        //eval('this.buildScreen_'+this.cobject.template);
     }
             
     this.buildPieceSet = function(){
         self.domPieceSet = $('<div class="pieceset" id="'+self.id.pieceset+'"></div>');
+        var fd = $('<fieldset></fieldset>');
         var pieces_length =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces.length;
         for(this.pos.piece = 0; this.pos.piece < pieces_length; this.pos.piece++) {
             self.id.piece =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces[this.pos.piece].id;
-            self.domPieceSet.append(this.buildPiece());
+            fd.append(this.buildPiece());
         };
+        self.domPieceSet.append(fd);
         return self.domPieceSet;
     }
             
     this.buildPiece = function(){
         self.domPiece = $('<div class="piece" id="'+self.id.piece+'"></div>');
-        //self.domPiece.append(self.buildEnum());
-        // var elements_length = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements.length;
-        // console.log(self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements);
-        //                 for(self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
-        //                     self.id.element =  self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].elements[self.pos.element].elementID;
-        //                     self.domPiece.append(self.buildElement());
-        //                  };
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
         $.each(groups, function(current_group, elements_group){
             self.pos.group =current_group; // O grupo Corrent dessa Piece !
             var elements_length = elements_group.elements.length;
+            
             for(self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
                 self.id.element =  elements_group.elements[self.pos.element].id;
                 self.domPiece.append(self.buildElement());
             };
-                        
+                       
         });
-                    
-                    
                     
         return self.domPiece;
     }
@@ -90,10 +99,6 @@ var DomCobject = function(cobject){
         return eval("self.buildElement_"+cobject.template_code+"();");
     }
 
-    this.buildEnum_MTE = function(){
-        //self.domEnum
-    }
-            
     this.buildElement_MTE = function(){
     }
             
@@ -108,7 +113,6 @@ var DomCobject = function(cobject){
                     strBuild_library_type="build_"+item['value'];
                 }else{
                     properties+= "'"+item['name'] +"':'"+ item['value']+"',";
-                    //console.log(properties);
                 }
             });
             properties+="};";
@@ -120,7 +124,6 @@ var DomCobject = function(cobject){
             var properties = "var properties = {";
             $.each(currentElement.generalProperties, function(i,item){
                 properties+= "'"+item['name'] +"':'"+ item['value']+"',";
-                //console.log(properties);
             });
             properties+="};";
             html+= self.build_text(properties);
@@ -185,7 +188,49 @@ var DomCobject = function(cobject){
                  <source src="'+src+'"> '+'ERROR_BROWSER_SUPORT'+' </audio></span>';
      
         return html;
-    }           
-           
+    }  
+    
+    
+    this.buildEnum_MTE = function(){
+        
+    }
+    this.buildEnum_AEL = function(){
+        
+    }
+    this.buildEnum_TXT = function(){
+        
+    }
+    this.buildEnum_PRE = function(){
+        
+    }
+    
+       
+       
+    this.buildInfo_MEET = function(){
+       
+    } 
+   
+    this.buildInfo_Cobject = function(){
+        var goal = self.cobject.goal; 
+        var type = self.cobject.cobject_type;
+        var degree_name = self.cobject.degree_name;
+        var discipline = self.cobject.discipline;
+        var content = self.cobject.content; 
+        var html = $('<div class="cobjectInfo"></div>');
+        html.append('<span><b>'+COBJECT_GOAL+":</b> "+goal+" <b>"+COBJECT_TYPE+":</b> "+type+" <br><b>"+COBJECT_DEGREE_NAME+":</b> "+degree_name+
+            " <b>"+COBJECT_DISCIPLINE+":</b> "+discipline+" <b>"+COBJECT_CONTENT+":</b> "+content+'<span>');
+        return html;
+    } 
+    this.buildToolBar = function(){
+        var html = $('<div class="toolBar"></div>');
+        html.append('<button id="nextSreen">Próxima Tela >>>>></button>');
+        return html;
+    }
+      
+    this.buildInfo_PieceSet = function(){
+       
+    } 
+   
+       
 }
 

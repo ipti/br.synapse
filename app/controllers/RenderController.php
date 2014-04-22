@@ -4,22 +4,29 @@
 /*
   @done-1 - Correções nas condicionais do método loadCobject
   @done-2 - Agrupar elementos no Json
-  @done-3 - Criar Arrays para a tree da atividade para todos os templates  
+  @done-3 - Criar Arrays para a tree da atividade para todos os templates
   @done 4 - Criação do método no controller para acesso ao novo render
   @done 5 - Criar função ajax para carregar um Cobject específico.
   @done 6 - Corrigir o que é array e objeto nos grupos de elementos
   @done 7 - Corrigir o que é array e objeto nos elementos
   @done 8 - Construção da estrutura principal do build_image
-  @done 9 - Criação do render.css 
+  @done 9 - Criação do render.css
   @done 10 - Listar html básico do elememt Img
   @done 11 - Listar html básico do elememt sound
   @done 12 - Listar html básico do element Text
   @done 13 - Criação de um novo layout para o render
   @done 14 - Correção do seletor de elementos img do render.css
   @todo 15 - Corrigir a substituição de elementos de mesmo grupo na rendenrização do elemento na tela
- * 
- * 
-  today: 3:4;
+  @done 16 - Corrigir o contador de elementos no Json do getCobjectID do RenderController
+  @done 17 - Verificar se o array de elementos no Json já foi para criar o array de elementos do getCobjectID do RenderController
+  
+   @done 18 - Criação do buildInfo_Cobject, para apresentar informações do CObject corrente.
+   @done 19 - Criação de classes css para a div de Informações do Cobject
+   @done 20 - Separar visualmente os pieceSets.
+   @done 21 - Separar o conteúdo do CObject das Informações do CObject
+   @done 22 -
+ 
+  today: 0:0;
  * 
  */
 
@@ -102,7 +109,6 @@ class RenderController extends Controller {
                     $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
                     $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
                     $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
-
                     //=======================================
                     //For each elements in this pieceset
                     $a5 = -1;
@@ -118,7 +124,7 @@ class RenderController extends Controller {
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
-                        $a5 = (int)-1;
+                        $a5 = (int) -1;
                         foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
                             $a5++;
                             $this->buildJsonElement(false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5]);
@@ -154,7 +160,7 @@ class RenderController extends Controller {
             } else if ($sizeGrouping == 2) {
                 $type_group = $grouping;
             }
-            
+
             // }
             //===================================
             //$properties[] = array('name' => 'pieceset', 'value' => $screen_pieceset->pieceset->id);
@@ -189,22 +195,30 @@ class RenderController extends Controller {
         foreach ($pieceOrPieceSet_element->element->editorElementAliases as $alias) {
             $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
         }
-        
-        $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
-        $aTemp = array(); 
-        
+
+        //$json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
+        //$json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']] = array();
+        $aTemp = array();
+
         if (!$isPiecesetElement) {
             $aTemp["id"] = $pieceOrPieceSet_element->element->id;
             $aTemp['pieceElement_Properties'] = $pe_properties;
             $aTemp['events'] = $events;
             $aTemp['generalProperties'] = $gproperties;
-            $aTemp['type'] = (string)$pieceOrPieceSet_element->element->type->name;
+            $aTemp['type'] = (string) $pieceOrPieceSet_element->element->type->name;
+            if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'])) {
+                $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
+            }
             array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'], $aTemp);
         } else {
             $aTemp['id'] = $pieceOrPieceSet_element->element->id;
             $aTemp['generalProperties'] = $gproperties;
             $aTemp['type'] = $pieceOrPieceSet_element->element->type->name;
-            array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']],$aTemp);
+            if(!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'])){
+                $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'] = array();
+            }
+            
+            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']] = $aTemp;
         }
         // End Function Element=========================================
     }

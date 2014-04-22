@@ -5,6 +5,45 @@
     Description:
         Purpose of the stylesheet follows.
 */
+.theme{
+  background:#585858;
+  font-family:sans-serif;
+}
+.cobjects{
+    background:#fff;
+    padding:10px; 
+    width:100%;
+    clear:both;
+    margin-top:5px;
+}
+.content{
+    padding:25px;
+}
+.cobjectInfo {
+    background:#dbdadd;  
+    padding-left:25px;
+}
+.cobjectInfo span{
+  color:#585858;
+  text-decoration: none; 
+  list-style: none; 
+  font-size:14px; 
+  text-align: center; 
+  font-weight: bold;
+}
+
+.toolbar {
+  text-align: right;
+}
+
+.cobjects li{
+     list-style-type: none;
+}
+
+.pieceset fieldset {
+    margin-bottom: 25px;
+}
+
 
 .element { 
     /* display: block;*/
@@ -14,6 +53,10 @@
     display: block;
     height: 240px;
     width:  320px;
+}
+
+fieldset{
+   border:2px solid gray;
 }
 
 
