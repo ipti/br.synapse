@@ -59,6 +59,10 @@ fieldset{
    border:2px solid gray;
 }
 
+.group{
+    float:left;width:340px;border:1px;
+}
+
 
 
 

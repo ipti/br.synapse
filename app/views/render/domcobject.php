@@ -34,6 +34,18 @@ and open the template in the editor.
                  var current_cobject = response; 
                  var dump = new DomCobject(current_cobject);
                  $('#render_canvas').html(dump.buildAll());
+                 
+                 // Render Ready !
+                 //$.cachedScript
+                 //Carregar o Script de eventos, após a construção do html dos cobjects
+                 $.getScript("<?php echo Yii::app()->theme->baseUrl;?>/js/render/events.js").done(function(script, textStatus) {
+                    console.log(textStatus);
+                  });
+                 
+                 
+//                 $('div.cobjects').append("<div id='dark-back' style='width:30%;height:24%;\n\
+//                     position:absolute;z-index:9998;background:#df4257;opacity:0.6;top:0;left:0'> div ok </div>");
+
             }
                 });
             

@@ -19,14 +19,27 @@
   @todo 15 - Corrigir a substituição de elementos de mesmo grupo na rendenrização do elemento na tela
   @done 16 - Corrigir o contador de elementos no Json do getCobjectID do RenderController
   @done 17 - Verificar se o array de elementos no Json já foi para criar o array de elementos do getCobjectID do RenderController
-  
    @done 18 - Criação do buildInfo_Cobject, para apresentar informações do CObject corrente.
    @done 19 - Criação de classes css para a div de Informações do Cobject
    @done 20 - Separar visualmente os pieceSets.
    @done 21 - Separar o conteúdo do CObject das Informações do CObject
-   @done 22 -
  
-  today: 0:0;
+   @done 22 - Criação da função buildToolBar para adicionar ferramentas para usar durante a atividade
+   @done 23 - Adicionar o botão nextScreen para viajar nas telas
+   @done 24 - Criação do Script events.js para a criação das funcionalidade de cada evento chamado no render
+   @done 25 - Criação da função para o botão nextSreen em events
+ * @done 26 - Iniciar todas as screens como hide, com exeção do '.currentSreen'
+ * @done 27 - Criação do buildInfo_PieceSet, para apresentar a descrição dos PieceSets.
+ * 
+ * @done 28 - Chamar o script de eventos, events.js somente depois de caregado todo o cobjects
+ * @done 29 - Definir destaque para os grupos de elementos, no onclick
+ * @done 30 - Construir style para organizar horizontalmente as divs dos grupos de  elementos
+ * @todo 31 -
+ * @todo 32 -
+ * 
+ * 
+  today:3:3;
+ 
  * 
  */
 

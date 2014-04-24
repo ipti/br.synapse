@@ -48,9 +48,9 @@ var DomCobject = function(cobject){
     this.buildScreen = function(){
         if(this.pos.screen == 0){
             // É a primeira Screen
-           self.domScreen = $('<div class="T_screen currentScreen" id="S'+self.id.screen+'"></div>');  
+            self.domScreen = $('<div class="T_screen currentScreen" id="S'+self.id.screen+'"></div>');  
         }else{
-           self.domScreen = $('<div class="T_screen" id="S'+self.id.screen+'"></div>'); 
+            self.domScreen = $('<div class="T_screen" style="display:none" id="S'+self.id.screen+'"></div>'); 
         }
         
         var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
@@ -63,6 +63,7 @@ var DomCobject = function(cobject){
             
     this.buildPieceSet = function(){
         self.domPieceSet = $('<div class="pieceset" id="'+self.id.pieceset+'"></div>');
+        self.domPieceSet.append(self.buildInfo_PieceSet()); 
         var fd = $('<fieldset></fieldset>');
         var pieces_length =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces.length;
         for(this.pos.piece = 0; this.pos.piece < pieces_length; this.pos.piece++) {
@@ -75,18 +76,46 @@ var DomCobject = function(cobject){
             
     this.buildPiece = function(){
         self.domPiece = $('<div class="piece" id="'+self.id.piece+'"></div>');
+        var domElementASK = $('<div class="ask"></div>');
+        var domElementANSWER = $('<div class="answer"></div>');
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
+        
         $.each(groups, function(current_group, elements_group){
-            self.pos.group =current_group; // O grupo Corrent dessa Piece !
-            var elements_length = elements_group.elements.length;
+            self.pos.group =current_group; // O grupo Corrent dessa Piece!
+            var domTypeGroup="";
+            var domGroup="";
+            if(current_group.split('_')==1){
+                //is ASK-GROUP
+                domTypeGroup = domElementASK;
+            }else{
+                // is ANSWER-GROUP
+                domTypeGroup = domElementANSWER;
+            }
+            var possibleGroup = domTypeGroup.find('div[group="'+current_group+'"]');
+            var isNewGroup = (possibleGroup.size() == 0);
+            if(isNewGroup){
+                // Novo Grupo
+                domGroup =$('<div group="'+current_group+'" class="group" ><div>'); 
+            }else{
+                //Grupo existente
+                domGroup =possibleGroup; 
+            }
             
+            var elements_length = elements_group.elements.length;
             for(self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
                 self.id.element =  elements_group.elements[self.pos.element].id;
-                self.domPiece.append(self.buildElement());
+                domGroup.append(self.buildElement());
+                if(isNewGroup){
+                    //Se for um novo Grupo, então add o novo
+                    domTypeGroup.append(domGroup);
+                }
+                
             };
-                       
         });
-                    
+              
+        self.domPiece.append(domElementASK);
+        self.domPiece.append(domElementANSWER);      
+              
         return self.domPiece;
     }
 
@@ -221,6 +250,7 @@ var DomCobject = function(cobject){
             " <b>"+COBJECT_DISCIPLINE+":</b> "+discipline+" <b>"+COBJECT_CONTENT+":</b> "+content+'<span>');
         return html;
     } 
+    
     this.buildToolBar = function(){
         var html = $('<div class="toolBar"></div>');
         html.append('<button id="nextSreen">Próxima Tela >>>>></button>');
@@ -228,7 +258,10 @@ var DomCobject = function(cobject){
     }
       
     this.buildInfo_PieceSet = function(){
-       
+        var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
+        var html = $('<div class="pieceSetInfo"></div>');
+        html.append('<span><b>'+description+'</b></span>');
+        return html;
     } 
    
        
