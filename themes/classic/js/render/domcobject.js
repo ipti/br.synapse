@@ -84,7 +84,7 @@ var DomCobject = function(cobject){
             self.pos.group =current_group; // O grupo Corrent dessa Piece!
             var domTypeGroup="";
             var domGroup="";
-            if(current_group.split('_')==1){
+            if(current_group.split('_').length==1){
                 //is ASK-GROUP
                 domTypeGroup = domElementASK;
             }else{

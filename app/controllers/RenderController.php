@@ -34,9 +34,12 @@
  * @done 28 - Chamar o script de eventos, events.js somente depois de caregado todo o cobjects
  * @done 29 - Definir destaque para os grupos de elementos, no onclick
  * @done 30 - Construir style para organizar horizontalmente as divs dos grupos de  elementos
- * @todo 31 -
- * @todo 32 -
  * 
+ * @todo 31 - Criação do Meet
+ * @todo 32 -
+ * @todo 33 -
+ * @todo 34 -
+ * @todo 35 -
  * 
   today:3:3;
  

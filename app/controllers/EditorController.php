@@ -108,7 +108,7 @@
 //@done 104 - Incluir no seletor dos grupos a peça atual, no btn deletar dos grupos de elementos
 //@done 105 - Incluir no seletor dos grupos a peça atual, no deletar todos os objetos do GRUPO RESPOSTA, se existir
 //@done 106 - Corrigir erro na linha 1016 no EditorController, property(match) no found !
-//
+//@done 107 - Por os Goals em ordem alfabética no preeditor
 //
 //
 //
@@ -333,7 +333,7 @@ class EditorController extends Controller {
 
                         //Por padrão, como não foi selecionado algum Degree, mostrará o GOAL do 1° [0]
                         $actGoal_d = Yii::app()->db->createCommand('SELECT id, name FROM act_goal 
-                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $actDegree[0][0]['id'])->queryAll();
+                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $actDegree[0][0]['id'] . ' ORDER BY name ASC;')->queryAll();
                         $count_Agoal_d = count($actGoal_d);
                         // No mínimo possui 1 registro
                         $str.= "<div id='propertyAgoal' class='propertyAgoal' align='center'>
@@ -370,7 +370,7 @@ class EditorController extends Controller {
             } else {
                 //Selecionou Algum Degree
                 $actGoal_d = Yii::app()->db->createCommand('SELECT id, name FROM act_goal 
-                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $idDegree)->queryAll();
+                     WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $idDegree . ' ORDER BY name ASC;')->queryAll();
                 $count_Agoal_d = count($actGoal_d);
                 // No mínimo possui 1 registro
                 $str = "<br> Objetivo&nbsp;:&nbsp;

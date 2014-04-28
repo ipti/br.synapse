@@ -63,6 +63,12 @@ fieldset{
     float:left;width:340px;border:1px;
 }
 
+.ask{
+    clear:both;
+}
+.answer{
+    clear:both;
+}
 
 
 
