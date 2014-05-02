@@ -110,7 +110,9 @@
 //@done 106 - Corrigir erro na linha 1016 no EditorController, property(match) no found !
 //@done 107 - Por os Goals em ordem alfabética no preeditor
 //
-//
+//@done 108 - Corrigir o formulário dos selects do CobjectsID
+//@todo 109 - Refatorar o html do método preeditor
+//@todo 110 - Refatorar o JS do método preeditor 
 //
 //
 //
@@ -345,19 +347,7 @@ class EditorController extends Controller {
 
                         $str.= "</select>";
                         $str.= $this->searchCobjectofGoal($actGoal_d[0]['id']) .
-                                "</div>                  
-
-             <script type='text/javascript'>
-                $('#actDegree').change(function(){
-                    $('#propertyAgoal').load(\"filtergoal\", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
-                });
-                $('#actGoal').change(function(){
-                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
-                });
-                $('#actGoal,#actDegree,#actDiscipline').change(function(){
-                    $('#error').hide(1000);
-                });
-             </script>";
+                                "</div>";
                         echo $str;
                     } else {
                         //Não encontrou algum act_degree relacionado a esta disciplina(with grade>0)
@@ -380,11 +370,6 @@ class EditorController extends Controller {
                 }
                 $str.= "</select>";
                 $str.= $this->searchCobjectofGoal($actGoal_d[0]['id']);
-                $str.="
-                <script language='javascript' type='text/javascript'>  
-                $('#actGoal').change(function(){
-                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val()} );  
-                }); </script> ";
 
                 echo $str;
             }
@@ -408,8 +393,16 @@ class EditorController extends Controller {
             WHERE type_id =' . $Cobj_met_typeID . ' AND  value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata);
         if ($count_CobjMdata > 0) {
-            $str2 = "<div id='showCobjectIDs' align='left'>
-              <br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
+            if(isset($_POST['isAjax']) && $_POST['isAjax']) {
+                $str2 = "";
+            }else{
+                $str2 = "<div id='showCobjectIDs' align='left'>";
+            }
+                
+            //Verificar o porquê de adicionar uma outra tag do form 
+            $str2 .= "<br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
+                <form id='cobjectIDS2' name='cobjectIDS2' method='POST' action='/editor/index/'>
+                </form>
                 <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
                 <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for ($i = 0; $i < $count_CobjMdata; $i++) {
@@ -427,10 +420,16 @@ class EditorController extends Controller {
                 $str2.= "<option value=" . $cobject_metadata[$i]['cobject_id'] . ">"
                         . $innerHtml . "</option>";
             }
-            $str2.= "</select>
-                    <input type='hidden' name='op' value='load'> 
-                         <input id='editCobject' name='editCobject' type='submit' value='Change Cobject'>
-                    </div>";
+            $str2.= "</select> 
+                        <input type='hidden' name='op' value='load'> 
+                          <input id='editCobject' name='editCobject' type='submit' value='Change Cobject'>
+                          </form>";
+            
+            if(!(isset($_POST['isAjax']) && $_POST['isAjax'])) {
+                $str2.= " </div>";
+            }
+            
+            
             return $str2;
         }
 

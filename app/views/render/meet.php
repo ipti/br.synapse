@@ -15,8 +15,15 @@ and open the template in the editor.
 
 
 <script>
-   
     $(document).ready(function(){
+        //Iniciar Encontro
+        var personage = '<?php echo Yii::app()->session['personage']; ?>';
+        var idActor = '<?php echo Yii::app()->session['idActor']; ?>';
+        var unityIdActor = '<?php echo Yii::app()->session['unityIdActor']; ?>';
+        var newMeet = new Meet(personage, idActor, unityIdActor);
+        
+        <?php var_dump($_POST); ?>
+        
         var CobjectID = 999;
        $.ajax({
             type: "POST",
@@ -34,16 +41,16 @@ and open the template in the editor.
                  var current_cobject = response; 
                  var dump = new DomCobject(current_cobject);
                  $('#render_canvas').html(dump.buildAll());
-                 
-                 // Render Ready !
+                 // Render Ready!
                  //Carregar o Script de eventos, após a construção do html dos cobjects
                  $.getScript("<?php echo Yii::app()->theme->baseUrl;?>/js/render/events.js").done(function(script, textStatus) {
-                  });
-
+             });
+                 
+                // newMeet.getInfoStudent
+                  
             }
                 });
             
-       
         
     }); 
     

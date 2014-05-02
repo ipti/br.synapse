@@ -25,12 +25,16 @@
              $('#actDiscipline').change(function(){
                $('#ajaxGoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" } ); 
              }); 
-             $('#actDegree').change(function(){
-               $('#propertyAgoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
-             });
-             $('#actGoal').change(function(){
-               $('#showCobjectIDs').load("filtergoal", {goalID: $('#actGoal').val()} );  
-             });
+             
+               $(document).on('change','#actDegree',function(){
+                    $('#propertyAgoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
+                });
+               $(document).on('change','#actGoal',function(){
+                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val(),isAjax:true} );    
+                });
+                $(document).on('change','#actGoal,#actDegree,#actDiscipline',function(){
+                    $('#error').hide(1000);
+                });
 
         });
          </script>    

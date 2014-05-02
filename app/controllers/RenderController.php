@@ -30,16 +30,23 @@
    @done 25 - Criação da função para o botão nextSreen em events
  * @done 26 - Iniciar todas as screens como hide, com exeção do '.currentSreen'
  * @done 27 - Criação do buildInfo_PieceSet, para apresentar a descrição dos PieceSets.
- * 
  * @done 28 - Chamar o script de eventos, events.js somente depois de caregado todo o cobjects
  * @done 29 - Definir destaque para os grupos de elementos, no onclick
  * @done 30 - Construir style para organizar horizontalmente as divs dos grupos de  elementos
+ * @done 31 - Torna os divs[group] do answer do AEL, hide quando iniciar o render
+ * @done 32 - Definir opacidade quando clica um ou duas vezes
+ * @done 33 - Quando clicar adcionar classe que indica o clique em cada elemento
+ * @done 34 - Quando clicar em elementos do  ask - AEL, dá um hidden nos irmãos visíveis
+ * @done 35 - Quando clicar em elementos do  ask - AEL, dá um show nos divs[group] do answer
+ * @done 36 - Quando clicar em elementos do answer - AEL, dá um hidden na divs[group] do answer
+ * @done 37 - Quando clicar em elementos do answer - Dá um show em todas as divs[group] que não estão 'clicadas'
+ 
+ * @done 38 - Voltar o click do elemento ask-AEL, e assim escolher outro element ask
+ * @done 39 - Criação da classe Meet.js 
+ * @done 40 - Criação do método showMessage no Meet.js
+ 
  * 
- * @todo 31 - Criação do Meet
- * @todo 32 -
- * @todo 33 -
- * @todo 34 -
- * @todo 35 -
+ * 
  * 
   today:3:3;
  
@@ -287,7 +294,7 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview', 'domcobject'),
+                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -300,15 +307,15 @@ class RenderController extends Controller {
         );
     }
 
-    public function actionDomcobject() {
-        $this->render("domcobject");
+    public function actionMeet() {
+        $this->render("meet");
     }
 
     public function actionIndex() {
         if (Yii::app()->session['personage'] == "Tutor") {
             $this->redirect("/render/filter");
         } else {
-            $this->redirect("/render/canvas");
+            $this->redirect("/render/meet");
         }
     }
 
