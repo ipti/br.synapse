@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 
-
 function renderize(){
     this.op;
     this.func;

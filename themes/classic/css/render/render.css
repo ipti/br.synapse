@@ -19,8 +19,9 @@
 .content{
     padding:25px;
 }
-.cobjectInfo {
+.cobjectInfo, #head_meet {
     background:#dbdadd;  
+    color: #0841f3;
     padding-left:25px;
 }
 .cobjectInfo span{
@@ -46,7 +47,7 @@
 
 
 .element { 
-    /* display: block;*/
+     display: block;
 }
 
 .elementImage img { 

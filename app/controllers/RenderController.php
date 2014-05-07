@@ -40,15 +40,30 @@
  * @done 35 - Quando clicar em elementos do  ask - AEL, dá um show nos divs[group] do answer
  * @done 36 - Quando clicar em elementos do answer - AEL, dá um hidden na divs[group] do answer
  * @done 37 - Quando clicar em elementos do answer - Dá um show em todas as divs[group] que não estão 'clicadas'
- 
  * @done 38 - Voltar o click do elemento ask-AEL, e assim escolher outro element ask
  * @done 39 - Criação da classe Meet.js 
  * @done 40 - Criação do método showMessage no Meet.js
  
+ 
+ * @done 41 - Deixar o CObject como atributo de 'delegação' no Meet.js
+ * @done 42 - Criação do setDomCobjects
+ * @done 43 - Adcionar o headMeet
+ * @done 44 - Criar o 'construtor' com informações do aluno,turma,escola
+ * @done 45 - (antigo) Criação da função isset no meet.js
+ * @todo 46 - 
+ * @todo 47 -
+ * @todo 48 - 
+ * @todo 49 - 
+ * @todo 50 - 
+ * @todo 51 -
+ * @todo 52 - 
+ * @todo 53 - 
  * 
  * 
  * 
-  today:3:3;
+ * 
+ * 
+  today:6:6;
  
  * 
  */
@@ -481,7 +496,7 @@ class RenderController extends Controller {
         } elseif (isset($_POST['op']) && $_POST['op'] == 'start') {
             $json = array();
             $disciplines = ActDiscipline::model()->findAll();
-//$classes = Userclass::model()->findAll();
+            //$classes = Userclass::model()->findAll();
             $themes = CobjectTheme::model()->findAll();
             $levels = ActDegree::model()->findAllByAttributes(array(), "grade !=0");
 

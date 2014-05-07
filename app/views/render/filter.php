@@ -21,6 +21,16 @@
         });
 
     });
+    
+            //função beforeSubmit
+        function beforeSubmit(){
+            $('#name_org_1').val(document.getElementById('org_1').options[document.getElementById('org_1').selectedIndex].text);
+            $('#name_classes').val(document.getElementById('classes').options[document.getElementById('classes').selectedIndex].text);
+            $('#name_actors').val(document.getElementById('actors').options[document.getElementById('actors').selectedIndex].text);
+            return true;
+        }
+        
+        
 </script>
 <style>
 .prerender{border:1px solid #000;width:319px;margin:100px auto;background: #262626;}
@@ -39,8 +49,12 @@
 </style>
 <div class="prerender">
 <div class="innerborder">
-    <form id="filter" method="POST" action="/render/meet">
-        <input type="hidden" name="unityfather" id="UnityFather" value="<?php  echo $unityfather; ?>"/>
+    <form id="filter" method="POST" action="/render/meet" onsubmit="return beforeSubmit()">
+        <input type="hidden" name="name_org_1" id="name_org_1" value=""/>
+        <input type="hidden" name="name_classes" id="name_classes" value=""/>
+        <input type="hidden" name="name_actors" id="name_actors" value=""/>
+        
+        <input type="hidden" name="unityfather" id="UnityFather" value="<?php echo $unityfather; ?>"/>
         <div id="box_0" class="box">
         </div>
     </form>
