@@ -7,7 +7,15 @@ and open the template in the editor.
 
 
 <script>
+    
     $(document).ready(function(){
+        
+        
+        if (window.openDatabase) {
+            console.log("Suporta BD-HTML5");
+        }
+ 
+ 
         //Iniciar Encontro
         var personage = '<?php echo Yii::app()->session['personage']; ?>';
         var idActor = '<?php echo Yii::app()->session['idActor']; ?>';
@@ -18,7 +26,7 @@ and open the template in the editor.
         var classe = '<?php echo $_POST["class"]; ?>'; 
         var actor = '<?php echo $_POST["actor"]; ?>'; 
         
-        //var unityfather_name = '<?php // echo $_POST["unityfather"]; ?>'; 
+        //var unityfather_name = '<?php // echo $_POST["unityfather"];  ?>'; 
         var org_name = '<?php echo $_POST["name_org_1"]; ?>'; 
         var classe_name = '<?php echo $_POST["name_classes"]; ?>'; 
         var actor_name = '<?php echo $_POST["name_actors"]; ?>'; 
@@ -28,13 +36,13 @@ and open the template in the editor.
             classe: [classe,classe_name],
             actor: [actor,actor_name]
         };
-        
-        
+         
+        //Passar parâmetro do tipo do Encontro
         var newMeet = new Meet(unityfather,options);
         $('#head_meet').append(newMeet.headMeet());
         
         var CobjectID = 999;
-       $.ajax({
+        $.ajax({
             type: "POST",
             url: "/render/loadcobject",
             dataType: 'json',
@@ -47,22 +55,23 @@ and open the template in the editor.
             },
             success: function(response, textStatus, jqXHR){
                 //Cobjects 
-                 var current_cobject = response; 
-                 var dump = new DomCobject(current_cobject);
-                 $('#render_canvas').html(dump.buildAll());
-                 //Adicionar o domCobjets no Encontro 'Meet'
-                 newMeet.setDomCobjects(dump);
-                 // Render Ready!
+                var current_cobject = response; 
+                var dump = new DomCobject(current_cobject);
+                //Adicionar o domCobjets no Encontro 'Meet'
+                newMeet.setDomCobjects(dump);
+                $('#render_canvas').html(newMeet.domCobjectBuildAll());
+                //Após criar o DomCobject no Dom 
+                 newMeet.beginEvents();
+                // Render Ready!
                  
-                 //Carregar o Script de eventos, após a construção do html dos cobjects
-                 $.getScript("<?php echo Yii::app()->theme->baseUrl;?>/js/render/events.js").done(function(script, textStatus) {
-             });
                  
+                //Carregar o Script de eventos, após a construção do html dos cobjects
+                //                 $.getScript("<?php // echo Yii::app()->theme->baseUrl; ?>/js/render/events.js").done(function(script, textStatus) {
+                //             });
                 // newMeet.getInfoStudent
                   
             }
-                });
-            
+        });
         
     }); 
     
@@ -75,10 +84,10 @@ and open the template in the editor.
     <body id="synapse">
         <div id="head_meet">
         </div>
-        
+
         <div id="register_student_canvas">
         </div>
-        
+
         <div id="render_canvas">
         </div>
     </body>

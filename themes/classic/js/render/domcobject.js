@@ -19,6 +19,11 @@ var DomCobject = function(cobject){
     this.domElement = '';
     this.dirLibrary = '/rsc/library';
     var self = this;
+    
+    //Armazenar Árvore de Peças
+    //var pieces, 
+    
+    //==========================
 
     this.pos = {
         screen:0,
@@ -79,6 +84,9 @@ var DomCobject = function(cobject){
         var domElementASK = $('<div class="ask"></div>');
         var domElementANSWER = $('<div class="answer"></div>');
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
+        self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups = self.shuffleArray(groups);
+        var newGroups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
+       // console.log(self.shuffleArray(groups));
         
         $.each(groups, function(current_group, elements_group){
             self.pos.group =current_group; // O grupo Corrent dessa Piece!
@@ -95,7 +103,7 @@ var DomCobject = function(cobject){
             var isNewGroup = (possibleGroup.size() == 0);
             if(isNewGroup){
                 // Novo Grupo
-                domGroup =$('<div group="'+current_group+'" class="group" ><div>'); 
+                domGroup =$('<div group="'+current_group+'" class="'+self.cobject.template_code+' group" ><div>'); 
             }else{
                 //Grupo existente
                 domGroup =possibleGroup; 
@@ -118,10 +126,28 @@ var DomCobject = function(cobject){
               
         return self.domPiece;
     }
+    
+    this.shuffleArray = function (array) {
+        console.log(typeof array);
+        var counter = array.length;
+        var temp,index;
+        // Percorrer os elementos do Array do > para o <
+        while (counter > 0) {
+            //Obter um Random Index
+            index = Math.floor(Math.random() * counter);
+            counter--;
+            // E da um swap entre o index e o último count
+            temp = array[counter];
+            array[counter] = array[index];
+            array[index] = temp;
+        }
+
+        return array;
+    }
 
     this.buildEnum = function(){
         self.domEnum = $('<div class="enunciation"></div>');
-        eval("self.buildEnum_"+cobject.template_code+"();");
+        eval("self.buildEnum_"+self.cobject.template_code+"();");
     }
             
     this.buildElement = function(){

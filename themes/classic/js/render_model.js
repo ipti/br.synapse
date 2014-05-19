@@ -16,13 +16,13 @@
                screen:0,
                pieceset:0,
                piece:0,
-               element:0,
+               element:0
             }
             this.id = {
                screen:0,
                pieceset:0,
                piece:0,
-               element:0,
+               element:0
             }
 
             this.buildAll = function(){

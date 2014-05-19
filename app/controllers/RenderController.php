@@ -44,18 +44,18 @@
  * @done 39 - Criação da classe Meet.js 
  * @done 40 - Criação do método showMessage no Meet.js
  
- 
  * @done 41 - Deixar o CObject como atributo de 'delegação' no Meet.js
  * @done 42 - Criação do setDomCobjects
  * @done 43 - Adcionar o headMeet
  * @done 44 - Criar o 'construtor' com informações do aluno,turma,escola
  * @done 45 - (antigo) Criação da função isset no meet.js
- * @todo 46 - 
- * @todo 47 -
- * @todo 48 - 
- * @todo 49 - 
- * @todo 50 - 
- * @todo 51 -
+ * 
+ * @todo 46 - Transpor as funções do events.js para meet.js
+ * @todo 47 - Criação da função de init_Common para eventos 
+ * @todo 48 - Criação da função init_AEL
+ * @todo 49 - Criação da função isMatch para verificar se os elementos estão em right matched
+ * @todo 50 - Criação da função shuffleArray para embaralhar um array qualquer
+ * @todo 51 - 
  * @todo 52 - 
  * @todo 53 - 
  * 
@@ -244,10 +244,20 @@ class RenderController extends Controller {
             $aTemp['events'] = $events;
             $aTemp['generalProperties'] = $gproperties;
             $aTemp['type'] = (string) $pieceOrPieceSet_element->element->type->name;
-            if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'])) {
-                $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
+            $idx;
+            if(!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'])) {
+                $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'] = array();
+                $idx=0;
+            }else{
+                $idx=count($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups']);
             }
-            array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'], $aTemp);
+            
+            if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$idx][$type_group]['elements'])) {
+                $arrayTypeGroupTemp[$type_group]['elements'] = array();
+                
+                array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'], $arrayTypeGroupTemp);
+            }
+            array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$idx][$type_group]['elements'], $aTemp);
         } else {
             $aTemp['id'] = $pieceOrPieceSet_element->element->id;
             $aTemp['generalProperties'] = $gproperties;
