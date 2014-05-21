@@ -244,20 +244,10 @@ class RenderController extends Controller {
             $aTemp['events'] = $events;
             $aTemp['generalProperties'] = $gproperties;
             $aTemp['type'] = (string) $pieceOrPieceSet_element->element->type->name;
-            $idx;
-            if(!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'])) {
-                $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'] = array();
-                $idx=0;
-            }else{
-                $idx=count($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups']);
+            if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'])) {
+                $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
             }
-            
-            if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$idx][$type_group]['elements'])) {
-                $arrayTypeGroupTemp[$type_group]['elements'] = array();
-                
-                array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'], $arrayTypeGroupTemp);
-            }
-            array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$idx][$type_group]['elements'], $aTemp);
+            array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'], $aTemp);
         } else {
             $aTemp['id'] = $pieceOrPieceSet_element->element->id;
             $aTemp['generalProperties'] = $gproperties;

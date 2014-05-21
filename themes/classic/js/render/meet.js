@@ -49,6 +49,7 @@ this.Meet = function(unityfather, options){
     //    this.verifyMatch(group1, element1ID, group2, element2ID){
     //        
     //    }
+    
     this.init_Common = function(){
         $('#nextSreen').on('click', function(){
             var currentScreen = $('.currentScreen');
@@ -94,25 +95,32 @@ this.Meet = function(unityfather, options){
                 var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
                 var groupAnswerClicked = $(this).attr('group');
                 var groupAskClicked = lastClicked.attr('group');
-                lastClicked.attr('real_matched',groupAnswerClicked);
+                lastClicked.attr('matched',groupAnswerClicked);
                 lastClicked.removeClass('last_clicked');
                 $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
                 $(this).addClass('ael_clicked');
+                
+                //Vericar se o match está certo para este element
+                self.ismatch(thisPieceID,groupAskClicked,groupAnswerClicked)
+                
                 //Verificar se Não existe mais elementos a serem clicados
                 if($(this).siblings('div[group]:not(.ael_clicked)').size() == 0){
+                    var thisPieceID = $(this).closest('.piece').attr('id');
                     //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                    $(this).closest('div.piece').attr('istrue',self.ismatch(groupAskClicked,groupAnswerClicked));
+                    $(this).closest('div.piece').attr('istrue',self.ismatch(thisPieceID));
                 }
-            
             }
-   
+                
         });
 
-        this.ismatch = function(ask,answer){
-            return (ask==answer.split('_')[0]);
+        this.ismatch = function(pieceID,ask,answer){
+            if(self.isset(ask) && self.isset(answer)){
+                return self.domCobjects.ismatchGroup(pieceID,ask,answer);
+            }
+            
+            return self.domCobjects.ismatchGroup(pieceID);
         }
     }
-    
     //======================
     
     

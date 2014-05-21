@@ -22,7 +22,7 @@ var DomCobject = function(cobject){
     
     //Armazenar Árvore de Peças
     //var pieces, 
-    
+    this.mainPieces= new Array();
     //==========================
 
     this.pos = {
@@ -84,12 +84,21 @@ var DomCobject = function(cobject){
         var domElementASK = $('<div class="ask"></div>');
         var domElementANSWER = $('<div class="answer"></div>');
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
-        self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups = self.shuffleArray(groups);
-        var newGroups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
-       // console.log(self.shuffleArray(groups));
         
+        var objGroups_currentPiece = {};
         $.each(groups, function(current_group, elements_group){
             self.pos.group =current_group; // O grupo Corrent dessa Piece!
+            
+            //array que armazena todos os objetos grupos da piece atual
+            var group_split = current_group.split('_');   
+            // ASK = Múltiplo de 2 ; ANSWER = Múltiplo de 3
+            var newIdGroup = (group_split[1]===undefined) ? (self.id.piece*(group_split[0]))*2 : (self.id.piece*(group_split[0]))*3 +'_1';
+            eval("objGroups_currentPiece._"+newIdGroup+" = elements_group;");
+            
+           // console.log(groupsPiece[self.id.piece][current_group]);
+           // groupsPiece[self.id.piece][current_group] = elements_group;
+            
+            
             var domTypeGroup="";
             var domGroup="";
             if(current_group.split('_').length==1){
@@ -99,11 +108,11 @@ var DomCobject = function(cobject){
                 // is ANSWER-GROUP
                 domTypeGroup = domElementANSWER;
             }
-            var possibleGroup = domTypeGroup.find('div[group="'+current_group+'"]');
+            var possibleGroup = domTypeGroup.find('div[group="'+newIdGroup+'"]');
             var isNewGroup = (possibleGroup.size() == 0);
             if(isNewGroup){
                 // Novo Grupo
-                domGroup =$('<div group="'+current_group+'" class="'+self.cobject.template_code+' group" ><div>'); 
+                domGroup =$('<div group="'+newIdGroup+'" class="'+self.cobject.template_code+' group" ><div>'); 
             }else{
                 //Grupo existente
                 domGroup =possibleGroup; 
@@ -120,15 +129,35 @@ var DomCobject = function(cobject){
                 
             };
         });
-              
+        //Armazena todos os grupos de cada peça
+        objGroups_currentPiece.istrue = null;
+        self.mainPieces[self.id.piece] = objGroups_currentPiece;
         self.domPiece.append(domElementASK);
         self.domPiece.append(domElementANSWER);      
               
         return self.domPiece;
     }
     
+    //Match Group
+    this.ismatchGroup = function(pieceID,ask,answer){
+        var piece = self.mainPieces[pieceID];
+        
+        if(self.isset(ask) && self.isset(answer)){
+            //Salvar o MEtadados do acerto e erro de um element
+            
+        }else{
+            //Salvar o acerto e erro da piece e salva os metadados dos elements no BD
+            
+        }
+        
+        
+        console.log(piece);
+        return ;
+        
+    }
+    
+    //Embaralhar qualquer Array
     this.shuffleArray = function (array) {
-        console.log(typeof array);
         var counter = array.length;
         var temp,index;
         // Percorrer os elementos do Array do > para o <
@@ -144,6 +173,7 @@ var DomCobject = function(cobject){
 
         return array;
     }
+    
 
     this.buildEnum = function(){
         self.domEnum = $('<div class="enunciation"></div>');
@@ -289,6 +319,10 @@ var DomCobject = function(cobject){
         html.append('<span><b>'+description+'</b></span>');
         return html;
     } 
+    
+     this.isset = function (variable){
+        return (typeof variable !== 'underfined' && variable !== null);
+    }
    
        
 }
