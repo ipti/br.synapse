@@ -99,13 +99,12 @@ this.Meet = function(unityfather, options){
                 lastClicked.removeClass('last_clicked');
                 $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
                 $(this).addClass('ael_clicked');
+                var thisPieceID = $(this).closest('.piece').attr('id');
                 
                 //Vericar se o match está certo para este element
-                self.ismatch(thisPieceID,groupAskClicked,groupAnswerClicked)
-                
+                self.ismatch(thisPieceID,groupAskClicked,groupAnswerClicked);
                 //Verificar se Não existe mais elementos a serem clicados
                 if($(this).siblings('div[group]:not(.ael_clicked)').size() == 0){
-                    var thisPieceID = $(this).closest('.piece').attr('id');
                     //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
                     $(this).closest('div.piece').attr('istrue',self.ismatch(thisPieceID));
                 }
@@ -113,9 +112,9 @@ this.Meet = function(unityfather, options){
                 
         });
 
-        this.ismatch = function(pieceID,ask,answer){
-            if(self.isset(ask) && self.isset(answer)){
-                return self.domCobjects.ismatchGroup(pieceID,ask,answer);
+        this.ismatch = function(pieceID,groupAskClicked,groupAnswerClicked){
+            if(self.isset(groupAskClicked) && self.isset(groupAnswerClicked)){
+                return self.domCobjects.ismatchGroup(pieceID,groupAskClicked,groupAnswerClicked);
             }
             
             return self.domCobjects.ismatchGroup(pieceID);

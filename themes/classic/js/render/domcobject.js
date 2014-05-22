@@ -95,8 +95,8 @@ var DomCobject = function(cobject){
             var newIdGroup = (group_split[1]===undefined) ? (self.id.piece*(group_split[0]))*2 : (self.id.piece*(group_split[0]))*3 +'_1';
             eval("objGroups_currentPiece._"+newIdGroup+" = elements_group;");
             
-           // console.log(groupsPiece[self.id.piece][current_group]);
-           // groupsPiece[self.id.piece][current_group] = elements_group;
+            // console.log(groupsPiece[self.id.piece][current_group]);
+            // groupsPiece[self.id.piece][current_group] = elements_group;
             
             
             var domTypeGroup="";
@@ -139,19 +139,72 @@ var DomCobject = function(cobject){
     }
     
     //Match Group
-    this.ismatchGroup = function(pieceID,ask,answer){
-        var piece = self.mainPieces[pieceID];
+    this.ismatchGroup = function(pieceID,groupAskClicked,groupAnswerClicked){
         
-        if(self.isset(ask) && self.isset(answer)){
-            //Salvar o MEtadados do acerto e erro de um element
+        if(self.isset(groupAskClicked) && self.isset(groupAnswerClicked)){
+            //Salvar no Objeto o Metadados do acerto e erro de um element
+            var elements_groupAsk = eval("self.mainPieces[pieceID]._"+groupAskClicked);
+            var elements_groupAnswer = eval("self.mainPieces[pieceID]._"+groupAnswerClicked);
+            
+            //Veridicar Match
+            var groupRevertAsk= (groupAskClicked/pieceID)/2;
+            var groupRevertAnswer =((groupAnswerClicked.split('_')[0])/pieceID)/3; 
+            var ismatch = (groupRevertAsk == groupRevertAnswer);
+            //Seta como ismatch o istrue dos dois grupos 
+            elements_groupAsk.ismatch = ismatch;
+            elements_groupAsk.groupMatched = groupAnswerClicked;
+            //Seta em cada grupo o grupo matched
+            elements_groupAnswer.ismatch = ismatch;
+            elements_groupAnswer.groupMatched = groupAskClicked;
             
         }else{
+            var pieceIsTrue = true;
+            //Para Cada Grupo da Piece
+            $.each(self.mainPieces[pieceID], function(nome_attr,value){
+                if(nome_attr!='istrue'){
+                    var groups = value;
+                    if(!groups.ismatch){
+                        pieceIsTrue = false;
+                    }
+                }            
+                //Salva no BD os MetaDados
+                $.ajax({
+                    url: '',
+                    type:'POST',
+                    dataType:'JSON',
+                    data: {},
+                    sucess: function(response){
+                        
+                    },
+                    error: function(){
+                        
+                    }
+                });
+            });
+            self.mainPieces[pieceID].istrue = pieceIsTrue;
+            //Salva no BD
+            
+            //=========================
+            
             //Salvar o acerto e erro da piece e salva os metadados dos elements no BD
+            //========Cada Elemento Ask ===========
+            var elements_length = elements_groupAsk.elements.length;
+            var current_element = null;
+            for(var i = 0; i < elements_length; i++) {
+                current_element =  elements_groupAsk.elements[i];
+            };
+            //========Cada Elemento Answer===========
+            elements_length = elements_groupAnswer.elements.length;
+            current_element = null;
+            for(var i = 0; i < elements_length; i++) {
+                current_element =  elements_groupAnswer.elements[i];
+                //console.log(current_element);
+            };
             
         }
         
         
-        console.log(piece);
+       
         return ;
         
     }
@@ -320,8 +373,8 @@ var DomCobject = function(cobject){
         return html;
     } 
     
-     this.isset = function (variable){
-        return (typeof variable !== 'underfined' && variable !== null);
+    this.isset = function (variable){
+        return (variable !== undefined && variable !== null);
     }
    
        
