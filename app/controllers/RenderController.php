@@ -19,15 +19,15 @@
   @todo 15 - Corrigir a substituição de elementos de mesmo grupo na rendenrização do elemento na tela
   @done 16 - Corrigir o contador de elementos no Json do getCobjectID do RenderController
   @done 17 - Verificar se o array de elementos no Json já foi para criar o array de elementos do getCobjectID do RenderController
-   @done 18 - Criação do buildInfo_Cobject, para apresentar informações do CObject corrente.
-   @done 19 - Criação de classes css para a div de Informações do Cobject
-   @done 20 - Separar visualmente os pieceSets.
-   @done 21 - Separar o conteúdo do CObject das Informações do CObject
- 
-   @done 22 - Criação da função buildToolBar para adicionar ferramentas para usar durante a atividade
-   @done 23 - Adicionar o botão nextScreen para viajar nas telas
-   @done 24 - Criação do Script events.js para a criação das funcionalidade de cada evento chamado no render
-   @done 25 - Criação da função para o botão nextSreen em events
+  @done 18 - Criação do buildInfo_Cobject, para apresentar informações do CObject corrente.
+  @done 19 - Criação de classes css para a div de Informações do Cobject
+  @done 20 - Separar visualmente os pieceSets.
+  @done 21 - Separar o conteúdo do CObject das Informações do CObject
+
+  @done 22 - Criação da função buildToolBar para adicionar ferramentas para usar durante a atividade
+  @done 23 - Adicionar o botão nextScreen para viajar nas telas
+  @done 24 - Criação do Script events.js para a criação das funcionalidade de cada evento chamado no render
+  @done 25 - Criação da função para o botão nextSreen em events
  * @done 26 - Iniciar todas as screens como hide, com exeção do '.currentSreen'
  * @done 27 - Criação do buildInfo_PieceSet, para apresentar a descrição dos PieceSets.
  * @done 28 - Chamar o script de eventos, events.js somente depois de caregado todo o cobjects
@@ -43,7 +43,7 @@
  * @done 38 - Voltar o click do elemento ask-AEL, e assim escolher outro element ask
  * @done 39 - Criação da classe Meet.js 
  * @done 40 - Criação do método showMessage no Meet.js
- 
+
  * @done 41 - Deixar o CObject como atributo de 'delegação' no Meet.js
  * @done 42 - Criação do setDomCobjects
  * @done 43 - Adcionar o headMeet
@@ -64,7 +64,7 @@
  * 
  * 
   today:6:6;
- 
+
  * 
  */
 
@@ -240,6 +240,7 @@ class RenderController extends Controller {
 
         if (!$isPiecesetElement) {
             $aTemp["id"] = $pieceOrPieceSet_element->element->id;
+            $aTemp["pieceElementID"] = $pieceOrPieceSet_element->id;
             $aTemp['pieceElement_Properties'] = $pe_properties;
             $aTemp['events'] = $events;
             $aTemp['generalProperties'] = $gproperties;
@@ -252,10 +253,10 @@ class RenderController extends Controller {
             $aTemp['id'] = $pieceOrPieceSet_element->element->id;
             $aTemp['generalProperties'] = $gproperties;
             $aTemp['type'] = $pieceOrPieceSet_element->element->type->name;
-            if(!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'])){
+            if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'])) {
                 $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'] = array();
             }
-            
+
             $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']] = $aTemp;
         }
         // End Function Element=========================================
@@ -364,7 +365,9 @@ class RenderController extends Controller {
     public function actionCompute() {
         $perf = new PeformanceActor();
         $data['piece_id'] = $_REQUEST['pieceID'];
-        $data['piece_element_id'] = $_REQUEST['elementID'];
+        if (isset($_REQUEST['piece_elementID'])) {
+            $data['piece_element_id'] = $_REQUEST['piece_elementID'];
+        }
         $data['actor_id'] = $_REQUEST['actorID'];
         $data['final_time'] = $_REQUEST['finalTime'];
         $data['start_time'] = $_REQUEST['startTime'];

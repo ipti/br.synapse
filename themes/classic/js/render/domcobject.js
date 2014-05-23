@@ -159,6 +159,8 @@ var DomCobject = function(cobject){
             
         }else{
             var pieceIsTrue = true;
+            
+            console.log(self.mainPieces[pieceID]);
             //Para Cada Grupo da Piece
             $.each(self.mainPieces[pieceID], function(nome_attr,value){
                 if(nome_attr!='istrue'){
@@ -166,40 +168,74 @@ var DomCobject = function(cobject){
                     if(!groups.ismatch){
                         pieceIsTrue = false;
                     }
+                    //Armazenar o groupMatched do grupo atual
+                    var current_groupMatched = this.groupMatched;
                 }            
-                //Salva no BD os MetaDados
-                $.ajax({
-                    url: '',
-                    type:'POST',
-                    dataType:'JSON',
-                    data: {},
-                    sucess: function(response){
+                //Salva no BD os MetaDados para cada element desse grupo
+                $.each(this.elements, function(){
+                    var current_pieceElementID = this.pieceElementID;
+                    
+                    //ou acertou ou erro para cada current_groupMatched
+                    $.each(eval("self.mainPieces[pieceID]._"+current_groupMatched+".elements"),function(){
+                        var matched_pieceElementID = this.pieceElementID;
                         
-                    },
-                    error: function(){
+                        $.ajax({
+                            url: '/render/compute',
+                            type:'POST',
+                            dataType:'json',
+                            data: {
+                                'pieceID':pieceID,
+                                'piece_elementID':current_pieceElementID,
+                                'actorID':3,
+                                'startTime':4,
+                                'finalTime':5,
+                                'value':matched_pieceElementID, // o que salvar quando o gropo do match tem mais de um element(todos os elements?!)
+                                'isCorrect':7
+                            },
+                            error: function( jqXHR, textStatus, errorThrown ){
+                                if(parent.isset(data['step'])) {
+                                    $('.savescreen').append('<br><p>Erro ao salvar '+data['step']+'.</p>'); 
+                                }else{
+                                    $('.savescreen').append('<br><p>Erro ao Deletar TODOS os Objetos!...</p>');    
+                                }
+                
+                                $('.savescreen').append('<br><p>Error mensage:</p>');
+                                $('.savescreen').append(jqXHR.responseText);
+                            },
+                            success: function(response, textStatus, jqXHR){
+                                sucess(response, textStatus, jqXHR);
+                            }
+            
+                        });
                         
-                    }
+                    });
+                    
+                    
+                    
+                
                 });
+                
+                
             });
             self.mainPieces[pieceID].istrue = pieceIsTrue;
-            //Salva no BD
+        //Salva no BD
             
-            //=========================
+        //=========================
             
-            //Salvar o acerto e erro da piece e salva os metadados dos elements no BD
-            //========Cada Elemento Ask ===========
-            var elements_length = elements_groupAsk.elements.length;
-            var current_element = null;
-            for(var i = 0; i < elements_length; i++) {
-                current_element =  elements_groupAsk.elements[i];
-            };
-            //========Cada Elemento Answer===========
-            elements_length = elements_groupAnswer.elements.length;
-            current_element = null;
-            for(var i = 0; i < elements_length; i++) {
-                current_element =  elements_groupAnswer.elements[i];
-                //console.log(current_element);
-            };
+        //Salvar o acerto e erro da piece e salva os metadados dos elements no BD
+        //========Cada Elemento Ask ===========
+        //            var elements_length = elements_groupAsk.elements.length;
+        //            var current_element = null;
+        //            for(var i = 0; i < elements_length; i++) {
+        //                current_element =  elements_groupAsk.elements[i];
+        //            };
+        //            //========Cada Elemento Answer===========
+        //            elements_length = elements_groupAnswer.elements.length;
+        //            current_element = null;
+        //            for(var i = 0; i < elements_length; i++) {
+        //                current_element =  elements_groupAnswer.elements[i];
+        //                //console.log(current_element);
+        //            };
             
         }
         
