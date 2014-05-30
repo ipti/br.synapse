@@ -72,6 +72,9 @@ class RenderController extends Controller {
 
     public $layout = 'render';
 
+    //MSG for Translate
+    public $INVALID_ATTRIBUTES = "Atributes Inválidos";
+    
     /**
      * @return array action filters
      */
@@ -363,18 +366,28 @@ class RenderController extends Controller {
     }
 
     public function actionCompute() {
+        //var_dump($_SESSION);exit();
+//         if (isset($_REQUEST['piece_elementID'])) {
+//            $data['piece_element_id'] = $_REQUEST['piece_elementID'];
+//        }
+//        $data['start_time'] = $_REQUEST['startTime'];
+//        $data['final_time'] = $_REQUEST['finalTime'];
+        
         $perf = new PeformanceActor();
         $data['piece_id'] = $_REQUEST['pieceID'];
-        if (isset($_REQUEST['piece_elementID'])) {
-            $data['piece_element_id'] = $_REQUEST['piece_elementID'];
-        }
+        $data['group_id'] = (isset($_REQUEST['groupID'])) ? $_REQUEST['groupID']: NULL;
         $data['actor_id'] = $_REQUEST['actorID'];
-        $data['final_time'] = $_REQUEST['finalTime'];
-        $data['start_time'] = $_REQUEST['startTime'];
-        $data['value'] = $_REQUEST['value'];
+        $data['final_time'] = $_REQUEST['time_answer'];
+        $data['value'] = (isset($_REQUEST['value'])) ? $_REQUEST['value'] : NULL;
         $data['iscorrect'] = $_REQUEST['isCorrect'];
+        
         $perf->setAttributes($data);
-        $perf->save();
+        if($perf->validate()){
+           echo $perf->save();
+        }else{
+            echo $this->INVALID_ATTRIBUTES;
+        }
+            
     }
 
     public function actionStage() {

@@ -3,7 +3,10 @@ COBJECT_TYPE = "Type";
 COBJECT_DEGREE_NAME = "Degree Name";
 COBJECT_DISCIPLINE = "Discipline";
 COBJECT_CONTENT = "Content";
-
+//Label Buttons
+ NEXT_PIECE = "Próxima Atividade >>>>>";
+ NEXT_SCREEN = "Próxima Tela >>>>>";
+ BEGIN_ACTIVITY = "Iniciar Atividade"
 var DomCobject = function(cobject){
     this.cobject = cobject;
     this.currentScreen = '';
@@ -53,7 +56,8 @@ var DomCobject = function(cobject){
     this.buildScreen = function(){
         if(this.pos.screen == 0){
             // É a primeira Screen
-            self.domScreen = $('<div class="T_screen currentScreen" id="S'+self.id.screen+'"></div>');  
+            self.domScreen = $('<div class="T_screen currentScreen" id="S'+self.id.screen+'"> \n\
+           <button id="begin_activity">'+BEGIN_ACTIVITY+'</button></div>');  
         }else{
             self.domScreen = $('<div class="T_screen" style="display:none" id="S'+self.id.screen+'"></div>'); 
         }
@@ -98,7 +102,6 @@ var DomCobject = function(cobject){
             // console.log(groupsPiece[self.id.piece][current_group]);
             // groupsPiece[self.id.piece][current_group] = elements_group;
             
-            
             var domTypeGroup="";
             var domGroup="";
             if(current_group.split('_').length==1){
@@ -138,130 +141,24 @@ var DomCobject = function(cobject){
         return self.domPiece;
     }
     
-    //Match Group
-    this.ismatchGroup = function(pieceID,groupAskClicked,groupAnswerClicked){
-        
-        if(self.isset(groupAskClicked) && self.isset(groupAnswerClicked)){
-            //Salvar no Objeto o Metadados do acerto e erro de um element
-            var elements_groupAsk = eval("self.mainPieces[pieceID]._"+groupAskClicked);
-            var elements_groupAnswer = eval("self.mainPieces[pieceID]._"+groupAnswerClicked);
-            
-            //Veridicar Match
-            var groupRevertAsk= (groupAskClicked/pieceID)/2;
-            var groupRevertAnswer =((groupAnswerClicked.split('_')[0])/pieceID)/3; 
-            var ismatch = (groupRevertAsk == groupRevertAnswer);
-            //Seta como ismatch o istrue dos dois grupos 
-            elements_groupAsk.ismatch = ismatch;
-            elements_groupAsk.groupMatched = groupAnswerClicked;
-            //Seta em cada grupo o grupo matched
-            elements_groupAnswer.ismatch = ismatch;
-            elements_groupAnswer.groupMatched = groupAskClicked;
-            
-        }else{
-            var pieceIsTrue = true;
-            
-            console.log(self.mainPieces[pieceID]);
-            //Para Cada Grupo da Piece
-            $.each(self.mainPieces[pieceID], function(nome_attr,value){
-                if(nome_attr!='istrue'){
-                    var groups = value;
-                    if(!groups.ismatch){
-                        pieceIsTrue = false;
-                    }
-                    //Armazenar o groupMatched do grupo atual
-                    var current_groupMatched = this.groupMatched;
-                }            
-                //Salva no BD os MetaDados para cada element desse grupo
-                $.each(this.elements, function(){
-                    var current_pieceElementID = this.pieceElementID;
-                    
-                    //ou acertou ou erro para cada current_groupMatched
-                    $.each(eval("self.mainPieces[pieceID]._"+current_groupMatched+".elements"),function(){
-                        var matched_pieceElementID = this.pieceElementID;
-                        
-                        $.ajax({
-                            url: '/render/compute',
-                            type:'POST',
-                            dataType:'json',
-                            data: {
-                                'pieceID':pieceID,
-                                'piece_elementID':current_pieceElementID,
-                                'actorID':3,
-                                'startTime':4,
-                                'finalTime':5,
-                                'value':matched_pieceElementID, // o que salvar quando o gropo do match tem mais de um element(todos os elements?!)
-                                'isCorrect':7
-                            },
-                            error: function( jqXHR, textStatus, errorThrown ){
-                                if(parent.isset(data['step'])) {
-                                    $('.savescreen').append('<br><p>Erro ao salvar '+data['step']+'.</p>'); 
-                                }else{
-                                    $('.savescreen').append('<br><p>Erro ao Deletar TODOS os Objetos!...</p>');    
-                                }
-                
-                                $('.savescreen').append('<br><p>Error mensage:</p>');
-                                $('.savescreen').append(jqXHR.responseText);
-                            },
-                            success: function(response, textStatus, jqXHR){
-                                sucess(response, textStatus, jqXHR);
-                            }
-            
-                        });
-                        
-                    });
-                    
-                    
-                    
-                
-                });
-                
-                
-            });
-            self.mainPieces[pieceID].istrue = pieceIsTrue;
-        //Salva no BD
-            
-        //=========================
-            
-        //Salvar o acerto e erro da piece e salva os metadados dos elements no BD
-        //========Cada Elemento Ask ===========
-        //            var elements_length = elements_groupAsk.elements.length;
-        //            var current_element = null;
-        //            for(var i = 0; i < elements_length; i++) {
-        //                current_element =  elements_groupAsk.elements[i];
-        //            };
-        //            //========Cada Elemento Answer===========
-        //            elements_length = elements_groupAnswer.elements.length;
-        //            current_element = null;
-        //            for(var i = 0; i < elements_length; i++) {
-        //                current_element =  elements_groupAnswer.elements[i];
-        //                //console.log(current_element);
-        //            };
-            
-        }
-        
-        
-       
-        return ;
-        
-    }
     
     //Embaralhar qualquer Array
-    this.shuffleArray = function (array) {
-        var counter = array.length;
-        var temp,index;
-        // Percorrer os elementos do Array do > para o <
-        while (counter > 0) {
-            //Obter um Random Index
-            index = Math.floor(Math.random() * counter);
-            counter--;
-            // E da um swap entre o index e o último count
-            temp = array[counter];
-            array[counter] = array[index];
-            array[index] = temp;
-        }
-
-        return array;
-    }
+//    this.shuffleArray = function (array) {
+//        var counter = array.length;
+//        var temp,index;
+//        // Percorrer os elementos do Array do > para o <
+//        while (counter > 0) {
+//            //Obter um Random Index
+//            index = Math.floor(Math.random() * counter);
+//            counter--;
+//            // E da um swap entre o index e o último count
+//            temp = array[counter];
+//            array[counter] = array[index];
+//            array[index] = temp;
+//        }
+//
+//        return array;
+//    }
     
 
     this.buildEnum = function(){
@@ -398,7 +295,7 @@ var DomCobject = function(cobject){
     
     this.buildToolBar = function(){
         var html = $('<div class="toolBar"></div>');
-        html.append('<button id="nextSreen">Próxima Tela >>>>></button>');
+        html.append('<button id="nextPiece">'+ NEXT_PIECE +'</button>');
         return html;
     }
       

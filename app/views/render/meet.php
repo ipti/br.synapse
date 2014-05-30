@@ -65,6 +65,8 @@ and open the template in the editor.
                 // Render Ready!
                  
                  
+                 
+                 
                 //Carregar o Script de eventos, após a construção do html dos cobjects
                 //                 $.getScript("<?php // echo Yii::app()->theme->baseUrl; ?>/js/render/events.js").done(function(script, textStatus) {
                 //             });
@@ -84,10 +86,10 @@ and open the template in the editor.
     <body id="synapse">
         <div id="head_meet">
         </div>
-
         <div id="register_student_canvas">
         </div>
-
+        <div id="error"> 
+        </div>
         <div id="render_canvas">
         </div>
     </body>

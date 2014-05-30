@@ -17,6 +17,7 @@
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl;?>/js/render/meet.js"></script>
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl;?>/js/render/cobject.js"></script>
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl;?>/js/render/domcobject.js"></script>
+        <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl;?>/js/jquery.shuffle.js"></script>
     </head>
     <body class="theme" >
         <div class="canvasr">

@@ -12,11 +12,12 @@
  * @property integer $final_time
  * @property string $value
  * @property string $iscorrect
+ * @property string $group_id
  *
  * The followings are the available model relations:
+ * @property Actor $actor
  * @property EditorPiece $piece
  * @property EditorPieceElement $pieceElement
- * @property Actor $actor
  */
 class PeformanceActor extends CActiveRecord
 {
@@ -46,13 +47,14 @@ class PeformanceActor extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('piece_id, piece_element_id, actor_id, start_time, final_time', 'required'),
+			array('piece_id, actor_id, final_time', 'required'),
 			array('piece_id, piece_element_id, actor_id, start_time, final_time', 'numerical', 'integerOnly'=>true),
 			array('iscorrect', 'length', 'max'=>5),
+			array('group_id', 'length', 'max'=>45),
 			array('value', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, piece_id, piece_element_id, actor_id, start_time, final_time, value, iscorrect', 'safe', 'on'=>'search'),
+			array('id, piece_id, piece_element_id, actor_id, start_time, final_time, value, iscorrect, group_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,9 +66,9 @@ class PeformanceActor extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'actor' => array(self::BELONGS_TO, 'Actor', 'actor_id'),
 			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'piece_id'),
 			'pieceElement' => array(self::BELONGS_TO, 'EditorPieceElement', 'piece_element_id'),
-			'actor' => array(self::BELONGS_TO, 'Actor', 'actor_id'),
 		);
 	}
 
@@ -84,6 +86,7 @@ class PeformanceActor extends CActiveRecord
 			'final_time' => Yii::t('default', 'Final Time'),
 			'value' => Yii::t('default', 'Value'),
 			'iscorrect' => Yii::t('default', 'Iscorrect'),
+			'group_id' => Yii::t('default', 'Group'),
 		);
 	}
 
@@ -106,6 +109,7 @@ class PeformanceActor extends CActiveRecord
 		$criteria->compare('final_time',$this->final_time);
 		$criteria->compare('value',$this->value,true);
 		$criteria->compare('iscorrect',$this->iscorrect,true);
+		$criteria->compare('group_id',$this->group_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
