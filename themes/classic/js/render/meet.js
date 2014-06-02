@@ -73,12 +73,10 @@ this.Meet = function(unityfather, options){
             if(currentPiece.next().size()==0) {
                 //Acabou Peça, passa pra outra PieceSet se houver
                 var currentPieceSet = $('.currentPieceSet');
-                currentPieceSet.removeClass('currentPiece');
+                currentPieceSet.removeClass('currentPieceSet');
                 currentPieceSet.hide();
                 
-                console.log(currentPieceSet);
-                
-                if(currentPieceSet.next()==0){
+                if(currentPieceSet.next().size()==0){
                     //Acabou todas as pieceSets dessa Tela
                     // Passa pra a pŕoxima PieceSet
                     var currentScreen = $('.currentScreen');
