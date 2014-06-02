@@ -4,9 +4,10 @@ COBJECT_DEGREE_NAME = "Degree Name";
 COBJECT_DISCIPLINE = "Discipline";
 COBJECT_CONTENT = "Content";
 //Label Buttons
- NEXT_PIECE = "Próxima Atividade >>>>>";
- NEXT_SCREEN = "Próxima Tela >>>>>";
- BEGIN_ACTIVITY = "Iniciar Atividade"
+NEXT_PIECE = "Próxima Atividade >>>>>";
+NEXT_SCREEN = "Próxima Tela >>>>>";
+BEGIN_ACTIVITY = "Iniciar Atividade";
+ 
 var DomCobject = function(cobject){
     this.cobject = cobject;
     this.currentScreen = '';
@@ -86,7 +87,11 @@ var DomCobject = function(cobject){
     this.buildPiece = function(){
         self.domPiece = $('<div class="piece" id="'+self.id.piece+'"></div>');
         var domElementASK = $('<div class="ask"></div>');
-        var domElementANSWER = $('<div class="answer"></div>');
+        //Verificar se é uma peça do template AEL
+        if(self.cobject.template_code == 'AEL'){
+            var domElementANSWER = $('<div class="answer"></div>');
+        }
+        
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
         
         var objGroups_currentPiece = {};
@@ -98,9 +103,6 @@ var DomCobject = function(cobject){
             // ASK = Múltiplo de 2 ; ANSWER = Múltiplo de 3
             var newIdGroup = (group_split[1]===undefined) ? (self.id.piece*(group_split[0]))*2 : (self.id.piece*(group_split[0]))*3 +'_1';
             eval("objGroups_currentPiece._"+newIdGroup+" = elements_group;");
-            
-            // console.log(groupsPiece[self.id.piece][current_group]);
-            // groupsPiece[self.id.piece][current_group] = elements_group;
             
             var domTypeGroup="";
             var domGroup="";
@@ -136,29 +138,31 @@ var DomCobject = function(cobject){
         objGroups_currentPiece.istrue = null;
         self.mainPieces[self.id.piece] = objGroups_currentPiece;
         self.domPiece.append(domElementASK);
-        self.domPiece.append(domElementANSWER);      
+        if(self.cobject.template_code == 'AEL'){
+            self.domPiece.append(domElementANSWER); 
+        }
               
         return self.domPiece;
     }
     
     
     //Embaralhar qualquer Array
-//    this.shuffleArray = function (array) {
-//        var counter = array.length;
-//        var temp,index;
-//        // Percorrer os elementos do Array do > para o <
-//        while (counter > 0) {
-//            //Obter um Random Index
-//            index = Math.floor(Math.random() * counter);
-//            counter--;
-//            // E da um swap entre o index e o último count
-//            temp = array[counter];
-//            array[counter] = array[index];
-//            array[index] = temp;
-//        }
-//
-//        return array;
-//    }
+    //    this.shuffleArray = function (array) {
+    //        var counter = array.length;
+    //        var temp,index;
+    //        // Percorrer os elementos do Array do > para o <
+    //        while (counter > 0) {
+    //            //Obter um Random Index
+    //            index = Math.floor(Math.random() * counter);
+    //            counter--;
+    //            // E da um swap entre o index e o último count
+    //            temp = array[counter];
+    //            array[counter] = array[index];
+    //            array[index] = temp;
+    //        }
+    //
+    //        return array;
+    //    }
     
 
     this.buildEnum = function(){
@@ -171,6 +175,34 @@ var DomCobject = function(cobject){
     }
 
     this.buildElement_MTE = function(){
+        //Editar for MTE
+        var html = "";
+        var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
+        if(currentElement.type == 'multimidia') {
+            var strBuild_library_type = "";
+            var properties = "var properties = {";
+            $.each(currentElement.generalProperties, function(i,item){
+                if(item['name']=='library_type') {
+                    strBuild_library_type="build_"+item['value'];
+                }else{
+                    properties+= "'"+item['name'] +"':'"+ item['value']+"',";
+                }
+            });
+            properties+="};";
+            
+            html+= eval('self.'+strBuild_library_type+'("'+properties+'");');
+            
+        }else if(currentElement.type == 'text'){
+            var strBuild_text = "";
+            var properties = "var properties = {";
+            $.each(currentElement.generalProperties, function(i,item){
+                properties+= "'"+item['name'] +"':'"+ item['value']+"',";
+            });
+            properties+="};";
+            html+= self.build_text(properties);
+        }   
+        self.domElement = $('<li class="element" id="'+self.id.element+'">'+html+'</li>');
+        return self.domElement;
     }
             
     this.buildElement_AEL = function(){

@@ -71,5 +71,10 @@ fieldset{
     clear:both;
 }
 
+.message{
+    float:right;
+    font-weight: bold;
+}
+
 
 

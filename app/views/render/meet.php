@@ -41,7 +41,7 @@ and open the template in the editor.
         var newMeet = new Meet(unityfather,options);
         $('#head_meet').append(newMeet.headMeet());
         
-        var CobjectID = 999;
+        var CobjectID = 1004;
         $.ajax({
             type: "POST",
             url: "/render/loadcobject",
@@ -86,9 +86,7 @@ and open the template in the editor.
     <body id="synapse">
         <div id="head_meet">
         </div>
-        <div id="register_student_canvas">
-        </div>
-        <div id="error"> 
+        <div id="message"> 
         </div>
         <div id="render_canvas">
         </div>

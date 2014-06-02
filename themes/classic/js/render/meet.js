@@ -7,6 +7,7 @@ this.Meet = function(unityfather, options){
     NAME_ACTOR = 'Aluno';
     DEFAULT_MEET_TYPE = 1; //Atividade = 1 ; Treino = 2
     MAX_ELEMENT_PER_PIECE = 5;
+    FINALIZE_ACTIVITY = "Finalizar Atividade";
     //================
     var self = this;
     this.domCobjects = null;
@@ -55,6 +56,7 @@ this.Meet = function(unityfather, options){
     this.init_Common = function(){
         //Embaralha os gropos de Elementos
         $('div[group]').closest('div.ask, div.answer').shuffle();
+        console.log(' OK! ');
         $('.pieceset, .piece, #nextPiece').hide();
         $('#begin_activity').on('click', function(){
             $(this).hide();
@@ -84,7 +86,7 @@ this.Meet = function(unityfather, options){
                     currentScreen.hide();
                     var nextScreen = currentScreen.next();
                     
-                    if(nextScreen!=0) {
+                    if(nextScreen.size()!=0) {
                         nextScreen.addClass('currentScreen');
                         nextScreen.show();
                         nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
@@ -92,7 +94,8 @@ this.Meet = function(unityfather, options){
                         nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
                     }else{
                         //Finalisou todas as Screen
-                        self.finalizeMeet();
+                        $('#nextPiece').hide();
+                        $('.toolBar').append($('<button id="finalize_activity">'+FINALIZE_ACTIVITY+'</button>'));
                     }
                     
                 }else{
@@ -111,6 +114,14 @@ this.Meet = function(unityfather, options){
             }
             
         });
+        
+        $('#finalize_activity').on('click',function(){
+            self.finalizeMeet();
+        });
+    }
+    
+    this.init_MTE = function(){
+        
     }
     
     this.init_AEL = function(){
@@ -135,7 +146,7 @@ this.Meet = function(unityfather, options){
                     $(this).addClass('last_clicked');
                 }else{
                     $(this).css('opacity','1');
-                    $(this).siblings().show();
+                    $(this).siblings(':not(.ael_clicked)').show();
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
                     $(this).removeClass('ael_clicked');
                     $(this).removeClass('last_clicked');
@@ -276,23 +287,10 @@ this.Meet = function(unityfather, options){
                     
         });
         
+        self.showMessageAnswer(pieceIsTrue);
+        
         return pieceIsTrue;
     //=========================
-            
-    //Salvar o acerto e erro da piece e salva os metadados dos elements no BD
-    //========Cada Elemento Ask ===========
-    //            var elements_length = elements_groupAsk.elements.length;
-    //            var current_element = null;
-    //            for(var i = 0; i < elements_length; i++) {
-    //                current_element =  elements_groupAsk.elements[i];
-    //            };
-    //            //========Cada Elemento Answer===========
-    //            elements_length = elements_groupAnswer.elements.length;
-    //            current_element = null;
-    //            for(var i = 0; i < elements_length; i++) {
-    //                current_element =  elements_groupAnswer.elements[i];
-    //                //console.log(current_element);
-    //            };
            
     }
     //======================
@@ -301,20 +299,26 @@ this.Meet = function(unityfather, options){
     }
     
     this.isset = function (variable){
-        return (typeof variable !== 'undefined' && variable !== null);
+        return (variable !== undefined && variable !== null);
     }
     
-    this.showMessage = function(type){
-        var msg = '';
-        if(type == 'correct'){
-            msg = '<font id="message" class="messagebox messagecorrect">'+MSG_CORRECT+'</font>';
+    this.showMessageAnswer = function(isTrue){
+         if(isTrue){
+            $('#message').show();
+            $('#message').css({
+                'backgroundColor':'green'
+            });
+            $('#message').html(MSG_CORRECT);
+            $('#message').fadeOut(5000);
         }else{
-            msg = '<font id="message" class="messagebox messagewrong" style="">'+MSG_WRONG+'</font>';
+            $('#message').show();
+            $('#message').css({
+                'backgroundColor':'red'
+            });
+            $('#message').html(MSG_WRONG);
+            $('#message').fadeOut(5000);
         }
-        $('.currentScreen').prepend(msg);
-        $('#message').fadeOut(3000,function(){
-            $('#message').remove();
-        });
+        
     }
     
 }
