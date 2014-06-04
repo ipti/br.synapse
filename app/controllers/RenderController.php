@@ -366,13 +366,6 @@ class RenderController extends Controller {
     }
 
     public function actionCompute() {
-        //var_dump($_SESSION);exit();
-//         if (isset($_REQUEST['piece_elementID'])) {
-//            $data['piece_element_id'] = $_REQUEST['piece_elementID'];
-//        }
-//        $data['start_time'] = $_REQUEST['startTime'];
-//        $data['final_time'] = $_REQUEST['finalTime'];
-        
         $perf = new PeformanceActor();
         $data['piece_id'] = $_REQUEST['pieceID'];
         $data['group_id'] = (isset($_REQUEST['groupID'])) ? $_REQUEST['groupID']: NULL;

@@ -64,9 +64,6 @@ and open the template in the editor.
                  newMeet.beginEvents();
                 // Render Ready!
                  
-                 
-                 
-                 
                 //Carregar o Script de eventos, após a construção do html dos cobjects
                 //                 $.getScript("<?php // echo Yii::app()->theme->baseUrl; ?>/js/render/events.js").done(function(script, textStatus) {
                 //             });
@@ -78,9 +75,7 @@ and open the template in the editor.
     }); 
     
 </script>
-<html>
-    <head>
-        <title></title>
+        <title>Render</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body id="synapse">

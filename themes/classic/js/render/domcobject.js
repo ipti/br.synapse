@@ -103,7 +103,6 @@ var DomCobject = function(cobject){
             // ASK = Múltiplo de 2 ; ANSWER = Múltiplo de 3
             var newIdGroup = (group_split[1]===undefined) ? (self.id.piece*(group_split[0]))*2 : (self.id.piece*(group_split[0]))*3 +'_1';
             eval("objGroups_currentPiece._"+newIdGroup+" = elements_group;");
-            
             var domTypeGroup="";
             var domGroup="";
             if(current_group.split('_').length==1){
@@ -115,6 +114,7 @@ var DomCobject = function(cobject){
             }
             var possibleGroup = domTypeGroup.find('div[group="'+newIdGroup+'"]');
             var isNewGroup = (possibleGroup.size() == 0);
+            
             if(isNewGroup){
                 // Novo Grupo
                 domGroup =$('<div group="'+newIdGroup+'" class="'+self.cobject.template_code+' group" ><div>'); 
@@ -175,34 +175,7 @@ var DomCobject = function(cobject){
     }
 
     this.buildElement_MTE = function(){
-        //Editar for MTE
-        var html = "";
-        var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
-        if(currentElement.type == 'multimidia') {
-            var strBuild_library_type = "";
-            var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function(i,item){
-                if(item['name']=='library_type') {
-                    strBuild_library_type="build_"+item['value'];
-                }else{
-                    properties+= "'"+item['name'] +"':'"+ item['value']+"',";
-                }
-            });
-            properties+="};";
-            
-            html+= eval('self.'+strBuild_library_type+'("'+properties+'");');
-            
-        }else if(currentElement.type == 'text'){
-            var strBuild_text = "";
-            var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function(i,item){
-                properties+= "'"+item['name'] +"':'"+ item['value']+"',";
-            });
-            properties+="};";
-            html+= self.build_text(properties);
-        }   
-        self.domElement = $('<li class="element" id="'+self.id.element+'">'+html+'</li>');
-        return self.domElement;
+       return self.buildElement_AEL();
     }
             
     this.buildElement_AEL = function(){
