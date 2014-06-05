@@ -209,6 +209,8 @@ var DomCobject = function(cobject){
     }
             
     this.buildElement_PRE = function(){
+       var html_Answer = "<input type='text' class='text' >";
+       return html_Answer;
     }
             
     this.buildElement_TXT = function(){

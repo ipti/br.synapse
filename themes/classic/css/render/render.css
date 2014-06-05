@@ -75,6 +75,10 @@ fieldset{
     float:right;
     font-weight: bold;
 }
+input.text{
+    height: 30px;
+    width: 400px;
+}
 
 
 
