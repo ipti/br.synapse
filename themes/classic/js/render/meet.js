@@ -76,9 +76,12 @@ this.Meet = function(unityfather, options){
             if(self.domCobjects.cobject.template_code == 'PRE') {
                 self.isCorrectPRE(currentPiece.attr('id'));
             }
-            //Salva a Piece Current no BD
-            //Salva na PerformanceUser
-            self.savePerformanceUsr(currentPiece.attr('id'));
+            
+            //Salva no BD somente se o template for != TXT
+            if(self.domCobjects.cobject.template_code != 'TXT') {
+                //Salva na PerformanceUser
+                self.savePerformanceUsr(currentPiece.attr('id'));
+            }
             
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
@@ -215,6 +218,10 @@ this.Meet = function(unityfather, options){
     this.init_PRE = function(){
         self.init_Common(); 
         
+    }
+    
+    this.init_TXT = function(){
+        self.init_Common();
     }
     //======================
     

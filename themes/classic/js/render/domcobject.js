@@ -214,6 +214,19 @@ var DomCobject = function(cobject){
     }
             
     this.buildElement_TXT = function(){
+        var TXT = $("<p class='element TXT'></p>");
+        var elements_group = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
+        //BUSCAR PROPRIEDADE  = TEXT
+        var idxText = null;
+        for(var i = 0; i < elements_group.elements[0].generalProperties.length; i++){
+            if(elements_group.elements[0].generalProperties[i].name == 'text'){
+                idxText = i;
+                break;
+            }
+        }
+        TXT.append(elements_group.elements[0].generalProperties[idxText].value);
+        
+        return TXT;
     }
             
     // Type Text
