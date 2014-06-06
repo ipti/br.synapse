@@ -244,26 +244,13 @@ function editor () {
         var plus = 'position="'+position+'" ';
         //se estiver setado o novo id
         var str_match = '';
-        if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)) {
-            if(this.isset(idbd)){
-                var match = loaddata['match'];
-                plus += 'idbd="'+idbd+'" updated="'+0+'"  match="' +match+ '"'; 
-            }else{
-                var match = $(tagAdd).attr('group');
-                plus += 'match="' +match+ '"';
-            }
+        //Em todos os templates há um GRUPO de elementos
+        if(this.isset(idbd)){
+            var match = loaddata['match'];
+            plus += 'idbd="'+idbd+'" updated="'+0+'"  match="' +match+ '"'; 
         }else{
-            if(this.isset(idbd)){
-                if(parent.COTemplateTypeIn(parent.TXT)){
-                    plus += 'idbd="'+idbd+'" updated="'+0+'"';   
-                }else{
-                    plus += 'idbd="'+idbd+'" updated="'+0+'"';  
-                }
-            }else{
-                if(parent.COTemplateTypeIn(parent.TXT)){
-                    plus += 'updated="'+0+'"';   
-                } 
-            }
+            var match = $(tagAdd).attr('group');
+            plus += 'match="' +match+ '"';
         }
         
          
@@ -279,10 +266,8 @@ function editor () {
         var html;
         if(parent.COTemplateTypeIn(parent.AEL)){
             html = '<div id="'+ID+'_text" class="text element moptions"'+ plus +'>'+ input_text;
-        }else if(parent.COTemplateTypeIn(parent.MTE)){
-            html = '<div id="'+ID+'_text" class="text element"'+ plus +'>'
-            + input_text;
-        }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)){
+        }else if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PRE) 
+            || parent.COTemplateTypeIn(parent.TXT)){
             html = '<div id="'+ID+'_text" class="text element"'+ plus +'>'+ input_text;
         }
         
@@ -293,7 +278,6 @@ function editor () {
         } 
         
         html += '</div>';
-        //$('#'+ID).append(html);
         if(parent.COTemplateTypeIn(parent.AEL)){
             $(tagAdd).append(html);
         }else if(parent.COTemplateTypeIn(parent.MTE)){
@@ -317,9 +301,6 @@ function editor () {
                 var text_div = text_element+'_text';                 
                 //Verificar se foi Alterado em relação a do DB        
                 this.textChanged(txt_BD, txt_NEW, text_element, text_div );
-            //Atualizar a variável totalElementsChanged & Invert É PRECISO AQUI ?
-            //                this.totalElementsChanged = $('.element[updated="1"]').size();
-            //                this.totalElementsNOchanged = $('.element[updated="0"]').size();
             });
               
         }else{     
@@ -706,9 +687,9 @@ function editor () {
          
         var elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
         
-     
-        if(parent.MTE.indexOf(parent.COtemplateType) != -1){
-            var group;
+        if(parent.COTemplateTypeIn(parent.MTE)||parent.COTemplateTypeIn(parent.TXT)||parent.COTemplateTypeIn(parent.PRE)){
+            //Agrupando Elementos
+             var group;
             if(this.isset(match) && match != -1) {
                 // É um load
                 group = match;
@@ -726,7 +707,13 @@ function editor () {
                 }
                 group = next_group;
             }
-            
+        }
+        
+        if(parent.COTemplateTypeIn(parent.TXT) || parent.COTemplateTypeIn(parent.PRE)){
+            var html = $('<div group="'+group+'"></div>');
+        }
+        
+        if(parent.MTE.indexOf(parent.COtemplateType) != -1){
             var newDivMatch = false;
             //Verificar se já existe essa div group 
             if($("#"+parent.currentPiece+" div[group="+group+"]").length == 0){
@@ -753,10 +740,11 @@ function editor () {
                 // Já existe, html = '';
                 html="";
             }
-            
         
         }else if(parent.COTemplateTypeIn(parent.PRE)){
-            html += '<label>'+LABEL_CORRECT+' </label>';
+            $('li[id="'+parent.currentPiece+'"] div.tplPre').append(html);
+        }else if (parent.COTemplateTypeIn(parent.TXT)){
+            $('li[id="'+parent.currentPiece+'"] div.tplTxt').append(html);
         }else if(parent.COTemplateTypeIn(parent.AEL)){
             var group;
             var isResp;
@@ -844,15 +832,13 @@ function editor () {
             }
             
         }
-        
         var tagAdd = "";
         if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)){
             //TagAdd para o load
             tagAdd= $('#'+parent.currentPiece+' div[group='+group+']');
-        }else if(parent.COTemplateTypeIn(parent.PRE)){
-            tagAdd= $('li[id="'+parent.currentPiece+'"] div.tplPre'); 
-        }else if(parent.COTemplateTypeIn(parent.TXT)){
-            tagAdd= $('li[id="'+parent.currentPiece+'"] div.tplTxt'); 
+        }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)){
+            tagAdd= $('li[id="'+parent.currentPiece+'"] div[group='+group+']');  // 
+            console.log(tagAdd);
         }
         
         if(this.isset(loaddata)){
@@ -891,9 +877,12 @@ function editor () {
         }
         
         if((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1)) 
-                && parent.COTemplateTypeIn(parent.MTE)){
-            //É MTE
-            var buttonDelID = "#"+parent.currentPiece+" div[group='"+group+"'] > span > div > input.delElement:eq(0)";
+            ){
+            //É MTE , PRE ou TXT
+            if(parent.COTemplateTypeIn(parent.MTE)){
+                var buttonDelID = "#"+parent.currentPiece+" div[group='"+group+"'] > span > div > input.delElement:eq(0)";
+            }
+            
         }else if(parent.COTemplateTypeIn(parent.AEL)){
             //É AEL
             var buttonDelID = "#"+parent.currentPiece+" div[group='"+group.split('_')[0]+"'] > input.delElement";
@@ -937,7 +926,6 @@ function editor () {
                 }
             });
             $(buttonImageID).click(function(){
-                window.alert("oi");
                 if(!parent.COTemplateTypeIn(parent.AEL)){
                     if(!parent.existID(ElementTextID) ||
                         confirm(MSG_CHANGE_ELEMENT)){
@@ -954,7 +942,6 @@ function editor () {
             });
             // Add SOUND 
             $(buttonSoundID).click(function(){
-                window.alert('ok');
                 if(!parent.COTemplateTypeIn(parent.AEL)){
                     if(!parent.existID(ElementTextID) ||
                         confirm(MSG_CHANGE_ELEMENT)){
@@ -1386,7 +1373,6 @@ function editor () {
                                     //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                                     ElementID = $(this).attr('id');
                                     ElementID_BD = $(this).attr('idBD');
-                                    console.log(ElementID_BD);
                                     //get Atributo position
                                     elementPosition = $(this).attr('position');
                                     var continuar = true;
@@ -1433,8 +1419,7 @@ function editor () {
                                         ElementFlag_Updated = $(this).attr('updated');
                                         Flag = $(this).closest('div[group]').find('input[type="checkbox"]').is(':checked');
                                         
-                                        Match = (parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE)) 
-                                        ? $(this).attr('match') : null;                       
+                                        Match = $(this).attr('match');                       
                                         //declaração das variáveis que serão passadas por ajax
                                         var type;
                                         var value;

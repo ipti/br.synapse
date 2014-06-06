@@ -71,12 +71,12 @@ this.Meet = function(unityfather, options){
             self.restartTimes();
         });
         $('#nextPiece').on('click', function(){
+            var currentPiece = $('.currentPiece');
             //Se for PRE então Verificar ser está correto
             if(self.domCobjects.cobject.template_code == 'PRE') {
                 self.isCorrectPRE(currentPiece.attr('id'));
             }
             //Salva a Piece Current no BD
-            var currentPiece = $('.currentPiece');
             //Salva na PerformanceUser
             self.savePerformanceUsr(currentPiece.attr('id'));
             
@@ -346,12 +346,20 @@ this.Meet = function(unityfather, options){
         return null;
     }
     
-    this.isCorrectPRE = function(){
-        //Stop Here !!
-        //Criar group em todos os templates no editor
-         var elements_group = eval("self.domCobjects.mainPieces[pieceID]._"+groupClicked);
-        //Alterar para comparar com o layertype de todo o grupo
-        var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype == 'Acerto');
+    this.isCorrectPRE = function(pieceID){
+        //PRE somente possuí um grupo em cada piece
+        var elements_group = eval("self.domCobjects.mainPieces[pieceID]._"+(pieceID*2));
+        var digitated_value = $('.currentPiece').find('div[group] input.text').val();
+        var idxText=null;
+        //BUSCAR PROPRIEDADE  = TEXT
+        for(var i = 0; i < elements_group.elements[0].generalProperties.length; i++){
+            if(elements_group.elements[0].generalProperties[i].name == 'text'){
+                idxText = i;
+                break;
+            }
+        }
+        
+        var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() == digitated_value.toUpperCase());
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
         self.domCobjects.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
