@@ -1,9 +1,24 @@
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> -->
+<html> 
+<head>
+    <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="../../../css/reset.css" media="screen, projection" />
+        <link rel="stylesheet" type="text/css" href="../../../css/render/render.css">  
+        <link rel="stylesheet" type="text/css" href="../../../css/print.css" media="print" />
+        <!---[if lt IE 8]>
+        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
+        <![endif]-->
+        <script src="../../../js/jquery/jquery-1.7.2.js"></script>
+        <script src="../../../js/jquery/jquery.ui.core.js"></script>
+        <script src="../../../js/jquery/jquery.ui.widget.js"></script>
+        <script src="../../../js/jquery/jquery.ui.mouse.js"></script>
+        <script src="../../../js/jquery/jquery.ui.draggable.js"></script>
+        <script src="../../../js/jquery/jquery.ui.droppable.js"></script>
+        <script type="text/javascript" src="../../../js/render/meet.js"></script>
+        <script type="text/javascript" src="../../../js/render/cobject.js"></script>
+        <script type="text/javascript" src="../../../js/render/domcobject.js"></script>
+        <script type="text/javascript" src="../../../js/jquery.shuffle.js"></script>
+
 <script>
     
     $(document).ready(function(){
@@ -13,19 +28,19 @@ and open the template in the editor.
         }
         
         //Iniciar Encontro
-        var personage = '<?php echo Yii::app()->session['personage']; ?>';
-        var idActor = '<?php echo Yii::app()->session['idActor']; ?>';
-        var unityIdActor = '<?php echo Yii::app()->session['unityIdActor']; ?>';
+        var personage = '';
+        var idActor = '';
+        var unityIdActor = '';
         //===========================================
-        var unityfather = '<?php echo $_POST["unityfather"]; ?>'; 
-        var org = '<?php echo $_POST["org"][1]; ?>'; 
-        var classe = '<?php echo $_POST["class"]; ?>'; 
-        var actor = '<?php echo $_POST["actor"]; ?>'; 
+        var unityfather = ''; 
+        var org = ''; 
+        var classe = ''; 
+        var actor = ''; 
         
-        //var unityfather_name = '<?php // echo $_POST["unityfather"];  ?>'; 
-        var org_name = '<?php echo $_POST["name_org_1"]; ?>'; 
-        var classe_name = '<?php echo $_POST["name_classes"]; ?>'; 
-        var actor_name = '<?php echo $_POST["name_actors"]; ?>'; 
+        //var unityfather_name = ''; 
+        var org_name = ''; 
+        var classe_name = ''; 
+        var actor_name = ''; 
           
         var options = {
             org: [org,org_name],
@@ -39,7 +54,7 @@ and open the template in the editor.
         $('#head_meet').append(newMeet.headMeet());
         
         var CobjectID = 1011;
-        $.ajax({
+      /*  $.ajax({
             type: "POST",
             url: "/render/loadcobject",
             dataType: 'json',
@@ -67,7 +82,7 @@ and open the template in the editor.
                 // newMeet.getInfoStudent
                   
             }
-        });
+        }); */
         
     }); 
     

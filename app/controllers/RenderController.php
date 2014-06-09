@@ -63,7 +63,7 @@
  * 
  * 
  * 
- @todo 54 - Criar Login para o Render Somente com o JS(CPF + SENHA[Data_Nascimento])
+  @todo 54 - Criar Login para o Render Somente com o JS(CPF + SENHA[Data_Nascimento])
  * 
  * 
   today:6:6;
@@ -74,10 +74,9 @@
 class RenderController extends Controller {
 
     public $layout = 'render';
-
     //MSG for Translate
     public $INVALID_ATTRIBUTES = "Atributes Inválidos";
-    
+
     /**
      * @return array action filters
      */
@@ -330,7 +329,11 @@ class RenderController extends Controller {
     }
 
     public function actionMeet() {
-        $this->render("meet");
+        if (isset($_POST["actor"])) {
+            $this->render("meet");
+        }else{
+            $this->redirect("/render/filter");
+        }
     }
 
     public function actionIndex() {
@@ -371,19 +374,18 @@ class RenderController extends Controller {
     public function actionCompute() {
         $perf = new PeformanceActor();
         $data['piece_id'] = $_REQUEST['pieceID'];
-        $data['group_id'] = (isset($_REQUEST['groupID'])) ? $_REQUEST['groupID']: NULL;
+        $data['group_id'] = (isset($_REQUEST['groupID'])) ? $_REQUEST['groupID'] : NULL;
         $data['actor_id'] = $_REQUEST['actorID'];
         $data['final_time'] = $_REQUEST['time_answer'];
         $data['value'] = (isset($_REQUEST['value'])) ? $_REQUEST['value'] : NULL;
         $data['iscorrect'] = $_REQUEST['isCorrect'];
-        
+
         $perf->setAttributes($data);
-        if($perf->validate()){
-           echo $perf->save();
-        }else{
+        if ($perf->validate()) {
+            echo $perf->save();
+        } else {
             echo $this->INVALID_ATTRIBUTES;
         }
-            
     }
 
     public function actionStage() {
