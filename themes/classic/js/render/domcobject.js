@@ -32,6 +32,7 @@ var DomCobject = function(cobject){
     this.pos = {
         screen:0,
         pieceset:0,
+        elementPS:0,
         piece:0,
         group:0,
         element:0
@@ -39,6 +40,7 @@ var DomCobject = function(cobject){
     this.id = {
         screen:0,
         pieceset:0,
+        elementPS:0,
         piece:0,
         element:0
     }
@@ -76,6 +78,8 @@ var DomCobject = function(cobject){
         self.domPieceSet.append(self.buildInfo_PieceSet()); 
         var fd = $('<fieldset></fieldset>');
         var pieces_length =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces.length;
+        
+        //Construir os pieces desta pieceSet
         for(this.pos.piece = 0; this.pos.piece < pieces_length; this.pos.piece++) {
             self.id.piece =  this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces[this.pos.piece].id;
             fd.append(this.buildPiece());
@@ -173,15 +177,29 @@ var DomCobject = function(cobject){
     this.buildElement = function(){
         return eval("self.buildElement_"+cobject.template_code+"();");
     }
-
+    
+    this.buildElementPS = function(){
+        var isElement_PieceSet = true;
+        return self.buildElement_AEL(isElement_PieceSet);
+    }
+    
     this.buildElement_MTE = function(){
-       return self.buildElement_AEL();
+        return self.buildElement_AEL();
     }
             
-    this.buildElement_AEL = function(){
+    this.buildElement_AEL = function(isElement_PieceSet){
         var html = "";
-        var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
-        if(currentElement.type == 'multimidia') {
+        var elementID = 0;
+        if(self.isset(isElement_PieceSet) && isElement_PieceSet){
+            //É um elemento da PieceSet
+            elementID = self.id.elementPS;
+            var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].elements[self.pos.elementPS];
+        }else{
+            elementID = self.id.element;
+            var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
+        }
+       
+       if(currentElement.type == 'multimidia') {
             var strBuild_library_type = "";
             var properties = "var properties = {";
             $.each(currentElement.generalProperties, function(i,item){
@@ -204,13 +222,14 @@ var DomCobject = function(cobject){
             properties+="};";
             html+= self.build_text(properties);
         }   
-        self.domElement = $('<li class="element" id="'+self.id.element+'">'+html+'</li>');
+        
+        self.domElement = $('<li class="element" id="'+elementID+'">'+html+'</li>');
         return self.domElement;
     }
             
     this.buildElement_PRE = function(){
-       var html_Answer = "<input type='text' class='text' >";
-       return html_Answer;
+        var html_Answer = "<input type='text' class='text' >";
+        return html_Answer;
     }
             
     this.buildElement_TXT = function(){
@@ -225,7 +244,6 @@ var DomCobject = function(cobject){
             }
         }
         TXT.append(elements_group.elements[0].generalProperties[idxText].value);
-        
         return TXT;
     }
             
@@ -323,6 +341,13 @@ var DomCobject = function(cobject){
         var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
         var html = $('<div class="pieceSetInfo"></div>');
         html.append('<span><b>'+description+'</b></span>');
+        var elementPS_length = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements.length;
+        //Construir os elementos dessa PieceSet
+        for(this.pos.elementPS = 0; this.pos.elementPS < elementPS_length; this.pos.elementPS++){
+            self.id.elementPS = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements[this.pos.elementPS].id;
+           html.append(self.buildElementPS()); 
+        }
+        
         return html;
     } 
     
