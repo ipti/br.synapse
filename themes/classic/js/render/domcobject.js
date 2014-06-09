@@ -199,7 +199,7 @@ var DomCobject = function(cobject){
             var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
         }
        
-       if(currentElement.type == 'multimidia') {
+        if(currentElement.type == 'multimidia') {
             var strBuild_library_type = "";
             var properties = "var properties = {";
             $.each(currentElement.generalProperties, function(i,item){
@@ -341,11 +341,13 @@ var DomCobject = function(cobject){
         var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
         var html = $('<div class="pieceSetInfo"></div>');
         html.append('<span><b>'+description+'</b></span>');
-        var elementPS_length = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements.length;
-        //Construir os elementos dessa PieceSet
-        for(this.pos.elementPS = 0; this.pos.elementPS < elementPS_length; this.pos.elementPS++){
-            self.id.elementPS = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements[this.pos.elementPS].id;
-           html.append(self.buildElementPS()); 
+        if(self.isset(this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements)){
+            var elementPS_length = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements.length;
+            //Construir os elementos dessa PieceSet
+            for(this.pos.elementPS = 0; this.pos.elementPS < elementPS_length; this.pos.elementPS++){
+                self.id.elementPS = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements[this.pos.elementPS].id;
+                html.append(self.buildElementPS()); 
+            }
         }
         
         return html;
