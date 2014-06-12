@@ -1,6 +1,6 @@
 <html> 
-<head>
-    <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
+    <head>
+        <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="../../../css/reset.css" media="screen, projection" />
         <link rel="stylesheet" type="text/css" href="../../../css/render/render.css">  
@@ -19,74 +19,151 @@
         <script type="text/javascript" src="../../../js/render/domcobject.js"></script>
         <script type="text/javascript" src="../../../js/jquery.shuffle.js"></script>
 
-<script>
+        <script>
     
-    $(document).ready(function(){
+            $(document).ready(function(){
         
-        if (window.openDatabase) {
-            console.log("Suporta BD-HTML5");
-        }
+                if (window.openDatabase) {
+                    console.log("Suporta BD-HTML5");
+                }
         
-        //Iniciar Encontro
-        var personage = '';
-        var idActor = '';
-        var unityIdActor = '';
-        //===========================================
-        var unityfather = ''; 
-        var org = ''; 
-        var classe = ''; 
-        var actor = ''; 
+                //Iniciar Encontro
+                var personage = '';
+                var idActor = '';
+                var unityIdActor = '';
+                //===========================================
+                var unityfather = ''; 
+                var org = ''; 
+                var classe = ''; 
+                var actor = ''; 
         
-        //var unityfather_name = ''; 
-        var org_name = ''; 
-        var classe_name = ''; 
-        var actor_name = ''; 
+                //var unityfather_name = ''; 
+                var org_name = ''; 
+                var classe_name = ''; 
+                var actor_name = ''; 
           
-        var options = {
-            org: [org,org_name],
-            classe: [classe,classe_name],
-            actor: [actor,actor_name]
-        };
+                var options = {
+                    org: [org,org_name],
+                    classe: [classe,classe_name],
+                    actor: [actor,actor_name]
+                };
          
-        //Passar parâmetro do tipo do Encontro
-        var newMeet = new Meet(unityfather,options);
+                //Passar parâmetro do tipo do Encontro
+                var newMeet = new Meet(unityfather,options);
         
-        $('#head_meet').append(newMeet.headMeet());
+                $('#head_meet').append(newMeet.headMeet());
         
-        var CobjectID = 1011;
-      /*  $.ajax({
-            type: "POST",
-            url: "/render/loadcobject",
-            dataType: 'json',
-            data: {
-                ID:CobjectID
-            },                
-            error: function( jqXHR, textStatus, errorThrown ){
-                $('#img_load').remove();
-                $('html').html(jqXHR.responseText);
-            },
-            success: function(response, textStatus, jqXHR){
-                //Cobjects 
-                var current_cobject = response; 
-                var dump = new DomCobject(current_cobject);
-                //Adicionar o domCobjets no Encontro 'Meet'
-                newMeet.setDomCobjects(dump);
-                $('#render_canvas').html(newMeet.domCobjectBuildAll());
-                //Após criar o DomCobject no Dom 
-                 newMeet.beginEvents();
-                // Render Ready!
+                var CobjectID = 1011;
+       
+                /*  $.ajax({
+                    type: "POST",
+                    url: "/render/loadcobject",
+                    dataType: 'json',
+                    data: {
+                        ID:CobjectID
+                    },                
+                    error: function( jqXHR, textStatus, errorThrown ){
+                        $('#img_load').remove();
+                        $('html').html(jqXHR.responseText);
+                    },
+                    success: function(response, textStatus, jqXHR){
+                        //Cobjects 
+                        var current_cobject = response; 
+                        var dump = new DomCobject(current_cobject);
+                        //Adicionar o domCobjets no Encontro 'Meet'
+                        newMeet.setDomCobjects(dump);
+                        $('#render_canvas').html(newMeet.domCobjectBuildAll());
+                        //Após criar o DomCobject no Dom 
+                         newMeet.beginEvents();
+                        // Render Ready!
                  
-                //Carregar o Script de eventos, após a construção do html dos cobjects
-                //                 $.getScript("<?php // echo Yii::app()->theme->baseUrl; ?>/js/render/events.js").done(function(script, textStatus) {
-                //             });
-                // newMeet.getInfoStudent
+                        //Carregar o Script de eventos, após a construção do html dos cobjects
+                        //                 $.getScript("<?php // echo Yii::app()->theme->baseUrl; ?>/js/render/events.js").done(function(script, textStatus) {
+                        //             });
+                        // newMeet.getInfoStudent
                   
-            }
-        }); */
+                    }
+                }); */
         
-    }); 
+        
+        
+        
+                // - - - - - - - - - -  //
+                // CRIAR BANCO DE DADOS //
+                // - - - - - - - - - -  //
+                var nameBD = "synapseDB"
+                var data_person = [{id:2,nome:"Maria Joaquina",login:"maria@gmail.com",email:"maria@gmail.com"
+                        ,password:"123456",fk_code:null}];
+                
+                // Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
+                window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+                // Não use "var indexedDB = ..." se você não está numa function.
+                // Posteriormente, você pode precisar de referências de algum objeto window.IDB*:
+                window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+                window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+                // (Mozilla nunca usou prefixo nesses objetos, então não precisamos window.mozIDB*)
+        
+                if (!window.indexedDB) {
+                    window.alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
+                }
+                // Abrindo o banco de dados
+                var db;
+                var synapseBD = indexedDB.open(nameBD,3);
+                
+                //Deletar DataBase : indexedDB.deleteDatabase('synapseDB');
+                
+                synapseBD.onerror = function(event) {
+                    alert("Você não habilitou minha web app para usar IndexedDB?!");
+                };
+                synapseBD.onsuccess = function(event) {
+                    db = event.target.result;
+                    db.onerror = function(event) {
+                        // Função genérica para tratar os erros de todos os requests desse banco!
+                        alert("Database error: " + event.target.errorCode);
+                    };
+                    //=============================
+                };
+               
+               //Criar Schemas das tabelas na 1° vez que o banco é criado !!!! 
+                synapseBD.onupgradeneeded = function(event){ 
+                        db = event.target.result;
+                        // cria um objectStore de Person para esse banco
+                        var objectStore = db.createObjectStore("person", { keyPath: "id" });
+                        // Podemos ter nomes duplicados, então não podemos usar como índice único.
+                        objectStore.createIndex("nome", "nome", { unique: false });
+                        objectStore.createIndex("login", "login", { unique: true });
+                        objectStore.createIndex("email", "email", { unique: false });
+                        //===============================================
+                        // Usando transação oncomplete para afirmar que a criação do objectStore 
+                        // é terminada antes de adicionar algum dado nele.
+                       
+                        objectStore.transaction.oncomplete = function(event) {
+                            // Armazenando valores no novo objectStore.
+                            var PersonObjectStore = db.transaction("person", "readwrite").objectStore("person");
+                            for (var i in data_person) {
+                                PersonObjectStore.add(data_person[i]);
+                            }
+                            // Usando transação oncomplete para afirmar que a criação do objectStore 
+                            PersonObjectStore.transaction.oncomplete = function(event) {
+                                //Pesquisar person no banco
+                                var transaction = db.transaction(["person"]); // tipo readonly
+                                var objectStore = transaction.objectStore("clientes");
+                                var request = objectStore.get("2");
+                                request.onerror = function(event) {
+                                    // Tratar erro!
+                                };
+                                request.onsuccess = function(event) {
+                                    // Fazer algo com request.result!
+                                    alert("O nome do 2 é " + request.result.name);
+                                };
+                            }
+                            
+                        }
+                    }
+                
+            }); 
     
-</script>
+        </script>
         <title>Render</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>

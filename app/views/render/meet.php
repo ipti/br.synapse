@@ -38,7 +38,7 @@ and open the template in the editor.
         
         $('#head_meet').append(newMeet.headMeet());
         
-        var CobjectID = 1011;
+        var CobjectID = 1004;
         $.ajax({
             type: "POST",
             url: "/render/loadcobject",
