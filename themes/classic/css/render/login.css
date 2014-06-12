@@ -1,0 +1,54 @@
+body {
+	background: #333333;
+	background-image: -webkit-gradient(radial,center center,0,center center,460,from(#F5DBAF),to(#FEDFA3));
+}
+
+ .bg-login {
+ 	position: absolute;
+ 	height: 100%;
+ 	top: 0;
+ 	overflow: hidden;
+	-webkit-animation: showLogin 4.5s ease;
+ }
+
+ .bg-right {
+ 	right: 0;
+ }
+
+.middle {
+	
+}
+
+#synapse-logo {
+	margin: 5% auto;
+	width: 60%;
+	-webkit-animation: hiddenLogo 4s ease;
+	opacity: 0;
+}
+
+#login-form {
+	width: 20%;
+	margin: 5% auto;
+	-webkit-animation: showLogin 4.5s ease;
+}
+
+.login-label {
+	display: inline-block;
+	width: 20%;
+	text-align: right;
+	vertical-align: middle;
+}
+
+/** Logo Animation **/
+
+@-webkit-keyframes hiddenLogo {
+   0% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@-webkit-keyframes showLogin {
+   0% { opacity: 0; }
+  90% { opacity: 0; }
+  100% { opacity: 1; }
+}
