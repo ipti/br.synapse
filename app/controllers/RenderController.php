@@ -315,7 +315,10 @@ class RenderController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage', 'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout', 'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet'),
+                'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
+                    'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
+                    'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportOffline',
+                    'getSchool'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -331,9 +334,53 @@ class RenderController extends Controller {
     public function actionMeet() {
         if (isset($_POST["actor"])) {
             $this->render("meet");
-        }else{
+        } else {
             $this->redirect("/render/filter");
         }
+    }
+
+    public function actionExportOffline() {
+        if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
+            if (isset($_REQUEST['school'])) {
+                $school = Unity::model()->findByPk($_REQUEST['school']);
+                //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
+               $query = "SELECT act.id, person.name, personage.name, person.login, person.password FROM unity_tree AS ut
+                    INNER JOIN unity AS u ON(ut.secondary_unity_id = u.id)
+                    INNER JOIN organization AS o ON(ut.secondary_organization_id = o.id)
+                    INNER JOIN actor AS act ON(act.unity_id = ut.secondary_unity_id)
+                    INNER JOIN person ON(act.person_id = person.id)
+                    INNER JOIN personage ON(act.personage_id = personage.id)
+                    WHERE (ut.primary_organization_id = " . $school->organization_id . "
+                    AND ut.primary_unity_id = " . $school->id . ") 
+                    OR (ut.secondary_organization_id = " . $school->organization_id . "
+                    AND ut.secondary_unity_id = " . $school->id . "); " ;
+                
+                //Criar Objeto user => actor_id, name, name_personage, login, senha
+                $array_alunos = Yii::app()->db->createCommand($query)->queryAll();
+                var_dump($array_alunos);
+            }
+            
+            if(isset($_REQUEST['cobject_block'])){
+                //Para cada Cobject do bloco armazenar sua "view"
+                
+            }
+            
+        } else {
+            //Carrega a página para exportar para o render Offline
+            $this->render("exportOffline");
+        }
+    }
+
+    public function actionGetSchool() {
+        $allSchool = Unity::model()->findAllByAttributes(array('organization_id' => '2'));
+        $json = array();
+        foreach ($allSchool as $school):
+            $json[$school->id] = $school->name;
+        endforeach;
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($json);
     }
 
     public function actionIndex() {
