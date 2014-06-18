@@ -318,7 +318,7 @@ class RenderController extends Controller {
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportOffline',
-                    'getSchool'),
+                    'getSchool', 'getCobject_blocks', 'getDisciplines'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -344,7 +344,7 @@ class RenderController extends Controller {
             if (isset($_REQUEST['school'])) {
                 $school = Unity::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
-               $query = "SELECT act.id, person.name, personage.name, person.login, person.password FROM unity_tree AS ut
+                $query = "SELECT act.id, person.name, personage.name AS personage, person.login, person.password FROM unity_tree AS ut
                     INNER JOIN unity AS u ON(ut.secondary_unity_id = u.id)
                     INNER JOIN organization AS o ON(ut.secondary_organization_id = o.id)
                     INNER JOIN actor AS act ON(act.unity_id = ut.secondary_unity_id)
@@ -353,18 +353,29 @@ class RenderController extends Controller {
                     WHERE (ut.primary_organization_id = " . $school->organization_id . "
                     AND ut.primary_unity_id = " . $school->id . ") 
                     OR (ut.secondary_organization_id = " . $school->organization_id . "
-                    AND ut.secondary_unity_id = " . $school->id . "); " ;
-                
+                    AND ut.secondary_unity_id = " . $school->id . "); ";
+
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
-                $array_alunos = Yii::app()->db->createCommand($query)->queryAll();
-                var_dump($array_alunos);
+                $array_actors = Yii::app()->db->createCommand($query)->queryAll();
             }
-            
-            if(isset($_REQUEST['cobject_block'])){
+
+            if (isset($_REQUEST['cobject_block'])) {
                 //Para cada Cobject do bloco armazenar sua "view"
-                
+                $cobject_block_id = $_REQUEST['cobject_block'];
+                $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
+                $json_cobjects = array();
+                foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
+                    array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id));
+                endforeach;
             }
+            $json = array();
+            $json['Actors']= $array_actors;
+            $json['Cobjects']= $json_cobjects;
             
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($json);
         } else {
             //Carrega a página para exportar para o render Offline
             $this->render("exportOffline");
@@ -376,6 +387,34 @@ class RenderController extends Controller {
         $json = array();
         foreach ($allSchool as $school):
             $json[$school->id] = $school->name;
+        endforeach;
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($json);
+    }
+
+    public function actionGetDisciplines() {
+        $allDisciplines = ActDiscipline::model()->findAll();
+        $json = array();
+        foreach ($allDisciplines as $discipline):
+            $json[$discipline->id] = $discipline->name;
+        endforeach;
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($json);
+    }
+
+    public function actionGetCobject_blocks() {
+        if (isset($_POST['discipline_id'])) {
+            $blocks = Cobjectblock::model()->findAllByAttributes(array('discipline_id' => $_POST['discipline_id']));
+        } else {
+            $blocks = Cobjectblock::model()->findAll();
+        }
+        $json = array();
+        foreach ($blocks as $block):
+            $json[$block->id] = $block->name;
         endforeach;
         header('Cache-Control: no-cache, must-revalidate');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
