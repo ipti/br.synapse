@@ -105,8 +105,9 @@ this.DB = function(){
             // Falta organization_id & father_id 
             //===========================================
         
+        
             // cria um objectStore de ACTOR
-             objectStore = db.createObjectStore("actor", {
+            objectStore = db.createObjectStore("actor", {
                 keyPath: "id"
             });
             // Podemos ter nomes duplicados, então não podemos usar como índice único.
@@ -119,8 +120,17 @@ this.DB = function(){
             // Falta personage_name & password
             //===============================================
         
+            // cria um objectStore da discipline
+            objectStore = db.createObjectStore("discipline", {
+                keyPath: "id"
+            });
+            objectStore.createIndex("name", "name", {
+                unique: true
+            });
+            //================================================
+        
             // cria um objectStore do cobjectblock
-             objectStore = db.createObjectStore("cobjectblock", {
+            objectStore = db.createObjectStore("cobjectblock", {
                 keyPath: "id"
             });
             // Nome do bloco deve ser Único
@@ -132,10 +142,37 @@ this.DB = function(){
             //================================================
             
             
-        
-        
-        
-        
+            // cria um objectStore do cobject_cobjectblock
+            objectStore = db.createObjectStore("cobject_cobjectblock", {
+                keyPath: "id"
+            });
+            // Faltam cobject_id, cobject_block_id
+            
+            //================================================
+            
+            // cria um objectStore do cobject
+            objectStore = db.createObjectStore("cobject", {
+                keyPath: "id"
+            });
+            // E Falta  o Json de toda a view deste cobject_id
+            //================================================
+            
+            
+            
+            // cria um objectStore do performance_actor
+            objectStore = db.createObjectStore("performance_actor", {
+                keyPath: "id"
+            });
+            // Falta personage_name & password
+            /* piece_id
+            piece_element_id
+            actor_id
+            start_time
+            final_time
+            value
+            iscorrect
+            group_id  */
+            //===============================================
         
         
             // Usando transação oncomplete para afirmar que a criação do objectStore 
