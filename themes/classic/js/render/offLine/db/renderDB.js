@@ -9,9 +9,7 @@ this.DB = function(){
     
     db=null;
     
-    
-    
-    this.openDB = function(alterSchema){
+    this.verifyIDBrownser = function(){
         // Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
         window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
         // Não use "var indexedDB = ..." se você não está numa function.
@@ -19,7 +17,11 @@ this.DB = function(){
         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
         window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
         // (Mozilla nunca usou prefixo nesses objetos, então não precisamos window.mozIDB*)
-        
+        return window.indexedDB;
+    }
+    
+    this.openDBuild = function(alterSchema){
+        window.indexedDB = self.verifyIDBrownser();   
         if (!window.indexedDB) {
             window.alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
         }
@@ -32,7 +34,7 @@ this.DB = function(){
             
         synapseBD.onerror = function(event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
-        };
+        }
         synapseBD.onsuccess = function(event) {
             var db = event.target.result;
             db.onerror = function(event) {
@@ -46,28 +48,15 @@ this.DB = function(){
             }
             //Antes de abrir o banco novamente, fecha essa conexão com o BD
             db.close();
-            open();
+            openBuild();
         }
               
     }
     
     
 
-    var open = function(){
-        // Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
-        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-        // Não use "var indexedDB = ..." se você não está numa function.
-        // Posteriormente, você pode precisar de referências de algum objeto window.IDB*:
-        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-        // (Mozilla nunca usou prefixo nesses objetos, então não precisamos window.mozIDB*)
-        
-        if (!window.indexedDB) {
-            window.alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
-        }
-        
+    var openBuild = function(){
         DBsynapse = window.indexedDB.open(nameBD, DBversion);
-        
         DBsynapse.onerror = function(event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         };
@@ -78,7 +67,6 @@ this.DB = function(){
                 alert("Database error: " + event.target.errorCode);
             };
         }
-        
         //Se for uma nova versão é criado o novo schemma do banco
         self.buildAllSchema();
         
@@ -89,12 +77,12 @@ this.DB = function(){
         
     }
 
+
     this.buildAllSchema = function() {
-        //Deletar DataBase : indexedDB.deleteDatabase('synapseDB');
         //Criar Schemas das tabelas
         DBsynapse.onupgradeneeded = function(event){ 
             var db = event.target.result;
-            // cria um objectStore de ACTOR
+            
             var objectStore = db.createObjectStore("unity", {
                 keyPath: "id"
             });
@@ -163,7 +151,7 @@ this.DB = function(){
             objectStore = db.createObjectStore("performance_actor", {
                 keyPath: "id"
             });
-            // Falta personage_name & password
+            //Faltam
             /* piece_id
             piece_element_id
             actor_id
@@ -190,28 +178,29 @@ this.DB = function(){
     // IMPORT PARA BANCO DE DADOS //
     // - - - - - - - - - -  //
 
-    this.importUserRender = function(){
-    
+    this.importAllDataRender = function(){
         //Unidade e Usuário
-        var data_unity_classroom = [{
+        var data_unity = [{
             id:2,
-            unity_id:"",
-            person_name:"",
-            person_login:"",
-            person_password:"",
-            personage_name:""
+            name:"",
+            organization_id:"",
+            father_id:""
         }];
 
         var data_actor = [{
-            id:2,
-            unity_id:"",
-            person_name:"",
-            person_login:"",
-            person_password:"",
-            personage_name:""
+            id:1,
+            name:"1",
+            personage_name:"a",
+            login:"Jack",
+            password:"123"
         }];
         //======================================
         //Blocos de Atividades para cada Disciplina
+        var data_discipline = [{
+            id:2,
+            name:""
+        }];
+    
         var data_cobjectBlock = [{
             id:2,
             name:"",
@@ -225,92 +214,151 @@ this.DB = function(){
         }];
 
         //Cobjets
-        var data_cobjectBlock = [{
+        var data_cobject = [{
             id:2,
-            name:"",
-            discipline_id:""
+            json:""
         }];
-        var data_cobjectBlock = [{
+        
+        var data_performance_actor = [{
             id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
+            piece_id:"",
+            piece_element_id:"",
+            actor_id:"",
+            start_time:"",
+            final_time:"",
+            value:"",
+            iscorrect:"",
+            group_id:""
         }];
 
 
+        window.indexedDB = self.verifyIDBrownser();   
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                alert("Database error: " + event.target.errorCode);
+            };
+            
+            //Importar as unitys
+            console.log(data_unity);
+            self.importUnity(db,data_unity);
+
+         //Importar os atores
+            self.importActor(db,data_actor);
+
+            //Importar as disciplines
+            self.importDiscipline(db,data_discipline);
+
+            //Importar os cobjectblocks
+            self.importCobjectblock(db,data_cobjectBlock);
+
+            //Importar os cobject_cobjectblocks
+            self.importCobject_cobjectblock(db,data_cobject_cobjectBlock);
+
+            // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
+            //Importar os cobjects
+            self.importCobject(db,data_cobject);
+
+            //Importar os performance_actors
+            self.importPerformance_actor(db,data_performance_actor); 
+            
+            
+        }
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        };
+
+       
+    }
     
+    //////////////////////
+    //Métodos de Import 
+    /////////////////////
+    
+    //Importar as unitys
+    this.importUnity = function(db,data_unity){
+        var UnityObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
+        for (var i in data_unity) {
+            UnityObjectStore.add(data_unity[i]);
+        }
+        UnityObjectStore.transaction.oncomplete = function(event) {
+            console.log("Unitys IMPORTED!");
+        }
+    }
 
-
-        //importando person
+    //Importar os atores
+    this.importActor = function(db,data_actor){
         var ActorObjectStore = db.transaction("actor", "readwrite").objectStore("actor");
         for (var i in data_actor) {
             ActorObjectStore.add(data_actor[i]);
         }
-        // Usando transação oncomplete para afirmar que a criação do objectStore 
-        //Importar Unity
-    
-    
-        //Importar Actor
         ActorObjectStore.transaction.oncomplete = function(event) {
             console.log("Actors IMPORTED!");
-        
-   
         }
     }
+
+    //Importar as disciplines
+    this.importDiscipline = function(db,data_discipline){
+        var DisciplineObjectStore = db.transaction("discipline", "readwrite").objectStore("discipline");
+        for (var i in data_discipline) {
+            DisciplineObjectStore.add(data_discipline[i]);
+        }
+        DisciplineObjectStore.transaction.oncomplete = function(event) {
+            console.log("Disciplines IMPORTED!");
+        }
+    }
+
+    //Importar os cobjectblocks
+    this.importCobjectblock = function(db,data_cobjectBlock){
+        var CobjectblockObjectStore = db.transaction("cobjectblock", "readwrite").objectStore("cobjectblock");
+        for (var i in data_cobjectBlock) {
+            CobjectblockObjectStore.add(data_cobjectBlock[i]);
+        }
+        CobjectblockObjectStore.transaction.oncomplete = function(event) {
+            console.log("Cobjectblocks IMPORTED!");
+        }
+    }
+
+    //Importar os cobject_cobjectblocks
+    this.importCobject_cobjectblock = function(db,data_cobject_cobjectBlock){
+        var Cobject_cobjectBlockObjectStore = db.transaction("cobject_cobjectblock", "readwrite").objectStore("cobject_cobjectblock");
+        for (var i in data_cobject_cobjectBlock) {
+            Cobject_cobjectBlockObjectStore.add(data_cobject_cobjectBlock[i]);
+        }
+        Cobject_cobjectBlockObjectStore.transaction.oncomplete = function(event) {
+            console.log("Cobject_cobjectblocks IMPORTED!");
+        }
+    }
+
+    // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
+    //Importar os cobjects
+    this.importCobject=function(db,data_cobject){
+        var CobjectObjectStore = db.transaction("cobject", "readwrite").objectStore("cobject");
+        for (var i in data_cobject) {
+            CobjectObjectStore.add(data_cobject[i]);
+        }
+        CobjectObjectStore.transaction.oncomplete = function(event) {
+            console.log("Cobjects IMPORTED!");
+        }
+    }
+
+    //Importar os performance_actors
+    this.importPerformance_actor=function(db,data_performance_actor){
+        var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
+        for (var i in data_performance_actor) {
+            Performance_actorObjectStore.add(data_performance_actor[i]);
+        }
+        Performance_actorObjectStore.transaction.oncomplete = function(event) {
+            console.log("Performance_actors IMPORTED!");
+        }
+    }
+            
 
 
     this.isset = function (variable){

@@ -344,7 +344,10 @@ class RenderController extends Controller {
             if (isset($_REQUEST['school'])) {
                 $school = Unity::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
-                $query = "SELECT act.id, person.name, personage.name AS personage, person.login, person.password FROM unity_tree AS ut
+                $query = "SELECT u.id AS unity_id, u.name AS unity_name, 
+                    u.organization_id AS unity_organization_id, u.father_id AS unity_father,
+                    act.id, person.name, personage.name AS personage, person.login, person.password 
+                    FROM unity_tree AS ut
                     INNER JOIN unity AS u ON(ut.secondary_unity_id = u.id)
                     INNER JOIN organization AS o ON(ut.secondary_organization_id = o.id)
                     INNER JOIN actor AS act ON(act.unity_id = ut.secondary_unity_id)
@@ -357,6 +360,9 @@ class RenderController extends Controller {
 
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actors = Yii::app()->db->createCommand($query)->queryAll();
+                
+                var_dump($array_actors[0]["unity_id"]);exit();
+                
             }
 
             if (isset($_REQUEST['cobject_block'])) {
@@ -369,9 +375,9 @@ class RenderController extends Controller {
                 endforeach;
             }
             $json = array();
-            $json['Actors']= $array_actors;
-            $json['Cobjects']= $json_cobjects;
-            
+            $json['Actors'] = $array_actors;
+            $json['Cobjects'] = $json_cobjects;
+
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');
