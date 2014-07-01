@@ -6,8 +6,8 @@
         Purpose of the stylesheet follows.
 */
 .theme{
-  background:#585858;
-  font-family:sans-serif;
+    background:#585858;
+    font-family:sans-serif;
 }
 .cobjects{
     background:#fff;
@@ -25,20 +25,20 @@
     padding-left:25px;
 }
 .cobjectInfo span{
-  color:#585858;
-  text-decoration: none; 
-  list-style: none; 
-  font-size:14px; 
-  text-align: center; 
-  font-weight: bold;
+    color:#585858;
+    text-decoration: none; 
+    list-style: none; 
+    font-size:14px; 
+    text-align: center; 
+    font-weight: bold;
 }
 
 .toolbar {
-  text-align: right;
+    text-align: right;
 }
 
 .cobjects li{
-     list-style-type: none;
+    list-style-type: none;
 }
 
 .pieceset fieldset {
@@ -46,7 +46,7 @@
 }
 
 .element { 
-     display: block;
+    display: block;
 }
 
 .elementImage img { 
@@ -56,7 +56,7 @@
 }
 
 fieldset{
-   border:2px solid gray;
+    border:2px solid gray;
 }
 
 .group{
@@ -79,5 +79,13 @@ input.text{
     width: 400px;
 }
 
+#import_data{
+    text-align: center;
+    margin-top: 100px;
+}
+
+#import_data #enviar{
+ 
+}
 
 

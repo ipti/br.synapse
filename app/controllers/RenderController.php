@@ -317,7 +317,7 @@ class RenderController extends Controller {
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
-                    'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportOffline',
+                    'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
                     'getSchool', 'getCobject_blocks', 'getDisciplines'),
                 'users' => array('*'),
             ),
@@ -339,7 +339,7 @@ class RenderController extends Controller {
         }
     }
 
-    public function actionExportOffline() {
+    public function actionExportToOffline() {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             if (isset($_REQUEST['school'])) {
                 $school = Unity::model()->findByPk($_REQUEST['school']);
@@ -359,12 +359,36 @@ class RenderController extends Controller {
                     AND ut.secondary_unity_id = " . $school->id . "); ";
 
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
-                $array_actors = Yii::app()->db->createCommand($query)->queryAll();
-                
-                var_dump($array_actors[0]["unity_id"]);exit();
-                
+                $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
             }
 
+            //Obter as disciplinas
+            $disciplines = ActDiscipline::model()->findAll();
+            $array_disciplines = array();
+            foreach ($disciplines as $idx => $discipline):
+                $array_disciplines[$idx]['id'] = $discipline->id;
+                $array_disciplines[$idx]['name'] = $discipline->name;
+            endforeach;
+            //Obter o CobjectBloco Selecionado
+            $cobjectBlock = Cobjectblock::model()->findByPk($_REQUEST['cobject_block']);
+            $array_cobjectBlock = array();
+            $array_cobjectBlock['id'] = $cobjectBlock->id;
+            $array_cobjectBlock['name'] = $cobjectBlock->name;
+            $array_cobjectBlock['discipline_id'] = $cobjectBlock->discipline_id;
+
+            //Obter os Cobject_cobjectBlock do CobjectBlock acima
+            $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
+                    array('cobject_block_id' => $array_cobjectBlock['id']));
+            $array_cobject_cobjectBlocks = array();
+
+            foreach ($cobject_cobjectBlocks as $idx => $cobject_cobjectBlock):
+                $array_cobject_cobjectBlocks[$idx]['id'] = $cobject_cobjectBlock->id;
+                $array_cobject_cobjectBlocks[$idx]['cobject_id'] = $cobject_cobjectBlock->cobject_id;
+                $array_cobject_cobjectBlocks[$idx]['cobject_block_id'] = $cobject_cobjectBlock->cobject_block_id;
+            endforeach;
+
+
+            //Obter o Cobject id e json
             if (isset($_REQUEST['cobject_block'])) {
                 //Para cada Cobject do bloco armazenar sua "view"
                 $cobject_block_id = $_REQUEST['cobject_block'];
@@ -374,17 +398,30 @@ class RenderController extends Controller {
                     array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id));
                 endforeach;
             }
+
+
             $json = array();
-            $json['Actors'] = $array_actors;
+            //Tratar Separação no JS
+            $json['ActorsOwnUnity'] = $array_actorsOwnUnity;
+            $json['Disciplines'] = $array_disciplines;
+            $json['CobjectBlock'] = $array_cobjectBlock;
+            $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
             $json['Cobjects'] = $json_cobjects;
 
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-            header('Content-type: application/json');
-            echo json_encode($json);
+            header('Content-type: application/javascript');
+            header('Content-disposition: attachment; filename=renderData'.date('d-m-Y H.i.s').'.js');
+            header('Access-Control-Allow-Origin: *'); 
+            
+            $json_encode="var dataJson = ";
+            $json_encode.=json_encode($json);
+            $json_encode.=";";
+            
+            echo $json_encode;
         } else {
             //Carrega a página para exportar para o render Offline
-            $this->render("exportOffline");
+            $this->render("exportToOffline");
         }
     }
 

@@ -241,7 +241,7 @@ this.DB = function(){
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-                alert("Database error: " + event.target.errorCode);
+                console.log("Database error: " + event.target.errorCode);
             };
             
             //Importar as unitys

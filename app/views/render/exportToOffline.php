@@ -70,7 +70,7 @@
 </head>
 
 <body id="synapse">
-    <form action="exportOffline" method="POST" id="getIDatas" name="getIDatas">
+    <form action="exportToOffline" method="POST" id="getIDatas" name="getIDatas">
         <select id="school" name="school">
         </select>
         <select id="discipline" name="discipline">
