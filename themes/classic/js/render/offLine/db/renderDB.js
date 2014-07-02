@@ -83,46 +83,45 @@ this.DB = function(){
         DBsynapse.onupgradeneeded = function(event){ 
             var db = event.target.result;
             
-            var objectStore = db.createObjectStore("unity", {
+            var unityStore = db.createObjectStore("unity", {
                 keyPath: "id"
             });
             // Podemos ter nomes duplicados, então não podemos usar como índice único.
-            objectStore.createIndex("name", "name", {
+            unityStore.createIndex("name", "name", {
                 unique: false
             });
             // Falta organization_id & father_id 
             //===========================================
         
-        
             // cria um objectStore de ACTOR
-            objectStore = db.createObjectStore("actor", {
+            var actorStore = db.createObjectStore("actor", {
                 keyPath: "id"
             });
             // Podemos ter nomes duplicados, então não podemos usar como índice único.
-            objectStore.createIndex("name", "name", {
+            actorStore.createIndex("name", "name", {
                 unique: false
             });
-            objectStore.createIndex("login", "login", {
+            actorStore.createIndex("login", "login", {
                 unique: true
             });
             // Falta personage_name & password
             //===============================================
         
             // cria um objectStore da discipline
-            objectStore = db.createObjectStore("discipline", {
+            var  disciplineStore = db.createObjectStore("discipline", {
                 keyPath: "id"
             });
-            objectStore.createIndex("name", "name", {
+            disciplineStore.createIndex("name", "name", {
                 unique: true
             });
             //================================================
         
             // cria um objectStore do cobjectblock
-            objectStore = db.createObjectStore("cobjectblock", {
+            var cobjectblockStore = db.createObjectStore("cobjectblock", {
                 keyPath: "id"
             });
             // Nome do bloco deve ser Único
-            objectStore.createIndex("name", "name", {
+            cobjectblockStore.createIndex("name", "name", {
                 unique: true
             });
             // Falta discipline_id
@@ -131,7 +130,7 @@ this.DB = function(){
             
             
             // cria um objectStore do cobject_cobjectblock
-            objectStore = db.createObjectStore("cobject_cobjectblock", {
+            var cobject_cobjectblockStore = db.createObjectStore("cobject_cobjectblock", {
                 keyPath: "id"
             });
             // Faltam cobject_id, cobject_block_id
@@ -139,16 +138,15 @@ this.DB = function(){
             //================================================
             
             // cria um objectStore do cobject
-            objectStore = db.createObjectStore("cobject", {
-                keyPath: "id"
+            var  cobjectStore = db.createObjectStore("cobject", {
+                keyPath: "cobject_id"
             });
             // E Falta  o Json de toda a view deste cobject_id
             //================================================
             
             
-            
             // cria um objectStore do performance_actor
-            objectStore = db.createObjectStore("performance_actor", {
+            var performance_actorStore = db.createObjectStore("performance_actor", {
                 keyPath: "id"
             });
             //Faltam
@@ -165,9 +163,45 @@ this.DB = function(){
         
             // Usando transação oncomplete para afirmar que a criação do objectStore 
             // é terminada antes de adicionar algum dado nele.
-            objectStore.transaction.oncomplete = function(event) {
+            
+            unityStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 7 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas');           
+            }
+            
+            actorStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 7 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas');        
+            }
+            disciplineStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 7 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas');           
+            }
+            cobjectblockStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 7 então contruiu todos os schemas
+                db.close();
                 window.alert('Criou os Schemas');             
             }
+            cobject_cobjectblockStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 7 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas');              
+            }
+            cobjectStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 7 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas');              
+            }
+            performance_actorStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 7 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas'); 
+            }
+            
+            useDatabase(db);
         }
     }
     
@@ -178,59 +212,23 @@ this.DB = function(){
     // IMPORT PARA BANCO DE DADOS //
     // - - - - - - - - - -  //
 
-    this.importAllDataRender = function(){
+    this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
+        ,cobject_cobjectblocks,cobjects){
         //Unidade e Usuário
-        var data_unity = [{
-            id:2,
-            name:"",
-            organization_id:"",
-            father_id:""
-        }];
+        var data_unity = unitys;
 
-        var data_actor = [{
-            id:1,
-            name:"1",
-            personage_name:"a",
-            login:"Jack",
-            password:"123"
-        }];
+        var data_actor = actors;
         //======================================
         //Blocos de Atividades para cada Disciplina
-        var data_discipline = [{
-            id:2,
-            name:""
-        }];
+        var data_discipline = disciplines;
     
-        var data_cobjectBlock = [{
-            id:2,
-            name:"",
-            discipline_id:""
-        }];
+        var data_cobjectBlock = cobjectblock;
 
-        var data_cobject_cobjectBlock = [{
-            id:2,
-            cobject_id:"",
-            cobject_block_id:""
-        }];
+        var data_cobject_cobjectBlock = cobject_cobjectblocks;
 
         //Cobjets
-        var data_cobject = [{
-            id:2,
-            json:""
-        }];
+        var data_cobject = cobjects;
         
-        var data_performance_actor = [{
-            id:2,
-            piece_id:"",
-            piece_element_id:"",
-            actor_id:"",
-            start_time:"",
-            final_time:"",
-            value:"",
-            iscorrect:"",
-            group_id:""
-        }];
-
 
         window.indexedDB = self.verifyIDBrownser();   
         DBsynapse = window.indexedDB.open(nameBD);
@@ -245,10 +243,9 @@ this.DB = function(){
             };
             
             //Importar as unitys
-            console.log(data_unity);
             self.importUnity(db,data_unity);
 
-         //Importar os atores
+            //Importar os atores
             self.importActor(db,data_actor);
 
             //Importar as disciplines
@@ -262,17 +259,17 @@ this.DB = function(){
 
             // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
             //Importar os cobjects
-            self.importCobject(db,data_cobject);
+             self.importCobject(db,data_cobject);
 
             //Importar os performance_actors
-            self.importPerformance_actor(db,data_performance_actor); 
+           // self.importPerformance_actor(db,data_performance_actor); 
             
             
         }
         DBsynapse.onblocked = function(event) {
             // Se existe outra aba com a versão antiga
-            console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-        };
+          console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
 
        
     }
@@ -283,6 +280,7 @@ this.DB = function(){
     
     //Importar as unitys
     this.importUnity = function(db,data_unity){
+        
         var UnityObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
         for (var i in data_unity) {
             UnityObjectStore.add(data_unity[i]);
@@ -339,6 +337,7 @@ this.DB = function(){
     // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
     //Importar os cobjects
     this.importCobject=function(db,data_cobject){
+        console.log(data_cobject);
         var CobjectObjectStore = db.transaction("cobject", "readwrite").objectStore("cobject");
         for (var i in data_cobject) {
             CobjectObjectStore.add(data_cobject[i]);
@@ -359,6 +358,15 @@ this.DB = function(){
         }
     }
             
+
+    function useDatabase(db) {
+        // Esteja certo de que adicionou um evento para notificar se a página muda a versão
+        // Devemos fechar o banco. Isso permite à outra página ser atualizada
+        db.onversionchange = function(event) {
+            db.close();
+            alert("Uma nova versão desta web app está pronta. Atualiza, por favor!");
+        }
+    }
 
 
     this.isset = function (variable){

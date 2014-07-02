@@ -22,17 +22,25 @@
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script type="text/javascript" src="data/json/renderData.js"></script>
         <script>
-    
+                
+                 function existInArray(array, id){
+                    for(var i in array){
+                        if(array[i].id == id){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            
+            
             $(document).ready(function(){
         
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
                 }
                 
-                //Criar Objeto para MAnipulação do Banco
+                //Criar Objeto para Manipulação do Banco
                 var db = new DB();
-                //db.openDB(true);
-                db.importAllDataRender();
                 
                 $('#import').on('click',function(){
                     var unitys = new Array();
@@ -40,19 +48,24 @@
                     
                     //Percorrer todos objetos existentes no ActorsOwnUnity
                     $.each(dataJson.ActorsOwnUnity, function(idx, object){
-                        var tempUnity = new Array();
-                        tempUnity['father'] =  object.unity_father;
-                        tempUnity['id'] =  object.unity_id;
-                        tempUnity['name'] =  object.unity_name;
-                        tempUnity['organization_id'] =  object.unity_organization_id;
-                        unitys.push(tempUnity);
-                        var tempActor = new Array();
-                        tempActor['id'] =  object.id;
-                        tempActor['login'] =  object.login;
-                        tempActor['name'] =  object.name;
-                        tempActor['password'] =  object.password;
-                        tempActor['personage'] =  object.personage;
-                        actors.push(tempActor);
+                        var tempUnity = {};
+                        tempUnity.id =  object.unity_id;
+                        tempUnity.father_id =  object.unity_father;
+                        tempUnity.name =  object.unity_name;
+                        tempUnity.organization_id =  object.unity_organization_id;
+                        if(!existInArray(unitys,tempUnity.id)){
+                            unitys.push(tempUnity);
+                        }
+                        var tempActor = {};
+                        tempActor.id =  object.id;
+                        tempActor.login =  object.login;
+                        tempActor.name =  object.name;
+                        tempActor.password =  object.password;
+                        tempActor.personage_name =  object.personage;
+                         if(!existInArray(actors,tempActor.id)){
+                           actors.push(tempActor);
+                        }
+                        
                     });
                     var disciplines = dataJson.Disciplines;
                     var cobjectblock = dataJson.CobjectBlock;
@@ -60,10 +73,15 @@
                     var cobjects = dataJson.Cobjects;
                     
                     
+                    //2° Importar
+                    db.importAllDataRender(unitys, actors, disciplines, cobjectblock
+                    ,cobject_cobjectblocks,cobjects);
                     
-                    
-                    
-                    
+                });
+                
+                $('#buildAllSchemas').on('click',function(){
+                    //1° Criar
+                    db.openDBuild(true);
                 });
                 
             }); 
@@ -77,6 +95,7 @@
             <p>Para importar novos Dados ao Banco, clique em confirmar</p>
         </div>
         <div id="import_data">
+            <button type="button" id="buildAllSchemas" name="buildAllSchemas" >buildAllSchemas</button>
             <button type="button" id="import" name="import" >Importar</button>
         </div>
     </body>

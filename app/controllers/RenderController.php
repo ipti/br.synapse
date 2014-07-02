@@ -372,13 +372,13 @@ class RenderController extends Controller {
             //Obter o CobjectBloco Selecionado
             $cobjectBlock = Cobjectblock::model()->findByPk($_REQUEST['cobject_block']);
             $array_cobjectBlock = array();
-            $array_cobjectBlock['id'] = $cobjectBlock->id;
-            $array_cobjectBlock['name'] = $cobjectBlock->name;
-            $array_cobjectBlock['discipline_id'] = $cobjectBlock->discipline_id;
+            $array_cobjectBlock[0]['id'] = $cobjectBlock->id;
+            $array_cobjectBlock[0]['name'] = $cobjectBlock->name;
+            $array_cobjectBlock[0]['discipline_id'] = $cobjectBlock->discipline_id;
 
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
-                    array('cobject_block_id' => $array_cobjectBlock['id']));
+                    array('cobject_block_id' => $array_cobjectBlock[0]['id']));
             $array_cobject_cobjectBlocks = array();
 
             foreach ($cobject_cobjectBlocks as $idx => $cobject_cobjectBlock):
