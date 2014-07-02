@@ -1,0 +1,91 @@
+/* 
+    Document   : render.css
+    Created on : Apr 11, 2014, 12:20:18 PM
+    Author     : ipti002
+    Description:
+        Purpose of the stylesheet follows.
+*/
+.theme{
+    background:#585858;
+    font-family:sans-serif;
+}
+.cobjects{
+    background:#fff;
+    padding:10px; 
+    width:100%;
+    clear:both;
+    margin-top:5px;
+}
+.content{
+    padding:25px;
+}
+.cobjectInfo, #head_meet {
+    background:#dbdadd;  
+    color: #0841f3;
+    padding-left:25px;
+}
+.cobjectInfo span{
+    color:#585858;
+    text-decoration: none; 
+    list-style: none; 
+    font-size:14px; 
+    text-align: center; 
+    font-weight: bold;
+}
+
+.toolbar {
+    text-align: right;
+}
+
+.cobjects li{
+    list-style-type: none;
+}
+
+.pieceset fieldset {
+    margin-bottom: 25px;
+}
+
+.element { 
+    display: block;
+}
+
+.elementImage img { 
+    display: block;
+    height: 240px;
+    width:  320px;
+}
+
+fieldset{
+    border:2px solid gray;
+}
+
+.group{
+    float:left;width:340px;border:1px;
+}
+
+.ask{
+    clear:both;
+}
+.answer{
+    clear:both;
+}
+
+.message{
+    float:right;
+    font-weight: bold;
+}
+input.text{
+    height: 30px;
+    width: 400px;
+}
+
+#import_data{
+    text-align: center;
+    margin-top: 100px;
+}
+
+#import_data #enviar{
+ 
+}
+
+
