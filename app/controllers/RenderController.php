@@ -76,6 +76,11 @@ class RenderController extends Controller {
     public $layout = 'render';
     //MSG for Translate
     public $INVALID_ATTRIBUTES = "Atributes Inválidos";
+    //
+    private $tempArchiveZipMultiMedia = null;
+    private $tempArchiveZipimage = null;
+    private $tempArchiveZipsound = null;
+    private $dir_library = "/rsc/library/";
 
     /**
      * @return array action filters
@@ -124,13 +129,15 @@ class RenderController extends Controller {
         exit;
     }
 
-    public function cobjectbyid($cobject_id) {
+    public function cobjectbyid($cobject_id, $buildZipMultimedia) {
 
         /**
          * RECONSTRUIR TUDO PARA DO PONTO DE VISTA DE SEMATICA FICA EXATAMENTE IDENTICO A ESTRUTURA QUE O RENDER PRECISARÁ, REMOVENDO DO EDITOR
          * COMPLEXIDADES NO TRATAMENTO DOS ELEMENTOS E AGRUPAMENTO. OU SEJA TRAZER AS REGRAS DE NEGÓCIO DO RENDER PARA AQUI.
          *
          */
+        $buildZipMultimedia = isset($buildZipMultimedia) && $buildZipMultimedia;
+
         $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
         $command = Yii::app()->db->createCommand($sql);
         $command->execute();
@@ -158,7 +165,7 @@ class RenderController extends Controller {
                     foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
                         //build elements of the PieceSet
                         $a5++;
-                        $this->buildJsonElement(true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5]);
+                        $this->buildJsonElement(true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
                     }
 
                     $a4 = -1;
@@ -170,7 +177,7 @@ class RenderController extends Controller {
                         $a5 = (int) -1;
                         foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
                             $a5++;
-                            $this->buildJsonElement(false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5]);
+                            $this->buildJsonElement(false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5], $buildZipMultimedia);
                         }
                     }
                 }
@@ -182,9 +189,10 @@ class RenderController extends Controller {
         }
     }
 
-    private function buildJsonElement($isPiecesetElement, $pieceOrPieceSet_element, &$json, $as) {
+    private function buildJsonElement($isPiecesetElement, $pieceOrPieceSet_element, &$json, $as, $buildZipMultimedia) {
         //Begin Function Element =======================================
         // $gproperties = ELEMENT_PROPERTY + LIBRARY_PROPERTY
+
         $pe_properties = $events = $gproperties = array();
 
         if (!$isPiecesetElement) {
@@ -231,6 +239,12 @@ class RenderController extends Controller {
             $lib = Library::model()->findByAttributes(array('id' => $libid));
             foreach ($lib->libraryProperties as $libproperty) {
                 $gproperties[] = array('name' => $libproperty->property->name, 'value' => $libproperty->value);
+                if ($buildZipMultimedia && $libproperty->property->name == 'src') {
+                    $dir_uploadType = $lib->type->name == 'image' ? $lib->type->name + 's' : $lib->type->name;
+                    $src = $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
+                    eval('$name_temp = $this->tempArchiveZip' . $lib->type->name . ';');
+                    $name_temp->addFile($src);
+                }
             };
             $gproperties[] = array('name' => 'library_type', 'value' => $lib->type->name);
         }
@@ -394,9 +408,37 @@ class RenderController extends Controller {
                 $cobject_block_id = $_REQUEST['cobject_block'];
                 $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
                 $json_cobjects = array();
+
+                //Arquivo ZIP ALL
+                $zipname = 'filesMultimedia_' . date('d-m-Y H.i.s') . '.zip';
+                $this->tempArchiveZipMultiMedia = new ZipArchive;
+                $this->tempArchiveZipMultiMedia->open($zipname, ZipArchive::CREATE);
+                // somente imagens
+                $this->tempArchiveZipimage = new ZipArchive;
+                $this->tempArchiveZipimage->open('image', ZipArchive::CREATE);
+                // somente sons
+                $this->tempArchiveZipsound = new ZipArchive;
+                $this->tempArchiveZipsound->open('sound', ZipArchive::CREATE);
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
-                    array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id));
+                    array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
                 endforeach;
+
+                // Fazer Download no Final
+                //$this->tempArchiveZipMultiMedia->addFile($this->tempArchiveZipimage);
+                // $this->tempArchiveZipMultiMedia->addFile($this->tempArchiveZipsound);
+                $this->tempArchiveZipimage->close();
+                $this->tempArchiveZipsound->close();
+                $this->tempArchiveZipMultiMedia->close();
+
+//                header('Content-Type: application/zip');
+//                header('Content-disposition: attachment; filename=filesMultimedia_' . date('d-m-Y H.i.s') . '.zip');
+//                header('Content-Length: ' . filesize($this->tempArchiveZipMultiMedia));
+//                readfile($this->tempArchiveZipMultiMedia);
+              
+                header('Content-Type: application/zip');  //Stop Here !!!!
+                header('Content-disposition: attachment; filename=Images_' . date('d-m-Y H.i.s') . '.zip');
+                header('Content-Length: ' . filesize($this->tempArchiveZipimage));
+                readfile($this->tempArchiveZipimage);
             }
 
 
@@ -411,13 +453,13 @@ class RenderController extends Controller {
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/javascript');
-            header('Content-disposition: attachment; filename=renderData'.date('d-m-Y H.i.s').'.js');
-            header('Access-Control-Allow-Origin: *'); 
-            
-            $json_encode="var dataJson = ";
+            header('Content-disposition: attachment; filename=renderData' . date('d-m-Y H.i.s') . '.js');
+            header('Access-Control-Allow-Origin: *');
+
+            $json_encode = "var dataJson = ";
             $json_encode.=json_encode($json);
             $json_encode.=";";
-            
+
             echo $json_encode;
         } else {
             //Carrega a página para exportar para o render Offline

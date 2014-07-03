@@ -36,11 +36,15 @@
             $(document).ready(function(){
         
                 if (window.openDatabase) {
-                    console.log("Suporta BD-HTML5");
+                    $('#mensage').html("Suporta BD-HTML5");
                 }
                 
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
+                
+                $('#deleteAllDB').on('click', function(){
+                    indexedDB.deleteDatabase("synapseDB");
+                });
                 
                 $('#import').on('click',function(){
                     var unitys = new Array();
@@ -94,7 +98,9 @@
         <div class="title">
             <p>Para importar novos Dados ao Banco, clique em confirmar</p>
         </div>
+        <div id="mensage"> </div>
         <div id="import_data">
+            <button type="button" id="deleteAllDB"> DELETAR TODO BANCO </button>  
             <button type="button" id="buildAllSchemas" name="buildAllSchemas" >buildAllSchemas</button>
             <button type="button" id="import" name="import" >Importar</button>
         </div>
