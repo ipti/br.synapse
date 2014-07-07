@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript">
         $(document).ready(function(){
-            //Carragar Escolas
+            //Carregar Escolas
             $.ajax({
                 type: "POST",
                 url: "/Render/GetSchool",
@@ -22,7 +22,7 @@
                 }
             });
         
-            //Carragar Disciplinas
+            //Carregar Disciplinas
             $.ajax({
                 type: "POST",
                 url: "/Render/GetDisciplines",

@@ -240,12 +240,12 @@ class RenderController extends Controller {
             foreach ($lib->libraryProperties as $libproperty) {
                 $gproperties[] = array('name' => $libproperty->property->name, 'value' => $libproperty->value);
                 if ($buildZipMultimedia && $libproperty->property->name == 'src') {
-                    $dir_uploadType = $lib->type->name == 'image' ? $lib->type->name + 's' : $lib->type->name;
-                    $src = $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
+                    $dir_uploadType = $lib->type->name == 'image' ? $lib->type->name . 's' : $lib->type->name;
+                    $src = Yii::app()->basePath . "/.." . $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
                     eval('$name_temp = $this->tempArchiveZip' . $lib->type->name . ';');
-                    $name_temp->addFile($src);
+                    $name_temp->addFile($src, '/' . $libproperty->value);
                 }
-            };
+            }
             $gproperties[] = array('name' => 'library_type', 'value' => $lib->type->name);
         }
 
@@ -409,58 +409,72 @@ class RenderController extends Controller {
                 $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
                 $json_cobjects = array();
 
+                $zip_name_image = 'image.zip';
+                $zip_name_sound = 'sound.zip';
                 //Arquivo ZIP ALL
-                $zipname = 'filesMultimedia_' . date('d-m-Y H.i.s') . '.zip';
+                $zipname = 'importRender_' . date('d_m_Y H_i_s') . '.zip';
                 $this->tempArchiveZipMultiMedia = new ZipArchive;
                 $this->tempArchiveZipMultiMedia->open($zipname, ZipArchive::CREATE);
                 // somente imagens
                 $this->tempArchiveZipimage = new ZipArchive;
-                $this->tempArchiveZipimage->open('image', ZipArchive::CREATE);
+                $this->tempArchiveZipimage->open($zip_name_image, ZipArchive::CREATE);
                 // somente sons
                 $this->tempArchiveZipsound = new ZipArchive;
-                $this->tempArchiveZipsound->open('sound', ZipArchive::CREATE);
+                $this->tempArchiveZipsound->open($zip_name_sound, ZipArchive::CREATE);
+
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
                     array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
                 endforeach;
 
-                // Fazer Download no Final
-                //$this->tempArchiveZipMultiMedia->addFile($this->tempArchiveZipimage);
-                // $this->tempArchiveZipMultiMedia->addFile($this->tempArchiveZipsound);
+                //Salva as alterações nos zips
                 $this->tempArchiveZipimage->close();
                 $this->tempArchiveZipsound->close();
+                // Fazer Download no Final
+                if (file_exists($zip_name_image)) {
+                    $this->tempArchiveZipMultiMedia->addFile($zip_name_image);
+                }
+
+                if (file_exists($zip_name_sound)) {
+                    $this->tempArchiveZipMultiMedia->addFile($zip_name_sound);
+                }
+                
+                  //Arquivo Json para adcionar no ZIP
+                    $json = array();
+                    //Tratar Separação no JS
+                    $json['ActorsOwnUnity'] = $array_actorsOwnUnity;
+                    $json['Disciplines'] = $array_disciplines;
+                    $json['CobjectBlock'] = $array_cobjectBlock;
+                    $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
+                    $json['Cobjects'] = $json_cobjects;
+                    $json_encode = "var dataJson = ";
+                    $json_encode.=json_encode($json);
+                    $json_encode.=";";
+                    
+                    $this->tempArchiveZipMultiMedia->addFromString('renderData.js', $json_encode);
+                
+                //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
 
-//                header('Content-Type: application/zip');
-//                header('Content-disposition: attachment; filename=filesMultimedia_' . date('d-m-Y H.i.s') . '.zip');
-//                header('Content-Length: ' . filesize($this->tempArchiveZipMultiMedia));
-//                readfile($this->tempArchiveZipMultiMedia);
-              
-                header('Content-Type: application/zip');  //Stop Here !!!!
-                header('Content-disposition: attachment; filename=Images_' . date('d-m-Y H.i.s') . '.zip');
-                header('Content-Length: ' . filesize($this->tempArchiveZipimage));
-                readfile($this->tempArchiveZipimage);
+
+                if (file_exists($zipname)) {
+
+                    header('Content-type: application/zip');
+                    header('Content-Disposition: attachment; filename="' . $zipname . '"');
+                    readfile($zipname);
+                    if (file_exists($zip_name_image)) {
+                        // Remover o arquivo zip do temp do servidor
+                        unlink($zip_name_image);
+                    }
+                    if (file_exists($zip_name_sound)) {
+                        // Remover o arquivo zip do temp do servidor
+                        unlink($zip_name_sound);
+                    }
+                    //Remover o arquivo zip do temp do servidor
+                    unlink($zipname);
+                }
             }
 
 
-            $json = array();
-            //Tratar Separação no JS
-            $json['ActorsOwnUnity'] = $array_actorsOwnUnity;
-            $json['Disciplines'] = $array_disciplines;
-            $json['CobjectBlock'] = $array_cobjectBlock;
-            $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
-            $json['Cobjects'] = $json_cobjects;
-
-            header('Cache-Control: no-cache, must-revalidate');
-            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-            header('Content-type: application/javascript');
-            header('Content-disposition: attachment; filename=renderData' . date('d-m-Y H.i.s') . '.js');
-            header('Access-Control-Allow-Origin: *');
-
-            $json_encode = "var dataJson = ";
-            $json_encode.=json_encode($json);
-            $json_encode.=";";
-
-            echo $json_encode;
         } else {
             //Carrega a página para exportar para o render Offline
             $this->render("exportToOffline");

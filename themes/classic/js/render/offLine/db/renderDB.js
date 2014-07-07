@@ -72,7 +72,7 @@ this.DB = function(){
         
         DBsynapse.onblocked = function(event) {
             // Se existe outra aba com a versão antiga
-            console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         };
         
     }
@@ -239,7 +239,7 @@ this.DB = function(){
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-                console.log("Database error: " + event.target.errorCode);
+                window.alert("Database error: " + event.target.errorCode);
             };
             
             //Importar as unitys
@@ -259,16 +259,16 @@ this.DB = function(){
 
             // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
             //Importar os cobjects
-             self.importCobject(db,data_cobject);
+            self.importCobject(db,data_cobject);
 
-            //Importar os performance_actors
-           // self.importPerformance_actor(db,data_performance_actor); 
+        //Importar os performance_actors
+        // self.importPerformance_actor(db,data_performance_actor); 
             
             
         }
         DBsynapse.onblocked = function(event) {
             // Se existe outra aba com a versão antiga
-          console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
 
        
@@ -286,7 +286,7 @@ this.DB = function(){
             UnityObjectStore.add(data_unity[i]);
         }
         UnityObjectStore.transaction.oncomplete = function(event) {
-            console.log("Unitys IMPORTED!");
+            window.alert("Unitys IMPORTED!");
         }
     }
 
@@ -297,7 +297,7 @@ this.DB = function(){
             ActorObjectStore.add(data_actor[i]);
         }
         ActorObjectStore.transaction.oncomplete = function(event) {
-            console.log("Actors IMPORTED!");
+            window.alert("Actors IMPORTED!");
         }
     }
 
@@ -308,7 +308,7 @@ this.DB = function(){
             DisciplineObjectStore.add(data_discipline[i]);
         }
         DisciplineObjectStore.transaction.oncomplete = function(event) {
-            console.log("Disciplines IMPORTED!");
+            window.alert("Disciplines IMPORTED!");
         }
     }
 
@@ -319,7 +319,7 @@ this.DB = function(){
             CobjectblockObjectStore.add(data_cobjectBlock[i]);
         }
         CobjectblockObjectStore.transaction.oncomplete = function(event) {
-            console.log("Cobjectblocks IMPORTED!");
+            window.alert("Cobjectblocks IMPORTED!");
         }
     }
 
@@ -330,20 +330,19 @@ this.DB = function(){
             Cobject_cobjectBlockObjectStore.add(data_cobject_cobjectBlock[i]);
         }
         Cobject_cobjectBlockObjectStore.transaction.oncomplete = function(event) {
-            console.log("Cobject_cobjectblocks IMPORTED!");
+            window.alert("Cobject_cobjectblocks IMPORTED!");
         }
     }
 
     // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
     //Importar os cobjects
     this.importCobject=function(db,data_cobject){
-        console.log(data_cobject);
         var CobjectObjectStore = db.transaction("cobject", "readwrite").objectStore("cobject");
         for (var i in data_cobject) {
             CobjectObjectStore.add(data_cobject[i]);
         }
         CobjectObjectStore.transaction.oncomplete = function(event) {
-            console.log("Cobjects IMPORTED!");
+            window.alert("Cobjects IMPORTED!");
         }
     }
 
@@ -354,10 +353,47 @@ this.DB = function(){
             Performance_actorObjectStore.add(data_performance_actor[i]);
         }
         Performance_actorObjectStore.transaction.oncomplete = function(event) {
-            console.log("Performance_actors IMPORTED!");
+            window.alert("Performance_actors IMPORTED!");
         }
     }
             
+            
+    //Pesquisas No Banco        
+    this.login = function(login, senha){
+        window.alert("0");
+        window.indexedDB = self.verifyIDBrownser();   
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                window.alert("Database error: " + event.target.errorCode);
+            }
+            //Tudo ok Então Busca O Actor
+            var Performance_actorObjectStore = db.transaction("performance_actor", "readonly").objectStore("performance_actor");
+            var request = Performance_actorObjectStore.get("8");
+            console.log(request);
+            request.onerror = function(event) {
+            // Tratar erro!
+            }
+            request.onsuccess = function(event) {
+                // Fazer algo com request.result!
+                alert("O nome do SSN 444-44-4444 é " + request.result);
+            }
+            
+            
+        }
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+        
+       
+    }
+      
 
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão

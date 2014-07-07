@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8"> 
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title>Entrar no Synapse</title>
 		<link rel="stylesheet" type="text/css" href="css/reset.css">
-		<link rel="stylesheet" type="text/css" href="css/global.css">
-		<link rel="stylesheet" type="text/css" href="css/login.css">
+		<link rel="stylesheet" type="text/css" href="css/render/global.css">
+		<link rel="stylesheet" type="text/css" href="css/render/login.css">
+		<link rel="stylesheet" type="text/css" href="css/render/fonts.css">
 	</head>
 
 	<body>
-		<div class="bg-login bg-left"><img src="img/background-left.png"></div>
-		<div class="bg-login bg-right"><img src="img/background-right.png"></div>
+		<div class="bg-login bg-left"><!-- <img src="img/background-left.png"> --></div>
+		<div class="bg-login bg-right"><!-- <img src="img/background-right.png"> --></div>
+		<div id="error" class="message"><p>login e/ou senhas incorretos, tente novamente</p></div>
 		<section id="synapse-logo" class="middle">
 			<img src="img/synapse-logo.png">
 		</section>
 		<div class="animacao"></div>
 		<section id="login-form" class="middle">
-			<form method="POST" action="login">
-				<label class="login-label" for="username">Usuário</label>
-				<input type="text" name="username">
-				<label class="login-label" for="username">Senha</label>
-				<input type="text" name="password">
+			<form>
+				<label class="login-label" for="username">login</label>
+				<input class="login-input" type="text" name="username">
+				<label class="login-label" for="username">senha</label>
+				<input class="login-input" type="text" name="password">
+				<input class="login-button" type="button" value="entrar" onclick="showMessage()">
 			</form>
 		</section>
+		<script type="text/javascript">
+			function showMessage() {
+  				document.getElementById('error').style.opacity = "1";
+			}
+		</script>
 	</body>
 </html>
