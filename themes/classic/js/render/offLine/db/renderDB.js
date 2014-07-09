@@ -213,7 +213,7 @@ this.DB = function() {
     // - - - - - - - - - -  //
 
     this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
-            , cobject_cobjectblocks, cobjects) {
+        , cobject_cobjectblocks, cobjects) {
         //Unidade e Usuário
         var data_unity = unitys;
 
@@ -261,8 +261,8 @@ this.DB = function() {
             //Importar os cobjects
             self.importCobject(db, data_cobject);
 
-            //Importar os performance_actors
-            // self.importPerformance_actor(db,data_performance_actor); 
+        //Importar os performance_actors
+        // self.importPerformance_actor(db,data_performance_actor); 
 
 
         }
@@ -359,8 +359,8 @@ this.DB = function() {
 
 
     //Pesquisas No Banco        
-    this.login = function(login, password) {
-        if (self.isset(login) && self.isset(password)) {
+    this.login = function(login, password, callBack) {
+        if (login !== ''  && password !== ''  && self.isset(login) && self.isset(password)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -373,10 +373,10 @@ this.DB = function() {
                     window.alert("Database error: " + event.target.errorCode);
                 }
                 //Tudo ok Então Busca O Actor
-                var Performance_actorObjectStore = db.transaction("actor").objectStore("actor");
-                var requestGet = Performance_actorObjectStore.get(login);
+                var ActorObjectStore = db.transaction("actor").objectStore("actor");
+                var requestGet = ActorObjectStore.get(login);
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     // Fazer algo com request.result!
@@ -398,6 +398,9 @@ this.DB = function() {
                         //Usuário Não encontrado
                         sessionStorage.setItem("authorization", false);
                     }
+                    
+                    //Chama o método callBack
+                    callBack();
                 }
 
             }
@@ -408,6 +411,41 @@ this.DB = function() {
         }else{
             //Usuário ou Senha nulos
             sessionStorage.setItem("authorization", false);
+            //Chama o método callBack
+            callBack();
+        }
+    }
+    
+    //===================
+     this.getCobject = function(cobject_id, callBack) {
+        if (self.isset(cobject_id)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                }
+                //Tudo ok Então Busca O Cobject
+                var cobjectStore = db.transaction("cobject").objectStore("cobject");
+                var requestGet = cobjectStore.get(cobject_id);
+                requestGet.onerror = function(event) {
+                // Tratar erro!
+                }
+                requestGet.onsuccess = function(event) {
+                            var json_cobject = requestGet.result;
+                            callBack(json_cobject);
+                }
+
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
         }
     }
 

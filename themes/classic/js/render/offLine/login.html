@@ -22,7 +22,7 @@
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script>
             if (sessionStorage.getItem("authorization") != null 
-                    && sessionStorage.getItem("authorization") == 'true') {
+                && sessionStorage.getItem("authorization") == 'true') {
                 //Usuário Logado
                 location.href = "meet.html";
             }
@@ -38,23 +38,22 @@
                 $('#entrar').on('click', function() {
                     //Criar Objeto para MAnipulação do Banco
                     var db = new DB();
-                    db.login($('#username').val(), $('#password').val());
-                    var i = 0;
-                    while (sessionStorage.getItem("authorization") == null && i < 1000) {
-                        //do Nothing
-                        i++;
+                    db.login($('#username').val(), $('#password').val(), function(){
                         console.log(sessionStorage.getItem("authorization"));
-                    }
-                    var authorization = sessionStorage.getItem("authorization");
-                    if (authorization == 'true') {
-                        //Usuário Logado
-                        location.href = "meet.html";
-                    }else{
-                        //Remove a sessão do authorization
-                        sessionStorage.removeItem("authorization");
-                        //Usuário ou Senha Incorretos
-                        errorMessage();
-                    }
+                        var authorization = sessionStorage.getItem("authorization");
+                        if (authorization == 'true') {
+                            //Usuário Logado
+                            location.href = "meet.html";
+                        }else{
+                            //Remove a sessão do authorization
+                            sessionStorage.removeItem("authorization");
+                            //Usuário ou Senha Incorretos
+                            errorMessage();
+                        }
+                        
+                    });
+                    
+                    
                 });
 
 

@@ -23,7 +23,6 @@
         <script>
     
             $(document).ready(function(){
-        
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
                 }
@@ -53,43 +52,22 @@
                 var newMeet = new Meet(unityfather,options);
         
                 $('#head_meet').append(newMeet.headMeet());
-        
-                var CobjectID = 1011;
+                
+                //Criar Objeto para Manipulação do Banco
+                var DB_synapse = new DB();
+                var CobjectID = '1004';
        
-                /*  $.ajax({
-                    type: "POST",
-                    url: "/render/loadcobject",
-                    dataType: 'json',
-                    data: {
-                        ID:CobjectID
-                    },                
-                    error: function( jqXHR, textStatus, errorThrown ){
-                        $('#img_load').remove();
-                        $('html').html(jqXHR.responseText);
-                    },
-                    success: function(response, textStatus, jqXHR){
-                        //Cobjects 
-                        var current_cobject = response; 
-                        var dump = new DomCobject(current_cobject);
-                        //Adicionar o domCobjets no Encontro 'Meet'
-                        newMeet.setDomCobjects(dump);
-                        $('#render_canvas').html(newMeet.domCobjectBuildAll());
-                        //Após criar o DomCobject no Dom 
-                         newMeet.beginEvents();
-                        // Render Ready!
-                 
-                        //Carregar o Script de eventos, após a construção do html dos cobjects
-                        //                 $.getScript("<?php // echo Yii::app()->theme->baseUrl; ?>/js/render/events.js").done(function(script, textStatus) {
-                        //             });
-                        // newMeet.getInfoStudent
-                  
-                    }
-                }); */
-                
-                //Criar Objeto para MAnipulação do Banco
-                var db = new DB();
-                db.login("8",123456);
-                
+                //Cobjects 
+                var json_Cobject = DB_synapse.getCobject(CobjectID, function(json_cobject){
+                    var dump = new DomCobject(json_cobject);
+                    //Adicionar o domCobjets no Encontro 'Meet'
+                    newMeet.setDomCobjects(dump);
+                    $('#render_canvas').html(newMeet.domCobjectBuildAll());
+                    //Após criar o DomCobject no Dom 
+                    newMeet.beginEvents();
+                    // Render Ready!
+                });
+               
                 
             }); 
     
