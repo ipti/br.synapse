@@ -1,10 +1,15 @@
+<!DOCTYPE html>
 <html> 
     <head>
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen, projection" />
-        <link rel="stylesheet" type="text/css" href="css/render/render.css">  
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
         <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+        <link rel="stylesheet" type="text/css" href="css/render/render.css">
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" type="text/css" href="css/render/global.css">
+        <link rel="stylesheet" type="text/css" href="css/render/meet.css">
+        <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
         <!---[if lt IE 8]>
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
         <![endif]-->
@@ -69,15 +74,47 @@
                 });
                
                 
-            }); 
+            });
     
         </script>
         <title>Render</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body id="synapse">
+        <!-- Barra de informações -->
+
+        <!-- Eu coloquei a barra de informações mas os dados inseridos vem do Javascript, acho que você terá que mudar a estrutura dele -->
+
         <div id="head_meet">
+            <div class="info info-name">
+                <p>João José da Silva</p>
+            </div>
+            <div class="info info-time">
+                <img class="info-icon" src="img/icons/clock.png">
+                <p class="info-text">00:00:45</p>
+                <div class="clear"></div>
+            </div>
+            <div class="info info-hits">
+                <img class="info-icon" src="img/icons/error.png">
+                <p class="info-text">3</p>
+                <div class="clear"></div>
+            </div>
+            <div class="info info-erros">
+                <img class="info-icon" src="img/icons/hit.png">
+                <p class="info-text">456</p>
+                <div class="clear"></div>
+            </div>
+            <a class="info-exit" href="#">
+                <img class="info-icon" src="img/icons/exit.png">
+                <p class="info-text">encerrar atendimento</p>
+                <div class="clear"></div>
+            </a>
         </div>
+
+        <button id="info-button">
+            <img class="info-icon" src="img/icons/exit.png">
+        </button>
+
         <div id="message"> 
         </div>
         <div id="render_canvas">

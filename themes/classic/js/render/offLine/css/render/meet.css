@@ -1,0 +1,207 @@
+/** Layout **/
+
+viewport {
+	
+}
+body {
+	margin: 0px;
+	background-color: #D1E0CD;
+	background-image: url(../img/background-texture.png);
+	background-repeat: repeat;
+	font-family: asap, helvetica, arial, sans-serif;
+}
+
+/** Barra de informações **/
+#head_meet {
+	width: 145px;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	padding: 5px;
+	background: #666666;
+	box-shadow: 2px 0px 5px #2C2C2C;
+	border-right: 1px solid #fff;
+	color: #fff;
+	font-size: 20px;
+}
+
+.info {
+	padding: 5px;
+	border-bottom: 1px solid #fff;
+}
+
+.info-name {
+	padding: 30px 0;
+	text-align: center;
+}
+
+.info-icon {
+	float: left;
+	width: 40px;
+}
+
+.info-exit {
+	text-align: center;
+	padding: 5px;
+	border-bottom: none;
+	border-top: 1px solid #fff;
+	position: absolute;
+	bottom: 0;
+	color: #fff;
+	margin-right: 5px;
+}
+
+.info-exit .info-icon {
+	float: none;
+}
+
+.info-text {
+	float: left;
+	padding: 10px;
+}
+
+#info-button {
+	position: fixed;
+	bottom: 115px;
+	left: 156px;
+	padding: 5px;
+	background: #666666;
+	color: #fff;
+	font-size: 20px;
+	border: none;
+	border-radius: 0 7px 7px 0;
+}
+
+/** Nível e Pontos **/
+.score {
+	position: absolute;
+	top: 15px;
+	right: 30px;
+}
+
+.level {
+	float: left;
+	margin-right: 15px;
+}
+
+.points {
+	float: left;
+}
+
+.score-icon {
+	float: left;
+	width: 50px;
+	margin-right: 5px;
+}
+
+.score-number {
+	float: left;
+	font-family: tellural, helvetica, arial, sans-serif;
+	font-weight: bold;
+	font-size: 40px;
+	color: #FBB03B;
+}
+
+/** Pergunta da atividade **/
+.question-container {
+	width: 700px;
+	margin: 0 auto;
+	background: #FBB03B;
+	border-radius: 0 0 5px 5px;
+	padding: 10px;
+	color: #fff;
+}
+
+.question-image-container {
+	width: 50%;
+	float: left;
+	margin-right: 20px;
+}
+
+.question-title {
+	font-size: 35px;
+	line-height: 35px;
+}
+
+/** Respostas **/
+.answer {
+	margin: 80px auto 0;
+	width: 720px;
+	text-align: center;
+}
+
+.answer-ok {
+	vertical-align: middle;
+}
+
+.send-button {
+	background: #ACDD31;
+	border: none;
+	padding: 0px 60px;
+	color: #fff;
+	font-size: 26px;
+	border-radius: 6px;
+	box-shadow: 2px 2px 5px #2C2C2C;
+}
+
+/** Resposta tipo texto **/
+.answer input {
+	margin: 0 0 50px 0;
+	border: 9px solid #51b899;
+	width: 672px;
+	padding: 15px;
+}
+
+
+
+/** Overlay **/
+
+.overlay {
+	background: rgba(255, 255, 255, 0.7);
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+.error {
+	background: #FBB03B;
+}
+
+.success {
+	background: #51b899;
+}
+
+.message-container {
+	width: 350px;
+	margin: 150px auto;
+	text-align: center;
+	font-family: tellural, helvetica, arial, sans-serif;
+	color: #fff;
+	font-size: 36px;
+	padding: 30px;
+	border-radius: 6px;
+	line-height: 44px;
+	box-shadow: 1px 1px 8px #2C2C2C;
+}
+
+.message-icon {
+	width: 60px;
+}
+
+.message-button {
+	border: none;
+	border-radius: 3px;
+	color: #fff;
+	font-family: tellural, helvetica, arial, sans-serif;
+	font-size: 36px;
+	padding: 20px 40px;
+	margin-top: 10px;
+}
+.error .message-button {
+	background: #F18318;
+}
+
+.success .message-button {
+	background: #ACDD31;
+}

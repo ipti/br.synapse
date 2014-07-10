@@ -10,7 +10,6 @@
     font-family:sans-serif;
 }
 .cobjects{
-    background:#fff;
     padding:10px; 
     width:100%;
     clear:both;
@@ -19,7 +18,7 @@
 .content{
     padding:25px;
 }
-.cobjectInfo, #head_meet {
+.cobjectInfo {
     background:#dbdadd;  
     color: #0841f3;
     padding-left:25px;
