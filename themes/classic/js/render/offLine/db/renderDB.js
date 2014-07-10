@@ -147,7 +147,7 @@ this.DB = function() {
 
             // cria um objectStore do performance_actor
             var performance_actorStore = db.createObjectStore("performance_actor", {
-                keyPath: "id"
+                keyPath: "id", autoIncrement:true
             });
             //Faltam
             /* piece_id
@@ -213,7 +213,7 @@ this.DB = function() {
     // - - - - - - - - - -  //
 
     this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
-        , cobject_cobjectblocks, cobjects) {
+            , cobject_cobjectblocks, cobjects) {
         //Unidade e Usuário
         var data_unity = unitys;
 
@@ -261,8 +261,8 @@ this.DB = function() {
             //Importar os cobjects
             self.importCobject(db, data_cobject);
 
-        //Importar os performance_actors
-        // self.importPerformance_actor(db,data_performance_actor); 
+            //Importar os performance_actors
+            // self.importPerformance_actor(db,data_performance_actor); 
 
 
         }
@@ -360,7 +360,7 @@ this.DB = function() {
 
     //Pesquisas No Banco        
     this.login = function(login, password, callBack) {
-        if (login !== ''  && password !== ''  && self.isset(login) && self.isset(password)) {
+        if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -376,7 +376,7 @@ this.DB = function() {
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
                 var requestGet = ActorObjectStore.get(login);
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     // Fazer algo com request.result!
@@ -388,8 +388,8 @@ this.DB = function() {
                             var id = requestGet.result.id;
                             //Armazenar nome do usuário e id_Actor na sessão 
                             sessionStorage.setItem("authorization", true);
-                            sessionStorage.setItem("id_Actor", id);
-                            sessionStorage.setItem("name_Actor", name);
+                            sessionStorage.setItem("id_actor", id);
+                            sessionStorage.setItem("name_actor", name);
                         } else {
                             sessionStorage.setItem("authorization", false);
                         }
@@ -398,7 +398,7 @@ this.DB = function() {
                         //Usuário Não encontrado
                         sessionStorage.setItem("authorization", false);
                     }
-                    
+
                     //Chama o método callBack
                     callBack();
                 }
@@ -408,16 +408,16 @@ this.DB = function() {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
-        }else{
+        } else {
             //Usuário ou Senha nulos
             sessionStorage.setItem("authorization", false);
             //Chama o método callBack
             callBack();
         }
     }
-    
+
     //===================
-     this.getCobject = function(cobject_id, callBack) {
+    this.getCobject = function(cobject_id, callBack) {
         if (self.isset(cobject_id)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
@@ -434,11 +434,11 @@ this.DB = function() {
                 var cobjectStore = db.transaction("cobject").objectStore("cobject");
                 var requestGet = cobjectStore.get(cobject_id);
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
-                            var json_cobject = requestGet.result;
-                            callBack(json_cobject);
+                    var json_cobject = requestGet.result;
+                    callBack(json_cobject);
                 }
 
             }
@@ -447,6 +447,50 @@ this.DB = function() {
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
         }
+    }
+
+
+    //Armazenar a performance
+    this.addPerformance_actor = function(data) {
+        var piece_id = data.piece_id;
+        var actor_id = data.actor_id;
+        var final_time = data.final_time;
+        var value = self.isset(data.value) ? data.value : null;
+        var iscorrect = data.iscorrect;
+        var group_id = self.isset(data.group_id) ? data.group_id : null;
+
+        var data_performance_actor = {
+            'piece_id': piece_id,
+            'group_id': group_id,
+            'actor_id': actor_id,
+            'final_time': final_time,
+            'value': value,
+            'iscorrect': iscorrect
+        };
+
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                }
+                var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
+                Performance_actorObjectStore.add(data_performance_actor);
+                Performance_actorObjectStore.transaction.oncomplete = function(event) {
+                    console.log('Performance Salva !!!! ');
+                }
+
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+
     }
 
 
@@ -460,8 +504,8 @@ this.DB = function() {
     }
 
 
-    this.isset = function(variable){
-        return (typeof variable !== 'undefined' && variable!== null);
+    this.isset = function(variable) {
+        return (typeof variable !== 'undefined' && variable !== null);
     }
 
 }

@@ -21,7 +21,7 @@ var DomCobject = function(cobject){
     this.domPieceSet = '';
     this.domPiece = '';
     this.domElement = '';
-    this.dirLibrary = '/rsc/library';
+    this.dirLibrary = 'data/library';
     var self = this;
     
     //Armazenar Árvore de Peças
@@ -262,7 +262,7 @@ var DomCobject = function(cobject){
     this.build_image = function(properties){
         //Properties : extension, src, width, height
         eval(properties);
-        var src = self.dirLibrary+'/images/'+properties['src']; 
+        var src = self.dirLibrary+'/image/'+properties['src']; 
         var extension = properties['extension']; 
         var library_id = properties['library_id'];  
         var width = properties['width']; 

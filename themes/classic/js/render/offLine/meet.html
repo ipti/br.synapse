@@ -35,17 +35,15 @@
                 var unityfather = ''; 
                 var org = ''; 
                 var classe = ''; 
-                var actor = ''; 
         
                 //var unityfather_name = ''; 
                 var org_name = ''; 
                 var classe_name = ''; 
-                var actor_name = ''; 
           
                 var options = {
                     org: [org,org_name],
                     classe: [classe,classe_name],
-                    actor: [actor,actor_name]
+                    actor: [sessionStorage.getItem('id_actor'),sessionStorage.getItem('name_actor')]
                 };
          
                 //Passar parâmetro do tipo do Encontro
@@ -53,12 +51,10 @@
         
                 $('#head_meet').append(newMeet.headMeet());
                 
-                //Criar Objeto para Manipulação do Banco
-                var DB_synapse = new DB();
                 var CobjectID = '1004';
        
                 //Cobjects 
-                var json_Cobject = DB_synapse.getCobject(CobjectID, function(json_cobject){
+                var json_Cobject = newMeet.DB_synapse.getCobject(CobjectID, function(json_cobject){
                     var dump = new DomCobject(json_cobject);
                     //Adicionar o domCobjets no Encontro 'Meet'
                     newMeet.setDomCobjects(dump);
