@@ -68,8 +68,11 @@
                     newMeet.beginEvents();
                     // Render Ready!
                 });
-               
                 
+                //Atualizar O painel do render
+                $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');
+                $('.info.info-hits .info-text').html(newMeet.peformance_qtd_correct);
+                $('.info.info-erros .info-text').html(newMeet.peformance_qtd_wrong); 
             });
     
         </script>
@@ -83,7 +86,7 @@
 
         <div id="head_meet">
             <div class="info info-name">
-                <p>João José da Silva</p>
+
             </div>
             <div class="info info-time">
                 <img class="info-icon" src="img/icons/clock.png">
@@ -92,12 +95,12 @@
             </div>
             <div class="info info-hits">
                 <img class="info-icon" src="img/icons/error.png">
-                <p class="info-text">3</p>
+                <p class="info-text"></p>
                 <div class="clear"></div>
             </div>
             <div class="info info-erros">
                 <img class="info-icon" src="img/icons/hit.png">
-                <p class="info-text">456</p>
+                <p class="info-text"></p>
                 <div class="clear"></div>
             </div>
             <a class="info-exit" href="#">

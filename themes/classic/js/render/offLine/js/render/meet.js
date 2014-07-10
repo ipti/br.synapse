@@ -21,8 +21,8 @@ this.Meet = function(unityfather, options) {
     //============================
 
     //==== Armazenar a performance do usuário
-    var peformance_qtd_correct = 0;
-    var peformance_qtd_wrong = 0;
+    this.peformance_qtd_correct = 0;
+    this.peformance_qtd_wrong = 0;
     var discipline_id = 0;
     var script_id = 0;
     var start_time = 0;
@@ -48,8 +48,8 @@ this.Meet = function(unityfather, options) {
 
     this.headMeet = function() {
         return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
-                + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
-                + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
+        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
+        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
     }
 
     //    this.verifyMatch(group1, element1ID, group2, element2ID){
@@ -128,10 +128,12 @@ this.Meet = function(unityfather, options) {
                 nextPiece.addClass('currentPiece');
                 nextPiece.show();
             }
+            //Atualiza a contidade de corretos
+            $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
+            $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
 
             // Após salvar, Reinicia o time da Piece e Group
             self.restartTimes();
-
         });
 
         $('#finalize_activity').on('click', function() {
@@ -159,7 +161,7 @@ this.Meet = function(unityfather, options) {
             //Primeiro Verificar se a Piece está certa!
             var pieceID = $(this).closest('.piece').attr('id');
             self.isCorrectMTE(pieceID, $(this).attr('group'));
-            //Somente salva no BD no botão: Próxima Piece
+        //Somente salva no BD no botão: Próxima Piece
         });
 
     }
@@ -206,8 +208,8 @@ this.Meet = function(unityfather, options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -256,6 +258,11 @@ this.Meet = function(unityfather, options) {
 
         //Salvar na performance_User OffLine
         self.DB_synapse.addPerformance_actor(data);
+        if(pieceIsTrue){
+            self.peformance_qtd_correct++;
+        }else{
+            self.peformance_qtd_wrong++;
+        }
 
         self.showMessageAnswer(pieceIsTrue);
         //Salvo com Sucesso !
@@ -278,14 +285,14 @@ this.Meet = function(unityfather, options) {
                     var current_groupMatched = this.groupMatched;
 
                     var data = {
-                            'piece_id': currentPieceID,
-                            // 'piece_elementID':current_pieceElementID,
-                            'group_id': current_group,
-                            'actor_id': self.actor,
-                            'final_time': this.time_answer, //delta T 
-                            'value': "GRP" + current_groupMatched,
-                            'iscorrect': this.ismatch
-                        };
+                        'piece_id': currentPieceID,
+                        // 'piece_elementID':current_pieceElementID,
+                        'group_id': current_group,
+                        'actor_id': self.actor,
+                        'final_time': this.time_answer, //delta T 
+                        'value': "GRP" + current_groupMatched,
+                        'iscorrect': this.ismatch
+                    };
                     //Salvar na performance_User OffLine
                     self.DB_synapse.addPerformance_actor(data);
 

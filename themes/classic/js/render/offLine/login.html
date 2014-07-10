@@ -15,7 +15,6 @@
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
         <script type="text/javascript" src="js/render/meet.js"></script>
-        <script type="text/javascript" src="js/render/cobject.js"></script>
         <script type="text/javascript" src="js/render/domcobject.js"></script>
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
         <!-- Abrir Script do renderDB --> 
@@ -39,7 +38,6 @@
                     //Criar Objeto para MAnipulação do Banco
                     var db = new DB();
                     db.login($('#username').val(), $('#password').val(), function(){
-                        console.log(sessionStorage.getItem("authorization"));
                         var authorization = sessionStorage.getItem("authorization");
                         if (authorization == 'true') {
                             //Usuário Logado
