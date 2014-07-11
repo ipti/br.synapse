@@ -73,6 +73,18 @@
                 $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');
                 $('.info.info-hits .info-text').html(newMeet.peformance_qtd_correct);
                 $('.info.info-erros .info-text').html(newMeet.peformance_qtd_wrong); 
+
+                //Mostrar/Ocultar barra de informações
+                $('#info-button').click(function() {
+                    if ($('#head_meet').is(':visible')) {
+                        $('#head_meet').hide();
+                        $('#info-button').css('left','0');
+                    } else {
+                        $('#head_meet').show();
+                        $('#info-button').css('left','156px');
+                    }
+                });
+
             });
     
         </script>
@@ -110,9 +122,9 @@
             </a>
         </div>
 
-        <button id="info-button">
+        <div id="info-button">
             <img class="info-icon" src="img/icons/exit.png">
-        </button>
+        </div>
 
         <div id="message"> 
         </div>
