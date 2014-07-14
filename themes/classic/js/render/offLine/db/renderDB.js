@@ -374,7 +374,7 @@ this.DB = function() {
                 }
                 //Tudo ok Então Busca O Actor
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
-                var requestGet = ActorObjectStore.get(login);
+                var requestGet = ActorObjectStore.index("login").get(login);
                 requestGet.onerror = function(event) {
                     // Tratar erro!
                 }

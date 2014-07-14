@@ -15,7 +15,7 @@ var DomCobject = function(cobject){
     this.currentPiece = '';
     this.currentElement = '';
     this.domCobject = '';
-    this.dom = $('<div class="cobjects"></div>');
+    this.dom = $('<div class="cobject '+this.cobject.template_code+'" id='+this.cobject.cobject_id+'></div>');
     this.domContent = $('<div class="content"></div>');
     this.domScreen = '';
     this.domPieceSet = '';
@@ -47,8 +47,8 @@ var DomCobject = function(cobject){
 
     this.buildAll = function(){
         self.dom.append(self.buildInfo_Cobject);
-        self.dom.append(self.buildToolBar);
         self.dom.append(self.domContent);
+        self.dom.append(self.buildToolBar);
         for (this.pos.screen = 0; this.pos.screen < this.cobject.screens.length; this.pos.screen++) {
             self.id.screen = this.cobject.screens[this.pos.screen].id;
             self.domContent.append(self.buildScreen());
@@ -276,7 +276,7 @@ var DomCobject = function(cobject){
     this.build_sound = function(properties){
         //Properties : extension, src
         eval(properties);
-        var src = self.dirLibrary+'/audio/'+properties['src']; 
+        var src = self.dirLibrary+'/sound/'+properties['src']; 
         var extension = properties['extension']; 
         var library_id = properties['library_id'];  
         var html = '<span class="elementSound" library_id=' + library_id + '><font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font> \n\
@@ -289,7 +289,7 @@ var DomCobject = function(cobject){
     this.build_txt = function(properties){
         //Properties : extension, src
         eval(properties);
-        var src = self.dirLibrary+'/audio/'+properties['src']; 
+        var src = self.dirLibrary+'/sound/'+properties['src']; 
         var extension = properties['extension']; 
         var library_id = properties['library_id'];  
         var html = '<span class="elementSound" library_id=' + library_id + '><font style="display:block;font-size:9px;">Clique no icone de play para escuta as instruções</font> \n\

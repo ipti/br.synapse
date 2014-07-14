@@ -13,18 +13,9 @@
     width:100%;
     clear:both;
 }
-.content{
-    padding:25px;
-}
+
 .cobjectInfo {
-    width: 700px;
-    margin: 0 auto;
-    background: #FBB03B;
-    border-radius: 0 0 5px 5px;
-    padding: 10px;
-    color: #fff;
-    font-size: 35px;
-    line-height: 35px;
+    display: none;
 }
 
 .cobjectInfo span{
@@ -95,3 +86,13 @@ input.text{
 }
 
 
+.pieceSetInfo {
+    width: 700px;
+    margin: 0 auto;
+    background: #FBB03B;
+    border-radius: 0 0 5px 5px;
+    padding: 10px;
+    color: #fff;
+    font-size: 35px;
+    line-height: 35px;
+}

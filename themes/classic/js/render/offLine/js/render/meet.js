@@ -10,7 +10,8 @@ this.Meet = function(unityfather, options) {
     FINALIZE_ACTIVITY = "Finalizar Atividade";
     //================
     var self = this;
-    this.domCobjects = null;
+    this.currentCobject_id = null;
+    this.domCobjects = new Array();
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     this.org = options.org[0];
     this.org_name = options.org[1];
@@ -35,12 +36,21 @@ this.Meet = function(unityfather, options) {
     this.DB_synapse = new DB();
 
 
-    this.setDomCobjects = function(domCobjects) {
-        self.domCobjects = domCobjects;
+    this.pushDomCobjects = function(domCobjects) {
+        self.domCobjects.push(domCobjects);
     }
-    this.domCobjectBuildAll = function() {
-        return self.domCobjects.buildAll();
+    
+    this.domCobjectBuildAll = function(){
+        var domCobjectBuildAll = '';
+        for each(var domCobject in self.domCobjects){
+            domCobjectBuildAll += domCobject.buildAll();
+        }
+        //Retorno do 1° Cobject
+        var current_Cobject = domCobjectBuildAll.find('.cobject:eq(0)');
+        self.currentCobject_id = current_Cobject.attr('id');
+        return domCobjectBuildAll;
     }
+    
     this.beginEvents = function() {
         //iniciar code_Event dos templates
         eval("self.init_" + self.domCobjects.cobject.template_code + "();");

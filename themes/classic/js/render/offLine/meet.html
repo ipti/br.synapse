@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<script type="text/javascript">
+	if(sessionStorage.getItem("authorization") == null  || sessionStorage.getItem("authorization") == 'false'){
+		location.href = 'login.html';
+	}
+</script>
+
 <html> 
     <head>
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
@@ -20,7 +26,6 @@
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
         <script type="text/javascript" src="js/render/meet.js"></script>
-        <script type="text/javascript" src="js/render/cobject.js"></script>
         <script type="text/javascript" src="js/render/domcobject.js"></script>
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
         <!-- Abrir Script do renderDB --> 
@@ -58,11 +63,11 @@
                 
                 var CobjectID = '1004';
        
-                //Cobjects 
+                //Cobjects STOP HERE !!
                 var json_Cobject = newMeet.DB_synapse.getCobject(CobjectID, function(json_cobject){
                     var dump = new DomCobject(json_cobject);
                     //Adicionar o domCobjets no Encontro 'Meet'
-                    newMeet.setDomCobjects(dump);
+                    newMeet.pushDomCobjects(dump);
                     $('#render_canvas').html(newMeet.domCobjectBuildAll());
                     //Após criar o DomCobject no Dom 
                     newMeet.beginEvents();
@@ -89,7 +94,6 @@
     
         </script>
         <title>Render</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body id="synapse">
         <!-- Barra de informações -->
@@ -106,12 +110,12 @@
                 <div class="clear"></div>
             </div>
             <div class="info info-hits">
-                <img class="info-icon" src="img/icons/error.png">
+                <img class="info-icon" src="img/icons/hit.png">
                 <p class="info-text"></p>
                 <div class="clear"></div>
             </div>
             <div class="info info-erros">
-                <img class="info-icon" src="img/icons/hit.png">
+                <img class="info-icon" src="img/icons/error.png">
                 <p class="info-text"></p>
                 <div class="clear"></div>
             </div>

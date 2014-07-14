@@ -240,7 +240,7 @@ class RenderController extends Controller {
             foreach ($lib->libraryProperties as $libproperty) {
                 $gproperties[] = array('name' => $libproperty->property->name, 'value' => $libproperty->value);
                 if ($buildZipMultimedia && $libproperty->property->name == 'src') {
-                    $dir_uploadType = $lib->type->name == 'image' ? $lib->type->name . 's' : $lib->type->name;
+                    $dir_uploadType = $lib->type->name;
                     $src = Yii::app()->basePath . "/.." . $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
                     eval('$name_temp = $this->tempArchiveZip' . $lib->type->name . ';');
                     $name_temp->addFile($src, '/' . $libproperty->value);
@@ -437,21 +437,21 @@ class RenderController extends Controller {
                 if (file_exists($zip_name_sound)) {
                     $this->tempArchiveZipMultiMedia->addFile($zip_name_sound);
                 }
-                
-                  //Arquivo Json para adcionar no ZIP
-                    $json = array();
-                    //Tratar Separação no JS
-                    $json['ActorsOwnUnity'] = $array_actorsOwnUnity;
-                    $json['Disciplines'] = $array_disciplines;
-                    $json['CobjectBlock'] = $array_cobjectBlock;
-                    $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
-                    $json['Cobjects'] = $json_cobjects;
-                    $json_encode = "var dataJson = ";
-                    $json_encode.=json_encode($json);
-                    $json_encode.=";";
-                    
-                    $this->tempArchiveZipMultiMedia->addFromString('renderData.js', $json_encode);
-                
+
+                //Arquivo Json para adcionar no ZIP
+                $json = array();
+                //Tratar Separação no JS
+                $json['ActorsOwnUnity'] = $array_actorsOwnUnity;
+                $json['Disciplines'] = $array_disciplines;
+                $json['CobjectBlock'] = $array_cobjectBlock;
+                $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
+                $json['Cobjects'] = $json_cobjects;
+                $json_encode = "var dataJson = ";
+                $json_encode.=json_encode($json);
+                $json_encode.=";";
+
+                $this->tempArchiveZipMultiMedia->addFromString('renderData.js', $json_encode);
+
                 //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
 
@@ -473,8 +473,6 @@ class RenderController extends Controller {
                     unlink($zipname);
                 }
             }
-
-
         } else {
             //Carrega a página para exportar para o render Offline
             $this->render("exportToOffline");
