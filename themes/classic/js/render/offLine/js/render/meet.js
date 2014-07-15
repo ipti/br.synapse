@@ -1,3 +1,12 @@
+/**
+ * Classe do Meet
+ * 
+ * @class
+ * 
+ * @param {integer} unityfather
+ * @param {array} options
+ * @returns {Meet}
+ */
 this.Meet = function(unityfather, options) {
     // MGS
     MSG_CORRECT = 'Parabéns, você acertou';
@@ -35,14 +44,24 @@ this.Meet = function(unityfather, options) {
     //Criar Objeto para Manipulação do Banco
     this.DB_synapse = new DB();
 
-
-    this.pushDomCobjects = function(domCobjects) {
+    /**
+     * Efetua o push do domCobjects na array self.domCobjects
+     * 
+     * @param {dom String} domCobjects
+     * @returns {void}
+     */
+    this.pushDomCobjectsobjects = function(domCobjects) {
         self.domCobjects.push(domCobjects);
     }
     
+    /**
+     * Retorna todos os CObjects de self.domCobject em uma string
+     * 
+     * @returns {String.domCobjectBuildAll}
+     */
     this.domCobjectBuildAll = function(){
         var domCobjectBuildAll = '';
-        for each(var domCobject in self.domCobjects){
+        for(var domCobject in self.domCobjects){
             domCobjectBuildAll += domCobject.buildAll();
         }
         //Retorno do 1° Cobject
@@ -51,11 +70,21 @@ this.Meet = function(unityfather, options) {
         return domCobjectBuildAll;
     }
     
+    /**
+     * Inicializa os eventos dos Cobjects
+     * 
+     * @returns {void}
+     */
     this.beginEvents = function() {
         //iniciar code_Event dos templates
         eval("self.init_" + self.domCobjects.cobject.template_code + "();");
     }
 
+    /**
+     * Retorna o cabeçalho do Meet
+     * 
+     * @returns {String}
+     */
     this.headMeet = function() {
         return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
         + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
@@ -65,10 +94,21 @@ this.Meet = function(unityfather, options) {
     //    this.verifyMatch(group1, element1ID, group2, element2ID){
     //        
     //    }
+    
+    /**
+     * Reseta os intervalos de tempo
+     * 
+     * @returns {void}
+     */
     this.restartTimes = function() {
         self.interval_group = self.interval_piece = new Date().getTime();
     }
 
+    /**
+     * Inicializa eventos comuns a todos os templates.
+     * 
+     * @returns {void}
+     */
     this.init_Common = function() {
         //Embaralha os gropos de Elementos
         $('div[group]').closest('div.ask, div.answer').shuffle();
@@ -151,7 +191,11 @@ this.Meet = function(unityfather, options) {
         });
     }
 
-
+    /**
+     * Inicializa eventos do MTE
+     * 
+     * @returns {void}
+     */
     this.init_MTE = function() {
         self.init_Common();
         $('div[group]').on('click', function() {
@@ -175,7 +219,12 @@ this.Meet = function(unityfather, options) {
         });
 
     }
-
+    
+    /**
+     * Inicializa eventos do AEL
+     * 
+     * @returns {void}
+     */
     this.init_AEL = function() {
         // variável de encontro definida no meet.php
         $('div.answer > div[group]').hide();
@@ -229,97 +278,131 @@ this.Meet = function(unityfather, options) {
         });
 
     }
-
+    
+    /**
+     * Inicializa eventos do PRE
+     * 
+     * @returns {void}
+     */
     this.init_PRE = function() {
         self.init_Common();
 
     }
-
+    
+    /**
+     * Inicializa eventos do TXT
+     * 
+     * @returns {void}
+     */
     this.init_TXT = function() {
         self.init_Common();
     }
     //======================
 
     //Salvar PermanceUser
+    /**
+     * Salva a performace do usuário no banco. Retorna falso caso haja algum erro.
+     * 
+     * @returns {boolean}
+     */
     this.savePerformanceUsr = function(currentPieceID) {
-        //Obtem o intervalo de resolução da Piece
-        self.interval_piece = (new Date().getTime() - self.interval_piece);
-        //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
-        // e a armazena no objeto piece.isCorrect da piece corrente 
-        if (self.domCobjects.cobject.template_code == 'AEL') {
-            self.saveMatchGroup(currentPieceID);
-        }
-        //Neste ponto o isTrue da Piece está setado
-        //Salva isCorrect da PIECE toda
-        var pieceIsTrue = self.domCobjects.mainPieces[currentPieceID].isCorrect;
-        self.domCobjects.mainPieces[currentPieceID].time_answer = self.interval_piece;
-        var data_default = {
-            'piece_id': currentPieceID,
-            'actor_id': self.actor,
-            'final_time': self.interval_piece, //delta T 
-            'iscorrect': pieceIsTrue
-        };
-        var data = data_default;
-        if (self.domCobjects.cobject.template_code == 'MTE') {
-            // console.log(currentPieceID);
-            //Último grupo clicado da Piece Corrente. Divide por 2 como um grupo ASK
-            data.group_id = ($('.currentPiece .last_clicked').attr('group') / currentPieceID) / 2;
-        }
-
-        //Salvar na performance_User OffLine
-        self.DB_synapse.addPerformance_actor(data);
-        if(pieceIsTrue){
-            self.peformance_qtd_correct++;
-        }else{
-            self.peformance_qtd_wrong++;
-        }
-
-        self.showMessageAnswer(pieceIsTrue);
-        //Salvo com Sucesso !
-        return true;
-    }
-
-    this.saveMatchGroup = function(currentPieceID) {
-        //Para Cada GRUPO da Piece
-        var pieceIsTrue = true;
-        $.each(self.domCobjects.mainPieces[currentPieceID], function(nome_attr, group) {
-            if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
-                if (self.isset(group.ismatch) && (!group.ismatch)) {
-                    pieceIsTrue = false;
-                }
-                //Salva no BD os MetaDados para cada grupo
-                if (self.isset(this.groupMatched)) {
-                    //Se for um grupo do tipo ASK
-                    var current_group = nome_attr.split('_')[1];
-                    //Armazenar o groupMatched do grupo atual
-                    var current_groupMatched = this.groupMatched;
-
-                    var data = {
-                        'piece_id': currentPieceID,
-                        // 'piece_elementID':current_pieceElementID,
-                        'group_id': current_group,
-                        'actor_id': self.actor,
-                        'final_time': this.time_answer, //delta T 
-                        'value': "GRP" + current_groupMatched,
-                        'iscorrect': this.ismatch
-                    };
-                    //Salvar na performance_User OffLine
-                    self.DB_synapse.addPerformance_actor(data);
-
-                }
-
+        try {
+            //Obtem o intervalo de resolução da Piece
+            self.interval_piece = (new Date().getTime() - self.interval_piece);
+            //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
+            // e a armazena no objeto piece.isCorrect da piece corrente 
+            if (self.domCobjects.cobject.template_code == 'AEL') {
+                self.saveMatchGroup(currentPieceID);
+            }
+            //Neste ponto o isTrue da Piece está setado
+            //Salva isCorrect da PIECE toda
+            var pieceIsTrue = self.domCobjects.mainPieces[currentPieceID].isCorrect;
+            self.domCobjects.mainPieces[currentPieceID].time_answer = self.interval_piece;
+            var data_default = {
+                'piece_id': currentPieceID,
+                'actor_id': self.actor,
+                'final_time': self.interval_piece, //delta T 
+                'iscorrect': pieceIsTrue
+            };
+            var data = data_default;
+            if (self.domCobjects.cobject.template_code == 'MTE') {
+                // console.log(currentPieceID);
+                //Último grupo clicado da Piece Corrente. Divide por 2 como um grupo ASK
+                data.group_id = ($('.currentPiece .last_clicked').attr('group') / currentPieceID) / 2;
             }
 
-        });
-        //Salvo com Sucesso
-        self.domCobjects.mainPieces[currentPieceID].isCorrect = pieceIsTrue;
+            //Salvar na performance_User OffLine
+            self.DB_synapse.addPerformance_actor(data);
+            if (pieceIsTrue) {
+                self.peformance_qtd_correct++;
+            } else {
+                self.peformance_qtd_wrong++;
+            }
 
-        return true;
+            self.showMessageAnswer(pieceIsTrue);
+            //Salvo com Sucesso !
+            return true;
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+    }
+    
+    /**
+     * Salva os metadados da interação do usuário com o sistema.
+     * 
+     * @returns {boolean}
+     */
+    this.saveMatchGroup = function(currentPieceID) {
+        try {
+            //Para Cada GRUPO da Piece
+            var pieceIsTrue = true;
+            $.each(self.domCobjects.mainPieces[currentPieceID], function(nome_attr, group) {
+                if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
+                    if (self.isset(group.ismatch) && (!group.ismatch)) {
+                        pieceIsTrue = false;
+                    }
+                    //Salva no BD os MetaDados para cada grupo
+                    if (self.isset(this.groupMatched)) {
+                        //Se for um grupo do tipo ASK
+                        var current_group = nome_attr.split('_')[1];
+                        //Armazenar o groupMatched do grupo atual
+                        var current_groupMatched = this.groupMatched;
+
+                        var data = {
+                            'piece_id': currentPieceID,
+                            // 'piece_elementID':current_pieceElementID,
+                            'group_id': current_group,
+                            'actor_id': self.actor,
+                            'final_time': this.time_answer, //delta T 
+                            'value': "GRP" + current_groupMatched,
+                            'iscorrect': this.ismatch
+                        };
+                        //Salvar na performance_User OffLine
+                        self.DB_synapse.addPerformance_actor(data);
+
+                    }
+
+                }
+
+            });
+            //Salvo com Sucesso
+            self.domCobjects.mainPieces[currentPieceID].isCorrect = pieceIsTrue;
+
+            return true;
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
     }
 
-
-
-
+    /**
+     * Verifica se esta Correto MTE.
+     * 
+     * @param {integer} pieceID
+     * @param {string} groupClicked
+     * @returns {Boolean}
+     */
     this.isCorrectMTE = function(pieceID, groupClicked) {
         var elements_group = eval("self.domCobjects.mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
@@ -329,6 +412,15 @@ this.Meet = function(unityfather, options) {
         return isCorrect;
     }
 
+    /**
+     * Salva os Metadados no objeto e verifica se o AEL esta correto
+     * 
+     * @param {integer} pieceID
+     * @param {string} groupAskClicked
+     * @param {string} groupAnswerClicked
+     * @param {integer} time_answer
+     * @returns {Boolean} null caso não seja salvo
+     */
     this.isCorrectAEL = function(pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
@@ -354,6 +446,12 @@ this.Meet = function(unityfather, options) {
         return null;
     }
 
+    /**
+     * Verifica se o PRE esta correto
+     * 
+     * @param {integer} pieceID
+     * @returns {Boolean}
+     */
     this.isCorrectPRE = function(pieceID) {
         //PRE somente possuí um grupo em cada piece
         var elements_group = eval("self.domCobjects.mainPieces[pieceID]._" + (pieceID * 2));
@@ -372,15 +470,31 @@ this.Meet = function(unityfather, options) {
         self.domCobjects.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     }
+    
     //======================
+    /**
+     * Deveria finalizar o meet... mas não faz nada.
+     */
     this.finalizeMeet = function() {
 
     }
 
+    /**
+     * Verifica se a variavel esta setada.
+     * 
+     * @param {mixed} variable
+     * @returns {Boolean}
+     */
     this.isset = function(variable) {
         return (variable !== undefined && variable !== null);
     }
 
+    /**
+     * Envia mensagem de Certo ou Errado par ao usuário
+     * 
+     * @param {boolean} isTrue
+     * @returns {void}
+     */
     this.showMessageAnswer = function(isTrue) {
         if (isTrue) {
             $('#message').show();
