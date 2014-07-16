@@ -8,14 +8,22 @@ NEXT_PIECE = "Próxima Atividade >>>>>";
 NEXT_SCREEN = "Próxima Tela >>>>>";
 BEGIN_ACTIVITY = "Iniciar Atividade";
  
-var DomCobject = function(cobject){
+var DomCobject = function(cobject, idx){
     this.cobject = cobject;
+    this.idx = idx;
     this.currentScreen = '';
     this.currentPieceSet = '';
     this.currentPiece = '';
     this.currentElement = '';
     this.domCobject = '';
-    this.dom = $('<div class="cobject '+this.cobject.template_code+'" id='+this.cobject.cobject_id+'></div>');
+    if(this.idx == 0){
+        //O primeiro Cobject
+        this.dom = $('<div class="cobject '+this.cobject.template_code+' currentCobject" id='+this.cobject.cobject_id+'></div>');
+    }else{
+        this.dom = $('<div class="cobject '+this.cobject.template_code+'" id='+this.cobject.cobject_id+'></div>');
+    }
+    
+    
     this.domContent = $('<div class="content"></div>');
     this.domScreen = '';
     this.domPieceSet = '';
@@ -23,7 +31,6 @@ var DomCobject = function(cobject){
     this.domElement = '';
     this.dirLibrary = 'data/library';
     var self = this;
-    
     //Armazenar Árvore de Peças
     //var pieces, 
     this.mainPieces= new Array();
@@ -48,17 +55,19 @@ var DomCobject = function(cobject){
     this.buildAll = function(){
         self.dom.append(self.buildInfo_Cobject);
         self.dom.append(self.domContent);
-        self.dom.append(self.buildToolBar);
+        if(self.idx == 0){
+             self.dom.append(self.buildToolBar);
+        }
         for (this.pos.screen = 0; this.pos.screen < this.cobject.screens.length; this.pos.screen++) {
             self.id.screen = this.cobject.screens[this.pos.screen].id;
             self.domContent.append(self.buildScreen());
-        };
+        }
         return self.dom;
     }
 
     this.buildScreen = function(){
-        if(this.pos.screen == 0){
-            // É a primeira Screen
+        if(self.idx == 0 && this.pos.screen == 0){
+            // É a primeira Screen do cobjectCorrent
             self.domScreen = $('<div class="T_screen currentScreen" id="S'+self.id.screen+'"> \n\
            <button id="begin_activity">'+BEGIN_ACTIVITY+'</button></div>');  
         }else{
@@ -333,7 +342,7 @@ var DomCobject = function(cobject){
     
     this.buildToolBar = function(){
         var html = $('<div class="toolBar"></div>');
-        html.append('<button id="nextPiece">'+ NEXT_PIECE +'</button>');
+        html.append('<button class="nextPiece">'+ NEXT_PIECE +'</button>');
         return html;
     }
       

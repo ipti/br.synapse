@@ -35,7 +35,10 @@
 }
 
 .pieceset fieldset {
-    margin-bottom: 25px;
+    text-align: center;
+    display: table;
+    margin: auto;
+    margin-top: 30px;
 }
 
 #nextPiece, #begin_activity{
@@ -95,4 +98,8 @@ input.text{
     color: #fff;
     font-size: 35px;
     line-height: 35px;
+}
+
+.toolBar {
+    clear: both;
 }
