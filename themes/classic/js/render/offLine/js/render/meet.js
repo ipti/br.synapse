@@ -1,3 +1,12 @@
+/**
+ * Classe do Meet
+ * 
+ * @class
+ * 
+ * @param {integer} unityfather
+ * @param {array} options
+ * @returns {Meet}
+ */
 this.Meet = function(unityfather, options) {
     // MGS
     MSG_CORRECT = 'Parabéns, você acertou';
@@ -40,6 +49,11 @@ this.Meet = function(unityfather, options) {
         self.domCobjects.push(domCobjects);
     }
     
+    /**
+     * Retorna todos os CObjects de self.domCobject em uma string
+     * 
+     * @returns {String.domCobjectBuildAll}
+     */
     this.domCobjectBuildAll = function(){
         var domCobjectBuildAll = $('<div class="cobject_block"></div>');
         for(var idx in self.domCobjects){
@@ -51,6 +65,11 @@ this.Meet = function(unityfather, options) {
         return domCobjectBuildAll;
     }
     
+    /**
+     * Inicializa os eventos dos Cobjects
+     * 
+     * @returns {void}
+     */
     this.beginEvents = function() {
         //iniciar code_Event dos templates
         //Para cada cobject Inicia seus eventos
@@ -67,6 +86,11 @@ this.Meet = function(unityfather, options) {
         
     }
 
+    /**
+     * Retorna o cabeçalho do Meet
+     * 
+     * @returns {String}
+     */
     this.headMeet = function() {
         return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
         + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
@@ -76,10 +100,21 @@ this.Meet = function(unityfather, options) {
     //    this.verifyMatch(group1, element1ID, group2, element2ID){
     //        
     //    }
+    
+    /**
+     * Reseta os intervalos de tempo
+     * 
+     * @returns {void}
+     */
     this.restartTimes = function() {
         self.interval_group = self.interval_piece = new Date().getTime();
     }
 
+    /**
+     * Inicializa eventos comuns a todos os templates.
+     * 
+     * @returns {void}
+     */
     this.init_Common = function() {
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+']';
@@ -178,7 +213,11 @@ this.Meet = function(unityfather, options) {
         });
     }
 
-
+    /**
+     * Inicializa eventos do MTE
+     * 
+     * @returns {void}
+     */
     this.init_MTE = function() {
         // self.init_Common();
         $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div[group]').on('click', function() {
@@ -202,7 +241,12 @@ this.Meet = function(unityfather, options) {
         });
 
     }
-
+    
+    /**
+     * Inicializa eventos do AEL
+     * 
+     * @returns {void}
+     */
     this.init_AEL = function() {
         // variável de encontro definida no meet.php
         $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div.answer > div[group]').hide();
@@ -256,18 +300,33 @@ this.Meet = function(unityfather, options) {
         });
 
     }
-
+    
+    /**
+     * Inicializa eventos do PRE
+     * 
+     * @returns {void}
+     */
     this.init_PRE = function() {
     //  self.init_Common();
 
     }
-
+    
+    /**
+     * Inicializa eventos do TXT
+     * 
+     * @returns {void}
+     */
     this.init_TXT = function() {
     //  self.init_Common();
     }
     //======================
 
     //Salvar PermanceUser
+    /**
+     * Salva a performace do usuário no banco. Retorna falso caso haja algum erro.
+     * 
+     * @returns {boolean}
+     */
     this.savePerformanceUsr = function(currentPieceID) {
         //Obtem o intervalo de resolução da Piece
         self.interval_piece = (new Date().getTime() - self.interval_piece);
@@ -340,9 +399,13 @@ this.Meet = function(unityfather, options) {
         return true;
     }
 
-
-
-
+    /**
+     * Verifica se esta Correto MTE.
+     * 
+     * @param {integer} pieceID
+     * @param {string} groupClicked
+     * @returns {Boolean}
+     */
     this.isCorrectMTE = function(pieceID, groupClicked) {
         var elements_group = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
@@ -352,6 +415,15 @@ this.Meet = function(unityfather, options) {
         return isCorrect;
     }
 
+    /**
+     * Salva os Metadados no objeto e verifica se o AEL esta correto
+     * 
+     * @param {integer} pieceID
+     * @param {string} groupAskClicked
+     * @param {string} groupAnswerClicked
+     * @param {integer} time_answer
+     * @returns {Boolean} null caso não seja salvo
+     */
     this.isCorrectAEL = function(pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
@@ -377,6 +449,12 @@ this.Meet = function(unityfather, options) {
         return null;
     }
 
+    /**
+     * Verifica se o PRE esta correto
+     * 
+     * @param {integer} pieceID
+     * @returns {Boolean}
+     */
     this.isCorrectPRE = function(pieceID) {
         //PRE somente possuí um grupo em cada piece
         var elements_group = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + (pieceID * 2));
@@ -402,14 +480,29 @@ this.Meet = function(unityfather, options) {
     }
     
     //======================
+    /**
+     * Deveria finalizar o meet... mas não faz nada.
+     */
     this.finalizeMeet = function() {
 
     }
 
+    /**
+     * Verifica se a variavel esta setada.
+     * 
+     * @param {mixed} variable
+     * @returns {Boolean}
+     */
     this.isset = function(variable) {
         return (variable !== undefined && variable !== null);
     }
 
+    /**
+     * Envia mensagem de Certo ou Errado par ao usuário
+     * 
+     * @param {boolean} isTrue
+     * @returns {void}
+     */
     this.showMessageAnswer = function(isTrue) {
         if (isTrue) {
             $('#message').show();
