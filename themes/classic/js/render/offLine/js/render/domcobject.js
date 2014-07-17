@@ -231,13 +231,17 @@ var DomCobject = function(cobject, idx){
             properties+="};";
             html+= self.build_text(properties);
         }   
+        if(self.isset(isElement_PieceSet) && isElement_PieceSet){
+        	self.domElement = $('<li id="'+elementID+'" class="question-image-container">'+html+'</li>');
+        }else{
+        	self.domElement = $('<li class="element" id="'+elementID+'">'+html+'</li>');
+        }
         
-        self.domElement = $('<li class="element" id="'+elementID+'">'+html+'</li>');
         return self.domElement;
     }
             
     this.buildElement_PRE = function(){
-        var html_Answer = "<input type='text' class='text' >";
+        var html_Answer = "<input type='text' class='text' autocomplete='off'>";
         return html_Answer;
     }
             
@@ -349,7 +353,6 @@ var DomCobject = function(cobject, idx){
     this.buildInfo_PieceSet = function(){
         var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
         var html = $('<div class="pieceSetInfo"></div>');
-        html.append('<span><b>'+description+'</b></span>');
         if(self.isset(this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements)){
             var elementPS_length = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements.length;
             //Construir os elementos dessa PieceSet
@@ -358,6 +361,7 @@ var DomCobject = function(cobject, idx){
                 html.append(self.buildElementPS()); 
             }
         }
+        html.append('<h1 class="question-title">'+description+'</h1>');
         
         return html;
     } 

@@ -34,13 +34,6 @@
     list-style-type: none;
 }
 
-.pieceset fieldset {
-    text-align: center;
-    display: table;
-    margin: auto;
-    margin-top: 30px;
-}
-
 #nextPiece, #begin_activity{
     text-align: right;
 }
@@ -51,8 +44,8 @@
 
 .elementImage img { 
     display: block;
-    height: 240px;
-    width:  320px;
+    height: 210px;
+    width: 100%;
 }
 
 fieldset{
@@ -74,10 +67,7 @@ fieldset{
     float:right;
     font-weight: bold;
 }
-input.text{
-    height: 30px;
-    width: 400px;
-}
+
 
 #import_data{
     text-align: center;
@@ -91,6 +81,7 @@ input.text{
 
 .pieceSetInfo {
     width: 700px;
+    height: 210px;
     margin: 0 auto;
     background: #FBB03B;
     border-radius: 0 0 5px 5px;
@@ -102,4 +93,17 @@ input.text{
 
 .toolBar {
     clear: both;
+}
+
+/** TEMPLATE PRE **/
+.PRE fieldset {
+    margin: 80px auto 0;
+    width: 720px;
+    text-align: center;
+}
+.PRE input {
+    margin: 0 0 50px 0;
+    border: 9px solid #51b899;
+    width: 672px;
+    padding: 15px;
 }
