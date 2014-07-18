@@ -34,6 +34,7 @@ this.Meet = function(unityfather, options) {
     //==== Armazenar a performance do usuário
     this.peformance_qtd_correct = 0;
     this.peformance_qtd_wrong = 0;
+    this.score = 0;
     var discipline_id = 0;
     var script_id = 0;
     var start_time = 0;
@@ -519,7 +520,15 @@ this.Meet = function(unityfather, options) {
             $('#message').html(MSG_WRONG);
             $('#message').fadeOut(5000);
         }
+        self.scoreCalculator();
+    }
 
+    this.scoreCalculator = function(){
+        self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
+        if(self.score < 0){
+            self.score = 0;
+        }
+        $('#points').text(self.score);
     }
 
 }

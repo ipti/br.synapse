@@ -5,6 +5,11 @@
     Description:
         Purpose of the stylesheet follows.
 */
+
+/** Reset **/
+ul, ol, li {
+    list-style: none;
+}
 .theme{
     background:#585858;
     font-family:sans-serif;
@@ -42,23 +47,10 @@
     display: block;
 }
 
-.elementImage img { 
-    display: block;
-    height: 210px;
-    width: 100%;
-}
-
 fieldset{
     border:2px solid gray;
 }
 
-.group{
-    float:left;width:340px;border:1px;
-}
-
-.ask{
-    clear:both;
-}
 .answer{
     clear:both;
 }
@@ -78,11 +70,48 @@ fieldset{
  
 }
 
+.toolBar {
+    clear: both;
+}
 
+/** Nível e Pontos **/
+.game {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+}
+
+.level {
+    float: left;
+    margin-right: 15px;
+}
+
+.points {
+    float: left;
+}
+
+.score-icon {
+    float: left;
+    width: 50px;
+    margin-right: 5px;
+}
+
+.score-number {
+    float: left;
+    font-family: tellural, helvetica, arial, sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+    color: #FBB03B;
+}
+
+/** PieceSet Global **/
+
+
+/** Questão **/
 .pieceSetInfo {
     width: 700px;
     height: 210px;
-    margin: 0 auto;
+    margin: 0 auto 80px;
     background: #FBB03B;
     border-radius: 0 0 5px 5px;
     padding: 10px;
@@ -91,13 +120,88 @@ fieldset{
     line-height: 35px;
 }
 
-.toolBar {
-    clear: both;
+.pieceSetInfo .elementImage {
+    width: 50%;
+    float: left;
+    margin-right: 20px;
+    list-style: none;
 }
 
-/** TEMPLATE PRE **/
+.pieceSetInfo .elementImage img { 
+    display: block;
+    height: 210px;
+    width: 100%;
+}
+
+/** Respostas Global**/
+
+
+/** Template TXT **/
+.book {
+    background: #fff;
+    margin: 40px;
+    border: 4px solid #FBB03B;
+    clear: both;
+    font-family: tellural,helvetica, arial, sans-serif;
+    color: #51B899;
+    font-weight: bold;
+    font-size: 52px;
+    text-transform: lowercase;
+    text-align: center;
+}
+
+.book-right {
+    padding: 10px;
+}
+
+.book-left {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+/** Template MTE **/
+.MTE .ask{
+    text-align: center;
+    display: table;
+    margin: auto;
+}
+
+.MTE .group{
+    float:left;
+    width: 160px;
+    height: 140px;
+    background: #51B899;
+    border-radius: 5px;
+    padding: 7px;
+    margin: 0 10px;
+}
+
+.MTE .elementText {
+    font-size: 19px;
+    text-transform: uppercase;
+}
+
+.element img {
+    height: 140px;
+    border-radius: 2px;
+}
+
+.MTE .element-build_text {
+    margin-top: 40%;
+}
+
+.MTE .group.build_image.build_text img {
+    height: 121px;
+}
+
+.MTE .group.build_image.build_text .element-build_text {
+    margin-top: 0;
+}
+
+/** Template PRE **/
 .PRE fieldset {
-    margin: 80px auto 0;
+    margin: auto;
     width: 720px;
     text-align: center;
 }

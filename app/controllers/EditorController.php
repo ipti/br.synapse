@@ -271,9 +271,9 @@ class EditorController extends Controller {
                 $tem_crop = false;
                 $img[$i] = '';
                 if (isset($name_img[$i])) {
-                    $newDir[$i] = Yii::app()->basePath . "/../rsc/library/images/" . $name_img[$i];
+                    $newDir[$i] = Yii::app()->basePath . "/../rsc/library/image/" . $name_img[$i];
                     $newDir[$i] = str_replace('\\', "/", $newDir[$i]);
-                    $newUrl[$i] = "/rsc/library/images/" . $name_img[$i];
+                    $newUrl[$i] = "/rsc/library/image/" . $name_img[$i];
                     $imagesize[$i] = getimagesize($newDir[$i]);
                     if ($imagesize[$i] !== false) {
                         $oImg = new cutImage($newDir[$i]);
@@ -1190,14 +1190,14 @@ class EditorController extends Controller {
         if (isset($_FILES['file'])) {
             //checa se existe operação
             if (isset($_POST['op'])) {
-                //se opreação for imagem
+                //se operação for imagem
                 if ($_POST['op'] == 'image') {
                     //define as extensões aceitas
                     $extencions = array(".png", ".gif", ".bmp", ".jpeg", ".jpg", ".ico");
                     //define tamanho máximo
                     $max_size = 1024 * 5; //5MB
                     //se operação for audio
-                } elseif ($_POST['op'] == 'audio') {
+                } elseif ($_POST['op'] == 'sound') {
                     //define as extensões aceitas
                     $extencions = array(".mp3", ".wav", ".ogg");
                     //define tamanho máximo
@@ -1210,7 +1210,7 @@ class EditorController extends Controller {
                     $max_size = 1024 * 20; //20MB
                 }
                 //define qual o endereço que será guardado o arquivo
-                $type_multimidia = $_POST['op'] == 'image' ? $_POST['op'] . 's' : $_POST['op'];
+                $type_multimidia = $_POST['op'];
                 $path = Yii::app()->basePath . '/../rsc/library/' . $type_multimidia . '/';
                 //define qual a url para visualização do arquivo
                 $url = "/rsc/library/" . $type_multimidia . "/";
