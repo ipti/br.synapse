@@ -42,6 +42,9 @@ this.Meet = function(unityfather, options) {
     var interval_group = 0;
     var interval_piece = 0;
     var meet_type = options.meet_type || DEFAULT_MEET_TYPE;
+    //Time de cada encontro Em Segundos
+    this.time = 0;
+    this.tag_time;
     //======================================
     //Criar Objeto para Manipulação do Banco
     this.DB_synapse = new DB();
@@ -521,6 +524,47 @@ this.Meet = function(unityfather, options) {
         }
         self.scoreCalculator();
     }
+
+    //Contador de Tempo de cada Meet
+    this.countTime = function (tag){
+        //A cada segundo realiza a recursividade
+        if(self.isset(tag)){
+            self.tag_time = tag;
+        }
+        setTimeout(function(){
+            self.time++;
+            var current_time = self.time;
+            
+            var hours = 0;
+            var mins = 0;
+            var segs = 0;
+            if(current_time >= 3600){
+                //Possui hora
+                hours =  Math.round(current_time/3600);
+                current_time %= 3600; 
+            }
+            
+            if(current_time >= 60){
+                //Possui minutos
+                mins =  Math.round(current_time/60);
+                current_time %= 60;
+            }
+            segs = current_time;
+            if(hours<10){
+                hours = '0'+hours;
+            }
+             if(mins<10){
+                mins = '0'+mins;
+            }
+             if(segs<10){
+                segs = '0'+segs;
+            }
+            self.tag_time.html(hours+':'+mins+':'+segs);
+            self.countTime();
+        }, 1000);
+    }
+    
+
 
     this.scoreCalculator = function(){
         self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
