@@ -38,6 +38,10 @@ function editor () {
     this.MTE = new Array(3,4,5,6);
     this.PRE = new Array(7,8,9,10,11,12);
     this.AEL = new Array(13,14,15);
+    this.PLC = new Array(16);
+    this.DIG = new Array(17);
+    this.DDROP = new Array();
+    this.DDROP.push(21);
     this.unLinks = [];
     this.COTemplateTypeIn = function(array){
         return array.indexOf(this.COtemplateType) != -1 ;
@@ -169,7 +173,8 @@ function editor () {
             //Se o template for PRE
             }else if(parent.COTemplateTypeIn(parent.PRE)){
                 html+= '<div class="tplPre"></div>';
-            }else if(parent.COTemplateTypeIn(parent.AEL)){
+            }else if(parent.COTemplateTypeIn(parent.AEL) 
+                    || parent.COTemplateTypeIn(parent.DDROP) ){
                 html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
                 "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
                 "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
@@ -184,9 +189,10 @@ function editor () {
             //incrementa o contador de piece
             this.countPieces[this.currentPieceSet] =  this.countPieces[this.currentPieceSet]+1;
         
-            //se template for MTE ou AEL
+            //se template for MTE ou AEL ou DDROP
             if(parent.COTemplateTypeIn(parent.MTE)
-                || parent.COTemplateTypeIn(parent.AEL)){
+                || parent.COTemplateTypeIn(parent.AEL)
+                 || parent.COTemplateTypeIn(parent.DDROP)){
                 //adiciona a função do botão addElement
                 $("#"+pieceID+"> div > button.newElement").click(function(){
                     parent.addElement();
@@ -221,7 +227,9 @@ function editor () {
             var flag = loaddata['flag'];
             position = loaddata['position'];
         }else{
-            if(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE) ){
+            if(parent.COTemplateTypeIn(parent.AEL) 
+                    || parent.COTemplateTypeIn(parent.MTE)  
+                    || parent.COTemplateTypeIn(parent.DDROP)){
                 //Sua Posição dentro do Grupo
                 position = $(tagAdd).find(".element").size()+1;
             }
@@ -264,21 +272,24 @@ function editor () {
         }          
         
         var html;
-        if(parent.COTemplateTypeIn(parent.AEL)){
+        if(parent.COTemplateTypeIn(parent.AEL)
+            || parent.COTemplateTypeIn(parent.DDROP)){
             html = '<div id="'+ID+'_text" class="text element moptions"'+ plus +'>'+ input_text;
         }else if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PRE) 
             || parent.COTemplateTypeIn(parent.TXT)){
             html = '<div id="'+ID+'_text" class="text element"'+ plus +'>'+ input_text;
         }
         
-        if(parent.COTemplateTypeIn(parent.MTE) || 
-            parent.COTemplateTypeIn(parent.AEL)){
+        if(parent.COTemplateTypeIn(parent.MTE)
+            || parent.COTemplateTypeIn(parent.AEL)
+            || parent.COTemplateTypeIn(parent.DDROP)){
             //Se for MTE ou (AEL e For uma PERGUNTA)
             html += '<input type="button" class="del delElement" value="'+LABEL_REMOVE_TEXT+'">'
         } 
         
         html += '</div>';
-        if(parent.COTemplateTypeIn(parent.AEL)){
+        if(parent.COTemplateTypeIn(parent.AEL)
+           || parent.COTemplateTypeIn(parent.DDROP)){
             $(tagAdd).append(html);
         }else if(parent.COTemplateTypeIn(parent.MTE)){
             $(tagAdd).find('span:eq(0)').append(html);
@@ -441,7 +452,9 @@ function editor () {
                 var flag = loaddata['flag'];
             }
         }else{
-            if(parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.MTE) ){
+            if(parent.COTemplateTypeIn(parent.AEL) 
+                || parent.COTemplateTypeIn(parent.MTE) 
+                || parent.COTemplateTypeIn(parent.DDROP)){
                 //Sua Posição dentro do Grupo
                 position = $(tagAdd).find(".element").size()+1;
             }
@@ -504,7 +517,8 @@ function editor () {
         
         
         var html;
-        if(parent.COTemplateTypeIn(parent.AEL)){
+        if(parent.COTemplateTypeIn(parent.AEL)
+            || parent.COTemplateTypeIn(parent.DDROP)){
             html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+' element moptions">'; 
         }else{
             html = '<div id="'+file+'" '+libBDID+' class="'+uploadType+' element">'
@@ -533,7 +547,8 @@ function editor () {
         }else{
             if(parent.COTemplateTypeIn(parent.MTE)){
                 $(tagAdd).find('span:eq(0)').append(html); 
-            }else if (parent.COTemplateTypeIn(parent.AEL)){
+            }else if (parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)){
                 $(tagAdd).append(html);
             }
         }
@@ -747,7 +762,8 @@ function editor () {
             $('li[id="'+parent.currentPiece+'"] div.tplPre').append(html);
         }else if (parent.COTemplateTypeIn(parent.TXT)){
             $('li[id="'+parent.currentPiece+'"] div.tplTxt').append(html);
-        }else if(parent.COTemplateTypeIn(parent.AEL)){
+        }else if(parent.COTemplateTypeIn(parent.AEL)
+            || parent.COTemplateTypeIn(parent.DDROP)){
             var group;
             var isResp;
             if(this.isset(match) && match != -1) {
@@ -835,7 +851,9 @@ function editor () {
             
         }
         var tagAdd = "";
-        if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)){
+        if(parent.COTemplateTypeIn(parent.MTE) 
+                || parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)){
             //TagAdd para o load
             tagAdd= $('#'+parent.currentPiece+' div[group='+group+']');
         }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)){
@@ -867,7 +885,8 @@ function editor () {
                     break;
                 default:
             }
-        }else if(parent.COTemplateTypeIn(parent.AEL)){
+        }else if(parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)){
         // o group é a Resposta '_'
         //this.addText(tagAdd);
         }
@@ -885,7 +904,8 @@ function editor () {
                 var buttonDelID = "#"+parent.currentPiece+" div[group='"+group+"'] > span > div > input.delElement:eq(0)";
             }
             
-        }else if(parent.COTemplateTypeIn(parent.AEL)){
+        }else if(parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)){
             //É AEL
             var buttonDelID = "#"+parent.currentPiece+" div[group='"+group.split('_')[0]+"'] > input.delElement";
         }
@@ -896,8 +916,10 @@ function editor () {
         var textoID = "#"+elementID+"_text";
         var imageID = "#"+elementID+"_image";
         if(parent.COTemplateTypeIn(parent.MTE)
-            || parent.COTemplateTypeIn(parent.AEL)){
-            if(parent.COTemplateTypeIn(parent.AEL)){
+            || parent.COTemplateTypeIn(parent.AEL)
+            || parent.COTemplateTypeIn(parent.DDROP)){
+            if(parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)){
                 var buttonTextoRespID = "#"+elementID_Resp + "> div > button.insertText";
                 var ElementTextRespID = "#"+elementID_Resp+"_text";
                 $(buttonTextoRespID).click(function(){
@@ -913,7 +935,8 @@ function editor () {
             var ElementSoundID = "#"+elementID+"_sound";
 
             $(buttonTextoID).click(function(){
-                if(!parent.COTemplateTypeIn(parent.AEL)){
+                if(!parent.COTemplateTypeIn(parent.AEL)
+                        && !parent.COTemplateTypeIn(parent.DDROP)){
                     if(!parent.existID(ElementImageID) || 
                         confirm(MSG_CHANGE_ELEMENT)){
                         if(!parent.existID(ElementTextID)){
@@ -928,7 +951,8 @@ function editor () {
                 }
             });
             $(buttonImageID).click(function(){
-                if(!parent.COTemplateTypeIn(parent.AEL)){
+                if(!parent.COTemplateTypeIn(parent.AEL)
+                        && !parent.COTemplateTypeIn(parent.DDROP)){
                     if(!parent.existID(ElementTextID) ||
                         confirm(MSG_CHANGE_ELEMENT)){
                         if(!parent.existID(ElementImageID)){
@@ -944,7 +968,8 @@ function editor () {
             });
             // Add SOUND 
             $(buttonSoundID).click(function(){
-                if(!parent.COTemplateTypeIn(parent.AEL)){
+                if(!parent.COTemplateTypeIn(parent.AEL)
+                        && !parent.COTemplateTypeIn(parent.DDROP)){
                     if(!parent.existID(ElementTextID) ||
                         confirm(MSG_CHANGE_ELEMENT)){
                         if(!parent.existID(ElementSoundID)){
@@ -960,10 +985,13 @@ function editor () {
             });
             
             
-            if(parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.AEL)){
+            if(parent.COTemplateTypeIn(parent.MTE) 
+                    || parent.COTemplateTypeIn(parent.AEL)
+                    || parent.COTemplateTypeIn(parent.DDROP)){
                 $(buttonDelID).click(function(){
                     if($(buttonDelID).size() == 1) {
-                        if(parent.COTemplateTypeIn(parent.AEL)) {
+                        if(parent.COTemplateTypeIn(parent.AEL)
+                                || parent.COTemplateTypeIn(parent.DDROP)) {
                             parent.delElement($(this).closest('div[group]').closest('li'));
                         }else if(parent.COTemplateTypeIn(parent.MTE)) {
                             parent.delElement($(this).closest('div[group]'));
@@ -1085,7 +1113,8 @@ function editor () {
                 //deleta todo o grupo de elementos
                 //Deletar todos os objeto, se existir
                 //id é um li que possui o div-grupo
-                if(parent.COTemplateTypeIn(parent.AEL)) {
+                if(parent.COTemplateTypeIn(parent.AEL)
+                        || parent.COTemplateTypeIn(parent.DDROP)) {
                     $(id).find('div[group] div.element').each(function(){
                         var id_Element_del = $(this).attr('id');
                         parent.delElement(id_Element_del,true);
