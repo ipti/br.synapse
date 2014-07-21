@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <script type="text/javascript">
-	if(sessionStorage.getItem("authorization") == null  || sessionStorage.getItem("authorization") == 'false'){
-		location.href = 'login.html';
-	}
+    if(sessionStorage.getItem("authorization") == null  || sessionStorage.getItem("authorization") == 'false'){
+        location.href = 'login.html';
+    }
 </script>
 
 <html> 
@@ -61,18 +61,38 @@
         
                 $('#head_meet').append(newMeet.headMeet());
                 
-                var CobjectID = '1004';
-       
-                //Cobjects STOP HERE !!
-                var json_Cobject = newMeet.DB_synapse.getCobject(CobjectID, function(json_cobject){
-                    var dump = new DomCobject(json_cobject);
-                    //Adicionar o domCobjets no Encontro 'Meet'
-                    newMeet.pushDomCobjects(dump);
-                    $('#render_canvas').html(newMeet.domCobjectBuildAll());
-                    //Após criar o DomCobject no Dom 
-                    newMeet.beginEvents();
-                    // Render Ready!
+                var block_id = '1';
+                var cobjectsFromBlock = null;
+                //Obter todos os Cobject deste Bloco
+                var getcobjectsFromBlock =  newMeet.DB_synapse.getCobjectsFromBlock(block_id, function(objectsThisBlock){
+                    
+                    //count do número de objetos
+                    var num_objects = 0;
+                    $.each(objectsThisBlock, function(){
+                        num_objects++;
+                    });
+                    
+                    $.each(objectsThisBlock, function(idx, object){
+                        //Para cada Cobject Cria sua Dom
+                        newMeet.DB_synapse.getCobject(object, function(json_cobject){
+                            var dump = new DomCobject(json_cobject,idx);
+                            //Adicionar o domCobjets no Encontro 'Meet'
+                            newMeet.pushDomCobjects(dump);
+                            //Chamar função para inserir nome html
+                            if(idx == num_objects-1){
+                                $('#render_canvas').html(newMeet.domCobjectBuildAll());
+                                  newMeet.beginEvents();
+                                //Após criar o DomCobject no Dom 
+                                // Render Ready! 
+                            }
+                            
+                        });
+                    });
+    
+                    
                 });
+                    
+               
                 
                 //Atualizar O painel do render
                 $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');
@@ -96,10 +116,8 @@
         <title>Render</title>
     </head>
     <body id="synapse">
+
         <!-- Barra de informações -->
-
-        <!-- Eu coloquei a barra de informações mas os dados inseridos vem do Javascript, acho que você terá que mudar a estrutura dele -->
-
         <div id="head_meet">
             <div class="info info-name">
 
@@ -134,6 +152,16 @@
         </div>
         <div id="render_canvas">
         </div>
+        <div class="game">
+            <div class="level">
+                <img class="score-icon" src="img/icons/level.png">
+                <p id="level" class="score-number">1</p>
+            </div>
+            <div class="points">
+                <img class="score-icon" src="img/icons/points.png">
+                <p id="points" class="score-number">0</p>
+            </div>
+        </div>  
     </body>
 </html>
 

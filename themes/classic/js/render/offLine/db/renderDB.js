@@ -133,7 +133,12 @@ this.DB = function() {
             var cobject_cobjectblockStore = db.createObjectStore("cobject_cobjectblock", {
                 keyPath: "id"
             });
-            // Faltam cobject_id, cobject_block_id
+            //Criar Index para cobject_block_id
+            cobject_cobjectblockStore.createIndex("cobject_block_id", "cobject_block_id", {
+                unique: false
+            });
+            
+            // Faltam cobject_id
 
             //================================================
 
@@ -147,7 +152,8 @@ this.DB = function() {
 
             // cria um objectStore do performance_actor
             var performance_actorStore = db.createObjectStore("performance_actor", {
-                keyPath: "id", autoIncrement:true
+                keyPath: "id", 
+                autoIncrement:true
             });
             //Faltam
             /* piece_id
@@ -213,7 +219,7 @@ this.DB = function() {
     // - - - - - - - - - -  //
 
     this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
-            , cobject_cobjectblocks, cobjects) {
+        , cobject_cobjectblocks, cobjects) {
         //Unidade e Usuário
         var data_unity = unitys;
 
@@ -261,8 +267,8 @@ this.DB = function() {
             //Importar os cobjects
             self.importCobject(db, data_cobject);
 
-            //Importar os performance_actors
-            // self.importPerformance_actor(db,data_performance_actor); 
+        //Importar os performance_actors
+        // self.importPerformance_actor(db,data_performance_actor); 
 
 
         }
@@ -376,7 +382,7 @@ this.DB = function() {
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
                 var requestGet = ActorObjectStore.index("login").get(login);
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     // Fazer algo com request.result!
@@ -434,7 +440,7 @@ this.DB = function() {
                 var cobjectStore = db.transaction("cobject").objectStore("cobject");
                 var requestGet = cobjectStore.get(cobject_id);
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     var json_cobject = requestGet.result;
@@ -448,7 +454,48 @@ this.DB = function() {
             }
         }
     }
-
+    
+    //===================
+    this.getCobjectsFromBlock = function(block_id, callBack) {
+        if (self.isset(block_id)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                }
+                //Tudo ok Então Busca O Cobject
+                var cobjectStore = db.transaction("cobject_cobjectblock").objectStore("cobject_cobjectblock");
+                var requestGet = cobjectStore.index('cobject_block_id');
+                var objectsThisBlock = new Array();
+                var singleKeyRange = IDBKeyRange.only(block_id);
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        // Faz algo com o que encontrar
+                        objectsThisBlock.push(cursor.value.cobject_id);
+                        cursor.continue();
+                    }else{
+                        //Finalisou a Pesquisa
+                        callBack(objectsThisBlock);
+                    }
+                    
+                };
+                requestGet.onerror = function(event) {
+                // Tratar erro!
+                }
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+    }
 
     //Armazenar a performance
     this.addPerformance_actor = function(data) {
@@ -468,28 +515,28 @@ this.DB = function() {
             'iscorrect': iscorrect
         };
 
-            window.indexedDB = self.verifyIDBrownser();
-            DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function(event) {
-                alert("Você não habilitou minha web app para usar IndexedDB?!");
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        }
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                window.alert("Database error: " + event.target.errorCode);
             }
-            DBsynapse.onsuccess = function(event) {
-                var db = event.target.result;
-                db.onerror = function(event) {
-                    // Função genérica para tratar os erros de todos os requests desse banco!
-                    window.alert("Database error: " + event.target.errorCode);
-                }
-                var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
-                Performance_actorObjectStore.add(data_performance_actor);
-                Performance_actorObjectStore.transaction.oncomplete = function(event) {
-                    console.log('Performance Salva !!!! ');
-                }
+            var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
+            Performance_actorObjectStore.add(data_performance_actor);
+            Performance_actorObjectStore.transaction.oncomplete = function(event) {
+                console.log('Performance Salva !!!! ');
+            }
 
-            }
-            DBsynapse.onblocked = function(event) {
-                // Se existe outra aba com a versão antiga
-                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-            }
+        }
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
 
     }
 

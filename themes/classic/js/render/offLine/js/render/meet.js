@@ -19,8 +19,9 @@ this.Meet = function(unityfather, options) {
     FINALIZE_ACTIVITY = "Finalizar Atividade";
     //================
     var self = this;
-    this.currentCobject_id = null;
+    this.currentCobject_idx = null;
     this.domCobjects = new Array();
+    this.num_cobjects = 0;
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     this.org = options.org[0];
     this.org_name = options.org[1];
@@ -33,6 +34,7 @@ this.Meet = function(unityfather, options) {
     //==== Armazenar a performance do usuário
     this.peformance_qtd_correct = 0;
     this.peformance_qtd_wrong = 0;
+    this.score = 0;
     var discipline_id = 0;
     var script_id = 0;
     var start_time = 0;
@@ -44,13 +46,7 @@ this.Meet = function(unityfather, options) {
     //Criar Objeto para Manipulação do Banco
     this.DB_synapse = new DB();
 
-    /**
-     * Efetua o push do domCobjects na array self.domCobjects
-     * 
-     * @param {dom String} domCobjects
-     * @returns {void}
-     */
-    this.pushDomCobjectsobjects = function(domCobjects) {
+    this.pushDomCobjects = function(domCobjects) {
         self.domCobjects.push(domCobjects);
     }
     
@@ -60,13 +56,13 @@ this.Meet = function(unityfather, options) {
      * @returns {String.domCobjectBuildAll}
      */
     this.domCobjectBuildAll = function(){
-        var domCobjectBuildAll = '';
-        for(var domCobject in self.domCobjects){
-            domCobjectBuildAll += domCobject.buildAll();
+        var domCobjectBuildAll = $('<div class="cobject_block"></div>');
+        for(var idx in self.domCobjects){
+            domCobjectBuildAll.append(self.domCobjects[idx].buildAll());
+            self.num_cobjects++;
         }
         //Retorno do 1° Cobject
-        var current_Cobject = domCobjectBuildAll.find('.cobject:eq(0)');
-        self.currentCobject_id = current_Cobject.attr('id');
+        self.currentCobject_idx = 0;
         return domCobjectBuildAll;
     }
     
@@ -77,7 +73,18 @@ this.Meet = function(unityfather, options) {
      */
     this.beginEvents = function() {
         //iniciar code_Event dos templates
-        eval("self.init_" + self.domCobjects.cobject.template_code + "();");
+        //Para cada cobject Inicia seus eventos
+        self.init_Common();
+        for(var idx = 0; idx < self.num_cobjects; idx++){
+            var template_codes = new Array(); 
+            //Add no Array o template name se não existir
+            if($.inArray(self.domCobjects[idx].cobject.template_code, template_codes) == -1){
+                //Evoca o evento para este template
+                eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
+                template_codes.push(self.domCobjects[idx].cobject.template_code);
+            }
+        }
+        
     }
 
     /**
@@ -111,27 +118,28 @@ this.Meet = function(unityfather, options) {
      */
     this.init_Common = function() {
         //Embaralha os gropos de Elementos
-        $('div[group]').closest('div.ask, div.answer').shuffle();
-        $('.pieceset, .piece, #nextPiece').hide();
-        $('#begin_activity').on('click', function() {
+        var selector_cobject = '.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+']';
+        $(selector_cobject+' div[group]').closest('div.ask, div.answer').shuffle();
+        $(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
+        $(selector_cobject+' #begin_activity').on('click', function() {
             $(this).hide();
-            $('#nextPiece').show();
-            $('.pieceset:eq(0)').addClass('currentPieceSet');
-            $('.piece:eq(0)').addClass('currentPiece');
-            $('.pieceset:eq(0), .piece:eq(0)').show();
+            $(selector_cobject+' .nextPiece').show();
+            $(selector_cobject+' .pieceset:eq(0)').addClass('currentPieceSet');
+            $(selector_cobject+' .piece:eq(0)').addClass('currentPiece');
+            $(selector_cobject+' .pieceset:eq(0), .piece:eq(0)').show();
 
             //Inicio do temporizador
             self.restartTimes();
         });
-        $('#nextPiece').on('click', function() {
+        $(selector_cobject+' .nextPiece').on('click', function() {
             var currentPiece = $('.currentPiece');
             //Se for PRE então Verificar ser está correto
-            if (self.domCobjects.cobject.template_code == 'PRE') {
+            if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
                 self.isCorrectPRE(currentPiece.attr('id'));
             }
 
             //Salva no BD somente se o template for != TXT
-            if (self.domCobjects.cobject.template_code != 'TXT') {
+            if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
                 //Salva na PerformanceUser
                 self.savePerformanceUsr(currentPiece.attr('id'));
             }
@@ -159,9 +167,24 @@ this.Meet = function(unityfather, options) {
                         nextScreen.find('.piece:eq(0)').addClass('currentPiece');
                         nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
                     } else {
-                        //Finalisou todas as Screen
-                        $('#nextPiece').hide();
-                        $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                        //Finalisou todas as Screen do COBJECT Corrente
+                        if(self.hasNextCobject()){
+                            self.currentCobject_idx++;
+                            var selector_cobject = '.cobject[id='+self.domCobjects[self.currentCobject_idx].cobject.cobject_id+']';
+                            $('.currentCobject').removeClass('currentCobject');
+                            $(selector_cobject).addClass('currentCobject');
+                            nextScreen = $(selector_cobject+' .T_screen');
+                            nextScreen.addClass('currentScreen');
+                            nextScreen.show();
+                            nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                            nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                            nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                            
+                        }else{
+                            $('.nextPiece').hide();
+                            $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>')); 
+                        }
+                       
                     }
 
                 } else {
@@ -197,8 +220,8 @@ this.Meet = function(unityfather, options) {
      * @returns {void}
      */
     this.init_MTE = function() {
-        self.init_Common();
-        $('div[group]').on('click', function() {
+        // self.init_Common();
+        $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div[group]').on('click', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
                 $(this).css('opacity', '1');
@@ -227,9 +250,9 @@ this.Meet = function(unityfather, options) {
      */
     this.init_AEL = function() {
         // variável de encontro definida no meet.php
-        $('div.answer > div[group]').hide();
-        self.init_Common();
-        $('div[group]').on('click', function() {
+        $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div.answer > div[group]').hide();
+        // self.init_Common();
+        $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div[group]').on('click', function() {
             var ask_answer = $(this).parents('div').attr('class');
             if (ask_answer == 'ask') {
                 if (!$(this).hasClass('ael_clicked')) {
@@ -285,7 +308,7 @@ this.Meet = function(unityfather, options) {
      * @returns {void}
      */
     this.init_PRE = function() {
-        self.init_Common();
+    //  self.init_Common();
 
     }
     
@@ -295,7 +318,7 @@ this.Meet = function(unityfather, options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-        self.init_Common();
+    //  self.init_Common();
     }
     //======================
 
@@ -306,94 +329,75 @@ this.Meet = function(unityfather, options) {
      * @returns {boolean}
      */
     this.savePerformanceUsr = function(currentPieceID) {
-        try {
-            //Obtem o intervalo de resolução da Piece
-            self.interval_piece = (new Date().getTime() - self.interval_piece);
-            //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
-            // e a armazena no objeto piece.isCorrect da piece corrente 
-            if (self.domCobjects.cobject.template_code == 'AEL') {
-                self.saveMatchGroup(currentPieceID);
-            }
-            //Neste ponto o isTrue da Piece está setado
-            //Salva isCorrect da PIECE toda
-            var pieceIsTrue = self.domCobjects.mainPieces[currentPieceID].isCorrect;
-            self.domCobjects.mainPieces[currentPieceID].time_answer = self.interval_piece;
-            var data_default = {
-                'piece_id': currentPieceID,
-                'actor_id': self.actor,
-                'final_time': self.interval_piece, //delta T 
-                'iscorrect': pieceIsTrue
-            };
-            var data = data_default;
-            if (self.domCobjects.cobject.template_code == 'MTE') {
-                // console.log(currentPieceID);
-                //Último grupo clicado da Piece Corrente. Divide por 2 como um grupo ASK
-                data.group_id = ($('.currentPiece .last_clicked').attr('group') / currentPieceID) / 2;
-            }
-
-            //Salvar na performance_User OffLine
-            self.DB_synapse.addPerformance_actor(data);
-            if (pieceIsTrue) {
-                self.peformance_qtd_correct++;
-            } else {
-                self.peformance_qtd_wrong++;
-            }
-
-            self.showMessageAnswer(pieceIsTrue);
-            //Salvo com Sucesso !
-            return true;
-        } catch (err) {
-            console.log(err);
-            return false;
+        //Obtem o intervalo de resolução da Piece
+        self.interval_piece = (new Date().getTime() - self.interval_piece);
+        //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
+        // e a armazena no objeto piece.isCorrect da piece corrente 
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL') {
+            self.saveMatchGroup(currentPieceID);
         }
+        //Neste ponto o isTrue da Piece está setado
+        //Salva isCorrect da PIECE toda
+        var pieceIsTrue = self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].isCorrect;
+        self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].time_answer = self.interval_piece;
+        var data_default = {
+            'piece_id': currentPieceID,
+            'actor_id': self.actor,
+            'final_time': self.interval_piece, //delta T 
+            'iscorrect': pieceIsTrue
+        };
+        var data = data_default;
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'MTE') {
+            //Último grupo clicado da Piece Corrente. Divide por 2 como um grupo ASK
+            data.group_id = ($('.currentPiece .last_clicked').attr('group') / currentPieceID) / 2;
+        }
+
+        //Salvar na performance_User OffLine
+        self.DB_synapse.addPerformance_actor(data);
+        if(pieceIsTrue){
+            self.peformance_qtd_correct++;
+        }else{
+            self.peformance_qtd_wrong++;
+        }
+
+        self.showMessageAnswer(pieceIsTrue);
+        //Salvo com Sucesso !
+        return true;
     }
-    
-    /**
-     * Salva os metadados da interação do usuário com o sistema.
-     * 
-     * @returns {boolean}
-     */
+
     this.saveMatchGroup = function(currentPieceID) {
-        try {
-            //Para Cada GRUPO da Piece
-            var pieceIsTrue = true;
-            $.each(self.domCobjects.mainPieces[currentPieceID], function(nome_attr, group) {
-                if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
-                    if (self.isset(group.ismatch) && (!group.ismatch)) {
-                        pieceIsTrue = false;
-                    }
-                    //Salva no BD os MetaDados para cada grupo
-                    if (self.isset(this.groupMatched)) {
-                        //Se for um grupo do tipo ASK
-                        var current_group = nome_attr.split('_')[1];
-                        //Armazenar o groupMatched do grupo atual
-                        var current_groupMatched = this.groupMatched;
-
-                        var data = {
-                            'piece_id': currentPieceID,
-                            // 'piece_elementID':current_pieceElementID,
-                            'group_id': current_group,
-                            'actor_id': self.actor,
-                            'final_time': this.time_answer, //delta T 
-                            'value': "GRP" + current_groupMatched,
-                            'iscorrect': this.ismatch
-                        };
-                        //Salvar na performance_User OffLine
-                        self.DB_synapse.addPerformance_actor(data);
-
-                    }
-
+        //Para Cada GRUPO da Piece
+        var pieceIsTrue = true;
+        $.each(self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID], function(nome_attr, group) {
+            if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
+                if (self.isset(group.ismatch) && (!group.ismatch)) {
+                    pieceIsTrue = false;
                 }
+                //Salva no BD os MetaDados para cada grupo
+                if (self.isset(this.groupMatched)) {
+                    //Se for um grupo do tipo ASK
+                    var current_group = nome_attr.split('_')[1];
+                    //Armazenar o groupMatched do grupo atual
+                    var current_groupMatched = this.groupMatched;
 
-            });
-            //Salvo com Sucesso
-            self.domCobjects.mainPieces[currentPieceID].isCorrect = pieceIsTrue;
+                    var data = {
+                        'piece_id': currentPieceID,
+                        // 'piece_elementID':current_pieceElementID,
+                        'group_id': current_group,
+                        'actor_id': self.actor,
+                        'final_time': this.time_answer, //delta T 
+                        'value': "GRP" + current_groupMatched,
+                        'iscorrect': this.ismatch
+                    };
+                    //Salvar na performance_User OffLine
+                    self.DB_synapse.addPerformance_actor(data);
+                }
+            }
 
-            return true;
-        } catch (err) {
-            console.log(err);
-            return false;
-        }
+        });
+        //Salvo com Sucesso
+        self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].isCorrect = pieceIsTrue;
+        return true;
     }
 
     /**
@@ -404,11 +408,11 @@ this.Meet = function(unityfather, options) {
      * @returns {Boolean}
      */
     this.isCorrectMTE = function(pieceID, groupClicked) {
-        var elements_group = eval("self.domCobjects.mainPieces[pieceID]._" + groupClicked);
+        var elements_group = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
         var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype == 'Acerto');
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
-        self.domCobjects.mainPieces[pieceID].isCorrect = isCorrect;
+        self.domCobjects[self.currentCobject_idx].mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     }
 
@@ -425,8 +429,8 @@ this.Meet = function(unityfather, options) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
             //Salvar no Objeto o Metadados do acerto e erro de um element
-            var elements_groupAsk = eval("self.domCobjects.mainPieces[pieceID]._" + groupAskClicked);
-            var elements_groupAnswer = eval("self.domCobjects.mainPieces[pieceID]._" + groupAnswerClicked);
+            var elements_groupAsk = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAskClicked);
+            var elements_groupAnswer = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAnswerClicked);
 
             //Veridicar Match
             var groupRevertAsk = (groupAskClicked / pieceID) / 2;
@@ -454,7 +458,7 @@ this.Meet = function(unityfather, options) {
      */
     this.isCorrectPRE = function(pieceID) {
         //PRE somente possuí um grupo em cada piece
-        var elements_group = eval("self.domCobjects.mainPieces[pieceID]._" + (pieceID * 2));
+        var elements_group = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + (pieceID * 2));
         var digitated_value = $('.currentPiece').find('div[group] input.text').val();
         var idxText = null;
         //BUSCAR PROPRIEDADE  = TEXT
@@ -467,8 +471,13 @@ this.Meet = function(unityfather, options) {
 
         var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() == digitated_value.toUpperCase());
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
-        self.domCobjects.mainPieces[pieceID].isCorrect = isCorrect;
+        self.domCobjects[self.currentCobject_idx].mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
+    }
+    
+    
+    this.hasNextCobject = function(){
+        return self.isset(self.domCobjects[self.currentCobject_idx + 1]);
     }
     
     //======================
@@ -511,7 +520,15 @@ this.Meet = function(unityfather, options) {
             $('#message').html(MSG_WRONG);
             $('#message').fadeOut(5000);
         }
+        self.scoreCalculator();
+    }
 
+    this.scoreCalculator = function(){
+        self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
+        if(self.score < 0){
+            self.score = 0;
+        }
+        $('#points').text(self.score);
     }
 
 }

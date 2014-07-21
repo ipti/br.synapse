@@ -244,9 +244,28 @@ class RenderController extends Controller {
                     $src = Yii::app()->basePath . "/.." . $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
                     eval('$name_temp = $this->tempArchiveZip' . $lib->type->name . ';');
                     $name_temp->addFile($src, '/' . $libproperty->value);
+                    //Array de tipos que este grupo possui
+                    if (!$isPiecesetElement) {
+                        if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
+                            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$lib->type->name]=$lib->type->name;
+                        } else {
+                            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'] = array();
+                            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$lib->type->name]=$lib->type->name;
+                        }
+                    }
                 }
             }
             $gproperties[] = array('name' => 'library_type', 'value' => $lib->type->name);
+        } else {
+            //Array de tipos que este grupo possui
+            if (!$isPiecesetElement) {
+                if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
+                    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$pieceOrPieceSet_element->element->type->name]=$pieceOrPieceSet_element->element->type->name;
+                } else {
+                    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'] = array();
+                    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$pieceOrPieceSet_element->element->type->name]=$pieceOrPieceSet_element->element->type->name;
+                }
+            }
         }
 
         foreach ($pieceOrPieceSet_element->element->editorElementAliases as $alias) {

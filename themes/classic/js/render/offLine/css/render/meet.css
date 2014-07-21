@@ -6,7 +6,7 @@ viewport {
 body {
 	margin: 0px;
 	background-color: #D1E0CD;
-	background-image: url(../img/background-texture.png);
+	/*background-image: url(../img/background-texture.png);*/
 	background-repeat: repeat;
 	font-family: asap, helvetica, arial, sans-serif;
 }
@@ -73,50 +73,21 @@ body {
 	border-radius: 0 7px 7px 0;
 }
 
-/** Nível e Pontos **/
-.score {
-	position: absolute;
-	top: 15px;
-	right: 30px;
-}
-
-.level {
-	float: left;
-	margin-right: 15px;
-}
-
-.points {
-	float: left;
-}
-
-.score-icon {
-	float: left;
-	width: 50px;
-	margin-right: 5px;
-}
-
-.score-number {
-	float: left;
-	font-family: tellural, helvetica, arial, sans-serif;
-	font-weight: bold;
-	font-size: 40px;
-	color: #FBB03B;
-}
-
 /** Pergunta da atividade **/
-.question-container {
+/*.question-container {
 	width: 700px;
 	margin: 0 auto;
 	background: #FBB03B;
 	border-radius: 0 0 5px 5px;
 	padding: 10px;
 	color: #fff;
-}
+}*/
 
 .question-image-container {
 	width: 50%;
 	float: left;
 	margin-right: 20px;
+	list-style: none;
 }
 
 .question-title {

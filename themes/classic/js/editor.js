@@ -494,7 +494,9 @@ function editor () {
         var accept = '';
 
         $.each(uploadAccept,function( key, value  ) {
-            accept += uploadType+'/'+value+', ';
+            //sound  tornar-se audio
+            var extAcept = (uploadType == 'sound') ? 'audio' : uploadType;
+            accept += extAcept+'/'+value+', ';
         });
         
         var file    = ID+"_"+uploadType;
@@ -554,8 +556,7 @@ function editor () {
         
         
         if(this.isset(loaddata) && this.isset(loaddata['library'])){
-            var cam_uploadType = uploadType == 'image' ? uploadType+'s' : uploadType;
-            var src = '/rsc/library/'+cam_uploadType+'/'+loaddata['library']['src'];
+            var src = '/rsc/library/'+uploadType+'/'+loaddata['library']['src'];
             responseFunction(src, file, form); 
         }
         
@@ -577,7 +578,8 @@ function editor () {
             filesize = Math.round(filesize * 1000) / 1000; //3 decimal
             
             if(filesize <= uploadMaxSize){
-                if(!(this.files[0].type.indexOf(uploadType) == -1)){ 
+                 var extAcept = (uploadType == 'sound') ? 'audio' : uploadType;
+                if(!(this.files[0].type.indexOf(extAcept) == -1)){ 
                     
                     var reader = new FileReader();
                     reader.onload = function (e) {
@@ -620,7 +622,7 @@ function editor () {
     this.insertAudioPieceSet = function(piecesetID,idbd, loaddata){
         if(this.isset(piecesetID)) {
             var tagAdd = $('#'+piecesetID+"_forms");
-            if (!this.existID('#'+piecesetID+"_forms_audio_form")){
+            if (!this.existID('#'+piecesetID+"_forms_sound_form")){
                 tagAdd.append("<span class='elementPieceSet'></span>");
                 this.addSound(tagAdd.find('span:last'), loaddata,idbd); 
             }
@@ -629,7 +631,7 @@ function editor () {
             var psID = $('.PieceSet[idbd='+psIDBD+']').attr('id').split('_',2);
             psID = psID[0]+"_"+psID[1];
             var tagAdd = $('#'+psID+"_forms");
-            if (!this.existID('#'+psID+"_forms_audio_form")){
+            if (!this.existID('#'+psID+"_forms_sound_form")){
                 tagAdd.append("<span class='elementPieceSet'></span>");
                 this.addSound(tagAdd.find('span:last'), loaddata,idbd); 
             }
@@ -653,7 +655,7 @@ function editor () {
     this.addSound = function(tagAdd, loaddata, idbd){
         var parent = this;
         this.addUploadForm(tagAdd, {
-            type: 'audio',
+            type: 'sound',
             accept: Array("mp3","wav","ogg"),
             maxsize: (1024 * 10) //10MB
         }, function(src, fileid, formid){
@@ -930,7 +932,7 @@ function editor () {
 
             var ElementTextID = "#"+elementID+"_text";
             var ElementImageID = "#"+elementID+"_image";
-            var ElementSoundID = "#"+elementID+"_audio";
+            var ElementSoundID = "#"+elementID+"_sound";
 
             $(buttonTextoID).click(function(){
                 if(!parent.COTemplateTypeIn(parent.AEL)
@@ -1459,10 +1461,10 @@ function editor () {
                                         var FormElementImageID = "#"+ElementID+"_image_form";
                                         var input_NameDB_ID = "#"+ElementID+"_image_nameDB";
                                         var input_NameCurrent_ID = "#"+ElementID+"_image_input";
-                                        var ElementSoundID = "#"+ElementID+"_audio";
-                                        var FormElementSoundID = "#"+ElementID+"_audio_form";
-                                        var inputSound_NameDB_ID = "#"+ElementID+"_audio_nameDB";
-                                        var inputSound_NameCurrent_ID = "#"+ElementID+"_audio_input";    
+                                        var ElementSoundID = "#"+ElementID+"_sound";
+                                        var FormElementSoundID = "#"+ElementID+"_sound_form";
+                                        var inputSound_NameDB_ID = "#"+ElementID+"_sound_nameDB";
+                                        var inputSound_NameCurrent_ID = "#"+ElementID+"_sound_input";    
                                         //var ElementRespID = "#"+ElementID+"_resp_text";
                                         
                                         //Dados que serão passados pelo ajax
