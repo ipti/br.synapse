@@ -75,9 +75,9 @@ this.Meet = function(unityfather, options) {
         //iniciar code_Event dos templates
         //Para cada cobject Inicia seus eventos
         self.init_Common();
+        var template_codes = new Array(); 
         for(var idx = 0; idx < self.num_cobjects; idx++){
-            var template_codes = new Array(); 
-            //Add no Array o template name se não existir
+            //Add no Array o template name se não existir, para garantir que não chame o mesmo evento mais de uma vez
             if($.inArray(self.domCobjects[idx].cobject.template_code, template_codes) == -1){
                 //Evoca o evento para este template
                 eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
@@ -118,7 +118,7 @@ this.Meet = function(unityfather, options) {
      */
     this.init_Common = function() {
         //Embaralha os gropos de Elementos
-        var selector_cobject = '.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+']';
+        var selector_cobject = '.cobject';
         $(selector_cobject+' div[group]').closest('div.ask, div.answer').shuffle();
         $(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
         $(selector_cobject+' #begin_activity').on('click', function() {
@@ -173,7 +173,7 @@ this.Meet = function(unityfather, options) {
                             var selector_cobject = '.cobject[id='+self.domCobjects[self.currentCobject_idx].cobject.cobject_id+']';
                             $('.currentCobject').removeClass('currentCobject');
                             $(selector_cobject).addClass('currentCobject');
-                            nextScreen = $(selector_cobject+' .T_screen');
+                            nextScreen = $(selector_cobject+' .T_screen:eq(0)');
                             nextScreen.addClass('currentScreen');
                             nextScreen.show();
                             nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
@@ -221,7 +221,7 @@ this.Meet = function(unityfather, options) {
      */
     this.init_MTE = function() {
         // self.init_Common();
-        $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div[group]').on('click', function() {
+        $('.cobject.MTE div[group]').on('click', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
                 $(this).css('opacity', '1');
@@ -250,9 +250,8 @@ this.Meet = function(unityfather, options) {
      */
     this.init_AEL = function() {
         // variável de encontro definida no meet.php
-        $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div.answer > div[group]').hide();
-        // self.init_Common();
-        $('.cobject[id='+this.domCobjects[self.currentCobject_idx].cobject.cobject_id+'] div[group]').on('click', function() {
+        $('.cobject.AEL div.answer > div[group]').hide();
+        $('.cobject.AEL div[group]').on('click', function() {
             var ask_answer = $(this).parents('div').attr('class');
             if (ask_answer == 'ask') {
                 if (!$(this).hasClass('ael_clicked')) {
