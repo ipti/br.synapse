@@ -539,7 +539,9 @@ this.DB = function() {
         }
 
     }
-
+    
+    //Recuperar o estado do usuário
+    //this.getUserState
 
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão

@@ -2,7 +2,7 @@
     <?php
 $this->breadcrumbs=array(
 	'Cobjectblocks'=>array('index'),
-	$model->name=>array('view','id'=>$model->ID),
+	$model->name=>array('view','id'=>$model->id),
 	'Update',
 );
 
