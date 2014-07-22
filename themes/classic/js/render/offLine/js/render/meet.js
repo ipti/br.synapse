@@ -3,11 +3,10 @@
  * 
  * @class
  * 
- * @param {integer} unityfather
  * @param {array} options
  * @returns {Meet}
  */
-this.Meet = function(unityfather, options) {
+this.Meet = function(options) {
     // MGS
     MSG_CORRECT = 'Parabéns, você acertou';
     MSG_WRONG = 'Ops! Você errou, continue tentando.';
@@ -29,13 +28,15 @@ this.Meet = function(unityfather, options) {
     this.classe_name = options.classe[1];
     this.actor = options.actor[0];
     this.actor_name = options.actor[1];
+    this.login_personage_name = options.actor[2];
+    this.discipline_id = options.id_discipline;
+    this.cobject_block_id = options.cobject_block_id;
     //============================
 
     //==== Armazenar a performance do usuário
     this.peformance_qtd_correct = 0;
     this.peformance_qtd_wrong = 0;
     this.score = 0;
-    var discipline_id = 0;
     var script_id = 0;
     var start_time = 0;
     var final_time = 0;
@@ -90,16 +91,16 @@ this.Meet = function(unityfather, options) {
         
     }
 
-//    /**
-//     * Retorna o cabeçalho do Meet
-//     * 
-//     * @returns {String}
-//     */
-//    this.headMeet = function() {
-//        return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
-//        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
-//        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
-//    }
+    //    /**
+    //     * Retorna o cabeçalho do Meet
+    //     * 
+    //     * @returns {String}
+    //     */
+    //    this.headMeet = function() {
+    //        return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
+    //        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
+    //        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
+    //    }
 
     //    this.verifyMatch(group1, element1ID, group2, element2ID){
     //        
@@ -356,6 +357,19 @@ this.Meet = function(unityfather, options) {
 
         //Salvar na performance_User OffLine
         self.DB_synapse.addPerformance_actor(data);
+        
+        //Salvar o estado do Actor, neste ponto.
+        //cobject_block_id + actor_id = PK
+        var info_state = {
+            cobject_block_id : self.cobject_block_id,
+            actor_id : self.actor,
+            current_piece_id:currentPieceID,
+            qtd_correct:self.peformance_qtd_correct,
+            qtd_wrong:self.peformance_qtd_wrong
+        };
+        self.DB_synapse.NewORUpdateUserState(info_state);
+        
+        
         if(pieceIsTrue){
             self.peformance_qtd_correct++;
         }else{
@@ -553,10 +567,10 @@ this.Meet = function(unityfather, options) {
             if(hours<10){
                 hours = '0'+hours;
             }
-             if(mins<10){
+            if(mins<10){
                 mins = '0'+mins;
             }
-             if(segs<10){
+            if(segs<10){
                 segs = '0'+segs;
             }
             self.tag_time.html(hours+':'+mins+':'+segs);
