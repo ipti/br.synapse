@@ -33,20 +33,43 @@ function editor () {
     this.uploadedSounds = 0;
     this.isload = false;
     this.orderDelets = [];
-    this.TXT = new Array();
-    this.TXT.push(2);
-    this.MTE = new Array(3,4,5,6);
-    this.PRE = new Array(7,8,9,10,11,12);
-    this.AEL = new Array(13,14,15);
-    this.PLC = new Array(16);
-    this.DIG = new Array(17);
-    this.DDROP = new Array();
+    this.NONE = new Array();        //NONE: Nenhum
+    this.TXT = new Array();         //TXT: Texto
+    this.MTE = new Array(3,4,5,6);  //MTE: Multipla Escolha
+    this.PRE = new Array(7,8,9,10,11,12);   //PRE: Pergunta e Resposta
+    this.AEL = new Array(13,14,15); //AEL: Associar Elementos
+    this.PLC = new Array();         //PLC: Palavra Cruzada
+    this.DIG = new Array();         //DIG: Diagrama
+    this.LVR = new Array();         //LVR: Livre
+    this.FRM = new Array();         //FRM: Questionário
+    this.PDC = new Array();         //PDC: Produç]ao
+    this.DDROP = new Array();       //DDROP: Drag and Drop
+    this.TXT.push(2);   
+    this.PLC.push(16); 
+    this.DIG.push(17);
+    this.LVR.push(18);
+    this.FRM.push(19);
+    this.PDC.push(20);
     this.DDROP.push(21);
+    
     this.unLinks = [];
+    
+    /**
+     * Verifica se COtemplateType esta setado.
+     * 
+     * @param {array} array
+     * @returns {Boolean}
+     */
     this.COTemplateTypeIn = function(array){
         return array.indexOf(this.COtemplateType) != -1 ;
     }
     
+    /**
+     * Ativa 'Piece' desejada, e desativa todas as outras.
+     * 
+     * @param {element} piece
+     * @returns {void}
+     */
     this.changePiece = function(piece){
         $('.piece').removeClass('active');
         var id = piece.attr('id');
@@ -54,6 +77,12 @@ function editor () {
         this.currentPiece = id;
     }
     
+    /**
+     * Cria uma nova 'Screen'
+     * 
+     * @param {integer} id
+     * @returns {void}
+     */
     this.addScreen = function(id){
         
         //variável para adição do ID do banco, se ele não existir ficará vazio.
@@ -73,6 +102,11 @@ function editor () {
         this.attPajinate();
     }
     
+    /**
+     * Atualiza a Paginação.
+     * 
+     * @returns {void}
+     */
     this.attPajinate = function(){
         //pega o valor da quantidade de páginas
         var lastScreen = $('.screen').size()-1;
@@ -92,6 +126,14 @@ function editor () {
         });
     }
     
+    /**
+     * Adiciona um novo 'PieceSet'.
+     * 
+     * @param {integer} id
+     * @param {string} desc
+     * @param {string} type
+     * @returns {void}
+     */
     this.addPieceSet = function(id, desc, type){
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = "";
@@ -127,22 +169,26 @@ function editor () {
         this.countPieceSet[this.currentScreenId] =  this.countPieceSet[this.currentScreenId]+1;    
         
         
-        
+        //Cria função do botões
         $("#"+piecesetID+"_list > button.insertImage").click(function(){
             parent.insertImgPieceSet(piecesetID,null,null);
         });
         $("#"+piecesetID+"_list > button.insertSound").click(function(){
             parent.insertAudioPieceSet(piecesetID,null);
         });
-        
-       
-            
         $("#"+piecesetID+"_list > button.delPieceSet").click(function(){
             parent.delPieceSet(piecesetID);
         });
 
     }
     
+    /**
+     * Adiciona um 'Piece', vindo do Banco ou não.
+     * 
+     * @param {integer} id
+     * @param {integer} idbd
+     * @returns {void}
+     */
     this.addPiece = function(id, idbd){
         var parent = this;
         var PieceSetid = id.replace("pie_", "");
