@@ -175,7 +175,7 @@ this.DB = function() {
             state_actorStore.createIndex("actor_id", "actor_id", {
                 unique: false
             });
-            state_actorStore.createIndex("discipline_id", "discipline_id", {
+            state_actorStore.createIndex("cobject_block_id", "cobject_block_id", {
                 unique: false
             });
 
@@ -410,10 +410,12 @@ this.DB = function() {
                             //Senha correta
                             var name = requestGet.result.name;
                             var id = requestGet.result.id;
+                            var personage_name = requestGet.result.personage_name;
                             //Armazenar nome do usuário e id_Actor na sessão 
                             sessionStorage.setItem("authorization", true);
-                            sessionStorage.setItem("id_actor", id);
-                            sessionStorage.setItem("name_actor", name);
+                            sessionStorage.setItem("login_id_actor", id);
+                            sessionStorage.setItem("login_name_actor", name);
+                            sessionStorage.setItem('login_personage_name',personage_name);
                         } else {
                             sessionStorage.setItem("authorization", false);
                         }
@@ -515,7 +517,7 @@ this.DB = function() {
         }
     }
 
-    //Armazenar a performance
+    //Armazenar a  performance
     this.addPerformance_actor = function(data) {
         var piece_id = data.piece_id;
         var actor_id = data.actor_id;
@@ -556,6 +558,91 @@ this.DB = function() {
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
 
+    }
+    
+    //Adicionar o Estado Corrent do usuário
+    this.addState_Actor = function(){
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        }
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                window.alert("Database error: " + event.target.errorCode);
+            }
+           
+
+        }
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+    }
+    
+    //Realiza UPDATE dos registros do estado atual deste actor no block, caso já exista
+    this.NewORUpdateUserState = function(data_state_actor){
+        var actor_id = data_state_actor.actor_id;
+        var cobject_block_id = data_state_actor.cobject_block_id;
+        //Escolhe a pesquisa por Ator
+        if (self.isset(actor_id)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                }
+                //Tudo ok Então Busca O UserState
+                var stateActorStore = db.transaction("state_actor").objectStore("state_actor");
+                var requestGet = stateActorStore.index('actor_id');
+                var user_state_id = null;
+                var singleKeyRange = IDBKeyRange.only(actor_id);
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                    var cursor = event.target.result;
+                    if (cursor){
+                        // Faz algo com o que encontrar
+                        //Verificar se JÁ POSSUI UM ESTADO ATUAL PARA ESTE USUÁRIO NESTE BLOCK
+                        if(cursor.value.cobject_block_id == cobject_block_id){
+                            //Realiza Update
+                            user_state_id = cursor.value.id;
+                            //Set os novos dados do estado do actor corrente
+                            cursor.value.current_piece_id = data_state_actor.current_piece_id;
+                            cursor.value.qtd_correct = data_state_actor.qtd_correct;
+                            cursor.value.qtd_wrong = data_state_actor.qtd_wrong;
+                            cursor.update(cursor.value);
+                        }
+                        
+                        cursor.continue();
+                    }else{
+                        //Finalisou a Pesquisa, se não existir um estado corrent, o parms=null
+                        var update = self.isset(user_state_id);
+                        //Cria um novo Se NÃO houve update
+                        if(!update){
+                            var state_actorObjectStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
+                            state_actorObjectStore.add(data_state_actor);
+                            state_actorObjectStore.transaction.oncomplete = function(event) {
+                                console.log(' NEW State Actor Salvo !!!! ');
+                            }
+                        }
+                    }
+                    
+                };
+                requestGet.onerror = function(event) {
+                // Tratar erro!
+                }
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
     }
     
     //Recuperar o estado do usuário

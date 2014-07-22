@@ -31,12 +31,15 @@
         <!-- Abrir Script do renderDB --> 
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script>
-    
+            
+            function isset(variable) {
+                return (variable !== undefined && variable !== null);
+            }
+            
             $(document).ready(function(){
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
                 }
-        
                 //Iniciar Encontro
                 var personage = '';
                 var idActor = '';
@@ -50,18 +53,30 @@
                 var org_name = ''; 
                 var classe_name = ''; 
           
+                //Verificar se existe um aluno selecionado pelo tutor
+                //Ou se foi o próprio aluno que realizou login
+                var id_actor = isset(sessionStorage.getItem('id_actor')) ?
+                    sessionStorage.getItem('id_actor'): sessionStorage.getItem('login_id_actor');
+                var name_actor = isset(sessionStorage.getItem('name_actor')) ?
+                    sessionStorage.getItem('name_actor'): sessionStorage.getItem('login_name_actor');
+                //Personagem de quem fez o login
+                var login_personage_name = sessionStorage.getItem('login_personage_name');
+                
+                //Selecionar o Bloco de Atividades
+                var block_id = '1';
                 var options = {
                     org: [org,org_name],
                     classe: [classe,classe_name],
-                    actor: [sessionStorage.getItem('id_actor'),sessionStorage.getItem('name_actor')]
+                    actor: [id_actor,name_actor,login_personage_name],
+                    id_discipline: sessionStorage.getItem('id_discipline'),
+                    cobject_block_id:block_id
                 };
          
                 //Passar parâmetro do tipo do Encontro
-                var newMeet = new Meet(unityfather,options);
+                var newMeet = new Meet(options);
         
                 //$('#head_meet').append(newMeet.headMeet());
                 
-                var block_id = '1';
                 var cobjectsFromBlock = null;
                 //Obter todos os Cobject deste Bloco
                 var getcobjectsFromBlock =  newMeet.DB_synapse.getCobjectsFromBlock(block_id, function(objectsThisBlock){
@@ -82,10 +97,10 @@
                             if(idx == num_objects-1){
                                 $('#render_canvas').html(newMeet.domCobjectBuildAll());
                                 //Inicia os eventos somente após a inclusão do html na dom
-                                  newMeet.beginEvents();
+                                newMeet.beginEvents();
                                 // Render Ready! 
-                                 newMeet.countTime($('.info-time .info-text'));
-                                 
+                                newMeet.countTime($('.info-time .info-text'));
+                                $('#begin_activity').trigger('click');
                             }
                             
                         });
@@ -94,7 +109,6 @@
                     
                 });
                     
-               
                 
                 //Atualizar O painel do render
                 $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');
@@ -151,7 +165,7 @@
         </div>
 
         <div id="info-button" class="menu-open">
-            
+
         </div>
 
         <div id="message"> 
