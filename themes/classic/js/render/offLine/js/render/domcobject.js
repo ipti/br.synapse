@@ -7,7 +7,7 @@ COBJECT_CONTENT = "Content";
 NEXT_PIECE = "Próxima Atividade >>>>>";
 NEXT_SCREEN = "Próxima Tela >>>>>";
 BEGIN_ACTIVITY = "Iniciar Atividade";
-
+ 
 var DomCobject = function(cobject, idx) {
     this.cobject = cobject;
     this.idx = idx;

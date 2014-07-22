@@ -17,9 +17,9 @@
                     </div>
 
                                         <div class="formField">
-                        <?php echo $form->labelEx($model,'disciplineID'); ?>
-                        <?php echo $form->dropDownList($model, 'disciplineID', CHtml::listData(ActDiscipline::model()->findAll(), 'ID', 'name')); ?>
-                        <?php echo $form->error($model,'disciplineID'); ?>
+                        <?php echo $form->labelEx($model,'discipline_id'); ?>
+                        <?php echo $form->textField($model,'discipline_id'); ?>
+                        <?php echo $form->error($model,'discipline_id'); ?>
                     </div>
 
                                     <div class="formField buttonWizardBar">

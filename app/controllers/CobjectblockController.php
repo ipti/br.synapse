@@ -92,7 +92,7 @@ class CobjectblockController extends Controller
 		{
 			$model->attributes=$_POST['Cobjectblock'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->ID));
+				$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('update',array(

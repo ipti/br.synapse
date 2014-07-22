@@ -6,8 +6,8 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'ID'); ?>
-		<?php echo $form->textField($model,'ID'); ?>
+		<?php echo $form->label($model,'id'); ?>
+		<?php echo $form->textField($model,'id'); ?>
 	</div>
 
 	<div class="row">
@@ -16,8 +16,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'disciplineID'); ?>
-		<?php echo $form->textField($model,'disciplineID'); ?>
+		<?php echo $form->label($model,'discipline_id'); ?>
+		<?php echo $form->textField($model,'discipline_id'); ?>
 	</div>
 
 	<div class="row buttons">
