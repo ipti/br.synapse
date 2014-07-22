@@ -166,43 +166,61 @@ this.DB = function() {
              group_id  */
             //===============================================
 
+            //Criar o ObjectStore específico do RENDER
+            var state_actorStore = db.createObjectStore("state_actor", {
+                keyPath: "id",
+                autoIncrement:true
+            });
+            
+            state_actorStore.createIndex("actor_id", "actor_id", {
+                unique: false
+            });
+            state_actorStore.createIndex("discipline_id", "discipline_id", {
+                unique: false
+            });
+
 
             // Usando transação oncomplete para afirmar que a criação do objectStore 
             // é terminada antes de adicionar algum dado nele.
 
             unityStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
 
             actorStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             disciplineStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             cobjectblockStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             cobject_cobjectblockStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             cobjectStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             performance_actorStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas');
+            }
+            state_actorStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
@@ -541,7 +559,9 @@ this.DB = function() {
     }
     
     //Recuperar o estado do usuário
-    //this.getUserState
+    this.getUserState = function(){
+        
+    }
 
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão
