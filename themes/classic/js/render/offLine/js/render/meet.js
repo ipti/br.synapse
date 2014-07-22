@@ -90,16 +90,16 @@ this.Meet = function(unityfather, options) {
         
     }
 
-    /**
-     * Retorna o cabeçalho do Meet
-     * 
-     * @returns {String}
-     */
-    this.headMeet = function() {
-        return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
-        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
-        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
-    }
+//    /**
+//     * Retorna o cabeçalho do Meet
+//     * 
+//     * @returns {String}
+//     */
+//    this.headMeet = function() {
+//        return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
+//        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
+//        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
+//    }
 
     //    this.verifyMatch(group1, element1ID, group2, element2ID){
     //        
@@ -227,13 +227,13 @@ this.Meet = function(unityfather, options) {
         $('.cobject.MTE div[group]').on('click', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
-                $(this).css('opacity', '1');
+                $(this).css('border', 'none');
                 $(this).removeClass('last_clicked');
             } else {
                 var siblings = $(this).siblings();
-                $(this).css('opacity', '0.4');
+                $(this).css('border', '4px solid');
                 var siblings = $(this).siblings();
-                siblings.css('opacity', '1');
+                siblings.css('border', 'none');
                 siblings.removeClass('last_clicked');
                 $(this).addClass('last_clicked');
             }

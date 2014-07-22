@@ -59,7 +59,7 @@
                 //Passar parâmetro do tipo do Encontro
                 var newMeet = new Meet(unityfather,options);
         
-                $('#head_meet').append(newMeet.headMeet());
+                //$('#head_meet').append(newMeet.headMeet());
                 
                 var block_id = '1';
                 var cobjectsFromBlock = null;
@@ -84,6 +84,8 @@
                                 //Inicia os eventos somente após a inclusão do html na dom
                                   newMeet.beginEvents();
                                 // Render Ready! 
+                                 newMeet.countTime($('.info-time .info-text'));
+                                 
                             }
                             
                         });
@@ -104,9 +106,13 @@
                     if ($('#head_meet').is(':visible')) {
                         $('#head_meet').hide();
                         $('#info-button').css('left','0');
+                        $('#info-button').removeClass('menu-close');
+                        $('#info-button').addClass('menu-open');
                     } else {
                         $('#head_meet').show();
                         $('#info-button').css('left','156px');
+                        $('#info-button').removeClass('menu-open');
+                        $('#info-button').addClass('menu-close');
                     }
                 });
 
@@ -115,7 +121,7 @@
         </script>
         <title>Render</title>
     </head>
-    <body id="synapse">
+    <body id="synapse" ondragstart='return false'>
 
         <!-- Barra de informações -->
         <div id="head_meet">
@@ -124,7 +130,7 @@
             </div>
             <div class="info info-time">
                 <img class="info-icon" src="img/icons/clock.png">
-                <p class="info-text">00:00:45</p>
+                <p class="info-text"></p>
                 <div class="clear"></div>
             </div>
             <div class="info info-hits">
@@ -144,8 +150,8 @@
             </a>
         </div>
 
-        <div id="info-button">
-            <img class="info-icon" src="img/icons/exit.png">
+        <div id="info-button" class="menu-open">
+            
         </div>
 
         <div id="message"> 

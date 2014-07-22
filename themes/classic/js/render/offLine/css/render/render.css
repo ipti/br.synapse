@@ -43,6 +43,16 @@ ul, ol, li {
     text-align: right;
 }
 
+.nextPiece{
+    background: #ACDD31;
+    border: none;
+    padding: 0px 60px;
+    color: #fff;
+    font-size: 26px;
+    border-radius: 6px;
+    box-shadow: 2px 2px 5px #2C2C2C;
+}
+
 .element { 
     display: block;
 }
@@ -173,8 +183,9 @@ fieldset{
     height: 140px;
     background: #51B899;
     border-radius: 5px;
-    padding: 7px;
+    padding: 5px;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .MTE .elementText {
@@ -198,6 +209,43 @@ fieldset{
 .MTE .group.build_image.build_text .element-build_text {
     margin-top: 0;
 }
+
+/** Template AEL **/
+.AEL .ask{
+    text-align: center;
+    display: table;
+    margin: auto;
+}
+
+.AEL .group{
+    float:left;
+    width: 160px;
+    height: 140px;
+    background: #51B899;
+    border-radius: 5px;
+    padding: 7px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.AEL .elementText {
+    font-size: 19px;
+    text-transform: uppercase;
+}
+
+.AEL .element-build_text {
+    margin-top: 40%;
+}
+
+.AEL .group.build_image.build_text img {
+    height: 121px;
+}
+
+.AEL .group.build_image.build_text .element-build_text {
+    margin-top: 0;
+}
+
+
 
 /** Template PRE **/
 .PRE fieldset {
