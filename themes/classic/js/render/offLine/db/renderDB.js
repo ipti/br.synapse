@@ -561,26 +561,26 @@ this.DB = function() {
     }
 
     //Adicionar o Estado Corrent do usuário
-    this.addState_Actor = function() {
-        window.indexedDB = self.verifyIDBrownser();
-        DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function(event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
-        }
-        DBsynapse.onsuccess = function(event) {
-            var db = event.target.result;
-            db.onerror = function(event) {
-                // Função genérica para tratar os erros de todos os requests desse banco!
-                window.alert("Database error: " + event.target.errorCode);
-            }
-
-
-        }
-        DBsynapse.onblocked = function(event) {
-            // Se existe outra aba com a versão antiga
-            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-        }
-    }
+//    this.addState_Actor = function() {
+//        window.indexedDB = self.verifyIDBrownser();
+//        DBsynapse = window.indexedDB.open(nameBD);
+//        DBsynapse.onerror = function(event) {
+//            alert("Você não habilitou minha web app para usar IndexedDB?!");
+//        }
+//        DBsynapse.onsuccess = function(event) {
+//            var db = event.target.result;
+//            db.onerror = function(event) {
+//                // Função genérica para tratar os erros de todos os requests desse banco!
+//                window.alert("Database error: " + event.target.errorCode);
+//            }
+//
+//
+//        }
+//        DBsynapse.onblocked = function(event) {
+//            // Se existe outra aba com a versão antiga
+//            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+//        }
+//    }
 
     //Realiza UPDATE dos registros do estado atual deste actor no block, caso já exista
     this.NewORUpdateUserState = function(data_state_actor) {
@@ -652,8 +652,57 @@ this.DB = function() {
     }
 
     //Recuperar o estado do usuário
-    this.getUserState = function() {
+    this.getUserState = function(actor_id, cobject_block_id, callBack) {
+         
+        if (self.isset(actor_id) && self.isset(cobject_block_id)) {
+            var info_state = null;
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                }
+                //Tudo ok Então Busca O Cobject
+                var state_actorStore = db.transaction("state_actor").objectStore("state_actor");
+                var requestGet = state_actorStore.index('actor_id');
+                var singleKeyRange = IDBKeyRange.only(actor_id);
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        // Para cada id do Actor encontrado, verificar cobject_block_id
+                        if (cursor.value.cobject_block_id == cobject_block_id) {
+                            //Encontrou o estado deste Actor para este Bloco
+                            info_state = {
+                                cobject_block_id: cursor.value.cobject_block_id,
+                                actor_id: cursor.value.actor_id,
+                                last_piece_id: cursor.value.last_piece_id,
+                                qtd_correct: cursor.value.qtd_correct,
+                                qtd_wrong: cursor.value.qtd_wrong
+                            };
+                        } 
+                            //else { Se não encontrou, vai pro próximo
+                            cursor.continue();
+                    } else {
+                        //Finalisou a Pesquisa
+                        console.log(info_state);
+                        callBack(info_state);
+                    }
 
+                };
+                requestGet.onerror = function(event) {
+                    // Tratar erro!
+                }
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
     }
 
     function useDatabase(db) {

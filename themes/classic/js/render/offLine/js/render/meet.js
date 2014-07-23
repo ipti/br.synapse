@@ -78,7 +78,9 @@ this.Meet = function(options) {
     this.beginEvents = function() {
         //iniciar code_Event dos templates
         //Para cada cobject Inicia seus eventos
-        self.init_Common();
+
+        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, self.init_Common);
+
         var template_codes = new Array();
         for (var idx = 0; idx < self.num_cobjects; idx++) {
             //Add no Array o template name se não existir, para garantir que não chame o mesmo evento mais de uma vez
@@ -120,17 +122,106 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_Common = function() {
+    this.init_Common = function(info_state) {
+        console.log($('.currentCobject'));
+        var gotoState = self.isset(info_state);
+        if (gotoState) {
+            var lastpiece_id = info_state.last_piece_id;
+            self.peformance_qtd_correct = info_state.qtd_correct;
+            self.peformance_qtd_wrong = info_state.qtd_wrong;
+            self.update_performanceDOM();
+        }
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
         $(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
+
+
         $(selector_cobject + ' #begin_activity').on('click', function() {
             $(this).hide();
-            $(selector_cobject + ' .nextPiece').show();
-            $(selector_cobject + ' .pieceset:eq(0)').addClass('currentPieceSet');
-            $(selector_cobject + ' .piece:eq(0)').addClass('currentPiece');
-            $(selector_cobject + ' .pieceset:eq(0), .piece:eq(0)').show();
+
+            if (!gotoState) {
+                $(selector_cobject + ' .nextPiece').show();
+                $(selector_cobject + ' .pieceset:eq(0)').addClass('currentPieceSet');
+                $(selector_cobject + ' .piece:eq(0)').addClass('currentPiece');
+                $(selector_cobject + ' .pieceset:eq(0), .piece:eq(0)').show();
+            } else {
+                //Ir para a piece->pieceSet->Screen->cobject 
+                $('.currentCobject').hide();
+                $('.currentCobject').removeClass('currentCobject');
+                $('.currentScreen').hide();
+                $('.currentScreen').removeClass('currentScreen');
+ 
+                var lastPiece = $(selector_cobject + ' .piece[id=' + lastpiece_id + ']');
+                 var nextPiece = null;
+                 var lastPieceSet = null;
+                 var lastScreen = null;
+                 var lastCobject = null;
+                 var nextPieceSet = null;
+                 var nextScreen = null;
+                 var nextCobject = null;
+                 var nextBook = null;
+                if(lastPiece.next('.piece').size()!=0){
+                    nextPiece = lastPiece.next('.piece');
+                }else{
+                    //Acabou as Pieces desta PieceSet
+                    lastPieceSet = lastPiece.closest('.pieceset');
+                    nextPieceSet = lastPieceSet.next('.pieceset');
+                    nextBook = lastPieceSet.next('.book'); // STOP HERE COLCOAR PIECESET no book
+                    if(nextBook.size() == 0){
+                    if(nextPieceSet.size()==0){
+                        //Acabou as PieceSets desta Screen
+                        lastScreen = lastPieceSet.closest('.T_screen');
+                        nextScreen = lastScreen.next('.T_screen');
+                        if(nextScreen.size()==0){
+                            //Acabou as Screens deste Cobject
+                            lastCobject = lastScreen.closest('.cobject');
+                            nextCobject = lastCobject.next('.cobject');
+                            if(nextCobject.size()==0){
+                                //Acabou todos os Cobjets, ATIVIDADE JÁ FINALISADA
+                            }else{
+                                //Ir pra a piece deste Cobject
+                        nextPiece = nextCobject.find('.T_screen:eq(0) .piece:eq(0)');
+                        
+                            }
+                        }else{
+                              //Ir pra a piece desta Screen
+                        nextPiece = nextScreen.find('.piece:eq(0)');
+                        
+                        }
+                    }else{
+                        //Ir pra a piece deste PieceSet
+                        nextPiece = nextPieceSet.find('.piece:eq(0)');
+                        
+                    }
+                }else{
+                    
+                }
+                    
+                }
+               
+                
+                if (lastPiece.next('.piece').size() != 0) {
+                    //Existe uma próxima peça
+                    var nextPiece = lastPiece.next('.piece');
+                    nextPiece.addClass('currentPiece');
+                    if (!nextPiece.hasClass('book')) {
+                        //Não é TXT
+                        nextPiece.closest('.pieceset').addClass('currentPieceSet');
+                    }
+                    var parentScreen = nextPiece.closest('.T_screen').addClass('currentScreen');
+                    parentScreen.closest('.cobject').addClass('currentCobject');
+
+                    $(selector_cobject + ' .nextPiece').show();
+                    $(selector_cobject + ' .currentCobject, ' + selector_cobject +
+                            ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                            ' .currentPiece').show();
+                } else {
+                    //Não existe próxima peça
+
+                }
+
+            }
 
             //Inicio do temporizador
             self.restartTimes();
@@ -217,10 +308,8 @@ this.Meet = function(options) {
                 nextPiece.addClass('currentPiece');
                 nextPiece.show();
             }
-            //Atualiza a contidade de corretos
-            $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
-            $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
-
+            
+            self.update_performanceDOM();
             // Após salvar, Reinicia o time da Piece e Group
             self.restartTimes();
         });
@@ -228,6 +317,12 @@ this.Meet = function(options) {
         $('#finalize_activity').on('click', function() {
             self.finalizeMeet();
         });
+    }
+
+    this.update_performanceDOM = function() {
+        //Atualiza a contidade de corretos
+        $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
+        $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
     }
 
     /**
