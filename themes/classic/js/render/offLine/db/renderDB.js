@@ -616,7 +616,6 @@ this.DB = function() {
                             cursor.value.last_piece_id = data_state_actor.last_piece_id;
                             cursor.value.qtd_correct = data_state_actor.qtd_correct;
                             cursor.value.qtd_wrong = data_state_actor.qtd_wrong;
-                            console.log(cursor.value);
                             var request_update = cursor.update(cursor.value);
                             request_update.onsuccess = function(event) {
                                 console.log(' State Actor Atualizado !!!! ');
@@ -624,7 +623,6 @@ this.DB = function() {
                             request_update.onerror = function(event) {
                                 console.log(' ERRO ao Atualizar State Actor !!!! ');
                             };
-                            console.log("");
                         }
 
                         cursor.continue();

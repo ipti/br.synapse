@@ -146,6 +146,18 @@ this.Meet = function(options) {
             if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
                 //Salva na PerformanceUser
                 self.savePerformanceUsr(currentPiece.attr('id'));
+            } else {
+                //Salva somente o estado corrente do usuário
+                //Salvar o estado do Actor, neste ponto.
+                //cobject_block_id + actor_id = PK
+                var info_state = {
+                    cobject_block_id: self.cobject_block_id,
+                    actor_id: self.actor,
+                    last_piece_id: currentPiece.attr('id'),
+                    qtd_correct: self.peformance_qtd_correct,
+                    qtd_wrong: self.peformance_qtd_wrong
+                };
+                self.DB_synapse.NewORUpdateUserState(info_state);
             }
 
             currentPiece.removeClass('currentPiece');
