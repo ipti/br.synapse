@@ -80,6 +80,7 @@ var DomCobject = function(cobject, idx) {
         for (this.pos.pieceset = 0; this.pos.pieceset < piecesets_length; this.pos.pieceset++) {
             self.id.pieceset = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].id;
             if (self.cobject.template_code == 'TXT') {
+                self.id.piece = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces[0].id;
                 self.domScreen.append(this.buildRightBook());
             } else {
                 self.domScreen.append(this.buildPieceSet());
@@ -91,7 +92,7 @@ var DomCobject = function(cobject, idx) {
 
     this.buildRightBook = function() {
         self.pos.group = 1;
-        self.domPieceSet = $('<div class="book" id="' + self.id.pieceset + '"></div>');
+        self.domPieceSet = $('<div class="book piece" id="' + self.id.piece + '"></div>');
         var fd = $('<div class="book-right"></div>');
         var elements_group = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         for (self.pos.element = 0; self.pos.element < elements_group.elements.length; self.pos.element++) {
