@@ -131,6 +131,7 @@ fieldset{
     color: #fff;
     font-size: 35px;
     line-height: 35px;
+    position: relative;
 }
 
 .pieceSetInfo .elementImage {
@@ -148,6 +149,14 @@ fieldset{
 
 /** Respostas Global**/
 
+.elementSound{
+    display:none;
+}
+
+.soundIconPlay{
+    width:100%;
+    height:100%;
+}
 
 /** Template TXT **/
 .book {
@@ -174,13 +183,13 @@ fieldset{
 }
 
 /** Template MTE **/
-.MTE .ask{
+.ask{
     text-align: center;
     display: table;
     margin: auto;
 }
 
-.MTE .group{
+.MTE .group, .AEL .group{
     float:left;
     width: 160px;
     height: 140px;
@@ -189,9 +198,10 @@ fieldset{
     padding: 5px;
     margin: 0 10px;
     cursor: pointer;
+    position: relative;
 }
 
-.MTE .elementText {
+.elementText {
     font-size: 19px;
     text-transform: uppercase;
 }
@@ -201,19 +211,32 @@ fieldset{
     border-radius: 2px;
 }
 
-.MTE .element-build_text {
+.element-build_text {
     margin-top: 40%;
 }
 
-.MTE .group.build_image.build_text img {
+.group.build_image.build_text.build_sound .element-build_sound img {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 30px;
+}
+
+.group.build_image.build_text .elementImage img {
     height: 121px;
 }
 
-.MTE .group.build_image.build_text .element-build_text {
+.group.build_image.build_text .element-build_text {
     margin-top: 0;
 }
-
-/** Template AEL **/
+.element-build_sound img {
+    position: absolute;
+    width: 67px;
+    height: auto;
+    margin-left: -87px;
+}
+/*
+/** Template AEL **
 .AEL .ask{
     text-align: center;
     display: table;
@@ -240,13 +263,14 @@ fieldset{
     margin-top: 40%;
 }
 
-.AEL .group.build_image.build_text img {
+.AEL .group.build_image.build_text .elementImage img {
     height: 121px;
 }
 
 .AEL .group.build_image.build_text .element-build_text {
     margin-top: 0;
-}
+}*/
+
 
 
 

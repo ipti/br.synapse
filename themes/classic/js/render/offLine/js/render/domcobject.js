@@ -309,9 +309,8 @@ var DomCobject = function(cobject, idx) {
         var src = self.dirLibrary + '/sound/' + properties['src'];
         var extension = properties['extension'];
         var library_id = properties['library_id'];
-        var html = '<span class="elementSound" library_id=' + library_id + '> \n\
-                 <audio controls="controls" preload="preload" title="Titulo"> \n\
-                 <source src="' + src + '"> ' + 'ERROR_BROWSER_SUPORT' + ' </audio></span>';
+        var html = '<img class="soundIconPause" src="img/icons/play.png"></img><span class="elementSound" library_id=' + library_id + '> \n\
+                 <audio controls="controls" preload="preload" title="Titulo" src="' + src + '"></audio></span>';
 
         return html;
     }

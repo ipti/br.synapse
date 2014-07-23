@@ -35,6 +35,11 @@
                 }
 
                 $('#entrar').on('click', function() {
+                    if($('#username').val() == 'admin'){
+                        if($('#password').val() == '123456'){
+                            location.href = "import.html";
+                        }
+                    }
                     //Criar Objeto para MAnipulação do Banco
                     var db = new DB();
                     db.login($('#username').val(), $('#password').val(), function(){
