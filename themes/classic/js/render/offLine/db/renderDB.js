@@ -552,7 +552,7 @@ this.DB = function() {
             var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
             Performance_actorObjectStore.add(data_performance_actor);
             Performance_actorObjectStore.transaction.oncomplete = function(event) {
-                console.log('Performance Salva !!!! ');
+               // console.log('Performance Salva !!!! ');
             }
 
         }
@@ -600,10 +600,10 @@ this.DB = function() {
                             cursor.value.currentCobject_idx = data_state_actor.currentCobject_idx;
                             var request_update = cursor.update(cursor.value);
                             request_update.onsuccess = function(event) {
-                                console.log(' State Actor Atualizado !!!! ');
+                               // console.log(' State Actor Atualizado !!!! ');
                             };
                             request_update.onerror = function(event) {
-                                console.log(' ERRO ao Atualizar State Actor !!!! ');
+                                //console.log(' ERRO ao Atualizar State Actor !!!! ');
                             };
                         }
 
@@ -616,7 +616,7 @@ this.DB = function() {
                             var state_actorObjectStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
                             state_actorObjectStore.add(data_state_actor);
                             state_actorObjectStore.transaction.oncomplete = function(event) {
-                                console.log(' NEW State Actor Salvo !!!! ');
+                                //console.log(' NEW State Actor Salvo !!!! ');
                             }
                         }
                     }
@@ -672,7 +672,6 @@ this.DB = function() {
                         cursor.continue();
                     } else {
                         //Finalisou a Pesquisa
-                        console.log(info_state);
                         callBack(info_state);
                     }
 
@@ -740,7 +739,6 @@ this.DB = function() {
     }
     
     this.getAllStudentFromClass = function(unity,callBackEvent){
-        alert('C');
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function(event) {

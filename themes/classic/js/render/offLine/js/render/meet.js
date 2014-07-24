@@ -139,8 +139,6 @@ this.Meet = function(options) {
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
 
-        console.log(gotoState);
-
         if (!gotoState) {
             $('.nextPiece').show();
             $(selector_cobject + ':eq(0)').addClass('currentCobject');
@@ -181,15 +179,16 @@ this.Meet = function(options) {
                             self.isFinalBlock = true;
 
                         } else {
-                            //Ir pra a piece deste Cobject
+                            //Ir pra a piece do next Cobject
+                            self.currentCobject_idx++;
                             nextPiece = nextCobject.find('.T_screen:eq(0) .pieceset:eq(0) .piece:eq(0)');
                         }
                     } else {
-                        //Ir pra a piece desta Screen
+                        //Ir pra a piece next Screen
                         nextPiece = nextScreen.find('.pieceset:eq(0) .piece:eq(0)');
                     }
                 } else {
-                    //Ir pra a piece deste PieceSet
+                    //Ir pra a piece next PieceSet
                     nextPiece = nextPieceSet.find('.piece:eq(0)');
 
                 }
@@ -545,6 +544,7 @@ this.Meet = function(options) {
     this.isCorrectAEL = function(pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
+            console.log(self.currentCobject_idx);
             //Salvar no Objeto o Metadados do acerto e erro de um element
             var elements_groupAsk = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAskClicked);
             var elements_groupAnswer = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAnswerClicked);

@@ -3,7 +3,6 @@ $(document).ready(function(){
  
     //Classe Principal
     var getAllClassAndStudents = function(){
-        alert('A');
         DB_synapse.actorOwnUnity = new Array();
         DB_synapse.getAllClass(DB_synapse.getAllStudentFromClasses,eventFilterMeet);
     }
@@ -29,6 +28,7 @@ $(document).ready(function(){
             $("#classroom").trigger('change');
         } else {
             $("#login-select").hide();
+            $("#select-discipline").css('margin-top', '10%')
         }
 
         $('.discipline').click(function(){
