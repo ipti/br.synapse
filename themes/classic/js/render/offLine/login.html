@@ -23,7 +23,7 @@
             if (sessionStorage.getItem("authorization") != null 
                 && sessionStorage.getItem("authorization") == 'true') {
                 //Usuário Logado
-                location.href = "meet.html";
+                location.href = "select.html";
             }
             $(document).ready(function() {
                 if (window.openDatabase) {
@@ -35,13 +35,18 @@
                 }
 
                 $('#entrar').on('click', function() {
+                    if($('#username').val() == 'admin'){
+                        if($('#password').val() == '123456'){
+                            location.href = "import.html";
+                        }
+                    }
                     //Criar Objeto para MAnipulação do Banco
                     var db = new DB();
                     db.login($('#username').val(), $('#password').val(), function(){
                         var authorization = sessionStorage.getItem("authorization");
                         if (authorization == 'true') {
                             //Usuário Logado
-                            location.href = "meet.html";
+                            location.href = "select.html";
                         }else{
                             //Remove a sessão do authorization
                             sessionStorage.removeItem("authorization");

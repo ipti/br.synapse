@@ -3,11 +3,10 @@
  * 
  * @class
  * 
- * @param {integer} unityfather
  * @param {array} options
  * @returns {Meet}
  */
-this.Meet = function(unityfather, options) {
+this.Meet = function(options) {
     // MGS
     MSG_CORRECT = 'Parabéns, você acertou';
     MSG_WRONG = 'Ops! Você errou, continue tentando.';
@@ -22,6 +21,7 @@ this.Meet = function(unityfather, options) {
     this.currentCobject_idx = null;
     this.domCobjects = new Array();
     this.num_cobjects = 0;
+    this.isFinalBlock = false;
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     this.org = options.org[0];
     this.org_name = options.org[1];
@@ -29,13 +29,15 @@ this.Meet = function(unityfather, options) {
     this.classe_name = options.classe[1];
     this.actor = options.actor[0];
     this.actor_name = options.actor[1];
+    this.login_personage_name = options.actor[2];
+    this.discipline_id = options.id_discipline;
+    this.cobject_block_id = options.cobject_block_id;
     //============================
 
     //==== Armazenar a performance do usuário
     this.peformance_qtd_correct = 0;
     this.peformance_qtd_wrong = 0;
     this.score = 0;
-    var discipline_id = 0;
     var script_id = 0;
     var start_time = 0;
     var final_time = 0;
@@ -52,15 +54,16 @@ this.Meet = function(unityfather, options) {
     this.pushDomCobjects = function(domCobjects) {
         self.domCobjects.push(domCobjects);
     }
-    
+
     /**
      * Retorna todos os CObjects de self.domCobject em uma string
      * 
      * @returns {String.domCobjectBuildAll}
      */
-    this.domCobjectBuildAll = function(){
+    this.domCobjectBuildAll = function() {
         var domCobjectBuildAll = $('<div class="cobject_block"></div>');
-        for(var idx in self.domCobjects){
+        domCobjectBuildAll.append(self.buildToolBar);
+        for (var idx in self.domCobjects) {
             domCobjectBuildAll.append(self.domCobjects[idx].buildAll());
             self.num_cobjects++;
         }
@@ -68,7 +71,7 @@ this.Meet = function(unityfather, options) {
         self.currentCobject_idx = 0;
         return domCobjectBuildAll;
     }
-    
+
     /**
      * Inicializa os eventos dos Cobjects
      * 
@@ -77,34 +80,36 @@ this.Meet = function(unityfather, options) {
     this.beginEvents = function() {
         //iniciar code_Event dos templates
         //Para cada cobject Inicia seus eventos
-        self.init_Common();
-        var template_codes = new Array(); 
-        for(var idx = 0; idx < self.num_cobjects; idx++){
+
+        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, self.init_Common);
+
+        var template_codes = new Array();
+        for (var idx = 0; idx < self.num_cobjects; idx++) {
             //Add no Array o template name se não existir, para garantir que não chame o mesmo evento mais de uma vez
-            if($.inArray(self.domCobjects[idx].cobject.template_code, template_codes) == -1){
+            if ($.inArray(self.domCobjects[idx].cobject.template_code, template_codes) == -1) {
                 //Evoca o evento para este template
                 eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
                 template_codes.push(self.domCobjects[idx].cobject.template_code);
             }
         }
-        
+
     }
 
-    /**
-     * Retorna o cabeçalho do Meet
-     * 
-     * @returns {String}
-     */
-    this.headMeet = function() {
-        return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
-        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
-        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
-    }
+    //    /**
+    //     * Retorna o cabeçalho do Meet
+    //     * 
+    //     * @returns {String}
+    //     */
+    //    this.headMeet = function() {
+    //        return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
+    //        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
+    //        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
+    //    }
 
     //    this.verifyMatch(group1, element1ID, group2, element2ID){
     //        
     //    }
-    
+
     /**
      * Reseta os intervalos de tempo
      * 
@@ -119,103 +124,197 @@ this.Meet = function(unityfather, options) {
      * 
      * @returns {void}
      */
-    this.init_Common = function() {
+    this.init_Common = function(info_state) {
+        var gotoState = self.isset(info_state);
+        if (gotoState) {
+            var lastpiece_id = info_state.last_piece_id;
+            self.peformance_qtd_correct = info_state.qtd_correct;
+            self.peformance_qtd_wrong = info_state.qtd_wrong;
+            self.currentCobject_idx = info_state.currentCobject_idx;
+            //Calcula o Score
+            self.scoreCalculator();
+        }
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject';
-        $(selector_cobject+' div[group]').closest('div.ask, div.answer').shuffle();
-        $(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
-        $(selector_cobject+' #begin_activity').on('click', function() {
-            $(this).hide();
-            $(selector_cobject+' .nextPiece').show();
-            $(selector_cobject+' .pieceset:eq(0)').addClass('currentPieceSet');
-            $(selector_cobject+' .piece:eq(0)').addClass('currentPiece');
-            $(selector_cobject+' .pieceset:eq(0), .piece:eq(0)').show();
+        $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
+        //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
 
+        console.log(gotoState);
+
+        if (!gotoState) {
+            $('.nextPiece').show();
+            $(selector_cobject + ':eq(0)').addClass('currentCobject');
+            $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
+            $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
+            $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
+            $(selector_cobject + '.currentCobject, ' + selector_cobject +
+                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                    ' .currentPiece').show();
+        } else {
+            //Ir para a piece->pieceSet->Screen->cobject 
+
+            var lastPiece = $(selector_cobject + ' .piece[id=' + lastpiece_id + ']');
+            var nextPiece = null;
+            var lastPieceSet = null;
+            var lastScreen = null;
+            var lastCobject = null;
+            var nextPieceSet = null;
+            var nextScreen = null;
+            var nextCobject = null;
+
+            if (lastPiece.next('.piece').size() != 0) {
+                nextPiece = lastPiece.next('.piece');
+            } else {
+                //Acabou as Pieces desta PieceSet
+                lastPieceSet = lastPiece.closest('.pieceset');
+                nextPieceSet = lastPieceSet.next('.pieceset');
+                if (nextPieceSet.size() == 0) {
+                    //Acabou as PieceSets desta Screen
+                    lastScreen = lastPieceSet.closest('.T_screen');
+                    nextScreen = lastScreen.next('.T_screen');
+                    if (nextScreen.size() == 0) {
+                        //Acabou as Screens deste Cobject
+                        lastCobject = lastScreen.closest('.cobject');
+                        nextCobject = lastCobject.next('.cobject');
+                        if (nextCobject.size() == 0) {
+                            //Acabou todos os Cobjets, ATIVIDADE JÁ FINALIZADA
+                            self.isFinalBlock = true;
+
+                        } else {
+                            //Ir pra a piece deste Cobject
+                            nextPiece = nextCobject.find('.T_screen:eq(0) .pieceset:eq(0) .piece:eq(0)');
+                        }
+                    } else {
+                        //Ir pra a piece desta Screen
+                        nextPiece = nextScreen.find('.pieceset:eq(0) .piece:eq(0)');
+                    }
+                } else {
+                    //Ir pra a piece deste PieceSet
+                    nextPiece = nextPieceSet.find('.piece:eq(0)');
+
+                }
+
+
+            }
+
+            //Se NÃO for o final do bloco
+            //Existe uma próxima peça
+            if (!self.isFinalBlock) {
+                nextPiece.addClass('currentPiece');
+                nextPiece.closest('.pieceset').addClass('currentPieceSet');
+                var parentScreen = nextPiece.closest('.T_screen').addClass('currentScreen');
+                parentScreen.closest('.cobject').addClass('currentCobject');
+
+                $('.nextPiece').show();
+                $(selector_cobject + '.currentCobject, ' + selector_cobject +
+                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                        ' .currentPiece').show();
+            }
+        }
+
+        if (!self.isFinalBlock) {
             //Inicio do temporizador
             self.restartTimes();
-        });
-        $(selector_cobject+' .nextPiece').on('click', function() {
-            var currentPiece = $('.currentPiece');
-            //Se for PRE então Verificar ser está correto
-            if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
-                self.isCorrectPRE(currentPiece.attr('id'));
-            }
 
-            //Salva no BD somente se o template for != TXT
-            if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
-                //Salva na PerformanceUser
-                self.savePerformanceUsr(currentPiece.attr('id'));
-            }
+            $('.nextPiece').on('click', function() {
+                var currentPiece = $('.currentPiece');
+                //Se for PRE então Verificar ser está correto
+                if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
+                    self.isCorrectPRE(currentPiece.attr('id'));
+                }
 
-            currentPiece.removeClass('currentPiece');
-            currentPiece.hide();
-            if (currentPiece.next().size() == 0) {
-                //Acabou Peça, passa pra outra PieceSet se houver
-                var currentPieceSet = $('.currentPieceSet');
-                currentPieceSet.removeClass('currentPieceSet');
-                currentPieceSet.hide();
+                //Salva no BD somente se o template for != TXT
+                if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+                    //Salva na PerformanceUser
+                    self.savePerformanceUsr(currentPiece.attr('id'));
+                } else {
+                    //Salva somente o estado corrente do usuário
+                    //Salvar o estado do Actor, neste ponto.
+                    //cobject_block_id + actor_id = PK
+                    var info_state = {
+                        cobject_block_id: self.cobject_block_id,
+                        actor_id: self.actor,
+                        last_piece_id: currentPiece.attr('id'),
+                        qtd_correct: self.peformance_qtd_correct,
+                        qtd_wrong: self.peformance_qtd_wrong,
+                        currentCobject_idx: self.currentCobject_idx
+                    };
+                    self.DB_synapse.NewORUpdateUserState(info_state);
+                }
 
-                if (currentPieceSet.next().size() == 0) {
-                    //Acabou todas as pieceSets dessa Tela
-                    // Passa pra a pŕoxima PieceSet
-                    var currentScreen = $('.currentScreen');
-                    currentScreen.removeClass('currentScreen');
-                    currentScreen.hide();
-                    var nextScreen = currentScreen.next();
+                currentPiece.removeClass('currentPiece');
+                currentPiece.hide();
+                if (currentPiece.next().size() == 0) {
+                    //Acabou Peça, passa pra outra PieceSet se houver
+                    var currentPieceSet = $('.currentPieceSet');
+                    currentPieceSet.removeClass('currentPieceSet');
+                    currentPieceSet.hide();
 
-                    if (nextScreen.size() != 0) {
-                        nextScreen.addClass('currentScreen');
-                        nextScreen.show();
-                        nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                        nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                        nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-                    } else {
-                        //Finalisou todas as Screen do COBJECT Corrente
-                        if(self.hasNextCobject()){
-                            self.currentCobject_idx++;
-                            var selector_cobject = '.cobject[id='+self.domCobjects[self.currentCobject_idx].cobject.cobject_id+']';
-                            $('.currentCobject').removeClass('currentCobject');
-                            $(selector_cobject).addClass('currentCobject');
-                            nextScreen = $(selector_cobject+' .T_screen:eq(0)');
+                    if (currentPieceSet.next().size() == 0) {
+                        //Acabou todas as pieceSets dessa Tela
+                        // Passa pra a pŕoxima PieceSet
+                        var currentScreen = $('.currentScreen');
+                        currentScreen.removeClass('currentScreen');
+                        currentScreen.hide();
+                        var nextScreen = currentScreen.next();
+
+                        if (nextScreen.size() != 0) {
                             nextScreen.addClass('currentScreen');
                             nextScreen.show();
                             nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
                             nextScreen.find('.piece:eq(0)').addClass('currentPiece');
                             nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-                            
-                        }else{
-                            $('.nextPiece').hide();
-                            $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>')); 
+                        } else {
+                            //Finalisou todas as Screen do COBJECT Corrente
+                            if (self.hasNextCobject()) {
+                                self.currentCobject_idx++;
+                                var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
+                                $('.currentCobject').removeClass('currentCobject');
+                                $(selector_cobject).addClass('currentCobject');
+                                nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
+                                nextScreen.addClass('currentScreen');
+                                nextScreen.show();
+                                nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                                nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                                $(selector_cobject).show();
+                                nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+
+                            } else {
+                                $('.nextPiece').hide();
+                                $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                            }
+
                         }
-                       
+
+                    } else {
+                        var nextPieceSet = currentPieceSet.next();
+                        nextPieceSet.addClass('currentPieceSet');
+                        nextPieceSet.show();
+
+                        var nextPiece = nextPieceSet.find('.piece:eq(0)');
+                        nextPiece.addClass('currentPiece');
+                        nextPiece.show();
                     }
-
                 } else {
-                    var nextPieceSet = currentPieceSet.next();
-                    nextPieceSet.addClass('currentPieceSet');
-                    nextPieceSet.show();
-
-                    var nextPiece = nextPieceSet.find('.piece:eq(0)');
+                    var nextPiece = currentPiece.next();
                     nextPiece.addClass('currentPiece');
                     nextPiece.show();
                 }
-            } else {
-                var nextPiece = currentPiece.next();
-                nextPiece.addClass('currentPiece');
-                nextPiece.show();
-            }
-            //Atualiza a contidade de corretos
-            $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
-            $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
 
-            // Após salvar, Reinicia o time da Piece e Group
-            self.restartTimes();
-        });
+                // Após salvar, Reinicia o time da Piece e Group
+                self.restartTimes();
+            });
 
-        $('#finalize_activity').on('click', function() {
-            self.finalizeMeet();
-        });
+            $('#finalize_activity').on('click', function() {
+                self.finalizeMeet();
+            });
+        } else {
+            //Atividade Já Finalizada
+            $('.cobject_block').hide();
+            window.alert('Atividade Já Finalizada !');
+        }
     }
+
 
     /**
      * Inicializa eventos do MTE
@@ -227,13 +326,13 @@ this.Meet = function(unityfather, options) {
         $('.cobject.MTE div[group]').on('click', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
-                $(this).css('opacity', '1');
+                $(this).css('border', 'none');
                 $(this).removeClass('last_clicked');
             } else {
                 var siblings = $(this).siblings();
-                $(this).css('opacity', '0.4');
+                $(this).css('border', '4px solid');
                 var siblings = $(this).siblings();
-                siblings.css('opacity', '1');
+                siblings.css('border', 'none');
                 siblings.removeClass('last_clicked');
                 $(this).addClass('last_clicked');
             }
@@ -241,11 +340,11 @@ this.Meet = function(unityfather, options) {
             //Primeiro Verificar se a Piece está certa!
             var pieceID = $(this).closest('.piece').attr('id');
             self.isCorrectMTE(pieceID, $(this).attr('group'));
-        //Somente salva no BD no botão: Próxima Piece
+            //Somente salva no BD no botão: Próxima Piece
         });
 
     }
-    
+
     /**
      * Inicializa eventos do AEL
      * 
@@ -292,8 +391,8 @@ this.Meet = function(unityfather, options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -303,24 +402,24 @@ this.Meet = function(unityfather, options) {
         });
 
     }
-    
+
     /**
      * Inicializa eventos do PRE
      * 
      * @returns {void}
      */
     this.init_PRE = function() {
-    //  self.init_Common();
+        //  self.init_Common();
 
     }
-    
+
     /**
      * Inicializa eventos do TXT
      * 
      * @returns {void}
      */
     this.init_TXT = function() {
-    //  self.init_Common();
+        //  self.init_Common();
     }
     //======================
 
@@ -356,12 +455,28 @@ this.Meet = function(unityfather, options) {
 
         //Salvar na performance_User OffLine
         self.DB_synapse.addPerformance_actor(data);
-        if(pieceIsTrue){
+
+
+        if (pieceIsTrue) {
             self.peformance_qtd_correct++;
-        }else{
+        } else {
             self.peformance_qtd_wrong++;
         }
 
+        //Salvar o estado do Actor, neste ponto.
+        //cobject_block_id + actor_id = PK
+        var info_state = {
+            cobject_block_id: self.cobject_block_id,
+            actor_id: self.actor,
+            last_piece_id: currentPieceID,
+            qtd_correct: self.peformance_qtd_correct,
+            qtd_wrong: self.peformance_qtd_wrong,
+            currentCobject_idx: self.currentCobject_idx
+        };
+        //Salva o Estado
+        self.DB_synapse.NewORUpdateUserState(info_state);
+        //Calcula o Score
+        self.scoreCalculator();
         self.showMessageAnswer(pieceIsTrue);
         //Salvo com Sucesso !
         return true;
@@ -476,12 +591,12 @@ this.Meet = function(unityfather, options) {
         self.domCobjects[self.currentCobject_idx].mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     }
-    
-    
-    this.hasNextCobject = function(){
+
+
+    this.hasNextCobject = function() {
         return self.isset(self.domCobjects[self.currentCobject_idx + 1]);
     }
-    
+
     //======================
     /**
      * Deveria finalizar o meet... mas não faz nada.
@@ -522,56 +637,65 @@ this.Meet = function(unityfather, options) {
             $('#message').html(MSG_WRONG);
             $('#message').fadeOut(5000);
         }
-        self.scoreCalculator();
+
     }
 
     //Contador de Tempo de cada Meet
-    this.countTime = function (tag){
+    this.countTime = function(tag) {
         //A cada segundo realiza a recursividade
-        if(self.isset(tag)){
+        if (self.isset(tag)) {
             self.tag_time = tag;
         }
-        setTimeout(function(){
+        setTimeout(function() {
             self.time++;
             var current_time = self.time;
-            
+
             var hours = 0;
             var mins = 0;
             var segs = 0;
-            if(current_time >= 3600){
+            if (current_time >= 3600) {
                 //Possui hora
-                hours =  Math.round(current_time/3600);
-                current_time %= 3600; 
+                hours = Math.round(current_time / 3600);
+                current_time %= 3600;
             }
-            
-            if(current_time >= 60){
+
+            if (current_time >= 60) {
                 //Possui minutos
-                mins =  Math.round(current_time/60);
+                mins = Math.round(current_time / 60);
                 current_time %= 60;
             }
             segs = current_time;
-            if(hours<10){
-                hours = '0'+hours;
+            if (hours < 10) {
+                hours = '0' + hours;
             }
-             if(mins<10){
-                mins = '0'+mins;
+            if (mins < 10) {
+                mins = '0' + mins;
             }
-             if(segs<10){
-                segs = '0'+segs;
+            if (segs < 10) {
+                segs = '0' + segs;
             }
-            self.tag_time.html(hours+':'+mins+':'+segs);
+            self.tag_time.html(hours + ':' + mins + ':' + segs);
             self.countTime();
         }, 1000);
     }
-    
 
 
-    this.scoreCalculator = function(){
+
+    this.scoreCalculator = function() {
         self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
-        if(self.score < 0){
+        if (self.score < 0) {
             self.score = 0;
         }
+        //Atualiza a contidade de corretos
+        $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
+        $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
         $('#points').text(self.score);
+    }
+
+    this.buildToolBar = function() {
+        var html = $('<div class="toolBar"></div>');
+        html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
+        return html;
     }
 
 }

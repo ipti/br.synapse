@@ -88,6 +88,10 @@
                     db.openDBuild(true);
                 });
                 
+                $('#back').on('click',function(){
+                    location.href = "login.html";
+                });
+                
             }); 
     
         </script>
@@ -103,6 +107,7 @@
             <button type="button" id="deleteAllDB"> DELETAR TODO BANCO </button>  
             <button type="button" id="buildAllSchemas" name="buildAllSchemas" >buildAllSchemas</button>
             <button type="button" id="import" name="import" >Importar</button>
+            <button type="button" id="back" name="back" >Voltar</button>
         </div>
     </body>
 </html>

@@ -137,7 +137,7 @@ this.DB = function() {
             cobject_cobjectblockStore.createIndex("cobject_block_id", "cobject_block_id", {
                 unique: false
             });
-            
+
             // Faltam cobject_id
 
             //================================================
@@ -152,8 +152,8 @@ this.DB = function() {
 
             // cria um objectStore do performance_actor
             var performance_actorStore = db.createObjectStore("performance_actor", {
-                keyPath: "id", 
-                autoIncrement:true
+                keyPath: "id",
+                autoIncrement: true
             });
             //Faltam
             /* piece_id
@@ -166,43 +166,61 @@ this.DB = function() {
              group_id  */
             //===============================================
 
+            //Criar o ObjectStore específico do RENDER
+            var state_actorStore = db.createObjectStore("state_actor", {
+                keyPath: "id",
+                autoIncrement: true
+            });
+
+            state_actorStore.createIndex("actor_id", "actor_id", {
+                unique: false
+            });
+            state_actorStore.createIndex("cobject_block_id", "cobject_block_id", {
+                unique: false
+            });
+
 
             // Usando transação oncomplete para afirmar que a criação do objectStore 
             // é terminada antes de adicionar algum dado nele.
 
             unityStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
 
             actorStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             disciplineStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             cobjectblockStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             cobject_cobjectblockStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             cobjectStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
             performance_actorStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 7 então contruiu todos os schemas
+                //Se for o último dos 8 então contruiu todos os schemas
+                db.close();
+                window.alert('Criou os Schemas');
+            }
+            state_actorStore.transaction.oncomplete = function(event) {
+                //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 window.alert('Criou os Schemas');
             }
@@ -219,7 +237,7 @@ this.DB = function() {
     // - - - - - - - - - -  //
 
     this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
-        , cobject_cobjectblocks, cobjects) {
+            , cobject_cobjectblocks, cobjects) {
         //Unidade e Usuário
         var data_unity = unitys;
 
@@ -267,8 +285,8 @@ this.DB = function() {
             //Importar os cobjects
             self.importCobject(db, data_cobject);
 
-        //Importar os performance_actors
-        // self.importPerformance_actor(db,data_performance_actor); 
+            //Importar os performance_actors
+            // self.importPerformance_actor(db,data_performance_actor); 
 
 
         }
@@ -382,7 +400,7 @@ this.DB = function() {
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
                 var requestGet = ActorObjectStore.index("login").get(login);
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     // Fazer algo com request.result!
@@ -392,10 +410,12 @@ this.DB = function() {
                             //Senha correta
                             var name = requestGet.result.name;
                             var id = requestGet.result.id;
+                            var personage_name = requestGet.result.personage_name;
                             //Armazenar nome do usuário e id_Actor na sessão 
                             sessionStorage.setItem("authorization", true);
-                            sessionStorage.setItem("id_actor", id);
-                            sessionStorage.setItem("name_actor", name);
+                            sessionStorage.setItem("login_id_actor", id);
+                            sessionStorage.setItem("login_name_actor", name);
+                            sessionStorage.setItem('login_personage_name', personage_name);
                         } else {
                             sessionStorage.setItem("authorization", false);
                         }
@@ -440,7 +460,7 @@ this.DB = function() {
                 var cobjectStore = db.transaction("cobject").objectStore("cobject");
                 var requestGet = cobjectStore.get(cobject_id);
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     var json_cobject = requestGet.result;
@@ -454,7 +474,7 @@ this.DB = function() {
             }
         }
     }
-    
+
     //===================
     this.getCobjectsFromBlock = function(block_id, callBack) {
         if (self.isset(block_id)) {
@@ -480,14 +500,14 @@ this.DB = function() {
                         // Faz algo com o que encontrar
                         objectsThisBlock.push(cursor.value.cobject_id);
                         cursor.continue();
-                    }else{
+                    } else {
                         //Finalisou a Pesquisa
                         callBack(objectsThisBlock);
                     }
-                    
+
                 };
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
             }
             DBsynapse.onblocked = function(event) {
@@ -497,7 +517,7 @@ this.DB = function() {
         }
     }
 
-    //Armazenar a performance
+    //Armazenar a  performance
     this.addPerformance_actor = function(data) {
         var piece_id = data.piece_id;
         var actor_id = data.actor_id;
@@ -539,9 +559,131 @@ this.DB = function() {
         }
 
     }
-    
+
+    //Adicionar ou Realiza UPDATE dos registros do estado atual deste actor no block
+    this.NewORUpdateUserState = function(data_state_actor) {
+        var actor_id = data_state_actor.actor_id;
+        var cobject_block_id = data_state_actor.cobject_block_id;
+        //Escolhe a pesquisa por Ator
+        if (self.isset(actor_id)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                }
+                //Tudo ok Então Busca O UserState
+                var stateActorStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
+                var requestGet = stateActorStore.index('actor_id');
+                var user_state_id = null;
+                var singleKeyRange = IDBKeyRange.only(actor_id);
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        // Faz algo com o que encontrar
+                        //Verificar se JÁ POSSUI UM ESTADO ATUAL PARA ESTE USUÁRIO NESTE BLOCK
+                        if (cursor.value.cobject_block_id == cobject_block_id) {
+                            //Realiza Update
+                            user_state_id = cursor.value.id;
+                            //Set os novos dados do estado do actor corrente
+                            cursor.value.last_piece_id = data_state_actor.last_piece_id;
+                            cursor.value.qtd_correct = data_state_actor.qtd_correct;
+                            cursor.value.qtd_wrong = data_state_actor.qtd_wrong;
+                            cursor.value.currentCobject_idx = data_state_actor.currentCobject_idx;
+                            var request_update = cursor.update(cursor.value);
+                            request_update.onsuccess = function(event) {
+                                console.log(' State Actor Atualizado !!!! ');
+                            };
+                            request_update.onerror = function(event) {
+                                console.log(' ERRO ao Atualizar State Actor !!!! ');
+                            };
+                        }
+
+                        cursor.continue();
+                    } else {
+                        //Finalisou a Pesquisa, se não existir um estado corrent, o parms=null
+                        var update = self.isset(user_state_id);
+                        //Cria um novo Se NÃO houve update
+                        if (!update) {
+                            var state_actorObjectStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
+                            state_actorObjectStore.add(data_state_actor);
+                            state_actorObjectStore.transaction.oncomplete = function(event) {
+                                console.log(' NEW State Actor Salvo !!!! ');
+                            }
+                        }
+                    }
+
+                };
+                requestGet.onerror = function(event) {
+                    // Tratar erro!
+                }
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+    }
+
     //Recuperar o estado do usuário
-    //this.getUserState
+    this.getUserState = function(actor_id, cobject_block_id, callBack) {
+         
+        if (self.isset(actor_id) && self.isset(cobject_block_id)) {
+            var info_state = null;
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                }
+                //Tudo ok Então Busca O Cobject
+                var state_actorStore = db.transaction("state_actor").objectStore("state_actor");
+                var requestGet = state_actorStore.index('actor_id');
+                var singleKeyRange = IDBKeyRange.only(actor_id);
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        // Para cada id do Actor encontrado, verificar cobject_block_id
+                        if (cursor.value.cobject_block_id == cobject_block_id) {
+                            //Encontrou o estado deste Actor para este Bloco
+                            info_state = {
+                                cobject_block_id: cursor.value.cobject_block_id,
+                                actor_id: cursor.value.actor_id,
+                                last_piece_id: cursor.value.last_piece_id,
+                                qtd_correct: cursor.value.qtd_correct,
+                                qtd_wrong: cursor.value.qtd_wrong,
+                                currentCobject_idx: cursor.value.currentCobject_idx
+                            };
+                        } 
+                            //else { Se não encontrou, vai pro próximo
+                            cursor.continue();
+                    } else {
+                        //Finalisou a Pesquisa
+                        console.log(info_state);
+                        callBack(info_state);
+                    }
+
+                };
+                requestGet.onerror = function(event) {
+                    // Tratar erro!
+                }
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+    }
 
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão

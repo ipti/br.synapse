@@ -66,13 +66,30 @@ body {
 	bottom: 115px;
 	left: 0;
 	padding: 5px;
-	background: #666666;
+	background-color: #666666;
 	color: #fff;
 	font-size: 20px;
 	border: none;
 	border-radius: 0 7px 7px 0;
+	cursor: pointer;
 }
 
+.menu-open {
+	background-image: url(../../img/icons/exit.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 44px;
+	height: 44px;
+}
+
+.menu-close {
+	background-image: url(../../img/icons/sidebar-close.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 44px;
+	height: 44px;
+
+}
 /** Pergunta da atividade **/
 /*.question-container {
 	width: 700px;

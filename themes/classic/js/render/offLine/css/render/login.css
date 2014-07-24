@@ -99,6 +99,61 @@ body {
 	color: #fff;
 }
 
+/** Selecionar aluno **/
+.bg-select {
+ 	position: absolute;
+ 	top: -15%;
+	overflow: hidden;
+	height: 115%;
+ }
+
+#login-select {
+	margin: 5% auto;
+	width: 600px;
+}
+
+#login-select select {
+	background: #E9A232;
+	padding: 8px 30px;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 2px 2px 6px #2C2C2C;
+	color: #fff;
+	margin-right: 30px;
+}
+
+#login-select .login-label {
+	width: 120px;
+}
+
+.discipline {
+	width: 250px;
+	float: left;
+	margin: 0 20px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#select-discipline {
+	display: table;
+	margin: auto;
+}
+
+.discipline-button {
+	background: #51B899;
+	border: none;
+	font-family: asap;
+	color: #fff;
+	padding: 5px 20px;
+	border-radius: 5px;
+	box-shadow: 1px 1px 2px #2C2C2C;
+	font-weight: 600;
+	font-size: 20px;
+	width: 170px;
+	cursor: pointer;
+	margin-top: 20px;
+}
+
 /** Animação **/
 
 @-webkit-keyframes hiddenLogo {
