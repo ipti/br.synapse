@@ -22,7 +22,7 @@ var DomCobject = function(cobject, idx) {
 //        //O primeiro Cobject
 //        this.dom = $('<div class="cobject ' + this.cobject.template_code + ' currentCobject" id=' + this.cobject.cobject_id + '></div>');
 //    }else{
-        this.dom = $('<div class="cobject ' + this.cobject.template_code + '" id=' + this.cobject.cobject_id + '></div>');
+        this.dom = $('<div class="cobject ' + this.cobject.template_code + '" style="display:none" id=' + this.cobject.cobject_id + '></div>');
 //    }
 
 
@@ -92,8 +92,8 @@ var DomCobject = function(cobject, idx) {
 
     this.buildRightBook = function() {
         self.pos.group = 1;
-        self.domPieceSet = $('<div class="pieceset book" id="' + self.id.pieceset + '"></div>');
-        self.domPiece = $('<div class="piece" id="' + self.id.piece + '"></div>');
+        self.domPieceSet = $('<div class="pieceset book" style="display:none" id="' + self.id.pieceset + '"></div>');
+        self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
         var fd = $('<div class="book-right"></div>');
         var elements_group = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         for (self.pos.element = 0; self.pos.element < elements_group.elements.length; self.pos.element++) {
@@ -107,7 +107,7 @@ var DomCobject = function(cobject, idx) {
     }
 
     this.buildPieceSet = function() {
-        self.domPieceSet = $('<div class="pieceset" id="' + self.id.pieceset + '"></div>');
+        self.domPieceSet = $('<div class="pieceset" style="display:none" id="' + self.id.pieceset + '"></div>');
         self.domPieceSet.append(self.buildInfo_PieceSet());
         var fd = $('<fieldset class="answer-container"></fieldset>');
         var pieces_length = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces.length;
@@ -123,7 +123,7 @@ var DomCobject = function(cobject, idx) {
     }
 
     this.buildPiece = function() {
-        self.domPiece = $('<div class="piece" id="' + self.id.piece + '"></div>');
+        self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
         var domElementASK = $('<div class="ask"></div>');
         //Verificar se é uma peça do template AEL
         if (self.cobject.template_code == 'AEL') {

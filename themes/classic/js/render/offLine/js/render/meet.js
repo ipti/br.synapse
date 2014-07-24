@@ -134,27 +134,21 @@ this.Meet = function(options) {
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
-        $(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
+        //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
 
-
-        $(selector_cobject + ' #begin_activity').on('click', function() {
-            $(this).hide();
+        console.log(gotoState);
 
             if (!gotoState) {
                 $(selector_cobject + ' .nextPiece').show();
-                $(selector_cobject + ' .cobject:eq(0)').addClass('currentCobject');
-                $(selector_cobject + ' .T_screen:eq(0)').addClass('currentScreen');
-                $(selector_cobject + ' .pieceset:eq(0)').addClass('currentPieceSet');
-                $(selector_cobject + ' .piece:eq(0)').addClass('currentPiece');
-                $(selector_cobject + ' .currentCobject, ' + selector_cobject +
+                $(selector_cobject + ':eq(0)').addClass('currentCobject');
+                $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
+                $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
+                $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
+                $(selector_cobject + '.currentCobject, ' + selector_cobject +
                             ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
                             ' .currentPiece').show();
             } else {
                 //Ir para a piece->pieceSet->Screen->cobject 
-                $('.currentCobject').hide();
-                $('.currentCobject').removeClass('currentCobject');
-                $('.currentScreen').hide();
-                $('.currentScreen').removeClass('currentScreen');
 
                 var lastPiece = $(selector_cobject + ' .piece[id=' + lastpiece_id + ']');
                 var nextPiece = null;
@@ -207,7 +201,7 @@ this.Meet = function(options) {
                     parentScreen.closest('.cobject').addClass('currentCobject');
 
                     $(selector_cobject + ' .nextPiece').show();
-                    $(selector_cobject + ' .currentCobject, ' + selector_cobject +
+                    $(selector_cobject + '.currentCobject, ' + selector_cobject +
                             ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
                             ' .currentPiece').show();
 
@@ -215,7 +209,7 @@ this.Meet = function(options) {
 
             //Inicio do temporizador
             self.restartTimes();
-        });
+
         $(selector_cobject + ' .nextPiece').on('click', function() {
             var currentPiece = $('.currentPiece');
             //Se for PRE então Verificar ser está correto
@@ -275,6 +269,7 @@ this.Meet = function(options) {
                             nextScreen.show();
                             nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
                             nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                            $(selector_cobject).show();
                             nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
 
                         } else {
