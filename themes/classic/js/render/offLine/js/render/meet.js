@@ -142,73 +142,67 @@ this.Meet = function(options) {
 
             if (!gotoState) {
                 $(selector_cobject + ' .nextPiece').show();
+                $(selector_cobject + ' .cobject:eq(0)').addClass('currentCobject');
+                $(selector_cobject + ' .T_screen:eq(0)').addClass('currentScreen');
                 $(selector_cobject + ' .pieceset:eq(0)').addClass('currentPieceSet');
                 $(selector_cobject + ' .piece:eq(0)').addClass('currentPiece');
-                $(selector_cobject + ' .pieceset:eq(0), .piece:eq(0)').show();
+                $(selector_cobject + ' .currentCobject, ' + selector_cobject +
+                            ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                            ' .currentPiece').show();
             } else {
                 //Ir para a piece->pieceSet->Screen->cobject 
                 $('.currentCobject').hide();
                 $('.currentCobject').removeClass('currentCobject');
                 $('.currentScreen').hide();
                 $('.currentScreen').removeClass('currentScreen');
- 
+
                 var lastPiece = $(selector_cobject + ' .piece[id=' + lastpiece_id + ']');
-                 var nextPiece = null;
-                 var lastPieceSet = null;
-                 var lastScreen = null;
-                 var lastCobject = null;
-                 var nextPieceSet = null;
-                 var nextScreen = null;
-                 var nextCobject = null;
-                 var nextBook = null;
-                if(lastPiece.next('.piece').size()!=0){
+                var nextPiece = null;
+                var lastPieceSet = null;
+                var lastScreen = null;
+                var lastCobject = null;
+                var nextPieceSet = null;
+                var nextScreen = null;
+                var nextCobject = null;
+                if (lastPiece.next('.piece').size() != 0) {
                     nextPiece = lastPiece.next('.piece');
-                }else{
+                } else {
                     //Acabou as Pieces desta PieceSet
                     lastPieceSet = lastPiece.closest('.pieceset');
                     nextPieceSet = lastPieceSet.next('.pieceset');
-                    nextBook = lastPieceSet.next('.book'); // STOP HERE COLCOAR PIECESET no book
-                    if(nextBook.size() == 0){
-                    if(nextPieceSet.size()==0){
+                    if (nextPieceSet.size() == 0) {
                         //Acabou as PieceSets desta Screen
                         lastScreen = lastPieceSet.closest('.T_screen');
                         nextScreen = lastScreen.next('.T_screen');
-                        if(nextScreen.size()==0){
+                        if (nextScreen.size() == 0) {
                             //Acabou as Screens deste Cobject
                             lastCobject = lastScreen.closest('.cobject');
                             nextCobject = lastCobject.next('.cobject');
-                            if(nextCobject.size()==0){
+                            if (nextCobject.size() == 0) {
                                 //Acabou todos os Cobjets, ATIVIDADE JÁ FINALISADA
-                            }else{
+                                
+                                
+                                
+                            } else {
                                 //Ir pra a piece deste Cobject
-                        nextPiece = nextCobject.find('.T_screen:eq(0) .piece:eq(0)');
-                        
+                                nextPiece = nextCobject.find('.T_screen:eq(0) .pieceset:eq(0) .piece:eq(0)');
                             }
-                        }else{
-                              //Ir pra a piece desta Screen
-                        nextPiece = nextScreen.find('.piece:eq(0)');
-                        
+                        } else {
+                            //Ir pra a piece desta Screen
+                            nextPiece = nextScreen.find('.pieceset:eq(0) .piece:eq(0)');
                         }
-                    }else{
+                    } else {
                         //Ir pra a piece deste PieceSet
                         nextPiece = nextPieceSet.find('.piece:eq(0)');
-                        
+
                     }
-                }else{
-                    
+
+
                 }
-                    
-                }
-               
-                
-                if (lastPiece.next('.piece').size() != 0) {
+
                     //Existe uma próxima peça
-                    var nextPiece = lastPiece.next('.piece');
                     nextPiece.addClass('currentPiece');
-                    if (!nextPiece.hasClass('book')) {
-                        //Não é TXT
-                        nextPiece.closest('.pieceset').addClass('currentPieceSet');
-                    }
+                    nextPiece.closest('.pieceset').addClass('currentPieceSet');
                     var parentScreen = nextPiece.closest('.T_screen').addClass('currentScreen');
                     parentScreen.closest('.cobject').addClass('currentCobject');
 
@@ -216,10 +210,6 @@ this.Meet = function(options) {
                     $(selector_cobject + ' .currentCobject, ' + selector_cobject +
                             ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
                             ' .currentPiece').show();
-                } else {
-                    //Não existe próxima peça
-
-                }
 
             }
 
@@ -308,7 +298,7 @@ this.Meet = function(options) {
                 nextPiece.addClass('currentPiece');
                 nextPiece.show();
             }
-            
+
             self.update_performanceDOM();
             // Após salvar, Reinicia o time da Piece e Group
             self.restartTimes();

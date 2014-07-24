@@ -18,12 +18,12 @@ var DomCobject = function(cobject, idx) {
     this.domCobject = '';
     this.currentElementType = '';
 
-    if (this.idx == 0) {
-        //O primeiro Cobject
-        this.dom = $('<div class="cobject ' + this.cobject.template_code + ' currentCobject" id=' + this.cobject.cobject_id + '></div>');
-    } else {
+//    if (this.idx == 0) {
+//        //O primeiro Cobject
+//        this.dom = $('<div class="cobject ' + this.cobject.template_code + ' currentCobject" id=' + this.cobject.cobject_id + '></div>');
+//    }else{
         this.dom = $('<div class="cobject ' + this.cobject.template_code + '" id=' + this.cobject.cobject_id + '></div>');
-    }
+//    }
 
 
     this.domContent = $('<div class="content"></div>');
@@ -68,13 +68,13 @@ var DomCobject = function(cobject, idx) {
     }
 
     this.buildScreen = function() {
-        if (self.idx == 0 && this.pos.screen == 0) {
-            // É a primeira Screen do cobjectCorrent
-            self.domScreen = $('<div class="T_screen currentScreen" id="S' + self.id.screen + '"> \n\
-           <button id="begin_activity">' + BEGIN_ACTIVITY + '</button></div>');
-        } else {
+//        if (self.idx == 0 && this.pos.screen == 0) {
+//            // É a primeira Screen do cobjectCorrent
+//            self.domScreen = $('<div class="T_screen currentScreen" id="S' + self.id.screen + '"> \n\
+//           <button id="begin_activity">' + BEGIN_ACTIVITY + '</button></div>');
+//        } else {
             self.domScreen = $('<div class="T_screen" style="display:none" id="S' + self.id.screen + '"></div>');
-        }
+//        }
 
         var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
         for (this.pos.pieceset = 0; this.pos.pieceset < piecesets_length; this.pos.pieceset++) {
@@ -92,14 +92,16 @@ var DomCobject = function(cobject, idx) {
 
     this.buildRightBook = function() {
         self.pos.group = 1;
-        self.domPieceSet = $('<div class="book piece" id="' + self.id.piece + '"></div>');
+        self.domPieceSet = $('<div class="pieceset book" id="' + self.id.pieceset + '"></div>');
+        self.domPiece = $('<div class="piece" id="' + self.id.piece + '"></div>');
         var fd = $('<div class="book-right"></div>');
         var elements_group = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         for (self.pos.element = 0; self.pos.element < elements_group.elements.length; self.pos.element++) {
                 self.id.element = elements_group.elements[self.pos.element].id;
                 fd.append(self.buildElement());
         }
-        self.domPieceSet.append(fd);
+        self.domPiece.append(fd);
+        self.domPieceSet.append(self.domPiece);
         self.domPieceSet.prepend(self.buildInfo_PieceSet());
         return self.domPieceSet;
     }
