@@ -325,13 +325,13 @@ this.Meet = function(options) {
         $('.cobject.MTE div[group]').on('click', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
-                $(this).css('border', 'none');
+                $(this).css('border', '3px solid transparent');
                 $(this).removeClass('last_clicked');
             } else {
                 var siblings = $(this).siblings();
-                $(this).css('border', '4px solid');
+                $(this).css('border', '3px dashed #FBB03B');
                 var siblings = $(this).siblings();
-                siblings.css('border', 'none');
+                siblings.css('border', '3px solid transparent');
                 siblings.removeClass('last_clicked');
                 $(this).addClass('last_clicked');
             }
@@ -409,7 +409,7 @@ this.Meet = function(options) {
      */
     this.init_DDROP = function() {
         //Definir Animação Drag and Drop
-        alert('A');
+        //alert('A');
         $( ".cobject.DDROP div.ask > div[group]" ).draggable();
         $( ".cobject.DDROP div.answer > div[group]" ).droppable({
             

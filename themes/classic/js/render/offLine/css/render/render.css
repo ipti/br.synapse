@@ -84,7 +84,7 @@ fieldset{
 .toolBar {
     clear: both;
     text-align: center;
-    margin-top:30px;
+    margin-top:40px;
 }
 
 /** Nível e Pontos **/
@@ -124,7 +124,7 @@ fieldset{
 .pieceSetInfo {
     width: 700px;
     height: 210px;
-    margin: 0 auto 80px;
+    margin: 0 auto 40px;
     background: #FBB03B;
     border-radius: 0 0 5px 5px;
     padding: 10px;
@@ -191,12 +191,9 @@ fieldset{
 
 .MTE .group, .AEL .group, .DDROP .group{
     float:left;
-    width: 160px;
-    height: 140px;
-    background: #51B899;
-    border-radius: 5px;
     padding: 5px;
     margin: 0 10px;
+    border: 3px solid transparent ;
     cursor: pointer;
     position: relative;
 }
@@ -219,9 +216,10 @@ fieldset{
 /* texto + imagem + som */
 .group.build_image.build_text.build_sound .element-build_sound img {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 11px;
+    right: 11px;
     width: 30px;
+    height: 30px;
 }
 
 /* iamegm + som */
@@ -230,7 +228,21 @@ fieldset{
 }
 
 .group.build_image.build_text .element-build_text {
-    margin-top: 0;
+    position: absolute;
+    bottom: 7px;
+    text-align: center;
+    left: 0;
+    right: 0;
+    padding: 0 10px;
+}
+
+.group li:first-child {
+    width: 160px;
+    height: 140px;
+    background: #51B899;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0;
 }
 
 /* QUESTÃO */
@@ -240,6 +252,7 @@ fieldset{
     width: 67px;
     height: auto;
     margin-left: -87px;
+    cursor: pointer;
 }
 
 .question-container.build_text.build_image .element {
@@ -250,6 +263,7 @@ fieldset{
 .question-container.build_sound.build_text .element-build_sound img {
     width: 100px;
     height: auto;
+    cursor: pointer;
 }
 /*
 /** Template AEL **
