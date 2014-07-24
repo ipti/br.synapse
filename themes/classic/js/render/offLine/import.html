@@ -66,6 +66,8 @@
                         tempActor.name =  object.name;
                         tempActor.password =  object.password;
                         tempActor.personage_name =  object.personage;
+                        //Chave Estrageira para a sua unidade
+                        tempActor.unity_id = object.unity_id;
                          if(!existInArray(actors,tempActor.id)){
                            actors.push(tempActor);
                         }

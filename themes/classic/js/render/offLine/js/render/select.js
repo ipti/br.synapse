@@ -1,53 +1,51 @@
 $(document).ready(function(){
-	var classrooms = {
-			"1": {
-				"name":"1ª A", 
-				"actors": {
-					"1":"João",
-					"2":"José"
-				}
-			}, 
-			"2": {
-				"name":"1ª B", 
-				"actors": {
-					"3":"Paulo",
-					"4":"Miseravão"
-				}
-			}
-		};
+    var DB_synapse = new DB();
+ 
+    //Classe Principal
+    var getAllClassAndStudents = function(){
+        alert('A');
+        DB_synapse.actorOwnUnity = new Array();
+        DB_synapse.getAllClass(DB_synapse.getAllStudentFromClasses,eventFilterMeet);
+    }
 
-	if(sessionStorage.getItem('login_personage_name') == 'Tutor'){
-		$("#login-select").show();
+    var eventFilterMeet = function (actorOwnUnity){
+        var classrooms = actorOwnUnity;
 
-		$("#classroom").html('');
-		$.each(classrooms, function(i, v){
-			$("#classroom").append("<option value='"+i+"''>"+v['name']+"</option>");
-		});
+        if(sessionStorage.getItem('login_personage_name') == 'Tutor'){
+            $("#login-select").show();
 
-		$('#classroom').change(function(){
-			$('#actor').html('');
-			var cr = $('#classroom').val();
+            $("#classroom").html('');
+            $.each(classrooms, function(i, v){
+                $("#classroom").append("<option value='"+v['unity_id']+"' id='"+i+"' >"+v['unity_name']+"</option>");
+            });
 
-			$.each(classrooms[cr]['actors'], function(i, v){
-				$('#actor').append("<option value='"+i+"''>"+v+"</option>");
-			})
-			
-		});
-		$("#classroom").trigger('change');
-	} else {
-		$("#login-select").hide();
-	}
+            $('#classroom').change(function(){
+                $('#actor').html('');
+                var cr = $('#classroom option:selected').attr('id');
+                $.each(classrooms[cr]['actors'], function(i, v){
+                    $('#actor').append("<option value='"+v['actor_id']+"''>"+v['actor_name']+"</option>");
+                })
+            });
+            $("#classroom").trigger('change');
+        } else {
+            $("#login-select").hide();
+        }
 
+        $('.discipline').click(function(){
 
-		$('.discipline').click(function(){
+            sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
+            if(sessionStorage.getItem('login_personage_name') == 'Tutor'){
+                sessionStorage.setItem('id_actor', $('#actor').val());
+                sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());
+            }
+            window.location = "./meet.html";
+        });
+    }
+    
+    if(sessionStorage.getItem('login_personage_name') == 'Tutor'){
+        getAllClassAndStudents();
+    }else{
+        eventFilterMeet(null);
+    }
 
-			sessionStorage.setItem('id_discipline', 	$(this).attr('discipline'));
-			if(sessionStorage.getItem('login_personage_name') == 'Tutor'){
-				sessionStorage.setItem('id_actor', 		$('#actor').val());
-				sessionStorage.setItem('name_actor', 	$('#actor').find(":selected").text());
-			}
-			window.location = "./meet.html";
-		});
-
-
-})
+});

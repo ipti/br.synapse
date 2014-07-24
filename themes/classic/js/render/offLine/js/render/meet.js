@@ -148,8 +148,8 @@ this.Meet = function(options) {
             $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
             $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
             $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                    ' .currentPiece').show();
+                ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                ' .currentPiece').show();
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
 
@@ -207,8 +207,8 @@ this.Meet = function(options) {
 
                 $('.nextPiece').show();
                 $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                        ' .currentPiece').show();
+                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                    ' .currentPiece').show();
             }
         }
 
@@ -340,7 +340,7 @@ this.Meet = function(options) {
             //Primeiro Verificar se a Piece está certa!
             var pieceID = $(this).closest('.piece').attr('id');
             self.isCorrectMTE(pieceID, $(this).attr('group'));
-            //Somente salva no BD no botão: Próxima Piece
+        //Somente salva no BD no botão: Próxima Piece
         });
 
     }
@@ -391,8 +391,8 @@ this.Meet = function(options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -409,7 +409,7 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_PRE = function() {
-        //  self.init_Common();
+    //  self.init_Common();
 
     }
 
@@ -419,7 +419,7 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-        //  self.init_Common();
+    //  self.init_Common();
     }
     //======================
 
@@ -691,6 +691,8 @@ this.Meet = function(options) {
         $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
         $('#points').text(self.score);
     }
+
+    
 
     this.buildToolBar = function() {
         var html = $('<div class="toolBar"></div>');

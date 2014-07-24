@@ -104,6 +104,9 @@ this.DB = function() {
             actorStore.createIndex("login", "login", {
                 unique: true
             });
+            actorStore.createIndex("unity_id", "unity_id", {
+                unique: false
+            });
             // Falta personage_name & password
             //===============================================
 
@@ -237,7 +240,7 @@ this.DB = function() {
     // - - - - - - - - - -  //
 
     this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
-            , cobject_cobjectblocks, cobjects) {
+        , cobject_cobjectblocks, cobjects) {
         //Unidade e Usuário
         var data_unity = unitys;
 
@@ -285,8 +288,8 @@ this.DB = function() {
             //Importar os cobjects
             self.importCobject(db, data_cobject);
 
-            //Importar os performance_actors
-            // self.importPerformance_actor(db,data_performance_actor); 
+        //Importar os performance_actors
+        // self.importPerformance_actor(db,data_performance_actor); 
 
 
         }
@@ -400,7 +403,7 @@ this.DB = function() {
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
                 var requestGet = ActorObjectStore.index("login").get(login);
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     // Fazer algo com request.result!
@@ -460,7 +463,7 @@ this.DB = function() {
                 var cobjectStore = db.transaction("cobject").objectStore("cobject");
                 var requestGet = cobjectStore.get(cobject_id);
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     var json_cobject = requestGet.result;
@@ -507,7 +510,7 @@ this.DB = function() {
 
                 };
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
             }
             DBsynapse.onblocked = function(event) {
@@ -620,7 +623,7 @@ this.DB = function() {
 
                 };
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
             }
             DBsynapse.onblocked = function(event) {
@@ -665,8 +668,8 @@ this.DB = function() {
                                 currentCobject_idx: cursor.value.currentCobject_idx
                             };
                         } 
-                            //else { Se não encontrou, vai pro próximo
-                            cursor.continue();
+                        //else { Se não encontrou, vai pro próximo
+                        cursor.continue();
                     } else {
                         //Finalisou a Pesquisa
                         console.log(info_state);
@@ -675,7 +678,7 @@ this.DB = function() {
 
                 };
                 requestGet.onerror = function(event) {
-                    // Tratar erro!
+                // Tratar erro!
                 }
             }
             DBsynapse.onblocked = function(event) {
@@ -684,6 +687,120 @@ this.DB = function() {
             }
         }
     }
+    
+    
+    this.getAllClass = function(callBack,callBackEvent){
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        }
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                window.alert("Database error: " + event.target.errorCode);
+            }
+            var unityStore = db.transaction("unity").objectStore("unity");
+            var unitys = new Array();
+            unityStore.openCursor().onsuccess = function(event) {
+                
+                var cursor = event.target.result;
+                if (cursor) {
+                    // Percorre cada registro da unity
+                    var unity_id = cursor.value.id;
+                    var unity_name = cursor.value.name;
+                    var currentUnity = {
+                        'unity_id':unity_id,
+                        'unity_name':unity_name
+                    };
+                    unitys.push(currentUnity);  
+                    cursor.continue();
+                }else{
+                    //Finalizou a Pesquisa das Unitys
+                    callBack(unitys,callBackEvent);
+                }
+
+            };
+            unityStore.onerror = function(event) {
+            // Tratar erro!
+            }
+        }
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+        
+    }
+    this.getAllStudentFromClasses = function(unitys,callBackEvent){
+        self.totalUnitys = unitys.length;
+        for(var idx = 0; idx < unitys.length ; idx++){
+            self.getAllStudentFromClass(unitys[idx],callBackEvent);
+        }
+    }
+    
+    this.getAllStudentFromClass = function(unity,callBackEvent){
+        alert('C');
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        }
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                window.alert("Database error: " + event.target.errorCode);
+            }
+            var unity_id = unity.unity_id;
+            var actorStore = db.transaction("actor").objectStore("actor");
+            var requestGet = actorStore.index('unity_id');
+            var singleKeyRange = IDBKeyRange.only(unity_id);
+            var actors = new Array();
+            requestGet.openCursor().onsuccess = function(event) {
+                var contStudent = 0;
+                var cursorActor = event.target.result;
+                if (cursorActor){
+                    // Percorre cada registro no actor para a unity corrent e personage = 'Aluno'
+                    if(cursorActor.value.personage_name == 'Aluno'){
+                        var actor_id = cursorActor.value.id;
+                        var actor_name = cursorActor.value.name;
+                        //Pesquisar Todos os alunos desta unidade
+                        actors[contStudent] = {
+                            'actor_id':actor_id,
+                            'actor_name':actor_name
+                        };
+                        contStudent++;
+                    }
+                           
+                    cursorActor.continue();
+                }else{
+                    //Finalisou para os Actors desta Class
+                    var currentUnity = {
+                        'unity_id':unity_id,
+                        'unity_name':unity.unity_name,
+                        'actors':actors
+                    };
+                    self.actorOwnUnity.push(currentUnity);
+                    //Verificar se é a ÚLTIMA Class
+                    if(self.actorOwnUnity.length == self.totalUnitys){
+                        //Dispara o evento para o filter do select
+                        callBackEvent(self.actorOwnUnity);
+                    }
+                }
+
+            };
+            requestGet.onerror = function(event) {
+            // Tratar erro!
+            }
+        }
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+        
+    }
+   
 
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão
