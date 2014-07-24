@@ -108,8 +108,33 @@
     
                     
                 });
-                    
                 
+                var playing = false;    
+
+                $(document).on('click','.soundIconPause',(function() {
+
+                    var li = $(this).parent();
+                    var span = li.children('span');
+                    var img = $(this);
+                    var audio = span.children()[0];
+                    
+                    if(playing){
+                        playing = false;
+                        audio.pause();
+                        audio.currentTime=0;
+                        img.attr('src', "img/icons/play.png");
+                    }
+                    else{
+                        playing = true;
+                        audio.play();
+                        img.attr('src', "img/icons/stop.png");
+                    }
+
+                    audio.addEventListener("ended", function(){
+                        img.attr('src', "img/icons/play.png");
+                    });
+
+                }));
                 //Atualizar O painel do render
                 $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');
                 $('.info.info-hits .info-text').html(newMeet.peformance_qtd_correct);
