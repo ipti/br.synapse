@@ -75,7 +75,7 @@ body {
 }
 
 .menu-open {
-	background-image: url(../../img/icons/exit.png);
+	background-image: url(../../img/icons/sidebar-open.png);
 	background-repeat: no-repeat;
 	background-size: contain;
 	width: 44px;

@@ -132,6 +132,7 @@ fieldset{
     font-size: 35px;
     line-height: 35px;
     position: relative;
+    text-align: center;
 }
 
 .pieceSetInfo .elementImage {
@@ -169,7 +170,6 @@ fieldset{
     font-weight: bold;
     font-size: 52px;
     text-transform: lowercase;
-    text-align: center;
 }
 
 .book-right {
@@ -189,7 +189,7 @@ fieldset{
     margin: auto;
 }
 
-.MTE .group, .AEL .group{
+.MTE .group, .AEL .group, .DDROP .group{
     float:left;
     width: 160px;
     height: 140px;
@@ -215,6 +215,8 @@ fieldset{
     margin-top: 40%;
 }
 
+/* ALTERNATIVAS */
+/* texto + imagem + som */
 .group.build_image.build_text.build_sound .element-build_sound img {
     position: absolute;
     top: 6px;
@@ -222,6 +224,7 @@ fieldset{
     width: 30px;
 }
 
+/* iamegm + som */
 .group.build_image.build_text .elementImage img {
     height: 121px;
 }
@@ -229,11 +232,24 @@ fieldset{
 .group.build_image.build_text .element-build_text {
     margin-top: 0;
 }
-.element-build_sound img {
+
+/* QUESTÃO */
+/* imagem + texto + som */
+.question-container.build_sound.build_text.build_image .element-build_sound img {
     position: absolute;
     width: 67px;
     height: auto;
     margin-left: -87px;
+}
+
+.question-container.build_text.build_image .element {
+    text-align: left;
+}
+
+/* texto + som */
+.question-container.build_sound.build_text .element-build_sound img {
+    width: 100px;
+    height: auto;
 }
 /*
 /** Template AEL **

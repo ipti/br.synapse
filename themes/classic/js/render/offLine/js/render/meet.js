@@ -62,11 +62,11 @@ this.Meet = function(options) {
      */
     this.domCobjectBuildAll = function() {
         var domCobjectBuildAll = $('<div class="cobject_block"></div>');
-        domCobjectBuildAll.append(self.buildToolBar);
         for (var idx in self.domCobjects) {
             domCobjectBuildAll.append(self.domCobjects[idx].buildAll());
             self.num_cobjects++;
         }
+        domCobjectBuildAll.append(self.buildToolBar);
         //Retorno do 1° Cobject
         self.currentCobject_idx = 0;
         return domCobjectBuildAll;
@@ -403,6 +403,81 @@ this.Meet = function(options) {
     }
 
     /**
+     * Inicializa eventos do AEL
+     * 
+     * @returns {void}
+     */
+    this.init_DDROP = function() {
+        //Definir Animação Drag and Drop
+        alert('A');
+        $( ".cobject.DDROP div.ask > div[group]" ).draggable();
+        $( ".cobject.DDROP div.answer > div[group]" ).droppable({
+            
+            drop: function( event, ui ) {
+//                $( this )
+//                .addClass( "ddrop" )
+//                .find( "p" )
+//                .html( "Dropped!" );
+                
+            }
+        });
+        
+        // variável de encontro definida no meet.php
+//        $('.cobject.DDROP div.answer > div[group]').hide();
+//        $('.cobject.DDROP div[group]').on('click', function() {
+//            var ask_answer = $(this).parents('div').attr('class');
+//            if (ask_answer == 'ask') {
+//                if (!$(this).hasClass('ael_clicked')) {
+//                    $(this).css('opacity', '0.4');
+//                    $(this).siblings().hide();
+//                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
+//                    $(this).addClass('ael_clicked');
+//                    $(this).addClass('last_clicked');
+//                } else {
+//                    $(this).css('opacity', '1');
+//                    $(this).siblings(':not(.ael_clicked)').show();
+//                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
+//                    $(this).removeClass('ael_clicked');
+//                    $(this).removeClass('last_clicked');
+//
+//                }
+//            } else if (ask_answer == 'answer') {
+//                //Time de resposta
+//                var time_answer = (new Date().getTime() - self.interval_group);
+//                //Atualizar o marcador de inicio do intervalo para cada resposta
+//                self.interval_group = time_answer;
+//                $(this).siblings().hide();
+//                $(this).hide();
+//                $(this).closest('div.answer').siblings('div.ask').children('div[group]').show(500);
+//                var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
+//                var groupAnswerClicked = $(this).attr('group');
+//                var groupAskClicked = lastClicked.attr('group');
+//                lastClicked.attr('matched', groupAnswerClicked);
+//                lastClicked.removeClass('last_clicked');
+//                $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
+//                $(this).addClass('ael_clicked');
+//                var thisPieceID = $(this).closest('.piece').attr('id');
+//
+//                //Vericar se o match está certo para este element
+//                self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
+//                //Verificar se Não existe mais elementos a serem clicados
+//                if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
+//                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+//                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+//                }
+//
+//                //Respondeu, então "reinicia" o temporizador de grupo
+//                self.interval_group = new Date().getTime();
+//            }
+//
+//        });
+
+    }
+
+
+
+
+    /**
      * Inicializa eventos do PRE
      * 
      * @returns {void}
@@ -433,7 +508,8 @@ this.Meet = function(options) {
         self.interval_piece = (new Date().getTime() - self.interval_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL') {
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' || 
+            self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP' ) {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado

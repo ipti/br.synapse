@@ -113,7 +113,7 @@ var DomCobject = function(cobject, idx) {
         self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
         var domElementASK = $('<div class="ask"></div>');
         //Verificar se é uma peça do template AEL
-        if (self.cobject.template_code == 'AEL') {
+        if (self.cobject.template_code == 'AEL' || self.cobject.template_code == 'DDROP') {
             var domElementANSWER = $('<div class="answer"></div>');
         }
 
@@ -158,13 +158,13 @@ var DomCobject = function(cobject, idx) {
                 }
                 domGroup.addClass(self.currentElementType);
             }
-            ;
+        ;
         });
         //Armazena todos os grupos de cada peça
         objGroups_currentPiece.istrue = null;
         self.mainPieces[self.id.piece] = objGroups_currentPiece;
         self.domPiece.append(domElementASK);
-        if (self.cobject.template_code == 'AEL') {
+        if (self.cobject.template_code == 'AEL' || self.cobject.template_code == 'DDROP') {
             self.domPiece.append(domElementANSWER);
         }
 
@@ -206,6 +206,13 @@ var DomCobject = function(cobject, idx) {
     }
 
     this.buildElement_MTE = function() {
+        return self.buildElement_AEL();
+    }
+    this.buildElement_DDROP = function() {
+        return self.buildElement_AEL();
+    }
+    
+    this.buildElement_ = function() {
         return self.buildElement_AEL();
     }
 
@@ -346,7 +353,7 @@ var DomCobject = function(cobject, idx) {
         var content = self.cobject.content;
         var html = $('<div class="cobjectInfo"></div>');
         html.append('<span><b>' + COBJECT_GOAL + ":</b> " + goal + " <b>" + COBJECT_TYPE + ":</b> " + type + " <br><b>" + COBJECT_DEGREE_NAME + ":</b> " + degree_name +
-                " <b>" + COBJECT_DISCIPLINE + ":</b> " + discipline + " <b>" + COBJECT_CONTENT + ":</b> " + content + '<span>');
+            " <b>" + COBJECT_DISCIPLINE + ":</b> " + discipline + " <b>" + COBJECT_CONTENT + ":</b> " + content + '<span>');
         return html;
     }
 
@@ -370,7 +377,7 @@ var DomCobject = function(cobject, idx) {
         }
         if (description !== undefined && description !== null) {
             html.addClass('build_text');
-            html.append('<li class="element-question"><h1 class="question-title">' + description + '</h1></li>');
+            html.append('<li class="element element-question"><h1 class="question-title">' + description + '</h1></li>');
         }
         return html;
     }
