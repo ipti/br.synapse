@@ -12,13 +12,13 @@
 
                                     <div class="formField">
                         <?php echo $form->labelEx($model,'cobject_id'); ?>
-                        <?php echo $form->textField($model,'cobject_id'); ?>
+                        <?php echo $form->dropdownlist($model,'cobject_id', chtml::listdata(Cobject::model()->findAll(), 'id', 'id')); ?>
                         <?php echo $form->error($model,'cobject_id'); ?>
                     </div>
 
                                         <div class="formField">
                         <?php echo $form->labelEx($model,'cobject_block_id'); ?>
-                        <?php echo $form->textField($model,'cobject_block_id'); ?>
+                        <?php echo $form->dropdownlist($model,'cobject_block_id', chtml::listData(Cobjectblock::model()->findAll(), 'id', 'name')); ?>
                         <?php echo $form->error($model,'cobject_block_id'); ?>
                     </div>
 

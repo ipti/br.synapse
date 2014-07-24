@@ -9,7 +9,7 @@
             <div class="panelGroupBody">
                 <div class="panelGroupAbout">
                      <?php echo Yii::t('default', 'Fields with * are required.')?></div>
-
+                
                                     <div class="formField">
                         <?php echo $form->labelEx($model,'name'); ?>
                         <?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>60)); ?>
@@ -18,7 +18,7 @@
 
                                         <div class="formField">
                         <?php echo $form->labelEx($model,'discipline_id'); ?>
-                        <?php echo $form->textField($model,'discipline_id'); ?>
+                        <?php echo $form->dropdownlist($model,'discipline_id', chtml::listData(ActDiscipline::model()->findAll(), 'id', 'name')); ?>
                         <?php echo $form->error($model,'discipline_id'); ?>
                     </div>
 
