@@ -7,7 +7,7 @@ COBJECT_CONTENT = "Content";
 NEXT_PIECE = '<img class="answer-ok" src="img/icons/ok.png">';
 NEXT_SCREEN = "Próxima Tela >>>>>";
 BEGIN_ACTIVITY = "Iniciar Atividade";
- 
+
 var DomCobject = function(cobject, idx) {
     this.cobject = cobject;
     this.idx = idx;
@@ -18,12 +18,7 @@ var DomCobject = function(cobject, idx) {
     this.domCobject = '';
     this.currentElementType = '';
 
-//    if (this.idx == 0) {
-//        //O primeiro Cobject
-//        this.dom = $('<div class="cobject ' + this.cobject.template_code + ' currentCobject" id=' + this.cobject.cobject_id + '></div>');
-//    }else{
-        this.dom = $('<div class="cobject ' + this.cobject.template_code + '" style="display:none" id=' + this.cobject.cobject_id + '></div>');
-//    }
+    this.dom = $('<div class="cobject ' + this.cobject.template_code + '" style="display:none" id=' + this.cobject.cobject_id + '></div>');
 
 
     this.domContent = $('<div class="content"></div>');
@@ -57,9 +52,7 @@ var DomCobject = function(cobject, idx) {
     this.buildAll = function() {
         self.dom.append(self.buildInfo_Cobject);
         self.dom.append(self.domContent);
-        if (self.idx == 0) {
-            self.dom.append(self.buildToolBar);
-        }
+        
         for (this.pos.screen = 0; this.pos.screen < this.cobject.screens.length; this.pos.screen++) {
             self.id.screen = this.cobject.screens[this.pos.screen].id;
             self.domContent.append(self.buildScreen());
@@ -68,13 +61,7 @@ var DomCobject = function(cobject, idx) {
     }
 
     this.buildScreen = function() {
-//        if (self.idx == 0 && this.pos.screen == 0) {
-//            // É a primeira Screen do cobjectCorrent
-//            self.domScreen = $('<div class="T_screen currentScreen" id="S' + self.id.screen + '"> \n\
-//           <button id="begin_activity">' + BEGIN_ACTIVITY + '</button></div>');
-//        } else {
-            self.domScreen = $('<div class="T_screen" style="display:none" id="S' + self.id.screen + '"></div>');
-//        }
+        self.domScreen = $('<div class="T_screen" style="display:none" id="S' + self.id.screen + '"></div>');
 
         var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
         for (this.pos.pieceset = 0; this.pos.pieceset < piecesets_length; this.pos.pieceset++) {
@@ -97,8 +84,8 @@ var DomCobject = function(cobject, idx) {
         var fd = $('<div class="book-right"></div>');
         var elements_group = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         for (self.pos.element = 0; self.pos.element < elements_group.elements.length; self.pos.element++) {
-                self.id.element = elements_group.elements[self.pos.element].id;
-                fd.append(self.buildElement());
+            self.id.element = elements_group.elements[self.pos.element].id;
+            fd.append(self.buildElement());
         }
         self.domPiece.append(fd);
         self.domPieceSet.append(self.domPiece);
@@ -363,11 +350,7 @@ var DomCobject = function(cobject, idx) {
         return html;
     }
 
-    this.buildToolBar = function() {
-        var html = $('<div class="toolBar"></div>');
-        html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
-        return html;
-    }
+    
 
     this.buildInfo_PieceSet = function() {
         var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
@@ -385,7 +368,7 @@ var DomCobject = function(cobject, idx) {
                 html.addClass(self.currentElementType);
             }
         }
-        if(description !== undefined && description !== null){
+        if (description !== undefined && description !== null) {
             html.addClass('build_text');
             html.append('<li class="element-question"><h1 class="question-title">' + description + '</h1></li>');
         }

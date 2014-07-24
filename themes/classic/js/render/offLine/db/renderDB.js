@@ -560,29 +560,7 @@ this.DB = function() {
 
     }
 
-    //Adicionar o Estado Corrent do usuário
-//    this.addState_Actor = function() {
-//        window.indexedDB = self.verifyIDBrownser();
-//        DBsynapse = window.indexedDB.open(nameBD);
-//        DBsynapse.onerror = function(event) {
-//            alert("Você não habilitou minha web app para usar IndexedDB?!");
-//        }
-//        DBsynapse.onsuccess = function(event) {
-//            var db = event.target.result;
-//            db.onerror = function(event) {
-//                // Função genérica para tratar os erros de todos os requests desse banco!
-//                window.alert("Database error: " + event.target.errorCode);
-//            }
-//
-//
-//        }
-//        DBsynapse.onblocked = function(event) {
-//            // Se existe outra aba com a versão antiga
-//            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-//        }
-//    }
-
-    //Realiza UPDATE dos registros do estado atual deste actor no block, caso já exista
+    //Adicionar ou Realiza UPDATE dos registros do estado atual deste actor no block
     this.NewORUpdateUserState = function(data_state_actor) {
         var actor_id = data_state_actor.actor_id;
         var cobject_block_id = data_state_actor.cobject_block_id;
@@ -616,6 +594,7 @@ this.DB = function() {
                             cursor.value.last_piece_id = data_state_actor.last_piece_id;
                             cursor.value.qtd_correct = data_state_actor.qtd_correct;
                             cursor.value.qtd_wrong = data_state_actor.qtd_wrong;
+                            cursor.value.currentCobject_idx = data_state_actor.currentCobject_idx;
                             var request_update = cursor.update(cursor.value);
                             request_update.onsuccess = function(event) {
                                 console.log(' State Actor Atualizado !!!! ');
@@ -682,7 +661,8 @@ this.DB = function() {
                                 actor_id: cursor.value.actor_id,
                                 last_piece_id: cursor.value.last_piece_id,
                                 qtd_correct: cursor.value.qtd_correct,
-                                qtd_wrong: cursor.value.qtd_wrong
+                                qtd_wrong: cursor.value.qtd_wrong,
+                                currentCobject_idx: cursor.value.currentCobject_idx
                             };
                         } 
                             //else { Se não encontrou, vai pro próximo
