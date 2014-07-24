@@ -127,9 +127,8 @@ body {
 }
 
 .discipline {
-	width: 250px;
+	width: 350px;
 	float: left;
-	margin: 0 20px;
 	text-align: center;
 	cursor: pointer;
 }
@@ -149,7 +148,7 @@ body {
 	box-shadow: 1px 1px 2px #2C2C2C;
 	font-weight: 600;
 	font-size: 20px;
-	width: 170px;
+	width: 200px;
 	cursor: pointer;
 	margin-top: 20px;
 }
