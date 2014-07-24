@@ -602,7 +602,16 @@ this.Meet = function(options) {
      * Deveria finalizar o meet... mas não faz nada.
      */
     this.finalizeMeet = function() {
-
+        if(confirm("Deseja realmente sair?")){
+            sessionStorage.removeItem("authorization");
+            sessionStorage.removeItem("id_discipline");
+            sessionStorage.removeItem("login_id_actor");
+            sessionStorage.removeItem("login_personage_name");
+            sessionStorage.removeItem("login_name_actor");
+            location.href = "index.html";
+            return true;
+        }
+        return false;
     }
 
     /**
