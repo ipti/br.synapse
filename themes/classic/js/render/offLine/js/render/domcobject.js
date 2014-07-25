@@ -130,7 +130,8 @@ var DomCobject = function(cobject, idx) {
             eval("objGroups_currentPiece._" + newIdGroup + " = elements_group;");
             var domTypeGroup = "";
             var domGroup = "";
-            if (current_group.split('_').length == 1) {
+            var isAskGroup = current_group.split('_').length == 1;
+            if (isAskGroup) {
                 //is ASK-GROUP
                 domTypeGroup = domElementASK;
             } else {
@@ -143,7 +144,17 @@ var DomCobject = function(cobject, idx) {
             if (isNewGroup) {
                 // Novo Grupo
                 domGroup = $('<div group="' + newIdGroup + '" class="' + self.cobject.template_code + ' group" ></div>');
-            } else {
+                //Add class drop somente se for um group Ask
+                if(self.cobject.template_code == 'DDROP') {
+                    if(isAskGroup){
+                        domGroup.addClass('drag');
+                    }else{
+                        // is ANSWER-GROUP
+                        domGroup.addClass('drop');
+                    }
+                    
+                }
+         } else{
                 //Grupo existente
                 domGroup = possibleGroup;
             }

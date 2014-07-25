@@ -22,6 +22,7 @@ this.Meet = function(options) {
     this.domCobjects = new Array();
     this.num_cobjects = 0;
     this.isFinalBlock = false;
+    self.template_codes = new Array();
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     this.org = options.org[0];
     this.org_name = options.org[1];
@@ -81,17 +82,21 @@ this.Meet = function(options) {
         //iniciar code_Event dos templates
         //Para cada cobject Inicia seus eventos
 
-        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, self.init_Common);
-
-        var template_codes = new Array();
+        
         for (var idx = 0; idx < self.num_cobjects; idx++) {
             //Add no Array o template name se não existir, para garantir que não chame o mesmo evento mais de uma vez
-            if ($.inArray(self.domCobjects[idx].cobject.template_code, template_codes) == -1) {
+            if ($.inArray(self.domCobjects[idx].cobject.template_code, self.template_codes) == -1) {
                 //Evoca o evento para este template
-                eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
-                template_codes.push(self.domCobjects[idx].cobject.template_code);
+                self.template_codes.push(self.domCobjects[idx].cobject.template_code);
+                if(self.domCobjects[idx].cobject.template_code != 'DDROP'){
+                    eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
+                }
+               
             }
         }
+        
+        //Por Fim chama o evento Comum a todos
+        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, self.init_Common);
 
     }
 
@@ -137,6 +142,12 @@ this.Meet = function(options) {
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
+        
+        if ($.inArray('DDROP',self.template_codes) != -1){
+            //Existe DDROP
+            self.init_DDROP();
+        }
+        
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
 
         if (!gotoState) {
@@ -409,68 +420,76 @@ this.Meet = function(options) {
      */
     this.init_DDROP = function() {
         //Definir Animação Drag and Drop
-        //alert('A');
-        $( ".cobject.DDROP div.ask > div[group]" ).draggable();
-        $( ".cobject.DDROP div.answer > div[group]" ).droppable({
-            
-            drop: function( event, ui ) {
-//                $( this )
-//                .addClass( "ddrop" )
-//                .find( "p" )
-//                .html( "Dropped!" );
-                
-            }
-        });
+        $('.drop').hide();
+     
+        $('.drag').draggable({
+            drag: function(){
+                // as you drag, add your "dragging" class, like so:
+                $(this).addClass("inmotion");
+            }    
         
+        });
+       
+        $('.drop').droppable({
+            drop: function( event, ui ){
+                //  $(this).addClass( "droped" );
+                // alert('droped!');
+                    
+                //Time de resposta
+                var time_answer = (new Date().getTime() - self.interval_group);
+                //Atualizar o marcador de inicio do intervalo para cada resposta
+                self.interval_group = time_answer;
+                $(this).siblings().hide();
+                $(this).hide();
+                //  $(this).closest('div.answer').siblings('div.ask').children('div[group]').hide();
+                var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
+                var groupAnswerClicked = $(this).attr('group');
+                var groupAskClicked = lastClicked.attr('group');
+                lastClicked.attr('matched', groupAnswerClicked);
+                
+                lastClicked.removeClass('last_clicked');
+                // $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
+                $(this).addClass('ael_clicked');
+                var thisPieceID = $(this).closest('.piece').attr('id');
+    
+                //Vericar se o match está certo para este element
+                self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
+                //Verificar se Não existe mais elementos a serem clicados
+                if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
+                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                }
+    
+                //Respondeu, então "reinicia" o temporizador de grupo
+                self.interval_group = new Date().getTime();
+                    
+            }
+                
+                
+        });   
+      
+        
+        
+        //        
         // variável de encontro definida no meet.php
-//        $('.cobject.DDROP div.answer > div[group]').hide();
-//        $('.cobject.DDROP div[group]').on('click', function() {
-//            var ask_answer = $(this).parents('div').attr('class');
-//            if (ask_answer == 'ask') {
-//                if (!$(this).hasClass('ael_clicked')) {
-//                    $(this).css('opacity', '0.4');
-//                    $(this).siblings().hide();
-//                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
-//                    $(this).addClass('ael_clicked');
-//                    $(this).addClass('last_clicked');
-//                } else {
-//                    $(this).css('opacity', '1');
-//                    $(this).siblings(':not(.ael_clicked)').show();
-//                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
-//                    $(this).removeClass('ael_clicked');
-//                    $(this).removeClass('last_clicked');
-//
-//                }
-//            } else if (ask_answer == 'answer') {
-//                //Time de resposta
-//                var time_answer = (new Date().getTime() - self.interval_group);
-//                //Atualizar o marcador de inicio do intervalo para cada resposta
-//                self.interval_group = time_answer;
-//                $(this).siblings().hide();
-//                $(this).hide();
-//                $(this).closest('div.answer').siblings('div.ask').children('div[group]').show(500);
-//                var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
-//                var groupAnswerClicked = $(this).attr('group');
-//                var groupAskClicked = lastClicked.attr('group');
-//                lastClicked.attr('matched', groupAnswerClicked);
-//                lastClicked.removeClass('last_clicked');
-//                $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
-//                $(this).addClass('ael_clicked');
-//                var thisPieceID = $(this).closest('.piece').attr('id');
-//
-//                //Vericar se o match está certo para este element
-//                self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
-//                //Verificar se Não existe mais elementos a serem clicados
-//                if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-//                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-//                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
-//                }
-//
-//                //Respondeu, então "reinicia" o temporizador de grupo
-//                self.interval_group = new Date().getTime();
-//            }
-//
-//        });
+           
+        $('.drag').on('mousedown', function() {
+            $(this).css('border', '3px dashed #FBB03B');
+            $(this).siblings().css('opacity', '0');
+            $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
+           // $(this).addClass('ael_clicked');
+           
+            $(this).addClass('last_clicked');
+                    
+        });
+            
+        $('.drag').on('mouseup', function() {
+            $(this).css('border', '3px solid transparent');
+            $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
+            $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
+          //  $(this).removeClass('ael_clicked');
+          //  $(this).removeClass('last_clicked');
+        });
 
     }
 

@@ -24,6 +24,7 @@ body {
 	border-right: 1px solid #fff;
 	color: #fff;
 	font-size: 20px;
+	z-index: 10000;
 }
 
 .info {
@@ -80,6 +81,7 @@ body {
 	background-size: contain;
 	width: 44px;
 	height: 44px;
+	z-index: 10000;
 }
 
 .menu-close {
@@ -88,6 +90,7 @@ body {
 	background-size: contain;
 	width: 44px;
 	height: 44px;
+	z-index: 10000;
 
 }
 /** Pergunta da atividade **/
@@ -151,6 +154,8 @@ body {
 	top: 0;
 	bottom: 0;
 	width: 100%;
+	display: none;
+	z-index: 100000;
 }
 
 .error {
@@ -159,6 +164,10 @@ body {
 
 .success {
 	background: #51b899;
+}
+
+.exit {
+	background: #666666;
 }
 
 .message-container {
@@ -174,8 +183,18 @@ body {
 	box-shadow: 1px 1px 8px #2C2C2C;
 }
 
+.message-container.exit {
+	width: 500px;
+	padding: 50px 30px;
+}
+
 .message-icon {
 	width: 60px;
+}
+
+.message-container.exit .message-icon {
+	margin: 50px 50px 0 50px;
+	cursor: pointer;
 }
 
 .message-button {

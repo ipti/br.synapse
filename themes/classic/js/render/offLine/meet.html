@@ -23,6 +23,7 @@
         <script src="js/jquery/jquery.ui.core.js"></script>
         <script src="js/jquery/jquery.ui.widget.js"></script>
         <script src="js/jquery/jquery.ui.mouse.js"></script>
+        <script src="js/jquery/jquery.ui.touch-punch.min.js"></script>
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
         <script type="text/javascript" src="js/render/meet.js"></script>
@@ -35,11 +36,12 @@
             function isset(variable) {
                 return (variable !== undefined && variable !== null);
             }
-            
+
             $(document).ready(function(){
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
                 }
+
                 //Iniciar Encontro
                 var personage = '';
                 var idActor = '';
@@ -100,7 +102,8 @@
                                 newMeet.beginEvents();
                                 // Render Ready! 
                                 newMeet.countTime($('.info-time .info-text'));
-                                $('#begin_activity').trigger('click');
+                               // $('#begin_activity').trigger('click');
+                             
                             }
                             
                         });
@@ -155,16 +158,23 @@
                     }
                 });
                 
+                // Encerrar atendimento
                 $(".info-exit").click(function(){
+                    $("#finalize-message").show();
+                });
+                $("#finalize-icon").click(function(){
                     newMeet.finalizeMeet();
-                })
+                });
+                $("#close-icon").click(function(){
+                    $("#finalize-message").hide();
+                });
 
             });
     
         </script>
         <title>Render</title>
     </head>
-    <body id="synapse" ondragstart='return false'>
+    <body id="synapse" ondragstart='return true'>
 
         <!-- Barra de informações -->
         <div id="head_meet">
@@ -199,8 +209,10 @@
 
         <div id="message"> 
         </div>
+
         <div id="render_canvas">
         </div>
+
         <div class="game">
             <div class="level">
                 <img class="score-icon" src="img/icons/level.png">
@@ -210,7 +222,35 @@
                 <img class="score-icon" src="img/icons/points.png">
                 <p id="points" class="score-number">0</p>
             </div>
-        </div>  
+        </div>
+
+        <!-- Acerto -->
+        <div id="hit-message" class="overlay">
+            <div class="message-container success">
+                <img class="ok message-icon" src="img/icons/hit.png">
+                <p class="message">Parabéns!<br>Você acertou!!</p>
+                <button class="message-button">OK</button>
+            </div>
+        </div>
+
+        <!-- Erro -->
+        <div cid="error-massage" class="overlay">
+            <div class="message-container error">
+                <img class="ok message-icon" src="img/icons/hit.png">
+                <p class="message">Tente outra vez</p>
+                <button class="message-button">OK</button>
+            </div>
+        </div>
+
+        <!-- Encerrar atividade -->
+        <div id="finalize-message" class="overlay">
+            <div class="message-container exit">
+                <p class="message">Deseja encerrar<br>o atendimento desse aluno?</p>
+                <img id="finalize-icon" class="message-icon" src="img/icons/hit.png">
+                <img id="close-icon" class="message-icon" src="img/icons/error.png">
+            </div>
+        </div>
+
     </body>
 </html>
 
