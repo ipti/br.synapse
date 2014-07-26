@@ -82,19 +82,19 @@ this.Meet = function(options) {
         //iniciar code_Event dos templates
         //Para cada cobject Inicia seus eventos
 
-        
+
         for (var idx = 0; idx < self.num_cobjects; idx++) {
             //Add no Array o template name se não existir, para garantir que não chame o mesmo evento mais de uma vez
             if ($.inArray(self.domCobjects[idx].cobject.template_code, self.template_codes) == -1) {
                 //Evoca o evento para este template
                 self.template_codes.push(self.domCobjects[idx].cobject.template_code);
-                if(self.domCobjects[idx].cobject.template_code != 'DDROP'){
+                if (self.domCobjects[idx].cobject.template_code != 'DDROP') {
                     eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
                 }
-               
+
             }
         }
-        
+
         //Por Fim chama o evento Comum a todos
         self.DB_synapse.getUserState(self.actor, self.cobject_block_id, self.init_Common);
 
@@ -142,12 +142,12 @@ this.Meet = function(options) {
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
-        
-        if ($.inArray('DDROP',self.template_codes) != -1){
+
+        if ($.inArray('DDROP', self.template_codes) != -1) {
             //Existe DDROP
             self.init_DDROP();
         }
-        
+
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
 
         if (!gotoState) {
@@ -157,8 +157,8 @@ this.Meet = function(options) {
             $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
             $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
             $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                ' .currentPiece').show();
+                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                    ' .currentPiece').show();
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
 
@@ -217,8 +217,8 @@ this.Meet = function(options) {
 
                 $('.nextPiece').show();
                 $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                    ' .currentPiece').show();
+                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                        ' .currentPiece').show();
             }
         }
 
@@ -350,7 +350,7 @@ this.Meet = function(options) {
             //Primeiro Verificar se a Piece está certa!
             var pieceID = $(this).closest('.piece').attr('id');
             self.isCorrectMTE(pieceID, $(this).attr('group'));
-        //Somente salva no BD no botão: Próxima Piece
+            //Somente salva no BD no botão: Próxima Piece
         });
 
     }
@@ -401,8 +401,8 @@ this.Meet = function(options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -421,20 +421,21 @@ this.Meet = function(options) {
     this.init_DDROP = function() {
         //Definir Animação Drag and Drop
         $('.drop').hide();
-     
+
         $('.drag').draggable({
-            drag: function(){
+            drag: function() {
                 // as you drag, add your "dragging" class, like so:
-                $(this).addClass("inmotion");
-            }    
-        
+                // $(this).addClass("inmotion");
+                console.log('Dragingg....');
+            }
+
         });
-       
+
         $('.drop').droppable({
-            drop: function( event, ui ){
+            drop: function(event, ui) {
                 //  $(this).addClass( "droped" );
-                // alert('droped!');
-                    
+                alert('droped!');
+
                 //Time de resposta
                 var time_answer = (new Date().getTime() - self.interval_group);
                 //Atualizar o marcador de inicio do intervalo para cada resposta
@@ -446,49 +447,49 @@ this.Meet = function(options) {
                 var groupAnswerClicked = $(this).attr('group');
                 var groupAskClicked = lastClicked.attr('group');
                 lastClicked.attr('matched', groupAnswerClicked);
-                
+
+                lastClicked.addClass('ael_clicked');
                 lastClicked.removeClass('last_clicked');
-                // $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
+                 $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
                 $(this).addClass('ael_clicked');
                 var thisPieceID = $(this).closest('.piece').attr('id');
-    
+
                 //Vericar se o match está certo para este element
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
-    
+
                 //Respondeu, então "reinicia" o temporizador de grupo
                 self.interval_group = new Date().getTime();
-                    
+
             }
-                
-                
-        });   
-      
-        
-        
+
+
+        });
+
+
+
         //        
         // variável de encontro definida no meet.php
-           
+
         $('.drag').on('mousedown', function() {
+
             $(this).css('border', '3px dashed #FBB03B');
             $(this).siblings().css('opacity', '0');
             $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
-           // $(this).addClass('ael_clicked');
-           
+            $(this).siblings('.drag').removeClass('last_clicked');
             $(this).addClass('last_clicked');
-                    
+
         });
-            
+
         $('.drag').on('mouseup', function() {
             $(this).css('border', '3px solid transparent');
             $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
             $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
-          //  $(this).removeClass('ael_clicked');
-          //  $(this).removeClass('last_clicked');
+           
         });
 
     }
@@ -502,7 +503,7 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_PRE = function() {
-    //  self.init_Common();
+        //  self.init_Common();
 
     }
 
@@ -512,7 +513,7 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-    //  self.init_Common();
+        //  self.init_Common();
     }
     //======================
 
@@ -527,8 +528,8 @@ this.Meet = function(options) {
         self.interval_piece = (new Date().getTime() - self.interval_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' || 
-            self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP' ) {
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' ||
+                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
@@ -697,7 +698,7 @@ this.Meet = function(options) {
      * Deveria finalizar o meet... mas não faz nada.
      */
     this.finalizeMeet = function() {
-        if(confirm("Deseja realmente sair?")){
+        if (confirm("Deseja realmente sair?")) {
             sessionStorage.removeItem("authorization");
             sessionStorage.removeItem("id_discipline");
             sessionStorage.removeItem("login_id_actor");
@@ -796,7 +797,7 @@ this.Meet = function(options) {
         $('#points').text(self.score);
     }
 
-    
+
 
     this.buildToolBar = function() {
         var html = $('<div class="toolBar"></div>');

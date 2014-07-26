@@ -672,6 +672,7 @@ this.DB = function() {
                         cursor.continue();
                     } else {
                         //Finalisou a Pesquisa
+                        console.log(info_state);
                         callBack(info_state);
                     }
 
