@@ -26,6 +26,18 @@
                 location.href = "select.html";
             }
             $(document).ready(function() {
+                
+                //animação
+                $('.bg-login').hide();
+                $('#login-form').hide();
+                $('#synapse-logo').show();
+                
+                $('#synapse-logo').fadeOut(3200, "swing", function(){   
+                    $('#login-form').show();
+                });
+                $('.bg-login').fadeIn(3200, "linear", function(){
+                });
+                
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
                 }
