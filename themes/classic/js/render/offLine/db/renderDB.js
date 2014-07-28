@@ -594,10 +594,17 @@ this.DB = function() {
                             //Realiza Update
                             user_state_id = cursor.value.id;
                             //Set os novos dados do estado do actor corrente
-                            cursor.value.last_piece_id = data_state_actor.last_piece_id;
+                            if(self.isset(data_state_actor.last_piece_id)){
+                                cursor.value.last_piece_id = data_state_actor.last_piece_id;
+                            }
+                            
                             cursor.value.qtd_correct = data_state_actor.qtd_correct;
                             cursor.value.qtd_wrong = data_state_actor.qtd_wrong;
-                            cursor.value.currentCobject_idx = data_state_actor.currentCobject_idx;
+                            
+                            if(self.isset(data_state_actor.currentCobject_idx)){
+                                cursor.value.currentCobject_idx = data_state_actor.currentCobject_idx;
+                            }
+                            
                             var request_update = cursor.update(cursor.value);
                             request_update.onsuccess = function(event) {
                                // console.log(' State Actor Atualizado !!!! ');
