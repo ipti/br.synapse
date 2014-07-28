@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<script type="text/javascript">
-    if(sessionStorage.getItem("authorization") == null  || sessionStorage.getItem("authorization") == 'false'){
-        location.href = 'login.html';
-    }
-</script>
 
 <html> 
     <head>
+        <script type="text/javascript">
+            if(sessionStorage.getItem("authorization") == null  || sessionStorage.getItem("authorization") == 'false'){
+                location.href = 'login.html';
+            }
+        </script>
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="css/reset.css" />
@@ -198,7 +198,7 @@
             </div>
             <a class="info-exit" href="#">
                 <img class="info-icon" src="img/icons/exit.png">
-                <p class="info-text">encerrar atendimento</p>
+                <p class="info-text">Encerrar atendimento</p>
                 <div class="clear"></div>
             </a>
         </div>
@@ -225,19 +225,19 @@
         </div>
 
         <!-- Acerto -->
-        <div id="hit-message" class="overlay">
+        <div id="hit-message" class="modal_message overlay">
             <div class="message-container success">
                 <img class="ok message-icon" src="img/icons/hit.png">
-                <p class="message">Parabéns!<br>Você acertou!!</p>
+                <p class="message">Parabéns!<br>Você acertou!! \o/</p>
                 <button class="message-button">OK</button>
             </div>
         </div>
 
         <!-- Erro -->
-        <div cid="error-massage" class="overlay">
+        <div id="error-message" class="modal_message overlay">
             <div class="message-container error">
-                <img class="ok message-icon" src="img/icons/hit.png">
-                <p class="message">Tente outra vez</p>
+                <img class="ok message-icon" src="img/icons/error.png">
+                <p class="message">Que peninha<br/>você errou :/</p>
                 <button class="message-button">OK</button>
             </div>
         </div>

@@ -235,109 +235,96 @@ this.Meet = function(options) {
                 if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
                     self.isCorrectPRE(currentPiece.attr('id'));
                 }
-                var isCorrectPiece
+
+                var result;
                 //Salva no BD somente se o template for != TXT
                 if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
                     //Salva na PerformanceUser
-                    self.savePerformanceUsr(currentPiece.attr('id'));
-                    isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
-                } else {
-                    isCorrectPiece = true;
+                    result = self.savePerformanceUsr(currentPiece.attr('id'));
+                    self.showMessageAnswer(result.pieceIsTrue);
+                }else{
+                    $(".message-button").trigger('click');
                 }
+                
+            });
+            
+            $(".message-button").click(function(){
+                var currentPiece = $('.currentPiece');
+                //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+                //cobject_block_id + actor_id = PK
+                var info_state = {
+                    cobject_block_id: self.cobject_block_id,
+                    actor_id: self.actor,
+                    last_piece_id: currentPiece.attr('id'),
+                    qtd_correct: self.peformance_qtd_correct,
+                    qtd_wrong: self.peformance_qtd_wrong,
+                    currentCobject_idx: self.currentCobject_idx
+                };
+                self.DB_synapse.NewORUpdateUserState(info_state);
+                //Calcula o Score
+                self.scoreCalculator();
+                currentPiece.removeClass('currentPiece');
+                currentPiece.hide();
+                if (currentPiece.next().size() == 0) {
+                    //Acabou Peça, passa pra outra PieceSet se houver
+                    var currentPieceSet = $('.currentPieceSet');
+                    currentPieceSet.removeClass('currentPieceSet');
+                    currentPieceSet.hide();
 
-                //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
-                if (isCorrectPiece) {
-                    //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-                    //cobject_block_id + actor_id = PK
-                    var info_state = {
-                        cobject_block_id: self.cobject_block_id,
-                        actor_id: self.actor,
-                        last_piece_id: currentPiece.attr('id'),
-                        qtd_correct: self.peformance_qtd_correct,
-                        qtd_wrong: self.peformance_qtd_wrong,
-                        currentCobject_idx: self.currentCobject_idx
-                    };
-                    self.DB_synapse.NewORUpdateUserState(info_state);
-                    //Calcula o Score
-                    self.scoreCalculator();
+                    if (currentPieceSet.next().size() == 0) {
+                        //Acabou todas as pieceSets dessa Tela
+                        // Passa pra a pŕoxima PieceSet
+                        var currentScreen = $('.currentScreen');
+                        currentScreen.removeClass('currentScreen');
+                        currentScreen.hide();
+                        var nextScreen = currentScreen.next();
 
-
-                    currentPiece.removeClass('currentPiece');
-                    currentPiece.hide();
-                    if (currentPiece.next().size() == 0) {
-                        //Acabou Peça, passa pra outra PieceSet se houver
-                        var currentPieceSet = $('.currentPieceSet');
-                        currentPieceSet.removeClass('currentPieceSet');
-                        currentPieceSet.hide();
-
-                        if (currentPieceSet.next().size() == 0) {
-                            //Acabou todas as pieceSets dessa Tela
-                            // Passa pra a pŕoxima PieceSet
-                            var currentScreen = $('.currentScreen');
-                            currentScreen.removeClass('currentScreen');
-                            currentScreen.hide();
-                            var nextScreen = currentScreen.next();
-
-                            if (nextScreen.size() != 0) {
+                        if (nextScreen.size() != 0) {
+                            nextScreen.addClass('currentScreen');
+                            nextScreen.show();
+                            nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                            nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                            nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                        } else {
+                            //Finalisou todas as Screen do COBJECT Corrente
+                            if (self.hasNextCobject()) {
+                                self.currentCobject_idx++;
+                                var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
+                                $('.currentCobject').removeClass('currentCobject');
+                                $(selector_cobject).addClass('currentCobject');
+                                nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
                                 nextScreen.addClass('currentScreen');
                                 nextScreen.show();
                                 nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
                                 nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                                $(selector_cobject).show();
                                 nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+
                             } else {
-                                //Finalisou todas as Screen do COBJECT Corrente
-                                if (self.hasNextCobject()) {
-                                    self.currentCobject_idx++;
-                                    var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
-                                    $('.currentCobject').removeClass('currentCobject');
-                                    $(selector_cobject).addClass('currentCobject');
-                                    nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
-                                    nextScreen.addClass('currentScreen');
-                                    nextScreen.show();
-                                    nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                                    nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                                    $(selector_cobject).show();
-                                    nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-
-                                } else {
-                                    $('.nextPiece').hide();
-                                    $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
-                                }
-
+                                $('.nextPiece').hide();
+                                $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
                             }
 
-                        } else {
-                            var nextPieceSet = currentPieceSet.next();
-                            nextPieceSet.addClass('currentPieceSet');
-                            nextPieceSet.show();
-
-                            var nextPiece = nextPieceSet.find('.piece:eq(0)');
-                            nextPiece.addClass('currentPiece');
-                            nextPiece.show();
                         }
+
                     } else {
-                        var nextPiece = currentPiece.next();
+                        var nextPieceSet = currentPieceSet.next();
+                        nextPieceSet.addClass('currentPieceSet');
+                        nextPieceSet.show();
+
+                        var nextPiece = nextPieceSet.find('.piece:eq(0)');
                         nextPiece.addClass('currentPiece');
                         nextPiece.show();
                     }
-
-                    // Após salvar, Reinicia o time da Piece e Group
-                    self.restartTimes();
                 } else {
-                    //Fica resolvendo a mesma Atividade até acertar
-                     var info_state = {
-                        cobject_block_id: self.cobject_block_id,
-                        actor_id: self.actor,
-                        last_piece_id: null,
-                        qtd_correct: self.peformance_qtd_correct,
-                        qtd_wrong: self.peformance_qtd_wrong,
-                        currentCobject_idx: null
-                    };
-                    self.DB_synapse.NewORUpdateUserState(info_state);
-                    //Calcula o Score
-                    self.scoreCalculator();
-                    
+                    var nextPiece = currentPiece.next();
+                    nextPiece.addClass('currentPiece');
+                    nextPiece.show();
                 }
+                // Após salvar, Reinicia o time da Piece e Group
+                self.restartTimes();
+                
+                $('.modal_message').hide();
             });
 
             $('#finalize_activity').on('click', function() {
@@ -451,17 +438,12 @@ this.Meet = function(options) {
 
         $('.drag').draggable({
             drag: function() {
-                // as you drag, add your "dragging" class, like so:
-                // $(this).addClass("inmotion");
-                console.log('Dragingg....');
             }
 
         });
 
         $('.drop').droppable({
             drop: function(event, ui) {
-                //  $(this).addClass( "droped" );
-                alert('droped!');
 
                 //Time de resposta
                 var time_answer = (new Date().getTime() - self.interval_group);
@@ -584,9 +566,8 @@ this.Meet = function(options) {
             self.peformance_qtd_wrong++;
         }
         
-        self.showMessageAnswer(pieceIsTrue);
         //Salvo com Sucesso !
-        return true;
+        return {'saved': true, 'pieceIsTrue':pieceIsTrue};
     }
 
     this.saveMatchGroup = function(currentPieceID) {
@@ -736,19 +717,21 @@ this.Meet = function(options) {
      */
     this.showMessageAnswer = function(isTrue) {
         if (isTrue) {
-            $('#message').show();
-            $('#message').css({
-                'backgroundColor': 'green'
-            });
-            $('#message').html(MSG_CORRECT);
-            $('#message').fadeOut(5000);
+            $('#hit-message').show();
+//            $('#message').show();
+//            $('#message').css({
+//                'backgroundColor': 'green'
+//            });
+//            $('#message').html(MSG_CORRECT);
+//            $('#message').fadeOut(5000);
         } else {
-            $('#message').show();
-            $('#message').css({
-                'backgroundColor': 'red'
-            });
-            $('#message').html(MSG_WRONG);
-            $('#message').fadeOut(5000);
+            $('#error-message').show();
+//            $('#message').show();
+//            $('#message').css({
+//                'backgroundColor': 'red'
+//            });
+//            $('#message').html(MSG_WRONG);
+//            $('#message').fadeOut(5000);
         }
 
     }
