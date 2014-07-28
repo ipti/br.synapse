@@ -178,7 +178,11 @@ var DomCobject = function(cobject, idx) {
         if (self.cobject.template_code == 'AEL' || self.cobject.template_code == 'DDROP') {
             self.domPiece.append(domElementANSWER);
         }
-
+        var $peopleli = self.domPiece.find("li");
+        console.log($peopleli);
+        $peopleli.sort(function(a,b){
+            //if()
+        });
         return self.domPiece;
     }
 

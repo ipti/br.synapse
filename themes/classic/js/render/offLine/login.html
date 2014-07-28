@@ -48,10 +48,6 @@
                     console.log("Suporta BD-HTML5");
                 }
 
-                function errorMessage() {
-                    document.getElementById('error').style.opacity = "1";
-                }
-
                 $('#entrar').on('click', function() {
                     if($('#username').val() == 'admin'){
                         if($('#password').val() == '123456'){
@@ -69,7 +65,7 @@
                             //Remove a sessão do authorization
                             sessionStorage.removeItem("authorization");
                             //Usuário ou Senha Incorretos
-                            errorMessage();
+                            $('#error').css('opacity','1');
                         }
                     });
                 });
