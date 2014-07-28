@@ -3,7 +3,9 @@
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen, projection" />
-        <link rel="stylesheet" type="text/css" href="css/render/render.css">  
+        <link rel="stylesheet" type="text/css" href="css/render/global.css">
+        <link rel="stylesheet" type="text/css" href="css/render/login.css">
+        <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
         <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
         <!---[if lt IE 8]>
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
@@ -15,7 +17,6 @@
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
         <script type="text/javascript" src="js/render/meet.js"></script>
-        <script type="text/javascript" src="js/render/cobject.js"></script>
         <script type="text/javascript" src="js/render/domcobject.js"></script>
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
         <!-- Abrir Script do renderDB --> 
@@ -35,9 +36,8 @@
             
             $(document).ready(function(){
         
-                if (window.openDatabase) {
-                    $('#mensage').html("Suporta BD-HTML5");
-                }
+                $('#login-form').show();
+                $('.bg-login').show();
                 
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
@@ -84,33 +84,31 @@
                     ,cobject_cobjectblocks,cobjects);
                     
                 });
-                
                 $('#buildAllSchemas').on('click',function(){
                     //1° Criar
                     db.openDBuild(true);
                 });
-                
                 $('#back').on('click',function(){
-                    location.href = "login.html";
+                    location.href = "index.html";
                 });
-                
             }); 
     
         </script>
-        <title>Render</title>
+        <title>Import</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-    <body class="theme">
-        <div class="title">
-            <p>Para importar novos Dados ao Banco, clique em confirmar</p>
-        </div>
-        <div id="mensage"> </div>
-        <div id="import_data">
-            <button type="button" id="deleteAllDB"> DELETAR TODO BANCO </button>  
-            <button type="button" id="buildAllSchemas" name="buildAllSchemas" >buildAllSchemas</button>
-            <button type="button" id="import" name="import" >Importar</button>
-            <button type="button" id="back" name="back" >Voltar</button>
-        </div>
+    
+    <body>
+        <div class="bg-login bg-left"><!-- <img src="img/background-left.png"> --></div>
+        <div class="bg-login bg-right"><!-- <img src="img/background-right.png"> --></div>
+        <section id="login-form" class="middle">
+            <div id="import_data">
+                <button class="login-button buttons" type="button" id="deleteAllDB"> Limpar Banco </button>  
+                <button class="login-button buttons" type="button" id="buildAllSchemas" name="buildAllSchemas" >Construir Esquemas</button>
+                <button class="login-button buttons" type="button" id="import" name="import" >Importar Dados</button>
+                <button class="back-button buttons" type="button" id="back" name="back" >Voltar</button>
+            </div>
+        </section>
     </body>
 </html>
 
