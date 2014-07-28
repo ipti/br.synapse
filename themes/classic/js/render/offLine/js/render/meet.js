@@ -717,7 +717,7 @@ this.Meet = function(options) {
         sessionStorage.removeItem("login_name_actor");
         location.href = "index.html";
         return true;
-
+    }
     /**
      * Verifica se a variavel esta setada.
      * 
