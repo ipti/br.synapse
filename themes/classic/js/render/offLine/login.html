@@ -27,6 +27,12 @@
             }
             $(document).ready(function() {
                 
+                $('#loginform').keypress(function(event){
+                    if (event.keyCode == 13){
+                        $('.login-button').trigger('click');
+                    }
+                })
+                
                 //animação
                 $('.bg-login').hide();
                 $('#login-form').hide();
@@ -80,7 +86,7 @@
         </section>
         <div class="animacao"></div>
         <section id="login-form" class="middle">
-            <form>
+            <form id="loginform">
                 <label class="login-label" for="username">login</label>
                 <input class="login-input" type="text" id="username" name="username">
                 <label class="login-label" for="username">senha</label>
