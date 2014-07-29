@@ -8,8 +8,8 @@ body {
  .bg-login {
  	position: absolute;
  	top: -15%;
-	//-webkit-animation: showLogin 4.3s ease;
-	//-moz-animation: showLogin 4.3s ease;
+	-webkit-animation: showLogin 4.3s ease;
+	-moz-animation: showLogin 4.3s ease;
 	overflow: hidden;
 	height: 115%;
  }
@@ -28,9 +28,9 @@ body {
 #synapse-logo {
 	margin: 5% auto;
 	width: 60%;
-	//opacity: 0;
-	//-webkit-animation: hiddenLogo 4s ease;
-	//-moz-animation: hiddenLogo 4s ease;
+	opacity: 0;
+	-webkit-animation: hiddenLogo 4s ease;
+	-moz-animation: hiddenLogo 4s ease;
 }
 
 /** Formulário de Login **/
@@ -44,8 +44,8 @@ body {
 	width: 305px;
 	margin: 5% auto;
 	text-align: center;
-	//-webkit-animation: showLogin 4.3s ease;
-	//-moz-animation: showLogin 4.3s ease;
+	-webkit-animation: showLogin 4.3s ease;
+	-moz-animation: showLogin 4.3s ease;
 }
 
 .login-label {
