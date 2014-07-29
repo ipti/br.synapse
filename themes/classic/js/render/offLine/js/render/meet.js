@@ -16,6 +16,8 @@ this.Meet = function(options) {
     DEFAULT_MEET_TYPE = 1; //Atividade = 1 ; Treino = 2
     MAX_ELEMENT_PER_PIECE = 5;
     FINALIZE_ACTIVITY = "Finalizar Atividade";
+    NEXT_PAGE = "Próxima Página";
+    LAST_PAGE = "Última Página";
     //================
     var self = this;
     this.currentCobject_idx = null;
@@ -67,6 +69,7 @@ this.Meet = function(options) {
             domCobjectBuildAll.append(self.domCobjects[idx].buildAll());
             self.num_cobjects++;
         }
+        //Por último a div de ferramentas
         domCobjectBuildAll.append(self.buildToolBar);
         //Retorno do 1° Cobject
         self.currentCobject_idx = 0;
@@ -230,115 +233,7 @@ this.Meet = function(options) {
             self.restartTimes();
 
             $('.nextPiece').on('click', function() {
-                var currentPiece = $('.currentPiece');
-                //Se for PRE então Verificar ser está correto
-                if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
-                    self.isCorrectPRE(currentPiece.attr('id'));
-                }
-
-                var isCorrectPiece;
-                //Salva no BD somente se o template for != TXT
-                if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
-                    //Salva na PerformanceUser
-                    self.savePerformanceUsr(currentPiece.attr('id'));
-                    isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
-                    self.showMessageAnswer(isCorrectPiece);
-                }else{
-                    // $(".message-button").trigger('click');
-                    isCorrectPiece = true;
-                }
-            
-                //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
-                if (isCorrectPiece || !isCorrectPiece) {
-                    //$(".message-button").click(function(){
-                    var currentPiece = $('.currentPiece');
-                    //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-                    //cobject_block_id + actor_id = PK
-                    var info_state = {
-                        cobject_block_id: self.cobject_block_id,
-                        actor_id: self.actor,
-                        last_piece_id: currentPiece.attr('id'),
-                        qtd_correct: self.peformance_qtd_correct,
-                        qtd_wrong: self.peformance_qtd_wrong,
-                        currentCobject_idx: self.currentCobject_idx
-                    };
-                    self.DB_synapse.NewORUpdateUserState(info_state);
-                    //Calcula o Score
-                    self.scoreCalculator();
-                    currentPiece.removeClass('currentPiece');
-                    currentPiece.hide();
-                    if (currentPiece.next().size() == 0) {
-                        //Acabou Peça, passa pra outra PieceSet se houver
-                        var currentPieceSet = $('.currentPieceSet');
-                        currentPieceSet.removeClass('currentPieceSet');
-                        currentPieceSet.hide();
-
-                        if (currentPieceSet.next().size() == 0) {
-                            //Acabou todas as pieceSets dessa Tela
-                            // Passa pra a pŕoxima PieceSet
-                            var currentScreen = $('.currentScreen');
-                            currentScreen.removeClass('currentScreen');
-                            currentScreen.hide();
-                            var nextScreen = currentScreen.next();
-
-                            if (nextScreen.size() != 0) {
-                                nextScreen.addClass('currentScreen');
-                                nextScreen.show();
-                                nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                                nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                                nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-                            } else {
-                                //Finalisou todas as Screen do COBJECT Corrente
-                                if (self.hasNextCobject()) {
-                                    self.currentCobject_idx++;
-                                    var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
-                                    $('.currentCobject').removeClass('currentCobject');
-                                    $(selector_cobject).addClass('currentCobject');
-                                    nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
-                                    nextScreen.addClass('currentScreen');
-                                    nextScreen.show();
-                                    nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                                    nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                                    $(selector_cobject).show();
-                                    nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-
-                                } else {
-                                    $('.nextPiece').hide();
-                                    $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
-                                }
-
-                            }
-
-                        } else {
-                            var nextPieceSet = currentPieceSet.next();
-                            nextPieceSet.addClass('currentPieceSet');
-                            nextPieceSet.show();
-
-                            var nextPiece = nextPieceSet.find('.piece:eq(0)');
-                            nextPiece.addClass('currentPiece');
-                            nextPiece.show();
-                        }
-                    } else {
-                        var nextPiece = currentPiece.next();
-                        nextPiece.addClass('currentPiece');
-                        nextPiece.show();
-                    }
-                   
-                }else {
-                //Fica resolvendo a mesma Atividade até acertar
-                //                    var info_state = {
-                //                        cobject_block_id: self.cobject_block_id,
-                //                        actor_id: self.actor,
-                //                        last_piece_id: null,
-                //                        qtd_correct: self.peformance_qtd_correct,
-                //                        qtd_wrong: self.peformance_qtd_wrong,
-                //                        currentCobject_idx: null
-                //                    };
-                //                    self.DB_synapse.NewORUpdateUserState(info_state);
-                //                    //Calcula o Score
-                //                    self.scoreCalculator();
-                    
-                }
+                self.nextPiece();
             });
             
             $(".message-button").click(function(){
@@ -347,10 +242,15 @@ this.Meet = function(options) {
                 self.restartTimes();
             });
 
-
             $('#finalize_activity').on('click', function() {
                 self.finalizeMeet();
             });
+            
+            //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
+            if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
+                BtnPageTXT();
+            }
+            
         } else {
             //Atividade Já Finalizada
             $('.cobject_block').hide();
@@ -360,6 +260,247 @@ this.Meet = function(options) {
 
     }
 
+
+
+    this.nextPiece = function(){
+        var currentPiece = $('.currentPiece');
+        //Se for PRE então Verificar ser está correto
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
+            self.isCorrectPRE(currentPiece.attr('id'));
+        }
+
+        var isCorrectPiece;
+        //Salva no BD somente se o template for != TXT
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+            //Salva na PerformanceUser
+            self.savePerformanceUsr(currentPiece.attr('id'));
+            isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
+            self.showMessageAnswer(isCorrectPiece);
+        }else{
+            // $(".message-button").trigger('click');
+            isCorrectPiece = true;
+        }
+            
+        //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
+        if (isCorrectPiece || !isCorrectPiece) {
+            var currentPiece = $('.currentPiece');
+            //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+            //cobject_block_id + actor_id = PK
+            var info_state = {
+                cobject_block_id: self.cobject_block_id,
+                actor_id: self.actor,
+                last_piece_id: currentPiece.attr('id'),
+                qtd_correct: self.peformance_qtd_correct,
+                qtd_wrong: self.peformance_qtd_wrong,
+                currentCobject_idx: self.currentCobject_idx
+            };
+            self.DB_synapse.NewORUpdateUserState(info_state);
+            //Calcula o Score
+            self.scoreCalculator();
+            currentPiece.removeClass('currentPiece');
+            currentPiece.hide();
+            if (currentPiece.next().size() == 0) {
+                //Acabou Peça, passa pra outra PieceSet se houver
+                var currentPieceSet = $('.currentPieceSet');
+                currentPieceSet.removeClass('currentPieceSet');
+                currentPieceSet.hide();
+
+                if (currentPieceSet.next().size() == 0) {
+                    //Acabou todas as pieceSets dessa Tela
+                    // Passa pra a pŕoxima PieceSet
+                    var currentScreen = $('.currentScreen');
+                    currentScreen.removeClass('currentScreen');
+                    currentScreen.hide();
+                    var nextScreen = currentScreen.next();
+
+                    if (nextScreen.size() != 0) {
+                        nextScreen.addClass('currentScreen');
+                        nextScreen.show();
+                        nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                        nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                        nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                    } else {
+                        //Finalisou todas as Screen do COBJECT Corrente
+                        if (self.hasNextCobject()) {
+                            self.currentCobject_idx++;
+                            var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
+                            $('.currentCobject').removeClass('currentCobject');
+                            $(selector_cobject).addClass('currentCobject');
+                            nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
+                            nextScreen.addClass('currentScreen');
+                            nextScreen.show();
+                            nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                            nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                            $(selector_cobject).show();
+                            nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+
+                        } else {
+                            $('.nextPiece').hide();
+                            $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                        }
+
+                    }
+
+                } else {
+                    var nextPieceSet = currentPieceSet.next();
+                    nextPieceSet.addClass('currentPieceSet');
+                    nextPieceSet.show();
+
+                    var nextPiece = nextPieceSet.find('.piece:eq(0)');
+                    nextPiece.addClass('currentPiece');
+                    nextPiece.show();
+                }
+            } else {
+                var nextPiece = currentPiece.next();
+                nextPiece.addClass('currentPiece');
+                nextPiece.show();
+            }
+                   
+        }else {
+        //Fica resolvendo a mesma Atividade até acertar
+        //                    var info_state = {
+        //                        cobject_block_id: self.cobject_block_id,
+        //                        actor_id: self.actor,
+        //                        last_piece_id: null,
+        //                        qtd_correct: self.peformance_qtd_correct,
+        //                        qtd_wrong: self.peformance_qtd_wrong,
+        //                        currentCobject_idx: null
+        //                    };
+        //                    self.DB_synapse.NewORUpdateUserState(info_state);
+        //                    //Calcula o Score
+        //                    self.scoreCalculator();
+                    
+        }
+        //Verificar se ainda é TXT
+        //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
+        if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
+            BtnPageTXT();
+        }
+                
+    }
+    
+    this.lastPiece = function(){
+        alert('lasttt');
+         var currentPiece = $('.currentPiece');
+        //Se for PRE então Verificar ser está correto
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
+            self.isCorrectPRE(currentPiece.attr('id'));
+        }
+
+        var isCorrectPiece;
+        //Salva no BD somente se o template for != TXT
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+            //Salva na PerformanceUser
+            self.savePerformanceUsr(currentPiece.attr('id'));
+            isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
+            self.showMessageAnswer(isCorrectPiece);
+        }else{
+            isCorrectPiece = true;
+        }
+            
+        //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
+        if (isCorrectPiece || !isCorrectPiece) {
+            //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+            //cobject_block_id + actor_id = PK
+            var info_state = {
+                cobject_block_id: self.cobject_block_id,
+                actor_id: self.actor,
+                last_piece_id: currentPiece.attr('id'),
+                qtd_correct: self.peformance_qtd_correct,
+                qtd_wrong: self.peformance_qtd_wrong,
+                currentCobject_idx: self.currentCobject_idx
+            };
+            self.DB_synapse.NewORUpdateUserState(info_state);
+            //Calcula o Score
+            self.scoreCalculator();
+            currentPiece.removeClass('currentPiece');
+            currentPiece.hide();
+            console.log(currentPiece.last());
+            if (currentPiece.last().size() == 0) {
+                //Acabou Peça, passa pra outra PieceSet se houver
+                var currentPieceSet = $('.currentPieceSet');
+                currentPieceSet.removeClass('currentPieceSet');
+                currentPieceSet.hide();
+
+                if (currentPieceSet.last().size() == 0) {
+                    //Acabou todas as pieceSets dessa Tela
+                    // Passa pra a pŕoxima PieceSet
+                    var currentScreen = $('.currentScreen');
+                    currentScreen.removeClass('currentScreen');
+                    currentScreen.hide();
+                    var nextScreen = currentScreen.last();
+
+                    if (nextScreen.size() != 0) {
+                        nextScreen.addClass('currentScreen');
+                        nextScreen.show();
+                        nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                        nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                        nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                    } else {
+                        //Finalisou todas as Screen do COBJECT Corrente
+                        alert('LAST ');
+                        if (self.hasNextCobject()) {
+                            self.currentCobject_idx--;
+                            var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
+                            $('.currentCobject').removeClass('currentCobject');
+                            $(selector_cobject).addClass('currentCobject');
+                            nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
+                            nextScreen.addClass('currentScreen');
+                            nextScreen.show();
+                            nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                            nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                            $(selector_cobject).show();
+                            nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+
+                        } else {
+                            $('.nextPiece').hide();
+                            $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                        }
+
+                    }
+
+                } else {
+                    var nextPieceSet = currentPieceSet.last();
+                    nextPieceSet.addClass('currentPieceSet');
+                    nextPieceSet.show();
+
+                    var nextPiece = nextPieceSet.find('.piece:eq(0)');
+                    nextPiece.addClass('currentPiece');
+                    nextPiece.show();
+                }
+            } else {
+                var nextPiece = currentPiece.last();
+                nextPiece.addClass('currentPiece');
+                nextPiece.show();
+            }
+                   
+        }else {
+        //Fica resolvendo a mesma Atividade até acertar
+        //                    var info_state = {
+        //                        cobject_block_id: self.cobject_block_id,
+        //                        actor_id: self.actor,
+        //                        last_piece_id: null,
+        //                        qtd_correct: self.peformance_qtd_correct,
+        //                        qtd_wrong: self.peformance_qtd_wrong,
+        //                        currentCobject_idx: null
+        //                    };
+        //                    self.DB_synapse.NewORUpdateUserState(info_state);
+        //                    //Calcula o Score
+        //                    self.scoreCalculator();
+                    
+        }
+        //Verificar se ainda é TXT
+        //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
+        if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
+            BtnPageTXT();
+        }
+    }
+
+    var BtnPageTXT = function(){
+        $('#nextPage').show();
+        $('#lastPage').show();
+        $('.nextPiece').hide();
+    }
 
     /**
      * Inicializa eventos do MTE
@@ -537,7 +678,12 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-    //  self.init_Common();
+        $(document).on('click','#nextPage',function(){
+           self.nextPiece();
+        });
+        $(document).on('click','#lastPage',function(){
+            self.lastPiece();
+        });
     }
     //======================
 
@@ -808,6 +954,9 @@ this.Meet = function(options) {
     this.buildToolBar = function() {
         var html = $('<div class="toolBar"></div>');
         html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
+        html.append("<button class='btn_lastPage' id='lastPage' style='display:none' >"+LAST_PAGE+"</button>");
+        html.append("<button class='btn_nextPage' id='nextPage' style='display:none' >"+NEXT_PAGE+"</button>");
+        
         return html;
     }
 

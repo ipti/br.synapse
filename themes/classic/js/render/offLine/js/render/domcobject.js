@@ -237,7 +237,6 @@ var DomCobject = function(cobject, idx) {
     //        return array;
     //    }
 
-
     this.buildEnum = function() {
         self.domEnum = $('<div class="enunciation"></div>');
         eval("self.buildEnum_" + self.cobject.template_code + "();");
