@@ -35,9 +35,6 @@
             
             
             $(document).ready(function(){
-        
-                $('#login-form').show();
-                $('.bg-login').show();
                 
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
@@ -99,9 +96,7 @@
     </head>
     
     <body>
-        <div class="bg-login bg-left"><!-- <img src="img/background-left.png"> --></div>
-        <div class="bg-login bg-right"><!-- <img src="img/background-right.png"> --></div>
-        <section id="login-form" class="middle">
+        <section id="import-form" class="middle">
             <div id="import_data">
                 <button class="login-button buttons" type="button" id="deleteAllDB"> Limpar Banco </button>  
                 <button class="login-button buttons" type="button" id="buildAllSchemas" name="buildAllSchemas" >Construir Esquemas</button>
