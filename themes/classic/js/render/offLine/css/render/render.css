@@ -62,10 +62,6 @@ fieldset{
     border:2px solid gray;
 }
 
-.answer{
-    clear:both;
-}
-
 #import_data{
     text-align: center;
     margin-top: 100px;
@@ -179,7 +175,7 @@ fieldset{
 }
 
 /** Template MTE **/
-.ask{
+.ask, .answer {
     text-align: center;
     display: table;
     margin: auto;
@@ -208,21 +204,22 @@ fieldset{
     border-radius: 2px;
 }
 
-.element-build_text {
-    margin-top: 40%;
+.group.build_text.build_sound .element-build_text {
+    margin-top: 0;
 }
 
 /* ALTERNATIVAS */
 /* texto + imagem + som */
-.group.build_image.build_text.build_sound .element-build_sound img {
+.group.build_image.build_text.build_sound .element-build_sound img,  .group.build_image.build_sound .element-build_sound img{
     position: absolute;
     top: 11px;
     right: 11px;
     width: 30px;
     height: 30px;
+    margin: 0;
 }
 
-/* iamegm + som */
+/* iamegm + texto */
 .group.build_image.build_text .elementImage img {
     height: 121px;
 }
@@ -234,6 +231,27 @@ fieldset{
     left: 0;
     right: 0;
     padding: 0 10px;
+}
+
+.group.build_sound .element-build_sound img{
+    width: 100px;
+    height: 100px;
+    margin-top: 20px;
+}
+
+.group.build_sound.build_text .element-build_text {
+    position: absolute;
+    bottom: 30px;
+    text-align: center;
+    left: 0;
+    right: 0;
+    padding: 0 10px;
+}
+
+.group.build_sound.build_text .element-build_sound img{
+    width: 40px;
+    height: 40px;
+    margin-top: 40px;
 }
 
 .group li:first-child {

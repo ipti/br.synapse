@@ -1,8 +1,5 @@
 /** Layout **/
 
-viewport {
-	
-}
 body {
 	margin: 0px;
 	background-color: #D1E0CD;
@@ -116,11 +113,6 @@ body {
 }
 
 /** Respostas **/
-.answer {
-	margin: 80px auto 0;
-	width: 720px;
-	text-align: center;
-}
 
 .answer-ok {
 	vertical-align: middle;
