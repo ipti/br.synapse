@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; target-densitydpi=medium-dpi; user-scalable=no" />
         <title>Entrar no Synapse</title>
         <link rel="stylesheet" type="text/css" href="css/reset.css">
         <link rel="stylesheet" type="text/css" href="css/render/global.css">
@@ -34,15 +34,15 @@
                 })
                 
                 //animação
-                $('.bg-login').hide();
-                $('#login-form').hide();
-                $('#synapse-logo').show();
-                
-                $('#synapse-logo').fadeOut(3200, "swing", function(){   
-                    $('#login-form').show();
-                });
-                $('.bg-login').fadeIn(3200, "linear", function(){
-                });
+//                $('.bg-login').hide();
+//                $('#login-form').hide();
+//                $('#synapse-logo').show();
+//                
+//                $('#synapse-logo').fadeOut(3200, "swing", function(){   
+//                    $('#login-form').show();
+//                });
+//                $('.bg-login').fadeIn(3200, "linear", function(){
+//                });
                 
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
