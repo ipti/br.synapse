@@ -219,9 +219,19 @@ fieldset{
     margin: 0;
 }
 
+.element-build_text .elementText {
+    display: block;
+    margin-top: 40%;
+}
+
+
 /* iamegm + texto */
 .group.build_image.build_text .elementImage img {
     height: 121px;
+}
+
+.group.build_image.build_sound.build_text .element-build_text {
+    bottom: 7px;
 }
 
 .group.build_image.build_text .element-build_text {
