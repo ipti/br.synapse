@@ -160,8 +160,8 @@ this.Meet = function(options) {
             $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
             $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
             $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                    ' .currentPiece').show();
+                ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                ' .currentPiece').show();
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
 
@@ -220,8 +220,8 @@ this.Meet = function(options) {
 
                 $('.nextPiece').show();
                 $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                        ' .currentPiece').show();
+                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                    ' .currentPiece').show();
             }
         }
 
@@ -236,96 +236,117 @@ this.Meet = function(options) {
                     self.isCorrectPRE(currentPiece.attr('id'));
                 }
 
-                var result;
+                var isCorrectPiece;
                 //Salva no BD somente se o template for != TXT
                 if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
                     //Salva na PerformanceUser
-                    result = self.savePerformanceUsr(currentPiece.attr('id'));
-                    self.showMessageAnswer(result.pieceIsTrue);
+                    self.savePerformanceUsr(currentPiece.attr('id'));
+                    isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
+                    self.showMessageAnswer(isCorrectPiece);
                 }else{
-                    $(".message-button").trigger('click');
+                    // $(".message-button").trigger('click');
+                    isCorrectPiece = true;
                 }
-                
-            });
             
-            $(".message-button").click(function(){
-                var currentPiece = $('.currentPiece');
-                //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-                //cobject_block_id + actor_id = PK
-                var info_state = {
-                    cobject_block_id: self.cobject_block_id,
-                    actor_id: self.actor,
-                    last_piece_id: currentPiece.attr('id'),
-                    qtd_correct: self.peformance_qtd_correct,
-                    qtd_wrong: self.peformance_qtd_wrong,
-                    currentCobject_idx: self.currentCobject_idx
-                };
-                self.DB_synapse.NewORUpdateUserState(info_state);
-                //Calcula o Score
-                self.scoreCalculator();
-                currentPiece.removeClass('currentPiece');
-                currentPiece.hide();
-                if (currentPiece.next().size() == 0) {
-                    //Acabou Peça, passa pra outra PieceSet se houver
-                    var currentPieceSet = $('.currentPieceSet');
-                    currentPieceSet.removeClass('currentPieceSet');
-                    currentPieceSet.hide();
+                //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
+                if (isCorrectPiece || !isCorrectPiece) {
+                    //$(".message-button").click(function(){
+                    var currentPiece = $('.currentPiece');
+                    //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+                    //cobject_block_id + actor_id = PK
+                    var info_state = {
+                        cobject_block_id: self.cobject_block_id,
+                        actor_id: self.actor,
+                        last_piece_id: currentPiece.attr('id'),
+                        qtd_correct: self.peformance_qtd_correct,
+                        qtd_wrong: self.peformance_qtd_wrong,
+                        currentCobject_idx: self.currentCobject_idx
+                    };
+                    self.DB_synapse.NewORUpdateUserState(info_state);
+                    //Calcula o Score
+                    self.scoreCalculator();
+                    currentPiece.removeClass('currentPiece');
+                    currentPiece.hide();
+                    if (currentPiece.next().size() == 0) {
+                        //Acabou Peça, passa pra outra PieceSet se houver
+                        var currentPieceSet = $('.currentPieceSet');
+                        currentPieceSet.removeClass('currentPieceSet');
+                        currentPieceSet.hide();
 
-                    if (currentPieceSet.next().size() == 0) {
-                        //Acabou todas as pieceSets dessa Tela
-                        // Passa pra a pŕoxima PieceSet
-                        var currentScreen = $('.currentScreen');
-                        currentScreen.removeClass('currentScreen');
-                        currentScreen.hide();
-                        var nextScreen = currentScreen.next();
+                        if (currentPieceSet.next().size() == 0) {
+                            //Acabou todas as pieceSets dessa Tela
+                            // Passa pra a pŕoxima PieceSet
+                            var currentScreen = $('.currentScreen');
+                            currentScreen.removeClass('currentScreen');
+                            currentScreen.hide();
+                            var nextScreen = currentScreen.next();
 
-                        if (nextScreen.size() != 0) {
-                            nextScreen.addClass('currentScreen');
-                            nextScreen.show();
-                            nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                            nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                            nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-                        } else {
-                            //Finalisou todas as Screen do COBJECT Corrente
-                            if (self.hasNextCobject()) {
-                                self.currentCobject_idx++;
-                                var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
-                                $('.currentCobject').removeClass('currentCobject');
-                                $(selector_cobject).addClass('currentCobject');
-                                nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
+                            if (nextScreen.size() != 0) {
                                 nextScreen.addClass('currentScreen');
                                 nextScreen.show();
                                 nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
                                 nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                                $(selector_cobject).show();
                                 nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-
                             } else {
-                                $('.nextPiece').hide();
-                                $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                                //Finalisou todas as Screen do COBJECT Corrente
+                                if (self.hasNextCobject()) {
+                                    self.currentCobject_idx++;
+                                    var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
+                                    $('.currentCobject').removeClass('currentCobject');
+                                    $(selector_cobject).addClass('currentCobject');
+                                    nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
+                                    nextScreen.addClass('currentScreen');
+                                    nextScreen.show();
+                                    nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                                    nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                                    $(selector_cobject).show();
+                                    nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+
+                                } else {
+                                    $('.nextPiece').hide();
+                                    $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                                }
+
                             }
 
+                        } else {
+                            var nextPieceSet = currentPieceSet.next();
+                            nextPieceSet.addClass('currentPieceSet');
+                            nextPieceSet.show();
+
+                            var nextPiece = nextPieceSet.find('.piece:eq(0)');
+                            nextPiece.addClass('currentPiece');
+                            nextPiece.show();
                         }
-
                     } else {
-                        var nextPieceSet = currentPieceSet.next();
-                        nextPieceSet.addClass('currentPieceSet');
-                        nextPieceSet.show();
-
-                        var nextPiece = nextPieceSet.find('.piece:eq(0)');
+                        var nextPiece = currentPiece.next();
                         nextPiece.addClass('currentPiece');
                         nextPiece.show();
                     }
-                } else {
-                    var nextPiece = currentPiece.next();
-                    nextPiece.addClass('currentPiece');
-                    nextPiece.show();
+                   
+                }else {
+                //Fica resolvendo a mesma Atividade até acertar
+                //                    var info_state = {
+                //                        cobject_block_id: self.cobject_block_id,
+                //                        actor_id: self.actor,
+                //                        last_piece_id: null,
+                //                        qtd_correct: self.peformance_qtd_correct,
+                //                        qtd_wrong: self.peformance_qtd_wrong,
+                //                        currentCobject_idx: null
+                //                    };
+                //                    self.DB_synapse.NewORUpdateUserState(info_state);
+                //                    //Calcula o Score
+                //                    self.scoreCalculator();
+                    
                 }
+            });
+            
+            $(".message-button").click(function(){
+                $('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
-                
-                $('.modal_message').hide();
             });
+
 
             $('#finalize_activity').on('click', function() {
                 self.finalizeMeet();
@@ -364,7 +385,7 @@ this.Meet = function(options) {
             //Primeiro Verificar se a Piece está certa!
             var pieceID = $(this).closest('.piece').attr('id');
             self.isCorrectMTE(pieceID, $(this).attr('group'));
-            //Somente salva no BD no botão: Próxima Piece
+        //Somente salva no BD no botão: Próxima Piece
         });
 
     }
@@ -415,8 +436,8 @@ this.Meet = function(options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -467,8 +488,8 @@ this.Meet = function(options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -479,19 +500,13 @@ this.Meet = function(options) {
 
         });
 
-
-
-        //        
         // variável de encontro definida no meet.php
-
         $('.drag').on('mousedown', function() {
-
             $(this).css('border', '3px dashed #FBB03B');
             $(this).siblings().css('opacity', '0');
             $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
             $(this).siblings('.drag').removeClass('last_clicked');
             $(this).addClass('last_clicked');
-
         });
 
         $('.drag').on('mouseup', function() {
@@ -512,7 +527,7 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_PRE = function() {
-        //  self.init_Common();
+    //  self.init_Common();
 
     }
 
@@ -522,7 +537,7 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-        //  self.init_Common();
+    //  self.init_Common();
     }
     //======================
 
@@ -538,7 +553,7 @@ this.Meet = function(options) {
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' ||
-                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
+            self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
@@ -567,7 +582,7 @@ this.Meet = function(options) {
         }
         
         //Salvo com Sucesso !
-        return {'saved': true, 'pieceIsTrue':pieceIsTrue};
+        return true;
     }
 
     this.saveMatchGroup = function(currentPieceID) {
@@ -718,20 +733,20 @@ this.Meet = function(options) {
     this.showMessageAnswer = function(isTrue) {
         if (isTrue) {
             $('#hit-message').show();
-//            $('#message').show();
-//            $('#message').css({
-//                'backgroundColor': 'green'
-//            });
-//            $('#message').html(MSG_CORRECT);
-//            $('#message').fadeOut(5000);
+        //            $('#message').show();
+        //            $('#message').css({
+        //                'backgroundColor': 'green'
+        //            });
+        //            $('#message').html(MSG_CORRECT);
+        //            $('#message').fadeOut(5000);
         } else {
             $('#error-message').show();
-//            $('#message').show();
-//            $('#message').css({
-//                'backgroundColor': 'red'
-//            });
-//            $('#message').html(MSG_WRONG);
-//            $('#message').fadeOut(5000);
+        //            $('#message').show();
+        //            $('#message').css({
+        //                'backgroundColor': 'red'
+        //            });
+        //            $('#message').html(MSG_WRONG);
+        //            $('#message').fadeOut(5000);
         }
 
     }
