@@ -154,22 +154,58 @@ var DomCobject = function(cobject, idx) {
                     }
                     
                 }
-         } else{
+            } else{
                 //Grupo existente
                 domGroup = possibleGroup;
             }
 
             var elements_length = elements_group.elements.length;
+            var order_type_elements = new Array();
+            //PErcorrer Elementos do grupo Corrent
             for (self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
                 self.id.element = elements_group.elements[self.pos.element].id;
-                domGroup.append(self.buildElement());
-                if (isNewGroup) {
-                    //Se for um novo Grupo, então add o novo
-                    domTypeGroup.append(domGroup);
+                var element = self.buildElement();
+                if(order_type_elements.length == 0){
+                    order_type_elements[self.currentElementType] = new Array();
+                    order_type_elements[self.currentElementType].push(element);
+                }else{
+                    //Existe pelo menos Um
+                    if(self.isset(order_type_elements[self.currentElementType])){
+                        //Push neste
+                        order_type_elements[self.currentElementType].push(element);
+                    }else{
+                        //É um novo
+                        order_type_elements[self.currentElementType] = new Array();
+                        order_type_elements[self.currentElementType].push(element);
+                    }
                 }
                 domGroup.addClass(self.currentElementType);
             }
-        ;
+            
+            //Agora apenda os elementos do grupo acima em ordem: imagem - som - texto
+            if(self.isset(order_type_elements['build_image'])){
+                //Apenda As Imagens
+                $.each(order_type_elements['build_image'], function(idx, element){
+                    domGroup.append(element);
+                });
+            }
+            if(self.isset(order_type_elements['build_sound'])){
+                //Apenda Os Sons
+                $.each(order_type_elements['build_sound'], function(idx, element){
+                    domGroup.append(element);
+                });
+            }
+            if(self.isset(order_type_elements['build_text'])){
+                //Apenda os Textos
+                $.each(order_type_elements['build_text'], function(idx, element){
+                    domGroup.append(element);
+                });
+            }
+            if (isNewGroup){
+                //Se for um novo Grupo, então add o novo
+                domTypeGroup.append(domGroup);
+            }
+            
         });
         //Armazena todos os grupos de cada peça
         objGroups_currentPiece.istrue = null;
@@ -178,11 +214,7 @@ var DomCobject = function(cobject, idx) {
         if (self.cobject.template_code == 'AEL' || self.cobject.template_code == 'DDROP') {
             self.domPiece.append(domElementANSWER);
         }
-        var $peopleli = self.domPiece.find("li");
-        console.log($peopleli);
-        $peopleli.sort(function(a,b){
-            //if()
-        });
+
         return self.domPiece;
     }
 
