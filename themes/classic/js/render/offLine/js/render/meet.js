@@ -249,6 +249,8 @@ this.Meet = function(options) {
             //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
             if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
                 BtnPageTXT();
+            }else{
+                NoBtnPageTXT();
             }
             
         } else {
@@ -375,13 +377,14 @@ this.Meet = function(options) {
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
         if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
             BtnPageTXT();
+        }else{
+            NoBtnPageTXT();
         }
                 
     }
     
-    this.lastPiece = function(){
-        alert('lasttt');
-         var currentPiece = $('.currentPiece');
+    this.prevPiece = function(){
+        var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
             self.isCorrectPRE(currentPiece.attr('id'));
@@ -415,61 +418,60 @@ this.Meet = function(options) {
             self.scoreCalculator();
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
-            console.log(currentPiece.last());
-            if (currentPiece.last().size() == 0) {
+            if (currentPiece.prev().size() == 0) {
                 //Acabou Peça, passa pra outra PieceSet se houver
                 var currentPieceSet = $('.currentPieceSet');
                 currentPieceSet.removeClass('currentPieceSet');
                 currentPieceSet.hide();
 
-                if (currentPieceSet.last().size() == 0) {
+                if (currentPieceSet.prev().size() == 0) {
                     //Acabou todas as pieceSets dessa Tela
                     // Passa pra a pŕoxima PieceSet
                     var currentScreen = $('.currentScreen');
                     currentScreen.removeClass('currentScreen');
                     currentScreen.hide();
-                    var nextScreen = currentScreen.last();
+                    var prevScreen = currentScreen.prev();
 
-                    if (nextScreen.size() != 0) {
-                        nextScreen.addClass('currentScreen');
-                        nextScreen.show();
-                        nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                        nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                        nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                    if (prevScreen.size() != 0) {
+                        prevScreen.addClass('currentScreen');
+                        prevScreen.show();
+                        prevScreen.find('.pieceset').last().addClass('currentPieceSet');
+                        prevScreen.find('.piece').last().addClass('currentPiece');
+                        prevScreen.find('.pieceset').last().show();
+                        prevScreen.find('.piece').last().show();
                     } else {
                         //Finalisou todas as Screen do COBJECT Corrente
-                        alert('LAST ');
-                        if (self.hasNextCobject()) {
+                        if (self.hasPrevCobject()) {
                             self.currentCobject_idx--;
                             var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
                             $('.currentCobject').removeClass('currentCobject');
                             $(selector_cobject).addClass('currentCobject');
-                            nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
-                            nextScreen.addClass('currentScreen');
-                            nextScreen.show();
-                            nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                            nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                            prevScreen = $(selector_cobject + ' .T_screen').last();
+                            prevScreen.addClass('currentScreen');
+                            prevScreen.show();
+                            prevScreen.find('.pieceset').last().addClass('currentPieceSet');
+                            prevScreen.find('.piece').last().addClass('currentPiece');
                             $(selector_cobject).show();
-                            nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-
+                            prevScreen.find('.pieceset').last().show();
+                            prevScreen.find('.piece').last().show();
                         } else {
-                            $('.nextPiece').hide();
-                            $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                        //Está na Primeira Peça
+                        //alert('Está na Primeira Peça');
                         }
 
                     }
 
                 } else {
-                    var nextPieceSet = currentPieceSet.last();
+                    var nextPieceSet = currentPieceSet.prev();
                     nextPieceSet.addClass('currentPieceSet');
                     nextPieceSet.show();
 
-                    var nextPiece = nextPieceSet.find('.piece:eq(0)');
+                    var nextPiece = nextPieceSet.find('.piece').last();
                     nextPiece.addClass('currentPiece');
                     nextPiece.show();
                 }
             } else {
-                var nextPiece = currentPiece.last();
+                var nextPiece = currentPiece.prev();
                 nextPiece.addClass('currentPiece');
                 nextPiece.show();
             }
@@ -493,6 +495,8 @@ this.Meet = function(options) {
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
         if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
             BtnPageTXT();
+        }else{
+            NoBtnPageTXT();
         }
     }
 
@@ -500,7 +504,13 @@ this.Meet = function(options) {
         $('#nextPage').show();
         $('#lastPage').show();
         $('.nextPiece').hide();
-    }
+    };
+    
+    var NoBtnPageTXT  = function(){
+        $('#nextPage').hide();
+        $('#lastPage').hide();
+        $('.nextPiece').show();
+    };
 
     /**
      * Inicializa eventos do MTE
@@ -679,13 +689,61 @@ this.Meet = function(options) {
      */
     this.init_TXT = function() {
         $(document).on('click','#nextPage',function(){
-           self.nextPiece();
+            self.nextPiece();
         });
         $(document).on('click','#lastPage',function(){
-            self.lastPiece();
+            if(self.hasPrevPieceTXT()){
+                self.prevPiece();
+            }else{
+                this.disabled = true;
+            }
+           
+            
         });
     }
     //======================
+    
+    this.hasPrevPieceTXT = function(){
+        var isTXT = false;
+        var currentPiece = $('.currentPiece');
+        if (currentPiece.prev().size() == 0) {
+            //Acabou Peça, passa pra outra PieceSet se houver
+            var currentPieceSet = $('.currentPieceSet');
+            if (currentPieceSet.prev().size() == 0) {
+                //Acabou todas as pieceSets dessa Tela
+                // Passa pra a pŕoxima PieceSet
+                var currentScreen = $('.currentScreen');
+                var prevScreen = currentScreen.prev();
+                if (prevScreen.size() != 0) {
+                    isTXT =  prevScreen.find('.piece').last().children('.element').hasClass('TXT');
+                } else {
+                    //Finalisou todas as Screen do COBJECT Corrente
+                    if (self.hasPrevCobject()) {
+                        var prevCobject_idx = self.currentCobject_idx - 1;
+                        var selector_cobject = '.cobject[id=' + self.domCobjects[prevCobject_idx].cobject.cobject_id + ']';
+                        prevScreen = $(selector_cobject + ' .T_screen').last();
+                        isTXT =  prevScreen.find('.piece').last().children('.element').hasClass('TXT');
+                    } else {
+                        //Está na Primeira Peça
+                        //alert('Está na Primeira Peça');
+                        isTXT = false;
+                    }
+                }
+
+            } else {
+                var nextPieceSet = currentPieceSet.prev();
+                var nextPiece = nextPieceSet.find('.piece').last();
+                isTXT = nextPiece.children('.element').hasClass('TXT');
+            }
+        } else {
+            var prevPiece = currentPiece.prev();
+            isTXT = prevPiece.children('.element').hasClass('TXT')
+        }
+            
+        return isTXT;
+    }
+    
+    
 
     //Salvar PermanceUser
     /**
@@ -847,6 +905,9 @@ this.Meet = function(options) {
         return self.isset(self.domCobjects[self.currentCobject_idx + 1]);
     }
 
+    this.hasPrevCobject = function() {
+        return self.currentCobject_idx != 0;
+    }
     //======================
     /**
      * Deveria finalizar o meet... mas não faz nada.

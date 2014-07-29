@@ -85,10 +85,10 @@ var DomCobject = function(cobject, idx) {
         var elements_group = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         for (self.pos.element = 0; self.pos.element < elements_group.elements.length; self.pos.element++) {
             self.id.element = elements_group.elements[self.pos.element].id;
-            fd.append(self.buildElement());
+            self.domPiece.append(self.buildElement());
         }
-        self.domPiece.append(fd);
-        self.domPieceSet.append(self.domPiece);
+        fd.append(self.domPiece);
+        self.domPieceSet.append(fd);
         self.domPieceSet.prepend(self.buildInfo_PieceSet());
         return self.domPieceSet;
     }
@@ -258,9 +258,9 @@ var DomCobject = function(cobject, idx) {
         return self.buildElement_AEL();
     }
     
-    this.buildElement_ = function() {
-        return self.buildElement_AEL();
-    }
+//    this.buildElement_ = function() {
+//        return self.buildElement_AEL();
+//    }
 
     this.buildElement_AEL = function(isElement_PieceSet) {
         var html = "";
@@ -423,7 +423,7 @@ var DomCobject = function(cobject, idx) {
         }
         if (description !== undefined && description !== null) {
             html.addClass('build_text');
-            html.append('<li class="element element-question"><h1 class="question-title">' + description + '</h1></li>');
+            html.append('<li class="element-question"><h1 class="question-title">' + description + '</h1></li>');
         }
         return html;
     }
