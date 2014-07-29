@@ -401,7 +401,7 @@ this.Meet = function(options) {
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
             //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-            //cobject_block_id + actor_id = PK
+            //cobject_block_id + actor_id = P K
             var info_state = {
                 cobject_block_id: self.cobject_block_id,
                 actor_id: self.actor,
@@ -543,13 +543,13 @@ this.Meet = function(options) {
             var ask_answer = $(this).parents('div').attr('class');
             if (ask_answer == 'ask') {
                 if (!$(this).hasClass('ael_clicked')) {
-                    $(this).css('opacity', '0.4');
+                    $(this).css('border', '3px dashed #FBB03B');
                     $(this).siblings().hide();
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
                     $(this).addClass('ael_clicked');
                     $(this).addClass('last_clicked');
                 } else {
-                    $(this).css('opacity', '1');
+                    $(this).css('border', '3px dashed transparent');
                     $(this).siblings(':not(.ael_clicked)').show();
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
                     $(this).removeClass('ael_clicked');
