@@ -1,139 +1,139 @@
 /** Layout **/
 
 body {
-	margin: 0px;
-	background-color: #D1E0CD;
-	/*background-image: url(../img/background-texture.png);*/
-	background-repeat: repeat;
-	font-family: asap, helvetica, arial, sans-serif;
+    margin: 0px;
+    background-color: #D1E0CD;
+    /*background-image: url(../img/background-texture.png);*/
+    background-repeat: repeat;
+    font-family: asap, helvetica, arial, sans-serif;
 }
 
 /** Barra de informações **/
 #head_meet {
-	display: none;
-	width: 145px;
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	padding: 5px;
-	background: #666666;
-	box-shadow: 2px 0px 5px #2C2C2C;
-	border-right: 1px solid #fff;
-	color: #fff;
-	font-size: 20px;
-	z-index: 10000;
+    display: none;
+    width: 145px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    padding: 5px;
+    background: #666666;
+    box-shadow: 2px 0px 5px #2C2C2C;
+    border-right: 1px solid #fff;
+    color: #fff;
+    font-size: 20px;
+    z-index: 10000;
 }
 
 .info {
-	padding: 5px;
-	border-bottom: 1px solid #fff;
+    padding: 5px;
+    border-bottom: 1px solid #fff;
 }
 
 .info-name {
-	padding: 30px 0;
-	text-align: center;
+    padding: 30px 0;
+    text-align: center;
 }
 
 .info-icon {
-	float: left;
-	width: 40px;
+    float: left;
+    width: 40px;
 }
 
 .info-exit {
-	text-align: center;
-	padding: 5px;
-	border-bottom: none;
-	border-top: 1px solid #fff;
-	position: absolute;
-	bottom: 0;
-	color: #fff;
-	margin-right: 5px;
+    text-align: center;
+    padding: 5px;
+    border-bottom: none;
+    border-top: 1px solid #fff;
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+    margin-right: 5px;
 }
 
 .info-exit .info-icon {
-	float: none;
+    float: none;
 }
 
 .info-text {
-	float: left;
-	padding: 10px;
+    float: left;
+    padding: 10px;
 }
 
 #info-button {
-	position: fixed;
-	bottom: 115px;
-	left: 0;
-	padding: 5px;
-	background-color: #666666;
-	color: #fff;
-	font-size: 20px;
-	border: none;
-	border-radius: 0 7px 7px 0;
-	cursor: pointer;
+    position: fixed;
+    bottom: 115px;
+    left: 0;
+    padding: 5px;
+    background-color: #666666;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 0 7px 7px 0;
+    cursor: pointer;
 }
 
 .menu-open {
-	background-image: url(../../img/icons/sidebar-open.png);
-	background-repeat: no-repeat;
-	background-size: contain;
-	width: 44px;
-	height: 44px;
-	z-index: 10000;
+    background-image: url(../../img/icons/sidebar-open.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 44px;
+    height: 44px;
+    z-index: 10000;
 }
 
 .menu-close {
-	background-image: url(../../img/icons/sidebar-close.png);
-	background-repeat: no-repeat;
-	background-size: contain;
-	width: 44px;
-	height: 44px;
-	z-index: 10000;
+    background-image: url(../../img/icons/sidebar-close.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 44px;
+    height: 44px;
+    z-index: 10000;
 
 }
 /** Pergunta da atividade **/
 /*.question-container {
-	width: 700px;
-	margin: 0 auto;
-	background: #FBB03B;
-	border-radius: 0 0 5px 5px;
-	padding: 10px;
-	color: #fff;
+        width: 700px;
+        margin: 0 auto;
+        background: #FBB03B;
+        border-radius: 0 0 5px 5px;
+        padding: 10px;
+        color: #fff;
 }*/
 
 .question-image-container {
-	width: 50%;
-	float: left;
-	margin-right: 20px;
-	list-style: none;
+    width: 50%;
+    float: left;
+    margin-right: 20px;
+    list-style: none;
 }
 
 .question-title {
-	font-size: 35px;
-	line-height: 35px;
+    font-size: 35px;
+    line-height: 35px;
 }
 
 /** Respostas **/
 
 .answer-ok {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .send-button {
-	background: #ACDD31;
-	border: none;
-	padding: 0px 60px;
-	color: #fff;
-	font-size: 26px;
-	border-radius: 6px;
-	box-shadow: 2px 2px 5px #2C2C2C;
+    background: #ACDD31;
+    border: none;
+    padding: 0px 60px;
+    color: #fff;
+    font-size: 26px;
+    border-radius: 6px;
+    box-shadow: 2px 2px 5px #2C2C2C;
 }
 
 /** Resposta tipo texto **/
 .answer input {
-	margin: 0 0 50px 0;
-	border: 9px solid #51b899;
-	width: 672px;
-	padding: 15px;
+    margin: 0 0 50px 0;
+    border: 9px solid #51b899;
+    width: 672px;
+    padding: 15px;
 }
 
 
@@ -141,68 +141,91 @@ body {
 /** Overlay **/
 
 .overlay {
-	background: rgba(255, 255, 255, 0.7);
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	width: 100%;
-	display: none;
-	z-index: 100000;
+    background: rgba(255, 255, 255, 0.7);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: none;
+    z-index: 100000;
 }
 
 .error {
-	background: #FBB03B;
+    background: #FBB03B;
 }
 
 .success {
-	background: #51b899;
+    background: #51b899;
 }
 
 .exit {
-	background: #666666;
+    background: #666666;
 }
 
 .message-container {
-	width: 350px;
-	margin: 150px auto;
-	text-align: center;
-	font-family: tellural, helvetica, arial, sans-serif;
-	color: #fff;
-	font-size: 36px;
-	padding: 30px;
-	border-radius: 6px;
-	line-height: 44px;
-	box-shadow: 1px 1px 8px #2C2C2C;
+    width: 350px;
+    margin: 150px auto;
+    text-align: center;
+    font-family: tellural, helvetica, arial, sans-serif;
+    color: #fff;
+    font-size: 36px;
+    padding: 30px;
+    border-radius: 6px;
+    line-height: 44px;
+    box-shadow: 1px 1px 8px #2C2C2C;
 }
 
 .message-container.exit {
-	width: 500px;
-	padding: 50px 30px;
+    width: 500px;
+    padding: 50px 30px;
 }
 
 .message-icon {
-	width: 60px;
+    width: 60px;
 }
 
 .message-container.exit .message-icon {
-	margin: 50px 50px 0 50px;
-	cursor: pointer;
+    margin: 50px 50px 0 50px;
+    cursor: pointer;
 }
 
 .message-button {
-	border: none;
-	border-radius: 3px;
-	color: #fff;
-	font-family: tellural, helvetica, arial, sans-serif;
-	font-size: 36px;
-	padding: 20px 40px;
-	margin-top: 10px;
-        cursor: pointer;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-family: tellural, helvetica, arial, sans-serif;
+    font-size: 36px;
+    padding: 20px 40px;
+    margin-top: 10px;
+    cursor: pointer;
 }
 .error .message-button {
-	background: #F18318;
+    background: #F18318;
 }
 
 .success .message-button {
-	background: #ACDD31;
+    background: #ACDD31;
 }
+
+.btn_lastPage {
+    width: 60px;
+    heigth: 150px;   
+    float:left;
+    cursor: pointer;
+
+    position: relative;
+/*    top: 50%;*/
+    transform: translateY(-150%);
+}
+
+.btn_nextPage {
+    width: 60px;
+    heigth: 150px;   
+    float:right;
+    cursor: pointer;
+    
+    position: relative;
+    /*    top: 50%;*/
+    transform: translateY(-150%);
+}
+

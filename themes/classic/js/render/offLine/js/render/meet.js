@@ -277,6 +277,7 @@ this.Meet = function(options) {
             //Salva na PerformanceUser
             self.savePerformanceUsr(currentPiece.attr('id'));
             isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
+            console.log(self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')]);
             self.showMessageAnswer(isCorrectPiece);
         }else{
             // $(".message-button").trigger('click');
@@ -393,8 +394,8 @@ this.Meet = function(options) {
         var isCorrectPiece;
         //Salva no BD somente se o template for != TXT
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
-            //Salva na PerformanceUser
-            self.savePerformanceUsr(currentPiece.attr('id'));
+            //Salva na PerformanceUser ?
+            // self.savePerformanceUsr(currentPiece.attr('id'));
             isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
         }else{
@@ -792,10 +793,13 @@ this.Meet = function(options) {
     this.saveMatchGroup = function(currentPieceID) {
         //Para Cada GRUPO da Piece
         var pieceIsTrue = true;
+        var answer = false;
         $.each(self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID], function(nome_attr, group) {
             if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
                 if (self.isset(group.ismatch) && (!group.ismatch)) {
                     pieceIsTrue = false;
+                }else if (self.isset(group.ismatch) && group.ismatch) {
+                    answer = true;
                 }
                 //Salva no BD os MetaDados para cada grupo
                 if (self.isset(this.groupMatched)) {
@@ -820,7 +824,7 @@ this.Meet = function(options) {
 
         });
         //Salvo com Sucesso
-        self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].isCorrect = pieceIsTrue;
+        self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
         return true;
     }
 
@@ -1015,8 +1019,8 @@ this.Meet = function(options) {
     this.buildToolBar = function() {
         var html = $('<div class="toolBar"></div>');
         html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
-        html.append("<button class='btn_lastPage' id='lastPage' style='display:none' >"+LAST_PAGE+"</button>");
-        html.append("<button class='btn_nextPage' id='nextPage' style='display:none' >"+NEXT_PAGE+"</button>");
+        html.append("<img class='btn_lastPage' id='lastPage' src='img/last.png' style='display:none' >");
+        html.append("<img class='btn_nextPage' id='nextPage' src='img/next.png' style='display:none' >");
         
         return html;
     }
