@@ -609,6 +609,7 @@ this.Meet = function(options) {
         $('.drop').hide();
 
         $('.drag').draggable({
+            containment: "body",
             drag: function() {
             }
 

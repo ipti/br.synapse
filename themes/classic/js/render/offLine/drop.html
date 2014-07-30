@@ -989,22 +989,20 @@ body .ui-tooltip {
             .html( "Dropped!" );
       }
     });
+  $("#little-box").draggable({ containment: "#my-drag-box" });
   });
+  
   </script>
 </head>
 <body>
  
-<div id="draggable" class=" draggable ui-widget-content">
-  <p>Drag me to my target</p>
-</div>
- 
-<div id="droppable" class="droppable ui-widget-header">
-  <p>Drop here</p>
-</div>
 
- <div id="droppable1" class="droppable ui-widget-header">
-  <p>Drop here</p>
-</div>
- 
+    
+    <div id="my-drag-box"  style="height: 300px; width: 600px; border: 1px solid black">
+        <div id="little-box" style="height: 30px; width: 30px; border: 1px solid red"></div>
+    </div>
+    
+    
+    
 </body>
 </html>
