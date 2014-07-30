@@ -253,6 +253,7 @@ this.Meet = function(options) {
                 NoBtnPageTXT();
             }
             
+            
         } else {
             //Atividade Já Finalizada
             $('.cobject_block').hide();
@@ -277,7 +278,6 @@ this.Meet = function(options) {
             //Salva na PerformanceUser
             self.savePerformanceUsr(currentPiece.attr('id'));
             isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
-            console.log(self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')]);
             self.showMessageAnswer(isCorrectPiece);
         }else{
             // $(".message-button").trigger('click');
@@ -287,19 +287,23 @@ this.Meet = function(options) {
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
             var currentPiece = $('.currentPiece');
-            //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-            //cobject_block_id + actor_id = PK
-            var info_state = {
-                cobject_block_id: self.cobject_block_id,
-                actor_id: self.actor,
-                last_piece_id: currentPiece.attr('id'),
-                qtd_correct: self.peformance_qtd_correct,
-                qtd_wrong: self.peformance_qtd_wrong,
-                currentCobject_idx: self.currentCobject_idx
-            };
-            self.DB_synapse.NewORUpdateUserState(info_state);
-            //Calcula o Score
-            self.scoreCalculator();
+            if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+                //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+                //cobject_block_id + actor_id = PK
+                var info_state = {
+                    cobject_block_id: self.cobject_block_id,
+                    actor_id: self.actor,
+                    last_piece_id: currentPiece.attr('id'),
+                    qtd_correct: self.peformance_qtd_correct,
+                    qtd_wrong: self.peformance_qtd_wrong,
+                    currentCobject_idx: self.currentCobject_idx
+                };
+                self.DB_synapse.NewORUpdateUserState(info_state);
+                //Calcula o Score
+                self.scoreCalculator();
+            }
+            
+            
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
             if (currentPiece.next().size() == 0) {
@@ -381,6 +385,7 @@ this.Meet = function(options) {
         }else{
             NoBtnPageTXT();
         }
+        
                 
     }
     
@@ -404,19 +409,22 @@ this.Meet = function(options) {
             
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
-            //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-            //cobject_block_id + actor_id = P K
-            var info_state = {
-                cobject_block_id: self.cobject_block_id,
-                actor_id: self.actor,
-                last_piece_id: currentPiece.attr('id'),
-                qtd_correct: self.peformance_qtd_correct,
-                qtd_wrong: self.peformance_qtd_wrong,
-                currentCobject_idx: self.currentCobject_idx
-            };
-            self.DB_synapse.NewORUpdateUserState(info_state);
-            //Calcula o Score
-            self.scoreCalculator();
+            if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+                //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+                //cobject_block_id + actor_id = P K
+                var info_state = {
+                    cobject_block_id: self.cobject_block_id,
+                    actor_id: self.actor,
+                    last_piece_id: currentPiece.attr('id'),
+                    qtd_correct: self.peformance_qtd_correct,
+                    qtd_wrong: self.peformance_qtd_wrong,
+                    currentCobject_idx: self.currentCobject_idx
+                };
+                self.DB_synapse.NewORUpdateUserState(info_state);
+                //Calcula o Score
+                self.scoreCalculator();
+            }
+            
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
             if (currentPiece.prev().size() == 0) {
@@ -499,15 +507,23 @@ this.Meet = function(options) {
         }else{
             NoBtnPageTXT();
         }
+        
     }
 
     var BtnPageTXT = function(){
+        $('.game').hide();
         $('#nextPage').show();
-        $('#lastPage').show();
+        //Verificar se mostrará o botão pra voltar o TXT
+        if(self.hasPrevPieceTXT()){
+            $('#lastPage').show();      
+        }else{
+            $('#lastPage').hide();  
+        }
         $('.nextPiece').hide();
     };
     
     var NoBtnPageTXT  = function(){
+         $('.game').show();
         $('#nextPage').hide();
         $('#lastPage').hide();
         $('.nextPiece').show();
@@ -551,9 +567,10 @@ this.Meet = function(options) {
         // variável de encontro definida no meet.php
         $('.cobject.AEL div.answer > div[group]').hide();
         $('.cobject.AEL div[group]').on('click', function() {
-            var ask_answer = $(this).parents('div').attr('class');
-            if (ask_answer == 'ask') {
+            var ask_answer = $(this).parents('div');
+            if (ask_answer.hasClass('ask')) {
                 if (!$(this).hasClass('ael_clicked')) {
+                     $('.nextPiece').hide();
                     $(this).css('border', '3px dashed #FBB03B');
                     $(this).siblings().hide();
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
@@ -565,9 +582,9 @@ this.Meet = function(options) {
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
                     $(this).removeClass('ael_clicked');
                     $(this).removeClass('last_clicked');
-
+                     $('.nextPiece').show();
                 }
-            } else if (ask_answer == 'answer') {
+            } else if (ask_answer.hasClass('answer')) {
                 //Time de resposta
                 var time_answer = (new Date().getTime() - self.interval_group);
                 //Atualizar o marcador de inicio do intervalo para cada resposta
@@ -594,6 +611,7 @@ this.Meet = function(options) {
 
                 //Respondeu, então "reinicia" o temporizador de grupo
                 self.interval_group = new Date().getTime();
+                 $('.nextPiece').show();
             }
 
         });
@@ -655,6 +673,7 @@ this.Meet = function(options) {
 
         // variável de encontro definida no meet.php
         $('.drag').on('mousedown', function() {
+            $('.nextPiece').hide();
             $(this).css('border', '3px dashed #FBB03B');
             $(this).siblings().css('opacity', '0');
             $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
@@ -666,7 +685,7 @@ this.Meet = function(options) {
             $(this).css('border', '3px solid transparent');
             $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
             $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
-
+            $('.nextPiece').show();
         });
 
     }
@@ -696,14 +715,12 @@ this.Meet = function(options) {
         $(document).on('click','#lastPage',function(){
             if(self.hasPrevPieceTXT()){
                 self.prevPiece();
-            }else{
-                this.disabled = true;
             }
-           
             
         });
     }
     //======================
+    
     
     this.hasPrevPieceTXT = function(){
         var isTXT = false;
@@ -717,14 +734,14 @@ this.Meet = function(options) {
                 var currentScreen = $('.currentScreen');
                 var prevScreen = currentScreen.prev();
                 if (prevScreen.size() != 0) {
-                    isTXT =  prevScreen.find('.piece').last().children('.element').hasClass('TXT');
+                    isTXT =  prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                 } else {
-                    //Finalisou todas as Screen do COBJECT Corrente
+                    //Finalizou todas as Screen do COBJECT Corrente
                     if (self.hasPrevCobject()) {
                         var prevCobject_idx = self.currentCobject_idx - 1;
                         var selector_cobject = '.cobject[id=' + self.domCobjects[prevCobject_idx].cobject.cobject_id + ']';
                         prevScreen = $(selector_cobject + ' .T_screen').last();
-                        isTXT =  prevScreen.find('.piece').last().children('.element').hasClass('TXT');
+                        isTXT =  prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                     } else {
                         //Está na Primeira Peça
                         //alert('Está na Primeira Peça');
@@ -733,13 +750,13 @@ this.Meet = function(options) {
                 }
 
             } else {
-                var nextPieceSet = currentPieceSet.prev();
-                var nextPiece = nextPieceSet.find('.piece').last();
-                isTXT = nextPiece.children('.element').hasClass('TXT');
+                var prevPieceSet = currentPieceSet.prev();
+                var prevPiece = prevPieceSet.find('.piece').last();
+                isTXT = prevPiece.find('.group').last().hasClass('TXT');
             }
         } else {
             var prevPiece = currentPiece.prev();
-            isTXT = prevPiece.children('.element').hasClass('TXT')
+            isTXT = prevPiece.find('.group').last().hasClass('TXT')
         }
             
         return isTXT;
@@ -1020,8 +1037,8 @@ this.Meet = function(options) {
     this.buildToolBar = function() {
         var html = $('<div class="toolBar"></div>');
         html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
-        html.append("<img class='btn_lastPage' id='lastPage' src='img/last.png' style='display:none' >");
-        html.append("<img class='btn_nextPage' id='nextPage' src='img/next.png' style='display:none' >");
+        html.append("<img class='btn_lastPage' id='lastPage' src='img/icons/last.png' style='display:none' >");
+        html.append("<img class='btn_nextPage' id='nextPage' src='img/icons/next.png' style='display:none' >");
         
         return html;
     }

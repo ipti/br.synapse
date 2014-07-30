@@ -81,14 +81,16 @@ var DomCobject = function(cobject, idx) {
         self.pos.group = 1;
         self.domPieceSet = $('<div class="pieceset book" style="display:none" id="' + self.id.pieceset + '"></div>');
         self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
-        var fd = $('<div class="book-right"></div>');
+        var group = $('<div class="group TXT" group="1"></div>');
+        var br = $('<div class="book-right"></div>');
         var elements_group = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         for (self.pos.element = 0; self.pos.element < elements_group.elements.length; self.pos.element++) {
             self.id.element = elements_group.elements[self.pos.element].id;
-            self.domPiece.append(self.buildElement());
+            group.append(self.buildElement());
         }
-        fd.append(self.domPiece);
-        self.domPieceSet.append(fd);
+        self.domPiece.append(group);
+        br.append(self.domPiece);
+        self.domPieceSet.append(br);
         self.domPieceSet.prepend(self.buildInfo_PieceSet());
         return self.domPieceSet;
     }
@@ -423,7 +425,9 @@ var DomCobject = function(cobject, idx) {
         }
         if (description !== undefined && description !== null) {
             html.addClass('build_text');
-            html.append('<li class="element-question"><h1 class="question-title">' + description + '</h1></li>');
+            if (self.cobject.template_code != 'TXT') {
+                html.append('<li class="element-question"><h1 class="question-title">' + description + '</h1></li>');
+            }
         }
         return html;
     }

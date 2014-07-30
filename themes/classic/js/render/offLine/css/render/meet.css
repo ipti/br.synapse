@@ -215,7 +215,7 @@ body {
 
     position: relative;
 /*    top: 50%;*/
-    transform: translateY(-150%);
+    transform: translateY(-222%);
 }
 
 .btn_nextPage {
@@ -226,6 +226,6 @@ body {
     
     position: relative;
     /*    top: 50%;*/
-    transform: translateY(-150%);
+    transform: translateY(-222%);
 }
 
