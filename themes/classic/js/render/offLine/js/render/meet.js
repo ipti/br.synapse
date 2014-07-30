@@ -242,6 +242,7 @@ this.Meet = function(options) {
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
             });
+            
 
             $('#finalize_activity').on('click', function() {
                 self.finalizeMeet();
