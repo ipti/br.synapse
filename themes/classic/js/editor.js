@@ -904,7 +904,6 @@ function editor () {
             tagAdd= $('#'+parent.currentPiece+' div[group='+group+']');
         }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)){
             tagAdd= $('li[id="'+parent.currentPiece+'"] div[group='+group+']');  // 
-            console.log(tagAdd);
         }
         
         if(this.isset(loaddata)){
@@ -1443,9 +1442,7 @@ function editor () {
                                     curretPieceID = currentID;
                                     str_seletor = '#'+curretPieceID+' .element'+limit_element;
                                 }
-                                //Se for texto acessa todos os elementos para verificar se foram alterados
                                 $(str_seletor).each(function(){
-                                          
                                     //Verificar se é um elemento da PieceSet
                                     //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                                     ElementID = $(this).attr('id');
@@ -1453,7 +1450,8 @@ function editor () {
                                     //get Atributo position
                                     elementPosition = $(this).attr('position');
                                     var continuar = true;
-                                    if(parent.COTemplateTypeIn(parent.TXT)) {
+                                    //Se for element da peça e TXT acessa todos os elementos para verificar se foram alterados
+                                    if(parent.COTemplateTypeIn(parent.TXT) && !isElementPieceSet) {
                                         var text_element = '#'+ElementID;
                                         var arrayText = text_element.split('_');
                                         text_element = "";
@@ -1476,7 +1474,6 @@ function editor () {
                                         var txt_New_noHtml =  $("body", $(text_element+"_flag_ifr").contents()).text();
                                         //Foi alterado  
                                         continuar = (txt_New_noHtml !="" && txt_BD != txt_New);
-                                            
                                     }
                                         
                                     if(continuar) {
