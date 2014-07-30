@@ -21,6 +21,7 @@ this.Meet = function(options) {
     //================
     var self = this;
     this.currentCobject_idx = null;
+    this.currentGrade = 0;
     this.domCobjects = new Array();
     this.num_cobjects = 0;
     this.isFinalBlock = false;
@@ -257,7 +258,7 @@ this.Meet = function(options) {
         } else {
             //Atividade Já Finalizada
             $('.cobject_block').hide();
-            window.alert('Atividade Já Finalizada !');
+            location.href = "finish-level.html";
         }
 
 
@@ -340,10 +341,11 @@ this.Meet = function(options) {
                             nextScreen.find('.piece:eq(0)').addClass('currentPiece');
                             $(selector_cobject).show();
                             nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-
+                            //Verificar o nível do próximo Cobject
+                            self.setCurrentGrade();
                         } else {
                             $('.nextPiece').hide();
-                            $('.toolBar').append($('<button id="finalize_activity">' + FINALIZE_ACTIVITY + '</button>'));
+                            location.href = "finish-level.html";
                         }
 
                     }
@@ -510,6 +512,16 @@ this.Meet = function(options) {
         
     }
 
+    this.setCurrentGrade = function(){
+        //Se for diferente, então Passou de Nível
+        if(self.currentGrade != self.domCobjects[self.currentCobject_idx].grade){
+            self.currentGrade = self.domCobjects[self.currentCobject_idx].grade;
+            location.href = "finish-level.html";
+        }
+        
+    }
+
+
     var BtnPageTXT = function(){
         $('.game').hide();
         $('#nextPage').show();
@@ -523,7 +535,7 @@ this.Meet = function(options) {
     };
     
     var NoBtnPageTXT  = function(){
-         $('.game').show();
+        $('.game').show();
         $('#nextPage').hide();
         $('#lastPage').hide();
         $('.nextPiece').show();
@@ -570,7 +582,7 @@ this.Meet = function(options) {
             var ask_answer = $(this).parents('div');
             if (ask_answer.hasClass('ask')) {
                 if (!$(this).hasClass('ael_clicked')) {
-                     $('.nextPiece').hide();
+                    $('.nextPiece').hide();
                     $(this).css('border', '3px dashed #FBB03B');
                     $(this).siblings().hide();
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
@@ -582,7 +594,7 @@ this.Meet = function(options) {
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
                     $(this).removeClass('ael_clicked');
                     $(this).removeClass('last_clicked');
-                     $('.nextPiece').show();
+                    $('.nextPiece').show();
                 }
             } else if (ask_answer.hasClass('answer')) {
                 //Time de resposta
@@ -611,7 +623,7 @@ this.Meet = function(options) {
 
                 //Respondeu, então "reinicia" o temporizador de grupo
                 self.interval_group = new Date().getTime();
-                 $('.nextPiece').show();
+                $('.nextPiece').show();
             }
 
         });
