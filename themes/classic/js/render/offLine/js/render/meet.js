@@ -142,7 +142,7 @@ this.Meet = function(options) {
             self.peformance_qtd_correct = info_state.qtd_correct;
             self.peformance_qtd_wrong = info_state.qtd_wrong;
             //Calcula o Score
-            self.scoreCalculator();
+            self.scoreCalculator(false);
         }
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject';
@@ -299,7 +299,7 @@ this.Meet = function(options) {
                 };
                 self.DB_synapse.NewORUpdateUserState(info_state);
                 //Calcula o Score
-                self.scoreCalculator();
+                self.scoreCalculator(false);
             }
             
             
@@ -340,7 +340,7 @@ this.Meet = function(options) {
                             $(selector_cobject).show();
                             nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
                             //Verificar o nível do próximo Cobject
-                            self.setCurrentGrade();
+                            self.scoreCalculator(true);
                         } else {
                             //Finalizou o Bloco de Atividades
                             $('.cobject_block').hide();
@@ -376,7 +376,7 @@ this.Meet = function(options) {
         //                    };
         //                    self.DB_synapse.NewORUpdateUserState(info_state);
         //                    //Calcula o Score
-        //                    self.scoreCalculator();
+        //                    self.scoreCalculator(false);
                     
         }
         //Verificar se ainda é TXT
@@ -423,7 +423,7 @@ this.Meet = function(options) {
                 };
                 self.DB_synapse.NewORUpdateUserState(info_state);
                 //Calcula o Score
-                self.scoreCalculator();
+                self.scoreCalculator(false);
             }
             
             currentPiece.removeClass('currentPiece');
@@ -498,7 +498,7 @@ this.Meet = function(options) {
         //                    };
         //                    self.DB_synapse.NewORUpdateUserState(info_state);
         //                    //Calcula o Score
-        //                    self.scoreCalculator();
+        //                    self.scoreCalculator(false);
                     
         }
         //Verificar se ainda é TXT
@@ -507,15 +507,6 @@ this.Meet = function(options) {
             BtnPageTXT();
         }else{
             NoBtnPageTXT();
-        }
-        
-    }
-
-    this.setCurrentGrade = function(){
-        //Se for diferente, então Passou de Nível
-        if(self.currentGrade != self.domCobjects[self.currentCobject_idx].grade){
-            self.currentGrade = self.domCobjects[self.currentCobject_idx].grade;
-            $('#nextLevel-message').show();
         }
         
     }
@@ -1032,7 +1023,7 @@ this.Meet = function(options) {
 
 
 
-    this.scoreCalculator = function() {
+    this.scoreCalculator = function(withMSGnextLevel) {
         self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
         if (self.score < 0) {
             self.score = 0;
@@ -1041,6 +1032,16 @@ this.Meet = function(options) {
         $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
         $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
         $('#points').text(self.score);
+        
+          //Se for diferente, então Passou de Nível
+        if(self.currentGrade != self.domCobjects[self.currentCobject_idx].cobject.grade){
+            self.currentGrade = self.domCobjects[self.currentCobject_idx].cobject.grade;
+            $('#level').text(self.currentGrade);
+            if(self.isset(withMSGnextLevel) && withMSGnextLevel){
+                $('#nextLevel-message').show();
+            }
+        }
+        
     }
 
 
