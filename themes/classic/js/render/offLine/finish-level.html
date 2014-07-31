@@ -5,9 +5,14 @@
     <link rel="stylesheet" type="text/css" href="css/render/global.css">
     <link rel="stylesheet" type="text/css" href="css/render/finish-level.css">
     <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
+     <script type="text/javascript">
+            if(sessionStorage.getItem("authorization") == null  || sessionStorage.getItem("authorization") == 'false'){
+                location.href = 'login.html';
+            }
+        </script>
     <script type="text/javascript">
-        function backToMeet(){
-            location.href="meet.html";
+        function backToLogin(){
+            location.href="login.html";
         }
     </script>
 </head>
@@ -18,6 +23,6 @@
         <p class="texto1">Parabéns!<br />
             Você passou de nível!</p>
     </div>
-    <div class="texto2" id="boxbotao" onclick="backToMeet()">OK</div>
+    <div class="texto2" id="boxbotao" onclick="backToLogin()">OK</div>
 </body>
 </html>

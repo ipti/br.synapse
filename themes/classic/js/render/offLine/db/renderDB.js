@@ -607,10 +607,10 @@ this.DB = function() {
                             
                             var request_update = cursor.update(cursor.value);
                             request_update.onsuccess = function(event) {
-                               // console.log(' State Actor Atualizado !!!! ');
+                                console.log(' State Actor Atualizado !!!! ');
                             };
                             request_update.onerror = function(event) {
-                                //console.log(' ERRO ao Atualizar State Actor !!!! ');
+                                console.log(' ERRO ao Atualizar State Actor !!!! ');
                             };
                         }
 
@@ -623,7 +623,7 @@ this.DB = function() {
                             var state_actorObjectStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
                             state_actorObjectStore.add(data_state_actor);
                             state_actorObjectStore.transaction.oncomplete = function(event) {
-                                //console.log(' NEW State Actor Salvo !!!! ');
+                                console.log(' NEW State Actor Salvo !!!! ');
                             }
                         }
                     }

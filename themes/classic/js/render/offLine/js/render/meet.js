@@ -85,8 +85,6 @@ this.Meet = function(options) {
     this.beginEvents = function() {
         //iniciar code_Event dos templates
         //Para cada cobject Inicia seus eventos
-
-
         for (var idx = 0; idx < self.num_cobjects; idx++) {
             //Add no Array o template name se não existir, para garantir que não chame o mesmo evento mais de uma vez
             if ($.inArray(self.domCobjects[idx].cobject.template_code, self.template_codes) == -1) {
@@ -238,7 +236,7 @@ this.Meet = function(options) {
             });
             
             $(".message-button").click(function(){
-                $('.modal_message').hide();
+                $(this).closest('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
             });
@@ -257,7 +255,7 @@ this.Meet = function(options) {
             
             
         } else {
-            //Atividade Já Finalizada
+            //Atividade Já Finalizada !
             $('.cobject_block').hide();
             location.href = "finish-level.html";
         }
@@ -282,7 +280,6 @@ this.Meet = function(options) {
             isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
         }else{
-            // $(".message-button").trigger('click');
             isCorrectPiece = true;
         }
             
@@ -329,7 +326,7 @@ this.Meet = function(options) {
                         nextScreen.find('.piece:eq(0)').addClass('currentPiece');
                         nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
                     } else {
-                        //Finalisou todas as Screen do COBJECT Corrente
+                        //Finalizou todas as Screen do COBJECT Corrente
                         if (self.hasNextCobject()) {
                             self.currentCobject_idx++;
                             var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
@@ -345,8 +342,9 @@ this.Meet = function(options) {
                             //Verificar o nível do próximo Cobject
                             self.setCurrentGrade();
                         } else {
-                            $('.nextPiece').hide();
-                            location.href = "finish-level.html";
+                            //Finalizou o Bloco de Atividades
+                            $('.cobject_block').hide();
+                            $('#nextLevel-message').show();
                         }
 
                     }
@@ -517,7 +515,7 @@ this.Meet = function(options) {
         //Se for diferente, então Passou de Nível
         if(self.currentGrade != self.domCobjects[self.currentCobject_idx].grade){
             self.currentGrade = self.domCobjects[self.currentCobject_idx].grade;
-            location.href = "finish-level.html";
+            $('#nextLevel-message').show();
         }
         
     }

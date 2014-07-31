@@ -150,6 +150,11 @@ body {
     z-index: 100000;
 }
 
+#hit-message, #error-message{
+    z-index: 100001;
+}
+
+
 .error {
     background: #FBB03B;
 }
@@ -214,7 +219,7 @@ body {
     cursor: pointer;
 
     position: relative;
-/*    top: 50%;*/
+    /*    top: 50%;*/
     transform: translateY(-222%);
 }
 
@@ -223,7 +228,7 @@ body {
     heigth: 150px;   
     float:right;
     cursor: pointer;
-    
+
     position: relative;
     /*    top: 50%;*/
     transform: translateY(-222%);

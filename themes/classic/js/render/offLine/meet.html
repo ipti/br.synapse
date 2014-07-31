@@ -66,12 +66,18 @@
                 var login_personage_name = sessionStorage.getItem('login_personage_name');
                 
                 //Selecionar o Bloco de Atividades
-                var block_id = '1';
+                var discipline_id = sessionStorage.getItem('id_discipline');
+                var block_id;
+                switch(discipline_id){
+                    case '1':block_id='1';break; //Linguagem
+                    case '2':block_id='2';break; //Matemática   
+                }
+                
                 var options = {
                     org: [org,org_name],
                     classe: [classe,classe_name],
                     actor: [id_actor,name_actor,login_personage_name],
-                    id_discipline: sessionStorage.getItem('id_discipline'),
+                    id_discipline: discipline_id,
                     cobject_block_id:block_id
                 };
          
@@ -252,6 +258,15 @@
             </div>
         </div>
 
+        <!-- Avanço de Nível -->
+        <div id="nextLevel-message" class="nextLevel-message modal_message overlay">
+            <div class="message-container success">
+                <img class="ok message-icon" src="img/icons/raio_telapassagem.png">
+                <p class="message">Parabéns!<br>Você passou de nível!</p>
+                <button class="message-button">OK</button>
+            </div>
+        </div>
+        
     </body>
 </html>
 
