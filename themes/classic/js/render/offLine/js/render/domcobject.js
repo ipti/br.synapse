@@ -91,6 +91,7 @@ var DomCobject = function(cobject, idx) {
         self.domPiece.append(group);
         br.append(self.domPiece);
         self.domPieceSet.append(br);
+        self.domPieceSet.append('<div class="clear"></div>');
         self.domPieceSet.prepend(self.buildInfo_PieceSet());
         return self.domPieceSet;
     }
@@ -419,7 +420,16 @@ var DomCobject = function(cobject, idx) {
             //Construir os elementos dessa PieceSet
             for (this.pos.elementPS = 0; this.pos.elementPS < elementPS_length; this.pos.elementPS++) {
                 self.id.elementPS = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements[this.pos.elementPS].id;
-                html.append(self.buildElementPS());
+                var tmpelement = self.buildElementPS()
+                if(self.cobject.template_code == 'TXT'){
+                   if(self.currentElementType == 'build_sound'){
+                       self.domPieceSet.find('div.book-right div.piece').prepend(tmpelement);
+                   }else{
+                       html.append(tmpelement);
+                   }
+                }else{
+                    html.append(tmpelement);
+                }
                 html.addClass(self.currentElementType);
             }
         }

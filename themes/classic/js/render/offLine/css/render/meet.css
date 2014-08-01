@@ -214,23 +214,19 @@ body {
 
 .btn_lastPage {
     width: 60px;
-    heigth: 150px;   
-    float:left;
-    cursor: pointer;
-
-    position: relative;
-    /*    top: 50%;*/
-    transform: translateY(-222%);
+    heigth: 150px;
+    position: fixed;
+    left: 0;
+    top: 40%;
+    cursor: pointer
 }
 
 .btn_nextPage {
     width: 60px;
-    heigth: 150px;   
-    float:right;
+    heigth: 150px;
+    position: fixed;
+    right: 0;
+    top: 40%;
     cursor: pointer;
-
-    position: relative;
-    /*    top: 50%;*/
-    transform: translateY(-222%);
 }
 
