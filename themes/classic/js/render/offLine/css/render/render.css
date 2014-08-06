@@ -165,6 +165,8 @@ fieldset{
     float: left;
     width: 45%;
     line-height: 40px;
+    border-left: 4px solid #FBB03B;
+    margin-left: -4px;
 }
 
 .book-left {
