@@ -408,7 +408,8 @@ class RenderController extends Controller {
             $array_cobjectBlock[0]['id'] = $cobjectBlock->id;
             $array_cobjectBlock[0]['name'] = $cobjectBlock->name;
             $array_cobjectBlock[0]['discipline_id'] = $cobjectBlock->discipline_id;
-
+            var_dump($array_cobjectBlock);
+            
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
                     array('cobject_block_id' => $array_cobjectBlock[0]['id']));
@@ -420,14 +421,12 @@ class RenderController extends Controller {
                 $array_cobject_cobjectBlocks[$idx]['cobject_block_id'] = $cobject_cobjectBlock->cobject_block_id;
             endforeach;
 
-
             //Obter o Cobject id e json
             if (isset($_REQUEST['cobject_block'])) {
                 //Para cada Cobject do bloco armazenar sua "view"
                 $cobject_block_id = $_REQUEST['cobject_block'];
                 $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
                 $json_cobjects = array();
-
                 $zip_name_image = 'image.zip';
                 $zip_name_sound = 'sound.zip';
                 //Arquivo ZIP ALL

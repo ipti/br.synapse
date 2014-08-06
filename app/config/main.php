@@ -56,7 +56,7 @@ return array(
             'connectionString' => 'mysql:host=localhost;dbname=synapse',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => '',
+            'password' => 'ipti002',
             'charset' => 'utf8',
         ),
         'db2' => array(

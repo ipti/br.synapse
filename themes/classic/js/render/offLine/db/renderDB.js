@@ -354,6 +354,7 @@ this.DB = function() {
     this.importCobject_cobjectblock = function(db, data_cobject_cobjectBlock) {
         var Cobject_cobjectBlockObjectStore = db.transaction("cobject_cobjectblock", "readwrite").objectStore("cobject_cobjectblock");
         for (var i in data_cobject_cobjectBlock) {
+            data_cobject_cobjectBlock[i].id = eval(data_cobject_cobjectBlock[i].id);
             Cobject_cobjectBlockObjectStore.add(data_cobject_cobjectBlock[i]);
         }
         Cobject_cobjectBlockObjectStore.transaction.oncomplete = function(event) {

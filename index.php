@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 //@AWESOM testando essse novo
 /** 
  * TODO teste de o que precisa ser feito.
@@ -6,7 +8,7 @@
  */
 //@todo pode ser feito depois
 // change the following paths if necessary
-$yii=dirname(__FILE__).'/../../dev.runtime.wamp/bin/php/php5.4.12/includes/frameworks/yii/yii.php';
+$yii=dirname(__FILE__).'/../../yii-1.1.14/framework/yii.php';
 $config=dirname(__FILE__).'/app/config/main.php';
 
 // remove the following lines when in production mode

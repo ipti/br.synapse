@@ -74,7 +74,7 @@ class Cobject extends CActiveRecord
 			'cobjects' => array(self::HAS_MANY, 'Cobject', 'father_id'),
 			'cobjectCobjectblocks' => array(self::HAS_MANY, 'CobjectCobjectblock', 'cobject_id'),
 			'cobjectMetadatas' => array(self::HAS_MANY, 'CobjectMetadata', 'cobject_id'),
-			'editorScreens' => array(self::HAS_MANY, 'EditorScreen', 'cobject_id'),
+			'editorScreens' => array(self::HAS_MANY, 'EditorScreen', 'cobject_id','order'=>'`order` ASC'),
 		);
 	}
 

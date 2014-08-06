@@ -119,29 +119,29 @@
                     
                 });
                 
-                var playing = false;    
-
+                
                 $(document).on('click','.soundIconPause',(function() {
-
+                    var playing = false;
                     var li = $(this).parent();
                     var span = li.children('span');
                     var img = $(this);
                     var audio = span.children()[0];
                     
                     if(playing){
-                        playing = false;
                         audio.pause();
                         audio.currentTime=0;
                         img.attr('src', "img/icons/play.png");
+                        playing = false;
                     }
                     else{
-                        playing = true;
                         audio.play();
                         img.attr('src', "img/icons/stop.png");
+                        playing = true;
                     }
 
                     audio.addEventListener("ended", function(){
                         img.attr('src', "img/icons/play.png");
+                        playing = true;
                     });
 
                 }));
@@ -205,7 +205,7 @@
             </div>
             <a class="info-exit" href="#">
                 <img class="info-icon" src="img/icons/exit.png">
-                <p class="info-text">Encerrar atendimento</p>
+                <p class="info-text">encerrar atendimento</p>
                 <div class="clear"></div>
             </a>
         </div>
