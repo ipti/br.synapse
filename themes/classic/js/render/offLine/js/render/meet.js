@@ -135,7 +135,7 @@ this.Meet = function(options) {
         var gotoState = self.isset(info_state);
         var gotoCompleteState = gotoState && self.isset(info_state.last_piece_id);
         if (gotoState) {
-            if(gotoCompleteState){
+            if (gotoCompleteState) {
                 var lastpiece_id = info_state.last_piece_id;
                 self.currentCobject_idx = info_state.currentCobject_idx;
             }
@@ -154,16 +154,15 @@ this.Meet = function(options) {
         }
 
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
-
+        $('.nextPiece').hide();
         if (!gotoCompleteState) {
-            $('.nextPiece').show();
             $(selector_cobject + ':eq(0)').addClass('currentCobject');
             $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
             $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
             $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
             $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                ' .currentPiece').show();
+                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                    ' .currentPiece').show();
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
 
@@ -220,10 +219,9 @@ this.Meet = function(options) {
                 var parentScreen = nextPiece.closest('.T_screen').addClass('currentScreen');
                 parentScreen.closest('.cobject').addClass('currentCobject');
 
-                $('.nextPiece').show();
                 $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                    ' .currentPiece').show();
+                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                        ' .currentPiece').show();
             }
         }
 
@@ -234,26 +232,26 @@ this.Meet = function(options) {
             $('.nextPiece').on('click', function() {
                 self.nextPiece();
             });
-            
-            $(".message-button").click(function(){
+
+            $(".message-button").click(function() {
                 $(this).closest('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
             });
-            
+
 
             $('#finalize_activity').on('click', function() {
                 self.finalizeMeet();
             });
-            
+
             //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-            if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
+            if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT') {
                 BtnPageTXT();
-            }else{
+            } else {
                 NoBtnPageTXT();
             }
-            
-            
+
+
         } else {
             //Atividade Já Finalizada !
             $('.cobject_block').hide();
@@ -265,7 +263,8 @@ this.Meet = function(options) {
 
 
 
-    this.nextPiece = function(){
+    this.nextPiece = function() {
+        $('.nextPiece').hide();
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
@@ -279,10 +278,10 @@ this.Meet = function(options) {
             self.savePerformanceUsr(currentPiece.attr('id'));
             isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
-        }else{
+        } else {
             isCorrectPiece = true;
         }
-            
+
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
             var currentPiece = $('.currentPiece');
@@ -301,8 +300,8 @@ this.Meet = function(options) {
                 //Calcula o Score
                 self.scoreCalculator(false);
             }
-            
-            
+
+
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
             if (currentPiece.next().size() == 0) {
@@ -363,34 +362,34 @@ this.Meet = function(options) {
                 nextPiece.addClass('currentPiece');
                 nextPiece.show();
             }
-                   
-        }else {
-        //Fica resolvendo a mesma Atividade até acertar
-        //                    var info_state = {
-        //                        cobject_block_id: self.cobject_block_id,
-        //                        actor_id: self.actor,
-        //                        last_piece_id: null,
-        //                        qtd_correct: self.peformance_qtd_correct,
-        //                        qtd_wrong: self.peformance_qtd_wrong,
-        //                        currentCobject_idx: null
-        //                    };
-        //                    self.DB_synapse.NewORUpdateUserState(info_state);
-        //                    //Calcula o Score
-        //                    self.scoreCalculator(false);
-                    
+
+        } else {
+            //Fica resolvendo a mesma Atividade até acertar
+            //                    var info_state = {
+            //                        cobject_block_id: self.cobject_block_id,
+            //                        actor_id: self.actor,
+            //                        last_piece_id: null,
+            //                        qtd_correct: self.peformance_qtd_correct,
+            //                        qtd_wrong: self.peformance_qtd_wrong,
+            //                        currentCobject_idx: null
+            //                    };
+            //                    self.DB_synapse.NewORUpdateUserState(info_state);
+            //                    //Calcula o Score
+            //                    self.scoreCalculator(false);
+
         }
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT') {
             BtnPageTXT();
-        }else{
+        } else {
             NoBtnPageTXT();
         }
-        
-                
+
+
     }
-    
-    this.prevPiece = function(){
+
+    this.prevPiece = function() {
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
@@ -404,10 +403,10 @@ this.Meet = function(options) {
             // self.savePerformanceUsr(currentPiece.attr('id'));
             isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
-        }else{
+        } else {
             isCorrectPiece = true;
         }
-            
+
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
             if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
@@ -425,7 +424,7 @@ this.Meet = function(options) {
                 //Calcula o Score
                 self.scoreCalculator(false);
             }
-            
+
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
             if (currentPiece.prev().size() == 0) {
@@ -465,8 +464,8 @@ this.Meet = function(options) {
                             prevScreen.find('.pieceset').last().show();
                             prevScreen.find('.piece').last().show();
                         } else {
-                        //Está na Primeira Peça
-                        //alert('Está na Primeira Peça');
+                            //Está na Primeira Peça
+                            //alert('Está na Primeira Peça');
                         }
 
                     }
@@ -485,50 +484,49 @@ this.Meet = function(options) {
                 nextPiece.addClass('currentPiece');
                 nextPiece.show();
             }
-                   
-        }else {
-        //Fica resolvendo a mesma Atividade até acertar
-        //                    var info_state = {
-        //                        cobject_block_id: self.cobject_block_id,
-        //                        actor_id: self.actor,
-        //                        last_piece_id: null,
-        //                        qtd_correct: self.peformance_qtd_correct,
-        //                        qtd_wrong: self.peformance_qtd_wrong,
-        //                        currentCobject_idx: null
-        //                    };
-        //                    self.DB_synapse.NewORUpdateUserState(info_state);
-        //                    //Calcula o Score
-        //                    self.scoreCalculator(false);
-                    
+
+        } else {
+            //Fica resolvendo a mesma Atividade até acertar
+            //                    var info_state = {
+            //                        cobject_block_id: self.cobject_block_id,
+            //                        actor_id: self.actor,
+            //                        last_piece_id: null,
+            //                        qtd_correct: self.peformance_qtd_correct,
+            //                        qtd_wrong: self.peformance_qtd_wrong,
+            //                        currentCobject_idx: null
+            //                    };
+            //                    self.DB_synapse.NewORUpdateUserState(info_state);
+            //                    //Calcula o Score
+            //                    self.scoreCalculator(false);
+
         }
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if(self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT'){
+        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT') {
             BtnPageTXT();
-        }else{
+        } else {
             NoBtnPageTXT();
         }
-        
+
     }
 
 
-    var BtnPageTXT = function(){
+    var BtnPageTXT = function() {
         $('.game').hide();
         $('#nextPage').show();
         //Verificar se mostrará o botão pra voltar o TXT
-        if(self.hasPrevPieceTXT()){
-            $('#lastPage').show();      
-        }else{
-            $('#lastPage').hide();  
+        if (self.hasPrevPieceTXT()) {
+            $('#lastPage').show();
+        } else {
+            $('#lastPage').hide();
         }
         $('.nextPiece').hide();
     };
-    
-    var NoBtnPageTXT  = function(){
+
+    var NoBtnPageTXT = function() {
         $('.game').show();
         $('#nextPage').hide();
         $('#lastPage').hide();
-        $('.nextPiece').show();
     };
 
     /**
@@ -541,6 +539,7 @@ this.Meet = function(options) {
         $('.cobject.MTE div[group]').on('click', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
+                $('.nextPiece').hide();
                 $(this).css('border', '3px solid transparent');
                 $(this).removeClass('last_clicked');
             } else {
@@ -550,12 +549,13 @@ this.Meet = function(options) {
                 siblings.css('border', '3px solid transparent');
                 siblings.removeClass('last_clicked');
                 $(this).addClass('last_clicked');
+                $('.nextPiece').show();
             }
 
             //Primeiro Verificar se a Piece está certa!
             var pieceID = $(this).closest('.piece').attr('id');
             self.isCorrectMTE(pieceID, $(this).attr('group'));
-        //Somente salva no BD no botão: Próxima Piece
+            //Somente salva no BD no botão: Próxima Piece
         });
 
     }
@@ -567,7 +567,8 @@ this.Meet = function(options) {
      */
     this.init_AEL = function() {
         // variável de encontro definida no meet.php
-        $('.cobject.AEL div.answer > div[group]').hide();
+        //$('.cobject.AEL div.answer > div[group]').hide();
+        $('.cobject.AEL div.answer > div[group]').css('opacity', '0.6');
         $('.cobject.AEL div[group]').on('click', function() {
             var ask_answer = $(this).parents('div');
             if (ask_answer.hasClass('ask')) {
@@ -575,47 +576,51 @@ this.Meet = function(options) {
                     $('.nextPiece').hide();
                     $(this).css('border', '3px dashed #FBB03B');
                     $(this).siblings().hide();
-                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
+                    // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
+                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '1');
                     $(this).addClass('ael_clicked');
                     $(this).addClass('last_clicked');
                 } else {
                     $(this).css('border', '3px dashed transparent');
                     $(this).siblings(':not(.ael_clicked)').show();
-                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
+                    // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
+                    $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
                     $(this).removeClass('ael_clicked');
                     $(this).removeClass('last_clicked');
-                    $('.nextPiece').show();
                 }
             } else if (ask_answer.hasClass('answer')) {
-                //Time de resposta
-                var time_answer = (new Date().getTime() - self.interval_group);
-                //Atualizar o marcador de inicio do intervalo para cada resposta
-                self.interval_group = time_answer;
-                $(this).siblings().hide();
-                $(this).hide();
-                $(this).closest('div.answer').siblings('div.ask').children('div[group]').show(500);
                 var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
-                var groupAnswerClicked = $(this).attr('group');
-                var groupAskClicked = lastClicked.attr('group');
-                lastClicked.attr('matched', groupAnswerClicked);
-                lastClicked.removeClass('last_clicked');
-                $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
-                $(this).addClass('ael_clicked');
-                var thisPieceID = $(this).closest('.piece').attr('id');
+                //Só poderá realizar ação de clicou em algum elemento ask
+                if (lastClicked.size() > 0) {
+                    //Time de resposta
+                    var time_answer = (new Date().getTime() - self.interval_group);
+                    //Atualizar o marcador de inicio do intervalo para cada resposta
+                    self.interval_group = time_answer;
+                    //$(this).siblings().hide();
+                    $(this).siblings().css('opacity', '0.6');
+                    $(this).hide();
+                    $(this).closest('div.answer').siblings('div.ask').children('div[group]:not(.ael_clicked)').show(500);
 
-                //Vericar se o match está certo para este element
-                self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
-                //Verificar se Não existe mais elementos a serem clicados
-                if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                    var groupAnswerClicked = $(this).attr('group');
+                    var groupAskClicked = lastClicked.attr('group');
+                    lastClicked.attr('matched', groupAnswerClicked);
+                    lastClicked.removeClass('last_clicked');
+                    $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
+                    $(this).addClass('ael_clicked');
+                    var thisPieceID = $(this).closest('.piece').attr('id');
+
+                    //Vericar se o match está certo para este element
+                    self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
+                    //Verificar se Não existe mais elementos a serem clicados
+                    if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
+                        //Não existe mais elementos a clicar, Habilita o botão de avançar
+                        $('.nextPiece').show();
+                    }
+
+                    //Respondeu, então "reinicia" o temporizador de grupo
+                    self.interval_group = new Date().getTime();
                 }
-
-                //Respondeu, então "reinicia" o temporizador de grupo
-                self.interval_group = new Date().getTime();
-                $('.nextPiece').show();
             }
-
         });
 
     }
@@ -661,8 +666,8 @@ this.Meet = function(options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
+                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -701,8 +706,15 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_PRE = function() {
-    //  self.init_Common();
-
+        //  self.init_Common();
+        $('input.text').on('keyup', function() {
+            if (!self.isEmpty($(this).val())) {
+                //contém algum caractere
+                $('.nextPiece').show();
+            } else {
+                $('.nextPiece').hide();
+            }
+        });
     }
 
     /**
@@ -711,20 +723,20 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-        $(document).on('click','#nextPage',function(){
+        $(document).on('click', '#nextPage', function() {
             self.nextPiece();
         });
-        $(document).on('click','#lastPage',function(){
-            if(self.hasPrevPieceTXT()){
+        $(document).on('click', '#lastPage', function() {
+            if (self.hasPrevPieceTXT()) {
                 self.prevPiece();
             }
-            
+
         });
     }
     //======================
-    
-    
-    this.hasPrevPieceTXT = function(){
+
+
+    this.hasPrevPieceTXT = function() {
         var isTXT = false;
         var currentPiece = $('.currentPiece');
         if (currentPiece.prev().size() == 0) {
@@ -736,14 +748,14 @@ this.Meet = function(options) {
                 var currentScreen = $('.currentScreen');
                 var prevScreen = currentScreen.prev();
                 if (prevScreen.size() != 0) {
-                    isTXT =  prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
+                    isTXT = prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                 } else {
                     //Finalizou todas as Screen do COBJECT Corrente
                     if (self.hasPrevCobject()) {
                         var prevCobject_idx = self.currentCobject_idx - 1;
                         var selector_cobject = '.cobject[id=' + self.domCobjects[prevCobject_idx].cobject.cobject_id + ']';
                         prevScreen = $(selector_cobject + ' .T_screen').last();
-                        isTXT =  prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
+                        isTXT = prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                     } else {
                         //Está na Primeira Peça
                         //alert('Está na Primeira Peça');
@@ -760,11 +772,11 @@ this.Meet = function(options) {
             var prevPiece = currentPiece.prev();
             isTXT = prevPiece.find('.group').last().hasClass('TXT')
         }
-            
+
         return isTXT;
     }
-    
-    
+
+
 
     //Salvar PermanceUser
     /**
@@ -778,7 +790,7 @@ this.Meet = function(options) {
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' ||
-            self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
+                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
@@ -805,7 +817,7 @@ this.Meet = function(options) {
         } else {
             self.peformance_qtd_wrong++;
         }
-        
+
         //Salvo com Sucesso !
         return true;
     }
@@ -818,7 +830,7 @@ this.Meet = function(options) {
             if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
                 if (self.isset(group.ismatch) && (!group.ismatch)) {
                     pieceIsTrue = false;
-                }else if (self.isset(group.ismatch) && group.ismatch) {
+                } else if (self.isset(group.ismatch) && group.ismatch) {
                     answer = true;
                 }
                 //Salva no BD os MetaDados para cada grupo
@@ -955,6 +967,10 @@ this.Meet = function(options) {
         return (variable !== undefined && variable !== null);
     }
 
+    this.isEmpty = function(variable) {
+        return !self.isset(variable) || variable === '';
+    }
+
     /**
      * Envia mensagem de Certo ou Errado par ao usuário
      * 
@@ -964,20 +980,20 @@ this.Meet = function(options) {
     this.showMessageAnswer = function(isTrue) {
         if (isTrue) {
             $('#hit-message').show();
-        //            $('#message').show();
-        //            $('#message').css({
-        //                'backgroundColor': 'green'
-        //            });
-        //            $('#message').html(MSG_CORRECT);
-        //            $('#message').fadeOut(5000);
+            //            $('#message').show();
+            //            $('#message').css({
+            //                'backgroundColor': 'green'
+            //            });
+            //            $('#message').html(MSG_CORRECT);
+            //            $('#message').fadeOut(5000);
         } else {
             $('#error-message').show();
-        //            $('#message').show();
-        //            $('#message').css({
-        //                'backgroundColor': 'red'
-        //            });
-        //            $('#message').html(MSG_WRONG);
-        //            $('#message').fadeOut(5000);
+            //            $('#message').show();
+            //            $('#message').css({
+            //                'backgroundColor': 'red'
+            //            });
+            //            $('#message').html(MSG_WRONG);
+            //            $('#message').fadeOut(5000);
         }
 
     }
@@ -1032,16 +1048,16 @@ this.Meet = function(options) {
         $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
         $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
         $('#points').text(self.score);
-        
-          //Se for diferente, então Passou de Nível
-        if(self.currentGrade != self.domCobjects[self.currentCobject_idx].cobject.grade){
+
+        //Se for diferente, então Passou de Nível
+        if (self.currentGrade != self.domCobjects[self.currentCobject_idx].cobject.grade) {
             self.currentGrade = self.domCobjects[self.currentCobject_idx].cobject.grade;
             $('#level').text(self.currentGrade);
-            if(self.isset(withMSGnextLevel) && withMSGnextLevel){
+            if (self.isset(withMSGnextLevel) && withMSGnextLevel) {
                 $('#nextLevel-message').show();
             }
         }
-        
+
     }
 
 
@@ -1051,7 +1067,7 @@ this.Meet = function(options) {
         html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
         html.append("<img class='btn_lastPage' id='lastPage' src='img/icons/last.png' style='display:none' >");
         html.append("<img class='btn_nextPage' id='nextPage' src='img/icons/next.png' style='display:none' >");
-        
+
         return html;
     }
 
