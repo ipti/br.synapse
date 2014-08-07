@@ -204,13 +204,26 @@ fieldset{
 
 }
 
-.MTE .group, .AEL .group, .DDROP .group{
+.MTE .group, .AEL .group{
     float:left;
     padding: 5px;
     margin: 0 10px;
     border: 3px solid transparent ;
     cursor: pointer;
     position: relative;
+}
+
+.DDROP .group {
+    float:left;
+    padding: 5px;
+    margin: 0 10px;
+    border: 3px solid transparent ;
+    position: relative;
+}
+
+
+.DDROP.group.drag {
+    cursor: pointer;
 }
 
 .elementText {

@@ -632,8 +632,9 @@ this.Meet = function(options) {
      */
     this.init_DDROP = function() {
         //Definir Animação Drag and Drop
-        $('.drop').hide();
-
+        //$('.drop').hide();
+        $('.drop').css('opacity','0.6');
+        
         $('.drag').draggable({
             containment: "body",
             drag: function() {
@@ -648,7 +649,8 @@ this.Meet = function(options) {
                 var time_answer = (new Date().getTime() - self.interval_group);
                 //Atualizar o marcador de inicio do intervalo para cada resposta
                 self.interval_group = time_answer;
-                $(this).siblings().hide();
+                //$(this).siblings().hide();
+                $(this).siblings().css('opacity','0.6');
                 $(this).hide();
                 //  $(this).closest('div.answer').siblings('div.ask').children('div[group]').hide();
                 var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
@@ -666,8 +668,8 @@ this.Meet = function(options) {
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
                 if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
-                    //Não existe mais elementos a clicar, verifica todas as respostas e marca correto na piece
-                    //$(this).closest('div.piece').attr('istrue',self.isCorrectAEL(thisPieceID));
+                    //Não existe mais elementos a clicar, Habilita o botão de avançar peça
+                    $('.nextPiece').show();
                 }
 
                 //Respondeu, então "reinicia" o temporizador de grupo
@@ -680,7 +682,7 @@ this.Meet = function(options) {
 
         // variável de encontro definida no meet.php
         $('.drag').on('mousedown', function() {
-            $('.nextPiece').hide();
+            $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity','1');
             $(this).css('border', '3px dashed #FBB03B');
             $(this).siblings().css('opacity', '0');
             $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
@@ -691,8 +693,8 @@ this.Meet = function(options) {
         $('.drag').on('mouseup', function() {
             $(this).css('border', '3px solid transparent');
             $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
-            $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
-            $('.nextPiece').show();
+           // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
+           $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity','0.6');
         });
 
     }
