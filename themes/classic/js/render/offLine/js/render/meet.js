@@ -161,8 +161,8 @@ this.Meet = function(options) {
             $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
             $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
             $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                    ' .currentPiece').show();
+                ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                ' .currentPiece').show();
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
 
@@ -220,8 +220,8 @@ this.Meet = function(options) {
                 parentScreen.closest('.cobject').addClass('currentCobject');
 
                 $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                        ' .currentPiece').show();
+                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                    ' .currentPiece').show();
             }
         }
 
@@ -364,18 +364,18 @@ this.Meet = function(options) {
             }
 
         } else {
-            //Fica resolvendo a mesma Atividade até acertar
-            //                    var info_state = {
-            //                        cobject_block_id: self.cobject_block_id,
-            //                        actor_id: self.actor,
-            //                        last_piece_id: null,
-            //                        qtd_correct: self.peformance_qtd_correct,
-            //                        qtd_wrong: self.peformance_qtd_wrong,
-            //                        currentCobject_idx: null
-            //                    };
-            //                    self.DB_synapse.NewORUpdateUserState(info_state);
-            //                    //Calcula o Score
-            //                    self.scoreCalculator(false);
+        //Fica resolvendo a mesma Atividade até acertar
+        //                    var info_state = {
+        //                        cobject_block_id: self.cobject_block_id,
+        //                        actor_id: self.actor,
+        //                        last_piece_id: null,
+        //                        qtd_correct: self.peformance_qtd_correct,
+        //                        qtd_wrong: self.peformance_qtd_wrong,
+        //                        currentCobject_idx: null
+        //                    };
+        //                    self.DB_synapse.NewORUpdateUserState(info_state);
+        //                    //Calcula o Score
+        //                    self.scoreCalculator(false);
 
         }
         //Verificar se ainda é TXT
@@ -464,8 +464,8 @@ this.Meet = function(options) {
                             prevScreen.find('.pieceset').last().show();
                             prevScreen.find('.piece').last().show();
                         } else {
-                            //Está na Primeira Peça
-                            //alert('Está na Primeira Peça');
+                        //Está na Primeira Peça
+                        //alert('Está na Primeira Peça');
                         }
 
                     }
@@ -486,18 +486,18 @@ this.Meet = function(options) {
             }
 
         } else {
-            //Fica resolvendo a mesma Atividade até acertar
-            //                    var info_state = {
-            //                        cobject_block_id: self.cobject_block_id,
-            //                        actor_id: self.actor,
-            //                        last_piece_id: null,
-            //                        qtd_correct: self.peformance_qtd_correct,
-            //                        qtd_wrong: self.peformance_qtd_wrong,
-            //                        currentCobject_idx: null
-            //                    };
-            //                    self.DB_synapse.NewORUpdateUserState(info_state);
-            //                    //Calcula o Score
-            //                    self.scoreCalculator(false);
+        //Fica resolvendo a mesma Atividade até acertar
+        //                    var info_state = {
+        //                        cobject_block_id: self.cobject_block_id,
+        //                        actor_id: self.actor,
+        //                        last_piece_id: null,
+        //                        qtd_correct: self.peformance_qtd_correct,
+        //                        qtd_wrong: self.peformance_qtd_wrong,
+        //                        currentCobject_idx: null
+        //                    };
+        //                    self.DB_synapse.NewORUpdateUserState(info_state);
+        //                    //Calcula o Score
+        //                    self.scoreCalculator(false);
 
         }
         //Verificar se ainda é TXT
@@ -555,7 +555,7 @@ this.Meet = function(options) {
             //Primeiro Verificar se a Piece está certa!
             var pieceID = $(this).closest('.piece').attr('id');
             self.isCorrectMTE(pieceID, $(this).attr('group'));
-            //Somente salva no BD no botão: Próxima Piece
+        //Somente salva no BD no botão: Próxima Piece
         });
 
     }
@@ -576,7 +576,7 @@ this.Meet = function(options) {
                     $('.nextPiece').hide();
                     $(this).css('border', '3px dashed #FBB03B');
                     $(this).siblings().hide();
-                    // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
+                    // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '1');
                     $(this).addClass('ael_clicked');
                     $(this).addClass('last_clicked');
@@ -599,7 +599,7 @@ this.Meet = function(options) {
                     //$(this).siblings().hide();
                     $(this).siblings().css('opacity', '0.6');
                     $(this).hide();
-                    $(this).closest('div.answer').siblings('div.ask').children('div[group]:not(.ael_clicked)').show(500);
+                    $(this).closest('div.answer').siblings('div.ask').children('div[group]:not(.ael_clicked)').show(300);
 
                     var groupAnswerClicked = $(this).attr('group');
                     var groupAskClicked = lastClicked.attr('group');
@@ -632,13 +632,42 @@ this.Meet = function(options) {
      */
     this.init_DDROP = function() {
         //Definir Animação Drag and Drop
-        //$('.drop').hide();
         $('.drop').css('opacity','0.6');
         
         $('.drag').draggable({
             containment: "body",
+            revert : true,
+            start:function(){
+                //armazernar posição  Original
+                var position = $(this).position();
+                if( !self.isset($(this).attr('OriginalLeft')) ){
+                    $(this).attr('OriginalTop', position.top);
+                    $(this).attr('OriginalLeft',position.left);
+                }
+            
+                $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity','1');
+                $(this).css('border', '3px dashed #FBB03B');
+                $(this).siblings().css('opacity', '0');
+                $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
+                $(this).siblings('.drag').removeClass('last_clicked');
+                $(this).addClass('last_clicked');
+            },
+            stop:function(){
+                $(this).css('border', '3px solid transparent');
+                $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
+                $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity','0.6');
+            
+                var position = $(this).position();
+                if($(this).attr('OriginalLeft') != position.left || $(this).attr('OriginalTop') != position.top){
+                    $(this).css('left',$(this).attr('OriginalLeft'));
+                    $(this).css('top',$(this).attr('OriginalTop'));
+                
+                }
+                
+            },
             drag: function() {
             }
+            
 
         });
 
@@ -649,10 +678,8 @@ this.Meet = function(options) {
                 var time_answer = (new Date().getTime() - self.interval_group);
                 //Atualizar o marcador de inicio do intervalo para cada resposta
                 self.interval_group = time_answer;
-                //$(this).siblings().hide();
                 $(this).siblings().css('opacity','0.6');
                 $(this).hide();
-                //  $(this).closest('div.answer').siblings('div.ask').children('div[group]').hide();
                 var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
                 var groupAnswerClicked = $(this).attr('group');
                 var groupAskClicked = lastClicked.attr('group');
@@ -682,20 +709,13 @@ this.Meet = function(options) {
 
         // variável de encontro definida no meet.php
         $('.drag').on('mousedown', function() {
-            $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity','1');
-            $(this).css('border', '3px dashed #FBB03B');
-            $(this).siblings().css('opacity', '0');
-            $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(500);
-            $(this).siblings('.drag').removeClass('last_clicked');
-            $(this).addClass('last_clicked');
-        });
+           
+            });
 
         $('.drag').on('mouseup', function() {
-            $(this).css('border', '3px solid transparent');
-            $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
-           // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
-           $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity','0.6');
-        });
+         
+            
+            });
 
     }
 
@@ -760,7 +780,6 @@ this.Meet = function(options) {
                         isTXT = prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                     } else {
                         //Está na Primeira Peça
-                        //alert('Está na Primeira Peça');
                         isTXT = false;
                     }
                 }
@@ -792,7 +811,7 @@ this.Meet = function(options) {
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' ||
-                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
+            self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
@@ -982,20 +1001,20 @@ this.Meet = function(options) {
     this.showMessageAnswer = function(isTrue) {
         if (isTrue) {
             $('#hit-message').show();
-            //            $('#message').show();
-            //            $('#message').css({
-            //                'backgroundColor': 'green'
-            //            });
-            //            $('#message').html(MSG_CORRECT);
-            //            $('#message').fadeOut(5000);
+        //            $('#message').show();
+        //            $('#message').css({
+        //                'backgroundColor': 'green'
+        //            });
+        //            $('#message').html(MSG_CORRECT);
+        //            $('#message').fadeOut(5000);
         } else {
             $('#error-message').show();
-            //            $('#message').show();
-            //            $('#message').css({
-            //                'backgroundColor': 'red'
-            //            });
-            //            $('#message').html(MSG_WRONG);
-            //            $('#message').fadeOut(5000);
+        //            $('#message').show();
+        //            $('#message').css({
+        //                'backgroundColor': 'red'
+        //            });
+        //            $('#message').html(MSG_WRONG);
+        //            $('#message').fadeOut(5000);
         }
 
     }
