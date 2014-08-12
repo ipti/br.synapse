@@ -57,6 +57,7 @@ echo "newEditor.isload = $load; \n";
     <h2><?php echo Yii::t('default', 'Add'); ?></h2>
     <ul class="tools">
         <li id="addPieceSet"><?php echo Yii::t('default', 'Add PieceSet'); ?></li>
+        <li id="addimage"><?php echo Yii::t('default', 'Add Imagem'); ?></li>
     </ul>
 </div>
 <div class="canvas">
@@ -73,6 +74,9 @@ echo "newEditor.isload = $load; \n";
     <ul class="navscreen"></ul>
     <button class="themebutton" id="delScreen"><?php echo Yii::t('default', 'Remove Screen'); ?></button>
     <div id="loading"></div>
+    <div id="cobject_description">
+         <input type="text" class="actName" value="" />
+    </div>
     <span class="clear"></span>
     <div class="content">
         <div class="screen" id="sc0">

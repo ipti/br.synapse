@@ -393,12 +393,12 @@ class EditorController extends Controller {
             WHERE type_id =' . $Cobj_met_typeID . ' AND  value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata);
         if ($count_CobjMdata > 0) {
-            if(isset($_POST['isAjax']) && $_POST['isAjax']) {
+            if (isset($_POST['isAjax']) && $_POST['isAjax']) {
                 $str2 = "";
-            }else{
+            } else {
                 $str2 = "<div id='showCobjectIDs' align='left'>";
             }
-                
+
             //Verificar o porquê de adicionar uma outra tag do form 
             $str2 .= "<br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
                 <form id='cobjectIDS2' name='cobjectIDS2' method='POST' action='/editor/index/'>
@@ -424,12 +424,12 @@ class EditorController extends Controller {
                         <input type='hidden' name='op' value='load'> 
                           <input id='editCobject' name='editCobject' type='submit' value='Change Cobject'>
                           </form>";
-            
-            if(!(isset($_POST['isAjax']) && $_POST['isAjax'])) {
+
+            if (!(isset($_POST['isAjax']) && $_POST['isAjax'])) {
                 $str2.= " </div>";
             }
-            
-            
+
+
             return $str2;
         }
 
@@ -636,17 +636,25 @@ class EditorController extends Controller {
                             }
                             $justFlag = false;
 
-                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID'])) && isset($_POST['ordem'])
+                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) || isset($_POST['cobjectID'])) && isset($_POST['ordem'])
                                     && isset($_POST['value']) && isset($_POST['DomID'])) {
                                 $DomID = $_POST['DomID'];
 
                                 $isElementPieceSet = false;
+                                $isElementCobject = false;
+
                                 if (isset($_POST['pieceID'])) {
                                     $pieceID = $_POST['pieceID'];
-                                } elseif (isset($_POST['pieceSetID'])) {
+                                } else if (isset($_POST['pieceSetID'])) {
                                     $isElementPieceSet = true;
                                     $pieceSetID = $_POST['pieceSetID'];
+                                } else if (isset($_POST['cobjectID'])) {
+                                    $isElementCobject = true;
+                                    $cobjectID = $_POST['cobjectID'];
                                 }
+
+
+
 
 
                                 $flag = isset($_POST['flag']) ? $_POST['flag'] : -1;
@@ -668,7 +676,7 @@ class EditorController extends Controller {
                                     $IDDB = $_POST['ID_BD'];
                                     $newElement = EditorElement::model()->findByPk($IDDB);
 
-                                    if (!$isElementPieceSet) {
+                                    if (!$isElementPieceSet && !$isElementCobject) {
                                         //É um elemento da PIECE
                                         $Element_Piece = EditorPieceElement::model()->findByAttributes(
                                                 array('piece_id' => $pieceID, 'element_id' => $newElement->id));
@@ -686,13 +694,20 @@ class EditorController extends Controller {
                                         endforeach;
                                         //Depois, Desvincula o elemento da peça. 
                                         $Element_Piece->delete();
-                                    }else {
+                                    }else if ($isElementPieceSet) {
                                         //É um elemento da PIECESET
                                         $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
                                                 array('pieceset_id' => $pieceSetID, 'element_id' => $newElement->id));
 
                                         //Depois, Desvincula o elemento da PieceSet. 
                                         $Element_PieceSet->delete();
+                                    } else if ($isElementCobject) {
+                                        //É um elemento do Cobject
+                                        $Element_Cobject = CobjectElement::model()->findByAttributes(
+                                                array('cobject_id' => $cobjectID, 'element_id' => $newElement->id));
+
+                                        //Depois, Desvincula o elemento do Cobject. 
+                                        $Element_Cobject->delete();
                                     }
 
                                     $unlink_New = true;
@@ -708,23 +723,32 @@ class EditorController extends Controller {
                                     $newElement->insert();
                                     $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
                                     $elementID = $element->id;
-                                    if (!$isElementPieceSet) {
+                                    if (!$isElementPieceSet && !$isElementCobject) {
                                         $newPieceElement = new EditorPieceElement();
                                         $newPieceElement->piece_id = $pieceID;
                                         $newPieceElement->element_id = $elementID;
                                         $newPieceElement->position = $order;
                                         $newPieceElement->insert();
-                                    } else {
+                                    } else if($isElementPieceSet) {
                                         //É um elemento da PIECESET
                                         $newPieceSetElement = new EditorPiecesetElement();
                                         $newPieceSetElement->pieceset_id = $pieceSetID;
                                         $newPieceSetElement->element_id = $elementID;
                                         $newPieceSetElement->position = $order;
                                         $newPieceSetElement->insert();
+                                    }else if($isElementCobject){
+                                        //É um elemento do Cobject
+                                        $newCobjectElement = new CobjectElement();
+                                        $newCobjectElement->cobject_id = $cobjectID;
+                                        $newCobjectElement->element_id = $elementID;
+                                        $newCobjectElement->position = $order;
+                                        $newCobjectElement->insert();
                                     }
+                                    
+                                    
                                     $json['ElementID'] = $elementID;
 
-                                    if (!$isElementPieceSet) {
+                                    if (!$isElementPieceSet && !$isElementCobject) {
                                         $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $pieceID, 'element_id' => $elementID), array('order' => 'id desc'));
                                         $pieceElementID = $pieceElement->id;
 
@@ -1003,7 +1027,7 @@ class EditorController extends Controller {
                                     //=============POSITION==================================
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['position'] = $pe->position;
                                     //==============Flag=====================================
-                                    if(isset($pe_property)){
+                                    if (isset($pe_property)) {
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
                                     }
                                     //=============== grouping ===============================

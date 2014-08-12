@@ -20,6 +20,7 @@ function editor () {
     this.countPieces = new Array();
     this.countElements = new Array();
     this.countElementsPS = new Array();
+    this.countElementsCobject;
     this.currentPieceSet = 'sc0_ps0';
     this.currentPiece = 'sc0_ps0_p0';
     this.uploadedElements = 0;
@@ -76,6 +77,7 @@ function editor () {
         piece.addClass('active');
         this.currentPiece = id;
     }
+    
     
     /**
      * Cria uma nova 'Screen'
@@ -220,7 +222,7 @@ function editor () {
             }else if(parent.COTemplateTypeIn(parent.PRE)){
                 html+= '<div class="tplPre"></div>';
             }else if(parent.COTemplateTypeIn(parent.AEL) 
-                    || parent.COTemplateTypeIn(parent.DDROP) ){
+                || parent.COTemplateTypeIn(parent.DDROP) ){
                 html += '<div class="tplMulti"><button class="newElement">'+LABEL_ADD_ELEMENT+'</button><br></div>'+
                 "<ul id='"+pieceID+"_query' class='sortable'></ul>"+
                 "<ul id='"+pieceID+"_query_resp' class='sortable'></ul>";
@@ -238,7 +240,7 @@ function editor () {
             //se template for MTE ou AEL ou DDROP
             if(parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.AEL)
-                 || parent.COTemplateTypeIn(parent.DDROP)){
+                || parent.COTemplateTypeIn(parent.DDROP)){
                 //adiciona a função do botão addElement
                 $("#"+pieceID+"> div > button.newElement").click(function(){
                     parent.addElement();
@@ -274,8 +276,8 @@ function editor () {
             position = loaddata['position'];
         }else{
             if(parent.COTemplateTypeIn(parent.AEL) 
-                    || parent.COTemplateTypeIn(parent.MTE)  
-                    || parent.COTemplateTypeIn(parent.DDROP)){
+                || parent.COTemplateTypeIn(parent.MTE)  
+                || parent.COTemplateTypeIn(parent.DDROP)){
                 //Sua Posição dentro do Grupo
                 position = $(tagAdd).find(".element").size()+1;
             }
@@ -335,7 +337,7 @@ function editor () {
         
         html += '</div>';
         if(parent.COTemplateTypeIn(parent.AEL)
-           || parent.COTemplateTypeIn(parent.DDROP)){
+            || parent.COTemplateTypeIn(parent.DDROP)){
             $(tagAdd).append(html);
         }else if(parent.COTemplateTypeIn(parent.MTE)){
             $(tagAdd).find('span:eq(0)').append(html);
@@ -470,7 +472,7 @@ function editor () {
     this.addUploadForm = function(tagAdd, type, responseFunction, loaddata, idbd){
         //Verificar se é um elemento da PieceSet
         var isElementPieceSet = tagAdd.hasClass('elementPieceSet'); 
-        
+        var isElementCobject =  tagAdd.hasClass('elementCobject'); 
         if(isElementPieceSet){
             var pieceSetID = tagAdd.closest('div').attr('id').split('_',2);
             var pieceSetID = pieceSetID[0]+'_'+pieceSetID[1];
@@ -480,20 +482,27 @@ function editor () {
             }
             ID = pieceSetID+'_e'+this.countElementsPS[pieceSetID];
             this.countElementsPS[pieceSetID]++;
+        }else if(isElementCobject){
+            if( !this.isset(this.countElementsCobject)) {
+                //Se não existe algo
+                this.countElementsCobject=0;
+            }
+            ID = 'e'+this.countElementsCobject;
+            this.countElementsCobject++;
         }else{
             ID = this.currentPiece+'_e'+this.countElements[this.currentPiece];
             this.countElements[this.currentPiece]++;
         }
         
-        var parent = this; 
         
+        var parent = this; 
         //Posição Default !!
         var position=0;
           
         if(parent.isset(idbd)){
             // Se existe no banco, então foi salvo no elemento o position
             position = loaddata['position'];
-            if(!isElementPieceSet) {
+            if(!isElementCobject && !isElementPieceSet) {
                 // Se é um elemento da Piece
                 var flag = loaddata['flag'];
             }
@@ -588,7 +597,7 @@ function editor () {
         '</form>'+
         '</div>';
     
-        if(isElementPieceSet) {
+        if(isElementPieceSet || isElementCobject) {
             $(tagAdd).append(html);
         }else{
             if(parent.COTemplateTypeIn(parent.MTE)){
@@ -624,7 +633,7 @@ function editor () {
             filesize = Math.round(filesize * 1000) / 1000; //3 decimal
             
             if(filesize <= uploadMaxSize){
-                 var extAcept = (uploadType == 'sound') ? 'audio' : uploadType;
+                var extAcept = (uploadType == 'sound') ? 'audio' : uploadType;
                 if(!(this.files[0].type.indexOf(extAcept) == -1)){ 
                     
                     var reader = new FileReader();
@@ -662,6 +671,23 @@ function editor () {
                 this.addImage(tagAdd.find('span:last'), loaddata,idbd); 
             }
             
+        }
+    }
+    
+    //Add imagem do Cobject
+    this.insertImgCobject = function (idbd, loaddata){
+        var tagAdd = $('#cobject_description');
+        console.log(tagAdd);
+         
+        if(!this.isset(idbd)) {
+            tagAdd.append("<span class='elementCobject'></span>");
+            this.addImage(tagAdd.find('span:last'), loaddata,idbd); 
+        }else {
+            var psIDBD = loaddata['piecesetID'];
+            var psID = $('.Cobject[idbd='+psIDBD+']').attr('id').split('_',2);
+            psID = psID[0]+"_"+psID[1];
+            tagAdd.append("<span class='elementCobject'></span>");
+            this.addImage(tagAdd.find('span:last'), loaddata,idbd); 
         }
     }
     
@@ -752,7 +778,7 @@ function editor () {
         
         if(parent.COTemplateTypeIn(parent.MTE)||parent.COTemplateTypeIn(parent.TXT)||parent.COTemplateTypeIn(parent.PRE)){
             //Agrupando Elementos
-             var group;
+            var group;
             if(this.isset(match) && match != -1) {
                 // É um load
                 group = match;
@@ -898,8 +924,8 @@ function editor () {
         }
         var tagAdd = "";
         if(parent.COTemplateTypeIn(parent.MTE) 
-                || parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)){
+            || parent.COTemplateTypeIn(parent.AEL)
+            || parent.COTemplateTypeIn(parent.DDROP)){
             //TagAdd para o load
             tagAdd= $('#'+parent.currentPiece+' div[group='+group+']');
         }else if(parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)){
@@ -931,7 +957,7 @@ function editor () {
                 default:
             }
         }else if(parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)){
+            || parent.COTemplateTypeIn(parent.DDROP)){
         // o group é a Resposta '_'
         //this.addText(tagAdd);
         }
@@ -950,7 +976,7 @@ function editor () {
             }
             
         }else if(parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)){
+            || parent.COTemplateTypeIn(parent.DDROP)){
             //É AEL
             var buttonDelID = "#"+parent.currentPiece+" div[group='"+group.split('_')[0]+"'] > input.delElement";
         }
@@ -981,7 +1007,7 @@ function editor () {
 
             $(buttonTextoID).click(function(){
                 if(!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)){
+                    && !parent.COTemplateTypeIn(parent.DDROP)){
                     if(!parent.existID(ElementImageID) || 
                         confirm(MSG_CHANGE_ELEMENT)){
                         if(!parent.existID(ElementTextID)){
@@ -997,7 +1023,7 @@ function editor () {
             });
             $(buttonImageID).click(function(){
                 if(!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)){
+                    && !parent.COTemplateTypeIn(parent.DDROP)){
                     if(!parent.existID(ElementTextID) ||
                         confirm(MSG_CHANGE_ELEMENT)){
                         if(!parent.existID(ElementImageID)){
@@ -1014,7 +1040,7 @@ function editor () {
             // Add SOUND 
             $(buttonSoundID).click(function(){
                 if(!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)){
+                    && !parent.COTemplateTypeIn(parent.DDROP)){
                     if(!parent.existID(ElementTextID) ||
                         confirm(MSG_CHANGE_ELEMENT)){
                         if(!parent.existID(ElementSoundID)){
@@ -1031,12 +1057,12 @@ function editor () {
             
             
             if(parent.COTemplateTypeIn(parent.MTE) 
-                    || parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)){
+                || parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)){
                 $(buttonDelID).click(function(){
                     if($(buttonDelID).size() == 1) {
                         if(parent.COTemplateTypeIn(parent.AEL)
-                                || parent.COTemplateTypeIn(parent.DDROP)) {
+                            || parent.COTemplateTypeIn(parent.DDROP)) {
                             parent.delElement($(this).closest('div[group]').closest('li'));
                         }else if(parent.COTemplateTypeIn(parent.MTE)) {
                             parent.delElement($(this).closest('div[group]'));
@@ -1159,7 +1185,7 @@ function editor () {
                 //Deletar todos os objeto, se existir
                 //id é um li que possui o div-grupo
                 if(parent.COTemplateTypeIn(parent.AEL)
-                        || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)) {
                     $(id).find('div[group] div.element').each(function(){
                         var id_Element_del = $(this).attr('id');
                         parent.delElement(id_Element_del,true);
@@ -1198,6 +1224,8 @@ function editor () {
         //Verificar se é um elemento da PieceSet
         if($('span.elementPieceSet > '+'#'+id).size()==1){
             $('#'+id).closest('span.elementPieceSet').remove();
+        }else if($('span.elementCobject > '+'#'+id).size()==1){
+            $('#'+id).closest('span.elementCobject').remove();
         }else{
             $("#"+id).remove();
         }
@@ -1347,6 +1375,346 @@ function editor () {
             //Reinicia o contador da Ordem das Screens
             screenPosition = 0;
             
+            //Salvar Elementos do Cobject
+            saveElements(true, false);
+            
+            //===================================================================
+            //Criação da função para salvar os três tipos de elementos: Cobject, PieceSet e os elementos dentro da piece             
+            function saveElements(isElementCobject, isElementPieceSet, LastID, currentID, limit_element) {
+                //Inicializa o contador de posição do elemento
+                elementPosition = 0;
+                var str_seletor = "";
+                                        
+                if(isElementPieceSet) {
+                    //É um elemento da PieceSet
+                    LastPieceSetID = LastID;
+                    curretPieceSetID = currentID;
+                    var idBDLastPieceSet = LastPieceSetID;
+                    str_seletor = '#'+curretPieceSetID+' .elementPieceSet .element';
+                }else if(isElementCobject){
+                    //É um elemento Cobject
+                    str_seletor = '.elementCobject .element';
+                }else{
+                    // É um elemento da Piece
+                    LastPieceID = LastID;
+                    curretPieceID = currentID;
+                    str_seletor = '#'+curretPieceID+' .element'+limit_element;
+                }
+                $(str_seletor).each(function(){
+                    //Verificar se é um elemento da PieceSet
+                    //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
+                    ElementID = $(this).attr('id');
+                    ElementID_BD = $(this).attr('idBD');
+                    //get Atributo position
+                    elementPosition = $(this).attr('position');
+                    var continuar = true;
+                    //Se for element da peça e TXT acessa todos os elementos para verificar se foram alterados
+                    if(parent.COTemplateTypeIn(parent.TXT) && !isElementPieceSet && !isElementCobject) {
+                        var text_element = '#'+ElementID;
+                        var arrayText = text_element.split('_');
+                        text_element = "";
+                        for(var i=0; i < (arrayText.length-1);i++){
+                            if(i<(arrayText.length-2)){
+                                text_element+=arrayText[i]+"_";
+                            }else{
+                                text_element+=arrayText[i]; 
+                            }
+                        }
+                        var txt_BD = $(text_element+"_flag").val();
+                        var txt_New = $("body", $(text_element+"_flag_ifr").contents()).html();
+                        var text_div = text_element+'_text';                 
+                        //Verificar se foi Alterado em relação a do DB        
+                        parent.textChanged(txt_BD, txt_New, text_element, text_div );
+                        //atualiza o total de elementos atualizados e não atualizados
+                        parent.totalElementsChanged = $('.element[updated="1"]').size();
+                        parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
+                                            
+                        var txt_New_noHtml =  $("body", $(text_element+"_flag_ifr").contents()).text();
+                        //Foi alterado  
+                        continuar = (txt_New_noHtml !="" && txt_BD != txt_New);
+                    }
+                                        
+                    if(continuar) {
+                                            
+                        var newElem='';
+                        var ElementIDSplit = ElementID.split('_');
+                        for(var i=0; i < ElementIDSplit.length-1; i++) {
+                            if(i == ElementIDSplit.length-2) {
+                                newElem+=ElementIDSplit[i];
+                            }else{
+                                newElem+=ElementIDSplit[i]+'_';
+                            }
+                                               
+                        }
+                        ElementID = newElem;
+                                            
+                        ElementFlag_Updated = $(this).attr('updated');
+                        Flag = $(this).closest('div[group]').find('input[type="checkbox"]').is(':checked');
+                                        
+                        Match = $(this).attr('match');                       
+                        //declaração das variáveis que serão passadas por ajax
+                        var type;
+                        var value;
+                                        
+                        //IDs dos Formulários, textos, imagens e sons
+                        var ElementTextID = "#"+ElementID+"_text";
+                        var ElementImageID = "#"+ElementID+"_image";
+                        var FormElementImageID = "#"+ElementID+"_image_form";
+                        var input_NameDB_ID = "#"+ElementID+"_image_nameDB";
+                        var input_NameCurrent_ID = "#"+ElementID+"_image_input";
+                        var ElementSoundID = "#"+ElementID+"_sound";
+                        var FormElementSoundID = "#"+ElementID+"_sound_form";
+                        var inputSound_NameDB_ID = "#"+ElementID+"_sound_nameDB";
+                        var inputSound_NameCurrent_ID = "#"+ElementID+"_sound_input";    
+                        //var ElementRespID = "#"+ElementID+"_resp_text";
+                                        
+                        //Dados que serão passados pelo ajax
+                        var data = {
+                            //Operação Salvar, Element, Type, ID no DOM
+                            op: parent.isload ? "update": "save", 
+                            step: "Element",
+                            DomID: ElementID,
+                            //Dados do Element
+                            ordem: elementPosition, //Ordem do Element
+                            flag: Flag,
+                            value: {},
+                            match: Match,
+                            isload: parent.isload,
+                            ID_BD:  ElementID_BD,
+                            updated: ElementFlag_Updated
+                        };
+                                        
+                                                
+                        if(isElementPieceSet){
+                            data["pieceSetID"] =  idBDLastPieceSet;
+                        }else if(isElementCobject){
+                           data["cobjectID"] = parent.CObjectID;
+                        }else{
+                            data["pieceID"] = LastPieceID;
+                        }
+                                                
+                        if(parent.COTemplateTypeIn(parent.TXT) || !(parent.isload && parent.isset(ElementFlag_Updated) 
+                            && ElementFlag_Updated == 0)) {
+                            // Precisa Salvar ou Atualizar
+                            //Se for um Texto
+                            if(parent.existID(ElementTextID)){
+                                //Salva Elemento
+                                data["typeID"] = TYPE.ELEMENT.TEXT;
+                                if(parent.COTemplateTypeIn(parent.TXT)) {
+                                                
+                                    data["value"] = txt_New;                                                                                                        
+                                                   
+                                }else{
+                                    data["value"] = $(ElementTextID+" > font").html();
+                                }
+                                parent.saveData(
+                                    //Variáveis dados
+                                    data,
+                                    //Função de sucess do Save Element
+                                    function(response, textStatus, jqXHR){
+                                        if(!parent.isload) {
+                                            $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
+                                        }else{
+                                            $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
+                                        }
+                                        parent.uploadedElements++;
+                                                          
+                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
+                                        }else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
+                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
+                                        }
+                                        //Verificar se acabou as requisições
+                                        parent.verify_requestFinish();
+                                                    
+                                                    
+                                    });
+                                        
+                            }
+                                            
+                            //Se for uma Imagem
+                            if(parent.existID(ElementImageID)){
+                                                  
+                                var doUpload = true;
+                                if ( parent.isload &&
+                                    ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
+                                        || $(input_NameCurrent_ID).val() == '')
+                                    ) {
+                                    //Não faz upload, pois não houve alterações
+                                    doUpload = false;
+                                }
+                                              
+                                if(doUpload) {
+                                    data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
+                                    data["library"] = TYPE.LIBRARY.IMAGE;
+                                    //criar a função para envio de formulário via Ajax
+
+
+                                    $(FormElementImageID).ajaxForm({
+                                        beforeSend: function() {
+                                        //zerar barra de upload
+                                        //$("#"+bar).width('0%')
+                                        //$("#"+percent).html('0%');
+                                        },
+                                        uploadProgress: function(event, position, total, percentComplete) {
+                                        //atualizar barra de upload
+                                        //$("#"+bar).width(percentComplete + '%')
+                                        //$("#"+percent).html(percentComplete + '%');
+                                        },
+                                        success: function(response) {
+                                            //dados de retorno do upload
+                                            data['value'] = {};
+                                            data['value']['url'] = response['url'];
+                                            data['value']['name'] = response['name'];
+
+                                            //Salva Elemento
+                                            parent.saveData(
+                                                //Dados
+                                                data,
+                                                //Função de sucess do Save Element
+                                                function(response, textStatus, jqXHR){
+                                                    if(!parent.isload) {
+                                                        $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
+                                                    }else{
+                                                        $('.savescreen').append('<br><p>ElementImage Atualizado com sucesso!</p>');    
+                                                    }
+
+                                                    //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
+                                                    parent.uploaded_ImagesIDs[parent.uploadedImages++] = response['LibraryID'];
+                                                    //Atualiza o contador dos Elementos
+                                                    parent.uploadedElements++; 
+                                                                    
+                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
+                                                    }
+                                                    else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
+                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
+                                                    }
+                                                    //Verificar se acabou as requisições
+                                                    parent.verify_requestFinish();
+                                                               
+                                                });
+                                        },
+                                        error: function(error, textStatus, errorThrown){
+                                            //$("#"+form).html(error.responseText);
+                                            alert(ERROR_FILE_UPLOAD);
+                                            $(".savescreen").append(error.responseText);
+                                        }
+                                    });
+
+                                    //Envia o formulário atual
+                                    $(FormElementImageID).submit();
+                                }
+                            }else if(parent.existID(ElementSoundID)){
+                                //Se for um Som  
+                                var doUpload = true;
+                                if ( parent.isload &&
+                                    ($(inputSound_NameDB_ID).val() == $(inputSound_NameCurrent_ID).val() 
+                                        || $(inputSound_NameCurrent_ID).val() == '')
+                                    ) {
+                                    //Não faz upload, pois não houve alterações
+                                    doUpload = false;
+                                }
+                                              
+                                if(doUpload) {
+                                    data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
+                                    data["library"] = TYPE.LIBRARY.SOUND;
+                                    //criar a função para envio de formulário via Ajax
+
+
+                                    $(FormElementSoundID).ajaxForm({
+                                        beforeSend: function() {
+                                        //zerar barra de upload
+                                        //$("#"+bar).width('0%')
+                                        //$("#"+percent).html('0%');
+                                        },
+                                        uploadProgress: function(event, position, total, percentComplete) {
+                                        //atualizar barra de upload
+                                        //$("#"+bar).width(percentComplete + '%')
+                                        //$("#"+percent).html(percentComplete + '%');
+                                        },
+                                        success: function(response) {
+                                            //dados de retorno do upload
+                                            data['value'] = {};
+                                            data['value']['url'] = response['url'];
+                                            data['value']['name'] = response['name'];
+                                            //Salva Elemento
+                                            parent.saveData(
+                                                //Dados
+                                                data,
+                                                //Função de sucess do Save Element
+                                                function(response, textStatus, jqXHR){
+                                                    if(!parent.isload) {
+                                                        $('.savescreen').append('<br><p>ElementSound salvo com sucesso!</p>');
+                                                    }else{
+                                                        $('.savescreen').append('<br><p>ElementSound Atualizado com sucesso!</p>');    
+                                                    }
+
+                                                    //atualiza o contador de Sons enviados
+                                                    parent.uploadedSounds++;
+                                                    //Atualiza o contador dos Elementos
+                                                    parent.uploadedElements++; 
+                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
+                                                    }
+                                                    else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
+                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
+                                                    }
+                                                                 
+                                                    parent.verify_requestFinish();
+                                                });
+                                        },
+                                        error: function(error, textStatus, errorThrown){
+                                            alert(ERROR_FILE_UPLOAD);
+                                            $(".savescreen").append(error.responseText);
+                                        }
+                                    });
+
+                                    //Envia o formulário atual
+                                    $(FormElementSoundID).submit();
+                                }
+                            }
+                                        
+                                                                               
+                        }else{
+                        //Atualiza Somente a Flag
+                                           
+                        }
+                    }else if(txt_New_noHtml == "") {
+                        // O template é do tipo texto  e o elemento está vazio
+                        //Deleta o PieceSet
+                        parent.delPieceSet(parent.currentPieceSet,true);
+                        //Atualiza Total de elementos e o Total alterados
+                        parent.totalElements = $('.element').size();
+                        parent.totalElementsChanged = $('.element[updated="1"]').size();
+                        parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
+                        parent.totalPieces = $('.piece').size();
+                        parent.totalPiecesets = $('.PieceSet').size();
+                                            
+                        if(parent.isset(ElementID_BD)){
+                            //Enviar array de objetos a serem excluidos 
+                            parent.saveData({                   
+                                op:"delete", 
+                                array_del:parent.orderDelets
+                            },
+                            //função sucess
+                            function(response, textStatus, jqXHR){
+                                parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
+                                $('.savescreen').append('<br><p> Objeto TEXT Deletado!...</p>');
+                                //Verificar se acabou as requisições
+                                parent.verify_requestFinish();   
+                            });
+                        }
+                                           
+                    }
+                }); // End Of EACH ELEMENTS
+                                        
+            }
+                            
+            //===================================================================
+            
+            
+            
             //Para cada tela
             $('.screen').each(function(){
                 //Atualiza a ScreeID com o ID do ".screen" atual
@@ -1422,336 +1790,8 @@ function editor () {
                             curretPieceSetID = response['DomID'];
                             LastPieceSetID = response['PieceSetID'];
                             //Salvar os Elementos da PieceSet
-                            saveElements(true, LastPieceSetID, curretPieceSetID);
-                            //===================================================================
+                            saveElements(false, true, LastPieceSetID, curretPieceSetID);
                             
-                            function saveElements(isElementPieceSet, LastID, currentID, limit_element) {
-                                //Inicializa o contador de posição do elemento
-                                elementPosition = 0;
-                                var str_seletor = "";
-                                        
-                                if(isElementPieceSet) {
-                                    //É um elemento da PieceSet
-                                    LastPieceSetID = LastID;
-                                    curretPieceSetID = currentID;
-                                    var idBDLastPieceSet = LastPieceSetID;
-                                    str_seletor = '#'+curretPieceSetID+' .elementPieceSet .element';
-                                }else{
-                                    // É um elemento da Piece
-                                    LastPieceID = LastID;
-                                    curretPieceID = currentID;
-                                    str_seletor = '#'+curretPieceID+' .element'+limit_element;
-                                }
-                                $(str_seletor).each(function(){
-                                    //Verificar se é um elemento da PieceSet
-                                    //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
-                                    ElementID = $(this).attr('id');
-                                    ElementID_BD = $(this).attr('idBD');
-                                    //get Atributo position
-                                    elementPosition = $(this).attr('position');
-                                    var continuar = true;
-                                    //Se for element da peça e TXT acessa todos os elementos para verificar se foram alterados
-                                    if(parent.COTemplateTypeIn(parent.TXT) && !isElementPieceSet) {
-                                        var text_element = '#'+ElementID;
-                                        var arrayText = text_element.split('_');
-                                        text_element = "";
-                                        for(var i=0; i < (arrayText.length-1);i++){
-                                            if(i<(arrayText.length-2)){
-                                                text_element+=arrayText[i]+"_";
-                                            }else{
-                                                text_element+=arrayText[i]; 
-                                            }
-                                        }
-                                        var txt_BD = $(text_element+"_flag").val();
-                                        var txt_New = $("body", $(text_element+"_flag_ifr").contents()).html();
-                                        var text_div = text_element+'_text';                 
-                                        //Verificar se foi Alterado em relação a do DB        
-                                        parent.textChanged(txt_BD, txt_New, text_element, text_div );
-                                        //atualiza o total de elementos atualizados e não atualizados
-                                        parent.totalElementsChanged = $('.element[updated="1"]').size();
-                                        parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
-                                            
-                                        var txt_New_noHtml =  $("body", $(text_element+"_flag_ifr").contents()).text();
-                                        //Foi alterado  
-                                        continuar = (txt_New_noHtml !="" && txt_BD != txt_New);
-                                    }
-                                        
-                                    if(continuar) {
-                                            
-                                        var newElem='';
-                                        var ElementIDSplit = ElementID.split('_');
-                                        for(var i=0; i < ElementIDSplit.length-1; i++) {
-                                            if(i == ElementIDSplit.length-2) {
-                                                newElem+=ElementIDSplit[i];
-                                            }else{
-                                                newElem+=ElementIDSplit[i]+'_';
-                                            }
-                                               
-                                        }
-                                        ElementID = newElem;
-                                            
-                                        ElementFlag_Updated = $(this).attr('updated');
-                                        Flag = $(this).closest('div[group]').find('input[type="checkbox"]').is(':checked');
-                                        
-                                        Match = $(this).attr('match');                       
-                                        //declaração das variáveis que serão passadas por ajax
-                                        var type;
-                                        var value;
-                                        
-                                        //IDs dos Formulários, textos, imagens e sons
-                                        var ElementTextID = "#"+ElementID+"_text";
-                                        var ElementImageID = "#"+ElementID+"_image";
-                                        var FormElementImageID = "#"+ElementID+"_image_form";
-                                        var input_NameDB_ID = "#"+ElementID+"_image_nameDB";
-                                        var input_NameCurrent_ID = "#"+ElementID+"_image_input";
-                                        var ElementSoundID = "#"+ElementID+"_sound";
-                                        var FormElementSoundID = "#"+ElementID+"_sound_form";
-                                        var inputSound_NameDB_ID = "#"+ElementID+"_sound_nameDB";
-                                        var inputSound_NameCurrent_ID = "#"+ElementID+"_sound_input";    
-                                        //var ElementRespID = "#"+ElementID+"_resp_text";
-                                        
-                                        //Dados que serão passados pelo ajax
-                                        var data = {
-                                            //Operação Salvar, Element, Type, ID no DOM
-                                            op: parent.isload ? "update": "save", 
-                                            step: "Element",
-                                            DomID: ElementID,
-                                            //Dados do Element
-                                            ordem: elementPosition, //Ordem do Element
-                                            flag: Flag,
-                                            value: {},
-                                            match: Match,
-                                            isload: parent.isload,
-                                            ID_BD:  ElementID_BD,
-                                            updated: ElementFlag_Updated
-                                        };
-                                        
-                                                
-                                        if(isElementPieceSet){
-                                            data["pieceSetID"] =  idBDLastPieceSet;
-                                        }else{
-                                            data["pieceID"] = LastPieceID;
-                                        }
-                                                
-                                        if(parent.COTemplateTypeIn(parent.TXT) || !(parent.isload && parent.isset(ElementFlag_Updated) 
-                                            && ElementFlag_Updated == 0)) {
-                                            // Precisa Salvar ou Atualizar
-                                            //Se for um Texto
-                                            if(parent.existID(ElementTextID)){
-                                                //Salva Elemento
-                                                data["typeID"] = TYPE.ELEMENT.TEXT;
-                                                if(parent.COTemplateTypeIn(parent.TXT)) {
-                                                
-                                                    data["value"] = txt_New;                                                                                                        
-                                                   
-                                                }else{
-                                                    data["value"] = $(ElementTextID+" > font").html();
-                                                }
-                                                parent.saveData(
-                                                    //Variáveis dados
-                                                    data,
-                                                    //Função de sucess do Save Element
-                                                    function(response, textStatus, jqXHR){
-                                                        if(!parent.isload) {
-                                                            $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
-                                                        }else{
-                                                            $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');    
-                                                        }
-                                                        parent.uploadedElements++;
-                                                          
-                                                        if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
-                                                        }else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
-                                                            $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                              
-                                                        }
-                                                        //Verificar se acabou as requisições
-                                                        parent.verify_requestFinish();
-                                                    
-                                                    
-                                                    });
-                                        
-                                            }
-                                            
-                                            //Se for uma Imagem
-                                            if(parent.existID(ElementImageID)){
-                                                  
-                                                var doUpload = true;
-                                                if ( parent.isload &&
-                                                    ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val() 
-                                                        || $(input_NameCurrent_ID).val() == '')
-                                                    ) {
-                                                    //Não faz upload, pois não houve alterações
-                                                    doUpload = false;
-                                                }
-                                              
-                                                if(doUpload) {
-                                                    data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
-                                                    data["library"] = TYPE.LIBRARY.IMAGE;
-                                                    //criar a função para envio de formulário via Ajax
-
-
-                                                    $(FormElementImageID).ajaxForm({
-                                                        beforeSend: function() {
-                                                        //zerar barra de upload
-                                                        //$("#"+bar).width('0%')
-                                                        //$("#"+percent).html('0%');
-                                                        },
-                                                        uploadProgress: function(event, position, total, percentComplete) {
-                                                        //atualizar barra de upload
-                                                        //$("#"+bar).width(percentComplete + '%')
-                                                        //$("#"+percent).html(percentComplete + '%');
-                                                        },
-                                                        success: function(response) {
-                                                            //dados de retorno do upload
-                                                            data['value'] = {};
-                                                            data['value']['url'] = response['url'];
-                                                            data['value']['name'] = response['name'];
-
-                                                            //Salva Elemento
-                                                            parent.saveData(
-                                                                //Dados
-                                                                data,
-                                                                //Função de sucess do Save Element
-                                                                function(response, textStatus, jqXHR){
-                                                                    if(!parent.isload) {
-                                                                        $('.savescreen').append('<br><p>ElementImage salvo com sucesso!</p>');
-                                                                    }else{
-                                                                        $('.savescreen').append('<br><p>ElementImage Atualizado com sucesso!</p>');    
-                                                                    }
-
-                                                                    //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                                    parent.uploaded_ImagesIDs[parent.uploadedImages++] = response['LibraryID'];
-                                                                    //Atualiza o contador dos Elementos
-                                                                    parent.uploadedElements++; 
-                                                                    
-                                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
-                                                                    }
-                                                                    else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
-                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
-                                                                    }
-                                                                    //Verificar se acabou as requisições
-                                                                    parent.verify_requestFinish();
-                                                               
-                                                                });
-                                                        },
-                                                        error: function(error, textStatus, errorThrown){
-                                                            //$("#"+form).html(error.responseText);
-                                                            alert(ERROR_FILE_UPLOAD);
-                                                            $(".savescreen").append(error.responseText);
-                                                        }
-                                                    });
-
-                                                    //Envia o formulário atual
-                                                    $(FormElementImageID).submit();
-                                                }
-                                            }else if(parent.existID(ElementSoundID)){
-                                                //Se for um Som  
-                                                var doUpload = true;
-                                                if ( parent.isload &&
-                                                    ($(inputSound_NameDB_ID).val() == $(inputSound_NameCurrent_ID).val() 
-                                                        || $(inputSound_NameCurrent_ID).val() == '')
-                                                    ) {
-                                                    //Não faz upload, pois não houve alterações
-                                                    doUpload = false;
-                                                }
-                                              
-                                                if(doUpload) {
-                                                    data["typeID"] = TYPE.ELEMENT.MULTIMIDIA;
-                                                    data["library"] = TYPE.LIBRARY.SOUND;
-                                                    //criar a função para envio de formulário via Ajax
-
-
-                                                    $(FormElementSoundID).ajaxForm({
-                                                        beforeSend: function() {
-                                                        //zerar barra de upload
-                                                        //$("#"+bar).width('0%')
-                                                        //$("#"+percent).html('0%');
-                                                        },
-                                                        uploadProgress: function(event, position, total, percentComplete) {
-                                                        //atualizar barra de upload
-                                                        //$("#"+bar).width(percentComplete + '%')
-                                                        //$("#"+percent).html(percentComplete + '%');
-                                                        },
-                                                        success: function(response) {
-                                                            //dados de retorno do upload
-                                                            data['value'] = {};
-                                                            data['value']['url'] = response['url'];
-                                                            data['value']['name'] = response['name'];
-                                                            //Salva Elemento
-                                                            parent.saveData(
-                                                                //Dados
-                                                                data,
-                                                                //Função de sucess do Save Element
-                                                                function(response, textStatus, jqXHR){
-                                                                    if(!parent.isload) {
-                                                                        $('.savescreen').append('<br><p>ElementSound salvo com sucesso!</p>');
-                                                                    }else{
-                                                                        $('.savescreen').append('<br><p>ElementSound Atualizado com sucesso!</p>');    
-                                                                    }
-
-                                                                    //atualiza o contador de Sons enviados
-                                                                    parent.uploadedSounds++;
-                                                                    //Atualiza o contador dos Elementos
-                                                                    parent.uploadedElements++; 
-                                                                    if(!parent.isload && parent.totalElements == parent.uploadedElements) {
-                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                         
-                                                                    }
-                                                                    else if(parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
-                                                                        $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');                                                            
-                                                                    }
-                                                                 
-                                                                    parent.verify_requestFinish();
-                                                                });
-                                                        },
-                                                        error: function(error, textStatus, errorThrown){
-                                                            alert(ERROR_FILE_UPLOAD);
-                                                            $(".savescreen").append(error.responseText);
-                                                        }
-                                                    });
-
-                                                    //Envia o formulário atual
-                                                    $(FormElementSoundID).submit();
-                                                }
-                                            }
-                                        
-                                                                               
-                                        }else{
-                                        //Atualiza Somente a Flag
-                                           
-                                        }
-                                    }else if(txt_New_noHtml == "") {
-                                        // O template é do tipo texto  e o elemento está vazio
-                                        //Deleta o PieceSet
-                                        parent.delPieceSet(parent.currentPieceSet,true);
-                                        //Atualiza Total de elementos e o Total alterados
-                                        parent.totalElements = $('.element').size();
-                                        parent.totalElementsChanged = $('.element[updated="1"]').size();
-                                        parent.totalElementsNOchanged = $('.element[updated="0"]').size(); 
-                                        parent.totalPieces = $('.piece').size();
-                                        parent.totalPiecesets = $('.PieceSet').size();
-                                            
-                                        if(parent.isset(ElementID_BD)){
-                                            //Enviar array de objetos a serem excluidos 
-                                            parent.saveData({                   
-                                                op:"delete", 
-                                                array_del:parent.orderDelets
-                                            },
-                                            //função sucess
-                                            function(response, textStatus, jqXHR){
-                                                parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
-                                                $('.savescreen').append('<br><p> Objeto TEXT Deletado!...</p>');
-                                                //Verificar se acabou as requisições
-                                                parent.verify_requestFinish();   
-                                            });
-                                        }
-                                           
-                                    }
-                                }); // End Of EACH ELEMENTS
-                                        
-                            }
-                            
-                            //===================================================================
                             //reiniciar o contador de posição da Piece no PieceSet
                             piecePosition = 0;
                             
@@ -1806,7 +1846,7 @@ function editor () {
                                     }
                                     
                                     
-                                    saveElements(false, LastPieceID, curretPieceID, limit_element);
+                                    saveElements(false ,false, LastPieceID, curretPieceID, limit_element);
                                 
                                     // REGISTRAR A FLAG DOS ELEMENTS
                                     if(parent.COTemplateTypeIn(parent.MTE)){

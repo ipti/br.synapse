@@ -34,21 +34,26 @@ $(function() {
         
     });
     $(document).on('click',".insertImage",function(){ //
-         //Somente adiciona se não possui outro elemento imagem neste grupo
+        //Somente adiciona se não possui outro elemento imagem neste grupo
         if($(this).closest('div[group]').find('div.image').size() == 0){
-           newEditor.addImage($(this).closest('div[group]'));
+            newEditor.addImage($(this).closest('div[group]'));
         }
     });
-     $(document).on('click',".insertSound",function(){ //
-         //Somente adiciona se não possui outro elemento imagem neste grupo
+    $(document).on('click',".insertSound",function(){ //
+        //Somente adiciona se não possui outro elemento imagem neste grupo
         if($(this).closest('div[group]').find('div.audio').size() == 0){
-           newEditor.addSound($(this).closest('div[group]'));
+            newEditor.addSound($(this).closest('div[group]'));
         }
     });
     
     $("#addPieceSet").click(function(){
         newEditor.addPieceSet();
-    })
+    });
+    
+    $("#toolbar > .tools > #addimage").click(function(){
+        newEditor.insertImgCobject(null,null);  
+    });
+    
     $(document).on("click",".addPiece",(function(){
         newEditor.addPiece($(this).attr('id'));
     }));
