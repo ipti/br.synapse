@@ -81,7 +81,7 @@
 .theme div.toolbar ul.tools{display:block;clear:both;width:84px;margin-left:2px; height:3d70px;background: -moz-linear-gradient(left, #b8bdc1 0%, #cbcfd2 46%, #b9bdc1 100%);}
 .theme ul.tools li{display:block;width:80px; height:50px;text-indent:-9999px;margin-top:10px;}
 .theme ul.tools li#addimage{padding-top:7px; background:url('<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_tools_addimage.png') bottom no-repeat;}
-.theme ul.tools li#addsound{background:url('<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_tools_addsound.png') bottom no-repeat;}
+.theme ul.tools li#addsound{padding-top:7px; background:url('<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_tools_addsound.png') bottom no-repeat;}
 .theme ul.tools li#addvideo{background:url('<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_tools_addvideo.png') bottom no-repeat;}
 .theme ul.tools li#addtext{background:url('<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_tools_addtext.png') bottom no-repeat;}
 .theme ul.tools li#addquestion{background:url('<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_tools_addquestion.png') bottom no-repeat;}

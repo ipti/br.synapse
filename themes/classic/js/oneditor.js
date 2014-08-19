@@ -54,6 +54,10 @@ $(function() {
         newEditor.insertImgCobject(null,null);  
     });
     
+     $("#toolbar > .tools > #addsound").click(function(){
+        newEditor.insertSoundCobject(null,null);
+    });
+    
     $(document).on("click",".addPiece",(function(){
         newEditor.addPiece($(this).attr('id'));
     }));

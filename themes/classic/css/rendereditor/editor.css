@@ -19,6 +19,7 @@
 .theme ul.tools li{display:block;width:80px; height:50px;text-indent:-9999px;margin-top:10px;}
 .theme ul.tools li#addvideo{background:url('../../images/theme_tools_addvideo.png') bottom no-repeat;}
 .theme ul.tools li#addimage{background:url('../../images/theme_tools_addimage.png') bottom no-repeat;}
+.theme ul.tools li#addsound{background:url('../../images/theme_tools_addsound.png') bottom no-repeat;}
 .theme ul.tools li#addtext{background:url('../../images/theme_tools_addtext.png') bottom no-repeat;}
 .theme ul.tools li#addPieceSet{background:url('../../images/theme_tools_addpieceset.png') bottom no-repeat;}
 .piece{margin-bottom:30px;}

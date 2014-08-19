@@ -466,12 +466,14 @@ class EditorController extends Controller {
                             $templateID = $_POST['COtemplateType'];
                             $themeID = ($_POST['COthemeID'] != '-1') ? $_POST['COthemeID'] : NULL;
                             $goalID = $_POST['COgoalID'];
-
+                            $description = $_POST['COdescription'];
+                            
                             $newCobject = new Cobject();
                             $newCobject->type_id = $typeID;
                             $newCobject->template_id = $templateID;
                             $newCobject->theme_id = $themeID;
                             $newCobject->status = 'on';
+                            $newCobject->description = $description;
                             $newCobject->insert();
 
                             $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
@@ -792,7 +794,7 @@ class EditorController extends Controller {
                                             //Pegar informações da imagem
                                             //$url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
                                             $path = Yii::app()->basePath;
-                                            list($width, $height, $type) = getimagesize($path . "/../" . $src);
+                                            list($width, $height, $type) = getimagesize($path . "/.." . $src);
 
                                             $newLibrary = new Library();
                                             $library_typeName = $_POST['library'];

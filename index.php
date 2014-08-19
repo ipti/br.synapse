@@ -1,4 +1,6 @@
 <?php
+//phpinfo();
+
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 //@AWESOM testando essse novo
@@ -8,7 +10,7 @@ ini_set('display_errors', '1');
  */
 //@todo pode ser feito depois
 // change the following paths if necessary
-$yii=dirname(__FILE__).'/../../yii-1.1.14/framework/yii.php';
+$yii=dirname(__FILE__).'/../yii-1.1.14/framework/yii.php';
 $config=dirname(__FILE__).'/app/config/main.php';
 
 // remove the following lines when in production mode
@@ -17,4 +19,5 @@ defined('YII_DEBUG') or define('YII_DEBUG',true);
 defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 require_once($yii);
+
 Yii::createWebApplication($config)->run();
