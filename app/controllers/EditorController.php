@@ -460,36 +460,45 @@ class EditorController extends Controller {
 
                 switch ($_POST['step']) {
                     case "CObject":
-                        if (isset($_POST['COtypeID'])
-                                && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])) {
-                            $typeID = $_POST['COtypeID'];
-                            $templateID = $_POST['COtemplateType'];
-                            $themeID = ($_POST['COthemeID'] != '-1') ? $_POST['COthemeID'] : NULL;
-                            $goalID = $_POST['COgoalID'];
-                            $description = $_POST['COdescription'];
-                            
-                            $newCobject = new Cobject();
-                            $newCobject->type_id = $typeID;
-                            $newCobject->template_id = $templateID;
-                            $newCobject->theme_id = $themeID;
-                            $newCobject->status = 'on';
-                            $newCobject->description = $description;
-                            $newCobject->insert();
+                        if ($_POST['op'] == 'save') {
+                            if (isset($_POST['COtypeID']) && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])) {
+                                $typeID = $_POST['COtypeID'];
+                                $templateID = $_POST['COtemplateType'];
+                                $themeID = ($_POST['COthemeID'] != '-1') ? $_POST['COthemeID'] : NULL;
+                                $goalID = $_POST['COgoalID'];
+                                $description = $_POST['COdescription'];
 
-                            $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
-                            $cobjectID = $cobject->id;
+                                $newCobject = new Cobject();
+                                $newCobject->type_id = $typeID;
+                                $newCobject->template_id = $templateID;
+                                $newCobject->theme_id = $themeID;
+                                $newCobject->status = 'on';
+                                $newCobject->description = $description;
+                                $newCobject->insert();
 
-                            $type_id = $this->getTypeIDbyName_Context('CobjectData', 'goal_id');
-                            $newCobjectMetadata = new CobjectMetadata();
-                            $newCobjectMetadata->cobject_id = $cobjectID;
-                            $newCobjectMetadata->type_id = $type_id;
-                            $newCobjectMetadata->value = $goalID;
-                            $newCobjectMetadata->insert();
+                                $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                $cobjectID = $cobject->id;
 
-                            $json['CObjectID'] = $cobjectID;
-                        } else {
-                            throw new Exception("ERROR: Dados do CObject insuficientes.<br>");
+                                $type_id = $this->getTypeIDbyName_Context('CobjectData', 'goal_id');
+                                $newCobjectMetadata = new CobjectMetadata();
+                                $newCobjectMetadata->cobject_id = $cobjectID;
+                                $newCobjectMetadata->type_id = $type_id;
+                                $newCobjectMetadata->value = $goalID;
+                                $newCobjectMetadata->insert();
+
+                                $json['CObjectID'] = $cobjectID;
+                            } else {
+                                throw new Exception("ERROR: Dados do CObject insuficientes.<br>");
+                            }
+                        } else if ($_POST['op'] == 'update') {
+                            // Somente Atualizar por enquanto a descrição do Cobject
+                            $cobject_id = $_POST['CObjectID'];
+                            $cobject_description = $_POST['COdescription'];
+                            $cobject = Cobject::model()->findByPk($cobject_id);
+                            $cobject->description = $cobject_description;
+                            $cobject->save();        
                         }
+
                         break;
                     case "Screen":
                         if (isset($_POST['CObjectID']) && isset($_POST['Ordem']) && isset($_POST['DomID'])) {
@@ -526,8 +535,7 @@ class EditorController extends Controller {
                         }
                         break;
                     case "PieceSet":
-                        if (isset($_POST['description']) && isset($_POST['screenID'])
-                                && isset($_POST['order']) && isset($_POST['templateID']) && isset($_POST['DomID'])) {
+                        if (isset($_POST['description']) && isset($_POST['screenID']) && isset($_POST['order']) && isset($_POST['templateID']) && isset($_POST['DomID'])) {
 
                             $DomID = $_POST['DomID'];
                             $description = $_POST['description'];
@@ -558,7 +566,7 @@ class EditorController extends Controller {
                                 $newScreenPieceSet = EditorScreenPieceset::model()->find(array(
                                     'condition' => 'screen_id =:screenID AND pieceset_id=:piecesetID',
                                     'params' => array(':screenID' => $screenID, ':piecesetID' => $pieceSetID)
-                                        ));
+                                ));
                             } else {
                                 $newScreenPieceSet = new EditorScreenPieceset();
                             }
@@ -580,8 +588,7 @@ class EditorController extends Controller {
                         }
                         break;
                     case "Piece":
-                        if (isset($_POST['pieceSetID']) && isset($_POST['ordem'])
-                                && isset($_POST['DomID']) && isset($_POST['screenID'])) {
+                        if (isset($_POST['pieceSetID']) && isset($_POST['ordem']) && isset($_POST['DomID']) && isset($_POST['screenID'])) {
 
                             $DomID = $_POST['DomID'];
                             $pieceSetID = $_POST['pieceSetID'];
@@ -609,7 +616,7 @@ class EditorController extends Controller {
                                 $newPieceSetPiece = EditorPiecesetPiece::model()->find(array(
                                     'condition' => 'piece_id =:pieceID AND pieceset_id=:piecesetID',
                                     'params' => array(':pieceID' => $pieceID, ':piecesetID' => $pieceSetID)
-                                        ));
+                                ));
                             } else {
                                 $newPieceSetPiece = new EditorPiecesetPiece();
                             }
@@ -638,8 +645,7 @@ class EditorController extends Controller {
                             }
                             $justFlag = false;
 
-                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) || isset($_POST['cobjectID'])) && isset($_POST['ordem'])
-                                    && isset($_POST['value']) && isset($_POST['DomID'])) {
+                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) || isset($_POST['cobjectID'])) && isset($_POST['ordem']) && isset($_POST['value']) && isset($_POST['DomID'])) {
                                 $DomID = $_POST['DomID'];
 
                                 $isElementPieceSet = false;
@@ -687,7 +693,7 @@ class EditorController extends Controller {
                                                 ->findAll(array(
                                             'condition' => 'piece_element_id=:idPieceElement',
                                             'params' => array(':idPieceElement' => $Element_Piece->id)
-                                                ));
+                                        ));
                                         $size_properties_Element_Piece = count($Element_Piece_Property);
                                         $ls = null;
                                         foreach ($Element_Piece_Property as $ls):
@@ -731,14 +737,14 @@ class EditorController extends Controller {
                                         $newPieceElement->element_id = $elementID;
                                         $newPieceElement->position = $order;
                                         $newPieceElement->insert();
-                                    } else if($isElementPieceSet) {
+                                    } else if ($isElementPieceSet) {
                                         //É um elemento da PIECESET
                                         $newPieceSetElement = new EditorPiecesetElement();
                                         $newPieceSetElement->pieceset_id = $pieceSetID;
                                         $newPieceSetElement->element_id = $elementID;
                                         $newPieceSetElement->position = $order;
                                         $newPieceSetElement->insert();
-                                    }else if($isElementCobject){
+                                    } else if ($isElementCobject) {
                                         //É um elemento do Cobject
                                         $newCobjectElement = new CobjectElement();
                                         $newCobjectElement->cobject_id = $cobjectID;
@@ -746,8 +752,8 @@ class EditorController extends Controller {
                                         $newCobjectElement->position = $order;
                                         $newCobjectElement->insert();
                                     }
-                                    
-                                    
+
+
                                     $json['ElementID'] = $elementID;
 
                                     if (!$isElementPieceSet && !$isElementCobject) {
@@ -969,7 +975,7 @@ class EditorController extends Controller {
                     $json['typeID'] = $cobject->type_id;
                     $json['themeID'] = $cobject->theme_id;
                     $json['templateID'] = $cobject->template_id;
-
+                    $json['description'] = $cobject->description;
                     $Srceens = EditorScreen::model()->findAllByAttributes(array('cobject_id' => $cobjectID), array('order' => '`order`'));
 
                     foreach ($Srceens as $sc):
@@ -1185,7 +1191,7 @@ class EditorController extends Controller {
                         ->findAll(array(
                     'condition' => 'piece_element_id=:idPieceElement',
                     'params' => array(':idPieceElement' => $Element_Piece->id)
-                        ));
+                ));
                 $size_properties_Element_Piece = count($Element_Piece_Property);
                 $ls = null;
                 foreach ($Element_Piece_Property as $ls):

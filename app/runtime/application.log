@@ -1047,3 +1047,268 @@ Stack trace:
 #3 {main}
 REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
 ---
+2014/08/19 14:45:22 [error] [php] getimagesize(/var/www/Synapse/app/../rsc/library/image/2a97dc6335489144431cf3aab9a16de5.jpg): failed to open stream: No such file or directory (/var/www/Synapse/app/controllers/EditorController.php:797)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#3 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#4 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#5 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#7 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#10 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#11 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (797)
+in /var/www/Synapse/index.php (23)
+2014/08/19 15:11:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:53 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:15:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---
+2014/08/19 15:16:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+---

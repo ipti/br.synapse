@@ -13,6 +13,7 @@ function editor() {
     this.COtemplateType;
     this.CObjectID;
     this.COgoalID;
+    this.COdescription;
     this.currentScreenId = 'sc0';
     this.lastScreenId;
     this.countScreen = 0;
@@ -54,6 +55,8 @@ function editor() {
     this.DDROP.push(21);
 
     this.unLinks = [];
+    
+    var self = this;
 
     /**
      * Verifica se COtemplateType esta setado.
@@ -1295,6 +1298,33 @@ function editor() {
         });
     }
 
+    
+    //Atualizar o Cobject caso necessário
+    this.updateCObject = function(){
+        var description = $('#cobject_description > #COdescription');
+        if(description.attr('valueDB') !== description.val()) {
+            //Então atualiza a Descrição do Cobject
+                this.saveData({
+                //Operação Salvar
+                op: "update",
+                //Passo CObject
+                step: "CObject",
+                //Dados do CObject
+                CObjectID: self.CObjectID,
+                COdescription: self.isset($('#cobject_description > #COdescription').val()) ?
+                        $('#cobject_description > #COdescription').val() : null
+            },
+            //funcção sucess do save Cobject
+            function(response, textStatus, jqXHR) {
+                //atualiza a tela de log
+                $('.savescreen').append('<br><p>Cobject Atualizado com Sucesso!</p>');
+            }
+            );
+        }
+    } 
+
+
+
     //Função de salvamento.
     //salva utilizando Ajax, parte por parte.
     this.saveAll = function() {
@@ -1330,6 +1360,8 @@ function editor() {
             );
         } else {
             // Então Existe um this.CObjectID
+            //Verificar se Alterou a descrição do Cobject e salvar, se sim
+            parent.updateCObject();
             posSaveCobject();
         }
         //======================
@@ -2008,6 +2040,12 @@ function editor() {
                             //altera na classe
                             parent.COtemplateType = Number(item);
                             break;
+                        case 'description':
+                             //altera a descrição do cobject
+                             parent.COdescription = item;
+                             $('#cobject_description > #COdescription').attr('valueDB', parent.COdescription);
+                             $('#cobject_description > #COdescription').val(parent.COdescription);
+                         break;
                             //se não
                         default:
                             //se for uma screen
