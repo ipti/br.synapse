@@ -55,7 +55,7 @@ function editor() {
     this.DDROP.push(21);
 
     this.unLinks = [];
-    
+
     var self = this;
 
     /**
@@ -611,8 +611,6 @@ function editor() {
             }
         }
 
-
-
         if (this.isset(loaddata) && this.isset(loaddata['library'])) {
             var src = '/rsc/library/' + uploadType + '/' + loaddata['library']['src'];
             responseFunction(src, file, form);
@@ -680,13 +678,11 @@ function editor() {
     //Add imagem do Cobject
     this.insertImgCobject = function(idbd, loaddata) {
         var tagAdd = $('#cobject_description');
-        console.log(tagAdd);
-
         if (!this.isset(idbd)) {
             tagAdd.append("<span class='elementCobject'></span>");
             this.addImage(tagAdd.find('span:last'), loaddata, idbd);
         } else {
-            var coIDBD = loaddata['piecesetID'];
+            var coIDBD = loaddata['cobjectID'];
             tagAdd.append("<span class='elementCobject'></span>");
             this.addImage(tagAdd.find('span:last'), loaddata, idbd);
         }
@@ -696,13 +692,12 @@ function editor() {
     //Add Sound no Cobject
     this.insertSoundCobject = function(idbd, loaddata) {
         var tagAdd = $('#cobject_description');
-        console.log(tagAdd);
 
         if (!this.isset(idbd)) {
             tagAdd.append("<span class='elementCobject'></span>");
             this.addSound(tagAdd.find('span:last'), loaddata, idbd);
         } else {
-            var coIDBD = loaddata['piecesetID'];
+            var coIDBD = loaddata['cobjectID'];
             tagAdd.append("<span class='elementCobject'></span>");
             this.addSound(tagAdd.find('span:last'), loaddata, idbd);
         }
@@ -776,7 +771,6 @@ function editor() {
 
     this.addElement = function(idbd, type, loaddata) {
         //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
-
         var parent = this;
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = "";
@@ -1298,13 +1292,13 @@ function editor() {
         });
     }
 
-    
+
     //Atualizar o Cobject caso necessário
-    this.updateCObject = function(){
+    this.updateCObject = function() {
         var description = $('#cobject_description > #COdescription');
-        if(description.attr('valueDB') !== description.val()) {
+        if (description.attr('valueDB') !== description.val()) {
             //Então atualiza a Descrição do Cobject
-                this.saveData({
+            this.saveData({
                 //Operação Salvar
                 op: "update",
                 //Passo CObject
@@ -1321,7 +1315,7 @@ function editor() {
             }
             );
         }
-    } 
+    }
 
 
 
@@ -2041,11 +2035,11 @@ function editor() {
                             parent.COtemplateType = Number(item);
                             break;
                         case 'description':
-                             //altera a descrição do cobject
-                             parent.COdescription = item;
-                             $('#cobject_description > #COdescription').attr('valueDB', parent.COdescription);
-                             $('#cobject_description > #COdescription').val(parent.COdescription);
-                         break;
+                            //altera a descrição do cobject
+                            parent.COdescription = item;
+                            $('#cobject_description > #COdescription').attr('valueDB', parent.COdescription);
+                            $('#cobject_description > #COdescription').val(parent.COdescription);
+                            break;
                             //se não
                         default:
                             //se for uma screen
@@ -2196,8 +2190,7 @@ function editor() {
                                                 }
                                                 //================
 
-
-                                                parent.addElement(elementID, type, data);
+                                               // parent.addElement(elementID, type, data);
                                             }
 
 
@@ -2206,6 +2199,77 @@ function editor() {
                                         });
                                     }
                                 });
+                            } else if (i.slice(0, 1) == "E") {
+                                //se for um elemento
+                                //declara a array de dados das propriedades do elemento
+                                var data = new Array();
+                                data['position'] = item['position'];
+                                //preenchimento do array de dados
+                                $.each(item, function(i, item) {
+                                    if (i.slice(0, 1) == "L") {
+                                        data['library'] = new Array();
+                                        data['library']['ID'] = i.slice(1);
+                                        data['library']['type'] = item['type_name'];
+
+                                        if (parent.isset(item['src']))
+                                            data['library']['src'] = item['src'];
+                                        if (parent.isset(item['extension']))
+                                            data['library']['extension'] = item['extension'];
+
+                                        if (item['type_name'] == 'image') {
+                                            if (parent.isset(item['width']))
+                                                data['library']['width'] = item['width'];
+                                            if (parent.isset(item['height']))
+                                                data['library']['height'] = item['height'];
+
+                                            if (parent.isset(item['nstyle']))
+                                                data['library']['nstyle'] = item['nstyle'];
+                                            if (parent.isset(item['content']))
+                                                data['library']['content'] = item['content'];
+                                            if (parent.isset(item['color']))
+                                                data['library']['color'] = item['color'];
+                                        }
+
+                                    }
+
+                                });
+                                if (parent.isset(item['text']))
+                                    data['text'] = item['text'];
+                                if (parent.isset(item['language']))
+                                    data['language'] = item['language'];
+                                if (parent.isset(item['classification']))
+                                    data['classification'] = item['classification'];
+                                //pega o tipo do element
+                                var type = item['type_name'];
+                                //pega o id do element a partir do indice
+                                var elementID = i.slice(1);
+
+                                var idbd = elementID;
+                                var loaddata = data;
+                                loaddata['cobjectID'] = parent.CObjectID;
+                                //var tagAdd = $('#'+piecesetID+"_forms");
+
+
+                                //Tipo do Elemento
+                                switch (type) {
+                                    case 'multimidia'://Library                   
+                                        switch (loaddata['library']['type']) {
+                                            case 'image'://image
+                                                parent.insertImgCobject(idbd, loaddata);
+                                                break;
+                                            case 'movie'://movie
+                                                // this.addVideo(tagAdd, loaddata, idbd);
+                                                break;
+                                            case 'sound'://sound
+                                                parent.insertSoundCobject(idbd, loaddata);
+                                                break;
+                                        }
+                                        break;
+                                    default:
+                                }
+                                //================
+
+                               // parent.addElement(elementID, type, data);
                             }
 
                     }

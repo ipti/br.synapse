@@ -496,7 +496,7 @@ class EditorController extends Controller {
                             $cobject_description = $_POST['COdescription'];
                             $cobject = Cobject::model()->findByPk($cobject_id);
                             $cobject->description = $cobject_description;
-                            $cobject->save();        
+                            $cobject->save();
                         }
 
                         break;
@@ -976,6 +976,37 @@ class EditorController extends Controller {
                     $json['themeID'] = $cobject->theme_id;
                     $json['templateID'] = $cobject->template_id;
                     $json['description'] = $cobject->description;
+
+                    //===============Cobject-Element===============
+
+                    $CobjectElement = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobjectID), array('order' => '`position`'));
+
+                    foreach ($CobjectElement as $cElem):
+                        $Element = EditorElement::model()->findByAttributes(array('id' => $cElem->element_id));
+                        $json['E' . $Element->id] = array();
+                        $json['E' . $Element->id]['type_name'] = $Element->type->name;
+
+                        //=============POSITION==================================
+                        $json['E' . $Element->id]['position'] = $cElem->position;
+
+                        $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
+                        foreach ($ElementProperty as $ep):
+                            if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                $Library = Library::model()->findByAttributes(array('id' => $ep->value));
+                                $json['E' . $Element->id]['L' . $Library->id] = array();
+                                $json['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
+                                $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
+                                foreach ($LibraryProperty as $lp):
+                                    $json['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
+                                endforeach;
+                            }else {
+                                $json['E' . $Element->id][$ep->property->name] = $ep->value;
+                            }
+                        endforeach;
+                    endforeach;
+
+                    //==============================================
+
                     $Srceens = EditorScreen::model()->findAllByAttributes(array('cobject_id' => $cobjectID), array('order' => '`order`'));
 
                     foreach ($Srceens as $sc):
@@ -1091,6 +1122,8 @@ class EditorController extends Controller {
                         case 'E':
 
                             $expl_element = explode('PS', $id);
+                            var_dump($id);exit();
+                            
                             if (count($expl_element) == 2) {
                                 //Então realmente é uma PS
                                 $id_element = $expl_element[0];
@@ -1177,7 +1210,7 @@ class EditorController extends Controller {
     }
 
     // Dois argumentos, pois, um elemento pode está em várias pieces
-    private function delElement($id, $pieceOrPset_id, $isElementPieceSet) {
+    private function delElement($id, $pieceOrPset_id, $isElementPieceSet, $isElementCobject) {
         $isElementPieceSet = isset($isElementPieceSet) && $isElementPieceSet;
         $newElement = EditorElement::model()->findByPk($id);
         if (!$isElementPieceSet) {
