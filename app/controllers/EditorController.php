@@ -1121,19 +1121,24 @@ class EditorController extends Controller {
                             break;
                         case 'E':
 
-                            $expl_element = explode('PS', $id);
-                            var_dump($id);exit();
-                            
-                            if (count($expl_element) == 2) {
+                            $expl_element_PS = explode('PS', $id);
+                            $expl_element_CO = explode('CO', $id);
+
+                            if (count($expl_element_PS) == 2) {
                                 //Então realmente é uma PS
-                                $id_element = $expl_element[0];
-                                $id_pieceSet = $expl_element[1];
+                                $id_element = $expl_element_PS[0];
+                                $id_pieceSet = $expl_element_PS[1];
                                 $delAll_Ok = $this->delElement($id_element, $id_pieceSet, true);
+                            } else if (count($expl_element_CO) == 2) {
+                                //Então é um element do Cobject
+                                $id_element = $expl_element_CO[0];
+                                $id_cobject = $expl_element_CO[1];
+                                $delAll_Ok = $this->delElement($id_element, $id_cobject, false, true);
                             } else {
                                 //É uma P -> piece
-                                $expl_element = explode('P', $id);
-                                $id_element = $expl_element[0];
-                                $id_piece = $expl_element[1];
+                                $expl_element_PS = explode('P', $id);
+                                $id_element = $expl_element_PS[0];
+                                $id_piece = $expl_element_PS[1];
                                 $delAll_Ok = $this->delElement($id_element, $id_piece, false);
                             }
                     }
@@ -1210,12 +1215,14 @@ class EditorController extends Controller {
     }
 
     // Dois argumentos, pois, um elemento pode está em várias pieces
-    private function delElement($id, $pieceOrPset_id, $isElementPieceSet, $isElementCobject) {
+    private function delElement($id, $id_Pai, $isElementPieceSet, $isElementCobject) {
         $isElementPieceSet = isset($isElementPieceSet) && $isElementPieceSet;
+        $isElementCobject = isset($isElementCobject) && $isElementCobject;
+
         $newElement = EditorElement::model()->findByPk($id);
-        if (!$isElementPieceSet) {
+        if (!$isElementPieceSet && !$isElementCobject) {
             $Element_Piece = EditorPieceElement::model()->findByAttributes(
-                    array('piece_id' => $pieceOrPset_id, 'element_id' => $newElement->id));
+                    array('piece_id' => $id_Pai, 'element_id' => $newElement->id));
             $Performance_Actor = PeformanceActor::model()->findByAttributes(
                     array('piece_element_id' => $Element_Piece->id));
             //Somente DELETA se NÃO existir alguma PERFORMANCE ACTOR
@@ -1236,10 +1243,17 @@ class EditorController extends Controller {
                 return true;
                 //==========================
             }
-        }else {
+        }else if ($isElementCobject) {
+            //É um elemento do Cobject
+            $Element_Cobject = CobjectElement::model()->findByAttributes(
+                    array('cobject_id' => $id_Pai, 'element_id' => $newElement->id));
+            //Desvincula o elemento do Cobject. 
+            $Element_Cobject->delete();
+            return true;
+        } else {
             //É um elemento da PieceSet
             $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
-                    array('pieceset_id' => $pieceOrPset_id, 'element_id' => $newElement->id));
+                    array('pieceset_id' => $id_Pai, 'element_id' => $newElement->id));
             //Desvincula o elemento da PieceSet. 
             $Element_PieceSet->delete();
             return true;

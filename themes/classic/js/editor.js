@@ -678,12 +678,23 @@ function editor() {
     //Add imagem do Cobject
     this.insertImgCobject = function(idbd, loaddata) {
         var tagAdd = $('#cobject_description');
+        //Verificar se já existe um .elementCobject
+         var thereElementCobject = tagAdd.find('.elementCobject').length > 0;
+
         if (!this.isset(idbd)) {
-            tagAdd.append("<span class='elementCobject'></span>");
+            if (thereElementCobject) {
+                tagAdd.children('span:last').after("<span class='elementCobject'></span>");
+            } else {
+                tagAdd.children('#COdescription').after("<span class='elementCobject'></span>");
+            }
             this.addImage(tagAdd.find('span:last'), loaddata, idbd);
         } else {
             var coIDBD = loaddata['cobjectID'];
-            tagAdd.append("<span class='elementCobject'></span>");
+            if (thereElementCobject) {
+                tagAdd.children('span:last').after("<span class='elementCobject'></span>");
+            } else {
+                tagAdd.children('#COdescription').after("<span class='elementCobject'></span>");
+            }
             this.addImage(tagAdd.find('span:last'), loaddata, idbd);
         }
     }
@@ -692,18 +703,25 @@ function editor() {
     //Add Sound no Cobject
     this.insertSoundCobject = function(idbd, loaddata) {
         var tagAdd = $('#cobject_description');
-
+        //Verificar se já existe um .elementCobject
+        var thereElementCobject = tagAdd.find('.elementCobject').length > 0;
         if (!this.isset(idbd)) {
-            tagAdd.append("<span class='elementCobject'></span>");
+            if (thereElementCobject) {
+                tagAdd.children('span:last').after("<span class='elementCobject'></span>");
+            } else {
+                tagAdd.children('#COdescription').after("<span class='elementCobject'></span>");
+            }
             this.addSound(tagAdd.find('span:last'), loaddata, idbd);
         } else {
             var coIDBD = loaddata['cobjectID'];
-            tagAdd.append("<span class='elementCobject'></span>");
+            if (thereElementCobject) {
+                tagAdd.children('span:last').after("<span class='elementCobject'></span>");
+            } else {
+                tagAdd.children('#COdescription').after("<span class='elementCobject'></span>");
+            }
             this.addSound(tagAdd.find('span:last'), loaddata, idbd);
         }
     }
-
-
 
 
     this.insertAudioPieceSet = function(piecesetID, idbd, loaddata) {
@@ -1149,8 +1167,10 @@ function editor() {
         }
     }
     this.delElement = function(id, isRecursion) {
+        console.log(id);
         var isRecursion = this.isset(isRecursion) && isRecursion;
         var isPiecesetElement = false;
+        var isCobjectElement = false;
 
         var doDel = isRecursion ? true : confirm(MSG_REMOVE_ELEMENT);
         if (typeof id != 'object') {
@@ -1162,6 +1182,10 @@ function editor() {
                 var id_P = '';
                 var id_PS = '';
                 var limitSuper = iddb_Piece.length - 2; // 2=> desconsidera o element e seu tipo
+
+                //Se for = 0 , então é um elemento do Cobject
+                isCobjectElement = (limitSuper == 0);
+
                 for (i = 0; i < limitSuper; i++) {
                     //Menos o último
                     if (i == limitSuper - 1) {
@@ -1174,12 +1198,20 @@ function editor() {
                     }
                 }
 
-                if (!isPiecesetElement) {
+
+
+                if (!isPiecesetElement && !isCobjectElement) {
                     var iddb_P = $('#' + id_P).attr('idbd');
                     if (this.isset(iddb)) {
                         //Adiciona num Array de objetos deletados em ordem.
                         this.orderDelets.push('E' + iddb + 'P' + iddb_P);
                     }
+                } else if (isCobjectElement) {
+                    if (this.isset(iddb)) {
+                        //Adiciona num Array de objetos deletados em ordem.
+                        this.orderDelets.push('E' + iddb + 'CO' + self.CObjectID);
+                    }
+
                 } else {
                     id_PS = id_P;
                     var iddb_PS = $('#' + id_PS + '_list').attr('idbd');
@@ -2190,7 +2222,7 @@ function editor() {
                                                 }
                                                 //================
 
-                                               // parent.addElement(elementID, type, data);
+                                                // parent.addElement(elementID, type, data);
                                             }
 
 
@@ -2269,7 +2301,7 @@ function editor() {
                                 }
                                 //================
 
-                               // parent.addElement(elementID, type, data);
+                                // parent.addElement(elementID, type, data);
                             }
 
                     }

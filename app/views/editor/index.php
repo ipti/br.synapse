@@ -77,8 +77,9 @@ echo "newEditor.isload = $load; \n";
     <div id="loading"></div>
     <div id="cobject_description">
          <input type="text" class="actName" id ="COdescription" value="" />
+         <div class="clear"></div>  
     </div>
-    <span class="clear"></span>
+    
     <div class="content">
         <div class="screen" id="sc0">
         </div>
