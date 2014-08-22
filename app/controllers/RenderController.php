@@ -147,6 +147,16 @@ class RenderController extends Controller {
         if (isset($cobject->father)) {
             $json['father'] = $cobject->father->id;
         }
+
+        //Obter os elementos desse Cobject
+        $CobjectElements = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobject->id));
+        $contElement = -1;
+        foreach ($CobjectElements as $CobjectElement):
+            $contElement++;
+            $this->buildJsonElement(true, false, $CobjectElement, $json, ['a5' => $contElement], $buildZipMultimedia);
+        endforeach;
+
+
         $a5 = $a2 = $a3 = -1;
 
         if (isset($cobject->editorScreens)) {
@@ -165,7 +175,7 @@ class RenderController extends Controller {
                     foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
                         //build elements of the PieceSet
                         $a5++;
-                        $this->buildJsonElement(true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
+                        $this->buildJsonElement(false, true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
                     }
 
                     $a4 = -1;
@@ -177,7 +187,7 @@ class RenderController extends Controller {
                         $a5 = (int) -1;
                         foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
                             $a5++;
-                            $this->buildJsonElement(false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5], $buildZipMultimedia);
+                            $this->buildJsonElement(false, false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5], $buildZipMultimedia);
                         }
                     }
                 }
@@ -189,14 +199,14 @@ class RenderController extends Controller {
         }
     }
 
-    private function buildJsonElement($isPiecesetElement, $pieceOrPieceSet_element, &$json, $as, $buildZipMultimedia) {
+    private function buildJsonElement($isCobjectElement, $isPiecesetElement, $father, &$json, $as, $buildZipMultimedia) {
         //Begin Function Element =======================================
         // $gproperties = ELEMENT_PROPERTY + LIBRARY_PROPERTY
 
         $pe_properties = $events = $gproperties = array();
 
-        if (!$isPiecesetElement) {
-            foreach ($pieceOrPieceSet_element->editorPieceelementProperties as $property) {
+        if (!$isPiecesetElement && !$isCobjectElement) {
+            foreach ($father->editorPieceelementProperties as $property) {
                 $pe_properties[$property->property->name] = $property->value;
             }
 
@@ -224,18 +234,18 @@ class RenderController extends Controller {
               $properties[] = array('name' => 'group', 'value' => $pieceset_piece->piece->id);
               } */
 
-            foreach ($pieceOrPieceSet_element->editorEvents as $event) {
+            foreach ($father->editorEvents as $event) {
                 $events[] = array('name' => $event->type->name, 'event' => $event->event, 'action' => $event->action);
             }
         }
 
-        foreach ($pieceOrPieceSet_element->element->editorElementProperties as $gproperty) {
+        foreach ($father->element->editorElementProperties as $gproperty) {
             $gproperties[] = array('name' => $gproperty->property->name, 'value' => $gproperty->value);
             if ($gproperty->property->name == 'library_id') {
                 $libid = $gproperty->value;
             }
         }
-        if ($pieceOrPieceSet_element->element->type->name == 'multimidia') {
+        if ($father->element->type->name == 'multimidia') {
             $lib = Library::model()->findByAttributes(array('id' => $libid));
             foreach ($lib->libraryProperties as $libproperty) {
                 $gproperties[] = array('name' => $libproperty->property->name, 'value' => $libproperty->value);
@@ -245,12 +255,12 @@ class RenderController extends Controller {
                     eval('$name_temp = $this->tempArchiveZip' . $lib->type->name . ';');
                     $name_temp->addFile($src, '/' . $libproperty->value);
                     //Array de tipos que este grupo possui
-                    if (!$isPiecesetElement) {
+                    if (!$isPiecesetElement && !$isCobjectElement) {
                         if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
-                            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$lib->type->name]=$lib->type->name;
+                            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$lib->type->name] = $lib->type->name;
                         } else {
                             $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'] = array();
-                            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$lib->type->name]=$lib->type->name;
+                            $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$lib->type->name] = $lib->type->name;
                         }
                     }
                 }
@@ -258,17 +268,17 @@ class RenderController extends Controller {
             $gproperties[] = array('name' => 'library_type', 'value' => $lib->type->name);
         } else {
             //Array de tipos que este grupo possui
-            if (!$isPiecesetElement) {
+            if (!$isPiecesetElement && !$isCobjectElement) {
                 if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
-                    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$pieceOrPieceSet_element->element->type->name]=$pieceOrPieceSet_element->element->type->name;
+                    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$father->element->type->name] = $father->element->type->name;
                 } else {
                     $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'] = array();
-                    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$pieceOrPieceSet_element->element->type->name]=$pieceOrPieceSet_element->element->type->name;
+                    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'][$father->element->type->name] = $father->element->type->name;
                 }
             }
         }
 
-        foreach ($pieceOrPieceSet_element->element->editorElementAliases as $alias) {
+        foreach ($father->element->editorElementAliases as $alias) {
             $gproperties[] = array('type' => $alias->type->name, 'value' => $gproperty->value);
         }
 
@@ -276,26 +286,36 @@ class RenderController extends Controller {
         //$json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'][$as['a5']] = array();
         $aTemp = array();
 
-        if (!$isPiecesetElement) {
-            $aTemp["id"] = $pieceOrPieceSet_element->element->id;
-            $aTemp["pieceElementID"] = $pieceOrPieceSet_element->id;
+        if (!$isPiecesetElement && !$isCobjectElement) {
+            $aTemp["id"] = $father->element->id;
+            $aTemp["pieceElementID"] = $father->id;
             $aTemp['pieceElement_Properties'] = $pe_properties;
             $aTemp['events'] = $events;
             $aTemp['generalProperties'] = $gproperties;
-            $aTemp['type'] = (string) $pieceOrPieceSet_element->element->type->name;
+            $aTemp['type'] = (string) $father->element->type->name;
             if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'])) {
                 $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
             }
             array_push($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'], $aTemp);
-        } else {
-            $aTemp['id'] = $pieceOrPieceSet_element->element->id;
+        } else if ($isPiecesetElement) {
+            $aTemp['id'] = $father->element->id;
             $aTemp['generalProperties'] = $gproperties;
-            $aTemp['type'] = $pieceOrPieceSet_element->element->type->name;
+            $aTemp['type'] = $father->element->type->name;
             if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'])) {
                 $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'] = array();
             }
 
             $json['screens'][$as['a2']]['piecesets'][$as['a3']]['elements'][$as['a5']] = $aTemp;
+        } else {
+            //É Cobject_Element
+            $aTemp['id'] = $father->element->id;
+            $aTemp['generalProperties'] = $gproperties;
+            $aTemp['type'] = $father->element->type->name;
+            if (!isset($json['elements'])) {
+                $json['elements'] = array();
+            }
+
+            $json['elements'][$as['a5']] = $aTemp;
         }
         // End Function Element=========================================
     }
@@ -408,8 +428,7 @@ class RenderController extends Controller {
             $array_cobjectBlock[0]['id'] = $cobjectBlock->id;
             $array_cobjectBlock[0]['name'] = $cobjectBlock->name;
             $array_cobjectBlock[0]['discipline_id'] = $cobjectBlock->discipline_id;
-            var_dump($array_cobjectBlock);
-            
+
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
                     array('cobject_block_id' => $array_cobjectBlock[0]['id']));
