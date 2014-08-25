@@ -89,13 +89,14 @@
                 var cobjectsFromBlock = null;
                 //Obter todos os Cobject deste Bloco
                 var getcobjectsFromBlock =  newMeet.DB_synapse.getCobjectsFromBlock(block_id, function(objectsThisBlock){
-                    
+                  
                     //count do número de objetos
                     var num_objects = 0;
                     $.each(objectsThisBlock, function(){
                         num_objects++;
                     });
                     
+                   
                     $.each(objectsThisBlock, function(idx, object){
                         //Para cada Cobject Cria sua Dom
                         newMeet.DB_synapse.getCobject(object, function(json_cobject){

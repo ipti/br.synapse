@@ -20,15 +20,19 @@ ul, ol, li {
 }
 
 .cobjectInfo {
-    display: none;
+    text-align: center;
+/*    top: 50%;
+    transform: translateY(-50%);*/
 }
 
 .cobjectInfo span{
-    text-decoration: none; 
-    list-style: none; 
-    font-size:14px; 
-    /*text-align: center; 
-    font-weight: bold;*/
+    /*    //display: none;
+         
+        text-decoration: none; 
+        list-style: none; 
+        font-size:14px; 
+        text-align: center; 
+        font-weight: bold;*/
 }
 
 .toolbar {
@@ -58,6 +62,20 @@ ul, ol, li {
     display: block;
 }
 
+.elementCO {
+    display: inline-block;
+    text-align: center;
+}
+
+.elementCO.element-build_sound .soundIconPause{
+    height: 67px;
+    width: 67px;
+}
+
+.elementCO.element-build_image{
+    width: 100px;
+}
+
 fieldset{
     border:2px solid gray;
 }
@@ -68,7 +86,7 @@ fieldset{
 }
 
 #import_data #enviar{
- 
+
 }
 
 .toolBar {
@@ -229,6 +247,10 @@ fieldset{
 .elementText {
     font-size: 19px;
     text-transform: uppercase;
+}
+
+.content{
+    text-align: center;
 }
 
 .element img {

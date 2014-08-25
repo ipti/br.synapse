@@ -34,6 +34,7 @@ var DomCobject = function(cobject, idx) {
     //==========================
 
     this.pos = {
+        elementCO: 0,
         screen: 0,
         pieceset: 0,
         elementPS: 0,
@@ -42,6 +43,7 @@ var DomCobject = function(cobject, idx) {
         element: 0
     }
     this.id = {
+        elementCO: 0,
         screen: 0,
         pieceset: 0,
         elementPS: 0,
@@ -52,7 +54,17 @@ var DomCobject = function(cobject, idx) {
     this.buildAll = function() {
         self.dom.append(self.buildInfo_Cobject);
         self.dom.append(self.domContent);
-        
+        //Construir o dump dos elementos do CObject
+        var cobjectInfo = self.dom.children(".cobjectInfo");
+       // this.domContent.prepend;
+        cobjectInfo.prepend('<span id="description" class="elementText">'+this.cobject.description+'</span>');
+        if (this.isset(this.cobject.elements)) {
+            for (this.pos.elementCO = 0; this.pos.elementCO < this.cobject.elements.length; this.pos.elementCO++) {
+                cobjectInfo.prepend(self.buildElement_CO());
+            }
+        }
+
+
         for (this.pos.screen = 0; this.pos.screen < this.cobject.screens.length; this.pos.screen++) {
             self.id.screen = this.cobject.screens[this.pos.screen].id;
             self.domContent.append(self.buildScreen());
@@ -148,16 +160,16 @@ var DomCobject = function(cobject, idx) {
                 // Novo Grupo
                 domGroup = $('<div group="' + newIdGroup + '" class="' + self.cobject.template_code + ' group" ></div>');
                 //Add class drop somente se for um group Ask
-                if(self.cobject.template_code == 'DDROP') {
-                    if(isAskGroup){
+                if (self.cobject.template_code == 'DDROP') {
+                    if (isAskGroup) {
                         domGroup.addClass('drag');
-                    }else{
+                    } else {
                         // is ANSWER-GROUP
                         domGroup.addClass('drop');
                     }
-                    
+
                 }
-            } else{
+            } else {
                 //Grupo existente
                 domGroup = possibleGroup;
             }
@@ -168,15 +180,15 @@ var DomCobject = function(cobject, idx) {
             for (self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
                 self.id.element = elements_group.elements[self.pos.element].id;
                 var element = self.buildElement();
-                if(order_type_elements.length == 0){
+                if (order_type_elements.length == 0) {
                     order_type_elements[self.currentElementType] = new Array();
                     order_type_elements[self.currentElementType].push(element);
-                }else{
+                } else {
                     //Existe pelo menos Um
-                    if(self.isset(order_type_elements[self.currentElementType])){
+                    if (self.isset(order_type_elements[self.currentElementType])) {
                         //Push neste
                         order_type_elements[self.currentElementType].push(element);
-                    }else{
+                    } else {
                         //É um novo
                         order_type_elements[self.currentElementType] = new Array();
                         order_type_elements[self.currentElementType].push(element);
@@ -184,31 +196,31 @@ var DomCobject = function(cobject, idx) {
                 }
                 domGroup.addClass(self.currentElementType);
             }
-            
+
             //Agora apenda os elementos do grupo acima em ordem: imagem - som - texto
-            if(self.isset(order_type_elements['build_image'])){
+            if (self.isset(order_type_elements['build_image'])) {
                 //Apenda As Imagens
-                $.each(order_type_elements['build_image'], function(idx, element){
+                $.each(order_type_elements['build_image'], function(idx, element) {
                     domGroup.append(element);
                 });
             }
-            if(self.isset(order_type_elements['build_sound'])){
+            if (self.isset(order_type_elements['build_sound'])) {
                 //Apenda Os Sons
-                $.each(order_type_elements['build_sound'], function(idx, element){
+                $.each(order_type_elements['build_sound'], function(idx, element) {
                     domGroup.append(element);
                 });
             }
-            if(self.isset(order_type_elements['build_text'])){
+            if (self.isset(order_type_elements['build_text'])) {
                 //Apenda os Textos
-                $.each(order_type_elements['build_text'], function(idx, element){
+                $.each(order_type_elements['build_text'], function(idx, element) {
                     domGroup.append(element);
                 });
             }
-            if (isNewGroup){
+            if (isNewGroup) {
                 //Se for um novo Grupo, então add o novo
                 domTypeGroup.append(domGroup);
             }
-            
+
         });
         //Armazena todos os grupos de cada peça
         objGroups_currentPiece.istrue = null;
@@ -251,21 +263,21 @@ var DomCobject = function(cobject, idx) {
 
     this.buildElementPS = function() {
         var isElement_PieceSet = true;
-        return self.buildElement_AEL(isElement_PieceSet);
+        return self.buildElement_P_PS(isElement_PieceSet);
     }
 
     this.buildElement_MTE = function() {
-        return self.buildElement_AEL();
+        return self.buildElement_P_PS();
     }
     this.buildElement_DDROP = function() {
-        return self.buildElement_AEL();
+        return self.buildElement_P_PS();
     }
-    
+
 //    this.buildElement_ = function() {
 //        return self.buildElement_AEL();
 //    }
 
-    this.buildElement_AEL = function(isElement_PieceSet) {
+    this.buildElement_P_PS = function(isElement_PieceSet) {
         var html = "";
         var elementID = 0;
         if (self.isset(isElement_PieceSet) && isElement_PieceSet) {
@@ -301,6 +313,42 @@ var DomCobject = function(cobject, idx) {
         }
         self.currentElementType = strBuild_library_type;
         self.domElement = $('<li class="element element-' + strBuild_library_type + '" id="' + elementID + '">' + html + '</li>');
+        return self.domElement;
+    }
+
+
+
+
+    this.buildElement_CO = function() {
+        var html = "";
+        var elementID = 0;
+        elementID = self.id.elementCO;
+        var currentElement = self.cobject.elements[self.pos.elementCO];
+        var strBuild_library_type = "";
+        if (currentElement.type == 'multimidia') {
+            var properties = "var properties = {";
+            $.each(currentElement.generalProperties, function(i, item) {
+                if (item['name'] == 'library_type') {
+                    strBuild_library_type = "build_" + item['value'];
+                } else {
+                    properties += "'" + item['name'] + "':'" + item['value'] + "',";
+                }
+            });
+            properties += "};";
+
+            html += eval('self.' + strBuild_library_type + '("' + properties + '");');
+
+        } else if (currentElement.type == 'text') {
+            strBuild_library_type = 'build_text';
+            var properties = "var properties = {";
+            $.each(currentElement.generalProperties, function(i, item) {
+                properties += "'" + item['name'] + "':'" + item['value'] + "',";
+            });
+            properties += "};";
+            html += self.build_text(properties);
+        }
+        self.currentElementType = strBuild_library_type;
+        self.domElement = $('<li class="element elementCO element-' + strBuild_library_type + '" id="' + elementID + '">' + html + '</li>');
         return self.domElement;
     }
 
@@ -401,12 +449,12 @@ var DomCobject = function(cobject, idx) {
         var discipline = self.cobject.discipline;
         var content = self.cobject.content;
         var html = $('<div class="cobjectInfo"></div>');
-        html.append('<span><b>' + COBJECT_GOAL + ":</b> " + goal + " <b>" + COBJECT_TYPE + ":</b> " + type + " <br><b>" + COBJECT_DEGREE_NAME + ":</b> " + degree_name +
-            " <b>" + COBJECT_DISCIPLINE + ":</b> " + discipline + " <b>" + COBJECT_CONTENT + ":</b> " + content + '<span>');
+      // html.append('<span><b>' + COBJECT_GOAL + ":</b> " + goal + " <b>" + COBJECT_TYPE + ":</b> " + type + " <br><b>" + COBJECT_DEGREE_NAME + ":</b> " + degree_name +
+      //         " <b>" + COBJECT_DISCIPLINE + ":</b> " + discipline + " <b>" + COBJECT_CONTENT + ":</b> " + content + '<span>');
         return html;
     }
 
-    
+
 
     this.buildInfo_PieceSet = function() {
         var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
@@ -420,14 +468,14 @@ var DomCobject = function(cobject, idx) {
             //Construir os elementos dessa PieceSet
             for (this.pos.elementPS = 0; this.pos.elementPS < elementPS_length; this.pos.elementPS++) {
                 self.id.elementPS = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].elements[this.pos.elementPS].id;
-                var tmpelement = self.buildElementPS()
-                if(self.cobject.template_code == 'TXT'){
-                   if(self.currentElementType == 'build_sound'){
-                       self.domPieceSet.find('div.book-right div.piece').prepend(tmpelement);
-                   }else{
-                       html.append(tmpelement);
-                   }
-                }else{
+                var tmpelement = self.buildElementPS();
+                if (self.cobject.template_code == 'TXT') {
+                    if (self.currentElementType == 'build_sound') {
+                        self.domPieceSet.find('div.book-right div.piece').prepend(tmpelement);
+                    } else {
+                        html.append(tmpelement);
+                    }
+                } else {
                     html.append(tmpelement);
                 }
                 html.addClass(self.currentElementType);
@@ -441,6 +489,8 @@ var DomCobject = function(cobject, idx) {
         }
         return html;
     }
+
+
 
     this.isset = function(variable) {
         return (variable !== undefined && variable !== null);

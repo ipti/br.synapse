@@ -498,20 +498,29 @@ this.DB = function() {
                 var requestGet = cobjectStore.index('cobject_block_id');
                 var objectsThisBlock = new Array();
                 var singleKeyRange = IDBKeyRange.only(block_id);
+                var existBlock = false;
                 requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                     var cursor = event.target.result;
+                     console.log(cursor);
                     if (cursor) {
                         // Faz algo com o que encontrar
+                        existBlock = true;
                         objectsThisBlock.push(cursor.value.cobject_id);
                         cursor.continue();
                     } else {
                         //Finalisou a Pesquisa
-                        callBack(objectsThisBlock);
+                        if(existBlock){
+                            callBack(objectsThisBlock);
+                        }else{
+                            console.log("Nenhum Cobject foi encontrado para este Bloco");
+                        }
+                        
                     }
 
                 };
                 requestGet.onerror = function(event) {
                 // Tratar erro!
+                  console.log("Não encontrou Cobjects para estes Bloco!");
                 }
             }
             DBsynapse.onblocked = function(event) {
