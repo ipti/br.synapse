@@ -501,7 +501,6 @@ this.DB = function() {
                 var existBlock = false;
                 requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                     var cursor = event.target.result;
-                     console.log(cursor);
                     if (cursor) {
                         // Faz algo com o que encontrar
                         existBlock = true;
