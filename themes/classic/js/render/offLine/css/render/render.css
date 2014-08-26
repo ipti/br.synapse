@@ -21,14 +21,14 @@ ul, ol, li {
 
 .cobjectInfo {
     text-align: center;
-    top: 100%;
-    transform: translateY(0%);
 }
 
 .elementCOText{
     font-size: 14px;
     text-transform: uppercase;
-    color:#51B899;
+    position: absolute;
+    top: 0%;
+    transform: translateY(75%);    
 }
 
 .cobjectInfo span{
