@@ -57,7 +57,7 @@ var DomCobject = function(cobject, idx) {
         //Construir o dump dos elementos do CObject
         var cobjectInfo = self.dom.children(".cobjectInfo");
        // this.domContent.prepend;
-        cobjectInfo.prepend('<span id="description" class="elementText">'+this.cobject.description+'</span>');
+        cobjectInfo.prepend('<span id="description" class="elementCOText">'+this.cobject.description+'</span>');
         if (this.isset(this.cobject.elements)) {
             for (this.pos.elementCO = 0; this.pos.elementCO < this.cobject.elements.length; this.pos.elementCO++) {
                 cobjectInfo.prepend(self.buildElement_CO());
