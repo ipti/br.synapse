@@ -56,8 +56,8 @@ var DomCobject = function(cobject, idx) {
         self.dom.append(self.domContent);
         //Construir o dump dos elementos do CObject
         var cobjectInfo = self.dom.children(".cobjectInfo");
-       // this.domContent.prepend;
-        cobjectInfo.prepend('<span id="description" class="elementCOText">'+this.cobject.description+'</span>');
+        cobjectInfo.prepend('<span id="description" class="elementCOText">'+
+                self.isset(this.cobject.description) ? this.cobject.description : "" +'</span>');
         if (this.isset(this.cobject.elements)) {
             for (this.pos.elementCO = 0; this.pos.elementCO < this.cobject.elements.length; this.pos.elementCO++) {
                 cobjectInfo.prepend(self.buildElement_CO());
@@ -273,9 +273,9 @@ var DomCobject = function(cobject, idx) {
         return self.buildElement_P_PS();
     }
 
-//    this.buildElement_ = function() {
-//        return self.buildElement_AEL();
-//    }
+    this.buildElement_AEL = function() {
+        return self.buildElement_P_PS();
+    }
 
     this.buildElement_P_PS = function(isElement_PieceSet) {
         var html = "";
