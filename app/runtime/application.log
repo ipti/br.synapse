@@ -4998,3 +4998,1118 @@ Stack trace:
 REQUEST_URI=/themes/classic/js/render/cobject.js
 HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
 ---
+2014/08/27 10:59:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/27 10:59:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/27 10:59:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/27 10:59:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/27 10:59:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/27 11:05:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:05:09 [error] [php] Undefined variable: tmp (/var/www/Synapse/app/controllers/EditorController.php:1315)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#2 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#3 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#4 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#5 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#7 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#9 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/upload
+in /var/www/Synapse/app/controllers/EditorController.php (1315)
+in /var/www/Synapse/index.php (23)
+2014/08/27 11:05:42 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:05:49 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes.<br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:06:44 [error] [exception.Exception] exception 'Exception' with message '33db7dda108a72b46cf23fd2953835c6.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:07:27 [error] [exception.Exception] exception 'Exception' with message '3d4932ba2a865616b63a9fd9fcf716fa.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:08:11 [error] [exception.Exception] exception 'Exception' with message '5c5b23ff621ca0778ad2014d741dcad0.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:10:03 [error] [exception.Exception] exception 'Exception' with message '611d9e9faa60e1671046487be769febd.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:10:27 [error] [exception.Exception] exception 'Exception' with message '256be667bf73b880395cdae792071a23.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:10:51 [error] [exception.Exception] exception 'Exception' with message 'dea84fb5328b0463e50cc51b9040f403.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:36:23 [error] [exception.Exception] exception 'Exception' with message 'cb955e09b76cb5bcaa252d012da078ab.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:38:08 [error] [exception.Exception] exception 'Exception' with message '/tmp/phpu0yUMA87621.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:40:10 [error] [exception.Exception] exception 'Exception' with message '/tmp/phpZipbFj' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:41:07 [error] [exception.Exception] exception 'Exception' with message 'Monkey_2.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:41:26 [error] [exception.Exception] exception 'Exception' with message '7a50fc49d7675fcb66e01c4583f7d1bd' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:41:48 [error] [exception.Exception] exception 'Exception' with message '7a50fc49d7675fcb66e01c4583f7d1bd' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:42:08 [error] [exception.Exception] exception 'Exception' with message '7a50fc49d7675fcb66e01c4583f7d1bd' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:43:14 [error] [exception.Exception] exception 'Exception' with message '5674333bc40f89e4920e0c6dcedefc0f.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:43:34 [error] [exception.Exception] exception 'Exception' with message '5674333bc40f89e4920e0c6dcedefc0f.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:52:35 [error] [exception.Exception] exception 'Exception' with message '/var/www/Synapse/app/../rsc/library/image/5674333bc40f89e4920e0c6dcedefc0f.jpg' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:53:02 [error] [exception.Exception] exception 'Exception' with message '1' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:53:24 [error] [exception.Exception] exception 'Exception' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:53:43 [error] [exception.Exception] exception 'Exception' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:54:05 [error] [exception.Exception] exception 'Exception' with message '1' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:54:23 [error] [php] Missing argument 4 for EditorController::delElement(), called in /var/www/Synapse/app/controllers/EditorController.php on line 1131 and defined (/var/www/Synapse/app/controllers/EditorController.php:1218)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#3 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#4 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#5 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#7 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#10 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#11 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (1218)
+in /var/www/Synapse/app/controllers/EditorController.php (1131)
+in /var/www/Synapse/index.php (23)
+2014/08/27 11:54:52 [error] [exception.Exception] exception 'Exception' with message '1' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:55:02 [error] [exception.Exception] exception 'Exception' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:55:12 [error] [exception.Exception] exception 'Exception' with message '1' in /var/www/Synapse/app/controllers/EditorController.php:1319
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:56:16 [error] [exception.Exception] exception 'Exception' with message '1' in /var/www/Synapse/app/controllers/EditorController.php:1320
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:56:24 [error] [exception.Exception] exception 'Exception' in /var/www/Synapse/app/controllers/EditorController.php:1320
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:57:19 [error] [exception.Exception] exception 'Exception' with message '1' in /var/www/Synapse/app/controllers/EditorController.php:1320
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 11:57:27 [error] [exception.Exception] exception 'Exception' with message 'NO' in /var/www/Synapse/app/controllers/EditorController.php:1320
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:05:45 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes.<br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:09:15 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes.<br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:45:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/27 12:45:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/27 12:45:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/27 12:45:40 [error] [php] Array to string conversion (/var/www/Synapse/app/controllers/EditorController.php:962)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#2 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#3 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#4 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#5 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#7 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#9 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (962)
+in /var/www/Synapse/index.php (23)
+2014/08/27 12:46:48 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes: <br>' in /var/www/Synapse/app/controllers/EditorController.php:962
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:47:28 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes: <br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:47:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:47:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:47:43 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes: <br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:48:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:50:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:50:18 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes: <br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:50:34 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:51:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:51:11 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes: <br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:52:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:53:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:54:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:55:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 12:56:34 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Dados da Element insuficientes: <br>' in /var/www/Synapse/app/controllers/EditorController.php:961
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionJson()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('Json')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/Json')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/Json
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:00:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:00:26 [error] [php] Undefined index: value (/var/www/Synapse/app/controllers/EditorController.php:961)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#2 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#3 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#4 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#5 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#7 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#9 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (961)
+in /var/www/Synapse/index.php (23)
+2014/08/27 13:00:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:00:31 [error] [php] Undefined index: value (/var/www/Synapse/app/controllers/EditorController.php:961)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#2 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#3 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#4 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#5 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#7 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#9 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (961)
+in /var/www/Synapse/index.php (23)
+2014/08/27 13:01:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:06:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:07:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/preeditor
+---
+2014/08/27 13:07:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:09:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:09:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:09:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:09:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:09:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:09:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:10:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:10:10 [error] [php] Missing argument 4 for EditorController::delElement(), called in /var/www/Synapse/app/controllers/EditorController.php on line 1131 and defined (/var/www/Synapse/app/controllers/EditorController.php:1218)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#3 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#4 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#5 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#7 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#10 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#11 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (1218)
+in /var/www/Synapse/app/controllers/EditorController.php (1131)
+in /var/www/Synapse/index.php (23)
+2014/08/27 13:10:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:10:30 [error] [php] Missing argument 4 for EditorController::delElement(), called in /var/www/Synapse/app/controllers/EditorController.php on line 1131 and defined (/var/www/Synapse/app/controllers/EditorController.php:1218)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#3 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#4 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#5 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#7 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#10 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#11 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (1218)
+in /var/www/Synapse/app/controllers/EditorController.php (1131)
+in /var/www/Synapse/index.php (23)
+2014/08/27 13:10:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---

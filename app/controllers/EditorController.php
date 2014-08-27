@@ -958,7 +958,7 @@ class EditorController extends Controller {
                                     $change_flag->save();
                                 }
                             } else {
-                                throw new Exception("ERROR: Dados da Element insuficientes.<br>");
+                                throw new Exception("ERROR: Dados da Element insuficientes: <br>");
                             }
                         } else {
                             throw new Exception("ERROR: Operação inválida.<br>");
@@ -1308,24 +1308,32 @@ class EditorController extends Controller {
                     $size = round($file_size / 1024);
                     //se o tamanho for menor que o máximo
                     if ($size < $max_size) {
+                        //pega o nome temporário do arquivo, para poder move-lo
+                        $tmp = $_FILES['file']['tmp_name'];
+
                         //gera um código md5 concatenado com a extensão para ser o nome do arquivo
                         //e evitar duplicatas
                         //=============================
-                        $name = md5(uniqid(time())) . $ext;
+                        // $name = md5(uniqid(time())) . $ext;
+                        //Identifica cada imagem a partir de seu nome + size, 
+                        //E impedi que seja feito outro upload
+                        $name = md5($file_name . $file_size) . $ext;
+                        $fileExists = file_exists($path . $name);
+                        $fileExists = isset($fileExists) && $fileExists;
                         ///=============================
-                        //pega o nome temporário do arquivo, para poder move-lo
-                        $tmp = $_FILES['file']['tmp_name'];
-                        //tenta
-                        try {
-                            //move o arquivo temporário para o novo local
-                            $varMUF = move_uploaded_file($tmp, $path . $name);
-                            //adiciona ao retorno do json a URL e o nome do arquivo
-                            $json['url'] = $url . $name;
-                            $json['name'] = $name;
-                            $json['varMUF'] = $varMUF;
-                            //se não funcionar
-                        } catch (Exception $e) {
-                            throw new Exception("ERROR: Falha ao enviar.<br>");
+                        //adiciona ao retorno do json a URL e o nome do arquivo
+                        $json['url'] = $url . $name;
+                        $json['name'] = $name;
+                        if (!$fileExists) {
+                            //Somente faz o upload se o mesmo arquivo Não existe no servidor 
+                            try {
+                                //move o arquivo temporário para o novo local
+                                $varMUF = move_uploaded_file($tmp, $path . $name);
+                                $json['varMUF'] = $varMUF;
+                                //se não funcionar
+                            } catch (Exception $e) {
+                                throw new Exception("ERROR: Falha ao enviar.<br>");
+                            }
                         }
                     } else {
                         throw new Exception("ERROR: A arquivo deve ser de no máximo $size<br>");

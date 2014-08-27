@@ -1642,7 +1642,7 @@ function editor() {
                                             data['value'] = {};
                                             data['value']['url'] = response['url'];
                                             data['value']['name'] = response['name'];
-
+                                            console.log(data);
                                             //Salva Elemento
                                             parent.saveData(
                                                     //Dados
