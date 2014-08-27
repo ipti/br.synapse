@@ -1128,7 +1128,7 @@ class EditorController extends Controller {
                                 //Então realmente é uma PS
                                 $id_element = $expl_element_PS[0];
                                 $id_pieceSet = $expl_element_PS[1];
-                                $delAll_Ok = $this->delElement($id_element, $id_pieceSet, true);
+                                $delAll_Ok = $this->delElement($id_element, $id_pieceSet, true, false);
                             } else if (count($expl_element_CO) == 2) {
                                 //Então é um element do Cobject
                                 $id_element = $expl_element_CO[0];
@@ -1139,7 +1139,7 @@ class EditorController extends Controller {
                                 $expl_element_PS = explode('P', $id);
                                 $id_element = $expl_element_PS[0];
                                 $id_piece = $expl_element_PS[1];
-                                $delAll_Ok = $this->delElement($id_element, $id_piece, false);
+                                $delAll_Ok = $this->delElement($id_element, $id_piece, false, false);
                             }
                     }
                 endforeach;

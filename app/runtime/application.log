@@ -6113,3 +6113,75 @@ Stack trace:
 REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
 HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
 ---
+2014/08/27 13:16:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:16:59 [error] [php] Missing argument 4 for EditorController::delElement(), called in /var/www/Synapse/app/controllers/EditorController.php on line 1131 and defined (/var/www/Synapse/app/controllers/EditorController.php:1218)
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams()
+#1 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): EditorController->runAction()
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#3 /var/www/yii-1.1.14/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#4 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): EditorController->filterAccessControl()
+#5 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#6 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#7 /var/www/yii-1.1.14/framework/web/CController.php(265): EditorController->runActionWithFilters()
+#8 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): EditorController->run()
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#10 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#11 /var/www/Synapse/index.php(23): CWebApplication->run()
+REQUEST_URI=/Editor/Json
+in /var/www/Synapse/app/controllers/EditorController.php (1218)
+in /var/www/Synapse/app/controllers/EditorController.php (1131)
+in /var/www/Synapse/index.php (23)
+2014/08/27 13:20:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:20:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:20:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:20:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 13:21:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
