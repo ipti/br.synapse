@@ -213,6 +213,7 @@ class EditorController extends Controller {
             //Na Solicitação AJAX
             //include( 'cutImage.class.php' );
             $oImg = new cutImage($_POST['img']);
+          
             if ($oImg->valida() == 'OK') {
                 $oImg->posicaoCrop($_POST['x'], $_POST['y']);
                 $oImg->redimensiona($_POST['w'], $_POST['h'], 'crop');

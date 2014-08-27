@@ -679,7 +679,7 @@ function editor() {
     this.insertImgCobject = function(idbd, loaddata) {
         var tagAdd = $('#cobject_description');
         //Verificar se já existe um .elementCobject
-         var thereElementCobject = tagAdd.find('.elementCobject').length > 0;
+        var thereElementCobject = tagAdd.find('.elementCobject').length > 0;
 
         if (!this.isset(idbd)) {
             if (thereElementCobject) {
@@ -1642,7 +1642,7 @@ function editor() {
                                             data['value'] = {};
                                             data['value']['url'] = response['url'];
                                             data['value']['name'] = response['name'];
-                                            console.log(data);
+                                            data['value']['isNewImg'] = self.isset(response['varMUF']);
                                             //Salva Elemento
                                             parent.saveData(
                                                     //Dados
@@ -1654,9 +1654,11 @@ function editor() {
                                                                 } else {
                                                                     $('.savescreen').append('<br><p>ElementImage Atualizado com sucesso!</p>');
                                                                 }
-
-                                                                //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
-                                                                parent.uploaded_ImagesIDs[parent.uploadedImages++] = response['LibraryID'];
+                                                                if (data['value']['isNewImg']) {
+                                                                    //Se for uma nova Imagem, então o upload foi feito
+                                                                    //atualiza o contador de imagens enviadas e coloca o id numa array para ser enviada pelo posRender
+                                                                    parent.uploaded_ImagesIDs[parent.uploadedImages++] = response['LibraryID'];
+                                                                }
                                                                 //Atualiza o contador dos Elementos
                                                                 parent.uploadedElements++;
 
