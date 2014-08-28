@@ -329,6 +329,7 @@ this.Meet = function(options) {
                         if (self.hasNextCobject()) {
                             self.currentCobject_idx++;
                             var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
+                            $('.currentCobject').hide();
                             $('.currentCobject').removeClass('currentCobject');
                             $(selector_cobject).addClass('currentCobject');
                             nextScreen = $(selector_cobject + ' .T_screen:eq(0)');

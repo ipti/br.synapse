@@ -6433,3 +6433,363 @@ Stack trace:
 REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
 HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
 ---
+2014/08/27 14:08:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/5674333bc40f89e4920e0c6dcedefc0f.jpg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/5674333bc40f89e4920e0c6dcedefc0f.jpg
+---
+2014/08/27 14:08:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/jquery/jquery-2.0.2.min.map".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:08:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:09:04 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/eef9f55398a42b275e48ea6e1da63b5b.jpg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:09:04 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('rsc/library/ima...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/rsc/library/image/4649df783d5a15e0211559cbbee40bc4.jpeg
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index/
+---
+2014/08/27 14:10:02 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Selecione um arquivo.<br>' in /var/www/Synapse/app/controllers/EditorController.php:1349
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index
+---
+2014/08/27 14:13:51 [error] [exception.Exception] exception 'Exception' with message 'ERROR: Selecione um arquivo.<br>' in /var/www/Synapse/app/controllers/EditorController.php:1349
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/actions/CInlineAction.php(49): EditorController->actionUpload()
+#1 /var/www/yii-1.1.14/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#3 /var/www/yii-1.1.14/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#4 /var/www/yii-1.1.14/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#5 /var/www/yii-1.1.14/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#6 /var/www/yii-1.1.14/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 /var/www/yii-1.1.14/framework/web/CController.php(291): CFilterChain->run()
+#8 /var/www/yii-1.1.14/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('upload')
+#10 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('Editor/upload')
+#11 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#12 /var/www/Synapse/index.php(23): CApplication->run()
+#13 {main}
+REQUEST_URI=/Editor/upload
+HTTP_REFERER=http://synapse.ipti.org.br/editor/index
+---
+2014/08/28 10:29:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/28 10:29:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/28 10:29:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/28 10:29:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/28 10:29:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/28 10:35:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:35:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:35:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:01 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:01 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:01 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/08/28 10:37:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'O sistema não foi capaz de encontrar a ação "import.html" solicitada.' in /var/www/yii-1.1.14/framework/web/CController.php:483
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CController.php(270): CController->missingAction('import.html')
+#1 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('import.html')
+#2 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('render/import.h...')
+#3 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/Synapse/index.php(23): CApplication->run()
+#5 {main}
+REQUEST_URI=/render/import.html
+---
