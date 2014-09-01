@@ -78,8 +78,6 @@ class RenderController extends Controller {
     public $INVALID_ATTRIBUTES = "Atributes Inválidos";
     //
     private $tempArchiveZipMultiMedia = null;
-    private $tempArchiveZipimage = null;
-    private $tempArchiveZipsound = null;
     private $dir_library = "/rsc/library/";
 
     /**
@@ -446,18 +444,12 @@ class RenderController extends Controller {
                 $cobject_block_id = $_REQUEST['cobject_block'];
                 $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
                 $json_cobjects = array();
-                $zip_name_image = 'image.zip';
-                $zip_name_sound = 'sound.zip';
                 //Arquivo ZIP ALL
                 $zipname = 'importRender_' . date('d_m_Y H_i_s') . '.zip';
                 $this->tempArchiveZipMultiMedia = new ZipArchive;
                 $this->tempArchiveZipMultiMedia->open($zipname, ZipArchive::CREATE);
-                // somente imagens
-                $this->tempArchiveZipimage = new ZipArchive;
-                $this->tempArchiveZipimage->open($zip_name_image, ZipArchive::CREATE);
-                // somente sons
-                $this->tempArchiveZipsound = new ZipArchive;
-                $this->tempArchiveZipsound->open($zip_name_sound, ZipArchive::CREATE);
+                $this->tempArchiveZipMultiMedia->addEmptyDir("/image/");
+                $this->tempArchiveZipMultiMedia->addEmptyDir("/sound/");
 
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
                     array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
@@ -467,13 +459,6 @@ class RenderController extends Controller {
                 $this->tempArchiveZipimage->close();
                 $this->tempArchiveZipsound->close();
                 // Fazer Download no Final
-                if (file_exists($zip_name_image)) {
-                    $this->tempArchiveZipMultiMedia->addFile($zip_name_image);
-                }
-
-                if (file_exists($zip_name_sound)) {
-                    $this->tempArchiveZipMultiMedia->addFile($zip_name_sound);
-                }
 
                 //Arquivo Json para adcionar no ZIP
                 $json = array();
@@ -498,14 +483,6 @@ class RenderController extends Controller {
                     header('Content-type: application/zip');
                     header('Content-Disposition: attachment; filename="' . $zipname . '"');
                     readfile($zipname);
-                    if (file_exists($zip_name_image)) {
-                        // Remover o arquivo zip do temp do servidor
-                        unlink($zip_name_image);
-                    }
-                    if (file_exists($zip_name_sound)) {
-                        // Remover o arquivo zip do temp do servidor
-                        unlink($zip_name_sound);
-                    }
                     //Remover o arquivo zip do temp do servidor
                     unlink($zipname);
                 }

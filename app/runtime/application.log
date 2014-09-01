@@ -7198,3 +7198,97 @@ Stack trace:
 REQUEST_URI=/themes/classic/js/jquery/jquery-2.0.2.min.map
 HTTP_REFERER=http://synapse.ipti.org.br/cobjectCobjectblock/create
 ---
+2014/08/30 11:41:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/30 11:41:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/30 11:41:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/30 11:41:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/30 11:41:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/30 12:03:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/30 12:03:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/30 12:03:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/30 12:03:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/08/30 12:03:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/08/30 12:15:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
