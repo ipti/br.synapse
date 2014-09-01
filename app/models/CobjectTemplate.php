@@ -99,7 +99,6 @@ class CobjectTemplate extends CActiveRecord
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('format_type_id',$this->format_type_id);
 		$criteria->compare('interative_type_id',$this->interative_type_id);
-S
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
