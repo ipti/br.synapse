@@ -7,7 +7,6 @@
  * @property integer $id
  * @property string $name
  * @property string $description
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property EditorPieceElement[] $editorPieceElements
@@ -42,7 +41,6 @@ class EditorPiece extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('oldID', 'numerical', 'integerOnly'=>true),
 			array('name, description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -73,7 +71,6 @@ class EditorPiece extends CActiveRecord
 			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
 			'description' => Yii::t('default', 'Description'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -91,7 +88,6 @@ class EditorPiece extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

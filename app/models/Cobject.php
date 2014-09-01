@@ -8,7 +8,6 @@
  * @property integer $type_id
  * @property integer $template_id
  * @property integer $theme_id
- * @property integer $oldID
  * @property string $status
  * @property integer $father_id
  *
@@ -51,7 +50,7 @@ class Cobject extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('type_id, template_id', 'required'),
-			array('type_id, template_id, theme_id, oldID, father_id', 'numerical', 'integerOnly'=>true),
+			array('type_id, template_id, theme_id, father_id', 'numerical', 'integerOnly'=>true),
 			array('status', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -88,7 +87,6 @@ class Cobject extends CActiveRecord
 			'type_id' => Yii::t('default', 'Type'),
 			'template_id' => Yii::t('default', 'Template'),
 			'theme_id' => Yii::t('default', 'Theme'),
-			'oldID' => Yii::t('default', 'Old'),
 			'status' => Yii::t('default', 'Status'),
 			'father_id' => Yii::t('default', 'Father'),
 		);
@@ -109,7 +107,6 @@ class Cobject extends CActiveRecord
 		$criteria->compare('type_id',$this->type_id);
 		$criteria->compare('template_id',$this->template_id);
 		$criteria->compare('theme_id',$this->theme_id);
-		$criteria->compare('oldID',$this->oldID);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('father_id',$this->father_id);
 

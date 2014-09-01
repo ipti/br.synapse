@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'act_discipline':
  * @property integer $id
  * @property string $name
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property ActContent[] $actContents
@@ -44,11 +43,11 @@ class ActDiscipline extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('oldID', 'numerical', 'integerOnly'=>true),
+			array('numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, oldID', 'safe', 'on'=>'search'),
+			array('id, name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,7 +75,6 @@ class ActDiscipline extends CActiveRecord
 		return array(
 			'id' => Yii::t('default', 'ID'),
 			'name' => Yii::t('default', 'Name'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -93,7 +91,6 @@ class ActDiscipline extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

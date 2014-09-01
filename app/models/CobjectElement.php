@@ -8,7 +8,6 @@
  * @property integer $cobject_id
  * @property integer $element_id
  * @property integer $position
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property Cobject $cobject
@@ -43,10 +42,10 @@ class CobjectElement extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cobject_id, element_id', 'required'),
-			array('cobject_id, element_id, position, oldID', 'numerical', 'integerOnly'=>true),
+			array('cobject_id, element_id, position', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, cobject_id, element_id, position, oldID', 'safe', 'on'=>'search'),
+			array('id, cobject_id, element_id, position', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,7 +72,6 @@ class CobjectElement extends CActiveRecord
 			'cobject_id' => Yii::t('default', 'Cobject'),
 			'element_id' => Yii::t('default', 'Element'),
 			'position' => Yii::t('default', 'Position'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -92,7 +90,6 @@ class CobjectElement extends CActiveRecord
 		$criteria->compare('cobject_id',$this->cobject_id);
 		$criteria->compare('element_id',$this->element_id);
 		$criteria->compare('position',$this->position);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -9,9 +9,6 @@
  * @property string $code
  * @property integer $format_type_id
  * @property integer $interative_type_id
- * @property integer $oldID
- * @property integer $oldIDFormat
- * @property integer $oldIDInterative
  *
  * The followings are the available model relations:
  * @property Cobject[] $cobjects
@@ -48,12 +45,12 @@ class CobjectTemplate extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, code', 'required'),
-			array('format_type_id, interative_type_id, oldID, oldIDFormat, oldIDInterative', 'numerical', 'integerOnly'=>true),
+			array('format_type_id, interative_type_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
 			array('code', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, code, format_type_id, interative_type_id, oldID, oldIDFormat, oldIDInterative', 'safe', 'on'=>'search'),
+			array('id, name, code, format_type_id, interative_type_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,9 +80,6 @@ class CobjectTemplate extends CActiveRecord
 			'code' => Yii::t('default', 'Code'),
 			'format_type_id' => Yii::t('default', 'Format Type'),
 			'interative_type_id' => Yii::t('default', 'Interative Type'),
-			'oldID' => Yii::t('default', 'Old'),
-			'oldIDFormat' => Yii::t('default', 'Old Idformat'),
-			'oldIDInterative' => Yii::t('default', 'Old Idinterative'),
 		);
 	}
 
@@ -105,10 +99,7 @@ class CobjectTemplate extends CActiveRecord
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('format_type_id',$this->format_type_id);
 		$criteria->compare('interative_type_id',$this->interative_type_id);
-		$criteria->compare('oldID',$this->oldID);
-		$criteria->compare('oldIDFormat',$this->oldIDFormat);
-		$criteria->compare('oldIDInterative',$this->oldIDInterative);
-
+S
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

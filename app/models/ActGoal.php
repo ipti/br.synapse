@@ -8,7 +8,6 @@
  * @property string $name
  * @property integer $degree_id
  * @property integer $discipline_id
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property ActDegree $degree
@@ -47,10 +46,10 @@ class ActGoal extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, degree_id, discipline_id', 'required'),
-			array('degree_id, discipline_id, oldID', 'numerical', 'integerOnly'=>true),
+			array('degree_id, discipline_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, degree_id, discipline_id, oldID', 'safe', 'on'=>'search'),
+			array('id, name, degree_id, discipline_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,7 +80,6 @@ class ActGoal extends CActiveRecord
 			'name' => Yii::t('default', 'Name'),
 			'degree_id' => Yii::t('default', 'Degree'),
 			'discipline_id' => Yii::t('default', 'Discipline'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -100,7 +98,6 @@ class ActGoal extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('degree_id',$this->degree_id);
 		$criteria->compare('discipline_id',$this->discipline_id);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

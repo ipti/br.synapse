@@ -8,7 +8,6 @@
  * @property integer $content_parent
  * @property integer $discipline_id
  * @property string $description
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property ActContent $contentParent
@@ -50,10 +49,10 @@ class ActContent extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('discipline_id, description', 'required'),
-			array('content_parent, discipline_id, oldID', 'numerical', 'integerOnly'=>true),
+			array('content_parent, discipline_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, content_parent, discipline_id, description, oldID', 'safe', 'on'=>'search'),
+			array('id, content_parent, discipline_id, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -84,7 +83,6 @@ class ActContent extends CActiveRecord
 			'content_parent' => Yii::t('default', 'Content Parent'),
 			'discipline_id' => Yii::t('default', 'Discipline'),
 			'description' => Yii::t('default', 'Description'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -103,7 +101,6 @@ class ActContent extends CActiveRecord
 		$criteria->compare('content_parent',$this->content_parent);
 		$criteria->compare('discipline_id',$this->discipline_id);
 		$criteria->compare('description',$this->description,true);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

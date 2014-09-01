@@ -7,7 +7,6 @@
  * @property integer $id
  * @property integer $template_id
  * @property string $description
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property CobjectTemplate $template
@@ -43,11 +42,11 @@ class EditorPieceset extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('template_id, oldID', 'numerical', 'integerOnly'=>true),
+			array('template_id', 'numerical', 'integerOnly'=>true),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, template_id, description, oldID', 'safe', 'on'=>'search'),
+			array('id, template_id, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,7 +74,6 @@ class EditorPieceset extends CActiveRecord
 			'id' => Yii::t('default', 'ID'),
 			'template_id' => Yii::t('default', 'Template'),
 			'description' => Yii::t('default', 'Description'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -93,7 +91,6 @@ class EditorPieceset extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('template_id',$this->template_id);
 		$criteria->compare('description',$this->description,true);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

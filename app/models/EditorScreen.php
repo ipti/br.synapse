@@ -7,7 +7,6 @@
  * @property integer $id
  * @property integer $cobject_id
  * @property integer $order
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property Cobject $cobject
@@ -42,10 +41,10 @@ class EditorScreen extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cobject_id', 'required'),
-			array('cobject_id, order, oldID', 'numerical', 'integerOnly'=>true),
+			array('cobject_id, order', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, cobject_id, order, oldID', 'safe', 'on'=>'search'),
+			array('id, cobject_id, order', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,7 +70,6 @@ class EditorScreen extends CActiveRecord
 			'id' => Yii::t('default', 'ID'),
 			'cobject_id' => Yii::t('default', 'Cobject'),
 			'order' => Yii::t('default', 'Order'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -89,7 +87,6 @@ class EditorScreen extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('cobject_id',$this->cobject_id);
 		$criteria->compare('order',$this->order);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

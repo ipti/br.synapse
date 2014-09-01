@@ -8,7 +8,6 @@
  * @property integer $piece_id
  * @property integer $element_id
  * @property integer $position
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property EditorEvents[] $editorEvents
@@ -46,10 +45,10 @@ class EditorPieceElement extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('piece_id, element_id', 'required'),
-			array('piece_id, element_id, position, oldID', 'numerical', 'integerOnly'=>true),
+			array('piece_id, element_id, position', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, piece_id, element_id, position, oldID', 'safe', 'on'=>'search'),
+			array('id, piece_id, element_id, position', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,7 +78,6 @@ class EditorPieceElement extends CActiveRecord
 			'piece_id' => Yii::t('default', 'Piece'),
 			'element_id' => Yii::t('default', 'Element'),
 			'position' => Yii::t('default', 'Position'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -98,7 +96,6 @@ class EditorPieceElement extends CActiveRecord
 		$criteria->compare('piece_id',$this->piece_id);
 		$criteria->compare('element_id',$this->element_id);
 		$criteria->compare('position',$this->position);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

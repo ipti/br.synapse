@@ -8,7 +8,6 @@
  * @property integer $pieceset_id
  * @property integer $element_id
  * @property integer $position
- * @property integer $oldID
  *
  * The followings are the available model relations:
  * @property EditorPieceset $pieceset
@@ -43,10 +42,10 @@ class EditorPiecesetElement extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('pieceset_id, element_id', 'required'),
-			array('pieceset_id, element_id, position, oldID', 'numerical', 'integerOnly'=>true),
+			array('pieceset_id, element_id, position', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, pieceset_id, element_id, position, oldID', 'safe', 'on'=>'search'),
+			array('id, pieceset_id, element_id, position', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,7 +72,6 @@ class EditorPiecesetElement extends CActiveRecord
 			'pieceset_id' => Yii::t('default', 'Pieceset'),
 			'element_id' => Yii::t('default', 'Element'),
 			'position' => Yii::t('default', 'Position'),
-			'oldID' => Yii::t('default', 'Old'),
 		);
 	}
 
@@ -92,7 +90,6 @@ class EditorPiecesetElement extends CActiveRecord
 		$criteria->compare('pieceset_id',$this->pieceset_id);
 		$criteria->compare('element_id',$this->element_id);
 		$criteria->compare('position',$this->position);
-		$criteria->compare('oldID',$this->oldID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
