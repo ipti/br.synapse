@@ -612,7 +612,7 @@ function editor() {
         }
 
         if (this.isset(loaddata) && this.isset(loaddata['library'])) {
-            var src = '/rsc/library/' + uploadType + '/' + loaddata['library']['src'];
+            var src = '/library/' + uploadType + '/' + loaddata['library']['src'];
             responseFunction(src, file, form);
         }
 

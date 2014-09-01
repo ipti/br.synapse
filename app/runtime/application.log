@@ -7292,3 +7292,207 @@ Stack trace:
 #3 {main}
 REQUEST_URI=/favicon.ico
 ---
+2014/09/01 10:52:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/09/01 10:56:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/09/01 11:08:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/09/01 11:08:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "favicon.ico".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2014/09/01 11:08:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:08:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:08:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:08:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:08:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:08:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:11:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:11:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:11:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:11:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:11:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:11:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/filter
+---
+2014/09/01 11:11:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'O sistema não foi capaz de encontrar a ação "exportToOffiline" solicitada.' in /var/www/yii-1.1.14/framework/web/CController.php:483
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CController.php(270): CController->missingAction('exportToOffilin...')
+#1 /var/www/yii-1.1.14/framework/web/CWebApplication.php(282): CController->run('exportToOffilin...')
+#2 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('render/exportTo...')
+#3 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/Synapse/index.php(23): CApplication->run()
+#5 {main}
+REQUEST_URI=/render/exportToOffiline
+---
+2014/09/01 11:11:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/09/01 11:11:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/09/01 11:11:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/09/01 11:11:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/meet.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/meet.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/09/01 11:11:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/cobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/cobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---
+2014/09/01 11:11:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Não foi possível resolver a requisição "themes/classic/js/render/domcobject.js".' in /var/www/yii-1.1.14/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/yii-1.1.14/framework/web/CWebApplication.php(141): CWebApplication->runController('themes/classic/...')
+#1 /var/www/yii-1.1.14/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/Synapse/index.php(23): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/classic/js/render/domcobject.js
+HTTP_REFERER=http://synapse.ipti.org.br/render/exportToOffline
+---

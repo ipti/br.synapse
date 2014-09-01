@@ -272,9 +272,9 @@ class EditorController extends Controller {
                 $tem_crop = false;
                 $img[$i] = '';
                 if (isset($name_img[$i])) {
-                    $newDir[$i] = Yii::app()->basePath . "/../rsc/library/image/" . $name_img[$i];
+                    $newDir[$i] = Yii::app()->basePath . "/../library/image/" . $name_img[$i];
                     $newDir[$i] = str_replace('\\', "/", $newDir[$i]);
-                    $newUrl[$i] = "/rsc/library/image/" . $name_img[$i];
+                    $newUrl[$i] = "/library/image/" . $name_img[$i];
                     $imagesize[$i] = getimagesize($newDir[$i]);
                     if ($imagesize[$i] !== false) {
                         $oImg = new cutImage($newDir[$i]);
@@ -1291,9 +1291,9 @@ class EditorController extends Controller {
                 }
                 //define qual o endereço que será guardado o arquivo
                 $type_multimidia = $_POST['op'];
-                $path = Yii::app()->basePath . '/../rsc/library/' . $type_multimidia . '/';
+                $path = Yii::app()->basePath . '/../library/' . $type_multimidia . '/';
                 //define qual a url para visualização do arquivo
-                $url = "/rsc/library/" . $type_multimidia . "/";
+                $url = "/library/" . $type_multimidia . "/";
 
                 //pega o nome do arquivo
                 $file_name = $_FILES['file']['name'];

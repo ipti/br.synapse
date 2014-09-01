@@ -78,7 +78,7 @@ class RenderController extends Controller {
     public $INVALID_ATTRIBUTES = "Atributes Inválidos";
     //
     private $tempArchiveZipMultiMedia = null;
-    private $dir_library = "/rsc/library/";
+    private $dir_library = "/library/";
 
     /**
      * @return array action filters
@@ -250,8 +250,7 @@ class RenderController extends Controller {
                 if ($buildZipMultimedia && $libproperty->property->name == 'src') {
                     $dir_uploadType = $lib->type->name;
                     $src = Yii::app()->basePath . "/.." . $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
-                    eval('$name_temp = $this->tempArchiveZip' . $lib->type->name . ';');
-                    $name_temp->addFile($src, '/' . $libproperty->value);
+                    $this->tempArchiveZipMultiMedia->addFile($src, '/'.$dir_uploadType.'/' . $libproperty->value);
                     //Array de tipos que este grupo possui
                     if (!$isPiecesetElement && !$isCobjectElement) {
                         if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
