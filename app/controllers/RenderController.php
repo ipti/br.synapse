@@ -250,7 +250,7 @@ class RenderController extends Controller {
                 if ($buildZipMultimedia && $libproperty->property->name == 'src') {
                     $dir_uploadType = $lib->type->name;
                     $src = Yii::app()->basePath . "/.." . $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
-                    $this->tempArchiveZipMultiMedia->addFile($src, '/'.$dir_uploadType.'/' . $libproperty->value);
+                    $this->tempArchiveZipMultiMedia->addFile($src, '/library/'.$dir_uploadType.'/' . $libproperty->value);
                     //Array de tipos que este grupo possui
                     if (!$isPiecesetElement && !$isCobjectElement) {
                         if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
@@ -447,9 +447,10 @@ class RenderController extends Controller {
                 $zipname = 'importRender_' . date('d_m_Y H_i_s') . '.zip';
                 $this->tempArchiveZipMultiMedia = new ZipArchive;
                 $this->tempArchiveZipMultiMedia->open($zipname, ZipArchive::CREATE);
-                $this->tempArchiveZipMultiMedia->addEmptyDir("/image/");
-                $this->tempArchiveZipMultiMedia->addEmptyDir("/sound/");
-
+                $this->tempArchiveZipMultiMedia->addEmptyDir("/library/image/");
+                $this->tempArchiveZipMultiMedia->addEmptyDir("/library/sound/");
+                $this->tempArchiveZipMultiMedia->addEmptyDir("/json/");
+                
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
                     array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
                 endforeach;
@@ -467,7 +468,7 @@ class RenderController extends Controller {
                 $json_encode.=json_encode($json);
                 $json_encode.=";";
 
-                $this->tempArchiveZipMultiMedia->addFromString('renderData.js', $json_encode);
+                $this->tempArchiveZipMultiMedia->addFromString('/json/renderData.js', $json_encode);
 
                 //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
