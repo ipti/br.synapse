@@ -455,11 +455,7 @@ class RenderController extends Controller {
                     array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
                 endforeach;
 
-                //Salva as alterações nos zips
-                $this->tempArchiveZipimage->close();
-                $this->tempArchiveZipsound->close();
                 // Fazer Download no Final
-
                 //Arquivo Json para adcionar no ZIP
                 $json = array();
                 //Tratar Separação no JS
