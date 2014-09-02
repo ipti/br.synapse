@@ -37,7 +37,7 @@
 .theme div.PieceSet button.addPiece{background:url('../../images/theme_activity_addpiece.png'); float:left; height:30px;width:30px;border:0px;text-indent:-9999px;}
 .theme div.PieceSet button.insertImage{background:url('../../images/theme_tools_addimage.png'); float:left; height:45px;width:80px;border:0px;text-indent:-9999px;}
 .theme div.PieceSet button.insertSound{background:url('../../images/theme_tools_addsound.png'); float:left; height:45px;width:80px;border:0px;text-indent:-9999px;}
-.theme div.tplMulti button.newElement{background:url('../../images/theme_tools_addelement.png'); float:block; height:45px;width:80px;border:0px;text-indent:-9999px;}
+.theme div.tplMulti button.newElement{background:url('../../images/theme_tools_addelement.png'); float:block; height:45px;width:80px;border:0px;text-indent:-9999px;position: absolute;left:7%;}
 .theme div.PieceSet button.insertText{background:url('../../images/theme_tools_addtext.png'); float:left; height:45px; width:80px;border:0px;text-indent:-9999px;}
 .theme ul.sortable { list-style-type: none; margin: 0; padding: 0; display:table; }
 .theme ul.sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; border: 1px dashed black;}
