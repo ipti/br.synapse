@@ -1108,6 +1108,8 @@ function editor() {
                 && (!this.isset(loaddata))) {
             parent.addText(tagAdd);
         }
+        
+        document.querySelector('#' + parent.currentPiece + ' div[group="' + group + '"]').scrollIntoView(true);
     }
 
     this.delScreen = function(force) {
