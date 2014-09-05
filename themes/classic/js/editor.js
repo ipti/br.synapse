@@ -1109,7 +1109,8 @@ function editor() {
             parent.addText(tagAdd);
         }
         
-        document.querySelector('#' + parent.currentPiece + ' div[group="' + group + '"]').scrollIntoView(true);
+        $('#' + parent.currentPieceSet).scrollTop($('#' + parent.currentPiece).height());
+        
     }
 
     this.delScreen = function(force) {

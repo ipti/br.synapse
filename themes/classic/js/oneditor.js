@@ -1,5 +1,10 @@
 var newEditor = new editor();
-$(function() { 
+$(function() {
+    //Add Scripts Just for Editor
+//    $.getScript("/../themes/classic/js/jquery/jquery.scrollintoview.js",function(){
+//       console.log('Carregou!');
+//    });
+    
     $('.canvas').pajinate({
         start_page : 0,
         items_per_page : 1,
