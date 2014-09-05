@@ -229,18 +229,18 @@ this.Meet = function(options) {
             //Inicio do temporizador
             self.restartTimes();
 
-            $('.nextPiece').on('click', function() {
+            $('.nextPiece').bind('tap', function() {
                 self.nextPiece();
             });
 
-            $(".message-button").click(function() {
+            $(".message-button").bind('tap',function() {
                 $(this).closest('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
             });
 
 
-            $('#finalize_activity').on('click', function() {
+            $('#finalize_activity').bind('tap', function() {
                 self.finalizeMeet();
             });
 
@@ -257,7 +257,7 @@ this.Meet = function(options) {
             $('.cobject_block').hide();
             // location.href = "finish-level.html";
             $('#finishLevel-message').show();
-            $('#finishLevel-message button').on('click', function() {
+            $('#finishLevel-message button').bind('tap', function() {
                 $('#finishLevel-message').hide();
             });
         }
@@ -349,7 +349,7 @@ this.Meet = function(options) {
                             //Finalizou o Bloco de Atividades
                             $('.cobject_block').hide();
                             $('#finishLevel-message').show();
-                            $('#finishLevel-message button').on('click', function() {
+                            $('#finishLevel-message button').bind('tap', function() {
                                 $('#finishLevel-message').hide();
                             });
                         }
@@ -544,7 +544,7 @@ this.Meet = function(options) {
      */
     this.init_MTE = function() {
         // self.init_Common();
-        $('.cobject.MTE div[group]').on('click', function() {
+        $('.cobject.MTE div[group]').bind('tap', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
                 $('.nextPiece').hide();
@@ -577,7 +577,7 @@ this.Meet = function(options) {
         // variável de encontro definida no meet.php
         //$('.cobject.AEL div.answer > div[group]').hide();
         $('.cobject.AEL div.answer > div[group]').css('opacity', '0.6');
-        $('.cobject.AEL div[group]').on('click', function() {
+        $('.cobject.AEL div[group]').bind('tap', function() {
             var ask_answer = $(this).parents('div');
             if (ask_answer.hasClass('ask')) {
                 if (!$(this).hasClass('ael_clicked')) {
@@ -753,10 +753,10 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-        $(document).on('click', '#nextPage', function() {
+        $(document).bind('tap', '#nextPage', function() {
             self.nextPiece();
         });
-        $(document).on('click', '#lastPage', function() {
+        $(document).bind('tap', '#lastPage', function() {
             if (self.hasPrevPieceTXT()) {
                 self.prevPiece();
             }

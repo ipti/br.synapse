@@ -17,6 +17,11 @@
         <script src="js/jquery/jquery.ui.mouse.js"></script>
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
+        
+          <!-- JQUERY FOR MOBILE-->
+        <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
+        <!-- ======= -->
+        
         <script type="text/javascript" src="js/render/meet.js"></script>
         <script type="text/javascript" src="js/render/domcobject.js"></script>
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
@@ -40,11 +45,11 @@
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
                 
-                $('#deleteAllDB').on('click', function(){
+                $('#deleteAllDB').bind('tap', function(){
                     indexedDB.deleteDatabase("synapseDB");
                 });
                 
-                $('#import').on('click',function(){
+                $('#import').bind('tap',function(){
                     var unitys = new Array();
                     var actors = new Array();
                     
@@ -82,11 +87,11 @@
                     ,cobject_cobjectblocks,cobjects);
                     
                 });
-                $('#buildAllSchemas').on('click',function(){
+                $('#buildAllSchemas').bind('tap',function(){
                     //1° Criar
                     db.openDBuild(true);
                 });
-                $('#back').on('click',function(){
+                $('#back').bind('tap',function(){
                     location.href = "index.html";
                 });
             }); 
