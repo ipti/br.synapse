@@ -268,6 +268,7 @@ this.Meet = function(options) {
 
 
     this.nextPiece = function() {
+        console.log("nextPIece");
         $('.nextPiece').hide();
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
@@ -753,10 +754,10 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_TXT = function() {
-        $(document).bind('tap', '#nextPage', function() {
+        $('#nextPage').bind('tap', function() {
             self.nextPiece();
         });
-        $(document).bind('tap', '#lastPage', function() {
+        $('#lastPage').bind('tap', function() {
             if (self.hasPrevPieceTXT()) {
                 self.prevPiece();
             }
