@@ -213,7 +213,7 @@ class EditorController extends Controller {
             //Na Solicitação AJAX
             //include( 'cutImage.class.php' );
             $oImg = new cutImage($_POST['img']);
-          
+
             if ($oImg->valida() == 'OK') {
                 $oImg->posicaoCrop($_POST['x'], $_POST['y']);
                 $oImg->redimensiona($_POST['w'], $_POST['h'], 'crop');
@@ -646,7 +646,9 @@ class EditorController extends Controller {
                             }
                             $justFlag = false;
 
-                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) || isset($_POST['cobjectID'])) && isset($_POST['ordem']) && isset($_POST['value']) && isset($_POST['DomID'])) {
+                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) ||
+                                    isset($_POST['cobjectID'])) && isset($_POST['ordem']) &&
+                                    isset($_POST['value']) && isset($_POST['DomID'])) {
                                 $DomID = $_POST['DomID'];
 
                                 $isElementPieceSet = false;
@@ -681,45 +683,70 @@ class EditorController extends Controller {
 
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
                                         isset($_POST['updated']) && $_POST['updated'] == 1) {
-                                    //Desvincula e Cria um novo elemento !
                                     $IDDB = $_POST['ID_BD'];
                                     $newElement = EditorElement::model()->findByPk($IDDB);
+                                    if ($_POST['typeID'] != "TEXT") {
+                                        //Desvincula e Cria um novo elemento !
+                                        if (!$isElementPieceSet && !$isElementCobject) {
+                                            //É um elemento da PIECE
+                                            $Element_Piece = EditorPieceElement::model()->findByAttributes(
+                                                    array('piece_id' => $pieceID, 'element_id' => $newElement->id));
 
-                                    if (!$isElementPieceSet && !$isElementCobject) {
-                                        //É um elemento da PIECE
-                                        $Element_Piece = EditorPieceElement::model()->findByAttributes(
-                                                array('piece_id' => $pieceID, 'element_id' => $newElement->id));
+                                            $Element_Piece_Property = EditorPieceelementProperty::model()
+                                                    ->findAll(array(
+                                                'condition' => 'piece_element_id=:idPieceElement',
+                                                'params' => array(':idPieceElement' => $Element_Piece->id)
+                                            ));
+                                            $size_properties_Element_Piece = count($Element_Piece_Property);
+                                            $ls = null;
+                                            foreach ($Element_Piece_Property as $ls):
+                                                // Excluir cada propriedade do Element_Piece
+                                                $ls->delete();
+                                            endforeach;
+                                            //Depois, Desvincula o elemento da peça. 
+                                            $Element_Piece->delete();
+                                        }else if ($isElementPieceSet) {
+                                            //É um elemento da PIECESET
+                                            $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
+                                                    array('pieceset_id' => $pieceSetID, 'element_id' => $newElement->id));
 
-                                        $Element_Piece_Property = EditorPieceelementProperty::model()
-                                                ->findAll(array(
-                                            'condition' => 'piece_element_id=:idPieceElement',
-                                            'params' => array(':idPieceElement' => $Element_Piece->id)
+                                            //Depois, Desvincula o elemento da PieceSet. 
+                                            $Element_PieceSet->delete();
+                                        } else if ($isElementCobject) {
+                                            //É um elemento do Cobject
+                                            $Element_Cobject = CobjectElement::model()->findByAttributes(
+                                                    array('cobject_id' => $cobjectID, 'element_id' => $newElement->id));
+
+                                            //Depois, Desvincula o elemento do Cobject. 
+                                            $Element_Cobject->delete();
+                                        }
+
+                                        $unlink_New = true;
+                                    } else {
+                                        //Elementos textos somente precisam Atualizar seu campo
+                                        //obs: verificar essa condição para os demais elementos != template TXT
+                                          //salva editor_element_property 's
+                                        //text   
+                                        $elementID = $newElement->id;
+                                        $propertyName = "text";
+                                        $propertyContext = "phrase";
+                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                        $newElementProperty =  EditorElementProperty::model()->findByAttributes(array(
+                                            'element_id'=>$elementID , 'property_id' => $propertyID
                                         ));
-                                        $size_properties_Element_Piece = count($Element_Piece_Property);
-                                        $ls = null;
-                                        foreach ($Element_Piece_Property as $ls):
-                                            // Excluir cada propriedade do Element_Piece
-                                            $ls->delete();
-                                        endforeach;
-                                        //Depois, Desvincula o elemento da peça. 
-                                        $Element_Piece->delete();
-                                    }else if ($isElementPieceSet) {
-                                        //É um elemento da PIECESET
-                                        $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
-                                                array('pieceset_id' => $pieceSetID, 'element_id' => $newElement->id));
+                                        $newElementProperty->value = $value;
+                                        $newElementProperty->save();
 
-                                        //Depois, Desvincula o elemento da PieceSet. 
-                                        $Element_PieceSet->delete();
-                                    } else if ($isElementCobject) {
-                                        //É um elemento do Cobject
-                                        $Element_Cobject = CobjectElement::model()->findByAttributes(
-                                                array('cobject_id' => $cobjectID, 'element_id' => $newElement->id));
-
-                                        //Depois, Desvincula o elemento do Cobject. 
-                                        $Element_Cobject->delete();
+                                        //language
+                                        $propertyName = "language";
+                                        $propertyContext = "element";
+                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                        $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
+                                            'element_id'=>$elementID , 'property_id' => $propertyID
+                                        )) ;
+                                        $newElementProperty->value = "português";
+                                        $newElementProperty->save();
                                     }
-
-                                    $unlink_New = true;
                                 } else {
                                     //Cria um novo somente.
                                     $new = true;

@@ -1608,6 +1608,7 @@ function editor() {
 
 
                                                 });
+                                                console.log(data);
 
                                     }
 
