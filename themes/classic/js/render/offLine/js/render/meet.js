@@ -263,7 +263,7 @@ this.Meet = function(options) {
         }
 
         //Botão do SOM
-        $('.soundIconPause').bind('tap', function() {
+        $(document).on('tap', '.soundIconPause', function() {
             var selfIconPause = $(this);
             var playing = selfIconPause.attr('playing') !== undefined &&
                     selfIconPause.attr('playing') !== null && selfIconPause.attr('playing') === 'true';
