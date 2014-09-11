@@ -665,9 +665,6 @@ class EditorController extends Controller {
                                 }
 
 
-
-
-
                                 $flag = isset($_POST['flag']) ? $_POST['flag'] : -1;
                                 $match = isset($_POST['match']) ? $_POST['match'] : -1;
                                 if (isset($_POST['value'])) {

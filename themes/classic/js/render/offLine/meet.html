@@ -127,32 +127,6 @@
                     
                 });
                 
-                
-                $(document).on('tap','.soundIconPause',(function() {
-                    var playing = false;
-                    var li = $(this).parent();
-                    var span = li.children('span');
-                    var img = $(this);
-                    var audio = span.children()[0];
-                    console.log($(this).text());
-                    if(playing){
-                        audio.pause();
-                        audio.currentTime=0;
-                        img.attr('src', "img/icons/play.png");
-                        playing = false;
-                    }
-                    else{
-                        audio.play();
-                        img.attr('src', "img/icons/stop.png");
-                        playing = true;
-                    }
-
-                    audio.addEventListener("ended", function(){
-                        img.attr('src', "img/icons/play.png");
-                        playing = true;
-                    });
-
-                }));
                 //Atualizar O painel do render
                 $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');
                 $('.info.info-hits .info-text').html(newMeet.peformance_qtd_correct);

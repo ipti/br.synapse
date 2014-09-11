@@ -233,7 +233,7 @@ this.Meet = function(options) {
                 self.nextPiece();
             });
 
-            $(".message-button").bind('tap',function() {
+            $(".message-button").bind('tap', function() {
                 $(this).closest('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
@@ -262,6 +262,33 @@ this.Meet = function(options) {
             });
         }
 
+        //Botão do SOM
+        $('.soundIconPause').bind('tap', function() {
+            var selfIconPause = $(this);
+            var playing = selfIconPause.attr('playing') !== undefined && 
+                    selfIconPause.attr('playing') !== null && selfIconPause.attr('playing') === 'true';
+            
+            var li = $(this).parent();
+            var span = li.children('span');
+            var img = $(this);
+            var audio = span.children()[0];
+            if (playing) {
+                audio.pause();
+                audio.currentTime = 0;
+                img.attr('src', "img/icons/play.png");
+                selfIconPause.attr('playing','false');
+            } else {
+                audio.play();
+                img.attr('src', "img/icons/stop.png");
+                selfIconPause.attr('playing','true');
+            }
+
+            audio.addEventListener("ended", function() {
+                img.attr('src', "img/icons/play.png");
+               // playing = true;
+            });
+
+        });
 
     }
 
