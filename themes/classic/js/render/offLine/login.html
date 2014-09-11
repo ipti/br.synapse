@@ -16,7 +16,7 @@
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
         
-         <!-- JQUERY FOR MOBILE-->
+         <!-- JQUERY FOR MOBILE
         <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
         <!-- ======= -->
         
@@ -55,7 +55,7 @@
                     console.log("Suporta BD-HTML5");
                 }
 
-                $('#entrar').bind('tap', function() {
+                $('#entrar').bind('mousedown', function() {
                     if($('#username').val() == 'admin'){
                         if($('#password').val() == '123456'){
                             location.href = "import.html";
