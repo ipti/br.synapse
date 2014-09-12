@@ -46,6 +46,7 @@ function editor() {
     this.FRM = new Array();         //FRM: Questionário
     this.PDC = new Array();         //PDC: Produç]ao
     this.DDROP = new Array();       //DDROP: Drag and Drop
+    this.ONEDDROP = new Array();       //1DDROP: One Drag and Drop
     this.TXT.push(2);
     this.PLC.push(16);
     this.DIG.push(17);
@@ -53,7 +54,7 @@ function editor() {
     this.FRM.push(19);
     this.PDC.push(20);
     this.DDROP.push(21);
-
+    this.ONEDDROP.push(22);
     this.unLinks = [];
 
     var self = this;
@@ -225,7 +226,8 @@ function editor() {
             } else if (parent.COTemplateTypeIn(parent.PRE)) {
                 html += '<div class="tplPre"></div>';
             } else if (parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 html += '<div class="tplMulti"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>' +
                         "<ul id='" + pieceID + "_query' class='sortable'></ul>" +
                         "<ul id='" + pieceID + "_query_resp' class='sortable'></ul>";
@@ -243,7 +245,8 @@ function editor() {
             //se template for MTE ou AEL ou DDROP
             if (parent.COTemplateTypeIn(parent.MTE)
                     || parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 //adiciona a função do botão addElement
                 $("#" + pieceID + "> div > button.newElement").click(function() {
                     parent.addElement();
@@ -280,7 +283,8 @@ function editor() {
         } else {
             if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.MTE)
-                    || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 //Sua Posição dentro do Grupo
                 position = $(tagAdd).find(".element").size() + 1;
             }
@@ -324,7 +328,8 @@ function editor() {
 
         var html;
         if (parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             html = '<div id="' + ID + '_text" class="text element moptions"' + plus + '>' + input_text;
         } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PRE)
                 || parent.COTemplateTypeIn(parent.TXT)) {
@@ -333,14 +338,16 @@ function editor() {
 
         if (parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             //Se for MTE ou (AEL e For uma PERGUNTA)
             html += '<input type="button" class="del delElement" value="' + LABEL_REMOVE_TEXT + '">'
         }
 
         html += '</div>';
         if (parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             $(tagAdd).append(html);
         } else if (parent.COTemplateTypeIn(parent.MTE)) {
             $(tagAdd).find('span:eq(0)').append(html);
@@ -512,7 +519,8 @@ function editor() {
         } else {
             if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.MTE)
-                    || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 //Sua Posição dentro do Grupo
                 position = $(tagAdd).find(".element").size() + 1;
             }
@@ -576,7 +584,8 @@ function editor() {
 
         var html;
         if (parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element moptions">';
         } else {
             html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element">'
@@ -606,7 +615,8 @@ function editor() {
             if (parent.COTemplateTypeIn(parent.MTE)) {
                 $(tagAdd).find('span:eq(0)').append(html);
             } else if (parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 $(tagAdd).append(html);
             }
         }
@@ -808,7 +818,8 @@ function editor() {
 
         var elementID = this.currentPiece + '_e' + this.countElements[this.currentPiece];
 
-        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.TXT) || parent.COTemplateTypeIn(parent.PRE)) {
+        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.TXT) ||
+                parent.COTemplateTypeIn(parent.PRE)) {
             //Agrupando Elementos
             var group;
             if (this.isset(match) && match != -1) {
@@ -867,7 +878,8 @@ function editor() {
         } else if (parent.COTemplateTypeIn(parent.TXT)) {
             $('li[id="' + parent.currentPiece + '"] div.tplTxt').append(html);
         } else if (parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             var group;
             var isResp;
             if (this.isset(match) && match != -1) {
@@ -897,16 +909,22 @@ function editor() {
             var htmlDefault = '<div group="' + group + '">';
             if (!sameElement) {
                 if (!this.isset(isResp) || !isResp) {
-                    //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
-                    html = '<li>' +
-                            htmlDefault +
-                            '<spam>(' + group + ')</spam>' +
-                            '<button class="insertImage" >' + LABEL_ADD_IMAGE + '</button>' +
-                            '<button class="insertSound"></button>' +
-                            '<button class="insertText" >' + LABEL_ADD_TEXT + '</button>' +
-                            '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">' +
-                            '</div>' +
-                            '</li>';
+                    if (!parent.COTemplateTypeIn(parent.ONEDDROP) ||
+                            (parent.COTemplateTypeIn(parent.ONEDDROP) &&
+                                    group == 1)) {
+                        //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
+                        html = '<li>' +
+                                htmlDefault +
+                                '<spam>(' + group + ')</spam>' +
+                                '<button class="insertImage" >' + LABEL_ADD_IMAGE + '</button>' +
+                                '<button class="insertSound"></button>' +
+                                '<button class="insertText" >' + LABEL_ADD_TEXT + '</button>' +
+                                '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">' +
+                                '</div>' +
+                                '</li>';
+                    } else {
+                        html = "";
+                    }
                 } else {
                     html = "";
                 }
@@ -926,12 +944,18 @@ function editor() {
                         //                        elementID = this.currentPiece+'_e'+this.countElements[this.currentPiece]; 
                         isAddTwoElementsAel = true;
                     }
+
                     var html2 = '<li>' + htmlDefault +
                             '<spam>(' + group + ')</spam>' +
                             '<button class="insertImage" >' + LABEL_ADD_IMAGE + '</button>' +
                             '<button class="insertSound"></button>' +
-                            '<button class="insertText" >' + LABEL_ADD_TEXT + '</button>' +
-                            '</div></li>';
+                            '<button class="insertText" >' + LABEL_ADD_TEXT + '</button>';
+                    if (parent.COTemplateTypeIn(parent.ONEDDROP) &&
+                            group.split('_')[0] > 1) {
+                        html2 += '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">';
+                    }
+                    html2 += '</div></li>';
+
                 }
 
 
@@ -952,12 +976,12 @@ function editor() {
                 html += '</span></div>';
                 $('#' + parent.currentPiece + " > div.tplMulti").append(html);
             }
-
         }
         var tagAdd = "";
         if (parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             //TagAdd para o load
             tagAdd = $('#' + parent.currentPiece + ' div[group=' + group + ']');
         } else if (parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) {
@@ -989,7 +1013,8 @@ function editor() {
                 default:
             }
         } else if (parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             // o group é a Resposta '_'
             //this.addText(tagAdd);
         }
@@ -1000,6 +1025,8 @@ function editor() {
             elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1]) - 1);
         }
 
+        var firstSplitGroup = group.split('_')[0];
+
         if ((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1))
                 ) {
             //É MTE , PRE ou TXT
@@ -1009,8 +1036,15 @@ function editor() {
 
         } else if (parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)) {
-            //É AEL
-            var buttonDelID = "#" + parent.currentPiece + " div[group='" + group.split('_')[0] + "'] > input.delElement";
+            var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > input.delElement";
+        } else if (parent.COTemplateTypeIn(parent.ONEDDROP)) {
+            if (firstSplitGroup == 1) {
+                //O primeiro deve excluir o group ask e answer juntos
+                var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > input.delElement";
+            }else{
+                 var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > input.delElement";
+            }
+           
         }
         var buttonTextoID = "#" + elementID + " > div > button.insertText";
         var buttonImageID = "#" + elementID + " > div > button.insertImage";
@@ -1020,9 +1054,11 @@ function editor() {
         var imageID = "#" + elementID + "_image";
         if (parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)) {
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             if (parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 var buttonTextoRespID = "#" + elementID_Resp + "> div > button.insertText";
                 var ElementTextRespID = "#" + elementID_Resp + "_text";
                 $(buttonTextoRespID).click(function() {
@@ -1039,7 +1075,8 @@ function editor() {
 
             $(buttonTextoID).click(function() {
                 if (!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)) {
+                        && !parent.COTemplateTypeIn(parent.DDROP)
+                        && !parent.COTemplateTypeIn(parent.ONEDDROP)) {
                     if (!parent.existID(ElementImageID) ||
                             confirm(MSG_CHANGE_ELEMENT)) {
                         if (!parent.existID(ElementTextID)) {
@@ -1055,7 +1092,8 @@ function editor() {
             });
             $(buttonImageID).click(function() {
                 if (!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)) {
+                        && !parent.COTemplateTypeIn(parent.DDROP)
+                        && !parent.COTemplateTypeIn(parent.ONEDDROP)) {
                     if (!parent.existID(ElementTextID) ||
                             confirm(MSG_CHANGE_ELEMENT)) {
                         if (!parent.existID(ElementImageID)) {
@@ -1072,7 +1110,8 @@ function editor() {
             // Add SOUND 
             $(buttonSoundID).click(function() {
                 if (!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)) {
+                        && !parent.COTemplateTypeIn(parent.DDROP)
+                        && !parent.COTemplateTypeIn(parent.ONEDDROP)) {
                     if (!parent.existID(ElementTextID) ||
                             confirm(MSG_CHANGE_ELEMENT)) {
                         if (!parent.existID(ElementSoundID)) {
@@ -1090,15 +1129,18 @@ function editor() {
 
             if (parent.COTemplateTypeIn(parent.MTE)
                     || parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)) {
+                    || parent.COTemplateTypeIn(parent.DDROP)
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 $(buttonDelID).click(function() {
                     if ($(buttonDelID).size() == 1) {
                         if (parent.COTemplateTypeIn(parent.AEL)
-                                || parent.COTemplateTypeIn(parent.DDROP)) {
+                                || parent.COTemplateTypeIn(parent.DDROP)
+                                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                             parent.delElement($(this).closest('div[group]').closest('li'));
                         } else if (parent.COTemplateTypeIn(parent.MTE)) {
                             parent.delElement($(this).closest('div[group]'));
                         }
+
                     }
 
                 });
@@ -1108,9 +1150,9 @@ function editor() {
                 && (!this.isset(loaddata))) {
             parent.addText(tagAdd);
         }
-        
+
         $('#' + parent.currentPieceSet).scrollTop($('#' + parent.currentPiece).height());
-        
+
     }
 
     this.delScreen = function(force) {
@@ -1234,7 +1276,8 @@ function editor() {
                 //Deletar todos os objeto, se existir
                 //id é um li que possui o div-grupo
                 if (parent.COTemplateTypeIn(parent.AEL)
-                        || parent.COTemplateTypeIn(parent.DDROP)) {
+                        || parent.COTemplateTypeIn(parent.DDROP)
+                        || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                     $(id).find('div[group] div.element').each(function() {
                         var id_Element_del = $(this).attr('id');
                         parent.delElement(id_Element_del, true);
@@ -1608,7 +1651,7 @@ function editor() {
 
 
                                                 });
-                                                console.log(data);
+                                        console.log(data);
 
                                     }
 
