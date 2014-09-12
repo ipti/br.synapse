@@ -90,7 +90,8 @@ this.Meet = function(options) {
             if ($.inArray(self.domCobjects[idx].cobject.template_code, self.template_codes) == -1) {
                 //Evoca o evento para este template
                 self.template_codes.push(self.domCobjects[idx].cobject.template_code);
-                if (self.domCobjects[idx].cobject.template_code != 'DDROP') {
+                if (self.domCobjects[idx].cobject.template_code != 'DDROP' &&
+                        self.domCobjects[idx].cobject.template_code != 'ONEDDROP') {
                     eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
                 }
 
@@ -148,10 +149,12 @@ this.Meet = function(options) {
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
 
-        if ($.inArray('DDROP', self.template_codes) != -1) {
-            //Existe DDROP
+        if ($.inArray('DDROP', self.template_codes) != -1 ||
+                $.inArray('ONEDDROP', self.template_codes) != -1) {
+            //Existe DDROP ou ONEDDROP
             self.init_DDROP();
         }
+        
 
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
         $('.nextPiece').hide();

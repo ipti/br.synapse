@@ -241,7 +241,7 @@ fieldset{
     position: relative;
 }
 
-.DDROP .group {
+.DDROP .group,  .ONEDDROP .group{
     float:left;
     padding: 5px;
     margin: 0 10px;
@@ -250,7 +250,7 @@ fieldset{
 }
 
 
-.DDROP.group.drag {
+.DDROP.group.drag, .ONEDDROP.group.drag {
     cursor: pointer;
 }
 

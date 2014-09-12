@@ -128,7 +128,9 @@ var DomCobject = function(cobject, idx) {
         self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
         var domElementASK = $('<div class="ask"></div>');
         //Verificar se é uma peça do template AEL
-        if (self.cobject.template_code == 'AEL' || self.cobject.template_code == 'DDROP') {
+        if (self.cobject.template_code == 'AEL' || 
+                self.cobject.template_code == 'DDROP' ||
+                self.cobject.template_code == 'ONEDDROP') {
             var domElementANSWER = $('<div class="answer"></div>');
         }
 
@@ -160,7 +162,8 @@ var DomCobject = function(cobject, idx) {
                 // Novo Grupo
                 domGroup = $('<div group="' + newIdGroup + '" class="' + self.cobject.template_code + ' group" ></div>');
                 //Add class drop somente se for um group Ask
-                if (self.cobject.template_code == 'DDROP') {
+                if (self.cobject.template_code == 'DDROP' ||
+                        self.cobject.template_code == 'ONEDDROP') {
                     if (isAskGroup) {
                         domGroup.addClass('drag');
                     } else {
@@ -226,7 +229,9 @@ var DomCobject = function(cobject, idx) {
         objGroups_currentPiece.istrue = null;
         self.mainPieces[self.id.piece] = objGroups_currentPiece;
         self.domPiece.append(domElementASK);
-        if (self.cobject.template_code == 'AEL' || self.cobject.template_code == 'DDROP') {
+        if (self.cobject.template_code == 'AEL' || 
+                self.cobject.template_code == 'DDROP' ||
+                self.cobject.template_code == 'ONEDDROP') {
             self.domPiece.append(domElementANSWER);
         }
 
@@ -270,6 +275,9 @@ var DomCobject = function(cobject, idx) {
         return self.buildElement_P_PS();
     }
     this.buildElement_DDROP = function() {
+        return self.buildElement_P_PS();
+    }
+    this.buildElement_ONEDDROP = function() {
         return self.buildElement_P_PS();
     }
 
