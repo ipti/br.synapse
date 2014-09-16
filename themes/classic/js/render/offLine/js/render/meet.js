@@ -818,8 +818,8 @@ this.Meet = function(options) {
                 var time_answer = (new Date().getTime() - self.interval_group);
                 //Atualizar o marcador de inicio do intervalo para cada resposta
                 self.interval_group = time_answer;
-                $(this).siblings().css('opacity', '0.6');
                 $(this).hide();
+                $(this).siblings().hide();
                 var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
                 var groupAnswerClicked = $(this).attr('group');
                 var groupAskClicked = lastClicked.attr('group');
