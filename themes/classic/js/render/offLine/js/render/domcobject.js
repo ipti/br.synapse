@@ -162,15 +162,20 @@ var DomCobject = function(cobject, idx) {
                 // Novo Grupo
                 domGroup = $('<div group="' + newIdGroup + '" class="' + self.cobject.template_code + ' group" ></div>');
                 //Add class drop somente se for um group Ask
-                if (self.cobject.template_code == 'DDROP' ||
-                        self.cobject.template_code == 'ONEDDROP') {
+                if (self.cobject.template_code == 'DDROP') {
                     if (isAskGroup) {
                         domGroup.addClass('drag');
                     } else {
                         // is ANSWER-GROUP
                         domGroup.addClass('drop');
                     }
-
+                }else if(self.cobject.template_code == 'ONEDDROP'){
+                    if (isAskGroup) {
+                        domGroup.addClass('oneDrag');
+                    } else {
+                        // is ANSWER-GROUP
+                        domGroup.addClass('oneDrop');
+                    }
                 }
             } else {
                 //Grupo existente

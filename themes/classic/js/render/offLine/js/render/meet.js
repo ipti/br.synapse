@@ -149,12 +149,14 @@ this.Meet = function(options) {
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
 
-        if ($.inArray('DDROP', self.template_codes) != -1 ||
-                $.inArray('ONEDDROP', self.template_codes) != -1) {
-            //Existe DDROP ou ONEDDROP
+        if ($.inArray('DDROP', self.template_codes) != -1) {
+            //Existe DDROP
             self.init_DDROP();
+        } else if ($.inArray('ONEDDROP', self.template_codes) != -1) {
+            //Existe  ONEDDROP
+            self.init_ONEDDROP();
         }
-        
+
 
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
         $('.nextPiece').hide();
@@ -680,7 +682,7 @@ this.Meet = function(options) {
     }
 
     /**
-     * Inicializa eventos do AEL
+     * Inicializa eventos do DDROP
      * 
      * @returns {void}
      */
@@ -761,19 +763,88 @@ this.Meet = function(options) {
 
         });
 
-        // variável de encontro definida no meet.php
-        $('.drag').on('mousedown', function() {
+    }
+
+    /**
+     * Inicializa eventos do ONEDDROP
+     * 
+     * @returns {void}
+     */
+    this.init_ONEDDROP = function() {
+        //Definir Animação Drag and Drop
+        $('.oneDrop').css('opacity', '0.6');
+
+        $('.oneDrag').draggable({
+            containment: "body",
+            revert: true,
+            start: function() {
+                //armazernar posição  Original
+                var position = $(this).position();
+                if (!self.isset($(this).attr('OriginalLeft'))) {
+                    $(this).attr('OriginalTop', position.top);
+                    $(this).attr('OriginalLeft', position.left);
+                }
+
+                $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity', '1');
+                $(this).css('border', '3px dashed #FBB03B');
+                $(this).siblings().css('opacity', '0');
+                $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
+                $(this).siblings('.drag').removeClass('last_clicked');
+                $(this).addClass('last_clicked');
+            },
+            stop: function() {
+                $(this).css('border', '3px solid transparent');
+                $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
+                $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
+
+                var position = $(this).position();
+                if ($(this).attr('OriginalLeft') != position.left || $(this).attr('OriginalTop') != position.top) {
+                    $(this).css('left', $(this).attr('OriginalLeft'));
+                    $(this).css('top', $(this).attr('OriginalTop'));
+
+                }
+
+            },
+            drag: function() {
+            }
+
 
         });
 
-        $('.drag').on('mouseup', function() {
+        $('.oneDrop').droppable({
+            drop: function(event, ui) {
 
+                //Time de resposta
+                var time_answer = (new Date().getTime() - self.interval_group);
+                //Atualizar o marcador de inicio do intervalo para cada resposta
+                self.interval_group = time_answer;
+                $(this).siblings().css('opacity', '0.6');
+                $(this).hide();
+                var lastClicked = $(this).closest('div.answer').siblings('div.ask').children('div[group].last_clicked');
+                var groupAnswerClicked = $(this).attr('group');
+                var groupAskClicked = lastClicked.attr('group');
+                lastClicked.attr('matched', groupAnswerClicked);
+
+                lastClicked.addClass('ael_clicked');
+                lastClicked.removeClass('last_clicked');
+                $(this).closest('div.answer').siblings('div.ask').children('div[group].ael_clicked').hide();
+                $(this).addClass('ael_clicked');
+                var thisPieceID = $(this).closest('.piece').attr('id');
+
+                //Vericar se o match está certo para este element
+                self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
+
+                //Não existe mais elementos a clicar, Habilita o botão de avançar peça
+                $('.nextPiece').show();
+
+                //Respondeu, então "reinicia" o temporizador de grupo
+                self.interval_group = new Date().getTime();
+
+            }
 
         });
 
     }
-
-
 
 
     /**
@@ -865,7 +936,8 @@ this.Meet = function(options) {
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
         if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' ||
-                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP') {
+                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP' ||
+                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'ONEDDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
@@ -902,33 +974,35 @@ this.Meet = function(options) {
         var pieceIsTrue = true;
         var answer = false;
         $.each(self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID], function(nome_attr, group) {
-            if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
-                if (self.isset(group.ismatch) && (!group.ismatch)) {
-                    pieceIsTrue = false;
-                } else if (self.isset(group.ismatch) && group.ismatch) {
-                    answer = true;
-                }
-                //Salva no BD os MetaDados para cada grupo
-                if (self.isset(this.groupMatched)) {
-                    //Se for um grupo do tipo ASK
-                    var current_group = nome_attr.split('_')[1];
-                    //Armazenar o groupMatched do grupo atual
-                    var current_groupMatched = this.groupMatched;
+            //Salva a perfomande do groupo somente se foi dado um Match
+            if (self.isset(this.groupMatched)) {
+                if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
+                    if (self.isset(group.ismatch) && (!group.ismatch)) {
+                        pieceIsTrue = false;
+                    } else if (self.isset(group.ismatch) && group.ismatch) {
+                        answer = true;
+                    }
+                    //Salva no BD os MetaDados para cada grupo
+                    if (self.isset(this.groupMatched)) {
+                        //Se for um grupo do tipo ASK
+                        var current_group = nome_attr.split('_')[1];
+                        //Armazenar o groupMatched do grupo atual
+                        var current_groupMatched = this.groupMatched;
 
-                    var data = {
-                        'piece_id': currentPieceID,
-                        // 'piece_elementID':current_pieceElementID,
-                        'group_id': current_group,
-                        'actor_id': self.actor,
-                        'final_time': this.time_answer, //delta T 
-                        'value': "GRP" + current_groupMatched,
-                        'iscorrect': this.ismatch
-                    };
-                    //Salvar na performance_User OffLine
-                    self.DB_synapse.addPerformance_actor(data);
+                        var data = {
+                            'piece_id': currentPieceID,
+                            // 'piece_elementID':current_pieceElementID,
+                            'group_id': current_group,
+                            'actor_id': self.actor,
+                            'final_time': this.time_answer, //delta T 
+                            'value': "GRP" + current_groupMatched,
+                            'iscorrect': this.ismatch
+                        };
+                        //Salvar na performance_User OffLine
+                        self.DB_synapse.addPerformance_actor(data);
+                    }
                 }
             }
-
         });
         //Salvo com Sucesso
         self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
@@ -963,7 +1037,6 @@ this.Meet = function(options) {
     this.isCorrectAEL = function(pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
-            console.log(self.currentCobject_idx);
             //Salvar no Objeto o Metadados do acerto e erro de um element
             var elements_groupAsk = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAskClicked);
             var elements_groupAnswer = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAnswerClicked);
