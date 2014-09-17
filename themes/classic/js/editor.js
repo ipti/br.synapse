@@ -101,11 +101,19 @@ function editor() {
         //incrementa o contador
         this.countScreen = this.countScreen + 1;
         //cria a div da nova screen, e adiciona o ID do banco, caso exista.
-        $(".content").append('<div class="screen" id="sc' + this.countScreen + '" ' + plus + '></div>');
+         var screenID = 'sc' + this.countScreen;
+        $(".content").append('<div class="screen" id="' + screenID + '" ' + plus + '></div>');
         //cria o novo contador de pieceSet
-        this.countPieceSet['sc' + this.countScreen] = 0;
+        this.countPieceSet[screenID] = 0;
         //atualiza o pajinate
         this.attPajinate();
+       
+        //Se for novo ADD a 1° PieceSet
+        var iddb = $('#' + screenID).attr('idbd');
+        if (!this.isset(iddb)) {
+            //adiciona uma PieceSet nesta Screen se for uma Nova Screen
+            self.addPieceSet();
+        }
     }
 
     /**
@@ -186,6 +194,13 @@ function editor() {
             parent.delPieceSet(piecesetID);
         });
 
+        //Se for novo ADD a 1° Piece
+        var iddb = $('#' + piecesetID).attr('idbd');
+        if (!this.isset(iddb)) {
+            //adiciona uma Piece neste pieceSet se for um Novo PieceSet
+            parent.addPiece(piecesetID);
+        }
+
     }
 
     /**
@@ -252,15 +267,16 @@ function editor() {
                     parent.addElement();
                 });
                 //se template for PRE ou TXT
-            } else if (parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) {
-                //altera a seleção de piece
-                parent.changePiece($('#' + pieceID));
-                var iddb = $('#' + pieceID).attr('idbd');
-                if (!this.isset(iddb)) {
-                    //adiciona um elemento neste piece se for uma Nova Piece
-                    parent.addElement();
-                }
             }
+
+            //altera a seleção de piece
+            parent.changePiece($('#' + pieceID));
+            var iddb = $('#' + pieceID).attr('idbd');
+            if (!this.isset(iddb)) {
+                //adiciona um elemento neste piece se for uma Nova Piece
+                parent.addElement();
+            }
+
 
             //adiciona a função do botão delPiece
             $("#" + pieceID + "> button.delPiece").click(function() {
@@ -1025,7 +1041,9 @@ function editor() {
             elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1]) - 1);
         }
 
-        var firstSplitGroup = group.split('_')[0];
+        if (parent.COTemplateTypeIn(parent.DDROP) || parent.COTemplateTypeIn(parent.ONEDDROP)) {
+            var firstSplitGroup = group.split('_')[0];
+        }
 
         if ((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1))
                 ) {
@@ -1041,10 +1059,10 @@ function editor() {
             if (firstSplitGroup == 1) {
                 //O primeiro deve excluir o group ask e answer juntos
                 var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > input.delElement";
-            }else{
-                 var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > input.delElement";
+            } else {
+                var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > input.delElement";
             }
-           
+
         }
         var buttonTextoID = "#" + elementID + " > div > button.insertText";
         var buttonImageID = "#" + elementID + " > div > button.insertImage";
