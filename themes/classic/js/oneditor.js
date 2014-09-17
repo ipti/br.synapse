@@ -55,11 +55,11 @@ $(function() {
         newEditor.addPieceSet();
     });
     
-    $("#toolbar > .tools > #addimage").click(function(){
+    $("#tools > #addimage").click(function(){
         newEditor.insertImgCobject(null,null);  
     });
     
-     $("#toolbar > .tools > #addsound").click(function(){
+     $("#tools > #addsound").click(function(){
         newEditor.insertSoundCobject(null,null);
     });
     
@@ -69,7 +69,7 @@ $(function() {
     $(document).on("mousedown",'.piece',function(){
         newEditor.changePiece($(this));
     });
-    $('.save').click(function(){
+    $('#save').click(function(){
         newEditor.saveAll();
     });
     
