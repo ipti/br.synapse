@@ -14,7 +14,7 @@ function editor() {
     this.CObjectID;
     this.COgoalID;
     this.COdescription;
-    this.currentScreenId = 'sc0';
+    this.currentScreenId;
     this.lastScreenId;
     this.countScreen = 0;
     this.countPieceSet = new Array();
@@ -90,7 +90,6 @@ function editor() {
      * @returns {void}
      */
     this.addScreen = function(id) {
-
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = "";
         //se estiver setado o novo id

@@ -27,31 +27,35 @@ $this->breadcrumbs = array(
 );
 ?>
 <script language ="javascript" type="text/javascript">
-<?php
-if ($load == 'false') {
-    $cobjectTheme = ($cobjectTheme != '') ? $cobjectTheme : -1;
-    echo "newEditor.COtypeID = $commonType ; \n";
-    echo "newEditor.COthemeID = $cobjectTheme; \n";
-    echo "newEditor.COtemplateType = $cobjectTemplate; \n";
-    echo "newEditor.COgoalID = $actGoal; \n";
-} else {
-    echo "newEditor.CObjectID = $cobjectID; \n";
-}
-echo "newEditor.isload = $load; \n";
-?>
+    $(document).ready(function() {
+        <?php
+        if ($load == 'false') {
+            $cobjectTheme = ($cobjectTheme != '') ? $cobjectTheme : -1;
+            echo "newEditor.COtypeID = $commonType ; \n";
+            echo "newEditor.COthemeID = $cobjectTheme; \n";
+            echo "newEditor.COtemplateType = $cobjectTemplate; \n";
+            echo "newEditor.COgoalID = $actGoal; \n";
+        } else {
+            echo "newEditor.CObjectID = $cobjectID; \n";
+        }
+        echo "newEditor.isload = $load; \n";
+        echo "newEditor.addScreen(); \n ";
+        ?>
+    });
+
 </script>
 
 <header>
     <hgroup>
         <h1> Synapse Editor </h1>
         <ul>
-                <ul id="tools">
-                    <li id="save"><?php echo Yii::t('default', 'Save'); ?></li>
-                    <li id="addPieceSet"><?php echo Yii::t('default', 'Add PieceSet'); ?></li>
-                    <li id="addimage"><?php echo Yii::t('default', 'Add Imagem'); ?></li>
-                    <li id="addsound"><?php echo Yii::t('default', 'Add Sound'); ?></li>
-                </ul>
-          
+            <ul id="tools">
+                <li id="addPieceSet"><?php echo Yii::t('default', 'Add PieceSet'); ?></li>
+                <li id="addimage"><?php echo Yii::t('default', 'Add Imagem'); ?></li>
+                <li id="addsound"><?php echo Yii::t('default', 'Add Sound'); ?></li>
+                <li id="save"><?php echo Yii::t('default', 'Save'); ?></li>
+            </ul>
+
 
         </ul>
         <span class="clear"></span>
@@ -78,7 +82,6 @@ echo "newEditor.isload = $load; \n";
     </div>
 
     <div class="content">
-        <div class="screen" id="sc0">
-        </div>
+
     </div>
 </div>
