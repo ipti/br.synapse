@@ -76,7 +76,7 @@
                 var discipline_id = sessionStorage.getItem('id_discipline');
                 var block_id;
                 switch(discipline_id){
-                    case '1':block_id='4';break; //Linguagem
+                    case '1':block_id='1';break; //Linguagem
                     case '2':block_id='2';break; //Matemática   
                 }
                 
@@ -90,42 +90,8 @@
          
                 //Passar parâmetro do tipo do Encontro
                 var newMeet = new Meet(options);
-        
-                //$('#head_meet').append(newMeet.headMeet());
                 
-                var cobjectsFromBlock = null;
-                //Obter todos os Cobject deste Bloco
-                var getcobjectsFromBlock =  newMeet.DB_synapse.getCobjectsFromBlock(block_id, function(objectsThisBlock){
-                  
-                    //count do número de objetos
-                    var num_objects = 0;
-                    $.each(objectsThisBlock, function(){
-                        num_objects++;
-                    });
-                    
-                   
-                    $.each(objectsThisBlock, function(idx, object){
-                        //Para cada Cobject Cria sua Dom
-                        newMeet.DB_synapse.getCobject(object, function(json_cobject){
-                            var dump = new DomCobject(json_cobject,idx);
-                            //Adicionar o domCobjets no Encontro 'Meet'
-                            newMeet.pushDomCobjects(dump);
-                            //Chamar função para inserir nome html
-                            if(idx == num_objects-1){
-                                $('#render_canvas').html(newMeet.domCobjectBuildAll());
-                                //Inicia os eventos somente após a inclusão do html na dom
-                                newMeet.beginEvents();
-                                // Render Ready! 
-                                newMeet.countTime($('.info-time .info-text'));
-                               // $('#begin_activity').trigger('click');
-                             
-                            }
-                            
-                        });
-                    });
-    
-                    
-                });
+               
                 
                 //Atualizar O painel do render
                 $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');

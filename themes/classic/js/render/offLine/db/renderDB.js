@@ -678,6 +678,7 @@ this.DB = function() {
                             info_state = {
                                 cobject_block_id: cursor.value.cobject_block_id,
                                 actor_id: cursor.value.actor_id,
+                                last_cobject_id: cursor.value.last_cobject_id,
                                 last_piece_id: cursor.value.last_piece_id,
                                 qtd_correct: cursor.value.qtd_correct,
                                 qtd_wrong: cursor.value.qtd_wrong,
@@ -687,8 +688,7 @@ this.DB = function() {
                         //else { Se não encontrou, vai pro próximo
                         cursor.continue();
                     } else {
-                        //Finalisou a Pesquisa
-                        console.log(info_state);
+                        //Finalizou a Pesquisa
                         callBack(info_state);
                     }
 

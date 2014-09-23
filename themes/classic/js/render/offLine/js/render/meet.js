@@ -21,11 +21,14 @@ this.Meet = function(options) {
     //================
     var self = this;
     this.currentCobject_idx = null;
+    this.isLoadState = false;
+    //Primeira peça mostrada na tela no Encontro Corrente
+    this.firstPieceCurrentMeet = null;
     this.currentGrade = 0;
-    this.domCobjects = new Array();
+    this.domCobject = null;
     this.num_cobjects = 0;
     this.isFinalBlock = false;
-    self.template_codes = new Array();
+    self.currentTemplateCode = null;
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     this.org = options.org[0];
     this.org_name = options.org[1];
@@ -54,9 +57,67 @@ this.Meet = function(options) {
     //======================================
     //Criar Objeto para Manipulação do Banco
     this.DB_synapse = new DB();
+    //======================================
 
-    this.pushDomCobjects = function(domCobjects) {
-        self.domCobjects.push(domCobjects);
+
+    //Obter todos os Cobject deste Bloco
+    this.start = self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id, function(objectsThisBlock) {
+
+        //count do número de objetos
+        var num_objects = 0;
+        $.each(objectsThisBlock, function() {
+            num_objects++;
+        });
+
+        //Setar todos os CobjectsIds
+        self.setCobjectsIds(objectsThisBlock);
+
+        //Agora Verifica o UserState
+        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, function(info_state) {
+            var gotoState = self.isset(info_state);
+            var lastCobject_id = null;
+            if (gotoState) {
+                //Encontrou O estado do usuário
+                self.isLoadState = true;
+                lastCobject_id = info_state.last_cobject_id;
+                self.firstPieceCurrentMeet = info_state.last_piece_id;
+                self.currentCobject_idx = info_state.currentCobject_idx;
+                self.peformance_qtd_correct = info_state.qtd_correct;
+                self.peformance_qtd_wrong = info_state.qtd_wrong;
+                //Calcula o Score
+                self.scoreCalculator(false);
+            } else {
+                //Abre o Primeiro Cobject
+                lastCobject_id = self.cobjectsIDs[0];
+                self.isLoadState = false;
+            }
+
+            self.domCobjectBuild(lastCobject_id);
+
+        });
+
+        /*  $.each(objectsThisBlock, function(idx, object){
+         //Para cada Cobject Cria sua Dom
+         
+         }); */
+
+
+    });
+
+
+
+    //Array com todos os cobjectsIds
+    this.cobjectsIDs = new Array();
+    this.setCobjectsIds = function(cobjectsIDs) {
+        self.cobjectsIDs = cobjectsIDs;
+    }
+
+    this.getIdxArrayCobjectsIDs = function(cobjectID) {
+        return $.inArray(cobjectID, self.cobjectsIDs);
+    }
+
+    this.setDomCobject = function(domCobject) {
+        self.domCobject = domCobject;
     }
 
     /**
@@ -66,8 +127,8 @@ this.Meet = function(options) {
      */
     this.domCobjectBuildAll = function() {
         var domCobjectBuildAll = $('<div class="cobject_block"></div>');
-        for (var idx in self.domCobjects) {
-            domCobjectBuildAll.append(self.domCobjects[idx].buildAll());
+        for (var idx in self.domCobject) {
+            domCobjectBuildAll.append(self.domCobject[idx].buildAll());
             self.num_cobjects++;
         }
         //Por último a div de ferramentas
@@ -77,30 +138,53 @@ this.Meet = function(options) {
         return domCobjectBuildAll;
     }
 
+
+    this.domCobjectBuild = function(cobject_id) {
+        //Construir a Dom do Cobject e append no html
+        self.DB_synapse.getCobject(cobject_id, function(json_cobject) {
+            var dump = new DomCobject(json_cobject);
+            //Adicionar o domCobjet no Encontro 'Meet'
+            self.setDomCobject(dump);
+            //Depois atualiza o template corrente do Meet
+            self.currentTemplateCode = self.domCobject.cobject.template_code;
+            var domCobjectBuild;
+            if ($('div.cobject_block').size() != 0) {
+                //Já existe
+                domCobjectBuild = $('div.cobject_block');
+            } else {
+                //É o 1°
+                domCobjectBuild = $('<div class="cobject_block"></div>');
+            }
+
+            domCobjectBuild.html(self.domCobject.buildAll());
+            //Por último a div de ferramentas
+            domCobjectBuild.append(self.buildToolBar);
+
+            //Chamar função para inserir nome html
+            $('#render_canvas').html(domCobjectBuild);
+            //Inicia os eventos somente após a inclusão do html na dom
+            self.beginEvents();
+            // Render Ready! 
+            self.countTime($('.info-time .info-text'));
+
+        });
+
+    }
+
     /**
      * Inicializa os eventos dos Cobjects
      * 
      * @returns {void}
      */
     this.beginEvents = function() {
-        //iniciar code_Event dos templates
-        //Para cada cobject Inicia seus eventos
-        for (var idx = 0; idx < self.num_cobjects; idx++) {
-            //Add no Array o template name se não existir, para garantir que não chame o mesmo evento mais de uma vez
-            if ($.inArray(self.domCobjects[idx].cobject.template_code, self.template_codes) == -1) {
-                //Evoca o evento para este template
-                self.template_codes.push(self.domCobjects[idx].cobject.template_code);
-                if (self.domCobjects[idx].cobject.template_code != 'DDROP' &&
-                        self.domCobjects[idx].cobject.template_code != 'ONEDDROP') {
-                    eval("self.init_" + self.domCobjects[idx].cobject.template_code + "();");
-                }
-
-            }
+        //iniciar code_Event dos template
+        //Evoca o evento para este template
+        if (self.domCobject.cobject.template_code != 'DDROP' &&
+                self.domCobject.cobject.template_code != 'ONEDDROP') {
+            eval("self.init_" + self.domCobject.cobject.template_code + "();");
         }
-
         //Por Fim chama o evento Comum a todos
-        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, self.init_Common);
-
+        self.init_Common();
     }
 
     //    /**
@@ -132,27 +216,14 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_Common = function(info_state) {
-        var gotoState = self.isset(info_state);
-        var gotoCompleteState = gotoState && self.isset(info_state.last_piece_id);
-        if (gotoState) {
-            if (gotoCompleteState) {
-                var lastpiece_id = info_state.last_piece_id;
-                self.currentCobject_idx = info_state.currentCobject_idx;
-            }
-            self.peformance_qtd_correct = info_state.qtd_correct;
-            self.peformance_qtd_wrong = info_state.qtd_wrong;
-            //Calcula o Score
-            self.scoreCalculator(false);
-        }
+    this.init_Common = function() {
         //Embaralha os gropos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
-
-        if ($.inArray('DDROP', self.template_codes) != -1) {
+        if (self.currentTemplateCode == 'DDROP') {
             //Existe DDROP
             self.init_DDROP();
-        } else if ($.inArray('ONEDDROP', self.template_codes) != -1) {
+        } else if (self.currentTemplateCode == 'ONEDDROP') {
             //Existe  ONEDDROP
             self.init_ONEDDROP();
         }
@@ -160,7 +231,7 @@ this.Meet = function(options) {
 
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
         $('.nextPiece').hide();
-        if (!gotoCompleteState) {
+        if (!self.isLoadState) {
             $(selector_cobject + ':eq(0)').addClass('currentCobject');
             $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
             $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
@@ -171,7 +242,7 @@ this.Meet = function(options) {
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
 
-            var lastPiece = $(selector_cobject + ' .piece[id=' + lastpiece_id + ']');
+            var lastPiece = $(selector_cobject + ' .piece[id=' + self.firstPieceCurrentMeet + ']');
             var nextPiece = null;
             var lastPieceSet = null;
             var lastScreen = null;
@@ -250,7 +321,7 @@ this.Meet = function(options) {
             });
 
             //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-            if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT') {
+            if (self.domCobject.cobject.template_code == 'TXT') {
                 BtnPageTXT();
             } else {
                 NoBtnPageTXT();
@@ -319,16 +390,16 @@ this.Meet = function(options) {
         $('.nextPiece').hide();
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
+        if (self.domCobject.cobject.template_code == 'PRE') {
             self.isCorrectPRE(currentPiece.attr('id'));
         }
 
         var isCorrectPiece;
         //Salva no BD somente se o template for != TXT
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+        if (self.domCobject.cobject.template_code != 'TXT') {
             //Salva na PerformanceUser
             self.savePerformanceUsr(currentPiece.attr('id'));
-            isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
+            isCorrectPiece = self.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
         } else {
             isCorrectPiece = true;
@@ -337,12 +408,13 @@ this.Meet = function(options) {
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
             var currentPiece = $('.currentPiece');
-            if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+            if (self.domCobject.cobject.template_code != 'TXT') {
                 //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
                 //cobject_block_id + actor_id = PK
                 var info_state = {
                     cobject_block_id: self.cobject_block_id,
                     actor_id: self.actor,
+                    last_cobject_id: self.domCobject.cobject.cobject_id,
                     last_piece_id: currentPiece.attr('id'),
                     qtd_correct: self.peformance_qtd_correct,
                     qtd_wrong: self.peformance_qtd_wrong,
@@ -379,20 +451,28 @@ this.Meet = function(options) {
                     } else {
                         //Finalizou todas as Screen do COBJECT Corrente
                         if (self.hasNextCobject()) {
-                            self.currentCobject_idx++;
-                            var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
-                            $('.currentCobject').hide();
-                            $('.currentCobject').removeClass('currentCobject');
-                            $(selector_cobject).addClass('currentCobject');
-                            nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
-                            nextScreen.addClass('currentScreen');
-                            nextScreen.show();
-                            nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                            nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                            $(selector_cobject).show();
-                            nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                            var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
+                            var nextCobjectID = self.cobjectsIDs[idxNextCobject];
+                            //Criar a Dom do Próximo Cobject
+                            self.domCobjectBuild(nextCobjectID);
                             //Verificar o nível do próximo Cobject
                             self.scoreCalculator(true);
+
+                            /*
+                             var selector_cobject = '.cobject[id=' + self.domCobject.cobject.cobject_id + ']';
+                             $('.currentCobject').hide();
+                             $('.currentCobject').removeClass('currentCobject');
+                             $(selector_cobject).addClass('currentCobject');
+                             nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
+                             nextScreen.addClass('currentScreen');
+                             nextScreen.show();
+                             nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                             nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                             $(selector_cobject).show();
+                             nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                             
+                             */
+
                         } else {
                             //Finalizou o Bloco de Atividades
                             $('.cobject_block').hide();
@@ -436,7 +516,7 @@ this.Meet = function(options) {
         }
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT') {
+        if (self.domCobject.cobject.template_code == 'TXT') {
             BtnPageTXT();
         } else {
             NoBtnPageTXT();
@@ -448,16 +528,16 @@ this.Meet = function(options) {
     this.prevPiece = function() {
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'PRE') {
+        if (self.domCobject.cobject.template_code == 'PRE') {
             self.isCorrectPRE(currentPiece.attr('id'));
         }
 
         var isCorrectPiece;
         //Salva no BD somente se o template for != TXT
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+        if (self.domCobject.cobject.template_code != 'TXT') {
             //Salva na PerformanceUser ?
             // self.savePerformanceUsr(currentPiece.attr('id'));
-            isCorrectPiece = self.domCobjects[self.currentCobject_idx].mainPieces[currentPiece.attr('id')].isCorrect;
+            isCorrectPiece = self.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
         } else {
             isCorrectPiece = true;
@@ -465,12 +545,13 @@ this.Meet = function(options) {
 
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
-            if (self.domCobjects[self.currentCobject_idx].cobject.template_code != 'TXT') {
+            if (self.domCobject.cobject.template_code != 'TXT') {
                 //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
                 //cobject_block_id + actor_id = P K
                 var info_state = {
                     cobject_block_id: self.cobject_block_id,
                     actor_id: self.actor,
+                    last_cobject_id: self.domCobject.cobject.cobject_id,
                     last_piece_id: currentPiece.attr('id'),
                     qtd_correct: self.peformance_qtd_correct,
                     qtd_wrong: self.peformance_qtd_wrong,
@@ -508,7 +589,7 @@ this.Meet = function(options) {
                         //Finalisou todas as Screen do COBJECT Corrente
                         if (self.hasPrevCobject()) {
                             self.currentCobject_idx--;
-                            var selector_cobject = '.cobject[id=' + self.domCobjects[self.currentCobject_idx].cobject.cobject_id + ']';
+                            var selector_cobject = '.cobject[id=' + self.domCobject.cobject.cobject_id + ']';
                             $('.currentCobject').removeClass('currentCobject');
                             $(selector_cobject).addClass('currentCobject');
                             prevScreen = $(selector_cobject + ' .T_screen').last();
@@ -558,7 +639,7 @@ this.Meet = function(options) {
         }
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'TXT') {
+        if (self.domCobject.cobject.template_code == 'TXT') {
             BtnPageTXT();
         } else {
             NoBtnPageTXT();
@@ -900,7 +981,7 @@ this.Meet = function(options) {
                     //Finalizou todas as Screen do COBJECT Corrente
                     if (self.hasPrevCobject()) {
                         var prevCobject_idx = self.currentCobject_idx - 1;
-                        var selector_cobject = '.cobject[id=' + self.domCobjects[prevCobject_idx].cobject.cobject_id + ']';
+                        var selector_cobject = '.cobject[id=' + self.domCobject[prevCobject_idx].cobject.cobject_id + ']';
                         prevScreen = $(selector_cobject + ' .T_screen').last();
                         isTXT = prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                     } else {
@@ -935,15 +1016,15 @@ this.Meet = function(options) {
         self.interval_piece = (new Date().getTime() - self.interval_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'AEL' ||
-                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'DDROP' ||
-                self.domCobjects[self.currentCobject_idx].cobject.template_code == 'ONEDDROP') {
+        if (self.domCobject.cobject.template_code == 'AEL' ||
+                self.domCobject.cobject.template_code == 'DDROP' ||
+                self.domCobject.cobject.template_code == 'ONEDDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
         //Salva isCorrect da PIECE toda
-        var pieceIsTrue = self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].isCorrect;
-        self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].time_answer = self.interval_piece;
+        var pieceIsTrue = self.domCobject.mainPieces[currentPieceID].isCorrect;
+        self.domCobject.mainPieces[currentPieceID].time_answer = self.interval_piece;
         var data_default = {
             'piece_id': currentPieceID,
             'actor_id': self.actor,
@@ -951,7 +1032,7 @@ this.Meet = function(options) {
             'iscorrect': pieceIsTrue
         };
         var data = data_default;
-        if (self.domCobjects[self.currentCobject_idx].cobject.template_code == 'MTE') {
+        if (self.domCobject.cobject.template_code == 'MTE') {
             //Último grupo clicado da Piece Corrente. Divide por 2 como um grupo ASK
             data.group_id = ($('.currentPiece .last_clicked').attr('group') / currentPieceID) / 2;
         }
@@ -973,7 +1054,7 @@ this.Meet = function(options) {
         //Para Cada GRUPO da Piece
         var pieceIsTrue = true;
         var answer = false;
-        $.each(self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID], function(nome_attr, group) {
+        $.each(self.domCobject.mainPieces[currentPieceID], function(nome_attr, group) {
             //Salva a perfomande do groupo somente se foi dado um Match
             if (self.isset(this.groupMatched)) {
                 if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
@@ -1005,7 +1086,7 @@ this.Meet = function(options) {
             }
         });
         //Salvo com Sucesso
-        self.domCobjects[self.currentCobject_idx].mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
+        self.domCobject.mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
         return true;
     }
 
@@ -1017,11 +1098,11 @@ this.Meet = function(options) {
      * @returns {Boolean}
      */
     this.isCorrectMTE = function(pieceID, groupClicked) {
-        var elements_group = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupClicked);
+        var elements_group = eval("self.domCobject.mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
         var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype == 'Acerto');
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
-        self.domCobjects[self.currentCobject_idx].mainPieces[pieceID].isCorrect = isCorrect;
+        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     }
 
@@ -1038,8 +1119,8 @@ this.Meet = function(options) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
             //Salvar no Objeto o Metadados do acerto e erro de um element
-            var elements_groupAsk = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAskClicked);
-            var elements_groupAnswer = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + groupAnswerClicked);
+            var elements_groupAsk = eval("self.domCobject.mainPieces[pieceID]._" + groupAskClicked);
+            var elements_groupAnswer = eval("self.domCobject.mainPieces[pieceID]._" + groupAnswerClicked);
 
             //Veridicar Match
             var groupRevertAsk = (groupAskClicked / pieceID) / 2;
@@ -1067,7 +1148,7 @@ this.Meet = function(options) {
      */
     this.isCorrectPRE = function(pieceID) {
         //PRE somente possuí um grupo em cada piece
-        var elements_group = eval("self.domCobjects[self.currentCobject_idx].mainPieces[pieceID]._" + (pieceID * 2));
+        var elements_group = eval("self.domCobject.mainPieces[pieceID]._" + (pieceID * 2));
         var digitated_value = $('.currentPiece').find('div[group] input.text').val();
         var idxText = null;
         //BUSCAR PROPRIEDADE  = TEXT
@@ -1080,13 +1161,14 @@ this.Meet = function(options) {
 
         var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() == digitated_value.toUpperCase());
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
-        self.domCobjects[self.currentCobject_idx].mainPieces[pieceID].isCorrect = isCorrect;
+        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     }
 
 
     this.hasNextCobject = function() {
-        return self.isset(self.domCobjects[self.currentCobject_idx + 1]);
+        var idxCurrentCobjectID = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id);
+        return self.isset(self.cobjectsIDs[idxCurrentCobjectID + 1]);
     }
 
     this.hasPrevCobject = function() {
@@ -1198,9 +1280,12 @@ this.Meet = function(options) {
         $('#points').text(self.score);
 
         //Se for diferente, então Passou de Nível
-        if (self.currentGrade != self.domCobjects[self.currentCobject_idx].cobject.grade) {
-            self.currentGrade = self.domCobjects[self.currentCobject_idx].cobject.grade;
-            $('#level').text(self.currentGrade);
+        if ( !self.isset(self.domCobject) || self.currentGrade != self.domCobject.cobject.grade) {
+            if (self.isset(self.domCobject)) {
+                self.currentGrade = self.domCobject.cobject.grade;
+                $('#level').text(self.currentGrade);
+            }
+
             if (self.isset(withMSGnextLevel) && withMSGnextLevel) {
                 $('#nextLevel-message').show();
             }
