@@ -20,7 +20,6 @@ this.Meet = function(options) {
     LAST_PAGE = "Última Página";
     //================
     var self = this;
-    this.currentCobject_idx = null;
     this.isLoadState = false;
     //Primeira peça mostrada na tela no Encontro Corrente
     this.firstPieceCurrentMeet = null;
@@ -58,7 +57,10 @@ this.Meet = function(options) {
     //Criar Objeto para Manipulação do Banco
     this.DB_synapse = new DB();
     //======================================
-
+    //Array com todos os cobjectsIds
+    this.cobjectsIDs = new Array();
+    //Array com todos templates por CobjectsIDs
+    this.cobjectsIDsTemplates = new Array();
 
     //Obter todos os Cobject deste Bloco
     this.start = self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id, function(objectsThisBlock) {
@@ -81,7 +83,6 @@ this.Meet = function(options) {
                 self.isLoadState = true;
                 lastCobject_id = info_state.last_cobject_id;
                 self.firstPieceCurrentMeet = info_state.last_piece_id;
-                self.currentCobject_idx = info_state.currentCobject_idx;
                 self.peformance_qtd_correct = info_state.qtd_correct;
                 self.peformance_qtd_wrong = info_state.qtd_wrong;
                 //Calcula o Score
@@ -105,11 +106,16 @@ this.Meet = function(options) {
     });
 
 
-
-    //Array com todos os cobjectsIds
-    this.cobjectsIDs = new Array();
     this.setCobjectsIds = function(cobjectsIDs) {
+        //Atribui ao array de CobjectsIDs
         self.cobjectsIDs = cobjectsIDs;
+        //Agora atribui um novo array que possuirá todos cobjetsIDs e seus templates
+        for(var idx in self.cobjectsIDs) {
+             self.DB_synapse.getCobject(self.cobjectsIDs[idx], function(json_cobject) {
+                 //Para cada CobjectID
+                 self.cobjectsIDsTemplates[json_cobject.cobject_id] =  json_cobject.template_code;
+             });
+        }
     }
 
     this.getIdxArrayCobjectsIDs = function(cobjectID) {
@@ -125,18 +131,18 @@ this.Meet = function(options) {
      * 
      * @returns {String.domCobjectBuildAll}
      */
-    this.domCobjectBuildAll = function() {
-        var domCobjectBuildAll = $('<div class="cobject_block"></div>');
-        for (var idx in self.domCobject) {
-            domCobjectBuildAll.append(self.domCobject[idx].buildAll());
-            self.num_cobjects++;
-        }
-        //Por último a div de ferramentas
-        domCobjectBuildAll.append(self.buildToolBar);
-        //Retorno do 1° Cobject
-        self.currentCobject_idx = 0;
-        return domCobjectBuildAll;
-    }
+//    this.domCobjectBuildAll = function() {
+//        var domCobjectBuildAll = $('<div class="cobject_block"></div>');
+//        for (var idx in self.domCobject) {
+//            domCobjectBuildAll.append(self.domCobject[idx].buildAll());
+//            self.num_cobjects++;
+//        }
+//        //Por último a div de ferramentas
+//        domCobjectBuildAll.append(self.buildToolBar);
+//        //Retorno do 1° Cobject
+//        self.currentCobject_idx = 0;
+//        return domCobjectBuildAll;
+//    }
 
 
     this.domCobjectBuild = function(cobject_id) {
@@ -271,7 +277,6 @@ this.Meet = function(options) {
 
                         } else {
                             //Ir pra a piece do next Cobject
-                            self.currentCobject_idx++;
                             nextPiece = nextCobject.find('.T_screen:eq(0) .pieceset:eq(0) .piece:eq(0)');
                         }
                     } else {
@@ -418,7 +423,6 @@ this.Meet = function(options) {
                     last_piece_id: currentPiece.attr('id'),
                     qtd_correct: self.peformance_qtd_correct,
                     qtd_wrong: self.peformance_qtd_wrong,
-                    currentCobject_idx: self.currentCobject_idx
                 };
                 self.DB_synapse.NewORUpdateUserState(info_state);
                 //Calcula o Score
@@ -457,21 +461,6 @@ this.Meet = function(options) {
                             self.domCobjectBuild(nextCobjectID);
                             //Verificar o nível do próximo Cobject
                             self.scoreCalculator(true);
-
-                            /*
-                             var selector_cobject = '.cobject[id=' + self.domCobject.cobject.cobject_id + ']';
-                             $('.currentCobject').hide();
-                             $('.currentCobject').removeClass('currentCobject');
-                             $(selector_cobject).addClass('currentCobject');
-                             nextScreen = $(selector_cobject + ' .T_screen:eq(0)');
-                             nextScreen.addClass('currentScreen');
-                             nextScreen.show();
-                             nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                             nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                             $(selector_cobject).show();
-                             nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
-                             
-                             */
 
                         } else {
                             //Finalizou o Bloco de Atividades
@@ -555,7 +544,6 @@ this.Meet = function(options) {
                     last_piece_id: currentPiece.attr('id'),
                     qtd_correct: self.peformance_qtd_correct,
                     qtd_wrong: self.peformance_qtd_wrong,
-                    currentCobject_idx: self.currentCobject_idx
                 };
                 self.DB_synapse.NewORUpdateUserState(info_state);
                 //Calcula o Score
@@ -588,18 +576,11 @@ this.Meet = function(options) {
                     } else {
                         //Finalisou todas as Screen do COBJECT Corrente
                         if (self.hasPrevCobject()) {
-                            self.currentCobject_idx--;
-                            var selector_cobject = '.cobject[id=' + self.domCobject.cobject.cobject_id + ']';
-                            $('.currentCobject').removeClass('currentCobject');
-                            $(selector_cobject).addClass('currentCobject');
-                            prevScreen = $(selector_cobject + ' .T_screen').last();
-                            prevScreen.addClass('currentScreen');
-                            prevScreen.show();
-                            prevScreen.find('.pieceset').last().addClass('currentPieceSet');
-                            prevScreen.find('.piece').last().addClass('currentPiece');
-                            $(selector_cobject).show();
-                            prevScreen.find('.pieceset').last().show();
-                            prevScreen.find('.piece').last().show();
+                            var idxPrevCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) - 1;
+                            var prevCobjectID = self.cobjectsIDs[idxPrevCobject];
+                            //Criar a Dom do Cobject Anterior
+                            self.domCobjectBuild(prevCobjectID);
+
                         } else {
                             //Está na Primeira Peça
                             //alert('Está na Primeira Peça');
@@ -980,10 +961,12 @@ this.Meet = function(options) {
                 } else {
                     //Finalizou todas as Screen do COBJECT Corrente
                     if (self.hasPrevCobject()) {
-                        var prevCobject_idx = self.currentCobject_idx - 1;
-                        var selector_cobject = '.cobject[id=' + self.domCobject[prevCobject_idx].cobject.cobject_id + ']';
-                        prevScreen = $(selector_cobject + ' .T_screen').last();
-                        isTXT = prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
+
+                        var idxPrevCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) - 1;
+                        var prevCobjectID = self.cobjectsIDs[idxPrevCobject];
+                        
+                        isTXT = self.cobjectsIDsTemplates[prevCobjectID] === 'TXT';   
+                        
                     } else {
                         //Está na Primeira Peça
                         isTXT = false;
@@ -1172,7 +1155,8 @@ this.Meet = function(options) {
     }
 
     this.hasPrevCobject = function() {
-        return self.currentCobject_idx != 0;
+        var idxCurrentCobjectID = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id);
+        return idxCurrentCobjectID > 0;
     }
     //======================
     /**
@@ -1280,7 +1264,7 @@ this.Meet = function(options) {
         $('#points').text(self.score);
 
         //Se for diferente, então Passou de Nível
-        if ( !self.isset(self.domCobject) || self.currentGrade != self.domCobject.cobject.grade) {
+        if (!self.isset(self.domCobject) || self.currentGrade != self.domCobject.cobject.grade) {
             if (self.isset(self.domCobject)) {
                 self.currentGrade = self.domCobject.cobject.grade;
                 $('#level').text(self.currentGrade);
