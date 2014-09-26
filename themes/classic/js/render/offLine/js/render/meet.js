@@ -110,11 +110,11 @@ this.Meet = function(options) {
         //Atribui ao array de CobjectsIDs
         self.cobjectsIDs = cobjectsIDs;
         //Agora atribui um novo array que possuirá todos cobjetsIDs e seus templates
-        for(var idx in self.cobjectsIDs) {
-             self.DB_synapse.getCobject(self.cobjectsIDs[idx], function(json_cobject) {
-                 //Para cada CobjectID
-                 self.cobjectsIDsTemplates[json_cobject.cobject_id] =  json_cobject.template_code;
-             });
+        for (var idx in self.cobjectsIDs) {
+            self.DB_synapse.getCobject(self.cobjectsIDs[idx], function(json_cobject) {
+                //Para cada CobjectID
+                self.cobjectsIDsTemplates[json_cobject.cobject_id] = json_cobject.template_code;
+            });
         }
     }
 
@@ -256,7 +256,8 @@ this.Meet = function(options) {
             var nextPieceSet = null;
             var nextScreen = null;
             var nextCobject = null;
-
+            var isNextCobject = false;
+            
             if (lastPiece.next('.piece').size() != 0) {
                 nextPiece = lastPiece.next('.piece');
             } else {
@@ -271,14 +272,20 @@ this.Meet = function(options) {
                         //Acabou as Screens deste Cobject
                         lastCobject = lastScreen.closest('.cobject');
                         nextCobject = lastCobject.next('.cobject');
-                        if (nextCobject.size() == 0) {
+
+                        if (self.hasNextCobject()) {
+                            isNextCobject = true;
+                            var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
+                            var nextCobjectID = self.cobjectsIDs[idxNextCobject];
+                            //Criar a Dom do Próximo Cobject
+                            self.domCobjectBuild(nextCobjectID);
+                            //Verificar o nível do próximo Cobject
+                            self.scoreCalculator(true);
+                        } else {
                             //Acabou todos os Cobjets, ATIVIDADE JÁ FINALIZADA
                             self.isFinalBlock = true;
-
-                        } else {
-                            //Ir pra a piece do next Cobject
-                            nextPiece = nextCobject.find('.T_screen:eq(0) .pieceset:eq(0) .piece:eq(0)');
                         }
+
                     } else {
                         //Ir pra a piece next Screen
                         nextPiece = nextScreen.find('.pieceset:eq(0) .piece:eq(0)');
@@ -292,9 +299,19 @@ this.Meet = function(options) {
 
             }
 
+            if (!self.isFinalBlock && isNextCobject) {
+                $(selector_cobject + ':eq(0)').addClass('currentCobject');
+                $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
+                $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
+                $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
+                $(selector_cobject + '.currentCobject, ' + selector_cobject +
+                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                        ' .currentPiece').show();
+            }
+
             //Se NÃO for o final do bloco
             //Existe uma próxima peça
-            if (!self.isFinalBlock) {
+            if (!self.isFinalBlock && !isNextCobject) {
                 nextPiece.addClass('currentPiece');
                 nextPiece.closest('.pieceset').addClass('currentPieceSet');
                 var parentScreen = nextPiece.closest('.T_screen').addClass('currentScreen');
@@ -304,6 +321,7 @@ this.Meet = function(options) {
                         ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
                         ' .currentPiece').show();
             }
+
         }
 
         if (!self.isFinalBlock) {
@@ -964,9 +982,9 @@ this.Meet = function(options) {
 
                         var idxPrevCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) - 1;
                         var prevCobjectID = self.cobjectsIDs[idxPrevCobject];
-                        
-                        isTXT = self.cobjectsIDsTemplates[prevCobjectID] === 'TXT';   
-                        
+
+                        isTXT = self.cobjectsIDsTemplates[prevCobjectID] === 'TXT';
+
                     } else {
                         //Está na Primeira Peça
                         isTXT = false;
