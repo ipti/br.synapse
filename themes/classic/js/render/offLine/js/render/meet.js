@@ -64,7 +64,6 @@ this.Meet = function(options) {
 
     //Obter todos os Cobject deste Bloco
     this.start = self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id, function(objectsThisBlock) {
-
         //count do número de objetos
         var num_objects = 0;
         $.each(objectsThisBlock, function() {
@@ -92,7 +91,7 @@ this.Meet = function(options) {
                 lastCobject_id = self.cobjectsIDs[0];
                 self.isLoadState = false;
             }
-
+            
             self.domCobjectBuild(lastCobject_id);
 
         });
@@ -247,7 +246,9 @@ this.Meet = function(options) {
                     ' .currentPiece').show();
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
-
+            // O A partir daqui torna falso o isLoadState, pois só é carregado o estado no primeira vez
+            self.isLoadState = false;
+            
             var lastPiece = $(selector_cobject + ' .piece[id=' + self.firstPieceCurrentMeet + ']');
             var nextPiece = null;
             var lastPieceSet = null;
@@ -268,11 +269,12 @@ this.Meet = function(options) {
                     //Acabou as PieceSets desta Screen
                     lastScreen = lastPieceSet.closest('.T_screen');
                     nextScreen = lastScreen.next('.T_screen');
+                    
                     if (nextScreen.size() == 0) {
                         //Acabou as Screens deste Cobject
                         lastCobject = lastScreen.closest('.cobject');
                         nextCobject = lastCobject.next('.cobject');
-
+                            
                         if (self.hasNextCobject()) {
                             isNextCobject = true;
                             var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
@@ -310,7 +312,7 @@ this.Meet = function(options) {
             }
 
             //Se NÃO for o final do bloco
-            //Existe uma próxima peça
+            //Existe uma próxima peça neste CObject
             if (!self.isFinalBlock && !isNextCobject) {
                 nextPiece.addClass('currentPiece');
                 nextPiece.closest('.pieceset').addClass('currentPieceSet');
@@ -360,7 +362,6 @@ this.Meet = function(options) {
                 $('#finishLevel-message').hide();
             });
         }
-
         //Botão do SOM
         $(document).on('tap', '.soundIconPause', function() {
             var selfIconPause = $(this);

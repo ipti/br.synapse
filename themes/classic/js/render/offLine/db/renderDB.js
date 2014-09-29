@@ -610,8 +610,8 @@ this.DB = function() {
                             cursor.value.qtd_correct = data_state_actor.qtd_correct;
                             cursor.value.qtd_wrong = data_state_actor.qtd_wrong;
                             
-                            if(self.isset(data_state_actor.currentCobject_idx)){
-                                cursor.value.currentCobject_idx = data_state_actor.currentCobject_idx;
+                            if(self.isset(data_state_actor.last_cobject_id)){
+                                cursor.value.last_cobject_id = data_state_actor.last_cobject_id;
                             }
                             
                             var request_update = cursor.update(cursor.value);
@@ -682,7 +682,7 @@ this.DB = function() {
                                 last_piece_id: cursor.value.last_piece_id,
                                 qtd_correct: cursor.value.qtd_correct,
                                 qtd_wrong: cursor.value.qtd_wrong,
-                                currentCobject_idx: cursor.value.currentCobject_idx
+                                last_cobject_id: cursor.value.last_cobject_id
                             };
                         } 
                         //else { Se não encontrou, vai pro próximo
