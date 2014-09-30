@@ -92,7 +92,10 @@ this.Meet = function(options) {
                 self.isLoadState = false;
             }
             
+            //Construçao do DOM do 1° cobject de cada Meet
             self.domCobjectBuild(lastCobject_id);
+            //Depois inicia os eventos globais 
+            self.init_eventsGlobals();
 
         });
 
@@ -100,7 +103,6 @@ this.Meet = function(options) {
          //Para cada Cobject Cria sua Dom
          
          }); */
-
 
     });
 
@@ -222,7 +224,7 @@ this.Meet = function(options) {
      * @returns {void}
      */
     this.init_Common = function() {
-        //Embaralha os gropos de Elementos
+        //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
         if (self.currentTemplateCode == 'DDROP') {
@@ -248,7 +250,7 @@ this.Meet = function(options) {
             //Ir para a piece->pieceSet->Screen->cobject 
             // O A partir daqui torna falso o isLoadState, pois só é carregado o estado no primeira vez
             self.isLoadState = false;
-            
+
             var lastPiece = $(selector_cobject + ' .piece[id=' + self.firstPieceCurrentMeet + ']');
             var nextPiece = null;
             var lastPieceSet = null;
@@ -258,7 +260,7 @@ this.Meet = function(options) {
             var nextScreen = null;
             var nextCobject = null;
             var isNextCobject = false;
-            
+
             if (lastPiece.next('.piece').size() != 0) {
                 nextPiece = lastPiece.next('.piece');
             } else {
@@ -269,12 +271,12 @@ this.Meet = function(options) {
                     //Acabou as PieceSets desta Screen
                     lastScreen = lastPieceSet.closest('.T_screen');
                     nextScreen = lastScreen.next('.T_screen');
-                    
+
                     if (nextScreen.size() == 0) {
                         //Acabou as Screens deste Cobject
                         lastCobject = lastScreen.closest('.cobject');
                         nextCobject = lastCobject.next('.cobject');
-                            
+
                         if (self.hasNextCobject()) {
                             isNextCobject = true;
                             var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
@@ -362,6 +364,12 @@ this.Meet = function(options) {
                 $('#finishLevel-message').hide();
             });
         }
+
+
+    }
+
+    this.init_eventsGlobals = function() {
+        
         //Botão do SOM
         $(document).on('tap', '.soundIconPause', function() {
             var selfIconPause = $(this);
@@ -393,6 +401,8 @@ this.Meet = function(options) {
         });
 
     }
+
+
 
     this.stopAllSounds = function() {
         $('.soundIconPause[playing="true"]').each(function(idx) {
