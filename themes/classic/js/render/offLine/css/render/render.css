@@ -289,10 +289,11 @@ fieldset{
 }
 
 
-/* iamegm + texto */
+/* imagem + texto */
 .group.build_image.build_text .elementImage img {
     height: 121px;
 }
+
 
 .group.build_image.build_sound.build_text .element-build_text {
     bottom: 7px;
@@ -322,10 +323,14 @@ fieldset{
     padding: 0 10px;
 }
 
+
 .group.build_sound.build_text .element-build_sound img{
+    position: absolute;
     width: 40px;
     height: 40px;
     margin-top: 40px;
+    margin-left: -20px; 
+    z-index: 999;
 }
 
 .group li:first-child {
