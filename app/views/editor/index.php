@@ -29,19 +29,24 @@ $this->breadcrumbs = array(
 <script language ="javascript" type="text/javascript">
     $(document).ready(function() {
         <?php
+        echo "newEditor.isload = $load; \n";
         if ($load == 'false') {
             $cobjectTheme = ($cobjectTheme != '') ? $cobjectTheme : -1;
             echo "newEditor.COtypeID = $commonType ; \n";
             echo "newEditor.COthemeID = $cobjectTheme; \n";
             echo "newEditor.COtemplateType = $cobjectTemplate; \n";
             echo "newEditor.COgoalID = $actGoal; \n";
+            echo "newEditor.addScreen(); \n ";   
         } else {
             echo "newEditor.CObjectID = $cobjectID; \n";
+            //Sendo um load entao chama a funçao de Load
+            echo "newEditor.load(); \n";
         }
-        echo "newEditor.isload = $load; \n";
-        echo "newEditor.addScreen(); \n ";
-        ?>
-    });
+        
+        ?>              
+   
+   
+   });
 
 </script>
 

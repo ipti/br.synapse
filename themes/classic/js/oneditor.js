@@ -73,9 +73,6 @@ $(function() {
         newEditor.saveAll();
     });
     
-    if(newEditor.isload){    
-        newEditor.load();
-    }
     
     $(document).on("change",'.input_element',function() {
         newEditor.imageChanged($(this));

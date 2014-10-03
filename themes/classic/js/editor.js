@@ -194,7 +194,7 @@ function editor() {
         });
 
         //Se for novo ADD a 1° Piece
-        var iddb = $('#' + piecesetID).attr('idbd');
+        var iddb = $('#' + piecesetID + "_list").attr('idbd');
         if (!this.isset(iddb)) {
             //adiciona uma Piece neste pieceSet se for um Novo PieceSet
             parent.addPiece(piecesetID);
@@ -2091,7 +2091,7 @@ function editor() {
         //define parent como a classe base
         var parent = this;
         //inicia a requisição de ajax
-        $('#loading').html('<img src="/themes/classic/images/loading.gif" id="img_load"/>');
+       // $('#loading').html('<img src="/themes/classic/images/loading.gif" id="img_load"/>');
         $.ajax({
             type: "POST",
             url: "/editor/json",
