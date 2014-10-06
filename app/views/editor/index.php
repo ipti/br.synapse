@@ -22,31 +22,48 @@ if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) && isset($_P
 } else {
     throw new Exception('ERROR: RQEUEST Inválido');
 }
+
+if (isset($cobjectID)) {
+    $cobject = Cobject::model()->findByPk($cobjectID);
+    $commonType = $cobject->type_id;
+    $cobjectTemplate = $cobject->template_id;
+    $cobjectTheme = $cobject->theme_id;
+    $cobject_metadata = CobjectMetadata::model()->findByAttributes(array('cobject_id' => $cobjectID, 'type_id' => '13'));
+    $actGoal = $cobject_metadata->value;
+    $name_commonType = CommonType::model()->findByPk($commonType);
+    $name_commonType = $name_commonType->name;
+    $name_cobjectTemplate = CobjectTemplate::model()->findByPk($cobjectTemplate);
+    $name_cobjectTemplate = $name_cobjectTemplate->name;
+    $name_cobjectTheme = CobjectTheme::model()->findByPk($cobjectTheme);
+    $name_cobjectTheme = isset($name_cobjectTheme) ? $name_cobjectTheme->name : "SEM TEMA";
+    $name_actGoal = ActGoal::model()->findByPk($actGoal);
+    $name_actGoal = $name_actGoal->name;
+}
+
 $this->breadcrumbs = array(
     'Editor',
 );
 ?>
 <script language ="javascript" type="text/javascript">
     $(document).ready(function() {
-        <?php
-        echo "newEditor.isload = $load; \n";
-        if ($load == 'false') {
-            $cobjectTheme = ($cobjectTheme != '') ? $cobjectTheme : -1;
-            echo "newEditor.COtypeID = $commonType ; \n";
-            echo "newEditor.COthemeID = $cobjectTheme; \n";
-            echo "newEditor.COtemplateType = $cobjectTemplate; \n";
-            echo "newEditor.COgoalID = $actGoal; \n";
-            echo "newEditor.addScreen(); \n ";   
-        } else {
-            echo "newEditor.CObjectID = $cobjectID; \n";
-            //Sendo um load entao chama a funçao de Load
-            echo "newEditor.load(); \n";
-        }
-        
-        ?>              
-   
-   
-   });
+<?php
+echo "newEditor.isload = $load; \n";
+if ($load == 'false') {
+    $cobjectTheme = ($cobjectTheme != '') ? $cobjectTheme : -1;
+    echo "newEditor.COtypeID = $commonType ; \n";
+    echo "newEditor.COthemeID = $cobjectTheme; \n";
+    echo "newEditor.COtemplateType = $cobjectTemplate; \n";
+    echo "newEditor.COgoalID = $actGoal; \n";
+    echo "newEditor.addScreen(); \n ";
+} else {
+    echo "newEditor.CObjectID = $cobjectID; \n";
+    //Sendo um load entao chama a funçao de Load
+    echo "newEditor.load(); \n";
+}
+?>
+
+
+    });
 
 </script>
 
@@ -68,14 +85,12 @@ $this->breadcrumbs = array(
 </header>
 
 <div class="canvas">
-    <?php if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) && isset($_POST['cobjectTheme']) && isset($_POST['actGoal'])) {
-        ?>
-        <li class="title"> Tipo: <?php echo $name_commonType; ?> 
-            &nbsp;&nbsp;Template: <?php echo $name_cobjectTemplate; ?> 
-            &nbsp;&nbsp;Tema: <?php echo $name_cobjectTheme; ?> 
-            <br>Objetivo: <?php echo $name_actGoal; ?> 
-        </li>
-    <?php } ?>
+
+    <li class="title"> Tipo: <?php echo $name_commonType; ?> 
+        &nbsp;&nbsp;Template: <?php echo $name_cobjectTemplate; ?> 
+        &nbsp;&nbsp;Tema: <?php echo $name_cobjectTheme; ?> 
+        <br>Objetivo: <?php echo $name_actGoal; ?> 
+    </li>
 
     <button class="themebutton" id="addScreen"><?php echo Yii::t('default', 'Add Screen'); ?></button>
     <ul class="navscreen"></ul>

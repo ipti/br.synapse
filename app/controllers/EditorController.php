@@ -998,8 +998,8 @@ class EditorController extends Controller {
                     $cobject = Cobject::model()->findByAttributes(array('id' => $cobjectID));
                     $json['cobject_id'] = $cobjectID;
                     $json['typeID'] = $cobject->type_id;
-                    $json['themeID'] = $cobject->theme_id;
-                    $json['templateID'] = $cobject->template_id;
+                    $json['themeID'] = $cobject->theme_id; //
+                    $json['templateID'] = $cobject->template_id; //
                     $json['description'] = $cobject->description;
 
                     //===============Cobject-Element===============
