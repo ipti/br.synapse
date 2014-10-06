@@ -2062,6 +2062,21 @@ console.log(group);
                 ((!parent.isload && parent.totalElements == parent.uploadedElements) ||
                         (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
                                 (!parent.COTemplateTypeIn(parent.MTE) || ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
+            
+           // getLastCobjectID
+//           $.ajax({
+//            type: "POST",
+//            url: "/editor/getLastCobjectID",
+//            error: function(jqXHR, textStatus, errorThrown) {
+//                $('#img_load').remove();
+//                $('html').html(jqXHR.responseText);
+//            },
+//            success: function(response, textStatus, jqXHR) {
+//               console.log(response);
+//            }
+//        });
+                
+                
             //chama o posEditor
             $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
             parent.posEditor();
@@ -2070,7 +2085,6 @@ console.log(group);
 
         }
     }
-
 
 
     this.posEditor = function() {

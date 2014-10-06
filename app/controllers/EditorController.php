@@ -181,7 +181,7 @@ class EditorController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'upload', 'json', 'preeditor', 'filtergoal', 'poseditor'),
+                'actions' => array('index', 'upload', 'json', 'preeditor', 'filtergoal', 'poseditor', 'getLastCobjectID'),
                 'users' => array('@'),
             ),
             array('deny', // deny all users
@@ -1408,6 +1408,11 @@ class EditorController extends Controller {
         $propertyID = $property->id;
 
         return $propertyID;
+    }
+    
+    public function getLastCobjectID(){
+        $lastID = Yii::app()->db->CreateCommand('SELECT MAX(id) FROM cobject;');
+        return $lastID;
     }
 
     // Uncomment the following methods and override them if needed
