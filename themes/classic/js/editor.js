@@ -921,6 +921,8 @@ function editor() {
                 group = next_group;
             }
 
+console.log(group);
+
             var htmlDefault = '<div group="' + group + '">';
             if (!sameElement) {
                 if (!this.isset(isResp) || !isResp) {
@@ -1421,7 +1423,9 @@ function editor() {
         var parent = this;
 
         //cria tela de log
-        $('.theme').append('<div style="overflow:auto; left: 0px; width: 100%; height: 100%; position: fixed; top: 0px; background: none repeat scroll 0px 0px black; opacity: 0.8;" class="savebg"></div>');
+        $('.theme').append('<div style="overflow:auto; left: 0px; width: 100%;\n\
+                             height: 100%; position: fixed; top: 0px; background: none repeat scroll 0px 0px black; \n\
+                                opacity: 0.8;" class="savebg"></div>');
         $('.theme').append('<div style="overflow:auto; background: none repeat scroll 0px 0px white; height: 300px; border-radius: 5px 5px 5px 5px; width: 800px; margin-top: 100px; margin-left: 250px; position: fixed; border: 2px solid black; padding: 10px;" class="savescreen">' +
                 '<p>Aguarde um instante...</p>' +
                 '</div>');
@@ -1543,6 +1547,7 @@ function editor() {
                     //Verificar se é um elemento da PieceSet
                     //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                     ElementID = $(this).attr('id');
+                    
                     ElementID_BD = $(this).attr('idBD');
                     //get Atributo position
                     elementPosition = $(this).attr('position');
@@ -1668,7 +1673,6 @@ function editor() {
 
 
                                                 });
-                                        console.log(data);
 
                                     }
 
