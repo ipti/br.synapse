@@ -1228,7 +1228,7 @@ class EditorController extends Controller {
         $delpiece = true;
         foreach ($delE as $el):
             //Desvincular cada Elemento 
-            $delpiece = (!$this->delElement($el->element_id, $id, false)) ? false : $delpiece;
+            $delpiece = (!$this->delElement($el->element_id, $id, false, false)) ? false : $delpiece;
         endforeach;
         //Depois, Exclui a peça Se Não existir Algum piece_element <=> performance_actor
         if ($delpiece) {
