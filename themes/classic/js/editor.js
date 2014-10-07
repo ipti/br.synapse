@@ -1057,7 +1057,8 @@ function editor() {
                     do {
                         
                         if (lastGroupASK.size() == 0) {
-                            $('#' + parent.currentPiece + " > div.tplMulti br").after(html);
+                            console.log('POO');
+                            $('#' + parent.currentPiece + " > div.tplMulti > br").after(html);
                             continues = false;
                         } else if (group > lastGroupASK.attr('group')) {
                             lastGroupASK.after(html);
