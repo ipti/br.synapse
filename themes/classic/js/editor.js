@@ -921,10 +921,9 @@ function editor() {
                 group = next_group;
             }
 
-            console.log(group);
-
             var htmlDefault = '<div group="' + group + '">';
             if (!sameElement) {
+                //Pode ADD um novo grupo
                 if (!this.isset(isResp) || !isResp) {
                     if (!parent.COTemplateTypeIn(parent.ONEDDROP) ||
                             (parent.COTemplateTypeIn(parent.ONEDDROP) &&
@@ -975,23 +974,100 @@ function editor() {
 
                 }
 
+                if (self.isset(loaddata)) {
+                    var lastGroupASK;
+                    var lastGroupANSWER;
+                    var lastListASK;
+                    var lastListANSWER;
+                    if (!self.isset(group.split('_')[1])) {
+                        //E um ask
+                        lastListASK = $("#" + parent.currentPiece + "_query").find('li:last');
+                        var continues = true;
+                        do {
+                            if (lastListASK.size() != 0) {
+                                lastGroupASK = lastListASK.find('div[group]');
+                            }
 
-                $("#" + parent.currentPiece + "_query").append(html);
-                if (this.isset(html2)) {
-                    $("#" + parent.currentPiece + "_query_resp").append(html2);
+                            if (lastListASK.size() == 0) {
+                                $("#" + parent.currentPiece + "_query").prepend(html);
+                                continues = false;
+                            } else if (group > lastGroupASK.attr('group')) {
+                                lastListASK.after(html);
+                                continues = false;
+                            } else {
+                                //lastList agora e um grupo anterior
+                                lastListASK = lastListASK.prev();
+                            }
+                        } while (continues);
+
+                    } else {
+                        //E um answer
+                        var numGroupAnswer = group.split('_')[0];
+                        lastListANSWER = $("#" + parent.currentPiece + "_query_resp").find('li:last');
+                        var continues = true;
+                        do {
+                            if (lastListANSWER.size() != 0) {
+                                lastGroupANSWER = lastListANSWER.find('div[group]');
+                            }
+
+                            if (lastListANSWER.size() == 0) {
+                                $("#" + parent.currentPiece + "_query_resp").prepend(html2);
+                                continues = false;
+                            } else if (numGroupAnswer > lastGroupANSWER.attr('group')) {
+                                lastListANSWER.after(html2);
+                                continues = false;
+                            } else {
+                                //lastList agora e um grupo anterior
+                                lastListANSWER = lastListANSWER.prev();
+                            }
+                        } while (continues);
+
+                    }
+                } else {
+                    $("#" + parent.currentPiece + "_query").append(html);
+                    if (this.isset(html2)) {
+                        $("#" + parent.currentPiece + "_query_resp").append(html2);
+                    }
                 }
+
+
 
             } else {
                 //muda o Element para da um append no elemento Pergunta Existente
                 elementID = $('div[match=' + match + ']').attr('id');
             }
 
+
+
         }
 
         if ((parent.COTemplateTypeIn(parent.MTE))) {
             if (newDivMatch) {
                 html += '</span></div>';
-                $('#' + parent.currentPiece + " > div.tplMulti").append(html);
+                
+                if (self.isset(loaddata)) {
+                    var lastGroupASK;
+                    //E um ask
+                    lastGroupASK = $('#' + parent.currentPiece + " > div.tplMulti").find('div[group]:last');
+                    var continues = true;
+                    do {
+                        
+                        if (lastGroupASK.size() == 0) {
+                            $('#' + parent.currentPiece + " > div.tplMulti br").after(html);
+                            continues = false;
+                        } else if (group > lastGroupASK.attr('group')) {
+                            lastGroupASK.after(html);
+                            continues = false;
+                        } else {
+                            //lastList agora e um grupo anterior
+                            lastGroupASK = lastGroupASK.prev();
+                        }
+                    } while (continues);
+
+                } else {
+                    $('#' + parent.currentPiece + " > div.tplMulti").append(html);
+                }
+
             }
         }
         var tagAdd = "";
@@ -2062,10 +2138,10 @@ function editor() {
                 ((!parent.isload && parent.totalElements == parent.uploadedElements) ||
                         (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
                                 (!parent.COTemplateTypeIn(parent.MTE) || ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
-                    //chama o posEditor
-                    $('.savescreen').append('<br><p> FIM! <a href="index?cID='+self.CObjectID+'"> Voltar </a> </p>');
-                    parent.posEditor();
-                    //=======================================================
+            //chama o posEditor
+            $('.savescreen').append('<br><p> FIM! <a href="index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
+            parent.posEditor();
+            //=======================================================
         }
     }
 
