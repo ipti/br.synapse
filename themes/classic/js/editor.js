@@ -653,6 +653,7 @@ function editor() {
             }
         });
 
+
         $("#" + input).bind('change', function() {
             var filesize = this.files[0].size / 1024; //KB
             filesize = filesize / 1024; //MB
@@ -677,6 +678,9 @@ function editor() {
             }
 
         });
+        
+        //Trigger pra clicar no btn de Upload
+         $("#" + input).trigger("click");
     }
 
     //Add imagem do PieceSet
@@ -2137,7 +2141,8 @@ function editor() {
                 (parent.totalPieces == parent.uploadedPieces) &&
                 ((!parent.isload && parent.totalElements == parent.uploadedElements) ||
                         (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
-                                (!parent.COTemplateTypeIn(parent.MTE) || ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
+                                (!parent.COTemplateTypeIn(parent.MTE) || 
+                                    ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
             //chama o posEditor
             $('.savescreen').append('<br><p> FIM! <a href="index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
             parent.posEditor();
