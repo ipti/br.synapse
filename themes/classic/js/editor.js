@@ -100,13 +100,13 @@ function editor() {
         //incrementa o contador
         this.countScreen = this.countScreen + 1;
         //cria a div da nova screen, e adiciona o ID do banco, caso exista.
-         var screenID = 'sc' + this.countScreen;
+        var screenID = 'sc' + this.countScreen;
         $(".content").append('<div class="screen" id="' + screenID + '" ' + plus + '></div>');
         //cria o novo contador de pieceSet
         this.countPieceSet[screenID] = 0;
         //atualiza o pajinate
         this.attPajinate();
-       
+
         //Se for novo ADD a 1° PieceSet
         var iddb = $('#' + screenID).attr('idbd');
         if (!this.isset(iddb)) {
@@ -921,7 +921,7 @@ function editor() {
                 group = next_group;
             }
 
-console.log(group);
+            console.log(group);
 
             var htmlDefault = '<div group="' + group + '">';
             if (!sameElement) {
@@ -1547,7 +1547,7 @@ console.log(group);
                     //Verificar se é um elemento da PieceSet
                     //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                     ElementID = $(this).attr('id');
-                    
+
                     ElementID_BD = $(this).attr('idBD');
                     //get Atributo position
                     elementPosition = $(this).attr('position');
@@ -2062,27 +2062,10 @@ console.log(group);
                 ((!parent.isload && parent.totalElements == parent.uploadedElements) ||
                         (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
                                 (!parent.COTemplateTypeIn(parent.MTE) || ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
-            
-           // getLastCobjectID
-//           $.ajax({
-//            type: "POST",
-//            url: "/editor/getLastCobjectID",
-//            error: function(jqXHR, textStatus, errorThrown) {
-//                $('#img_load').remove();
-//                $('html').html(jqXHR.responseText);
-//            },
-//            success: function(response, textStatus, jqXHR) {
-//               console.log(response);
-//            }
-//        });
-                
-                
-            //chama o posEditor
-            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
-            parent.posEditor();
-
-            //=======================================================
-
+                    //chama o posEditor
+                    $('.savescreen').append('<br><p> FIM! <a href="index?cID='+self.CObjectID+'"> Voltar </a> </p>');
+                    parent.posEditor();
+                    //=======================================================
         }
     }
 
@@ -2109,7 +2092,7 @@ console.log(group);
         //define parent como a classe base
         var parent = this;
         //inicia a requisição de ajax
-       // $('#loading').html('<img src="/themes/classic/images/loading.gif" id="img_load"/>');
+        // $('#loading').html('<img src="/themes/classic/images/loading.gif" id="img_load"/>');
         $.ajax({
             type: "POST",
             url: "/editor/json",

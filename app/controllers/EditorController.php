@@ -1410,9 +1410,12 @@ class EditorController extends Controller {
         return $propertyID;
     }
     
-    public function getLastCobjectID(){
-        $lastID = Yii::app()->db->CreateCommand('SELECT MAX(id) FROM cobject;');
-        return $lastID;
+    public function actionGetLastCobjectID(){
+            $lastID = Yii::app()->db->createCommand('SELECT Max(id) AS lastID FROM cobject;')->queryAll();
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($lastID);
     }
 
     // Uncomment the following methods and override them if needed
