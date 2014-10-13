@@ -100,13 +100,13 @@ function editor() {
         //incrementa o contador
         this.countScreen = this.countScreen + 1;
         //cria a div da nova screen, e adiciona o ID do banco, caso exista.
-         var screenID = 'sc' + this.countScreen;
+        var screenID = 'sc' + this.countScreen;
         $(".content").append('<div class="screen" id="' + screenID + '" ' + plus + '></div>');
         //cria o novo contador de pieceSet
         this.countPieceSet[screenID] = 0;
         //atualiza o pajinate
         this.attPajinate();
-       
+
         //Se for novo ADD a 1° PieceSet
         var iddb = $('#' + screenID).attr('idbd');
         if (!this.isset(iddb)) {
@@ -653,6 +653,7 @@ function editor() {
             }
         });
 
+
         $("#" + input).bind('change', function() {
             var filesize = this.files[0].size / 1024; //KB
             filesize = filesize / 1024; //MB
@@ -677,6 +678,9 @@ function editor() {
             }
 
         });
+        
+        //Trigger pra clicar no btn de Upload
+         $("#" + input).trigger("click");
     }
 
     //Add imagem do PieceSet
@@ -921,10 +925,9 @@ function editor() {
                 group = next_group;
             }
 
-console.log(group);
-
             var htmlDefault = '<div group="' + group + '">';
             if (!sameElement) {
+                //Pode ADD um novo grupo
                 if (!this.isset(isResp) || !isResp) {
                     if (!parent.COTemplateTypeIn(parent.ONEDDROP) ||
                             (parent.COTemplateTypeIn(parent.ONEDDROP) &&
@@ -975,23 +978,101 @@ console.log(group);
 
                 }
 
+                if (self.isset(loaddata)) {
+                    var lastGroupASK;
+                    var lastGroupANSWER;
+                    var lastListASK;
+                    var lastListANSWER;
+                    if (!self.isset(group.split('_')[1])) {
+                        //E um ask
+                        lastListASK = $("#" + parent.currentPiece + "_query").find('li:last');
+                        var continues = true;
+                        do {
+                            if (lastListASK.size() != 0) {
+                                lastGroupASK = lastListASK.find('div[group]');
+                            }
 
-                $("#" + parent.currentPiece + "_query").append(html);
-                if (this.isset(html2)) {
-                    $("#" + parent.currentPiece + "_query_resp").append(html2);
+                            if (lastListASK.size() == 0) {
+                                $("#" + parent.currentPiece + "_query").prepend(html);
+                                continues = false;
+                            } else if (group > lastGroupASK.attr('group')) {
+                                lastListASK.after(html);
+                                continues = false;
+                            } else {
+                                //lastList agora e um grupo anterior
+                                lastListASK = lastListASK.prev();
+                            }
+                        } while (continues);
+
+                    } else {
+                        //E um answer
+                        var numGroupAnswer = group.split('_')[0];
+                        lastListANSWER = $("#" + parent.currentPiece + "_query_resp").find('li:last');
+                        var continues = true;
+                        do {
+                            if (lastListANSWER.size() != 0) {
+                                lastGroupANSWER = lastListANSWER.find('div[group]');
+                            }
+
+                            if (lastListANSWER.size() == 0) {
+                                $("#" + parent.currentPiece + "_query_resp").prepend(html2);
+                                continues = false;
+                            } else if (numGroupAnswer > lastGroupANSWER.attr('group')) {
+                                lastListANSWER.after(html2);
+                                continues = false;
+                            } else {
+                                //lastList agora e um grupo anterior
+                                lastListANSWER = lastListANSWER.prev();
+                            }
+                        } while (continues);
+
+                    }
+                } else {
+                    $("#" + parent.currentPiece + "_query").append(html);
+                    if (this.isset(html2)) {
+                        $("#" + parent.currentPiece + "_query_resp").append(html2);
+                    }
                 }
+
+
 
             } else {
                 //muda o Element para da um append no elemento Pergunta Existente
                 elementID = $('div[match=' + match + ']').attr('id');
             }
 
+
+
         }
 
         if ((parent.COTemplateTypeIn(parent.MTE))) {
             if (newDivMatch) {
                 html += '</span></div>';
-                $('#' + parent.currentPiece + " > div.tplMulti").append(html);
+                
+                if (self.isset(loaddata)) {
+                    var lastGroupASK;
+                    //E um ask
+                    lastGroupASK = $('#' + parent.currentPiece + " > div.tplMulti").find('div[group]:last');
+                    var continues = true;
+                    do {
+                        
+                        if (lastGroupASK.size() == 0) {
+                            console.log('POO');
+                            $('#' + parent.currentPiece + " > div.tplMulti > br").after(html);
+                            continues = false;
+                        } else if (group > lastGroupASK.attr('group')) {
+                            lastGroupASK.after(html);
+                            continues = false;
+                        } else {
+                            //lastList agora e um grupo anterior
+                            lastGroupASK = lastGroupASK.prev();
+                        }
+                    } while (continues);
+
+                } else {
+                    $('#' + parent.currentPiece + " > div.tplMulti").append(html);
+                }
+
             }
         }
         var tagAdd = "";
@@ -1547,7 +1628,7 @@ console.log(group);
                     //Verificar se é um elemento da PieceSet
                     //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                     ElementID = $(this).attr('id');
-                    
+
                     ElementID_BD = $(this).attr('idBD');
                     //get Atributo position
                     elementPosition = $(this).attr('position');
@@ -2061,28 +2142,12 @@ console.log(group);
                 (parent.totalPieces == parent.uploadedPieces) &&
                 ((!parent.isload && parent.totalElements == parent.uploadedElements) ||
                         (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
-                                (!parent.COTemplateTypeIn(parent.MTE) || ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
-            
-           // getLastCobjectID
-//           $.ajax({
-//            type: "POST",
-//            url: "/editor/getLastCobjectID",
-//            error: function(jqXHR, textStatus, errorThrown) {
-//                $('#img_load').remove();
-//                $('html').html(jqXHR.responseText);
-//            },
-//            success: function(response, textStatus, jqXHR) {
-//               console.log(response);
-//            }
-//        });
-                
-                
+                                (!parent.COTemplateTypeIn(parent.MTE) || 
+                                    ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
             //chama o posEditor
-            $('.savescreen').append('<br><p> FIM! <a href="index"> Voltar </a> </p>');
+            $('.savescreen').append('<br><p> FIM! <a href="index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
             parent.posEditor();
-
             //=======================================================
-
         }
     }
 
@@ -2109,7 +2174,7 @@ console.log(group);
         //define parent como a classe base
         var parent = this;
         //inicia a requisição de ajax
-       // $('#loading').html('<img src="/themes/classic/images/loading.gif" id="img_load"/>');
+        // $('#loading').html('<img src="/themes/classic/images/loading.gif" id="img_load"/>');
         $.ajax({
             type: "POST",
             url: "/editor/json",

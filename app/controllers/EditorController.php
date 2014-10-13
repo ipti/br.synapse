@@ -1228,7 +1228,7 @@ class EditorController extends Controller {
         $delpiece = true;
         foreach ($delE as $el):
             //Desvincular cada Elemento 
-            $delpiece = (!$this->delElement($el->element_id, $id, false)) ? false : $delpiece;
+            $delpiece = (!$this->delElement($el->element_id, $id, false, false)) ? false : $delpiece;
         endforeach;
         //Depois, Exclui a peça Se Não existir Algum piece_element <=> performance_actor
         if ($delpiece) {
@@ -1410,9 +1410,12 @@ class EditorController extends Controller {
         return $propertyID;
     }
     
-    public function getLastCobjectID(){
-        $lastID = Yii::app()->db->CreateCommand('SELECT MAX(id) FROM cobject;');
-        return $lastID;
+    public function actionGetLastCobjectID(){
+            $lastID = Yii::app()->db->createCommand('SELECT Max(id) AS lastID FROM cobject;')->queryAll();
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($lastID);
     }
 
     // Uncomment the following methods and override them if needed
