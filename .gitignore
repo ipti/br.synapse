@@ -7,3 +7,5 @@
 /framework/
 /library/
 /themes/classic/js/render/offLine/data/
+/app/config/
+/app/runtime/
