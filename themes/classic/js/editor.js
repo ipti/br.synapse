@@ -1312,7 +1312,6 @@ function editor() {
         }
     }
     this.delElement = function(id, isRecursion) {
-        console.log(id);
         var isRecursion = this.isset(isRecursion) && isRecursion;
         var isPiecesetElement = false;
         var isCobjectElement = false;
@@ -1791,6 +1790,7 @@ function editor() {
                                             data['value'] = {};
                                             data['value']['url'] = response['url'];
                                             data['value']['name'] = response['name'];
+                                            data['value']['oldName'] = response['oldName'];
                                             data['value']['isNewImg'] = self.isset(response['varMUF']);
                                             //Salva Elemento
                                             parent.saveData(
@@ -1865,6 +1865,7 @@ function editor() {
                                             data['value'] = {};
                                             data['value']['url'] = response['url'];
                                             data['value']['name'] = response['name'];
+                                            data['value']['oldName'] = response['oldName'];
                                             //Salva Elemento
                                             parent.saveData(
                                                     //Dados

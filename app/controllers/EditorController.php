@@ -722,14 +722,14 @@ class EditorController extends Controller {
                                     } else {
                                         //Elementos textos somente precisam Atualizar seu campo
                                         //obs: verificar essa condição para os demais elementos != template TXT
-                                          //salva editor_element_property 's
+                                        //salva editor_element_property 's
                                         //text   
                                         $elementID = $newElement->id;
                                         $propertyName = "text";
                                         $propertyContext = "phrase";
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        $newElementProperty =  EditorElementProperty::model()->findByAttributes(array(
-                                            'element_id'=>$elementID , 'property_id' => $propertyID
+                                        $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
+                                            'element_id' => $elementID, 'property_id' => $propertyID
                                         ));
                                         $newElementProperty->value = $value;
                                         $newElementProperty->save();
@@ -739,8 +739,8 @@ class EditorController extends Controller {
                                         $propertyContext = "element";
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
                                         $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
-                                            'element_id'=>$elementID , 'property_id' => $propertyID
-                                        )) ;
+                                            'element_id' => $elementID, 'property_id' => $propertyID
+                                                ));
                                         $newElementProperty->value = "português";
                                         $newElementProperty->save();
                                     }
@@ -820,6 +820,7 @@ class EditorController extends Controller {
                                         if ($libraryTypeName == $this->TYPE_LIBRARY_IMAGE) {//image
                                             $src = $value['url'];
                                             $nome = $value['name'];
+                                            $oldName = $value['oldName'];
                                             $ext = explode(".", $nome);
                                             $ext = $ext[1];
                                             //Pegar informações da imagem
@@ -878,6 +879,16 @@ class EditorController extends Controller {
                                             $newLibraryProperty->value = $ext;
                                             $newLibraryProperty->insert();
 
+                                            //46 description
+                                            $propertyName = "description";
+                                            $propertyContext = "library";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newLibraryProperty = new LibraryProperty();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $oldName;
+                                            $newLibraryProperty->insert();
+
                                             //Salva a editor_element_property
                                             //4 libraryID
                                             $propertyName = "library_id";
@@ -894,6 +905,7 @@ class EditorController extends Controller {
 
                                             $src = $value['url'];
                                             $nome = $value['name'];
+                                            $oldName = $value['oldName'];
                                             $ext = explode(".", $nome);
                                             $ext = $ext[1];
 
@@ -924,6 +936,17 @@ class EditorController extends Controller {
                                             $newLibraryProperty->property_id = $propertyID;
                                             $newLibraryProperty->value = $ext;
                                             $newLibraryProperty->insert();
+
+                                            //46 description
+                                            $propertyName = "description";
+                                            $propertyContext = "library";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newLibraryProperty = new LibraryProperty();
+                                            $newLibraryProperty->library_id = $libraryID;
+                                            $newLibraryProperty->property_id = $propertyID;
+                                            $newLibraryProperty->value = $oldName;
+                                            $newLibraryProperty->insert();
+
 
                                             //Salva a editor_element_property
                                             //4 libraryID
@@ -1349,6 +1372,9 @@ class EditorController extends Controller {
                         //adiciona ao retorno do json a URL e o nome do arquivo
                         $json['url'] = $url . $name;
                         $json['name'] = $name;
+                        $json['oldName'] = explode(".", $file_name);
+                        $json['oldName'] = $json['oldName'][0];
+
                         if (!$fileExists) {
                             //Somente faz o upload se o mesmo arquivo Não existe no servidor 
                             try {
@@ -1409,9 +1435,9 @@ class EditorController extends Controller {
 
         return $propertyID;
     }
-    
-    public function actionGetLastCobjectID(){
-            $lastID = Yii::app()->db->createCommand('SELECT Max(id) AS lastID FROM cobject;')->queryAll();
+
+    public function actionGetLastCobjectID() {
+        $lastID = Yii::app()->db->createCommand('SELECT Max(id) AS lastID FROM cobject;')->queryAll();
         header('Cache-Control: no-cache, must-revalidate');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
         header('Content-type: application/json');
