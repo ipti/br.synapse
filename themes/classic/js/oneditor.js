@@ -4,79 +4,110 @@ $(function() {
 //    $.getScript("/../themes/classic/js/jquery/jquery.scrollintoview.js",function(){
 //       console.log('Carregou!');
 //    });
-    
+
     $('.canvas').pajinate({
-        start_page : 0,
-        items_per_page : 1,
-        nav_label_first : '<<',
-        nav_label_last : '>>',
-        nav_label_prev : '<',
-        nav_label_next : '>',
-        show_first_last : false,
+        start_page: 0,
+        items_per_page: 1,
+        nav_label_first: '<<',
+        nav_label_last: '>>',
+        nav_label_prev: '<',
+        nav_label_next: '>',
+        show_first_last: false,
         num_page_links_to_display: 20,
-        nav_panel_id : '.navsreen',
-        editor : newEditor
-    }); 
-    
+        nav_panel_id: '.navsreen',
+        editor: newEditor
+    });
+
     newEditor.countPieceSet['sc0'] = 0;
     newEditor.countPieces['sc0_ps0'] = 0;
-    
+
     //$("#toolbar").draggable({
     //    axis: "y"
     //});                   
-    $("#addScreen").click(function(){
+    $("#addScreen").click(function() {
         newEditor.addScreen();
     });
-    $("#delScreen").click(function(){
+    $("#delScreen").click(function(event) {
+
+        alert(event.which);
+
         newEditor.delScreen(false);
     });
-    
-    $(document).on('click',".insertText",function(){
+
+    //===================
+
+    var pressedCtrl = false;
+
+    $(document).keyup(function(e) {
+        if (e.which == 17) {
+            pressedCtrl = false;
+        }
+    });
+
+    $(document).keydown(function(e) {
+        if (e.which == 17) {
+            pressedCtrl = true;
+        }
+    });
+
+    $(document).on('click', '.insertImage', function() {
+        if (pressedCtrl) {
+            //Com o ctrl Pressionado
+            pressedCtrl = false;
+            alert('Press Ctrl');
+        } else {
+            alert('No Press Ctrl');
+            //click normal
+            //Somente adiciona se não possui outro elemento imagem neste grupo
+            if ($(this).closest('div[group]').find('div.image').size() == 0) {
+                newEditor.addImage($(this).closest('div[group]'));
+            }
+        }
+    });
+
+    //====================
+
+    $(document).on('click', ".insertText", function() {
         //Somente adiciona se não possui outro elemento texto neste grupo
-        if($(this).closest('div[group]').find('div.text').size() == 0){
+        if ($(this).closest('div[group]').find('div.text').size() == 0) {
             newEditor.addText($(this).closest('div[group]'));
         }
-        
+
     });
-    $(document).on('click',".insertImage",function(){ //
+
+    $(document).on('click', ".insertSound", function() { //
         //Somente adiciona se não possui outro elemento imagem neste grupo
-        if($(this).closest('div[group]').find('div.image').size() == 0){
-            newEditor.addImage($(this).closest('div[group]'));
-        }
-    });
-    $(document).on('click',".insertSound",function(){ //
-        //Somente adiciona se não possui outro elemento imagem neste grupo
-        if($(this).closest('div[group]').find('div.audio').size() == 0){
+        if ($(this).closest('div[group]').find('div.audio').size() == 0) {
             newEditor.addSound($(this).closest('div[group]'));
         }
     });
-    
-    $("#addPieceSet").click(function(){
+
+    $("#addPieceSet").click(function() {
         newEditor.addPieceSet();
     });
-    
-    $("#tools > #addimage").click(function(){
-        newEditor.insertImgCobject(null,null);  
+
+    $("#tools > #addimage").click(function() {
+        newEditor.insertImgCobject(null, null);
     });
-    
-     $("#tools > #addsound").click(function(){
-        newEditor.insertSoundCobject(null,null);
+
+    $("#tools > #addsound").click(function() {
+        newEditor.insertSoundCobject(null, null);
     });
-    
-    $(document).on("click",".addPiece",(function(){
+
+    $(document).on("click", ".addPiece", (function() {
         newEditor.addPiece($(this).attr('id'));
     }));
-    $(document).on("mousedown",'.piece',function(){
+    $(document).on("mousedown", '.piece', function() {
         newEditor.changePiece($(this));
     });
-    $('#save').click(function(){
+    $('#save').click(function() {
         newEditor.saveAll();
     });
-    
-    
-    $(document).on("change",'.input_element',function() {
+
+
+    $(document).on("change", '.input_element', function() {
         newEditor.imageChanged($(this));
     });
-    
-    
+
+
 });

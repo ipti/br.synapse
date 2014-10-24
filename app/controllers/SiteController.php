@@ -130,7 +130,7 @@ class SiteController extends Controller {
         //Redirecionamento Após Login e Seleção do Personagem
         switch($nome_personage){
             case "Tutor":
-                    $this->redirect(Yii::app()->baseUrl.'/render/');
+                    $this->redirect(Yii::app()->baseUrl.'/editor/');
                 break;
             case "Aluno":
                     $this->redirect(Yii::app()->baseUrl.'/render/canvas');
