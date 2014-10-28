@@ -184,7 +184,14 @@ function editor() {
 
         //Cria função do botões
         $("#" + piecesetID + "_list > button.insertImage").click(function() {
-            parent.insertImgPieceSet(piecesetID, null, null);
+            if (holdingCtrl) {
+                //Com o ctrl Pressionado
+                holdingCtrl = false;
+            } else {
+                //Click normal
+                 parent.insertImgPieceSet(piecesetID, null, null);
+            }
+           
         });
         $("#" + piecesetID + "_list > button.insertSound").click(function() {
             parent.insertAudioPieceSet(piecesetID, null);
@@ -678,9 +685,9 @@ function editor() {
             }
 
         });
-        
+
         //Trigger pra clicar no btn de Upload
-         $("#" + input).trigger("click");
+        $("#" + input).trigger("click");
     }
 
     //Add imagem do PieceSet
@@ -1048,14 +1055,14 @@ function editor() {
         if ((parent.COTemplateTypeIn(parent.MTE))) {
             if (newDivMatch) {
                 html += '</span></div>';
-                
+
                 if (self.isset(loaddata)) {
                     var lastGroupASK;
                     //E um ask
                     lastGroupASK = $('#' + parent.currentPiece + " > div.tplMulti").find('div[group]:last');
                     var continues = true;
                     do {
-                        
+
                         if (lastGroupASK.size() == 0) {
                             console.log('POO');
                             $('#' + parent.currentPiece + " > div.tplMulti > br").after(html);
@@ -1191,6 +1198,7 @@ function editor() {
                 }
             });
             $(buttonImageID).click(function() {
+                alert('BTN_IMG');
                 if (!parent.COTemplateTypeIn(parent.AEL)
                         && !parent.COTemplateTypeIn(parent.DDROP)
                         && !parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -2143,8 +2151,8 @@ function editor() {
                 (parent.totalPieces == parent.uploadedPieces) &&
                 ((!parent.isload && parent.totalElements == parent.uploadedElements) ||
                         (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
-                                (!parent.COTemplateTypeIn(parent.MTE) || 
-                                    ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
+                                (!parent.COTemplateTypeIn(parent.MTE) ||
+                                        ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
             //chama o posEditor
             $('.savescreen').append('<br><p> FIM! <a href="index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
             parent.posEditor();

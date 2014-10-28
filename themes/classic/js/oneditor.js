@@ -35,28 +35,23 @@ $(function() {
     });
 
     //===================
-
-    var pressedCtrl = false;
-
+    holdingCtrl = false;
     $(document).keyup(function(e) {
         if (e.which == 17) {
-            pressedCtrl = false;
+            holdingCtrl = false;
         }
     });
-
     $(document).keydown(function(e) {
         if (e.which == 17) {
-            pressedCtrl = true;
+            holdingCtrl = true;
         }
     });
 
-    $(document).on('click', '.insertImage', function() {
-        if (pressedCtrl) {
+    $(document).on('click', 'div[group] .insertImage', function() {
+        if (holdingCtrl) {
             //Com o ctrl Pressionado
-            pressedCtrl = false;
-            alert('Press Ctrl');
+            holdingCtrl = false;
         } else {
-            alert('No Press Ctrl');
             //click normal
             //Somente adiciona se não possui outro elemento imagem neste grupo
             if ($(this).closest('div[group]').find('div.image').size() == 0) {
@@ -64,7 +59,6 @@ $(function() {
             }
         }
     });
-
     //====================
 
     $(document).on('click', ".insertText", function() {
@@ -86,8 +80,17 @@ $(function() {
         newEditor.addPieceSet();
     });
 
+
     $("#tools > #addimage").click(function() {
-        newEditor.insertImgCobject(null, null);
+        //===================
+        if (holdingCtrl) {
+            //Com o ctrl Pressionado
+            holdingCtrl = false;
+        } else {
+            //click normal
+                newEditor.insertImgCobject(null, null);
+        }
+        //====================
     });
 
     $("#tools > #addsound").click(function() {
