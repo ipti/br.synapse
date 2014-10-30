@@ -250,7 +250,7 @@ class RenderController extends Controller {
                 if ($buildZipMultimedia && $libproperty->property->name == 'src') {
                     $dir_uploadType = $lib->type->name;
                     $src = Yii::app()->basePath . "/.." . $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
-                    $this->tempArchiveZipMultiMedia->addFile($src, '/library/'.$dir_uploadType.'/' . $libproperty->value);
+                    $this->tempArchiveZipMultiMedia->addFile($src, '/library/' . $dir_uploadType . '/' . $libproperty->value);
                     //Array de tipos que este grupo possui
                     if (!$isPiecesetElement && !$isCobjectElement) {
                         if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
@@ -368,7 +368,7 @@ class RenderController extends Controller {
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
-                    'getSchool', 'getCobject_blocks', 'getDisciplines'),
+                    'importPeformance', 'getSchool', 'getCobject_blocks', 'getDisciplines'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -450,7 +450,7 @@ class RenderController extends Controller {
                 $this->tempArchiveZipMultiMedia->addEmptyDir("/library/image/");
                 $this->tempArchiveZipMultiMedia->addEmptyDir("/library/sound/");
                 $this->tempArchiveZipMultiMedia->addEmptyDir("/json/");
-                
+
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
                     array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
                 endforeach;
@@ -486,6 +486,48 @@ class RenderController extends Controller {
         } else {
             //Carrega a página para exportar para o render Offline
             $this->render("exportToOffline");
+        }
+    }
+
+    public function actionImportPeformance() {
+
+        if (isset($_FILES['fileTxt'])) {
+            $tempName = $_FILES['fileTxt']['tmp_name'];
+            // move_uploaded_file($tempNamename, Yii::app()->theme->basePath . '/backups/backup_peformances/');
+            $fileTxt = fopen($tempName, "r") or die("Unable to open file!");
+            $peformancesJson = fread($fileTxt, filesize($tempName));
+            $peformances = json_decode($peformancesJson);
+            //Fecha o Arquivo
+            fclose($fileTxt);
+            $imported = false;
+            if (isset($peformances)) {
+                $strSqlPerformInserts = "INSERT INTO `synapse`.`peformance_actor`"
+                        . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
+                $totalPeformances = count($peformances);
+                foreach ($peformances as $idx => $peform):
+                    $strSqlPerformInserts.='( "';
+                    $strSqlPerformInserts.= $peform->actor_id . '", "' . $peform->piece_id
+                            . '", "' . $peform->group_id . '", "' . $peform->final_time
+                            . '", "' . $peform->iscorrect . '", "' . $peform->value;
+                    $strSqlPerformInserts.='" )';
+                    if($idx < $totalPeformances-1){
+                        $strSqlPerformInserts.=", ";
+                    }
+                        
+                endforeach;
+                
+                //Executa a Query
+                Yii::app()->db->createCommand($strSqlPerformInserts)->query();
+                $imported = true;
+            }
+
+            if ($imported) {
+                $this->render("importPeformance", array('msg' => 'success'));
+            } else {
+                $this->render("importPeformance", array('msg' => 'error'));
+            }
+        } else {
+            $this->render("importPeformance");
         }
     }
 

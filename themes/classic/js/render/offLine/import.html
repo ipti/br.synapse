@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width; initial-scale=1.2; maximum-scale=1.2; target-densitydpi=medium-dpi; user-scalable=no" />
         <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen, projection" />
         <link rel="stylesheet" type="text/css" href="css/render/global.css">
-        <link rel="stylesheet" type="text/css" href="css/render/login.css">
+        <link rel="stylesheet" type="text/css" href="css/render/admin.css">
         <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
         <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
         <!---[if lt IE 8]>
@@ -17,11 +17,11 @@
         <script src="js/jquery/jquery.ui.mouse.js"></script>
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
-        
-          <!-- JQUERY FOR MOBILE-->
+
+        <!-- JQUERY FOR MOBILE-->
         <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
         <!-- ======= -->
-        
+
         <script type="text/javascript" src="js/render/meet.js"></script>
         <script type="text/javascript" src="js/render/domcobject.js"></script>
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
@@ -29,84 +29,94 @@
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script type="text/javascript" src="data/json/renderData.js"></script>
         <script>
-                
-                 function existInArray(array, id){
-                    for(var i in array){
-                        if(array[i].id == id){
-                            return true;
-                        }
+
+            function existInArray(array, id) {
+                for (var i in array) {
+                    if (array[i].id == id) {
+                        return true;
                     }
-                    return false;
                 }
-            
-            
-            $(document).ready(function(){
-                
+                return false;
+            }
+
+
+            $(document).ready(function() {
+
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
-                
-                $('#deleteAllDB').bind('tap', function(){
+
+                $('#deleteAllDB').bind('tap', function() {
                     indexedDB.deleteDatabase("synapseDB");
                 });
-                
-                $('#import').bind('tap',function(){
+
+                $('#export').bind('tap', function() {
+                    db.exportPerformance_actor();
+                });
+
+                $('#import').bind('tap', function() {
                     var unitys = new Array();
                     var actors = new Array();
-                    
+
                     //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJson.ActorsOwnUnity, function(idx, object){
+                    $.each(dataJson.ActorsOwnUnity, function(idx, object) {
                         var tempUnity = {};
-                        tempUnity.id =  object.unity_id;
-                        tempUnity.father_id =  object.unity_father;
-                        tempUnity.name =  object.unity_name;
-                        tempUnity.organization_id =  object.unity_organization_id;
-                        if(!existInArray(unitys,tempUnity.id)){
+                        tempUnity.id = object.unity_id;
+                        tempUnity.father_id = object.unity_father;
+                        tempUnity.name = object.unity_name;
+                        tempUnity.organization_id = object.unity_organization_id;
+                        if (!existInArray(unitys, tempUnity.id)) {
                             unitys.push(tempUnity);
                         }
                         var tempActor = {};
-                        tempActor.id =  object.id;
-                        tempActor.login =  object.login;
-                        tempActor.name =  object.name;
-                        tempActor.password =  object.password;
-                        tempActor.personage_name =  object.personage;
+                        tempActor.id = object.id;
+                        tempActor.login = object.login;
+                        tempActor.name = object.name;
+                        tempActor.password = object.password;
+                        tempActor.personage_name = object.personage;
                         //Chave Estrageira para a sua unidade
                         tempActor.unity_id = object.unity_id;
-                         if(!existInArray(actors,tempActor.id)){
-                           actors.push(tempActor);
+                        if (!existInArray(actors, tempActor.id)) {
+                            actors.push(tempActor);
                         }
-                        
+
                     });
                     var disciplines = dataJson.Disciplines;
                     var cobjectblock = dataJson.CobjectBlock;
                     var cobject_cobjectblocks = dataJson.Cobject_cobjectBlocks;
                     var cobjects = dataJson.Cobjects;
-                    
-                    
+
+
                     //2° Importar
                     db.importAllDataRender(unitys, actors, disciplines, cobjectblock
-                    ,cobject_cobjectblocks,cobjects);
-                    
+                            , cobject_cobjectblocks, cobjects);
+
                 });
-                $('#buildAllSchemas').bind('tap',function(){
+                $('#buildAllSchemas').bind('tap', function() {
                     //1° Criar
                     db.openDBuild(true);
                 });
-                $('#back').bind('tap',function(){
+                $('#back').bind('tap', function() {
                     location.href = "index.html";
                 });
-            }); 
-    
+            });
+
         </script>
         <title>Import</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-    
+
     <body>
-        <section id="import-form" class="middle">
+        <section id="export-form">
+            <div id="export_data">
+                <button class="export-button buttons" type="button" id="export"> Exportar Performance</button>  
+            </div>
+        </section>    
+
+        <section id="import-form">
             <div id="import_data">
-                <button class="login-button buttons" type="button" id="deleteAllDB"> Limpar Banco </button>  
-                <button class="login-button buttons" type="button" id="buildAllSchemas" name="buildAllSchemas" >Construir Esquemas</button>
-                <button class="login-button buttons" type="button" id="import" name="import" >Importar Dados</button>
+                <button class="import-button buttons" type="button" id="deleteAllDB"> Limpar Banco </button>  
+                <button class="import-button buttons" type="button" id="buildAllSchemas" name="buildAllSchemas" >Construir Esquemas</button>
+                <button class="import-button buttons" type="button" id="import" name="import" >Importar Dados</button>
                 <button class="back-button buttons" type="button" id="back" name="back" >Voltar</button>
             </div>
         </section>

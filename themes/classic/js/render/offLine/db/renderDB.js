@@ -240,7 +240,7 @@ this.DB = function() {
     // - - - - - - - - - -  //
 
     this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
-        , cobject_cobjectblocks, cobjects) {
+            , cobject_cobjectblocks, cobjects) {
         //Unidade e Usuário
         var data_unity = unitys;
 
@@ -288,8 +288,8 @@ this.DB = function() {
             //Importar os cobjects
             self.importCobject(db, data_cobject);
 
-        //Importar os performance_actors
-        // self.importPerformance_actor(db,data_performance_actor); 
+            //Importar os performance_actors
+            // self.importPerformance_actor(db,data_performance_actor); 
 
 
         }
@@ -385,6 +385,74 @@ this.DB = function() {
         }
     }
 
+    // - - - - - - - - - -  //
+    // EXPORTE PARA BANCO DE DADOS //
+    // - - - - - - - - - -  //
+
+    //Export os performances_actors
+    this.exportPerformance_actor = function() {
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                window.alert("Database error: " + event.target.errorCode);
+            };
+
+            var performances = new Array();
+
+            var Performance_actorObjectStore = db.transaction("performance_actor", "readonly").objectStore("performance_actor");
+            Performance_actorObjectStore.openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var currentPerformance = '{"actor_id":"' + cursor.value.actor_id;
+                    currentPerformance += '", "final_time":"' + cursor.value.final_time;
+                    currentPerformance += '", "group_id":"' + cursor.value.group_id;
+                    currentPerformance += '", "iscorrect":"' + cursor.value.iscorrect;
+                    currentPerformance += '", "piece_id":"' + cursor.value.piece_id;
+                    currentPerformance += '", "value":"' + cursor.value.value + '"}';
+                    performances.push(currentPerformance);
+
+                    cursor.continue();
+                } else {
+                    //Não existe mais registros!
+                    var jsonExport = "[";
+                    for (var i = 0; i < performances.length; i++) {
+                        jsonExport += performances[i];
+                        //Se NAO for o ultimo
+                        if (i < performances.length - 1) {
+                            jsonExport += ", ";
+                        }
+                    }
+                    jsonExport += "]";
+
+                    //Realizar download da String
+                    var pom = document.createElement('a');
+                    var current_date = new Date();
+                    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
+                    pom.setAttribute('download', 'perfomances('+ current_date.getDate() + '-' + current_date.getMonth() 
+                    +'-'+ current_date.getFullYear() + '_' + current_date.getTime()+')');
+                    pom.click();
+
+                }
+            };
+
+        }
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+
+
+        ///=====
+
+
+    }
+
 
     //Pesquisas No Banco        
     this.login = function(login, password, callBack) {
@@ -404,7 +472,7 @@ this.DB = function() {
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
                 var requestGet = ActorObjectStore.index("login").get(login);
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     // Fazer algo com request.result!
@@ -464,7 +532,7 @@ this.DB = function() {
                 var cobjectStore = db.transaction("cobject").objectStore("cobject");
                 var requestGet = cobjectStore.get(cobject_id);
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
                 requestGet.onsuccess = function(event) {
                     var json_cobject = requestGet.result;
@@ -508,18 +576,18 @@ this.DB = function() {
                         cursor.continue();
                     } else {
                         //Finalisou a Pesquisa
-                        if(existBlock){
+                        if (existBlock) {
                             callBack(objectsThisBlock);
-                        }else{
+                        } else {
                             console.log("Nenhum Cobject foi encontrado para este Bloco");
                         }
-                        
+
                     }
 
                 };
                 requestGet.onerror = function(event) {
-                // Tratar erro!
-                  console.log("Não encontrou Cobjects para estes Bloco!");
+                    // Tratar erro!
+                    console.log("Não encontrou Cobjects para estes Bloco!");
                 }
             }
             DBsynapse.onblocked = function(event) {
@@ -561,7 +629,7 @@ this.DB = function() {
             var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
             Performance_actorObjectStore.add(data_performance_actor);
             Performance_actorObjectStore.transaction.oncomplete = function(event) {
-               // console.log('Performance Salva !!!! ');
+                // console.log('Performance Salva !!!! ');
             }
 
         }
@@ -603,17 +671,17 @@ this.DB = function() {
                             //Realiza Update
                             user_state_id = cursor.value.id;
                             //Set os novos dados do estado do actor corrente
-                            if(self.isset(data_state_actor.last_piece_id)){
+                            if (self.isset(data_state_actor.last_piece_id)) {
                                 cursor.value.last_piece_id = data_state_actor.last_piece_id;
                             }
-                            
+
                             cursor.value.qtd_correct = data_state_actor.qtd_correct;
                             cursor.value.qtd_wrong = data_state_actor.qtd_wrong;
-                            
-                            if(self.isset(data_state_actor.last_cobject_id)){
+
+                            if (self.isset(data_state_actor.last_cobject_id)) {
                                 cursor.value.last_cobject_id = data_state_actor.last_cobject_id;
                             }
-                            
+
                             var request_update = cursor.update(cursor.value);
                             request_update.onsuccess = function(event) {
                                 console.log(' State Actor Atualizado !!!! ');
@@ -639,7 +707,7 @@ this.DB = function() {
 
                 };
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
             }
             DBsynapse.onblocked = function(event) {
@@ -651,7 +719,7 @@ this.DB = function() {
 
     //Recuperar o estado do usuário
     this.getUserState = function(actor_id, cobject_block_id, callBack) {
-         
+
         if (self.isset(actor_id) && self.isset(cobject_block_id)) {
             var info_state = null;
             window.indexedDB = self.verifyIDBrownser();
@@ -684,7 +752,7 @@ this.DB = function() {
                                 qtd_wrong: cursor.value.qtd_wrong,
                                 last_cobject_id: cursor.value.last_cobject_id
                             };
-                        } 
+                        }
                         //else { Se não encontrou, vai pro próximo
                         cursor.continue();
                     } else {
@@ -694,7 +762,7 @@ this.DB = function() {
 
                 };
                 requestGet.onerror = function(event) {
-                // Tratar erro!
+                    // Tratar erro!
                 }
             }
             DBsynapse.onblocked = function(event) {
@@ -703,9 +771,9 @@ this.DB = function() {
             }
         }
     }
-    
-    
-    this.getAllClass = function(callBack,callBackEvent){
+
+
+    this.getAllClass = function(callBack, callBackEvent) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function(event) {
@@ -720,42 +788,42 @@ this.DB = function() {
             var unityStore = db.transaction("unity").objectStore("unity");
             var unitys = new Array();
             unityStore.openCursor().onsuccess = function(event) {
-                
+
                 var cursor = event.target.result;
                 if (cursor) {
                     // Percorre cada registro da unity
                     var unity_id = cursor.value.id;
                     var unity_name = cursor.value.name;
                     var currentUnity = {
-                        'unity_id':unity_id,
-                        'unity_name':unity_name
+                        'unity_id': unity_id,
+                        'unity_name': unity_name
                     };
-                    unitys.push(currentUnity);  
+                    unitys.push(currentUnity);
                     cursor.continue();
-                }else{
+                } else {
                     //Finalizou a Pesquisa das Unitys
-                    callBack(unitys,callBackEvent);
+                    callBack(unitys, callBackEvent);
                 }
 
             };
             unityStore.onerror = function(event) {
-            // Tratar erro!
+                // Tratar erro!
             }
         }
         DBsynapse.onblocked = function(event) {
             // Se existe outra aba com a versão antiga
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
-        
+
     }
-    this.getAllStudentFromClasses = function(unitys,callBackEvent){
+    this.getAllStudentFromClasses = function(unitys, callBackEvent) {
         self.totalUnitys = unitys.length;
-        for(var idx = 0; idx < unitys.length ; idx++){
-            self.getAllStudentFromClass(unitys[idx],callBackEvent);
+        for (var idx = 0; idx < unitys.length; idx++) {
+            self.getAllStudentFromClass(unitys[idx], callBackEvent);
         }
     }
-    
-    this.getAllStudentFromClass = function(unity,callBackEvent){
+
+    this.getAllStudentFromClass = function(unity, callBackEvent) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function(event) {
@@ -775,30 +843,30 @@ this.DB = function() {
             requestGet.openCursor().onsuccess = function(event) {
                 var contStudent = 0;
                 var cursorActor = event.target.result;
-                if (cursorActor){
+                if (cursorActor) {
                     // Percorre cada registro no actor para a unity corrent e personage = 'Aluno'
-                    if(cursorActor.value.personage_name == 'Aluno'){
+                    if (cursorActor.value.personage_name == 'Aluno') {
                         var actor_id = cursorActor.value.id;
                         var actor_name = cursorActor.value.name;
                         //Pesquisar Todos os alunos desta unidade
                         actors[contStudent] = {
-                            'actor_id':actor_id,
-                            'actor_name':actor_name
+                            'actor_id': actor_id,
+                            'actor_name': actor_name
                         };
                         contStudent++;
                     }
-                           
+
                     cursorActor.continue();
-                }else{
+                } else {
                     //Finalisou para os Actors desta Class
                     var currentUnity = {
-                        'unity_id':unity_id,
-                        'unity_name':unity.unity_name,
-                        'actors':actors
+                        'unity_id': unity_id,
+                        'unity_name': unity.unity_name,
+                        'actors': actors
                     };
                     self.actorOwnUnity.push(currentUnity);
                     //Verificar se é a ÚLTIMA Class
-                    if(self.actorOwnUnity.length == self.totalUnitys){
+                    if (self.actorOwnUnity.length == self.totalUnitys) {
                         //Dispara o evento para o filter do select
                         callBackEvent(self.actorOwnUnity);
                     }
@@ -806,16 +874,16 @@ this.DB = function() {
 
             };
             requestGet.onerror = function(event) {
-            // Tratar erro!
+                // Tratar erro!
             }
         }
         DBsynapse.onblocked = function(event) {
             // Se existe outra aba com a versão antiga
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
-        
+
     }
-   
+
 
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão

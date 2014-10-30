@@ -48,16 +48,6 @@ body {
 	-moz-animation: showLogin 4.3s ease;
 }
 
-#import-form {
-	position: absolute;
-	top: 20%;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	width: 305px;
-	margin: 5% auto;
-	text-align: center;
-}
 
 .login-label {
 	display: inline-block;
