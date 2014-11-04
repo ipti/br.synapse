@@ -172,3 +172,8 @@ label.goal{font-weight: bold;font-size:20px;text-align: center}
 .sps_render_ending span{text-align:center;font-size:30px;font-weight: bold;display:block;}
 ul.vertical li{float:left!important;}
 h5{display: block;}
+#library{height: 500px; width: 80%; text-align: center; background-color: #fbeacd;margin-left:130px;margin-top:20px}
+#aliasPaginate { text-align: center }
+#aliasPrev{margin-right: 100px}
+#aliasNext{margin-left: 100px}
+#findByAlias { margin-top: 10px;width: 300px; height: 30px }

@@ -181,7 +181,7 @@ class EditorController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'upload', 'json', 'preeditor', 'filtergoal', 'poseditor', 'getLastCobjectID'),
+                'actions' => array('index', 'upload', 'json', 'preeditor', 'filtergoal', 'poseditor', 'getLastCobjectID', 'addAlias', 'getMultimidias'),
                 'users' => array('@'),
             ),
             array('deny', // deny all users
@@ -740,7 +740,7 @@ class EditorController extends Controller {
                                         $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
                                         $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
                                             'element_id' => $elementID, 'property_id' => $propertyID
-                                                ));
+                                        ));
                                         $newElementProperty->value = "português";
                                         $newElementProperty->save();
                                     }
@@ -879,8 +879,8 @@ class EditorController extends Controller {
                                             $newLibraryProperty->value = $ext;
                                             $newLibraryProperty->insert();
 
-                                            //46 description
-                                            $propertyName = "description";
+                                            //46 Alias
+                                            $propertyName = "alias";
                                             $propertyContext = "library";
                                             $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
                                             $newLibraryProperty = new LibraryProperty();
@@ -937,8 +937,8 @@ class EditorController extends Controller {
                                             $newLibraryProperty->value = $ext;
                                             $newLibraryProperty->insert();
 
-                                            //46 description
-                                            $propertyName = "description";
+                                            //46 Alias
+                                            $propertyName = "alias";
                                             $propertyContext = "library";
                                             $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
                                             $newLibraryProperty = new LibraryProperty();
@@ -1404,6 +1404,62 @@ class EditorController extends Controller {
         header('Content-type: application/json');
         //escreve o json que sera retornado
         echo json_encode($json);
+    }
+
+    public function actionAddAlias() {
+        $this->render('addAlias');
+    }
+
+    public function actionGetMultimidias() {
+        $filterAlias = $_POST['filter'];
+        //46 Alias
+        $propertyName = "alias";
+        $propertyContext = "library";
+        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+        $where = "";
+        if (isset($filterAlias) && !empty($filterAlias)) {
+            $where = " WHERE property_id=$propertyID";
+            $where .= " AND value LIKE '%" . $filterAlias . "%' ";
+        }
+        $limit = " LIMIT 0,10";
+        //cada registro com library_id e o Alias correspondente
+        
+        //STOP HERE, VERIFICAR CONDIÇAO DE DISTINCT OU NAO
+        $librarysIdAlias = Yii::app()->db->createCommand('SELECT library_id, value FROM library_property' . $where . $limit)->queryAll();
+        //Busca agora o src de cada library encontrada
+        //4 src
+        $propertyName = "src";
+        $propertyContext = "library";
+        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+
+        $librarys = array();
+        foreach ($librarysIdAlias AS $libId_Alias):
+
+            $srcFromLibrary_id = Yii::app()->db->createCommand('SELECT value FROM library_property '
+                            . ' WHERE property_id =' . $propertyID . ' AND library_id =' . $libId_Alias['library_id'])->queryAll();
+
+            if (isset($filterAlias) && !empty($filterAlias)) {
+                //Encontrou librarys usando o filtro
+                if (!isset($librarys[$libId_Alias['library_id']]['alias'])) {
+                    //Se for o 1° Alias para esta library
+                    $librarys[$libId_Alias['library_id']]['alias'] = array();
+                    $librarys[$libId_Alias['library_id']]['src'] = $srcFromLibrary_id[0]['value'];
+                }
+                //Array Alias que possuira todos os Alias de determinada library   
+                array_push($librarys[$libId_Alias['library_id']]['alias'], $libId_Alias['value']);
+            }else{
+                //Encontrou sem filtro
+                 $librarys[$libId_Alias['library_id']]['src'] = $srcFromLibrary_id[0]['value'];
+            }
+            echo $libId_Alias['library_id'];
+        endforeach;
+
+        if (count($librarysIdAlias) == 0) {
+            //NAO encontrou algum Alias
+           echo "";
+        }
+        
+        echo json_encode($librarys);
     }
 
     private function getTypeIDByName($str) {
