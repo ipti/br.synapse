@@ -30,9 +30,6 @@ $(function() {
         newEditor.addScreen();
     });
     $("#delScreen").click(function(event) {
-
-        alert(event.which);
-
         newEditor.delScreen(false);
     });
 

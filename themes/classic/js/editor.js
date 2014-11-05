@@ -2363,7 +2363,7 @@ function editor() {
 
                                                 //Tipo do Elemento
                                                 switch (type) {
-                                                    case 'multimidia'://Library                   
+                                                    case 'multimidia'://Library       
                                                         switch (loaddata['library']['type']) {
                                                             case 'image'://image
                                                                 parent.insertImgPieceSet(null, idbd, loaddata);
