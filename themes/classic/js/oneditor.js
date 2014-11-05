@@ -5,6 +5,8 @@ $(function() {
 //       console.log('Carregou!');
 //    });
 
+    holdingCtrl = false;
+
     $('.canvas').pajinate({
         start_page: 0,
         items_per_page: 1,
@@ -35,16 +37,40 @@ $(function() {
     });
 
     //===================
-    holdingCtrl = false;
+    
+    //Combinação de teclas CRTL + T pra abrir nova Screen
+    $(document).keydown(function(e) {
+       
+    });
+     
+     
+    
     $(document).keyup(function(e) {
         if (e.which == 17) {
             holdingCtrl = false;
         }
     });
     $(document).keydown(function(e) {
+        
+          //Se for S
+//         if (e.which == 83) {
+//            if(holdingCtrl){
+//                console.log('s');
+//            }
+//        }
+        
+        //Se for Q
+         if (e.which == 81) {
+            if(holdingCtrl){
+                newEditor.addScreen();     
+            }
+        }
+        
+        //Se for CTRL
         if (e.which == 17) {
             holdingCtrl = true;
         }
+        
     });
 
     $(document).on('click', 'div[group] .insertImage', function() {
@@ -88,7 +114,7 @@ $(function() {
             holdingCtrl = false;
         } else {
             //click normal
-                newEditor.insertImgCobject(null, null);
+            newEditor.insertImgCobject(null, null);
         }
         //====================
     });
