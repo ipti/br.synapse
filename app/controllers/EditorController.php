@@ -438,6 +438,10 @@ class EditorController extends Controller {
     }
 
     public function actionJson() {
+        
+        $transaction = Yii::app()->db->beginTransaction();
+        
+     try {
         $json = array();
         if (isset($_POST['op'])) {
 //            if (!isset($this->transaction) && $_POST['op'] != 'load') {
@@ -1008,6 +1012,8 @@ class EditorController extends Controller {
                             } else {
                                 throw new Exception("ERROR: Dados da Element insuficientes: <br>");
                             }
+                            
+                            
                         } else {
                             throw new Exception("ERROR: Operação inválida.<br>");
                         }
@@ -1202,10 +1208,20 @@ class EditorController extends Controller {
             throw new Exception("ERROR: Operação inválida.<br>");
         }
 
+         
+        //Persiste as alteraçoes no BD
+        $transaction->commit();
+        
         header('Cache-Control: no-cache, must-revalidate');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
         header('Content-type: application/json');
         echo json_encode($json);
+        
+    }catch(Exception $e){
+        //Caso ocorra algum erro de sql e no php
+        $transaction->rollBack();
+    }
+        
     }
 
     private function delScreen($id) {
