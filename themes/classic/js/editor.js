@@ -2154,7 +2154,7 @@ function editor() {
                                 (!parent.COTemplateTypeIn(parent.MTE) ||
                                         ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
             //chama o posEditor
-            $('.savescreen').append('<br><p> FIM! <a href="/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
+            $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
             parent.posEditor();
             //=======================================================
         }
