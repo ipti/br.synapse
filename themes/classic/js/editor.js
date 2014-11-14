@@ -1130,7 +1130,8 @@ function editor() {
             elementID = elementID.split('e')[0] + 'e' + (parseInt(elementID.split('e')[1]) - 1);
         }
 
-        if (parent.COTemplateTypeIn(parent.DDROP) || parent.COTemplateTypeIn(parent.ONEDDROP)) {
+        if (parent.COTemplateTypeIn(parent.AEL) || parent.COTemplateTypeIn(parent.DDROP) 
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             var firstSplitGroup = group.split('_')[0];
         }
 
@@ -1198,7 +1199,6 @@ function editor() {
                 }
             });
             $(buttonImageID).click(function() {
-                alert('BTN_IMG');
                 if (!parent.COTemplateTypeIn(parent.AEL)
                         && !parent.COTemplateTypeIn(parent.DDROP)
                         && !parent.COTemplateTypeIn(parent.ONEDDROP)) {
