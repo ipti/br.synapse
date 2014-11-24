@@ -310,6 +310,7 @@ class EditorController extends Controller {
     }
 
     public function actionFiltergoal() {
+        $option = array();
         if (!isset($_POST['goalID'])) {
             $idDiscipline = $_POST['idDiscipline'];
             $idDegree = $_POST['idDegree'];
@@ -325,38 +326,24 @@ class EditorController extends Controller {
                     }
                     $count_Adeg = count($actDegree);
                     if ($count_Adeg > 0) {
-                        $str = "<div id='propertyAdeg' align='left'> 
-                 Nível&nbsp;:&nbsp;
-                 <select id='actDegree' name='actDegree'>  ";
-                        for ($i = 0; $i < $count_Adeg; $i++) {
-                            $str.= "<option value=" . $actDegree[$i][0]['id'] . ">" . $actDegree[$i][0]['name'] . "</option>";
-                        }
-                        $str.= "</select> 
-              </div> ";
 
+                        //$actDegree[$i][0]
                         //Por padrão, como não foi selecionado algum Degree, mostrará o GOAL do 1° [0]
                         $actGoal_d = Yii::app()->db->createCommand('SELECT id, name FROM act_goal 
                      WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $actDegree[0][0]['id'] . ' ORDER BY name ASC;')->queryAll();
                         $count_Agoal_d = count($actGoal_d);
                         // No mínimo possui 1 registro
-                        $str.= "<div id='propertyAgoal' class='propertyAgoal' align='center'>
-                      <br> Objetivo&nbsp;:&nbsp;
-                      <select id='actGoal' name='actGoal' style='width:430px'> ";
-                        for ($i = 0; $i < $count_Agoal_d; $i++) {
-                            $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
-                        }
-
-                        $str.= "</select>";
-                        $str.= $this->searchCobjectofGoal($actGoal_d[0]['id']) .
-                                "</div>";
-                        echo $str;
+                        $option['degree'] = $actDegree;
+                        $option['goal'] = $actGoal_d;
+                        $option['cObjects'] = $this->searchCobjectofGoal($actGoal_d[0]['id']);
+                        echo json_encode($option);
                     } else {
                         //Não encontrou algum act_degree relacionado a esta disciplina(with grade>0)
                     }
                 } else {
                     //Não encontrou algum goal para a disciplina selecionada
-                    echo "<font color='red' size='2'>
-                Não encontrou algum Objetivo para a disciplina selecionada !</font>";
+                    $option['error'] = "NoGoal";
+                    echo json_encode($option);
                 }
             } else {
                 //Selecionou Algum Degree
@@ -364,20 +351,15 @@ class EditorController extends Controller {
                      WHERE discipline_id =' . $idDiscipline . ' AND degree_id =' . $idDegree . ' ORDER BY name ASC;')->queryAll();
                 $count_Agoal_d = count($actGoal_d);
                 // No mínimo possui 1 registro
-                $str = "<br> Objetivo&nbsp;:&nbsp;
-                      <select id='actGoal' name='actGoal' style='width:430px'> ";
-                for ($i = 0; $i < $count_Agoal_d; $i++) {
-                    $str.= "<option value=" . $actGoal_d[$i]['id'] . ">" . $actGoal_d[$i]['name'] . "</option>";
-                }
-                $str.= "</select>";
-                $str.= $this->searchCobjectofGoal($actGoal_d[0]['id']);
-
-                echo $str;
+                $option['goal'] = $actGoal_d;
+                $option['cObjects'] = $this->searchCobjectofGoal($actGoal_d[0]['id']);
+                echo json_encode($option);
             }
         } else {
             //Somente Pesquisar Pelo GoalID
             $goalID = $_POST['goalID'];
-            echo $this->searchCobjectofGoal($goalID);
+            $option['cObjects'] = $this->searchCobjectofGoal($goalID);
+            echo json_encode($option);
         }
     }
 
@@ -393,19 +375,9 @@ class EditorController extends Controller {
         $cobject_metadata = Yii::app()->db->createCommand('SELECT cobject_id FROM cobject_metadata
             WHERE type_id =' . $Cobj_met_typeID . ' AND  value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata);
+        $option = array();
         if ($count_CobjMdata > 0) {
-            if (isset($_POST['isAjax']) && $_POST['isAjax']) {
-                $str2 = "";
-            } else {
-                $str2 = "<div id='showCobjectIDs' align='left'>";
-            }
-
             //Verificar o porquê de adicionar uma outra tag do form 
-            $str2 .= "<br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
-                <form id='cobjectIDS2' name='cobjectIDS2' method='POST' action='/editor/index/'>
-                </form>
-                <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
-                <select id='cobjectID' name='cobjectID' style='width:430px'>";
             for ($i = 0; $i < $count_CobjMdata; $i++) {
                 $First_screen = EditorScreen::model()->findByAttributes(array('cobject_id' => $cobject_metadata[$i]['cobject_id']));
                 if (isset($First_screen)) {
@@ -418,32 +390,23 @@ class EditorController extends Controller {
                     }
                 }
                 $innerHtml = isset($First_pieceSet) ? $cobject_metadata[$i]['cobject_id'] . " ['" . $First_pieceSet->description . "']" : $cobject_metadata[$i]['cobject_id'];
-                $str2.= "<option value=" . $cobject_metadata[$i]['cobject_id'] . ">"
-                        . $innerHtml . "</option>";
-            }
-            $str2.= "</select> 
-                        <input type='hidden' name='op' value='load'> 
-                          <input id='editCobject' name='editCobject' type='submit' value='Change Cobject'>
-                          </form>";
-
-            if (!(isset($_POST['isAjax']) && $_POST['isAjax'])) {
-                $str2.= " </div>";
+                $option[$i]['id'] = $cobject_metadata[$i]['cobject_id'];
+                $option[$i]['value'] = $innerHtml;
             }
 
-
-            return $str2;
+            return $option;
         }
 
         //=================================================================
     }
 
     public function actionJson() {
-        
+
         $transaction = Yii::app()->db->beginTransaction();
-        
-     try {
-        $json = array();
-        if (isset($_POST['op'])) {
+
+        try {
+            $json = array();
+            if (isset($_POST['op'])) {
 //            if (!isset($this->transaction) && $_POST['op'] != 'load') {
 //                //Criar Nova Transação
 //                //======================
@@ -461,767 +424,763 @@ class EditorController extends Controller {
 //                }
 //            }else
 
-            if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
+                if ($_POST['op'] == 'save' || $_POST['op'] == 'update' && isset($_POST['step'])) {
 
-                switch ($_POST['step']) {
-                    case "CObject":
-                        if ($_POST['op'] == 'save') {
-                            if (isset($_POST['COtypeID']) && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])) {
-                                $typeID = $_POST['COtypeID'];
-                                $templateID = $_POST['COtemplateType'];
-                                $themeID = ($_POST['COthemeID'] != '-1') ? $_POST['COthemeID'] : NULL;
-                                $goalID = $_POST['COgoalID'];
-                                $description = $_POST['COdescription'];
+                    switch ($_POST['step']) {
+                        case "CObject":
+                            if ($_POST['op'] == 'save') {
+                                if (isset($_POST['COtypeID']) && isset($_POST['COtemplateType']) && isset($_POST['COgoalID'])) {
+                                    $typeID = $_POST['COtypeID'];
+                                    $templateID = $_POST['COtemplateType'];
+                                    $themeID = ($_POST['COthemeID'] != '-1') ? $_POST['COthemeID'] : NULL;
+                                    $goalID = $_POST['COgoalID'];
+                                    $description = $_POST['COdescription'];
 
-                                $newCobject = new Cobject();
-                                $newCobject->type_id = $typeID;
-                                $newCobject->template_id = $templateID;
-                                $newCobject->theme_id = $themeID;
-                                $newCobject->status = 'on';
-                                $newCobject->description = $description;
-                                $newCobject->insert();
+                                    $newCobject = new Cobject();
+                                    $newCobject->type_id = $typeID;
+                                    $newCobject->template_id = $templateID;
+                                    $newCobject->theme_id = $themeID;
+                                    $newCobject->status = 'on';
+                                    $newCobject->description = $description;
+                                    $newCobject->insert();
 
-                                $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
-                                $cobjectID = $cobject->id;
+                                    $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                    $cobjectID = $cobject->id;
 
-                                $type_id = $this->getTypeIDbyName_Context('CobjectData', 'goal_id');
-                                $newCobjectMetadata = new CobjectMetadata();
-                                $newCobjectMetadata->cobject_id = $cobjectID;
-                                $newCobjectMetadata->type_id = $type_id;
-                                $newCobjectMetadata->value = $goalID;
-                                $newCobjectMetadata->insert();
+                                    $type_id = $this->getTypeIDbyName_Context('CobjectData', 'goal_id');
+                                    $newCobjectMetadata = new CobjectMetadata();
+                                    $newCobjectMetadata->cobject_id = $cobjectID;
+                                    $newCobjectMetadata->type_id = $type_id;
+                                    $newCobjectMetadata->value = $goalID;
+                                    $newCobjectMetadata->insert();
 
-                                $json['CObjectID'] = $cobjectID;
-                            } else {
-                                throw new Exception("ERROR: Dados do CObject insuficientes.<br>");
+                                    $json['CObjectID'] = $cobjectID;
+                                } else {
+                                    throw new Exception("ERROR: Dados do CObject insuficientes.<br>");
+                                }
+                            } else if ($_POST['op'] == 'update') {
+                                // Somente Atualizar por enquanto a descrição do Cobject
+                                $cobject_id = $_POST['CObjectID'];
+                                $cobject_description = $_POST['COdescription'];
+                                $cobject = Cobject::model()->findByPk($cobject_id);
+                                $cobject->description = $cobject_description;
+                                $cobject->save();
                             }
-                        } else if ($_POST['op'] == 'update') {
-                            // Somente Atualizar por enquanto a descrição do Cobject
-                            $cobject_id = $_POST['CObjectID'];
-                            $cobject_description = $_POST['COdescription'];
-                            $cobject = Cobject::model()->findByPk($cobject_id);
-                            $cobject->description = $cobject_description;
-                            $cobject->save();
-                        }
 
-                        break;
-                    case "Screen":
-                        if (isset($_POST['CObjectID']) && isset($_POST['Ordem']) && isset($_POST['DomID'])) {
+                            break;
+                        case "Screen":
+                            if (isset($_POST['CObjectID']) && isset($_POST['Ordem']) && isset($_POST['DomID'])) {
 
-                            $DomID = $_POST['DomID'];
-                            $cobjectID = $_POST['CObjectID'];
-                            $ordem = $_POST['Ordem'];
+                                $DomID = $_POST['DomID'];
+                                $cobjectID = $_POST['CObjectID'];
+                                $ordem = $_POST['Ordem'];
 
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $IDDB = $_POST['ID_BD'];
-                                $newScreen = EditorScreen::model()->findByPk($IDDB);
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $IDDB = $_POST['ID_BD'];
+                                    $newScreen = EditorScreen::model()->findByPk($IDDB);
 //                                //Desvincular Relação Cobject_Screen - Quando é Excluída !
 //                                
 //                                $BrothersScreens = EditorScreen::model()->findAllByAttributes(array('cobject'));
+                                } else {
+                                    $newScreen = new EditorScreen();
+                                }
+
+                                $newScreen->cobject_id = $cobjectID;
+                                $newScreen->order = $ordem;
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $newScreen->save();
+                                    $screen = $newScreen;
+                                } else {
+                                    $newScreen->insert();
+                                    $screen = EditorScreen::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                }
+                                $screenID = $screen->id;
+
+                                $json['DomID'] = $DomID;
+                                $json['screenID'] = $screenID;
                             } else {
-                                $newScreen = new EditorScreen();
+                                throw new Exception("ERROR: Dados da Screen insuficientes.<br>");
                             }
+                            break;
+                        case "PieceSet":
+                            if (isset($_POST['description']) && isset($_POST['screenID']) && isset($_POST['order']) && isset($_POST['templateID']) && isset($_POST['DomID'])) {
 
-                            $newScreen->cobject_id = $cobjectID;
-                            $newScreen->order = $ordem;
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $newScreen->save();
-                                $screen = $newScreen;
-                            } else {
-                                $newScreen->insert();
-                                $screen = EditorScreen::model()->findByAttributes(array(), array('order' => 'id desc'));
-                            }
-                            $screenID = $screen->id;
-
-                            $json['DomID'] = $DomID;
-                            $json['screenID'] = $screenID;
-                        } else {
-                            throw new Exception("ERROR: Dados da Screen insuficientes.<br>");
-                        }
-                        break;
-                    case "PieceSet":
-                        if (isset($_POST['description']) && isset($_POST['screenID']) && isset($_POST['order']) && isset($_POST['templateID']) && isset($_POST['DomID'])) {
-
-                            $DomID = $_POST['DomID'];
-                            $description = $_POST['description'];
-
-                            $screenID = $_POST['screenID'];
-                            $order = $_POST['order'];
-                            $templateID = $_POST['templateID'];
-
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $IDDB = $_POST['ID_BD'];
-                                $newPieceSet = EditorPieceset::model()->findByPk($IDDB);
-                            } else {
-                                $newPieceSet = new EditorPieceset();
-                            }
-                            $newPieceSet->template_id = $templateID;
-                            $newPieceSet->description = $description;
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $newPieceSet->save();
-                                $pieceSet = $newPieceSet;
-                            } else {
-                                $newPieceSet->insert();
-                                $pieceSet = EditorPieceset::model()->findByAttributes(array(), array('order' => 'id desc'));
-                            }
-
-                            $pieceSetID = $pieceSet->id;
-
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $newScreenPieceSet = EditorScreenPieceset::model()->find(array(
-                                    'condition' => 'screen_id =:screenID AND pieceset_id=:piecesetID',
-                                    'params' => array(':screenID' => $screenID, ':piecesetID' => $pieceSetID)
-                                ));
-                            } else {
-                                $newScreenPieceSet = new EditorScreenPieceset();
-                            }
-
-                            $newScreenPieceSet->screen_id = $screenID;
-                            $newScreenPieceSet->pieceset_id = $pieceSetID;
-                            $newScreenPieceSet->order = $order;
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $newScreenPieceSet->save();
-                            } else {
-                                $newScreenPieceSet->insert();
-                            }
-
-
-                            $json['DomID'] = $DomID;
-                            $json['PieceSetID'] = $pieceSetID;
-                        } else {
-                            throw new Exception("ERROR: Dados da PieceSet insuficientes.<br>");
-                        }
-                        break;
-                    case "Piece":
-                        if (isset($_POST['pieceSetID']) && isset($_POST['ordem']) && isset($_POST['DomID']) && isset($_POST['screenID'])) {
-
-                            $DomID = $_POST['DomID'];
-                            $pieceSetID = $_POST['pieceSetID'];
-                            $screenID = $_POST['screenID'];
-                            $ordem = $_POST['ordem'];
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $IDDB = $_POST['ID_BD'];
-                                $newPiece = EditorPiece::model()->findByPk($IDDB);
-                            } else {
-                                $newPiece = new EditorPiece();
-                            }
-
-
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $newPiece->save();
-                                $piece = $newPiece;
-                            } else {
-                                $newPiece->insert();
-                                $piece = EditorPiece::model()->findByAttributes(array(), array('order' => 'id desc'));
-                            }
-
-                            $pieceID = $piece->id;
-
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $newPieceSetPiece = EditorPiecesetPiece::model()->find(array(
-                                    'condition' => 'piece_id =:pieceID AND pieceset_id=:piecesetID',
-                                    'params' => array(':pieceID' => $pieceID, ':piecesetID' => $pieceSetID)
-                                ));
-                            } else {
-                                $newPieceSetPiece = new EditorPiecesetPiece();
-                            }
-                            $newPieceSetPiece->piece_id = $pieceID;
-                            $newPieceSetPiece->pieceset_id = $pieceSetID;
-                            $newPieceSetPiece->screen_id = $screenID;
-                            $newPieceSetPiece->order = $ordem;
-                            if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
-                                $newPieceSetPiece->save();
-                            } else {
-                                $newPieceSetPiece->insert();
-                            }
-
-                            $json['DomID'] = $DomID;
-                            $json['PieceID'] = $pieceID;
-                        } else {
-                            throw new Exception("ERROR: Dados da Piece insuficientes.<br>");
-                        }
-                        break;
-                    case "Element":
-                        if (isset($_POST['typeID']) || isset($_POST['justFlag'])) {
-
-                            if (isset($_POST['typeID'])) {
-                                $typeName = $_POST['typeID'];
-                                $typeID = $this->getTypeIDByName($typeName);
-                            }
-                            $justFlag = false;
-
-                            if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) ||
-                                    isset($_POST['cobjectID'])) && isset($_POST['ordem']) &&
-                                    isset($_POST['value']) && isset($_POST['DomID'])) {
                                 $DomID = $_POST['DomID'];
+                                $description = $_POST['description'];
 
-                                $isElementPieceSet = false;
-                                $isElementCobject = false;
+                                $screenID = $_POST['screenID'];
+                                $order = $_POST['order'];
+                                $templateID = $_POST['templateID'];
 
-                                if (isset($_POST['pieceID'])) {
-                                    $pieceID = $_POST['pieceID'];
-                                } else if (isset($_POST['pieceSetID'])) {
-                                    $isElementPieceSet = true;
-                                    $pieceSetID = $_POST['pieceSetID'];
-                                } else if (isset($_POST['cobjectID'])) {
-                                    $isElementCobject = true;
-                                    $cobjectID = $_POST['cobjectID'];
-                                }
-
-
-                                $flag = isset($_POST['flag']) ? $_POST['flag'] : -1;
-                                $match = isset($_POST['match']) ? $_POST['match'] : -1;
-                                if (isset($_POST['value'])) {
-                                    $value = $_POST['value'];
-                                }
-
-                                $order = $_POST['ordem'];
-
-                                $new = false;
-                                $unlink_New = false;
-                                $delete = false;
-
-
-                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
-                                        isset($_POST['updated']) && $_POST['updated'] == 1) {
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
                                     $IDDB = $_POST['ID_BD'];
-                                    $newElement = EditorElement::model()->findByPk($IDDB);
-                                    if ($_POST['typeID'] != "TEXT") {
-                                        //Desvincula e Cria um novo elemento !
-                                        if (!$isElementPieceSet && !$isElementCobject) {
-                                            //É um elemento da PIECE
-                                            $Element_Piece = EditorPieceElement::model()->findByAttributes(
-                                                    array('piece_id' => $pieceID, 'element_id' => $newElement->id));
+                                    $newPieceSet = EditorPieceset::model()->findByPk($IDDB);
+                                } else {
+                                    $newPieceSet = new EditorPieceset();
+                                }
+                                $newPieceSet->template_id = $templateID;
+                                $newPieceSet->description = $description;
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $newPieceSet->save();
+                                    $pieceSet = $newPieceSet;
+                                } else {
+                                    $newPieceSet->insert();
+                                    $pieceSet = EditorPieceset::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                }
 
-                                            $Element_Piece_Property = EditorPieceelementProperty::model()
-                                                    ->findAll(array(
-                                                'condition' => 'piece_element_id=:idPieceElement',
-                                                'params' => array(':idPieceElement' => $Element_Piece->id)
+                                $pieceSetID = $pieceSet->id;
+
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $newScreenPieceSet = EditorScreenPieceset::model()->find(array(
+                                        'condition' => 'screen_id =:screenID AND pieceset_id=:piecesetID',
+                                        'params' => array(':screenID' => $screenID, ':piecesetID' => $pieceSetID)
+                                    ));
+                                } else {
+                                    $newScreenPieceSet = new EditorScreenPieceset();
+                                }
+
+                                $newScreenPieceSet->screen_id = $screenID;
+                                $newScreenPieceSet->pieceset_id = $pieceSetID;
+                                $newScreenPieceSet->order = $order;
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $newScreenPieceSet->save();
+                                } else {
+                                    $newScreenPieceSet->insert();
+                                }
+
+
+                                $json['DomID'] = $DomID;
+                                $json['PieceSetID'] = $pieceSetID;
+                            } else {
+                                throw new Exception("ERROR: Dados da PieceSet insuficientes.<br>");
+                            }
+                            break;
+                        case "Piece":
+                            if (isset($_POST['pieceSetID']) && isset($_POST['ordem']) && isset($_POST['DomID']) && isset($_POST['screenID'])) {
+
+                                $DomID = $_POST['DomID'];
+                                $pieceSetID = $_POST['pieceSetID'];
+                                $screenID = $_POST['screenID'];
+                                $ordem = $_POST['ordem'];
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $IDDB = $_POST['ID_BD'];
+                                    $newPiece = EditorPiece::model()->findByPk($IDDB);
+                                } else {
+                                    $newPiece = new EditorPiece();
+                                }
+
+
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $newPiece->save();
+                                    $piece = $newPiece;
+                                } else {
+                                    $newPiece->insert();
+                                    $piece = EditorPiece::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                }
+
+                                $pieceID = $piece->id;
+
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $newPieceSetPiece = EditorPiecesetPiece::model()->find(array(
+                                        'condition' => 'piece_id =:pieceID AND pieceset_id=:piecesetID',
+                                        'params' => array(':pieceID' => $pieceID, ':piecesetID' => $pieceSetID)
+                                    ));
+                                } else {
+                                    $newPieceSetPiece = new EditorPiecesetPiece();
+                                }
+                                $newPieceSetPiece->piece_id = $pieceID;
+                                $newPieceSetPiece->pieceset_id = $pieceSetID;
+                                $newPieceSetPiece->screen_id = $screenID;
+                                $newPieceSetPiece->order = $ordem;
+                                if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
+                                    $newPieceSetPiece->save();
+                                } else {
+                                    $newPieceSetPiece->insert();
+                                }
+
+                                $json['DomID'] = $DomID;
+                                $json['PieceID'] = $pieceID;
+                            } else {
+                                throw new Exception("ERROR: Dados da Piece insuficientes.<br>");
+                            }
+                            break;
+                        case "Element":
+                            if (isset($_POST['typeID']) || isset($_POST['justFlag'])) {
+
+                                if (isset($_POST['typeID'])) {
+                                    $typeName = $_POST['typeID'];
+                                    $typeID = $this->getTypeIDByName($typeName);
+                                }
+                                $justFlag = false;
+
+                                if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) ||
+                                        isset($_POST['cobjectID'])) && isset($_POST['ordem']) &&
+                                        isset($_POST['value']) && isset($_POST['DomID'])) {
+                                    $DomID = $_POST['DomID'];
+
+                                    $isElementPieceSet = false;
+                                    $isElementCobject = false;
+
+                                    if (isset($_POST['pieceID'])) {
+                                        $pieceID = $_POST['pieceID'];
+                                    } else if (isset($_POST['pieceSetID'])) {
+                                        $isElementPieceSet = true;
+                                        $pieceSetID = $_POST['pieceSetID'];
+                                    } else if (isset($_POST['cobjectID'])) {
+                                        $isElementCobject = true;
+                                        $cobjectID = $_POST['cobjectID'];
+                                    }
+
+
+                                    $flag = isset($_POST['flag']) ? $_POST['flag'] : -1;
+                                    $match = isset($_POST['match']) ? $_POST['match'] : -1;
+                                    if (isset($_POST['value'])) {
+                                        $value = $_POST['value'];
+                                    }
+
+                                    $order = $_POST['ordem'];
+
+                                    $new = false;
+                                    $unlink_New = false;
+                                    $delete = false;
+
+
+                                    if ($_POST['op'] == 'update' && isset($_POST['ID_BD']) &&
+                                            isset($_POST['updated']) && $_POST['updated'] == 1) {
+                                        $IDDB = $_POST['ID_BD'];
+                                        $newElement = EditorElement::model()->findByPk($IDDB);
+                                        if ($_POST['typeID'] != "TEXT") {
+                                            //Desvincula e Cria um novo elemento !
+                                            if (!$isElementPieceSet && !$isElementCobject) {
+                                                //É um elemento da PIECE
+                                                $Element_Piece = EditorPieceElement::model()->findByAttributes(
+                                                        array('piece_id' => $pieceID, 'element_id' => $newElement->id));
+
+                                                $Element_Piece_Property = EditorPieceelementProperty::model()
+                                                        ->findAll(array(
+                                                    'condition' => 'piece_element_id=:idPieceElement',
+                                                    'params' => array(':idPieceElement' => $Element_Piece->id)
+                                                ));
+                                                $size_properties_Element_Piece = count($Element_Piece_Property);
+                                                $ls = null;
+                                                foreach ($Element_Piece_Property as $ls):
+                                                    // Excluir cada propriedade do Element_Piece
+                                                    $ls->delete();
+                                                endforeach;
+                                                //Depois, Desvincula o elemento da peça. 
+                                                $Element_Piece->delete();
+                                            }else if ($isElementPieceSet) {
+                                                //É um elemento da PIECESET
+                                                $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
+                                                        array('pieceset_id' => $pieceSetID, 'element_id' => $newElement->id));
+
+                                                //Depois, Desvincula o elemento da PieceSet. 
+                                                $Element_PieceSet->delete();
+                                            } else if ($isElementCobject) {
+                                                //É um elemento do Cobject
+                                                $Element_Cobject = CobjectElement::model()->findByAttributes(
+                                                        array('cobject_id' => $cobjectID, 'element_id' => $newElement->id));
+
+                                                //Depois, Desvincula o elemento do Cobject. 
+                                                $Element_Cobject->delete();
+                                            }
+
+                                            $unlink_New = true;
+                                        } else {
+                                            //Elementos textos somente precisam Atualizar seu campo
+                                            //obs: verificar essa condição para os demais elementos != template TXT
+                                            //salva editor_element_property 's
+                                            //text   
+                                            $elementID = $newElement->id;
+                                            $propertyName = "text";
+                                            $propertyContext = "phrase";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
+                                                'element_id' => $elementID, 'property_id' => $propertyID
                                             ));
-                                            $size_properties_Element_Piece = count($Element_Piece_Property);
-                                            $ls = null;
-                                            foreach ($Element_Piece_Property as $ls):
-                                                // Excluir cada propriedade do Element_Piece
-                                                $ls->delete();
-                                            endforeach;
-                                            //Depois, Desvincula o elemento da peça. 
-                                            $Element_Piece->delete();
-                                        }else if ($isElementPieceSet) {
-                                            //É um elemento da PIECESET
-                                            $Element_PieceSet = EditorPiecesetElement::model()->findByAttributes(
-                                                    array('pieceset_id' => $pieceSetID, 'element_id' => $newElement->id));
+                                            $newElementProperty->value = $value;
+                                            $newElementProperty->save();
 
-                                            //Depois, Desvincula o elemento da PieceSet. 
-                                            $Element_PieceSet->delete();
+                                            //language
+                                            $propertyName = "language";
+                                            $propertyContext = "element";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
+                                                'element_id' => $elementID, 'property_id' => $propertyID
+                                            ));
+                                            $newElementProperty->value = "português";
+                                            $newElementProperty->save();
+                                        }
+                                    } else {
+                                        //Cria um novo somente.
+                                        $new = true;
+                                    }
+
+
+                                    if ($new || $unlink_New) {
+                                        $newElement = new EditorElement(); // Cria um novo
+                                        $newElement->type_id = $typeID; // novo tipo ou alterado
+                                        $newElement->insert();
+                                        $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                        $elementID = $element->id;
+                                        if (!$isElementPieceSet && !$isElementCobject) {
+                                            $newPieceElement = new EditorPieceElement();
+                                            $newPieceElement->piece_id = $pieceID;
+                                            $newPieceElement->element_id = $elementID;
+                                            $newPieceElement->position = $order;
+                                            $newPieceElement->insert();
+                                        } else if ($isElementPieceSet) {
+                                            //É um elemento da PIECESET
+                                            $newPieceSetElement = new EditorPiecesetElement();
+                                            $newPieceSetElement->pieceset_id = $pieceSetID;
+                                            $newPieceSetElement->element_id = $elementID;
+                                            $newPieceSetElement->position = $order;
+                                            $newPieceSetElement->insert();
                                         } else if ($isElementCobject) {
                                             //É um elemento do Cobject
-                                            $Element_Cobject = CobjectElement::model()->findByAttributes(
-                                                    array('cobject_id' => $cobjectID, 'element_id' => $newElement->id));
-
-                                            //Depois, Desvincula o elemento do Cobject. 
-                                            $Element_Cobject->delete();
+                                            $newCobjectElement = new CobjectElement();
+                                            $newCobjectElement->cobject_id = $cobjectID;
+                                            $newCobjectElement->element_id = $elementID;
+                                            $newCobjectElement->position = $order;
+                                            $newCobjectElement->insert();
                                         }
 
-                                        $unlink_New = true;
-                                    } else {
-                                        //Elementos textos somente precisam Atualizar seu campo
-                                        //obs: verificar essa condição para os demais elementos != template TXT
-                                        //salva editor_element_property 's
-                                        //text   
-                                        $elementID = $newElement->id;
-                                        $propertyName = "text";
-                                        $propertyContext = "phrase";
-                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
-                                            'element_id' => $elementID, 'property_id' => $propertyID
-                                        ));
-                                        $newElementProperty->value = $value;
-                                        $newElementProperty->save();
 
-                                        //language
-                                        $propertyName = "language";
-                                        $propertyContext = "element";
-                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
-                                            'element_id' => $elementID, 'property_id' => $propertyID
-                                        ));
-                                        $newElementProperty->value = "português";
-                                        $newElementProperty->save();
+                                        $json['ElementID'] = $elementID;
+
+                                        if (!$isElementPieceSet && !$isElementCobject) {
+                                            $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $pieceID, 'element_id' => $elementID), array('order' => 'id desc'));
+                                            $pieceElementID = $pieceElement->id;
+
+                                            //===========================================================
+                                            if ($match != -1) {
+                                                // grouping
+                                                $propertyName = "grouping";
+                                                $propertyContext = "piecelement";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                //===========================================================
+                                                $newPieceElementProperty = new EditorPieceelementProperty();
+                                                $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                                $newPieceElementProperty->property_id = $propertyID;
+                                                $newPieceElementProperty->value = $match;
+                                                $newPieceElementProperty->insert();
+                                            }
+                                            if ($flag != -1) {
+                                                //Inseri a Flag
+                                                $propertyName = "layertype";
+                                                $propertyContext = "piecelement";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                //===========================================================
+                                                $newPieceElementProperty = new EditorPieceelementProperty();
+                                                $newPieceElementProperty->piece_element_id = $pieceElementID;
+                                                $newPieceElementProperty->property_id = $propertyID;
+                                                $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
+                                                $newPieceElementProperty->insert();
+                                                //====================
+                                            }
+                                        }
+
+                                        if (isset($_POST["library"])) {
+                                            $libraryTypeName = $_POST["library"];
+                                            $libraryTypeID = $this->getTypeIDByName($libraryTypeName);
+
+                                            if ($libraryTypeName == $this->TYPE_LIBRARY_IMAGE) {//image
+                                                $src = $value['url'];
+                                                $nome = $value['name'];
+                                                $oldName = $value['oldName'];
+                                                $ext = explode(".", $nome);
+                                                $ext = $ext[1];
+                                                //Pegar informações da imagem
+                                                //$url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
+                                                $path = Yii::app()->basePath;
+                                                list($width, $height, $type) = getimagesize($path . "/.." . $src);
+
+                                                $newLibrary = new Library();
+                                                $library_typeName = $_POST['library'];
+                                                $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
+                                                $newLibrary->insert();
+                                                //Pegar o ID do ultimo adicionado.
+                                                $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                                $libraryID = $library->id;
+                                                //Salva library_property 's
+                                                //1 width
+                                                $propertyName = "width";
+                                                $propertyContext = $libraryTypeName;
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+
+                                                $newLibraryProperty = new LibraryProperty();
+
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $width;
+                                                $newLibraryProperty->insert();
+
+                                                //2 height
+                                                $propertyName = "height";
+                                                $propertyContext = $libraryTypeName;
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newLibraryProperty = new LibraryProperty();
+
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $height;
+                                                $newLibraryProperty->insert();
+
+                                                //5 src
+                                                $propertyName = "src";
+                                                $propertyContext = "library";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newLibraryProperty = new LibraryProperty();
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $nome; //apenas o nome do arquivo
+                                                $newLibraryProperty->insert();
+
+                                                //12 extension
+                                                $propertyName = "extension";
+                                                $propertyContext = "library";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newLibraryProperty = new LibraryProperty();
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $ext;
+                                                $newLibraryProperty->insert();
+
+                                                //46 Alias
+                                                $propertyName = "alias";
+                                                $propertyContext = "library";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newLibraryProperty = new LibraryProperty();
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $oldName;
+                                                $newLibraryProperty->insert();
+
+                                                //Salva a editor_element_property
+                                                //4 libraryID
+                                                $propertyName = "library_id";
+                                                $propertyContext = $typeName;
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newElementProperty = new EditorElementProperty();
+
+                                                $newElementProperty->element_id = $elementID;
+                                                $newElementProperty->property_id = $propertyID;
+                                                $newElementProperty->value = $libraryID;
+                                                $newElementProperty->insert();
+                                                $json['LibraryID'] = $libraryID;
+                                            } elseif ($libraryTypeName == $this->TYPE_LIBRARY_SOUND) {
+
+                                                $src = $value['url'];
+                                                $nome = $value['name'];
+                                                $oldName = $value['oldName'];
+                                                $ext = explode(".", $nome);
+                                                $ext = $ext[1];
+
+                                                $newLibrary = new Library();
+                                                $library_typeName = $_POST['library'];
+                                                $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
+                                                $newLibrary->insert();
+                                                //Pegar o ID do ultimo adicionado.
+                                                $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
+                                                $libraryID = $library->id;
+                                                //Salva library_property 's
+                                                //5 src
+                                                $propertyName = "src";
+                                                $propertyContext = "library";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newLibraryProperty = new LibraryProperty();
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $nome; //apenas o nome do arquivo
+                                                $newLibraryProperty->insert();
+
+                                                //12 extension
+                                                $propertyName = "extension";
+                                                $propertyContext = "library";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newLibraryProperty = new LibraryProperty();
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $ext;
+                                                $newLibraryProperty->insert();
+
+                                                //46 Alias
+                                                $propertyName = "alias";
+                                                $propertyContext = "library";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newLibraryProperty = new LibraryProperty();
+                                                $newLibraryProperty->library_id = $libraryID;
+                                                $newLibraryProperty->property_id = $propertyID;
+                                                $newLibraryProperty->value = $oldName;
+                                                $newLibraryProperty->insert();
+
+
+                                                //Salva a editor_element_property
+                                                //4 libraryID
+                                                $propertyName = "library_id";
+                                                $propertyContext = $typeName;
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newElementProperty = new EditorElementProperty();
+
+                                                $newElementProperty->element_id = $elementID;
+                                                $newElementProperty->property_id = $propertyID;
+                                                $newElementProperty->value = $libraryID;
+                                                $newElementProperty->insert();
+                                                $json['LibraryID'] = $libraryID;
+                                            }
+                                        } elseif ($typeName == $this->TYPE_ELEMENT_TEXT) {  //text
+                                            //salva editor_element_property 's
+                                            //text   
+                                            $propertyName = "text";
+                                            $propertyContext = "phrase";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newElementProperty = new EditorElementProperty();
+                                            $newElementProperty->element_id = $elementID;
+                                            $newElementProperty->property_id = $propertyID;
+                                            $newElementProperty->value = $value;
+                                            $newElementProperty->insert();
+
+                                            //language
+                                            $propertyName = "language";
+                                            $propertyContext = "element";
+                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $newElementProperty = new EditorElementProperty();
+                                            $newElementProperty->element_id = $elementID;
+                                            $newElementProperty->property_id = $propertyID;
+                                            $newElementProperty->value = "português";
+                                            $newElementProperty->insert();
+                                        } else {
+                                            throw new Exception("ERROR: Tipo inválido.<br>");
+                                        }
+                                    } elseif ($delete) {
+                                        // Se deletou o Element                                  
+                                    }
+                                } else if (isset($_POST['justFlag']) && $_POST['justFlag'] == 1) {
+                                    // Somente a Flag
+                                    $flag = $_POST['flag'];
+                                    // Apenas Atualiza as Flags dos elementos
+                                    if (isset($_POST['ID_BD'])) {
+                                        //Atualiza as Flags
+                                        $IDDB = $_POST['ID_BD'];
+                                        $pieceID = $_POST['pieceID'];
+                                        $pieceElement = EditorPieceElement::model()->findByAttributes(array(
+                                            'piece_id' => $pieceID,
+                                            'element_id' => $IDDB));
+                                        $change_flag = EditorPieceelementProperty::model()->findByAttributes(
+                                                array('piece_element_id' => $pieceElement->id,
+                                                    'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
+                                        $change_flag->value = $flag == "true" ? "Acerto" : "Erro";
+                                        $change_flag->save();
                                     }
                                 } else {
-                                    //Cria um novo somente.
-                                    $new = true;
-                                }
-
-
-                                if ($new || $unlink_New) {
-                                    $newElement = new EditorElement(); // Cria um novo
-                                    $newElement->type_id = $typeID; // novo tipo ou alterado
-                                    $newElement->insert();
-                                    $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
-                                    $elementID = $element->id;
-                                    if (!$isElementPieceSet && !$isElementCobject) {
-                                        $newPieceElement = new EditorPieceElement();
-                                        $newPieceElement->piece_id = $pieceID;
-                                        $newPieceElement->element_id = $elementID;
-                                        $newPieceElement->position = $order;
-                                        $newPieceElement->insert();
-                                    } else if ($isElementPieceSet) {
-                                        //É um elemento da PIECESET
-                                        $newPieceSetElement = new EditorPiecesetElement();
-                                        $newPieceSetElement->pieceset_id = $pieceSetID;
-                                        $newPieceSetElement->element_id = $elementID;
-                                        $newPieceSetElement->position = $order;
-                                        $newPieceSetElement->insert();
-                                    } else if ($isElementCobject) {
-                                        //É um elemento do Cobject
-                                        $newCobjectElement = new CobjectElement();
-                                        $newCobjectElement->cobject_id = $cobjectID;
-                                        $newCobjectElement->element_id = $elementID;
-                                        $newCobjectElement->position = $order;
-                                        $newCobjectElement->insert();
-                                    }
-
-
-                                    $json['ElementID'] = $elementID;
-
-                                    if (!$isElementPieceSet && !$isElementCobject) {
-                                        $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $pieceID, 'element_id' => $elementID), array('order' => 'id desc'));
-                                        $pieceElementID = $pieceElement->id;
-
-                                        //===========================================================
-                                        if ($match != -1) {
-                                            // grouping
-                                            $propertyName = "grouping";
-                                            $propertyContext = "piecelement";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            //===========================================================
-                                            $newPieceElementProperty = new EditorPieceelementProperty();
-                                            $newPieceElementProperty->piece_element_id = $pieceElementID;
-                                            $newPieceElementProperty->property_id = $propertyID;
-                                            $newPieceElementProperty->value = $match;
-                                            $newPieceElementProperty->insert();
-                                        }
-                                        if ($flag != -1) {
-                                            //Inseri a Flag
-                                            $propertyName = "layertype";
-                                            $propertyContext = "piecelement";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            //===========================================================
-                                            $newPieceElementProperty = new EditorPieceelementProperty();
-                                            $newPieceElementProperty->piece_element_id = $pieceElementID;
-                                            $newPieceElementProperty->property_id = $propertyID;
-                                            $newPieceElementProperty->value = $flag == "true" ? "Acerto" : "Erro";
-                                            $newPieceElementProperty->insert();
-                                            //====================
-                                        }
-                                    }
-
-                                    if (isset($_POST["library"])) {
-                                        $libraryTypeName = $_POST["library"];
-                                        $libraryTypeID = $this->getTypeIDByName($libraryTypeName);
-
-                                        if ($libraryTypeName == $this->TYPE_LIBRARY_IMAGE) {//image
-                                            $src = $value['url'];
-                                            $nome = $value['name'];
-                                            $oldName = $value['oldName'];
-                                            $ext = explode(".", $nome);
-                                            $ext = $ext[1];
-                                            //Pegar informações da imagem
-                                            //$url = Yii::app()->createAbsoluteUrl(Yii::app()->request->url);
-                                            $path = Yii::app()->basePath;
-                                            list($width, $height, $type) = getimagesize($path . "/.." . $src);
-
-                                            $newLibrary = new Library();
-                                            $library_typeName = $_POST['library'];
-                                            $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
-                                            $newLibrary->insert();
-                                            //Pegar o ID do ultimo adicionado.
-                                            $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
-                                            $libraryID = $library->id;
-                                            //Salva library_property 's
-                                            //1 width
-                                            $propertyName = "width";
-                                            $propertyContext = $libraryTypeName;
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-
-                                            $newLibraryProperty = new LibraryProperty();
-
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $width;
-                                            $newLibraryProperty->insert();
-
-                                            //2 height
-                                            $propertyName = "height";
-                                            $propertyContext = $libraryTypeName;
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newLibraryProperty = new LibraryProperty();
-
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $height;
-                                            $newLibraryProperty->insert();
-
-                                            //5 src
-                                            $propertyName = "src";
-                                            $propertyContext = "library";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newLibraryProperty = new LibraryProperty();
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $nome; //apenas o nome do arquivo
-                                            $newLibraryProperty->insert();
-
-                                            //12 extension
-                                            $propertyName = "extension";
-                                            $propertyContext = "library";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newLibraryProperty = new LibraryProperty();
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $ext;
-                                            $newLibraryProperty->insert();
-
-                                            //46 Alias
-                                            $propertyName = "alias";
-                                            $propertyContext = "library";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newLibraryProperty = new LibraryProperty();
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $oldName;
-                                            $newLibraryProperty->insert();
-
-                                            //Salva a editor_element_property
-                                            //4 libraryID
-                                            $propertyName = "library_id";
-                                            $propertyContext = $typeName;
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newElementProperty = new EditorElementProperty();
-
-                                            $newElementProperty->element_id = $elementID;
-                                            $newElementProperty->property_id = $propertyID;
-                                            $newElementProperty->value = $libraryID;
-                                            $newElementProperty->insert();
-                                            $json['LibraryID'] = $libraryID;
-                                        } elseif ($libraryTypeName == $this->TYPE_LIBRARY_SOUND) {
-
-                                            $src = $value['url'];
-                                            $nome = $value['name'];
-                                            $oldName = $value['oldName'];
-                                            $ext = explode(".", $nome);
-                                            $ext = $ext[1];
-
-                                            $newLibrary = new Library();
-                                            $library_typeName = $_POST['library'];
-                                            $newLibrary->type_id = $this->getTypeIDByName($library_typeName);
-                                            $newLibrary->insert();
-                                            //Pegar o ID do ultimo adicionado.
-                                            $library = Library::model()->findByAttributes(array(), array('order' => 'id desc'));
-                                            $libraryID = $library->id;
-                                            //Salva library_property 's
-                                            //5 src
-                                            $propertyName = "src";
-                                            $propertyContext = "library";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newLibraryProperty = new LibraryProperty();
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $nome; //apenas o nome do arquivo
-                                            $newLibraryProperty->insert();
-
-                                            //12 extension
-                                            $propertyName = "extension";
-                                            $propertyContext = "library";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newLibraryProperty = new LibraryProperty();
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $ext;
-                                            $newLibraryProperty->insert();
-
-                                            //46 Alias
-                                            $propertyName = "alias";
-                                            $propertyContext = "library";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newLibraryProperty = new LibraryProperty();
-                                            $newLibraryProperty->library_id = $libraryID;
-                                            $newLibraryProperty->property_id = $propertyID;
-                                            $newLibraryProperty->value = $oldName;
-                                            $newLibraryProperty->insert();
-
-
-                                            //Salva a editor_element_property
-                                            //4 libraryID
-                                            $propertyName = "library_id";
-                                            $propertyContext = $typeName;
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                            $newElementProperty = new EditorElementProperty();
-
-                                            $newElementProperty->element_id = $elementID;
-                                            $newElementProperty->property_id = $propertyID;
-                                            $newElementProperty->value = $libraryID;
-                                            $newElementProperty->insert();
-                                            $json['LibraryID'] = $libraryID;
-                                        }
-                                    } elseif ($typeName == $this->TYPE_ELEMENT_TEXT) {  //text
-                                        //salva editor_element_property 's
-                                        //text   
-                                        $propertyName = "text";
-                                        $propertyContext = "phrase";
-                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        $newElementProperty = new EditorElementProperty();
-                                        $newElementProperty->element_id = $elementID;
-                                        $newElementProperty->property_id = $propertyID;
-                                        $newElementProperty->value = $value;
-                                        $newElementProperty->insert();
-
-                                        //language
-                                        $propertyName = "language";
-                                        $propertyContext = "element";
-                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                        $newElementProperty = new EditorElementProperty();
-                                        $newElementProperty->element_id = $elementID;
-                                        $newElementProperty->property_id = $propertyID;
-                                        $newElementProperty->value = "português";
-                                        $newElementProperty->insert();
-                                    } else {
-                                        throw new Exception("ERROR: Tipo inválido.<br>");
-                                    }
-                                } elseif ($delete) {
-                                    // Se deletou o Element                                  
-                                }
-                            } else if (isset($_POST['justFlag']) && $_POST['justFlag'] == 1) {
-                                // Somente a Flag
-                                $flag = $_POST['flag'];
-                                // Apenas Atualiza as Flags dos elementos
-                                if (isset($_POST['ID_BD'])) {
-                                    //Atualiza as Flags
-                                    $IDDB = $_POST['ID_BD'];
-                                    $pieceID = $_POST['pieceID'];
-                                    $pieceElement = EditorPieceElement::model()->findByAttributes(array(
-                                        'piece_id' => $pieceID,
-                                        'element_id' => $IDDB));
-                                    $change_flag = EditorPieceelementProperty::model()->findByAttributes(
-                                            array('piece_element_id' => $pieceElement->id,
-                                                'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
-                                    $change_flag->value = $flag == "true" ? "Acerto" : "Erro";
-                                    $change_flag->save();
+                                    throw new Exception("ERROR: Dados da Element insuficientes: <br>");
                                 }
                             } else {
-                                throw new Exception("ERROR: Dados da Element insuficientes: <br>");
+                                throw new Exception("ERROR: Operação inválida.<br>");
                             }
-                            
-                            
-                        } else {
+                            break;
+                        default:
                             throw new Exception("ERROR: Operação inválida.<br>");
-                        }
-                        break;
-                    default:
-                        throw new Exception("ERROR: Operação inválida.<br>");
-                }
-            } elseif ($_POST['op'] == 'load') {
-                if (isset($_POST['cobjectID'])) {
-                    $cobjectID = $_POST['cobjectID'];
-                    $cobject = Cobject::model()->findByAttributes(array('id' => $cobjectID));
-                    $json['cobject_id'] = $cobjectID;
-                    $json['typeID'] = $cobject->type_id;
-                    $json['themeID'] = $cobject->theme_id; //
-                    $json['templateID'] = $cobject->template_id; //
-                    $json['description'] = $cobject->description;
+                    }
+                } elseif ($_POST['op'] == 'load') {
+                    if (isset($_POST['cobjectID'])) {
+                        $cobjectID = $_POST['cobjectID'];
+                        $cobject = Cobject::model()->findByAttributes(array('id' => $cobjectID));
+                        $json['cobject_id'] = $cobjectID;
+                        $json['typeID'] = $cobject->type_id;
+                        $json['themeID'] = $cobject->theme_id; //
+                        $json['templateID'] = $cobject->template_id; //
+                        $json['description'] = $cobject->description;
 
-                    //===============Cobject-Element===============
+                        //===============Cobject-Element===============
 
-                    $CobjectElement = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobjectID), array('order' => '`position`'));
+                        $CobjectElement = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobjectID), array('order' => '`position`'));
 
-                    foreach ($CobjectElement as $cElem):
-                        $Element = EditorElement::model()->findByAttributes(array('id' => $cElem->element_id));
-                        $json['E' . $Element->id] = array();
-                        $json['E' . $Element->id]['type_name'] = $Element->type->name;
+                        foreach ($CobjectElement as $cElem):
+                            $Element = EditorElement::model()->findByAttributes(array('id' => $cElem->element_id));
+                            $json['E' . $Element->id] = array();
+                            $json['E' . $Element->id]['type_name'] = $Element->type->name;
 
-                        //=============POSITION==================================
-                        $json['E' . $Element->id]['position'] = $cElem->position;
+                            //=============POSITION==================================
+                            $json['E' . $Element->id]['position'] = $cElem->position;
 
-                        $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
-                        foreach ($ElementProperty as $ep):
-                            if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
-                                $Library = Library::model()->findByAttributes(array('id' => $ep->value));
-                                $json['E' . $Element->id]['L' . $Library->id] = array();
-                                $json['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
-                                $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
-                                foreach ($LibraryProperty as $lp):
-                                    $json['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
-                                endforeach;
-                            }else {
-                                $json['E' . $Element->id][$ep->property->name] = $ep->value;
-                            }
-                        endforeach;
-                    endforeach;
-
-                    //==============================================
-
-                    $Srceens = EditorScreen::model()->findAllByAttributes(array('cobject_id' => $cobjectID), array('order' => '`order`'));
-
-                    foreach ($Srceens as $sc):
-                        $json['S' . $sc->id] = array();
-                        $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screen_id' => $sc->id), array('order' => '`order`'));
-                        foreach ($ScreenPieceset as $scps):
-                            $PieceSet = EditorPieceset::model()->findByAttributes(array('id' => $scps->pieceset_id));
-                            $json['S' . $sc->id]['PS' . $PieceSet->id] = array();
-                            $json['S' . $sc->id]['PS' . $PieceSet->id]['description'] = $PieceSet->description;
-                            $json['S' . $sc->id]['PS' . $PieceSet->id]['template_id'] = $PieceSet->template_id;
-                            //===============PieceSet-Element===============
-
-                            $PieceSetElement = EditorPiecesetElement::model()->findAllByAttributes(array('pieceset_id' => $scps->pieceset_id), array('order' => '`position`'));
-
-                            foreach ($PieceSetElement as $pse):
-                                $Element = EditorElement::model()->findByAttributes(array('id' => $pse->element_id));
-                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id] = array();
-                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['type_name'] = $Element->type->name;
-
-                                //=============POSITION==================================
-                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['position'] = $pse->position;
-
-                                $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
-                                foreach ($ElementProperty as $ep):
-                                    if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
-                                        $Library = Library::model()->findByAttributes(array('id' => $ep->value));
-                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id] = array();
-                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
-                                        $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
-                                        foreach ($LibraryProperty as $lp):
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
-                                        endforeach;
-                                    }else {
-                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id][$ep->property->name] = $ep->value;
-                                    }
-                                endforeach;
+                            $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
+                            foreach ($ElementProperty as $ep):
+                                if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                    $Library = Library::model()->findByAttributes(array('id' => $ep->value));
+                                    $json['E' . $Element->id]['L' . $Library->id] = array();
+                                    $json['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
+                                    $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
+                                    foreach ($LibraryProperty as $lp):
+                                        $json['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
+                                    endforeach;
+                                }else {
+                                    $json['E' . $Element->id][$ep->property->name] = $ep->value;
+                                }
                             endforeach;
+                        endforeach;
 
-                            //==============================================
+                        //==============================================
 
-                            $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('pieceset_id' => $PieceSet->id), array('order' => '`order`'));
-                            foreach ($PieceSetPiece as $psp):
-                                $Piece = EditorPiece::model()->findByAttributes(array('id' => $psp->piece_id));
-                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id] = array();
-                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['description'] = $Piece->description;
-                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['name'] = $Piece->name;
+                        $Srceens = EditorScreen::model()->findAllByAttributes(array('cobject_id' => $cobjectID), array('order' => '`order`'));
 
-                                $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('piece_id' => $psp->piece_id), array('order' => '`position`'));
+                        foreach ($Srceens as $sc):
+                            $json['S' . $sc->id] = array();
+                            $ScreenPieceset = EditorScreenPieceset::model()->findAllByAttributes(array('screen_id' => $sc->id), array('order' => '`order`'));
+                            foreach ($ScreenPieceset as $scps):
+                                $PieceSet = EditorPieceset::model()->findByAttributes(array('id' => $scps->pieceset_id));
+                                $json['S' . $sc->id]['PS' . $PieceSet->id] = array();
+                                $json['S' . $sc->id]['PS' . $PieceSet->id]['description'] = $PieceSet->description;
+                                $json['S' . $sc->id]['PS' . $PieceSet->id]['template_id'] = $PieceSet->template_id;
+                                //===============PieceSet-Element===============
 
-                                foreach ($PieceElement as $pe):
-                                    $Element = EditorElement::model()->findByAttributes(array('id' => $pe->element_id));
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id] = array();
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name;
-                                    $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                        'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
+                                $PieceSetElement = EditorPiecesetElement::model()->findAllByAttributes(array('pieceset_id' => $scps->pieceset_id), array('order' => '`position`'));
+
+                                foreach ($PieceSetElement as $pse):
+                                    $Element = EditorElement::model()->findByAttributes(array('id' => $pse->element_id));
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id] = array();
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['type_name'] = $Element->type->name;
 
                                     //=============POSITION==================================
-                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['position'] = $pe->position;
-                                    //==============Flag=====================================
-                                    if (isset($pe_property)) {
-                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
-                                    }
-                                    //=============== grouping ===============================
-                                    $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                        'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
-                                    //var_dump($pe_property->value); exit();
-                                    if (isset($pe_property)) {
-                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
-                                    }
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['position'] = $pse->position;
+
                                     $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                     foreach ($ElementProperty as $ep):
                                         if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
                                             $Library = Library::model()->findByAttributes(array('id' => $ep->value));
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id] = array();
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id] = array();
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
                                             $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
                                             foreach ($LibraryProperty as $lp):
-                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
                                             endforeach;
                                         }else {
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id][$ep->property->name] = $ep->value;
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id][$ep->property->name] = $ep->value;
                                         }
+                                    endforeach;
+                                endforeach;
+
+                                //==============================================
+
+                                $PieceSetPiece = EditorPiecesetPiece::model()->findAllByAttributes(array('pieceset_id' => $PieceSet->id), array('order' => '`order`'));
+                                foreach ($PieceSetPiece as $psp):
+                                    $Piece = EditorPiece::model()->findByAttributes(array('id' => $psp->piece_id));
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id] = array();
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['description'] = $Piece->description;
+                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['name'] = $Piece->name;
+
+                                    $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('piece_id' => $psp->piece_id), array('order' => '`position`'));
+
+                                    foreach ($PieceElement as $pe):
+                                        $Element = EditorElement::model()->findByAttributes(array('id' => $pe->element_id));
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id] = array();
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name;
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
+
+                                        //=============POSITION==================================
+                                        $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['position'] = $pe->position;
+                                        //==============Flag=====================================
+                                        if (isset($pe_property)) {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['flag'] = $pe_property->value;
+                                        }
+                                        //=============== grouping ===============================
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
+                                        //var_dump($pe_property->value); exit();
+                                        if (isset($pe_property)) {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
+                                        }
+                                        $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
+                                        foreach ($ElementProperty as $ep):
+                                            if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                                $Library = Library::model()->findByAttributes(array('id' => $ep->value));
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id] = array();
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
+                                                $LibraryProperty = LibraryProperty::model()->findAllByAttributes(array('library_id' => $Library->id));
+                                                foreach ($LibraryProperty as $lp):
+                                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id][$lp->property->name] = $lp->value;
+                                                endforeach;
+                                            }else {
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id][$ep->property->name] = $ep->value;
+                                            }
+                                        endforeach;
                                     endforeach;
                                 endforeach;
                             endforeach;
                         endforeach;
+                    }
+                } elseif ($_POST['op'] == 'delete') {
+                    //Verificar Array de objetos para deletá-los
+                    $array_del = $_POST['array_del'];
+                    $size = count($array_del);
+                    $type = null;
+                    $id = null;
+                    $delAll_Ok = true;
+                    // Para cada elemento Excluído
+                    foreach ($array_del as $ls):
+                        if ($ls[0] . $ls[1] == 'PS') {
+                            $type = $ls[0] . $ls[1];
+                            $id = str_replace($type, '', $ls);
+                        } else {
+                            $type = $ls[0];
+                            $id = str_replace($type, '', $ls);
+                        }
+
+                        switch ($type) {
+                            case 'S':$this->delScreen($id);
+                                break;
+                            case 'PS':$this->delPieceset($id);
+                                break;
+                            case 'P': $delAll_Ok = $this->delPiece($id);
+                                break;
+                            case 'E':
+
+                                $expl_element_PS = explode('PS', $id);
+                                $expl_element_CO = explode('CO', $id);
+
+                                if (count($expl_element_PS) == 2) {
+                                    //Então realmente é uma PS
+                                    $id_element = $expl_element_PS[0];
+                                    $id_pieceSet = $expl_element_PS[1];
+                                    $delAll_Ok = $this->delElement($id_element, $id_pieceSet, true, false);
+                                } else if (count($expl_element_CO) == 2) {
+                                    //Então é um element do Cobject
+                                    $id_element = $expl_element_CO[0];
+                                    $id_cobject = $expl_element_CO[1];
+                                    $delAll_Ok = $this->delElement($id_element, $id_cobject, false, true);
+                                } else {
+                                    //É uma P -> piece
+                                    $expl_element_PS = explode('P', $id);
+                                    $id_element = $expl_element_PS[0];
+                                    $id_piece = $expl_element_PS[1];
+                                    $delAll_Ok = $this->delElement($id_element, $id_piece, false, false);
+                                }
+                        }
                     endforeach;
-                }
-            } elseif ($_POST['op'] == 'delete') {
-                //Verificar Array de objetos para deletá-los
-                $array_del = $_POST['array_del'];
-                $size = count($array_del);
-                $type = null;
-                $id = null;
-                $delAll_Ok = true;
-                // Para cada elemento Excluído
-                foreach ($array_del as $ls):
-                    if ($ls[0] . $ls[1] == 'PS') {
-                        $type = $ls[0] . $ls[1];
-                        $id = str_replace($type, '', $ls);
-                    } else {
-                        $type = $ls[0];
-                        $id = str_replace($type, '', $ls);
+                    if (!$delAll_Ok) {
+                        throw new Exception("ERROR: NEM Todos os Objectos solicitados para deleção foram Deletados!<br>");
                     }
-
-                    switch ($type) {
-                        case 'S':$this->delScreen($id);
-                            break;
-                        case 'PS':$this->delPieceset($id);
-                            break;
-                        case 'P': $delAll_Ok = $this->delPiece($id);
-                            break;
-                        case 'E':
-
-                            $expl_element_PS = explode('PS', $id);
-                            $expl_element_CO = explode('CO', $id);
-
-                            if (count($expl_element_PS) == 2) {
-                                //Então realmente é uma PS
-                                $id_element = $expl_element_PS[0];
-                                $id_pieceSet = $expl_element_PS[1];
-                                $delAll_Ok = $this->delElement($id_element, $id_pieceSet, true, false);
-                            } else if (count($expl_element_CO) == 2) {
-                                //Então é um element do Cobject
-                                $id_element = $expl_element_CO[0];
-                                $id_cobject = $expl_element_CO[1];
-                                $delAll_Ok = $this->delElement($id_element, $id_cobject, false, true);
-                            } else {
-                                //É uma P -> piece
-                                $expl_element_PS = explode('P', $id);
-                                $id_element = $expl_element_PS[0];
-                                $id_piece = $expl_element_PS[1];
-                                $delAll_Ok = $this->delElement($id_element, $id_piece, false, false);
-                            }
-                    }
-                endforeach;
-                if (!$delAll_Ok) {
-                    throw new Exception("ERROR: NEM Todos os Objectos solicitados para deleção foram Deletados!<br>");
+                    //--------------------------
+                } else {
+                    throw new Exception("ERROR: Operação inválida.<br>");
                 }
-                //--------------------------
             } else {
                 throw new Exception("ERROR: Operação inválida.<br>");
             }
-        } else {
-            throw new Exception("ERROR: Operação inválida.<br>");
-        }
 
-         
-        //Persiste as alteraçoes no BD
-        $transaction->commit();
-        
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-        header('Content-type: application/json');
-        echo json_encode($json);
-        
-    }catch(Exception $e){
-        //Caso ocorra algum erro de sql e no php
-        $transaction->rollBack();
-    }
-        
+
+            //Persiste as alteraçoes no BD
+            $transaction->commit();
+
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($json);
+        } catch (Exception $e) {
+            //Caso ocorra algum erro de sql e no php
+            $transaction->rollBack();
+        }
     }
 
     private function delScreen($id) {
@@ -1439,7 +1398,6 @@ class EditorController extends Controller {
         }
         $limit = " LIMIT 0,10";
         //cada registro com library_id e o Alias correspondente
-        
         //STOP HERE, VERIFICAR CONDIÇAO DE DISTINCT OU NAO
         $librarysIdAlias = Yii::app()->db->createCommand('SELECT library_id, value FROM library_property' . $where . $limit)->queryAll();
         //Busca agora o src de cada library encontrada
@@ -1463,18 +1421,18 @@ class EditorController extends Controller {
                 }
                 //Array Alias que possuira todos os Alias de determinada library   
                 array_push($librarys[$libId_Alias['library_id']]['alias'], $libId_Alias['value']);
-            }else{
+            } else {
                 //Encontrou sem filtro
-                 $librarys[$libId_Alias['library_id']]['src'] = $srcFromLibrary_id[0]['value'];
+                $librarys[$libId_Alias['library_id']]['src'] = $srcFromLibrary_id[0]['value'];
             }
             echo $libId_Alias['library_id'];
         endforeach;
 
         if (count($librarysIdAlias) == 0) {
             //NAO encontrou algum Alias
-           echo "";
+            echo "";
         }
-        
+
         echo json_encode($librarys);
     }
 

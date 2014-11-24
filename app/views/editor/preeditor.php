@@ -21,20 +21,78 @@
          </style>
          <script type="text/javascript">
         $(document).ready(function() {
-             $('#ajaxGoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" } ); 
+            $('#error').hide();
+          // $('#ajaxGoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" } ); 
+          filterGoal({idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" });
+          function filterGoal(data){
+                    $.ajax({
+                     type: "POST",
+                     url: "/Editor/filtergoal",
+                     dataType: 'json',
+                     data: data,
+                     error: function(jqXHR, textStatus, errorThrown) {
+                         console.log(jqXHR.responseText);
+                     },
+                     success: function(response, textStatus, jqXHR) {
+                         var data = response;
+                         
+                         if(data['error'] != 'undefined' && data['error'] != null ){
+                            $('#error').show();
+                         }
+                         
+                         if(data['degree'] != 'undefined' && data['degree'] != null){
+                             var str = "";
+                              $.each(data['degree'], function(idx, degree){
+                                  str+= '<option value = "'+degree[0]['id']+'">' + degree[0]['name'] + '</option>';
+                                $('#actDegree').html(str);
+                             });
+                         }else if(data['degree'] == null){
+                             $('#actDegree').html('<option id="0">Nenhum Encontrado</option>');
+                         }
+                         
+                         if( data['cObjects'] != 'undefined' && data['cObjects'] != null ){
+                             var str = "";
+                             $.each(data['cObjects'], function(idx, cobject){
+                                  str += '<option value = "'+cobject['id']+'">' + cobject['value'] + '</option>';
+                                $('#cobjectID').html(str);
+                             });
+                         }else if(data['cObjects'] == null){
+                             $('#cobjectID').html('<option id="0">Nenhum Encontrado</option>');
+                         }
+                         
+                           if( data['goal'] != 'undefined' && data['goal'] != null ){
+                              var str = "";
+                                $.each(data['goal'], function(idx, goal){
+                                   str += '<option value = "'+goal['id']+'">' + goal['name'] + '</option>';     
+                                   $('#actGoal').html(str);
+                                });
+                         }else if(data['goal'] == null){
+                             $('#actGoal').html('<option id="0">Nenhum Encontrado</option>');
+                         }
+                         
+                     }
+                 });
+             }
+             
              $('#actDiscipline').change(function(){
-               $('#ajaxGoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" } ); 
+              // $('#ajaxGoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" } ); 
+               filterGoal({idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" });
              }); 
              
                $(document).on('change','#actDegree',function(){
-                    $('#propertyAgoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
-                });
+                   // $('#propertyAgoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
+                    filterGoal({idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()});
+                 });
+                
                $(document).on('change','#actGoal',function(){
-                    $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val(),isAjax:true} );    
+                   // $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val(),isAjax:true} ); 
+                   filterGoal({goalID: $('#actGoal').val()});
                 });
+                
                 $(document).on('change','#actGoal,#actDegree,#actDiscipline',function(){
                     $('#error').hide(1000);
                 });
+                
 
         });
          </script>    
@@ -86,9 +144,43 @@
                </div>
         
               <br>                  
-                 <div id='ajaxGoal' name='ajaxGoal'>
+                 <div id='ajaxGoal' name='ajaxGoal'>                  
+                     <div id='propertyAdeg' align='left'> 
+                          Nível&nbsp;:&nbsp;
+                        <select id='actDegree' name='actDegree'>
+
+                        </select>
+                     </div>
+                    <div id='propertyAgoal' class='propertyAgoal' align='center'>
+                      <br> Objetivo&nbsp;:&nbsp;
+                        <select id='actGoal' name='actGoal' style='width:430px'>
+
+                       </select> 
+                    </div>
+                     
+            <div id='showCobjectIDs' align='left'>
+              <br><span id='txtIDsCobject'> Lista de Cobjects para Goal Corrente  </span>
+                <form id='cobjectIDS2' name='cobjectIDS2' method='POST' action='/editor/index/'>
+                </form>
+                <form id='cobjectIDS' name='cobjectIDS' method='POST' action='/editor/index/'>
+                <select id='cobjectID' name='cobjectID' style='width:430px'>
+                    
+                    
+                 </select> 
+                    <input type='hidden' name='op' value='load'> 
+                    <input id='editCobject' name='editCobject' type='submit' value='Change Cobject'>
+                 </form>
+                         
+               </div>
+                     
                  </div>  
                 <div id='error'>
+                 <div class='noGoal'>
+                        <font color='red' size='2'>
+                             Não encontrou algum Objetivo para a disciplina selecionada!
+                        </font>
+                 </div>
+                
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 1  ) {
                     echo "<font size='2' color='red'>Nenhum Objetivo foi Selecionado!</font>";
