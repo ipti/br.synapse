@@ -46,7 +46,7 @@
                                   str+= '<option value = "'+degree[0]['id']+'">' + degree[0]['name'] + '</option>';
                                 $('#actDegree').html(str);
                              });
-                         }else if(data['degree'] == null){
+                         }else if(data['degree'] == null && data['order'] == 'discipline'){
                              $('#actDegree').html('<option id="0">Nenhum Encontrado</option>');
                          }
                          
@@ -66,7 +66,7 @@
                                    str += '<option value = "'+goal['id']+'">' + goal['name'] + '</option>';     
                                    $('#actGoal').html(str);
                                 });
-                         }else if(data['goal'] == null){
+                         }else if(data['goal'] == null && data['order'] != 'goal'){
                              $('#actGoal').html('<option id="0">Nenhum Encontrado</option>');
                          }
                          
@@ -76,17 +76,17 @@
              
              $('#actDiscipline').change(function(){
               // $('#ajaxGoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" } ); 
-               filterGoal({idDiscipline: $('#actDiscipline').val(), idDegree:"undefined" });
+               filterGoal({idDiscipline: $('#actDiscipline').val(), idDegree:"undefined", order:"discipline" });
              }); 
              
                $(document).on('change','#actDegree',function(){
                    // $('#propertyAgoal').load("filtergoal", {idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()} ); 
-                    filterGoal({idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val()});
+                    filterGoal({idDiscipline: $('#actDiscipline').val(), idDegree: $('#actDegree').val(), order:"degree"});
                  });
                 
                $(document).on('change','#actGoal',function(){
                    // $('#showCobjectIDs').load('filtergoal', {goalID: $('#actGoal').val(),isAjax:true} ); 
-                   filterGoal({goalID: $('#actGoal').val()});
+                   filterGoal({goalID: $('#actGoal').val(), order:"goal"});
                 });
                 
                 $(document).on('change','#actGoal,#actDegree,#actDiscipline',function(){

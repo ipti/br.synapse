@@ -311,6 +311,8 @@ class EditorController extends Controller {
 
     public function actionFiltergoal() {
         $option = array();
+        $order = isset($_POST['order']) ? $_POST['order'] : null;
+        $option['order'] = $order;
         if (!isset($_POST['goalID'])) {
             $idDiscipline = $_POST['idDiscipline'];
             $idDegree = $_POST['idDegree'];
@@ -326,7 +328,6 @@ class EditorController extends Controller {
                     }
                     $count_Adeg = count($actDegree);
                     if ($count_Adeg > 0) {
-
                         //$actDegree[$i][0]
                         //Por padrão, como não foi selecionado algum Degree, mostrará o GOAL do 1° [0]
                         $actGoal_d = Yii::app()->db->createCommand('SELECT id, name FROM act_goal 
