@@ -13,6 +13,23 @@ if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) && isset($_P
     $name_cobjectTheme = isset($name_cobjectTheme) ? $name_cobjectTheme->name : "SEM TEMA";
     $name_actGoal = ActGoal::model()->findByPk($actGoal);
     $name_actGoal = $name_actGoal->name;
+    
+    if(isset($_POST['actDiscipline'])){
+        $name_Discipline = ActDiscipline::model()->findByPk($_POST['actDiscipline']);
+        $name_Discipline = $name_Discipline->name;
+    }else{
+        $name_Discipline = "SEM DISCIPLINA";
+    }
+    
+    if(isset($_POST['actDegree'])){
+        $name_Degree = ActDegree::model()->findByPk($_POST['actDegree']);
+        $name_Degree = $name_Degree->name;
+    }else{
+        $name_Degree = "SEM SÉRIE";
+    }
+    
+    
+    
 } elseif (isset($_GET['cID'])) {
     $cobjectID = $_GET['cID'];
     $load = 'true';
