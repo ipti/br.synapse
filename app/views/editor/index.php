@@ -20,24 +20,21 @@ if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) && isset($_P
     $cobjectID = $_POST['cobjectID'];
     $load = 'true';
 } else {
-    throw new Exception('ERROR: RQEUEST Inválido');
+    throw new Exception('ERROR: REQUEST Inválido');
 }
 
 if (isset($cobjectID)) {
-    $cobject = Cobject::model()->findByPk($cobjectID);
-    $commonType = $cobject->type_id;
-    $cobjectTemplate = $cobject->template_id;
-    $cobjectTheme = $cobject->theme_id;
-    $cobject_metadata = CobjectMetadata::model()->findByAttributes(array('cobject_id' => $cobjectID, 'type_id' => '13'));
-    $actGoal = $cobject_metadata->value;
-    $name_commonType = CommonType::model()->findByPk($commonType);
-    $name_commonType = $name_commonType->name;
-    $name_cobjectTemplate = CobjectTemplate::model()->findByPk($cobjectTemplate);
-    $name_cobjectTemplate = $name_cobjectTemplate->name;
-    $name_cobjectTheme = CobjectTheme::model()->findByPk($cobjectTheme);
-    $name_cobjectTheme = isset($name_cobjectTheme) ? $name_cobjectTheme->name : "SEM TEMA";
-    $name_actGoal = ActGoal::model()->findByPk($actGoal);
-    $name_actGoal = $name_actGoal->name;
+    $viewRenderCobjet = Yii::app()->db->createCommand(""
+            . "SELECT DISTINCT(cobject_id), cobject_type, template_name,"
+            . " theme, goal, degree_name, discipline FROM synapse.render_cobjects "
+            . "WHERE cobject_id = $cobjectID ;")->queryAll(); 
+    
+    $name_commonType = $viewRenderCobjet[0]["cobject_type"];
+    $name_cobjectTemplate = $viewRenderCobjet[0]["template_name"];
+    $name_cobjectTheme = isset($viewRenderCobjet[0]["theme"]) && $viewRenderCobjet[0]["theme"] != "" ? $viewRenderCobjet[0]["theme"] : "SEM TEMA";
+    $name_actGoal = $viewRenderCobjet[0]["goal"];
+    $name_Discipline = $viewRenderCobjet[0]["discipline"];
+    $name_Degree = $viewRenderCobjet[0]["degree_name"];
 }
 
 $this->breadcrumbs = array(
@@ -90,6 +87,8 @@ if ($load == 'false') {
         &nbsp;&nbsp;Template: <?php echo $name_cobjectTemplate; ?> 
         &nbsp;&nbsp;Tema: <?php echo $name_cobjectTheme; ?> 
         <br>Objetivo: <?php echo $name_actGoal; ?> 
+        <br>Disciplina: <?php echo $name_Discipline; ?>
+        &nbsp;&nbsp; Série: <?php echo $name_Degree; ?>
     </li>
 
     <button class="themebutton" id="addScreen"><?php echo Yii::t('default', 'Add Screen'); ?></button>
