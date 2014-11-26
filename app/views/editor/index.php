@@ -43,7 +43,7 @@ if (isset($_POST['commonType']) && isset($_POST['cobjectTemplate']) && isset($_P
 if (isset($cobjectID)) {
     $viewRenderCobjet = Yii::app()->db->createCommand(""
             . "SELECT DISTINCT(cobject_id), cobject_type, template_name,"
-            . " theme, goal, degree_name, discipline FROM synapse.render_cobjects "
+            . " theme, goal, degree_name, discipline FROM render_cobjects "
             . "WHERE cobject_id = $cobjectID ;")->queryAll(); 
     
     $name_commonType = $viewRenderCobjet[0]["cobject_type"];
