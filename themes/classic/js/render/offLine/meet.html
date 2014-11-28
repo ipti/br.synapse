@@ -76,7 +76,7 @@
                 var discipline_id = sessionStorage.getItem('id_discipline');
                 var block_id;
                 switch(discipline_id){
-                    case '1':block_id='1';break; //Linguagem
+                    case '1':block_id='2';break; //Linguagem
                     case '2':block_id='2';break; //Matemática   
                 }
                 
@@ -91,7 +91,6 @@
                 //Passar parâmetro do tipo do Encontro
                 var newMeet = new Meet(options);
                 
-               
                 
                 //Atualizar O painel do render
                 $('.info.info-name').html('<p>'+newMeet.actor_name+'</p>');
