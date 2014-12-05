@@ -27,7 +27,8 @@
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
         <!-- Abrir Script do renderDB --> 
         <script type="text/javascript" src="db/renderDB.js"></script>
-        <script type="text/javascript" src="data/json/renderData.js"></script>
+        <script type="text/javascript" src="data/json/renderDataLin.js"></script>
+        <script type="text/javascript" src="data/json/renderDataMat.js"></script>
         <script>
 
             function existInArray(array, id) {
@@ -53,12 +54,12 @@
                     db.exportPerformance_actor();
                 });
 
-                $('#import').bind('tap', function() {
+                $('#importLinguagem').bind('tap', function() {
                     var unitys = new Array();
                     var actors = new Array();
 
                     //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJson.ActorsOwnUnity, function(idx, object) {
+                    $.each(dataJsonLin.ActorsOwnUnity, function(idx, object) {
                         var tempUnity = {};
                         tempUnity.id = object.unity_id;
                         tempUnity.father_id = object.unity_father;
@@ -80,17 +81,64 @@
                         }
 
                     });
-                    var disciplines = dataJson.Disciplines;
-                    var cobjectblock = dataJson.CobjectBlock;
-                    var cobject_cobjectblocks = dataJson.Cobject_cobjectBlocks;
-                    var cobjects = dataJson.Cobjects;
+                    var disciplines = dataJsonLin.Disciplines;
+                    var cobjectblock = dataJsonLin.CobjectBlock;
+                    var cobject_cobjectblocks = dataJsonLin.Cobject_cobjectBlocks;
+                    var cobjects = dataJsonLin.Cobjects;
 
 
                     //2° Importar
                     db.importAllDataRender(unitys, actors, disciplines, cobjectblock
                             , cobject_cobjectblocks, cobjects);
+                            
+                            
+                            
 
                 });
+                
+                
+                $('#importMatematica').bind('tap', function() {
+                    var unitys = new Array();
+                    var actors = new Array();
+
+                    //Percorrer todos objetos existentes no ActorsOwnUnity
+                    $.each(dataJsonMat.ActorsOwnUnity, function(idx, object) {
+                        var tempUnity = {};
+                        tempUnity.id = object.unity_id;
+                        tempUnity.father_id = object.unity_father;
+                        tempUnity.name = object.unity_name;
+                        tempUnity.organization_id = object.unity_organization_id;
+                        if (!existInArray(unitys, tempUnity.id)) {
+                            unitys.push(tempUnity);
+                        }
+                        var tempActor = {};
+                        tempActor.id = object.id;
+                        tempActor.login = object.login;
+                        tempActor.name = object.name;
+                        tempActor.password = object.password;
+                        tempActor.personage_name = object.personage;
+                        //Chave Estrageira para a sua unidade
+                        tempActor.unity_id = object.unity_id;
+                        if (!existInArray(actors, tempActor.id)) {
+                            actors.push(tempActor);
+                        }
+
+                    });
+                    var disciplines = dataJsonMat.Disciplines;
+                    var cobjectblock = dataJsonMat.CobjectBlock;
+                    var cobject_cobjectblocks = dataJsonMat.Cobject_cobjectBlocks;
+                    var cobjects = dataJsonMat.Cobjects;
+
+
+                    //2° Importar
+                    db.importAllDataRender(unitys, actors, disciplines, cobjectblock
+                            , cobject_cobjectblocks, cobjects);
+                            
+                            
+                            
+
+                });
+                
                 $('#buildAllSchemas').bind('tap', function() {
                     //1° Criar
                     db.openDBuild(true);
@@ -116,7 +164,8 @@
             <div id="import_data">
                 <button class="import-button buttons" type="button" id="deleteAllDB"> Limpar Banco </button>  
                 <button class="import-button buttons" type="button" id="buildAllSchemas" name="buildAllSchemas" >Construir Esquemas</button>
-                <button class="import-button buttons" type="button" id="import" name="import" >Importar Dados</button>
+                <button class="import-button buttons" type="button" id="importLinguagem" name="importLinguagem" >Importar Dados - 1º Ano LINGUAGEM</button>
+                <button class="import-button buttons" type="button" id="importMatematica" name="importMatematica" >Importar Dados - 1º Ano MATEMÁTICA</button>
                 <button class="back-button buttons" type="button" id="back" name="back" >Voltar</button>
             </div>
         </section>

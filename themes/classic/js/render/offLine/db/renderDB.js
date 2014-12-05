@@ -241,62 +241,92 @@ this.DB = function() {
 
     this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
             , cobject_cobjectblocks, cobjects) {
-        //Unidade e Usuário
-        var data_unity = unitys;
 
-        var data_actor = actors;
-        //======================================
-        //Blocos de Atividades para cada Disciplina
-        var data_discipline = disciplines;
-
-        var data_cobjectBlock = cobjectblock;
-
-        var data_cobject_cobjectBlock = cobject_cobjectblocks;
-
-        //Cobjets
-        var data_cobject = cobjects;
-
-
-        window.indexedDB = self.verifyIDBrownser();
-        DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function(event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        var options = {
+            unitys: unitys,
+            actors: actors,
+            disciplines: disciplines,
+            cobjectblock: cobjectblock,
+            cobject_cobjectblocks: cobject_cobjectblocks,
+            cobjects: cobjects
         };
-        DBsynapse.onsuccess = function(event) {
-            var db = event.target.result;
-            db.onerror = function(event) {
-                // Função genérica para tratar os erros de todos os requests desse banco!
-                window.alert("Database error: " + event.target.errorCode);
+        self.verifyExistBlock(options, function(unitys, actors, disciplines, cobjectblock
+                , cobject_cobjectblocks, cobjects, existBlock) {
+            //Call Back
+
+            if (!existBlock) {
+                //=================================================
+                //Unidade e Usuário
+                var data_unity = unitys;
+
+                var data_actor = actors;
+                //======================================
+                //Blocos de Atividades para cada Disciplina
+                var data_discipline = disciplines;
+                //==================================================
+            }
+
+            var data_cobjectBlock = cobjectblock;
+
+            var data_cobject_cobjectBlock = cobject_cobjectblocks;
+
+            //Cobjets
+            var data_cobject = cobjects;
+
+
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    window.alert("Database error: " + event.target.errorCode);
+                };
 
-            //Importar as unitys
-            self.importUnity(db, data_unity);
+                if (!existBlock) {
+                    //==================================================
+                    //Importar as unitys
+                    self.importUnity(db, data_unity);
 
-            //Importar os atores
-            self.importActor(db, data_actor);
+                    //Importar os atores
+                    self.importActor(db, data_actor);
 
-            //Importar as disciplines
-            self.importDiscipline(db, data_discipline);
-
-            //Importar os cobjectblocks
-            self.importCobjectblock(db, data_cobjectBlock);
-
-            //Importar os cobject_cobjectblocks
-            self.importCobject_cobjectblock(db, data_cobject_cobjectBlock);
-
-            // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
-            //Importar os cobjects
-            self.importCobject(db, data_cobject);
-
-            //Importar os performance_actors
-            // self.importPerformance_actor(db,data_performance_actor); 
+                    //Importar as disciplines
+                    self.importDiscipline(db, data_discipline);
+                    //==================================================
+                }
 
 
-        }
-        DBsynapse.onblocked = function(event) {
-            // Se existe outra aba com a versão antiga
-            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-        }
+                //Importar os cobjectblocks
+                self.importCobjectblock(db, data_cobjectBlock);
+
+                //Importar os cobject_cobjectblocks
+                self.importCobject_cobjectblock(db, data_cobject_cobjectBlock);
+
+                // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
+                //Importar os cobjects
+                self.importCobject(db, data_cobject);
+
+                //Importar os performance_actors
+                // self.importPerformance_actor(db,data_performance_actor); 
+
+
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+
+
+
+
+        });
+
+
+
 
 
     }
@@ -434,8 +464,8 @@ this.DB = function() {
                     var pom = document.createElement('a');
                     var current_date = new Date();
                     pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
-                    pom.setAttribute('download', 'perfomances('+ current_date.getDate() + '-' + current_date.getMonth() 
-                    +'-'+ current_date.getFullYear() + '_' + current_date.getTime()+')');
+                    pom.setAttribute('download', 'perfomances(' + current_date.getDate() + '-' + current_date.getMonth()
+                            + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
                     pom.click();
 
                 }
@@ -884,6 +914,49 @@ this.DB = function() {
 
     }
 
+
+    //Verificar se já possui um bloco
+    this.verifyExistBlock = function(options, callBack) {
+        var existBlock = false;
+
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function(event) {
+            alert("Você não habilitou minha web app para usar IndexedDB?!");
+        }
+
+        DBsynapse.onsuccess = function(event) {
+            var db = event.target.result;
+            db.onerror = function(event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                window.alert("Database error: " + event.target.errorCode);
+            }
+            var blockStore = db.transaction("cobjectblock").objectStore("cobjectblock");
+            var cobjectblock = new Array();
+            blockStore.openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor && !existBlock) {
+                    // Percorre cada registro do cobjectblock
+                    existBlock = true;
+                    cursor.continue();
+                }
+                
+
+                callBack(options.unitys, options.actors, options.disciplines, options.cobjectblock
+                        , options.cobject_cobjectblocks, options.cobjects, existBlock);
+
+            };
+            blockStore.onerror = function(event) {
+                // Tratar erro!
+            }
+        }
+
+        DBsynapse.onblocked = function(event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+
+    }
 
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão

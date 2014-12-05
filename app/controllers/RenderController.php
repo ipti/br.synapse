@@ -411,14 +411,21 @@ class RenderController extends Controller {
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
             }
-
+            
+            $nameDisciplineSelected = "";
             //Obter as disciplinas
             $disciplines = ActDiscipline::model()->findAll();
             $array_disciplines = array();
             foreach ($disciplines as $idx => $discipline):
                 $array_disciplines[$idx]['id'] = $discipline->id;
                 $array_disciplines[$idx]['name'] = $discipline->name;
+                
+                if($_POST['discipline'] == $discipline->id){
+                    $nameDisciplineSelected = substr($discipline->name,0,3);
+                }
             endforeach;
+            
+            
             //Obter o CobjectBloco Selecionado
             $cobjectBlock = Cobjectblock::model()->findByPk($_REQUEST['cobject_block']);
             $array_cobjectBlock = array();
@@ -464,11 +471,11 @@ class RenderController extends Controller {
                 $json['CobjectBlock'] = $array_cobjectBlock;
                 $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
                 $json['Cobjects'] = $json_cobjects;
-                $json_encode = "var dataJson = ";
+                $json_encode = "var dataJson$nameDisciplineSelected = ";
                 $json_encode.=json_encode($json);
                 $json_encode.=";";
 
-                $this->tempArchiveZipMultiMedia->addFromString('/json/renderData.js', $json_encode);
+                $this->tempArchiveZipMultiMedia->addFromString("/json/renderData$nameDisciplineSelected.js", $json_encode);
 
                 //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
