@@ -283,7 +283,7 @@ this.DB = function() {
                 var db = event.target.result;
                 db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
-                    window.alert("Database error: " + event.target.errorCode);
+                    window.alert("Database error: " + event.target.error.message);
                 };
 
                 if (!existBlock) {
@@ -343,6 +343,7 @@ this.DB = function() {
             UnityObjectStore.add(data_unity[i]);
         }
         UnityObjectStore.transaction.oncomplete = function(event) {
+            db.close();
             window.alert("Unitys IMPORTED!");
         }
     }
@@ -354,6 +355,7 @@ this.DB = function() {
             ActorObjectStore.add(data_actor[i]);
         }
         ActorObjectStore.transaction.oncomplete = function(event) {
+            db.close();
             window.alert("Actors IMPORTED!");
         }
     }
@@ -365,6 +367,7 @@ this.DB = function() {
             DisciplineObjectStore.add(data_discipline[i]);
         }
         DisciplineObjectStore.transaction.oncomplete = function(event) {
+            db.close();
             window.alert("Disciplines IMPORTED!");
         }
     }
@@ -376,6 +379,7 @@ this.DB = function() {
             CobjectblockObjectStore.add(data_cobjectBlock[i]);
         }
         CobjectblockObjectStore.transaction.oncomplete = function(event) {
+            db.close();
             window.alert("Cobjectblocks IMPORTED!");
         }
     }
@@ -388,6 +392,7 @@ this.DB = function() {
             Cobject_cobjectBlockObjectStore.add(data_cobject_cobjectBlock[i]);
         }
         Cobject_cobjectBlockObjectStore.transaction.oncomplete = function(event) {
+            db.close();
             window.alert("Cobject_cobjectblocks IMPORTED!");
         }
     }
@@ -400,6 +405,7 @@ this.DB = function() {
             CobjectObjectStore.add(data_cobject[i]);
         }
         CobjectObjectStore.transaction.oncomplete = function(event) {
+            db.close();
             window.alert("Cobjects IMPORTED!");
         }
     }
@@ -411,6 +417,7 @@ this.DB = function() {
             Performance_actorObjectStore.add(data_performance_actor[i]);
         }
         Performance_actorObjectStore.transaction.oncomplete = function(event) {
+            db.close();
             window.alert("Performance_actors IMPORTED!");
         }
     }
@@ -870,8 +877,8 @@ this.DB = function() {
             var requestGet = actorStore.index('unity_id');
             var singleKeyRange = IDBKeyRange.only(unity_id);
             var actors = new Array();
+            var contStudent = 0;
             requestGet.openCursor().onsuccess = function(event) {
-                var contStudent = 0;
                 var cursorActor = event.target.result;
                 if (cursorActor) {
                     // Percorre cada registro no actor para a unity corrent e personage = 'Aluno'
@@ -885,8 +892,9 @@ this.DB = function() {
                         };
                         contStudent++;
                     }
-
+                    
                     cursorActor.continue();
+                    
                 } else {
                     //Finalisou para os Actors desta Class
                     var currentUnity = {

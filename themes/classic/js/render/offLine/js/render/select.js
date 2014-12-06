@@ -9,7 +9,7 @@ $(document).ready(function(){
 
     var eventFilterMeet = function (actorOwnUnity){
         var classrooms = actorOwnUnity;
-
+         
         if(sessionStorage.getItem('login_personage_name') == 'Tutor'){
             $("#login-select").show();
 
@@ -21,6 +21,7 @@ $(document).ready(function(){
             $('#classroom').change(function(){
                 $('#actor').html('');
                 var cr = $('#classroom option:selected').attr('id');
+               
                 $.each(classrooms[cr]['actors'], function(i, v){
                     $('#actor').append("<option value='"+v['actor_id']+"''>"+v['actor_name']+"</option>");
                 })

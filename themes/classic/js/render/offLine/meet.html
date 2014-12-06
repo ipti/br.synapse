@@ -46,6 +46,10 @@
             }
 
             $(document).ready(function(){
+                
+                //Somente para retirar o 'loading' que o jquery cria automaticamente
+                $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
+                
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
                 }
@@ -76,8 +80,8 @@
                 var discipline_id = sessionStorage.getItem('id_discipline');
                 var block_id;
                 switch(discipline_id){
-                    case '1':block_id='2';break; //Linguagem
-                    case '2':block_id='2';break; //Matemática   
+                    case '1':block_id='4';break; //Linguagem
+                    case '2':block_id='5';break; //Matemática   
                 }
                 
                 var options = {
