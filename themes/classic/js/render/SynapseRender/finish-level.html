@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.2; maximum-scale=1.2; target-densitydpi=medium-dpi; user-scalable=no" />
+    <title>Parabéns!</title>
+    <link rel="icon" type="image/png" href="icons/icon-48.png" /> 
+    <link rel="stylesheet" type="text/css" href="css/render/global.css">
+    <link rel="stylesheet" type="text/css" href="css/render/finish-level.css">
+    <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
+    <!-- JQUERY FOR MOBILE-->
+    <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
+    <!-- ======= -->
+    <script type="text/javascript">
+        if (sessionStorage.getItem("authorization") == null || sessionStorage.getItem("authorization") == 'false') {
+            location.href = 'login.html';
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            
+            $('#boxbotao').bind('tap', function() {
+                location.href = "login.html";
+            });
+            
+        });
+    </script>
+</head>
+
+<body>
+    <div id="boxraio"><img src="img/icons/raio_telapassagem.png" width="54" height="100" /></div>
+    <div id="boxtexto">
+        <p class="texto1">Parabéns!<br />
+            Você passou de nível!</p>
+    </div>
+    <div class="texto2" id="boxbotao">OK</div>
+</body>
+</html>
