@@ -267,13 +267,11 @@ this.DB = function() {
             }
 
             var data_cobjectBlock = cobjectblock;
-
             var data_cobject_cobjectBlock = cobject_cobjectblocks;
-
             //Cobjets
             var data_cobject = cobjects;
 
-
+            
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -299,7 +297,6 @@ this.DB = function() {
                     //==================================================
                 }
 
-
                 //Importar os cobjectblocks
                 self.importCobjectblock(db, data_cobjectBlock);
 
@@ -313,6 +310,8 @@ this.DB = function() {
                 //Importar os performance_actors
                 // self.importPerformance_actor(db,data_performance_actor); 
 
+                //Fecha o DB
+                db.close();
 
             }
             DBsynapse.onblocked = function(event) {
@@ -892,9 +891,9 @@ this.DB = function() {
                         };
                         contStudent++;
                     }
-                    
+
                     cursorActor.continue();
-                    
+
                 } else {
                     //Finalisou para os Actors desta Class
                     var currentUnity = {
@@ -946,9 +945,7 @@ this.DB = function() {
                 if (cursor && !existBlock) {
                     // Percorre cada registro do cobjectblock
                     existBlock = true;
-                    cursor.continue();
                 }
-                
 
                 callBack(options.unitys, options.actors, options.disciplines, options.cobjectblock
                         , options.cobject_cobjectblocks, options.cobjects, existBlock);
