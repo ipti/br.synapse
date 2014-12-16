@@ -1170,7 +1170,7 @@ this.Meet = function(options) {
                 break;
             }
         }
-
+        
         var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() == digitated_value.toUpperCase());
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
