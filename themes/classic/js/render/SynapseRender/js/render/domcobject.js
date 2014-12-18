@@ -56,8 +56,8 @@ var DomCobject = function(cobject, idx) {
         self.dom.append(self.domContent);
         //Construir o dump dos elementos do CObject
         var cobjectInfo = self.dom.children(".cobjectInfo");
-        cobjectInfo.prepend('<span id="description" class="elementCOText">'+
-                self.isset(this.cobject.description) ? this.cobject.description : "" +'</span>');
+        cobjectInfo.prepend('<span id="description" class="elementCOText">' +
+                self.isset(this.cobject.description) ? this.cobject.description : "" + '</span>');
         if (this.isset(this.cobject.elements)) {
             for (this.pos.elementCO = 0; this.pos.elementCO < this.cobject.elements.length; this.pos.elementCO++) {
                 cobjectInfo.prepend(self.buildElement_CO());
@@ -125,122 +125,129 @@ var DomCobject = function(cobject, idx) {
     }
 
     this.buildPiece = function() {
-        self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
-        var domElementASK = $('<div class="ask"></div>');
-        //Verificar se é uma peça do template AEL
-        if (self.cobject.template_code == 'AEL' || 
-                self.cobject.template_code == 'DDROP' ||
-                self.cobject.template_code == 'ONEDDROP') {
-            var domElementANSWER = $('<div class="answer"></div>');
-        }
-
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
-
-        var objGroups_currentPiece = {};
-        $.each(groups, function(current_group, elements_group) {
-            self.pos.group = current_group; // O grupo Corrent dessa Piece!
-
-            //array que armazena todos os objetos grupos da piece atual
-            var group_split = current_group.split('_');
-            // ASK = Múltiplo de 2 ; ANSWER = Múltiplo de 3
-            var newIdGroup = (group_split[1] === undefined) ? (self.id.piece * (group_split[0])) * 2 : (self.id.piece * (group_split[0])) * 3 + '_1';
-            eval("objGroups_currentPiece._" + newIdGroup + " = elements_group;");
-            var domTypeGroup = "";
-            var domGroup = "";
-            var isAskGroup = current_group.split('_').length == 1;
-            if (isAskGroup) {
-                //is ASK-GROUP
-                domTypeGroup = domElementASK;
-            } else {
-                // is ANSWER-GROUP
-                domTypeGroup = domElementANSWER;
-            }
-            var possibleGroup = domTypeGroup.find('div[group="' + newIdGroup + '"]');
-            var isNewGroup = (possibleGroup.size() == 0);
-
-            if (isNewGroup) {
-                // Novo Grupo
-                domGroup = $('<div group="' + newIdGroup + '" class="' + self.cobject.template_code + ' group" ></div>');
-                //Add class drop somente se for um group Ask
-                if (self.cobject.template_code == 'DDROP') {
-                    if (isAskGroup) {
-                        domGroup.addClass('drag');
-                    } else {
-                        // is ANSWER-GROUP
-                        domGroup.addClass('drop');
-                    }
-                }else if(self.cobject.template_code == 'ONEDDROP'){
-                    if (isAskGroup) {
-                        domGroup.addClass('oneDrag');
-                    } else {
-                        // is ANSWER-GROUP
-                        domGroup.addClass('oneDrop');
-                    }
-                }
-            } else {
-                //Grupo existente
-                domGroup = possibleGroup;
+        //Somente Monta a Piece, se existir algum Group dentro dela
+        if (self.isset(groups)) {
+            self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
+            var domElementASK = $('<div class="ask"></div>');
+            //Verificar se é uma peça do template AEL
+            if (self.cobject.template_code == 'AEL' ||
+                    self.cobject.template_code == 'DDROP' ||
+                    self.cobject.template_code == 'ONEDDROP') {
+                var domElementANSWER = $('<div class="answer"></div>');
             }
 
-            var elements_length = elements_group.elements.length;
-            var order_type_elements = new Array();
-            //PErcorrer Elementos do grupo Corrent
-            for (self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
-                self.id.element = elements_group.elements[self.pos.element].id;
-                var element = self.buildElement();
-                if (order_type_elements.length == 0) {
-                    order_type_elements[self.currentElementType] = new Array();
-                    order_type_elements[self.currentElementType].push(element);
+            var objGroups_currentPiece = {};
+            $.each(groups, function(current_group, elements_group) {
+                self.pos.group = current_group; // O grupo Corrent dessa Piece!
+
+                //array que armazena todos os objetos grupos da piece atual
+                var group_split = current_group.split('_');
+                // ASK = Múltiplo de 2 ; ANSWER = Múltiplo de 3
+                var newIdGroup = (group_split[1] === undefined) ? (self.id.piece * (group_split[0])) * 2 : (self.id.piece * (group_split[0])) * 3 + '_1';
+                eval("objGroups_currentPiece._" + newIdGroup + " = elements_group;");
+                var domTypeGroup = "";
+                var domGroup = "";
+                var isAskGroup = current_group.split('_').length == 1;
+                if (isAskGroup) {
+                    //is ASK-GROUP
+                    domTypeGroup = domElementASK;
                 } else {
-                    //Existe pelo menos Um
-                    if (self.isset(order_type_elements[self.currentElementType])) {
-                        //Push neste
-                        order_type_elements[self.currentElementType].push(element);
-                    } else {
-                        //É um novo
+                    // is ANSWER-GROUP
+                    domTypeGroup = domElementANSWER;
+                }
+                var possibleGroup = domTypeGroup.find('div[group="' + newIdGroup + '"]');
+                var isNewGroup = (possibleGroup.size() == 0);
+
+                if (isNewGroup) {
+                    // Novo Grupo
+                    domGroup = $('<div group="' + newIdGroup + '" class="' + self.cobject.template_code + ' group" ></div>');
+                    //Add class drop somente se for um group Ask
+                    if (self.cobject.template_code == 'DDROP') {
+                        if (isAskGroup) {
+                            domGroup.addClass('drag');
+                        } else {
+                            // is ANSWER-GROUP
+                            domGroup.addClass('drop');
+                        }
+                    } else if (self.cobject.template_code == 'ONEDDROP') {
+                        if (isAskGroup) {
+                            domGroup.addClass('oneDrag');
+                        } else {
+                            // is ANSWER-GROUP
+                            domGroup.addClass('oneDrop');
+                        }
+                    }
+                } else {
+                    //Grupo existente
+                    domGroup = possibleGroup;
+                }
+
+                var elements_length = elements_group.elements.length;
+                var order_type_elements = new Array();
+                //PErcorrer Elementos do grupo Corrent
+                for (self.pos.element = 0; self.pos.element < elements_length; self.pos.element++) {
+                    self.id.element = elements_group.elements[self.pos.element].id;
+                    var element = self.buildElement();
+                    if (order_type_elements.length == 0) {
                         order_type_elements[self.currentElementType] = new Array();
                         order_type_elements[self.currentElementType].push(element);
+                    } else {
+                        //Existe pelo menos Um
+                        if (self.isset(order_type_elements[self.currentElementType])) {
+                            //Push neste
+                            order_type_elements[self.currentElementType].push(element);
+                        } else {
+                            //É um novo
+                            order_type_elements[self.currentElementType] = new Array();
+                            order_type_elements[self.currentElementType].push(element);
+                        }
                     }
+                    domGroup.addClass(self.currentElementType);
                 }
-                domGroup.addClass(self.currentElementType);
+
+                //Agora apenda os elementos do grupo acima em ordem: imagem - som - texto
+                if (self.isset(order_type_elements['build_image'])) {
+                    //Apenda As Imagens
+                    $.each(order_type_elements['build_image'], function(idx, element) {
+                        domGroup.append(element);
+                    });
+                }
+                if (self.isset(order_type_elements['build_sound'])) {
+                    //Apenda Os Sons
+                    $.each(order_type_elements['build_sound'], function(idx, element) {
+                        domGroup.append(element);
+                    });
+                }
+                if (self.isset(order_type_elements['build_text'])) {
+                    //Apenda os Textos
+                    $.each(order_type_elements['build_text'], function(idx, element) {
+                        domGroup.append(element);
+                    });
+                }
+                if (isNewGroup) {
+                    //Se for um novo Grupo, então add o novo
+                    domTypeGroup.append(domGroup);
+                }
+
+            });
+            //Armazena todos os grupos de cada peça
+
+            objGroups_currentPiece.istrue = null;
+            self.mainPieces[self.id.piece] = objGroups_currentPiece;
+
+            self.domPiece.append(domElementASK);
+            if (self.cobject.template_code == 'AEL' ||
+                    self.cobject.template_code == 'DDROP' ||
+                    self.cobject.template_code == 'ONEDDROP') {
+                self.domPiece.append(domElementANSWER);
             }
 
-            //Agora apenda os elementos do grupo acima em ordem: imagem - som - texto
-            if (self.isset(order_type_elements['build_image'])) {
-                //Apenda As Imagens
-                $.each(order_type_elements['build_image'], function(idx, element) {
-                    domGroup.append(element);
-                });
-            }
-            if (self.isset(order_type_elements['build_sound'])) {
-                //Apenda Os Sons
-                $.each(order_type_elements['build_sound'], function(idx, element) {
-                    domGroup.append(element);
-                });
-            }
-            if (self.isset(order_type_elements['build_text'])) {
-                //Apenda os Textos
-                $.each(order_type_elements['build_text'], function(idx, element) {
-                    domGroup.append(element);
-                });
-            }
-            if (isNewGroup) {
-                //Se for um novo Grupo, então add o novo
-                domTypeGroup.append(domGroup);
-            }
-
-        });
-        //Armazena todos os grupos de cada peça
-        objGroups_currentPiece.istrue = null;
-        self.mainPieces[self.id.piece] = objGroups_currentPiece;
-        self.domPiece.append(domElementASK);
-        if (self.cobject.template_code == 'AEL' || 
-                self.cobject.template_code == 'DDROP' ||
-                self.cobject.template_code == 'ONEDDROP') {
-            self.domPiece.append(domElementANSWER);
+            return self.domPiece;
         }
 
-        return self.domPiece;
+        //NÃO HÁ GRUPO 
+        return "";
     }
 
 
@@ -462,8 +469,8 @@ var DomCobject = function(cobject, idx) {
         var discipline = self.cobject.discipline;
         var content = self.cobject.content;
         var html = $('<div class="cobjectInfo"></div>');
-      // html.append('<span><b>' + COBJECT_GOAL + ":</b> " + goal + " <b>" + COBJECT_TYPE + ":</b> " + type + " <br><b>" + COBJECT_DEGREE_NAME + ":</b> " + degree_name +
-      //         " <b>" + COBJECT_DISCIPLINE + ":</b> " + discipline + " <b>" + COBJECT_CONTENT + ":</b> " + content + '<span>');
+        // html.append('<span><b>' + COBJECT_GOAL + ":</b> " + goal + " <b>" + COBJECT_TYPE + ":</b> " + type + " <br><b>" + COBJECT_DEGREE_NAME + ":</b> " + degree_name +
+        //         " <b>" + COBJECT_DISCIPLINE + ":</b> " + discipline + " <b>" + COBJECT_CONTENT + ":</b> " + content + '<span>');
         return html;
     }
 

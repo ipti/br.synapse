@@ -91,7 +91,6 @@ this.Meet = function(options) {
                 lastCobject_id = self.cobjectsIDs[0];
                 self.isLoadState = false;
             }
-            
             //Construçao do DOM do 1° cobject de cada Meet
             self.domCobjectBuild(lastCobject_id);
             //Depois inicia os eventos globais 
@@ -147,11 +146,13 @@ this.Meet = function(options) {
 
 
     this.domCobjectBuild = function(cobject_id) {
+        
         //Construir a Dom do Cobject e append no html
         self.DB_synapse.getCobject(cobject_id, function(json_cobject) {
             var dump = new DomCobject(json_cobject);
             //Adicionar o domCobjet no Encontro 'Meet'
             self.setDomCobject(dump);
+         
             //Depois atualiza o template corrente do Meet
             self.currentTemplateCode = self.domCobject.cobject.template_code;
             var domCobjectBuild;
@@ -162,6 +163,8 @@ this.Meet = function(options) {
                 //É o 1°
                 domCobjectBuild = $('<div class="cobject_block"></div>');
             }
+
+
 
             domCobjectBuild.html(self.domCobject.buildAll());
             //Por último a div de ferramentas
