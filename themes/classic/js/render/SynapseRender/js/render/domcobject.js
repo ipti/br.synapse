@@ -388,7 +388,7 @@ var DomCobject = function(cobject, idx) {
                 break;
             }
         }
-        TXT.append(elements_group.elements[0].generalProperties[idxText].value);
+        TXT.append($(elements_group.elements[0].generalProperties[idxText].value).text());
         return TXT;
     }
 
