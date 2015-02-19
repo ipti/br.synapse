@@ -508,7 +508,7 @@ class RenderController extends Controller {
             fclose($fileTxt);
             $imported = false;
             if (isset($peformances)) {
-                $strSqlPerformInserts = "INSERT INTO `synapse`.`peformance_actor`"
+                $strSqlPerformInserts = "INSERT INTO `peformance_actor`"
                         . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
                 $totalPeformances = count($peformances);
                 foreach ($peformances as $idx => $peform):
