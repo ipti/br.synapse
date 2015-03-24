@@ -48,5 +48,10 @@ $(document).ready(function(){
     }else{
         eventFilterMeet(null);
     }
+    
+    
+    $('#toolsAdmin').on('click', function(){
+        location.href = "import.html";
+    });
 
 });

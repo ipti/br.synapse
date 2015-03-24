@@ -41,28 +41,34 @@
             }
 
 
-            $(document).ready(function() {
-                
+            $(document).ready(function () {
+
                 //Somente para retirar o 'loading' que o jquery cria automaticamente
                 $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
-                
+
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
 
-                $('#deleteAllDB').bind('tap', function() {
+                function deleteDatabase() {
                     indexedDB.deleteDatabase("synapseDB");
-                });
+                }
 
-                $('#export').bind('tap', function() {
-                    db.exportPerformance_actor();
-                });
+                function buildAllSchemas() {
+                    //1° Criar
+                    db.openDBuild(true, dataImportFunction);
+                }
 
-                $('#importLinguagem').bind('tap', function() {
+                function dataImportFunction() {
+                    importLinguagem();
+                    importMatematica();
+                }
+
+                function importLinguagem() {
                     var unitys = new Array();
                     var actors = new Array();
 
                     //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJsonLin.ActorsOwnUnity, function(idx, object) {
+                    $.each(dataJsonLin.ActorsOwnUnity, function (idx, object) {
                         var tempUnity = {};
                         tempUnity.id = object.unity_id;
                         tempUnity.father_id = object.unity_father;
@@ -93,19 +99,15 @@
                     //2° Importar
                     db.importAllDataRender(unitys, actors, disciplines, cobjectblock
                             , cobject_cobjectblocks, cobjects);
-                            
-                            
-                            
 
-                });
-                
-                
-                $('#importMatematica').bind('tap', function() {
+                }
+
+                function importMatematica() {
                     var unitys = new Array();
                     var actors = new Array();
 
                     //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJsonMat.ActorsOwnUnity, function(idx, object) {
+                    $.each(dataJsonMat.ActorsOwnUnity, function (idx, object) {
                         var tempUnity = {};
                         tempUnity.id = object.unity_id;
                         tempUnity.father_id = object.unity_father;
@@ -136,17 +138,42 @@
                     //2° Importar
                     db.importAllDataRender(unitys, actors, disciplines, cobjectblock
                             , cobject_cobjectblocks, cobjects);
-                            
-                            
-                            
+                }
 
+                function deleteDatabase() {
+                    indexedDB.deleteDatabase("synapseDB");
+                }
+
+
+                $('#export').bind('tap', function () {
+                    db.exportPerformance_actor();
                 });
-                
-                $('#buildAllSchemas').bind('tap', function() {
-                    //1° Criar
-                    db.openDBuild(true);
+
+                $('#installAll').on('tap', function () {
+                    deleteDatabase();
+                    buildAllSchemas();
                 });
-                $('#back').bind('tap', function() {
+
+                $('#deleteAllDB').bind('tap', function () {
+                    deleteDatabase();
+                });
+
+
+                $('#buildAllSchemas').bind('tap', function () {
+                    buildAllSchemas();
+                });
+
+                $('#importLinguagem').bind('tap', function () {
+                    importLinguagem();
+                });
+
+
+                $('#importMatematica').bind('tap', function () {
+                    importMatematica();
+                });
+
+
+                $('#back').bind('tap', function () {
                     location.href = "index.html";
                 });
             });
@@ -166,10 +193,14 @@
 
         <section id="import-form">
             <div id="import_data">
+
+                <!--
                 <button class="import-button buttons" type="button" id="deleteAllDB"> Limpar Banco </button>  
                 <button class="import-button buttons" type="button" id="buildAllSchemas" name="buildAllSchemas" >Construir Esquemas</button>
                 <button class="import-button buttons" type="button" id="importLinguagem" name="importLinguagem" >Importar Dados - 1º Ano LINGUAGEM</button>
                 <button class="import-button buttons" type="button" id="importMatematica" name="importMatematica" >Importar Dados - 1º Ano MATEMÁTICA</button>
+                -->
+                <button class="import-button buttons" type="button" id="installAll" name="installAll" >Instalar</button>
                 <button class="back-button buttons" type="button" id="back" name="back" >Voltar</button>
             </div>
         </section>

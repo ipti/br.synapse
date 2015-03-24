@@ -9,6 +9,9 @@ this.DB = function() {
 
     db = null;
 
+
+    dataImportFunction = null;
+
     this.verifyIDBrownser = function() {
         // Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
         window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
@@ -20,10 +23,14 @@ this.DB = function() {
         return window.indexedDB;
     }
 
-    this.openDBuild = function(alterSchema) {
+    this.openDBuild = function(alterSchema, dataImportFunction) {
+        
+        console.log(dataImportFunction);
+        self.dataImportFunction = dataImportFunction;
+        
         window.indexedDB = self.verifyIDBrownser();
         if (!window.indexedDB) {
-            window.alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
+            console.log("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
         }
         //Verificar se precisa mudar o setVersion para alterar o schema do BD
         var alterSchema = (this.isset(alterSchema) && alterSchema);
@@ -35,7 +42,9 @@ this.DB = function() {
         synapseBD.onerror = function(event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
+        
         synapseBD.onsuccess = function(event) {
+            
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
@@ -72,7 +81,7 @@ this.DB = function() {
 
         DBsynapse.onblocked = function(event) {
             // Se existe outra aba com a versão antiga
-            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         };
 
     }
@@ -80,6 +89,7 @@ this.DB = function() {
 
     this.buildAllSchema = function() {
         //Criar Schemas das tabelas
+        
         DBsynapse.onupgradeneeded = function(event) {
             var db = event.target.result;
 
@@ -189,43 +199,51 @@ this.DB = function() {
             unityStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
 
             actorStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
             disciplineStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
             cobjectblockStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
             cobject_cobjectblockStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
             cobjectStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                 self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
             performance_actorStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
             state_actorStore.transaction.oncomplete = function(event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
-                window.alert('Criou os Schemas');
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
             }
 
             useDatabase(db);
@@ -281,7 +299,7 @@ this.DB = function() {
                 var db = event.target.result;
                 db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
-                    window.alert("Database error: " + event.target.error.message);
+                    console.log("Database error: " + event.target.error.message);
                 };
 
                 if (!existBlock) {
@@ -343,7 +361,7 @@ this.DB = function() {
         }
         UnityObjectStore.transaction.oncomplete = function(event) {
             db.close();
-            window.alert("Unitys IMPORTED!");
+            console.log("Unitys IMPORTED!");
         }
     }
 
@@ -355,7 +373,7 @@ this.DB = function() {
         }
         ActorObjectStore.transaction.oncomplete = function(event) {
             db.close();
-            window.alert("Actors IMPORTED!");
+            console.log("Actors IMPORTED!");
         }
     }
 
@@ -367,7 +385,7 @@ this.DB = function() {
         }
         DisciplineObjectStore.transaction.oncomplete = function(event) {
             db.close();
-            window.alert("Disciplines IMPORTED!");
+            console.log("Disciplines IMPORTED!");
         }
     }
 
@@ -379,7 +397,7 @@ this.DB = function() {
         }
         CobjectblockObjectStore.transaction.oncomplete = function(event) {
             db.close();
-            window.alert("Cobjectblocks IMPORTED!");
+            console.log("Cobjectblocks IMPORTED!");
         }
     }
 
@@ -392,7 +410,7 @@ this.DB = function() {
         }
         Cobject_cobjectBlockObjectStore.transaction.oncomplete = function(event) {
             db.close();
-            window.alert("Cobject_cobjectblocks IMPORTED!");
+            console.log("Cobject_cobjectblocks IMPORTED!");
         }
     }
 
@@ -417,7 +435,7 @@ this.DB = function() {
         }
         Performance_actorObjectStore.transaction.oncomplete = function(event) {
             db.close();
-            window.alert("Performance_actors IMPORTED!");
+            console.log("Performance_actors IMPORTED!");
         }
     }
 
@@ -436,7 +454,7 @@ this.DB = function() {
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-                window.alert("Database error: " + event.target.errorCode);
+                console.log("Database error: " + event.target.errorCode);
             };
 
             var performances = new Array();
@@ -502,7 +520,7 @@ this.DB = function() {
                 var db = event.target.result;
                 db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
-                    window.alert("Database error: " + event.target.errorCode);
+                    console.log("Database error: " + event.target.errorCode);
                 }
                 //Tudo ok Então Busca O Actor
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
@@ -660,7 +678,7 @@ this.DB = function() {
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-                window.alert("Database error: " + event.target.errorCode);
+                console.log("Database error: " + event.target.errorCode);
             }
             var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
             Performance_actorObjectStore.add(data_performance_actor);
@@ -691,7 +709,7 @@ this.DB = function() {
                 var db = event.target.result;
                 db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
-                    window.alert("Database error: " + event.target.errorCode);
+                    console.log("Database error: " + event.target.errorCode);
                 }
                 //Tudo ok Então Busca O UserState
                 var stateActorStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
@@ -767,7 +785,7 @@ this.DB = function() {
                 var db = event.target.result;
                 db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
-                    window.alert("Database error: " + event.target.errorCode);
+                   console.log("Database error: " + event.target.errorCode);
                 }
                 //Tudo ok Então Busca O Cobject
                 var state_actorStore = db.transaction("state_actor").objectStore("state_actor");
@@ -819,7 +837,7 @@ this.DB = function() {
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-                window.alert("Database error: " + event.target.errorCode);
+                console.log("Database error: " + event.target.errorCode);
             }
             var unityStore = db.transaction("unity").objectStore("unity");
             var unitys = new Array();
@@ -869,7 +887,7 @@ this.DB = function() {
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-                window.alert("Database error: " + event.target.errorCode);
+               console.log("Database error: " + event.target.errorCode);
             }
             var unity_id = unity.unity_id;
             var actorStore = db.transaction("actor").objectStore("actor");
@@ -936,7 +954,7 @@ this.DB = function() {
             var db = event.target.result;
             db.onerror = function(event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-                window.alert("Database error: " + event.target.errorCode);
+                console.log("Database error: " + event.target.errorCode);
             }
             var blockStore = db.transaction("cobjectblock").objectStore("cobjectblock");
             var cobjectblock = new Array();

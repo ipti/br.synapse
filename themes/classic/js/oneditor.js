@@ -7,6 +7,8 @@ $(function() {
 
     holdingCtrl = false;
 
+    console.log($('#tools .show-navscreen'));
+
     $('.canvas').pajinate({
         start_page: 0,
         items_per_page: 1,
@@ -16,7 +18,7 @@ $(function() {
         nav_label_next: '>',
         show_first_last: false,
         num_page_links_to_display: 20,
-        nav_panel_id: '.navsreen',
+        nav_panel_id: '.show-navscreen',
         editor: newEditor
     });
 
@@ -26,10 +28,10 @@ $(function() {
     //$("#toolbar").draggable({
     //    axis: "y"
     //});                   
-    $("#addScreen").click(function() {
+    $("#btn-addScreen").click(function() {
         newEditor.addScreen();
     });
-    $("#delScreen").click(function(event) {
+    $("#btn-delScreen").click(function(event) {
         newEditor.delScreen(false);
     });
 

@@ -18,3 +18,10 @@
     width: 63%;
 }
 
+#toolsAdmin{
+    float: right;
+}
+
+#toolsAdmin a{
+    text-decoration: none;
+}
