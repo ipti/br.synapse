@@ -7,8 +7,6 @@ $(function() {
 
     holdingCtrl = false;
 
-    console.log($('#tools .show-navscreen'));
-
     $('.canvas').pajinate({
         start_page: 0,
         items_per_page: 1,
@@ -18,7 +16,7 @@ $(function() {
         nav_label_next: '>',
         show_first_last: false,
         num_page_links_to_display: 20,
-        nav_panel_id: '.show-navscreen',
+        nav_panel_id: '.navscreen',
         editor: newEditor
     });
 

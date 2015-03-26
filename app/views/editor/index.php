@@ -96,11 +96,7 @@ if ($load == 'false') {
                 
                 <li class="btn-addScreen btn-tools" id="btn-addScreen" >
                 </li>
-                
-                <li class="show-navscreen">
-                  <ul class="navscreen"></ul>   
-                </li>
-                
+                <ul class="navscreen"></ul>   
                 <li class="btn-delScreen btn-tools"  id="btn-delScreen">
                 </li>
                 
@@ -126,6 +122,7 @@ if ($load == 'false') {
     </div>
 
     <div class="content">
-
+        
     </div>
+    
 </div>

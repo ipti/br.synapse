@@ -26,10 +26,10 @@
 .theme #tools li.btn-tools#addPieceSet{background:url('../../images/theme_tools_addpieceset.png') bottom no-repeat; cursor: pointer;height: 32px}
 
 
-.theme #tools li.show-navscreen{background: no-repeat scroll center bottom transparent; height: 20px; width:200px; border:0px;}
-.theme #tools .show-navscreen #next, .theme #tools .show-navscreen #back{cursor: pointer;font-weight:bold;}
-.theme #tools .show-navscreen #next:hover, .theme #tools .show-navscreen #back:hover{color:#4dd33a}
-.theme #tools .show-navscreen #next{float:right}
+.theme #tools .navscreen{background: no-repeat scroll center bottom transparent; height: 20px; width:200px; border:0px;}
+.theme #tools .navscreen #next, .theme #tools .navscreen #back{cursor: pointer;font-weight:bold;}
+.theme #tools .navscreen #next:hover, .theme #tools .navscreen #back:hover{color:#4dd33a}
+.theme #tools .navscreen #next{float:right}
 
 .theme #tools li.btn-addScreen{background:url('../../images/newSreen.png') no-repeat scroll center bottom transparent; cursor: pointer;
 height: 32px;}
