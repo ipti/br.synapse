@@ -92,17 +92,16 @@ if ($load == 'false') {
                 <li id="addPieceSet" class="btn-tools"><?php echo Yii::t('default', 'Add PieceSet'); ?></li>
                 <li id="addimage" class="btn-tools"><?php echo Yii::t('default', 'Add Imagem'); ?></li>
                 <li id="addsound" class="btn-tools"><?php echo Yii::t('default', 'Add Sound'); ?></li>
-                <li id="save" class="btn-tools"><?php echo Yii::t('default', 'Save'); ?></li>
-                
                 <li class="btn-addScreen btn-tools" id="btn-addScreen" >
                 </li>
                 <ul class="navscreen"></ul>   
                 <li class="btn-delScreen btn-tools"  id="btn-delScreen">
                 </li>
                 
-                <li class="loading">
+                <li id="save" class="btn-tools"><?php echo Yii::t('default', 'Save'); ?></li>
+<!--                <li class="loading">
                 <div id="loading"></div>
-                </li>
+                </li>-->
 
             </ul>        
     

@@ -18,7 +18,7 @@
 .theme #tools h2{margin-left:1px;padding-top:6px;font-size:11px; color:#fff;text-align:center;display:block; height:14px; width:86px;background: -moz-linear-gradient(top, #46494D 0%, #191D22 100%);}
 .theme #tools ul.tools{display:block;clear:both;width:84px;margin-left:2px; height:3d70px;background: -moz-linear-gradient(left, #b8bdc1 0%, #cbcfd2 46%, #b9bdc1 100%);}
 .theme #tools li.btn-tools{display:block;width:80px; height:50px;text-indent:-9999px;margin-top:10px;}
-.theme #tools li.btn-tools#save{background:url('../../images/theme_tools_save.png') bottom no-repeat; cursor: pointer; height: 32px}
+.theme #tools li.btn-tools#save{background:url('../../images/theme_tools_save.png') bottom no-repeat; cursor: pointer; height: 32px; margin-left: 20%;}
 .theme #tools li.btn-tools#addvideo{background:url('../../images/theme_tools_addvideo.png') bottom no-repeat; cursor: pointer;height: 32px}
 .theme #tools li.btn-tools#addimage{background:url('../../images/theme_tools_addimage.png') bottom no-repeat; cursor: pointer;height: 32px}
 .theme #tools li.btn-tools#addsound{background:url('../../images/theme_tools_addsound.png') bottom no-repeat; cursor: pointer;height: 32px}
@@ -32,7 +32,7 @@
 .theme #tools .navscreen #next{float:right}
 
 .theme #tools li.btn-addScreen{background:url('../../images/newSreen.png') no-repeat scroll center bottom transparent; cursor: pointer;
-height: 32px;}
+height: 32px; margin-left: 5%;}
 
 .theme #tools li.btn-delScreen{background:url('../../images/removeScreen.png') no-repeat scroll center bottom transparent; cursor: pointer;
 height: 32px;}
