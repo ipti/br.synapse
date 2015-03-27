@@ -1,5 +1,5 @@
 var newEditor = new editor();
-$(function() {
+$(function () {
     //Add Scripts Just for Editor
 //    $.getScript("/../themes/classic/js/jquery/jquery.scrollintoview.js",function(){
 //       console.log('Carregou!');
@@ -23,54 +23,79 @@ $(function() {
     newEditor.countPieceSet['sc0'] = 0;
     newEditor.countPieces['sc0_ps0'] = 0;
 
-    //$("#toolbar").draggable({
-    //    axis: "y"
-    //});                   
-    $("#btn-addScreen").click(function() {
+
+    $("#btn-addScreen").click(function () {
         newEditor.addScreen();
     });
-    $("#btn-delScreen").click(function(event) {
+    $("#btn-delScreen").click(function (event) {
         newEditor.delScreen(false);
     });
 
-    //===================
-    
-    //Combinação de teclas CRTL + T pra abrir nova Screen
-    $(document).keydown(function(e) {
-       
+    // #COdescription
+    if ($('#COdescription').val() == '') {
+        //Deixa a mesma mensagem
+        $('#COdescription').val('Descrição da Atividade .....');
+        $('#COdescription').attr('noString', 'true');
+    } else {
+        $('#COdescription').attr('noString', 'false');
+    }
+
+
+    $(document).on('focus', '#COdescription', function () {
+        if ($('#COdescription').attr('noString') == 'true') {
+            //Limpa o input
+            $('#COdescription').val('');
+        }
     });
-     
-     
-    
-    $(document).keyup(function(e) {
+
+    $(document).on('focusout', '#COdescription', function () {
+        if ($('#COdescription').val() == '') {
+            //Deixa a mesma mensagem
+            $('#COdescription').val('Descrição da Atividade .....');
+            $('#COdescription').attr('noString', 'true');
+        } else {
+            $('#COdescription').attr('noString', 'false');
+        }
+    });
+    //===================================
+
+
+    //===================
+
+    //Combinação de teclas CRTL + T pra abrir nova Screen
+    $(document).keydown(function (e) {
+
+    });
+
+    $(document).keyup(function (e) {
         if (e.which == 17) {
             holdingCtrl = false;
         }
     });
-    $(document).keydown(function(e) {
-        
-          //Se for S
+    $(document).keydown(function (e) {
+
+        //Se for S
 //         if (e.which == 83) {
 //            if(holdingCtrl){
 //                console.log('s');
 //            }
 //        }
-        
+
         //Se for Q
-         if (e.which == 81) {
-            if(holdingCtrl){
-                newEditor.addScreen();     
+        if (e.which == 81) {
+            if (holdingCtrl) {
+                newEditor.addScreen();
             }
         }
-        
+
         //Se for CTRL
         if (e.which == 17) {
             holdingCtrl = true;
         }
-        
+
     });
 
-    $(document).on('click', 'div[group] .insertImage', function() {
+    $(document).on('click', 'div[group] .insertImage', function () {
         if (holdingCtrl) {
             //Com o ctrl Pressionado
             holdingCtrl = false;
@@ -84,7 +109,7 @@ $(function() {
     });
     //====================
 
-    $(document).on('click', ".insertText", function() {
+    $(document).on('click', ".insertText", function () {
         //Somente adiciona se não possui outro elemento texto neste grupo
         if ($(this).closest('div[group]').find('div.text').size() == 0) {
             newEditor.addText($(this).closest('div[group]'));
@@ -92,19 +117,19 @@ $(function() {
 
     });
 
-    $(document).on('click', ".insertSound", function() { //
+    $(document).on('click', ".insertSound", function () { //
         //Somente adiciona se não possui outro elemento imagem neste grupo
         if ($(this).closest('div[group]').find('div.audio').size() == 0) {
             newEditor.addSound($(this).closest('div[group]'));
         }
     });
 
-    $("#addPieceSet").click(function() {
+    $("#addPieceSet").click(function () {
         newEditor.addPieceSet();
     });
 
 
-    $("#tools > #addimage").click(function() {
+    $("#tools > #addimage").click(function () {
         //===================
         if (holdingCtrl) {
             //Com o ctrl Pressionado
@@ -116,22 +141,22 @@ $(function() {
         //====================
     });
 
-    $("#tools > #addsound").click(function() {
+    $("#tools > #addsound").click(function () {
         newEditor.insertSoundCobject(null, null);
     });
 
-    $(document).on("click", ".addPiece", (function() {
+    $(document).on("click", ".addPiece", (function () {
         newEditor.addPiece($(this).attr('id'));
     }));
-    $(document).on("mousedown", '.piece', function() {
+    $(document).on("mousedown", '.piece', function () {
         newEditor.changePiece($(this));
     });
-    $('#save').click(function() {
+    $('#save').click(function () {
         newEditor.saveAll();
     });
 
 
-    $(document).on("change", '.input_element', function() {
+    $(document).on("change", '.input_element', function () {
         newEditor.imageChanged($(this));
     });
 
