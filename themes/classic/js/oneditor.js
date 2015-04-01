@@ -60,6 +60,26 @@ $(function () {
     //===================================
 
 
+    // .actName 
+    // Descrição Padrão do PieceSet
+
+    $(document).on('focus', '.actName', function () {
+        if ($(this).attr('noString') == 'true') {
+            //Limpa o input
+            $(this).val('');
+        }
+    });
+
+    $(document).on('focusout', '.actName', function () {
+        if ($(this).val() == '') {
+            //Deixa a mesma mensagem
+            $(this).val('Descrição do Cabeçalho .....');
+            $(this).attr('noString', 'true');
+        } else {
+            $(this).attr('noString', 'false');
+        }
+    });
+
     //===================
 
     //Combinação de teclas CRTL + T pra abrir nova Screen
