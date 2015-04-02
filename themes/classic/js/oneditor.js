@@ -53,7 +53,9 @@ $(function () {
             //Deixa a mesma mensagem
             $('#COdescription').val('Descrição da Atividade .....');
             $('#COdescription').attr('noString', 'true');
+            console.log('a');
         } else {
+             console.log('B');
             $('#COdescription').attr('noString', 'false');
         }
     });
