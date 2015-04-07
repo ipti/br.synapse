@@ -179,8 +179,18 @@ function editor() {
                 '<span class="clear"></span>' +
                 '</div>');
 
-        this.countPieceSet[this.currentScreenId] = this.countPieceSet[this.currentScreenId] + 1;
+        // .actName 
+        // Descrição Padrão do PieceSet
+        if ($('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val() == '') {
+            //Deixa a mesma mensagem
+            $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição do Cabeçalho .....');
+            $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'true');
+        } else {
+            $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'false');
+        }
 
+
+        this.countPieceSet[this.currentScreenId] = this.countPieceSet[this.currentScreenId] + 1;
 
         //Cria função do botões
         $("#" + piecesetID + "_list > button.insertImage").click(function () {
@@ -2255,11 +2265,23 @@ function editor() {
                                         var piecesetID = i.slice(2);
                                         //pega a descrição do pieceset a partir do item
                                         var desc = item['description'];
+
                                         //pega o tipo do pieceset a partir do item
                                         var type = item['template_id'];
 
                                         //adiciona o pieceset
                                         parent.addPieceSet(piecesetID, desc, type);
+
+                                        //Aplica o texto Padrão no input da descrição do PieceSet
+
+                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() == '') {
+                                            //Deixa a mesma mensagem
+                                            $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val('Descrição do Cabeçalho .....');
+                                            $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'true');
+                                        } else {
+                                            $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'false');
+                                        }
+
                                         //para cada item do pieceset
                                         $.each(item, function (i, item) {
                                             //se for um piece

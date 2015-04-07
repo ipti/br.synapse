@@ -53,10 +53,10 @@ return array(
           // uncomment the following to use a MySQL database
          */
         'db' => array(
-            'connectionString' => 'mysql:host=192.168.25.209;dbname=synapse',
+            'connectionString' => 'mysql:host=localhost;dbname=br.org.ipti.synapse',
             'emulatePrepare' => true,
-            'username' => 'admin',
-            'password' => 'p@s4ipti',
+            'username' => 'root',
+            'password' => 'p@s4root',
             'charset' => 'utf8',
         ),
         'db2' => array(

@@ -47,12 +47,40 @@ $(function () {
             //Deixa a mesma mensagem
             $('#COdescription').val('Descrição da Atividade...');
             $('#COdescription').attr('noString', 'true');
+            console.log('a');
         } else {
+             console.log('B');
             $('#COdescription').attr('noString', 'false');
         }
     });
 
 
+    // .actName 
+    // Descrição Padrão do PieceSet
+
+    $(document).on('focus', '.actName', function () {
+        if ($(this).attr('noString') == 'true') {
+            //Limpa o input
+            $(this).val('');
+        }
+    });
+
+    $(document).on('focusout', '.actName', function () {
+        if ($(this).val() == '') {
+            //Deixa a mesma mensagem
+            $(this).val('Descrição do Cabeçalho .....');
+            $(this).attr('noString', 'true');
+        } else {
+            $(this).attr('noString', 'false');
+        }
+    });
+
+    //===================
+
+    //Combinação de teclas CRTL + T pra abrir nova Screen
+    $(document).keydown(function (e) {
+
+    });
 
     $(document).keyup(function (e) {
         if (e.which === 17) {
