@@ -264,6 +264,8 @@ function editor() {
                         "<ul id='" + pieceID + "_query_resp' class='sortable'></ul>";
             } else if (parent.COTemplateTypeIn(parent.TXT)) {
                 html += '<div class="tplTxt" ></div>';
+            }else if (parent.COTemplateTypeIn(parent.PLC)){
+                 html += '<div class="tplPlc"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>';
             }
             //finaliza o html
             html += '</li>';
@@ -277,7 +279,8 @@ function editor() {
             if (parent.COTemplateTypeIn(parent.MTE)
                     || parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.DDROP)
-                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
+                    || parent.COTemplateTypeIn(parent.ONEDDROP)
+                    || parent.COTemplateTypeIn(parent.PLC)) {
                 //adiciona a função do botão addElement
                 $("#" + pieceID + "> div > button.newElement").click(function () {
                     parent.addElement();
@@ -315,6 +318,7 @@ function editor() {
         } else {
             if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.MTE)
+                    || parent.COTemplateTypeIn(parent.PLC)
                     || parent.COTemplateTypeIn(parent.DDROP)
                     || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 //Sua Posição dentro do Grupo
@@ -363,12 +367,13 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             html = '<div id="' + ID + '_text" class="text element moptions"' + plus + '>' + input_text;
-        } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PRE)
+        } else if (parent.COTemplateTypeIn(parent.MTE)  || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.PRE)
                 || parent.COTemplateTypeIn(parent.TXT)) {
             html = '<div id="' + ID + '_text" class="text element"' + plus + '>' + input_text;
         }
 
         if (parent.COTemplateTypeIn(parent.MTE)
+                || parent.COTemplateTypeIn(parent.PLC)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -381,7 +386,7 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             $(tagAdd).append(html);
-        } else if (parent.COTemplateTypeIn(parent.MTE)) {
+        } else if (parent.COTemplateTypeIn(parent.MTE)  || parent.COTemplateTypeIn(parent.PLC)) {
             $(tagAdd).find('span:eq(0)').append(html);
         } else if (parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) {
             $(tagAdd).append(html);
@@ -508,7 +513,6 @@ function editor() {
             $(text_element).attr('updated', 0); // NÃO foi alterado!
             $(text_div).attr('updated', 0);
         }
-
     }
 
     this.addUploadForm = function (tagAdd, type, responseFunction, loaddata, idbd) {
@@ -536,7 +540,6 @@ function editor() {
             this.countElements[this.currentPiece]++;
         }
 
-
         var parent = this;
         //Posição Default !!
         var position = 0;
@@ -551,6 +554,7 @@ function editor() {
         } else {
             if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.MTE)
+                    || parent.COTemplateTypeIn(parent.PLC)
                     || parent.COTemplateTypeIn(parent.DDROP)
                     || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 //Sua Posição dentro do Grupo
@@ -623,7 +627,7 @@ function editor() {
             html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element">'
         }
 
-        if (parent.COTemplateTypeIn(parent.MTE)) {
+        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
             html += '<input type="button" class="del delElement" value="' + LABEL_REMOVE_OBJECT + '">';
         }
         else {
@@ -644,7 +648,7 @@ function editor() {
         if (isElementPieceSet || isElementCobject) {
             $(tagAdd).append(html);
         } else {
-            if (parent.COTemplateTypeIn(parent.MTE)) {
+            if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
                 $(tagAdd).find('span:eq(0)').append(html);
             } else if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.DDROP)
@@ -792,6 +796,7 @@ function editor() {
 
 
     this.addImage = function (tagAdd, loaddata, idbd) {
+        
         this.addUploadForm(tagAdd, {
             type: 'image',
             accept: Array("png", "gif", "bmp", "jpeg", "jsc", "ico"),
@@ -854,7 +859,7 @@ function editor() {
 
         var elementID = this.currentPiece + '_e' + this.countElements[this.currentPiece];
 
-        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.TXT) ||
+        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.TXT) ||
                 parent.COTemplateTypeIn(parent.PRE)) {
             //Agrupando Elementos
             var group;
@@ -909,7 +914,32 @@ function editor() {
                 html = "";
             }
 
-        } else if (parent.COTemplateTypeIn(parent.PRE)) {
+        }else if(parent.COTemplateTypeIn(parent.PLC)){
+            var newDivMatch = false;
+            //Verificar se já existe essa div group 
+            if ($("#" + parent.currentPiece + " div[group=" + group + "]").length == 0) {
+                //Não existe, então cria um novo
+                newDivMatch = true;
+                var htmlDefault = '<div group="' + group + '">';
+                var html = htmlDefault + '<span>' +
+                        '<div>';
+
+                html += '' +
+                        '<button class="insertImage">' + LABEL_ADD_IMAGE + '</button>' +
+                        '<button class="insertSound"></button>' +
+                        '<button class="insertText">' + LABEL_ADD_TEXT + '</button>' +
+                        '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">' +
+                        '<br>' +
+                        '<br>' +
+                        '<br>' +
+                        '<label>' +
+                        '</div>';
+            } else {
+                // Já existe, html = '';
+                html = "";
+            }
+            
+        }else if (parent.COTemplateTypeIn(parent.PRE)) {
             $('li[id="' + parent.currentPiece + '"] div.tplPre').append(html);
         } else if (parent.COTemplateTypeIn(parent.TXT)) {
             $('li[id="' + parent.currentPiece + '"] div.tplTxt').append(html);
@@ -1074,7 +1104,6 @@ function editor() {
                     do {
 
                         if (lastGroupASK.size() == 0) {
-                            console.log('POO');
                             $('#' + parent.currentPiece + " > div.tplMulti > br").after(html);
                             continues = false;
                         } else if (group > lastGroupASK.attr('group')) {
@@ -1091,9 +1120,41 @@ function editor() {
                 }
 
             }
+        }else if (parent.COTemplateTypeIn(parent.PLC)){
+             if (newDivMatch) {
+                html += '</span></div>';
+
+                if (self.isset(loaddata)) {
+                    var lastGroupASK;
+                    //E um ask
+                    lastGroupASK = $('#' + parent.currentPiece + " > div.tplPlc").find('div[group]:last');
+                    var continues = true;
+                    do {
+
+                        if (lastGroupASK.size() == 0) {
+                            $('#' + parent.currentPiece + " > div.tplPlc > br").after(html);
+                            continues = false;
+                        } else if (group > lastGroupASK.attr('group')) {
+                            lastGroupASK.after(html);
+                            continues = false;
+                        } else {
+                            //lastList agora e um grupo anterior
+                            lastGroupASK = lastGroupASK.prev();
+                        }
+                    } while (continues);
+
+                } else {
+                    $('#' + parent.currentPiece + " > div.tplPlc").append(html);
+                }
+
+            }
         }
+        
+        
+        
         var tagAdd = "";
         if (parent.COTemplateTypeIn(parent.MTE)
+                || parent.COTemplateTypeIn(parent.PLC)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1147,8 +1208,8 @@ function editor() {
 
         if ((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1))
                 ) {
-            //É MTE , PRE ou TXT
-            if (parent.COTemplateTypeIn(parent.MTE)) {
+            //É MTE OU PLC
+            if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
                 var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > span > div > input.delElement:eq(0)";
             }
 
@@ -1171,6 +1232,7 @@ function editor() {
         var textoID = "#" + elementID + "_text";
         var imageID = "#" + elementID + "_image";
         if (parent.COTemplateTypeIn(parent.MTE)
+            || parent.COTemplateTypeIn(parent.PLC)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1208,44 +1270,10 @@ function editor() {
                     }
                 }
             });
-            $(buttonImageID).click(function () {
-                if (!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)
-                        && !parent.COTemplateTypeIn(parent.ONEDDROP)) {
-                    if (!parent.existID(ElementTextID) ||
-                            confirm(MSG_CHANGE_ELEMENT)) {
-                        if (!parent.existID(ElementImageID)) {
-                            parent.addImage(elementID);
-                            $(textoID).remove();
-                        }
-                    }
-                } else {
-                    if (!parent.existID(ElementImageID)) {
-                        parent.addImage(elementID);
-                    }
-                }
-            });
-            // Add SOUND 
-            $(buttonSoundID).click(function () {
-                if (!parent.COTemplateTypeIn(parent.AEL)
-                        && !parent.COTemplateTypeIn(parent.DDROP)
-                        && !parent.COTemplateTypeIn(parent.ONEDDROP)) {
-                    if (!parent.existID(ElementTextID) ||
-                            confirm(MSG_CHANGE_ELEMENT)) {
-                        if (!parent.existID(ElementSoundID)) {
-                            parent.addSound(elementID);
-                            $(textoID).remove();
-                        }
-                    }
-                } else {
-                    if (!parent.existID(ElementSoundID)) {
-                        parent.addSound(elementID);
-                    }
-                }
-            });
-
+            
 
             if (parent.COTemplateTypeIn(parent.MTE)
+                    || parent.COTemplateTypeIn(parent.PLC)
                     || parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.DDROP)
                     || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1255,7 +1283,7 @@ function editor() {
                                 || parent.COTemplateTypeIn(parent.DDROP)
                                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                             parent.delElement($(this).closest('div[group]').closest('li'));
-                        } else if (parent.COTemplateTypeIn(parent.MTE)) {
+                        } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
                             parent.delElement($(this).closest('div[group]'));
                         }
 
