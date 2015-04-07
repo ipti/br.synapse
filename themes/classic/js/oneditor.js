@@ -57,7 +57,6 @@ $(function () {
 
     // .actName 
     // Descrição Padrão do PieceSet
-
     $(document).on('focus', '.actName', function () {
         if ($(this).attr('noString') == 'true') {
             //Limpa o input
@@ -68,19 +67,13 @@ $(function () {
     $(document).on('focusout', '.actName', function () {
         if ($(this).val() == '') {
             //Deixa a mesma mensagem
-            $(this).val('Descrição do Cabeçalho .....');
+            $(this).val('Descrição do Cabeçalho...');
             $(this).attr('noString', 'true');
         } else {
             $(this).attr('noString', 'false');
         }
     });
 
-    //===================
-
-    //Combinação de teclas CRTL + T pra abrir nova Screen
-    $(document).keydown(function (e) {
-
-    });
 
     $(document).keyup(function (e) {
         if (e.which === 17) {
@@ -157,7 +150,6 @@ $(function () {
 
 
     $("#tools > #addimage").click(function () {
-        //===================
         if (holdingCtrl) {
             //Com o ctrl Pressionado
             holdingCtrl = false;
@@ -165,7 +157,6 @@ $(function () {
             //click normal
             newEditor.insertImgCobject(null, null);
         }
-        //====================
     });
 
     $("#tools > #addsound").click(function () {
