@@ -78,50 +78,43 @@ if ($load == 'false') {
 
 </script>
 
-<header>
-    <hgroup>
-        <h1> Synapse Editor </h1>
-        
-        <span class="clear"></span>
-    </hgroup>
-</header>
 
 <div class="canvas">
     
-         <ul id="tools">
-                <li id="addPieceSet" class="btn-tools"><?php echo Yii::t('default', 'Add PieceSet'); ?></li>
-                <li id="addimage" class="btn-tools"><?php echo Yii::t('default', 'Add Imagem'); ?></li>
-                <li id="addsound" class="btn-tools"><?php echo Yii::t('default', 'Add Sound'); ?></li>
-                <li class="btn-addScreen btn-tools" id="btn-addScreen" >
-                </li>
-                <ul class="navscreen"></ul>   
-                <li class="btn-delScreen btn-tools"  id="btn-delScreen">
-                </li>
-                
-                <li id="save" class="btn-tools"><?php echo Yii::t('default', 'Save'); ?></li>
-<!--                <li class="loading">
-                <div id="loading"></div>
-                </li>-->
-
-            </ul>        
-    
-    
-    <li class="title"> Tipo: <?php echo $name_commonType; ?> 
-        &nbsp;&nbsp;Template: <?php echo $name_cobjectTemplate; ?> 
-        &nbsp;&nbsp;Tema: <?php echo $name_cobjectTheme; ?> 
-        <br>Objetivo: <?php echo $name_actGoal; ?> 
-        <br>Disciplina: <?php echo $name_Discipline; ?>
-        &nbsp;&nbsp; Série: <?php echo $name_Degree; ?>
-    </li>
-
+<header>
+    <ul id="tools">
+        <li id="logo"></li>
+        <li id="addPieceSet" class="btn-tools"><i class="fa fa-question-circle fa-2x"></i> <?php echo Yii::t('default', 'Add PieceSet'); ?></li>
+        <li id="addimage" class="btn-tools"><i class="fa fa-file-image-o fa-2x"></i> <?php echo Yii::t('default', 'Add Imagem'); ?></li>
+        <li id="addsound" class="btn-tools"><i class="fa fa-file-audio-o fa-2x"></i> <?php echo Yii::t('default', 'Add Sound'); ?></li>
+        <li id="btn-addScreen" class="btn-addScreen btn-tools" ><i class="fa fa-plus-circle fa-2x"></i> <?php echo Yii::t('default', 'Add Page'); ?></li>
+        <li id="btn-delScreen" class="btn-delScreen btn-tools" ><i class="fa fa-minus-circle fa-2x"></i> <?php echo Yii::t('default', 'Remove Page'); ?></li>
+        <li id="save" class="btn-tools pull-right"><i class="fa fa-floppy-o fa-2x"></i> <?php echo Yii::t('default', 'Save'); ?></li>
+    </ul>   
+    <table id="informations">
+        <tr>
+            <th>Tipo</th>       <td><?php echo $name_commonType; ?></td>
+            <th>Template</th>   <td><?php echo $name_cobjectTemplate; ?> </td>
+            <th>Tema</th>       <td><?php echo $name_cobjectTheme; ?> </td>
+        </tr>
+        <tr>
+            <th>Objetivo</th>   <td colspan="5"><?php echo $name_actGoal; ?> </td>
+        </tr>
+        <tr>
+            <th>Disciplina</th> <td><?php echo $name_Discipline; ?></td>
+            <th>Série</th>      <td colspan="3"><?php echo $name_Degree; ?></td>
+        </tr>
+    </table>
+</header>
+    <ul class="navscreen"></ul> 
+    <br>
+    <span class="clear"></span>
 
     <div id="cobject_description">
-        <input type="text" class="actName" id ="COdescription" value="" />
+        <input type="text" class="actName" id="COdescription" value="" />
         <div class="clear"></div>  
     </div>
 
     <div class="content">
-        
     </div>
-    
 </div>

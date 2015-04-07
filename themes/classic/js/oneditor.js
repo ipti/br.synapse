@@ -1,10 +1,5 @@
 var newEditor = new editor();
 $(function () {
-    //Add Scripts Just for Editor
-//    $.getScript("/../themes/classic/js/jquery/jquery.scrollintoview.js",function(){
-//       console.log('Carregou!');
-//    });
-
     holdingCtrl = false;
 
     $('.canvas').pajinate({
@@ -23,18 +18,17 @@ $(function () {
     newEditor.countPieceSet['sc0'] = 0;
     newEditor.countPieces['sc0_ps0'] = 0;
 
-
-    $("#btn-addScreen").click(function () {
+    $("#btn-addScreen").click(function() {
         newEditor.addScreen();
     });
-    $("#btn-delScreen").click(function (event) {
+    $("#btn-delScreen").click(function() {
         newEditor.delScreen(false);
     });
 
     // #COdescription
     if ($('#COdescription').val() == '') {
         //Deixa a mesma mensagem
-        $('#COdescription').val('Descrição da Atividade .....');
+        $('#COdescription').val('Descrição da Atividade...');
         $('#COdescription').attr('noString', 'true');
     } else {
         $('#COdescription').attr('noString', 'false');
@@ -51,47 +45,53 @@ $(function () {
     $(document).on('focusout', '#COdescription', function () {
         if ($('#COdescription').val() == '') {
             //Deixa a mesma mensagem
-            $('#COdescription').val('Descrição da Atividade .....');
+            $('#COdescription').val('Descrição da Atividade...');
             $('#COdescription').attr('noString', 'true');
         } else {
             $('#COdescription').attr('noString', 'false');
         }
     });
-    //===================================
 
 
-    //===================
-
-    //Combinação de teclas CRTL + T pra abrir nova Screen
-    $(document).keydown(function (e) {
-
-    });
 
     $(document).keyup(function (e) {
-        if (e.which == 17) {
+        if (e.which === 17) {
             holdingCtrl = false;
         }
     });
-    $(document).keydown(function (e) {
+    $(document).keydown(function (e) {   
+        
+        //ALT   - 18
+        //CTRL  - 17
+        //SHIFT - 16
+        //TAB   - 9
+        //LEFT  - 37
+        //UP    - 38
+        //RIGHT - 39
+        //DOWN  - 40
+        
+        //Se for LEFT, Volte uma página
+        if(e.which === 37){
+            $("#back").trigger("click");
+        }
+        
+        //Se for RIGHT, avance uma página
+        if(e.which === 39){
+            $("#next").trigger("click");
+        }
 
-        //Se for S
-//         if (e.which == 83) {
-//            if(holdingCtrl){
-//                console.log('s');
-//            }
-//        }
-
-        //Se for Q
-        if (e.which == 81) {
+        //Se for CTRL+Q, adicione uma nova tela
+        if (e.which === 81) {
             if (holdingCtrl) {
                 newEditor.addScreen();
             }
         }
 
-        //Se for CTRL
-        if (e.which == 17) {
+        //Se for CTRL, guarde esta informação
+        if (e.which === 17) {
             holdingCtrl = true;
         }
+        
 
     });
 
@@ -107,7 +107,6 @@ $(function () {
             }
         }
     });
-    //====================
 
     $(document).on('click', ".insertText", function () {
         //Somente adiciona se não possui outro elemento texto neste grupo
