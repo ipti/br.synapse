@@ -138,7 +138,8 @@ div.canvas div.content{
     clear:both;
     margin-top:5px;
 }
-.actName{
+
+.actName, .actNameDescCobject{
     border: 1px dotted #999;
     width: calc(100% - 10px);
     height: 30px;
@@ -146,6 +147,7 @@ div.canvas div.content{
     font-size: 14px;
     font-weight: bold;
     margin: 5px;
+    padding-left: 5px;
 }
 
 
