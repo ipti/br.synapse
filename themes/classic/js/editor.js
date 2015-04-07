@@ -372,7 +372,7 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             //Se for MTE ou (AEL e For uma PERGUNTA)
-            html += '<input type="button" class="del delElement pull-right"><i class="fa fa-times"></i></input>'
+            html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>'
         }
 
         html += '</div>';
@@ -409,7 +409,7 @@ function editor() {
             var value_txt = "#" + ID + "_flag.editable";
             var id_const = ID;
             //ID sempre muda, logo criar outra variável local id_const, quando o evento é chamado
-            $(text_div + " > input.delElement").click(function () {
+            $(text_div + " > button.delElement").click(function () {
                 parent.delElement(id_const + "_text");
             });
             $(editable).editable(function (value, settings) {
@@ -623,14 +623,14 @@ function editor() {
         }
 
         if (parent.COTemplateTypeIn(parent.MTE)) {
-            html += '<input type="button" class="del delElement pull-right"><i class="fa fa-times"></i></input>';
+            html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
         }
         else {
             html += "";
         }
         html += '<form enctype="multipart/form-data" id="' + form + '" method="post" action="/Editor/upload">' +
                 '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + '">' +
-                '<input type="button" class="del delElement pull-right"><i class="fa fa-times"></i></input>' +
+                '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
                 '<form enctype="multipart/form-data" id="' + form + '" method="post" action="/Editor/upload">' +
                 '<input type="hidden" name="op" value="' + uploadType + '"/>' +
                 name_db +
@@ -657,7 +657,7 @@ function editor() {
             responseFunction(src, file, form);
         }
 
-        $("#" + file + "> input.delElement").click(function () {
+        $("#" + file + "> button.delElement").click(function () {
             parent.delElement(file);
         });
 
@@ -894,7 +894,7 @@ function editor() {
                         '<button class="insertImage">' + LABEL_ADD_IMAGE + '</button>' +
                         '<button class="insertSound"></button>' +
                         '<button class="insertText">' + LABEL_ADD_TEXT + '</button>' +
-                        '<input type="button" class="del delElement pull-right"><i class="fa fa-times"></i></input>' +
+                        '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
                         '<br>' +
                         '<br>' +
                         '<br>' +
@@ -952,11 +952,11 @@ function editor() {
                         html = '<li>' +
                                 htmlDefault +
                                 '<spam>(' + group + ')</spam>' +
-                                '<button class="insertImage" ><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
+                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                                 '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                                 '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
                                 '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
-                                '</div>' +
+                                '<br><br><br><br></div>' +
                                 '</li>';
                     } else {
                         html = "";
@@ -990,7 +990,7 @@ function editor() {
                             group.split('_')[0] > 1) {
                         html2 += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
                     }
-                    html2 += '</div></li>';
+                    html2 += '<br><br><br></div></li>';
 
                 }
 

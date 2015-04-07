@@ -367,6 +367,9 @@ body{
     width:60px;
 }
 
+.input_element{
+    width: 200px;
+}
 
 #nextButton{
     width: 200px;
