@@ -179,6 +179,22 @@ $(function () {
     $(document).on("change", '.input_element', function () {
         newEditor.imageChanged($(this));
     });
+    
+    
+    //Template TPLC
+    
+    
+    $(document).on("click",".elementsPlc div[group]",function(){
+        var currentTxtInput = $(this).find('.element font').text();
+        var str = "";
+        for(var i = 0; i < currentTxtInput.length; i++){
+              str += "<input type='text' size='1' maxlength='1' readonly='true' value='"+currentTxtInput[i]+"' />";
+        }
+        
+        $(this).closest(".elementsPlc").siblings(".crosswords").html(str);
+        
+        
+    });
 
 
 });

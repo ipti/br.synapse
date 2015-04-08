@@ -134,15 +134,19 @@ body{margin:0}
 #message{position:relative !important;margin-bottom:-50px !important;z-index: 1;top:20px;}
 .delement{opacity: 0.3}
 .pairs,.groups{display: block}
-.pairs .element,.groups .element{float: left}
+.pairs .element,.groups .element{float: left; width: 290px;}
 .piecesets{width: 960px;margin:20px auto;}
-.element img{margin:0 auto;}
+.element img{margin:0 auto;width:150px; height: 150px}
 .options .element font{margin:0 14px;padding:4px;}
 ul.enum,ul.pairs{border-bottom:1px solid #666;margin-bottom:20px}
 ul.pairs{padding-bottom:20px;}
-.tplMulti span, .tplPlc span, .PieceSet span.elementPieceSet, span.elementCobject{float:left;border:1px dashed #000; margin: 5px; padding: 4px;}
- #cobject_description {background-color: #fff; width: 100%}
+.tplMulti span, .PieceSet span.elementPieceSet, span.elementCobject, .tplPlc span{float:left;border:1px dashed #000; margin: 5px; padding: 4px;width: 297px;}
+#cobject_description {background-color: #fff; width: 100%}
 .tplTxt span{border:none; margin: 5px; padding: 4px;}
+.elementsPlc{width:300px;}
+.tplPlc .crosswords {text-align: center;}
+.tplPlc .crosswords input {text-align: center;}
+
 .theme .tplMulti .insertImage, .theme .tplPlc .insertImage{border:0px; background:url('../../images/theme_tools_addimage.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .theme .tplMulti .insertText, .theme .tplPlc .insertText{border:0px; background:url('../../images/theme_tools_addtext.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .text { border: 1px dashed black; padding: 2px;}

@@ -265,7 +265,8 @@ function editor() {
             } else if (parent.COTemplateTypeIn(parent.TXT)) {
                 html += '<div class="tplTxt" ></div>';
             }else if (parent.COTemplateTypeIn(parent.PLC)){
-                 html += '<div class="tplPlc"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>';
+                 html += '<div class="tplPlc"><div class="elementsPlc"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
+                          <div class="crosswords"> </div> </div>';
             }
             //finaliza o html
             html += '</li>';
@@ -282,7 +283,7 @@ function editor() {
                     || parent.COTemplateTypeIn(parent.ONEDDROP)
                     || parent.COTemplateTypeIn(parent.PLC)) {
                 //adiciona a função do botão addElement
-                $("#" + pieceID + "> div > button.newElement").click(function () {
+                $("#" + pieceID + " button.newElement").click(function () {
                     parent.addElement();
                 });
                 //se template for PRE ou TXT
@@ -1144,7 +1145,7 @@ function editor() {
                     } while (continues);
 
                 } else {
-                    $('#' + parent.currentPiece + " > div.tplPlc").append(html);
+                    $('#' + parent.currentPiece + " > div.tplPlc .elementsPlc").append(html);
                 }
 
             }
