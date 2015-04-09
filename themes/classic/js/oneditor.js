@@ -179,21 +179,79 @@ $(function () {
     $(document).on("change", '.input_element', function () {
         newEditor.imageChanged($(this));
     });
-    
-    
+
+
     //Template TPLC
-    
-    
-    $(document).on("click",".elementsPlc div[group]",function(){
+
+
+    $(document).on("click", ".elementsPlc div[group]", function () {
         var currentTxtInput = $(this).find('.element font').text();
         var str = "";
-        for(var i = 0; i < currentTxtInput.length; i++){
-              str += "<input type='text' size='1' maxlength='1' readonly='true' value='"+currentTxtInput[i]+"' />";
+        if (currentTxtInput != "Clique para Alterar..." && currentTxtInput.replace(/^\s+|\s+$/g, "") != "" &&
+                typeof $(this).attr('selected') == "undefined") {
+
+            if ($(this).closest(".elementsPlc").siblings(".crosswords").text().replace(/^\s+|\s+$/g, "") == '') {
+                //Primeira palavra, na horizontal
+                for (var i = 0; i < currentTxtInput.length; i++) {
+                    str += "<div>" + currentTxtInput[i] + "</div>";
+                }
+                $(this).closest(".elementsPlc").siblings(".crosswords").html(str);
+                //Então add class de Selecionado nesse grupo
+                $(this).attr('selected', 'true');
+
+            } else {
+                //Já existe uma palavra no CrossWords
+                $(this).attr('selected', 'true');
+                $(this).siblings('div[lastSelected]').removeAttr('lastSelected');
+                $(this).attr('lastSelected', 'true');
+            }
+
         }
-        
-        $(this).closest(".elementsPlc").siblings(".crosswords").html(str);
-        
-        
+
+    });
+
+    $(document).on("click", ".crosswords > div", function () {
+        if ($(this).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]").length != 0) {
+            //Clicou num div Group
+            //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
+            var letterClicked = $(this).text();
+            var wordLastClicked = $(this).closest(".tplPlc").children(".elementsPlc")
+                    .find("div[group][lastSelected]").find(".element > font").text();
+            var positionsMayMerge = new Array();
+            for (var i = 0; i < wordLastClicked.length; i++) {
+                if (wordLastClicked[i] == letterClicked) {
+                    positionsMayMerge.push(i);
+                }
+            }
+
+            if (positionsMayMerge.length > 0) {
+                //Encontrou uma letra igual, então faz o match por padrão na primeira encontrada
+                //  $(this).append(wordLastClicked[positionsMayMerge[0]]);
+
+                var letterBeforeMargePosition = "";
+                var letterAfterMargePosition = "";
+                for (var i = 0; i < wordLastClicked.length; i++) {
+                    if (i < positionsMayMerge[0]) {
+                        letterBeforeMargePosition += "<div>" + wordLastClicked[i] + "</div>";
+                    } else if (i > positionsMayMerge[0]) {
+                        letterAfterMargePosition += "<div>" + wordLastClicked[i] + "</div>";
+                    } else {
+                        //É igual - posição do Merge
+
+                    }
+                }
+                
+                $(this).closest('.crosswords').prepend(letterBeforeMargePosition);
+                $(this).closest('.crosswords').append(letterAfterMargePosition);
+                //STOP HERE
+                $(this).css('background-color', 'red');
+            }
+
+        } else {
+            //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
+
+        }
+
     });
 
 
