@@ -266,7 +266,7 @@ function editor() {
                 html += '<div class="tplTxt" ></div>';
             }else if (parent.COTemplateTypeIn(parent.PLC)){
                  html += '<div class="tplPlc"><div class="elementsPlc"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
-                          <div class="crosswords"> </div> </div>';
+                          <div class="crosswords Table"> </div> </div>';
             }
             //finaliza o html
             html += '</li>';

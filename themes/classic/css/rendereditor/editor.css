@@ -32,15 +32,15 @@
 .theme #tools .navscreen #next{float:right}
 
 .theme #tools li.btn-addScreen{background:url('../../images/newSreen.png') no-repeat scroll center bottom transparent; cursor: pointer;
-height: 32px; margin-left: 5%;}
+                               height: 32px; margin-left: 5%;}
 
 .theme #tools li.btn-delScreen{background:url('../../images/removeScreen.png') no-repeat scroll center bottom transparent; cursor: pointer;
-height: 32px;}
+                               height: 32px;}
 
 .piece{margin-bottom:30px;}
 
 .theme #tools li.loading{list-style-type: none;}
-    
+
 .theme div.canvas{margin-left:50px;margin-top:70px;float:left;width:90%; } //transform:translateY(10%)
 /*.theme div.canvas button#addscreen,
 .theme div.canvas button#delscreen{float:left;font-size:12px; height:28px;font-weight:bold;color:#fff;}*/
@@ -145,7 +145,7 @@ ul.pairs{padding-bottom:20px;}
 .tplTxt span{border:none; margin: 5px; padding: 4px;}
 .elementsPlc{width:300px;}
 .tplPlc .crosswords {text-align: center;}
-.tplPlc .crosswords div {display: inline; font-weight: bold; cursor: pointer;padding: 7px; border: 1px solid black; width: 10px}
+.tplPlc .crosswords div {font-weight: bold; cursor: pointer;padding: 7px; border: 1px solid black; width: 10px}
 
 .theme .tplMulti .insertImage, .theme .tplPlc .insertImage{border:0px; background:url('../../images/theme_tools_addimage.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
 .theme .tplMulti .insertText, .theme .tplPlc .insertText{border:0px; background:url('../../images/theme_tools_addtext.png'); float:left; height:34px; width:80px;text-indent:-9999px;}
@@ -193,3 +193,22 @@ h5{display: block;}
 #aliasPrev{margin-right: 100px}
 #aliasNext{margin-left: 100px}
 #findByAlias { margin-top: 10px;width: 300px; height: 30px }
+
+//Table com Divs
+
+.Table
+{
+    display: table;
+}
+.Row
+{
+    display: table-row;
+}
+.Cell
+{
+    display: table-cell;
+    border: solid;
+    border-width: thin;
+    padding-left: 5px;
+    padding-right: 5px;
+}

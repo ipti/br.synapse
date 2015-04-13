@@ -192,9 +192,12 @@ $(function () {
 
             if ($(this).closest(".elementsPlc").siblings(".crosswords").text().replace(/^\s+|\s+$/g, "") == '') {
                 //Primeira palavra, na horizontal
+                str += "<div class='Row'>";
                 for (var i = 0; i < currentTxtInput.length; i++) {
-                    str += "<div>" + currentTxtInput[i] + "</div>";
+                    str += "<div class='Cell'>" + currentTxtInput[i] + "</div>";
                 }
+                str += "</div>";
+
                 $(this).closest(".elementsPlc").siblings(".crosswords").html(str);
                 //Então add class de Selecionado nesse grupo
                 $(this).attr('selected', 'true');
@@ -210,7 +213,7 @@ $(function () {
 
     });
 
-    $(document).on("click", ".crosswords > div", function () {
+    $(document).on("click", ".crosswords  div.Cell", function () {
         if ($(this).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]").length != 0) {
             //Clicou num div Group
             //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
@@ -228,25 +231,85 @@ $(function () {
                 //Encontrou uma letra igual, então faz o match por padrão na primeira encontrada
                 //  $(this).append(wordLastClicked[positionsMayMerge[0]]);
 
-                var letterBeforeMargePosition = "";
-                var letterAfterMargePosition = "";
+                var letterBeforeMergePosition = "";
+                var letterAfterMergePosition = "";
                 for (var i = 0; i < wordLastClicked.length; i++) {
                     if (i < positionsMayMerge[0]) {
-                        letterBeforeMargePosition += "<div>" + wordLastClicked[i] + "</div>";
+                        letterBeforeMergePosition += wordLastClicked[i];
                     } else if (i > positionsMayMerge[0]) {
-                        letterAfterMargePosition += "<div>" + wordLastClicked[i] + "</div>";
+                        letterAfterMergePosition += wordLastClicked[i];
                     } else {
                         //É igual - posição do Merge
 
                     }
                 }
-                
-                $(this).closest('.crosswords').prepend(letterBeforeMargePosition);
-                $(this).closest('.crosswords').append(letterAfterMargePosition);
+
+                //Aumentar o número de linhas e/ou colunas
+
+                //Quantidades de letras que irá ficar na posição oposta a da letra clicada
+                var sizeLetterBeforeMergePosition = letterBeforeMergePosition.length;
+                var sizeLetterAfterMergePosition = letterAfterMergePosition.length;
+
+                //Quandas linhas antes e depois da linha da letra clicada que já fora criada
+                var currentTotalRowBefore = $(this).closest('.Row').index();
+                var currentTotalRowAfter = ($(this).closest('.Row').last().index() - currentTotalRowBefore);
+                var currentTotalRow = currentTotalRowBefore + 1 + currentTotalRowAfter;
+                var currentTotalCell = $(this).closest('.Row').find('.Cell').size();
+                //Criar a quantidade Row Antes  igual a diferença
+                if (currentTotalRowBefore < sizeLetterBeforeMergePosition) {
+                    var sizeRowAddBefore = sizeLetterBeforeMergePosition - currentTotalRowBefore;
+                    currentTotalRow += sizeRowAddBefore;
+                    for (var idx = 0; idx < sizeRowAddBefore; idx++) {
+                        var str = "<div class='Row'>"
+                        for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
+                            str += "<div class='Cell'> </div>";
+                        }
+                        str += '</div>';
+                        $(this).closest('.crosswords').prepend(str);
+                    }
+                }
+
+                //Criar a quantidade Row Depois  igual a diferença
+                if (currentTotalRowAfter < sizeLetterAfterMergePosition) {
+                    var sizeRowAddAfter = sizeLetterAfterMergePosition - currentTotalRowAfter;
+                    currentTotalRow += sizeRowAddAfter;
+                    for (var idx = 0; idx < sizeRowAddAfter; idx++) {
+                        var str = "<div class='Row'>"
+                        for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
+                            str += "<div class='Cell'></div>";
+                        }
+                        str += '</div>';
+                        $(this).closest('.crosswords').append(str);
+                    }
+                }
+
+                //Após adicionar os linhas e colunas restantes
+                // Posição da letra clicada   
+                var indexCurrentColl = $(this).index();
+                var indexCurrentRow = $(this).closest('.Row').index();
+
+                //Percorre a lista de letras que será posta Antes
+                var tempIndexCurrentRow = indexCurrentRow;
+                for (var idx = sizeLetterBeforeMergePosition - 1; idx >= 0; idx--) {
+                    tempIndexCurrentRow--;
+                    $(this).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
+                            .eq(indexCurrentColl).html(letterBeforeMergePosition[idx]);
+                }
+
+                //Percorre a lista de letras que será posta Depois
+                var tempIndexCurrentRow = indexCurrentRow;
+                for (var idx in letterAfterMergePosition) {
+                    tempIndexCurrentRow++;
+                    $(this).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
+                            .eq(indexCurrentColl).html(letterAfterMergePosition[idx]);
+                }
+
                 //STOP HERE
                 $(this).css('background-color', 'red');
             }
 
+            //Retira a marcação da última palavra clicada
+            $(this).closest('.tplPlc').children('.elementsPlc').find('div[group][lastSelected]').removeAttr('lastSelected');
         } else {
             //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
 
