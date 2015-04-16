@@ -56,7 +56,10 @@ function editor() {
     this.DDROP.push(21);
     this.ONEDDROP.push(22);
     this.unLinks = [];
-
+    //Lista de peças e suas palavras cruzadas
+    this.crossWords = new Array();
+    
+    
     var self = this;
 
     /**
