@@ -364,7 +364,7 @@ $.fn.editable.defaults={
     onblur:'cancel',
     loadtype:'GET',
     loadtext:'Loading...',
-    placeholder:'Click to edit',
+    placeholder:'Clique para Alterar...',
     loaddata:{},
     submitdata:{},
     ajaxoptions:{}

@@ -470,8 +470,7 @@ function editor() {
                     parent.textChanged(initial_text, value_txt, text_element, text_div);
                     var txt_New_noHtml = $(value_txt).text();
                     //===========================
-                    if (parent.COTemplateTypeIn(parent.PRE) && (txt_New_noHtml == "" ||
-                            txt_New_noHtml == "Clique para Alterar...")) {
+                    if (parent.COTemplateTypeIn(parent.PRE) && (txt_New_noHtml == "")) {
                         // O template é do tipo PRE  e o elemento está vazio
                         //Deleta o PieceSet
                         parent.delPieceSet(parent.currentPieceSet, true); // TODO
