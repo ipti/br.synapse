@@ -456,11 +456,14 @@ function editor() {
                     }
                 });
                 //adiciona a função de perda de foco do input
-                $(input).on("focusout", function () {
+                $(input).on("focusout", function () {                    
                     //se não houver textoo
                     if ($(input).val() == "") {
                         //adiciona o texto initial_text
                         $(input).val(initial_text);
+                    } else if (parent.COTemplateTypeIn(parent.PLC)){
+                        //Converte para maiúsculas se o template for do tipo PLC
+                        $(input).val($(input).val().toUpperCase());
                     }
                     //da submit no formulário
                     $(form).submit();
