@@ -633,3 +633,16 @@ h5{
     width: 300px; 
     height: 30px;
 }
+.Table{
+    display: table;
+}
+.Row{
+    display: table-row;
+}
+.Cell{
+    display: table-cell;
+    border: solid;
+    border-width: thin;
+    padding-left: 5px;
+    padding-right: 5px;
+}
