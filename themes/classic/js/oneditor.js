@@ -34,7 +34,7 @@ $(function () {
     // #COdescription
     if ($('#COdescription').val() == '') {
         //Deixa a mesma mensagem
-        $('#COdescription').val('Descrição da Atividade .....');
+        $('#COdescription').val('Descrição da Atividade...');
         $('#COdescription').attr('noString', 'true');
     } else {
         $('#COdescription').attr('noString', 'false');
@@ -51,18 +51,16 @@ $(function () {
     $(document).on('focusout', '#COdescription', function () {
         if ($('#COdescription').val() == '') {
             //Deixa a mesma mensagem
-            $('#COdescription').val('Descrição da Atividade .....');
+            $('#COdescription').val('Descrição da Atividade...');
             $('#COdescription').attr('noString', 'true');
         } else {
             $('#COdescription').attr('noString', 'false');
         }
     });
-    //===================================
 
 
     // .actName 
     // Descrição Padrão do PieceSet
-
     $(document).on('focus', '.actName', function () {
         if ($(this).attr('noString') == 'true') {
             //Limpa o input
@@ -73,14 +71,13 @@ $(function () {
     $(document).on('focusout', '.actName', function () {
         if ($(this).val() == '') {
             //Deixa a mesma mensagem
-            $(this).val('Descrição do Cabeçalho .....');
+            $(this).val('Descrição do Cabeçalho...');
             $(this).attr('noString', 'true');
         } else {
             $(this).attr('noString', 'false');
         }
     });
 
-    //===================
 
     //Combinação de teclas CRTL + T pra abrir nova Screen
     $(document).keydown(function (e) {
@@ -88,30 +85,43 @@ $(function () {
     });
 
     $(document).keyup(function (e) {
-        if (e.which == 17) {
+        if (e.which === 17) {
             holdingCtrl = false;
         }
     });
     $(document).keydown(function (e) {
 
-        //Se for S
-//         if (e.which == 83) {
-//            if(holdingCtrl){
-//                console.log('s');
-//            }
-//        }
+        //ALT   - 18
+        //CTRL  - 17
+        //SHIFT - 16
+        //TAB   - 9
+        //LEFT  - 37
+        //UP    - 38
+        //RIGHT - 39
+        //DOWN  - 40
 
-        //Se for Q
-        if (e.which == 81) {
+        //Se for LEFT, Volte uma página
+        if(e.which === 37){
+            $("#back").trigger("click");
+        }
+        
+        //Se for RIGHT, avance uma página
+        if(e.which === 39){
+            $("#next").trigger("click");
+        }
+
+        //Se for CTRL+Q, adicione uma nova tela
+        if (e.which === 81) {
             if (holdingCtrl) {
                 newEditor.addScreen();
             }
         }
 
-        //Se for CTRL
-        if (e.which == 17) {
+        //Se for CTRL, guarde esta informação
+        if (e.which === 17) {
             holdingCtrl = true;
         }
+
 
     });
 
@@ -127,7 +137,6 @@ $(function () {
             }
         }
     });
-    //====================
 
     $(document).on('click', ".insertText", function () {
         //Somente adiciona se não possui outro elemento texto neste grupo
@@ -150,7 +159,6 @@ $(function () {
 
 
     $("#tools > #addimage").click(function () {
-        //===================
         if (holdingCtrl) {
             //Com o ctrl Pressionado
             holdingCtrl = false;
@@ -158,7 +166,6 @@ $(function () {
             //click normal
             newEditor.insertImgCobject(null, null);
         }
-        //====================
     });
 
     $("#tools > #addsound").click(function () {
