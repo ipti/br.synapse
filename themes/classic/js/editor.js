@@ -267,7 +267,7 @@ function editor() {
             } else if (parent.COTemplateTypeIn(parent.TXT)) {
                 html += '<div class="tplTxt tpl" ></div>';
             }else if (parent.COTemplateTypeIn(parent.PLC)){
-                 html += '<div class="tplPlc tpl"><div class="elementsPlc"><button class="newElement"><i class="fa fa-cube fa-2x "></i>' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
+                 html += '<div class="tplPlc tpl"><div class="elementsPlc"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
                           <div class="crosswords Table"> </div> </div>';
             }
             //finaliza o html
@@ -887,7 +887,7 @@ function editor() {
             var html = $('<div group="' + group + '"></div>');
         }
 
-        if (parent.MTE.indexOf(parent.COtemplateType) != -1 || parent.COTemplateTypeIn(parent.PLC))  {
+        if (parent.MTE.indexOf(parent.COtemplateType) != -1 || parent.COTemplateTypeIn(parent.PLC)) {
             var newDivMatch = false;
             //Verificar se já existe essa div group 
             if ($("#" + parent.currentPiece + " div[group=" + group + "]").length == 0) {
@@ -900,7 +900,7 @@ function editor() {
                 html += '' +
                         '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                         '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
-                        '<button class="insertText"><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
+                        '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
                         '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
                         '<br>' +
                         '<br>' +
