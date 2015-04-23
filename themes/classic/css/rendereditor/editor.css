@@ -8,7 +8,6 @@
 }
 
 
-
 .theme #tools .navscreen{background: no-repeat scroll center bottom transparent; height: 20px; width:200px; border:0px;}
 .theme #tools .navscreen #next, .theme #tools .navscreen #back{cursor: pointer;font-weight:bold;}
 .theme #tools .navscreen #next:hover, .theme #tools .navscreen #back:hover{color:#4dd33a}

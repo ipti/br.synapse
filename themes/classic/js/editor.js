@@ -455,16 +455,18 @@ function editor() {
                         $(input).val("");
                     }
                 });
-                //adiciona a função de perda de foco do input
-                $(input).on("focusout", function () {                    
-                    //se não houver textoo
+                $(input).on("change", function () {
+                    //se não houver texto
                     if ($(input).val() == "") {
                         //adiciona o texto initial_text
                         $(input).val(initial_text);
-                    } else if (parent.COTemplateTypeIn(parent.PLC)){
+                    } else if (parent.COTemplateTypeIn(parent.PLC)) {
                         //Converte para maiúsculas se o template for do tipo PLC
                         $(input).val($(input).val().toUpperCase());
                     }
+                });
+                //adiciona a função de perda de foco do input
+                $(input).on("focusout", function () {                    
                     //da submit no formulário
                     $(form).submit();
                     //Verificar se foi Alterado em relação a do DB             
