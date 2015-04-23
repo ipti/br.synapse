@@ -59,7 +59,6 @@ function editor() {
     //Lista de peças e suas palavras cruzadas
     this.crossWords = new Array();
     
-    
     var self = this;
 
     /**
@@ -133,8 +132,8 @@ function editor() {
             items_per_page: 1,
             nav_label_first: '<<',
             nav_label_last: '>>',
-            nav_label_prev: '<',
-            nav_label_next: '>',
+            nav_label_prev: '<i class="fa fa-arrow-circle-left fa-3x"></i>',
+            nav_label_next: '<i class="fa fa-arrow-circle-right fa-3x"></i>',
             show_first_last: false,
             num_page_links_to_display: 20,
             nav_panel_id: '.navscreen',
@@ -172,11 +171,11 @@ function editor() {
         // STOP HERE - CRIAR CLASSE PARA ESTA DIV DE ELEMENTOS
         $('#' + this.currentScreenId).append('' +
                 '<div class="PieceSet" id="' + piecesetID + '_list" ' + plus + '>' +
-                '<button class="addPiece" id="pie_' + piecesetID + '">' + LABEL_ADD_PIECE + '</button>' +
-                '<button class="insertImage" id="pie_' + piecesetID + '"></button>' +
-                '<button class="insertSound" id="pie_' + piecesetID + '"></button>' +
-                '<button class="del delPieceSet">' + LABEL_REMOVE_PIECESET + '</button>' +
-                '<input type="text" class="actName" value="' + plusdesc + '" />' +
+                '<button class="addPiece" id="pie_' + piecesetID + '"><i class="fa fa-cubes fa-2x"></i><br>' + LABEL_ADD_PIECE + '</button>' +
+                '<button class="insertImage" id="pie_' + piecesetID + '"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
+                '<button class="insertSound" id="pie_' + piecesetID + '"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
+                '<button class="del delPieceSet pull-right"><i class="fa fa-times"></i></button>' +
+                '<input type="text" class="actName" value="' + plusdesc + '"/>' +
                 '<div id="' + piecesetID + '_forms"></div>' +
                 '<ul class="piecelist" id="' + piecesetID + '"></ul>' +
                 '<span class="clear"></span>' +
@@ -252,23 +251,23 @@ function editor() {
             //inicia o html do piece
             var html = '' +
                     '<li id="' + pieceID + '" class="piece" ' + plus + '>' +
-                    '<button class="del delPiece">' + LABEL_REMOVE_PIECE + '</button>';
+                    '<button class="del delPiece pull-right"><i class="fa fa-times"></i></button>';
             //Se o Template for MTE
             if (parent.COTemplateTypeIn(parent.MTE)) {
-                html += '<div class="tplMulti"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>';
+                html += '<div class="tplMulti tpl"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>';
                 //Se o template for PRE
             } else if (parent.COTemplateTypeIn(parent.PRE)) {
-                html += '<div class="tplPre"></div>';
+                html += '<div class="tplPre tpl"></div>';
             } else if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.DDROP)
                     || parent.COTemplateTypeIn(parent.ONEDDROP)) {
-                html += '<div class="tplMulti"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>' +
+                html += '<div class="tplMulti tpl"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>' +
                         "<ul id='" + pieceID + "_query' class='sortable'></ul>" +
                         "<ul id='" + pieceID + "_query_resp' class='sortable'></ul>";
             } else if (parent.COTemplateTypeIn(parent.TXT)) {
-                html += '<div class="tplTxt" ></div>';
+                html += '<div class="tplTxt tpl" ></div>';
             }else if (parent.COTemplateTypeIn(parent.PLC)){
-                 html += '<div class="tplPlc"><div class="elementsPlc"><button class="newElement">' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
+                 html += '<div class="tplPlc tpl"><div class="elementsPlc"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
                           <div class="crosswords Table"> </div> </div>';
             }
             //finaliza o html
@@ -299,7 +298,6 @@ function editor() {
                 //adiciona um elemento neste piece se for uma Nova Piece
                 parent.addElement();
             }
-
 
             //adiciona a função do botão delPiece
             $("#" + pieceID + "> button.delPiece").click(function () {
@@ -382,7 +380,7 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             //Se for MTE ou (AEL e For uma PERGUNTA)
-            html += '<input type="button" class="del delElement" value="' + LABEL_REMOVE_TEXT + '">'
+            html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>'
         }
 
         html += '</div>';
@@ -419,7 +417,7 @@ function editor() {
             var value_txt = "#" + ID + "_flag.editable";
             var id_const = ID;
             //ID sempre muda, logo criar outra variável local id_const, quando o evento é chamado
-            $(text_div + " > input.delElement").click(function () {
+            $(text_div + " > button.delElement").click(function () {
                 parent.delElement(id_const + "_text");
             });
             $(editable).editable(function (value, settings) {
@@ -458,11 +456,14 @@ function editor() {
                     }
                 });
                 //adiciona a função de perda de foco do input
-                $(input).on("focusout", function () {
+                $(input).on("focusout", function () {                    
                     //se não houver textoo
                     if ($(input).val() == "") {
                         //adiciona o texto initial_text
                         $(input).val(initial_text);
+                    } else if (parent.COTemplateTypeIn(parent.PLC)){
+                        //Converte para maiúsculas se o template for do tipo PLC
+                        $(input).val($(input).val().toUpperCase());
                     }
                     //da submit no formulário
                     $(form).submit();
@@ -516,6 +517,7 @@ function editor() {
             $(text_element).attr('updated', 0); // NÃO foi alterado!
             $(text_div).attr('updated', 0);
         }
+
     }
 
     this.addUploadForm = function (tagAdd, type, responseFunction, loaddata, idbd) {
@@ -631,14 +633,14 @@ function editor() {
         }
 
         if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
-            html += '<input type="button" class="del delElement" value="' + LABEL_REMOVE_OBJECT + '">';
+            html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
         }
         else {
             html += "";
         }
         html += '<form enctype="multipart/form-data" id="' + form + '" method="post" action="/Editor/upload">' +
                 '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + '">' +
-                '<input type="button" class="del delElement" value="' + LABEL_REMOVE_OBJECT + '">' +
+                '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
                 '<form enctype="multipart/form-data" id="' + form + '" method="post" action="/Editor/upload">' +
                 '<input type="hidden" name="op" value="' + uploadType + '"/>' +
                 name_db +
@@ -665,7 +667,7 @@ function editor() {
             responseFunction(src, file, form);
         }
 
-        $("#" + file + "> input.delElement").click(function () {
+        $("#" + file + "> button.delElement").click(function () {
             parent.delElement(file);
         });
 
@@ -799,7 +801,6 @@ function editor() {
 
 
     this.addImage = function (tagAdd, loaddata, idbd) {
-        
         this.addUploadForm(tagAdd, {
             type: 'image',
             accept: Array("png", "gif", "bmp", "jpeg", "jsc", "ico"),
@@ -889,7 +890,7 @@ function editor() {
             var html = $('<div group="' + group + '"></div>');
         }
 
-        if (parent.MTE.indexOf(parent.COtemplateType) != -1) {
+        if (parent.MTE.indexOf(parent.COtemplateType) != -1 || parent.COTemplateTypeIn(parent.PLC)) {
             var newDivMatch = false;
             //Verificar se já existe essa div group 
             if ($("#" + parent.currentPiece + " div[group=" + group + "]").length == 0) {
@@ -900,48 +901,25 @@ function editor() {
                         '<div>';
 
                 html += '' +
-                        '<button class="insertImage">' + LABEL_ADD_IMAGE + '</button>' +
-                        '<button class="insertSound"></button>' +
-                        '<button class="insertText">' + LABEL_ADD_TEXT + '</button>' +
-                        '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">' +
+                        '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
+                        '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
+                        '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
+                        '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
                         '<br>' +
                         '<br>' +
                         '<br>' +
                         '<label>' +
                         '</div>';
-                html += '<input type="checkbox" class="correct" match="' + group +
-                        '" value="Correct"' + checked + '/>' + LABEL_CORRECT +
-                        '</label><br>';
+                if(!parent.COTemplateTypeIn(parent.PLC)){
+                    html += '<input type="checkbox" class="correct" match="' + group +
+                            '" value="Correct"' + checked + '/>' + LABEL_CORRECT;
+                }
+                html += '</label><br>';
             } else {
                 // Já existe, html = '';
                 html = "";
             }
 
-        }else if(parent.COTemplateTypeIn(parent.PLC)){
-            var newDivMatch = false;
-            //Verificar se já existe essa div group 
-            if ($("#" + parent.currentPiece + " div[group=" + group + "]").length == 0) {
-                //Não existe, então cria um novo
-                newDivMatch = true;
-                var htmlDefault = '<div group="' + group + '">';
-                var html = htmlDefault + '<span>' +
-                        '<div>';
-
-                html += '' +
-                        '<button class="insertImage">' + LABEL_ADD_IMAGE + '</button>' +
-                        '<button class="insertSound"></button>' +
-                        '<button class="insertText">' + LABEL_ADD_TEXT + '</button>' +
-                        '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">' +
-                        '<br>' +
-                        '<br>' +
-                        '<br>' +
-                        '<label>' +
-                        '</div>';
-            } else {
-                // Já existe, html = '';
-                html = "";
-            }
-            
         }else if (parent.COTemplateTypeIn(parent.PRE)) {
             $('li[id="' + parent.currentPiece + '"] div.tplPre').append(html);
         } else if (parent.COTemplateTypeIn(parent.TXT)) {
@@ -986,11 +964,11 @@ function editor() {
                         html = '<li>' +
                                 htmlDefault +
                                 '<spam>(' + group + ')</spam>' +
-                                '<button class="insertImage" >' + LABEL_ADD_IMAGE + '</button>' +
-                                '<button class="insertSound"></button>' +
-                                '<button class="insertText" >' + LABEL_ADD_TEXT + '</button>' +
-                                '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">' +
-                                '</div>' +
+                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
+                                '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
+                                '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
+                                '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
+                                '<br><br><br><br></div>' +
                                 '</li>';
                     } else {
                         html = "";
@@ -1017,14 +995,14 @@ function editor() {
 
                     var html2 = '<li>' + htmlDefault +
                             '<spam>(' + group + ')</spam>' +
-                            '<button class="insertImage" >' + LABEL_ADD_IMAGE + '</button>' +
-                            '<button class="insertSound"></button>' +
-                            '<button class="insertText" >' + LABEL_ADD_TEXT + '</button>';
+                            '<button class="insertImage" ><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
+                            '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
+                            '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>';
                     if (parent.COTemplateTypeIn(parent.ONEDDROP) &&
                             group.split('_')[0] > 1) {
-                        html2 += '<input type="button" class="del delElement" value="' + LABEL_REMOVE_ELEMENT + '">';
+                        html2 += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
                     }
-                    html2 += '</div></li>';
+                    html2 += '<br><br><br></div></li>';
 
                 }
 
@@ -1213,18 +1191,18 @@ function editor() {
                 ) {
             //É MTE OU PLC
             if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
-                var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > span > div > input.delElement:eq(0)";
+                var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > span > div > button.delElement:eq(0)";
             }
 
         } else if (parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)) {
-            var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > input.delElement";
+            var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > button.delElement";
         } else if (parent.COTemplateTypeIn(parent.ONEDDROP)) {
             if (firstSplitGroup == 1) {
                 //O primeiro deve excluir o group ask e answer juntos
-                var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > input.delElement";
+                var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > button.delElement";
             } else {
-                var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > input.delElement";
+                var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > button.delElement";
             }
 
         }
@@ -1442,8 +1420,8 @@ function editor() {
                         var id_ElementResp_del = $(this).attr('id');
                         parent.delElement(id_ElementResp_del, true);
                     });
-                    // Deleta também o seu Grupo de Resposta
-                    $('#' + idCurrentPiece + ' div[group=' + group + '_1]').remove();
+                    // Deleta também o li do seu Grupo de Resposta
+                    $('#' + idCurrentPiece + ' div[group=' + group + '_1]').parent().remove();
                 } else if (parent.COTemplateTypeIn(parent.MTE)) {
                     //id é o div-grupo a ser excluído
                     $(id).find('div.element').each(function () {
