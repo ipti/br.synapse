@@ -5,6 +5,7 @@ $(function () {
 //       console.log('Carregou!');
 //    });
 
+
     holdingCtrl = false;
 
     $('.canvas').pajinate({
