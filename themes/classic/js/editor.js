@@ -1,3 +1,5 @@
+
+
 TYPE = {}
 TYPE.ELEMENT = {}
 TYPE.ELEMENT.TEXT = "TEXT";
