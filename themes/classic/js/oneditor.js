@@ -183,16 +183,15 @@ $(function () {
 
     //Template TPLC
 
-
     $(document).on("click", ".elementsPlc div[group]", function () {
-        var currentTxtInput = $(this).find('.element font').text();
+        var currentTxtInput = $(this).find('.element font').text().replace( /\s/g, '');
         var str = "";
-        if (currentTxtInput != "Clique para Alterar..." && currentTxtInput != "Click to edit" &&
-                currentTxtInput.replace(/^\s+|\s+$/g, "") != "UpdateCalcel" &&
-                currentTxtInput.replace(/^\s+|\s+$/g, "") != "" &&
+        if (currentTxtInput != "CliqueparaAlterar..." && currentTxtInput != "Clicktoedit" &&
+                currentTxtInput != "UpdateCalcel" &&
+                currentTxtInput != "" &&
                 typeof $(this).attr('selected') == "undefined") {
 
-            if ($(this).closest(".elementsPlc").siblings(".crosswords").text().replace(/^\s+|\s+$/g, "") == '') {
+            if ($(this).closest(".elementsPlc").siblings(".crosswords").text().replace( /\s/g, '') == '') {
                 //Primeira palavra, na horizontal
                 $(this).attr('txtDirection', 'h');
                 str += "<div class='Row'>";
@@ -227,8 +226,8 @@ $(function () {
             //Clicou num div Group
             //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
             var letterClicked = $(this).text();
-            var wordLastClicked = lastSelected.find(".element > font").text().replace(/^\s+|\s+$/g, '');
-            alert(wordLastClicked);
+            var wordLastClicked = lastSelected.find(".element > font").text().replace( /\s/g, '');
+            
             var positionsMayMerge = new Array();
             for (var i = 0; i < wordLastClicked.length; i++) {
                 if (wordLastClicked[i] == letterClicked) {
