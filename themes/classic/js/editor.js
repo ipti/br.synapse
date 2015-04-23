@@ -2520,6 +2520,7 @@ function editor() {
 
     this.imageChanged = function (input_element) {
         // Change imagens
+        
         var id_div = input_element.attr("id").replace('_input', '');
         var id_span = id_div.replace('_image', '');
         $('#' + id_div + '.image, #' + id_span).attr('updated', 1);
