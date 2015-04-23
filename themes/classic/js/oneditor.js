@@ -234,7 +234,7 @@ $(function () {
             //Clicou num div Group
             //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
             var letterClicked = $(this).text();
-            var wordLastClicked = lastSelected.find(".element > font").text().replace( /\s/g, '');
+            var wordLastClicked = lastSelected.find(".element > font").text().replace(/\s/g, '');
             
             var positionsMayMerge = new Array();
             for (var i = 0; i < wordLastClicked.length; i++) {
@@ -280,8 +280,13 @@ $(function () {
                         tempIndexCurrentRow--;
                         var currentCell = $(this).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                 .eq(indexCurrentColl);
-                        if (currentCell.text().replace(/^\s+|\s+$/g, "") != '') {
+                       if(currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0){
+                            //Célula Vazia
+                            break;
+                        }
+                        if (currentCell.text().replace(/\s/g, '') != '') {
                             //Existe Letra no caminho
+                            console.log(currentCell.text().replace(/\s/g, ''));
                             cancel = true;
                             break;
                         }
@@ -293,7 +298,12 @@ $(function () {
                         tempIndexCurrentRow++;
                         var currentCell = $(this).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                 .eq(indexCurrentColl);
-                        if (currentCell.text().replace(/^\s+|\s+$/g, "") != '') {
+                         if(currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0){
+                            //Célula Vazia
+                            break;
+                        }
+                        
+                        if (currentCell.text().replace(/\s/g, '') != '') {
                             //Existe Letra no caminho
                             cancel = true;
                             break;
@@ -381,7 +391,11 @@ $(function () {
                         tempIndexCurrentColunm--;
                         // groups='g"+lastSelected.attr('group')+"' directions='v'
                         var currentCell = $(this).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                        if (currentCell.text().replace(/^\s+|\s+$/g, "") != '') {
+                      if(currentCell.size() == 0 || tempIndexCurrentColunm < 0){
+                            //Célula Vazia
+                            break;
+                        }
+                        if (currentCell.text().replace(/\s/g, '') != '') {
                             //Existe Letra no caminho
                             cancel = true;
                             break;
@@ -393,7 +407,11 @@ $(function () {
                     for (var idx in letterAfterMergePosition) {
                         tempIndexCurrentColunm++;
                         var currentCell = $(this).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                        if (currentCell.text().replace(/^\s+|\s+$/g, "") != '') {
+                         if(currentCell.size() == 0 || tempIndexCurrentColunm < 0){
+                            //Célula Vazia
+                            break;
+                        }
+                        if (currentCell.text().replace(/\s/g, '') != '') {
                             //Existe Letra no caminho
                             cancel = true;
                             break;
