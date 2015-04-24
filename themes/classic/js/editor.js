@@ -7,6 +7,7 @@ TYPE.LIBRARY.IMAGE = "IMAGE";
 TYPE.LIBRARY.SOUND = "SOUND";
 TYPE.LIBRARY.MOVIE = "MOVIE";
 
+//Classe Editor
 function editor() {
     this.COtypeID;
     this.COthemeID;
