@@ -191,41 +191,6 @@ $(function () {
 
     //Template TPLC
 
-    $(document).on("focusout", ".elementsPlc div[group] .editable form input", function () {
-        alert('HERE');
-            //Seleciona o grupo corrente, aguardando assim o click em alguma letra 
-            // de alguma palavra cruzada, para realizar um novo cruzamento
-            var thisDivGroup = $(this).closest('div[group]');
-            var currentTxtInput = thisDivGroup.find('.element font').text().replace(/\s/g, '');
-            var str = "";
-            if (currentTxtInput != "CliqueparaAlterar..." && currentTxtInput != "Clicktoedit" &&
-                    currentTxtInput != "UpdateCalcel" &&
-                    currentTxtInput != "" &&
-                    typeof thisDivGroup.attr('selected') == "undefined") {
-
-                if (thisDivGroup.closest(".elementsPlc").siblings(".crosswords").text().replace(/\s/g, '') == '') {
-                    //Primeira palavra, na horizontal
-                    thisDivGroup.attr('txtDirection', 'h');
-                    str += "<div class='Row'>";
-                    for (var i = 0; i < currentTxtInput.length; i++) {
-                        str += "<div class='Cell' groups='g" + thisDivGroup.attr('group') + "'>" + currentTxtInput[i] + "</div>";
-                    }
-                    str += "</div>";
-
-                    thisDivGroup.closest(".elementsPlc").siblings(".crosswords").html(str);
-                    //Então add class de Selecionado nesse grupo
-                    thisDivGroup.attr('selected', 'true');
-
-                } else {
-                    //Já existe uma palavra no CrossWords
-                    thisDivGroup.attr('selected', 'true');
-                    thisDivGroup.siblings('div[lastSelected]').removeAttr('lastSelected');
-                    thisDivGroup.attr('lastSelected', 'true');
-                }
-
-            }
-    });
-
     $(document).on("click", ".crosswords  div.Cell[groups]", function () {
         var lastSelected = $(this).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
         var groupWordOfClickedLetter = $(this).attr('groups');
@@ -506,12 +471,16 @@ $(function () {
                         if (typeof $(this).attr('currentClickedCell') != 'undefined') {
                             //Econtrou a célula clicada, atual
                             positionThisCellWordMerge = index;
+                            $(this).removeAttr('currentClickedCell');
                         }
                     });
 
                     var tempJsonArray = {pieceID: currentPieceId, word1Group: groupThisCell, position1: positionThisCellWordMerge
                         , word2Group: lastClickedGroupElement, position2: positionNewWordMerge};
                     newEditor.crossWords.push(tempJsonArray);
+                    
+                    //Por fim desabilita o botão, novo Elemento
+                    $(this).closest(".tplPlc").find(".newElement").removeAttr('disabled');
                 }
             } else {
                 //A letra clicada não foi encontrada na palavra 

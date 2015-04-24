@@ -59,7 +59,7 @@ function editor() {
     this.unLinks = [];
     //Lista de peças e suas palavras cruzadas
     this.crossWords = new Array();
-    
+
     var self = this;
 
     /**
@@ -267,8 +267,8 @@ function editor() {
                         "<ul id='" + pieceID + "_query_resp' class='sortable'></ul>";
             } else if (parent.COTemplateTypeIn(parent.TXT)) {
                 html += '<div class="tplTxt tpl" ></div>';
-            }else if (parent.COTemplateTypeIn(parent.PLC)){
-                 html += '<div class="tplPlc tpl"><div class="elementsPlc"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
+            } else if (parent.COTemplateTypeIn(parent.PLC)) {
+                html += '<div class="tplPlc tpl"><div class="elementsPlc"><button class="newElement" disabled="true"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
                           <div class="crosswords Table"> </div> </div>';
             }
             //finaliza o html
@@ -287,6 +287,7 @@ function editor() {
                     || parent.COTemplateTypeIn(parent.PLC)) {
                 //adiciona a função do botão addElement
                 $("#" + pieceID + " button.newElement").click(function () {
+                    $(this).attr('disabled', 'true');
                     parent.addElement();
                 });
                 //se template for PRE ou TXT
@@ -370,7 +371,7 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             html = '<div id="' + ID + '_text" class="text element moptions"' + plus + '>' + input_text;
-        } else if (parent.COTemplateTypeIn(parent.MTE)  || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.PRE)
+        } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.PRE)
                 || parent.COTemplateTypeIn(parent.TXT)) {
             html = '<div id="' + ID + '_text" class="text element"' + plus + '>' + input_text;
         }
@@ -389,7 +390,7 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             $(tagAdd).append(html);
-        } else if (parent.COTemplateTypeIn(parent.MTE)  || parent.COTemplateTypeIn(parent.PLC)) {
+        } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
             $(tagAdd).find('span:eq(0)').append(html);
         } else if (parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) {
             $(tagAdd).append(html);
@@ -467,7 +468,12 @@ function editor() {
                     }
                 });
                 //adiciona a função de perda de foco do input
-                $(input).on("focusout", function () {                    
+                $(input).on("focusout", function () {
+
+                    if (parent.COTemplateTypeIn(parent.PLC)) {
+                        var thisDivGroup = $(this).closest('div[group]');
+                    }
+
                     //da submit no formulário
                     $(form).submit();
                     //Verificar se foi Alterado em relação a do DB             
@@ -501,6 +507,43 @@ function editor() {
                         }
 
                     }
+
+                    if (parent.COTemplateTypeIn(parent.PLC)) {
+                        //Seleciona o grupo corrente, aguardando assim o click em alguma letra 
+                        // de alguma palavra cruzada, para realizar um novo cruzamento
+
+                        var currentTxtInput = thisDivGroup.find('.element font').text().replace(/\s/g, '');
+                        var str = "";
+                        if (currentTxtInput != "CliqueparaAlterar..." && currentTxtInput != "Clicktoedit" &&
+                                currentTxtInput != "UpdateCalcel" &&
+                                currentTxtInput != "" &&
+                                typeof thisDivGroup.attr('selected') == "undefined") {
+
+                            if (thisDivGroup.closest(".elementsPlc").siblings(".crosswords").text().replace(/\s/g, '') == '') {
+                                //Primeira palavra, na horizontal
+                                thisDivGroup.attr('txtDirection', 'h');
+                                str += "<div class='Row'>";
+                                for (var i = 0; i < currentTxtInput.length; i++) {
+                                    str += "<div class='Cell' groups='g" + thisDivGroup.attr('group') + "'>" + currentTxtInput[i] + "</div>";
+                                }
+                                str += "</div>";
+
+                                thisDivGroup.closest(".elementsPlc").siblings(".crosswords").html(str);
+                                //Então add class de Selecionado nesse grupo
+                                thisDivGroup.attr('selected', 'true');
+                                
+                                //Após add a primeira palavra no CrossWord habilita o botão de criar elemento
+                                thisDivGroup.closest(".tplPlc").find(".newElement").removeAttr('disabled');
+                            } else {
+                                //Já existe uma palavra no CrossWords
+                                thisDivGroup.attr('selected', 'true');
+                                thisDivGroup.siblings('div[lastSelected]').removeAttr('lastSelected');
+                                thisDivGroup.attr('lastSelected', 'true');
+                            }
+
+                        }
+                    }
+
                     //===========================
                 });
                 //seta o foco no input
@@ -913,7 +956,7 @@ function editor() {
                         '<br>' +
                         '<label>' +
                         '</div>';
-                if(!parent.COTemplateTypeIn(parent.PLC)){
+                if (!parent.COTemplateTypeIn(parent.PLC)) {
                     html += '<input type="checkbox" class="correct" match="' + group +
                             '" value="Correct"' + checked + '/>' + LABEL_CORRECT;
                 }
@@ -923,7 +966,7 @@ function editor() {
                 html = "";
             }
 
-        }else if (parent.COTemplateTypeIn(parent.PRE)) {
+        } else if (parent.COTemplateTypeIn(parent.PRE)) {
             $('li[id="' + parent.currentPiece + '"] div.tplPre').append(html);
         } else if (parent.COTemplateTypeIn(parent.TXT)) {
             $('li[id="' + parent.currentPiece + '"] div.tplTxt').append(html);
@@ -1104,8 +1147,8 @@ function editor() {
                 }
 
             }
-        }else if (parent.COTemplateTypeIn(parent.PLC)){
-             if (newDivMatch) {
+        } else if (parent.COTemplateTypeIn(parent.PLC)) {
+            if (newDivMatch) {
                 html += '</span></div>';
 
                 if (self.isset(loaddata)) {
@@ -1133,9 +1176,9 @@ function editor() {
 
             }
         }
-        
-        
-        
+
+
+
         var tagAdd = "";
         if (parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.PLC)
@@ -1216,7 +1259,7 @@ function editor() {
         var textoID = "#" + elementID + "_text";
         var imageID = "#" + elementID + "_image";
         if (parent.COTemplateTypeIn(parent.MTE)
-            || parent.COTemplateTypeIn(parent.PLC)
+                || parent.COTemplateTypeIn(parent.PLC)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1254,7 +1297,7 @@ function editor() {
                     }
                 }
             });
-            
+
 
             if (parent.COTemplateTypeIn(parent.MTE)
                     || parent.COTemplateTypeIn(parent.PLC)
