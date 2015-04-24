@@ -102,12 +102,12 @@ $(function () {
         //DOWN  - 40
 
         //Se for LEFT, Volte uma página
-        if(e.which === 37){
+        if (e.which === 37) {
             $("#back").trigger("click");
         }
-        
+
         //Se for RIGHT, avance uma página
-        if(e.which === 39){
+        if (e.which === 39) {
             $("#next").trigger("click");
         }
 
@@ -191,36 +191,39 @@ $(function () {
 
     //Template TPLC
 
-    $(document).on("click", ".elementsPlc div[group]", function () {
-        var currentTxtInput = $(this).find('.element font').text().replace( /\s/g, '');
-        var str = "";
-        if (currentTxtInput != "CliqueparaAlterar..." && currentTxtInput != "Clicktoedit" &&
-                currentTxtInput != "UpdateCalcel" &&
-                currentTxtInput != "" &&
-                typeof $(this).attr('selected') == "undefined") {
+    $(document).on("focusout", ".elementsPlc div[group] .editable form input", function () {
+        alert('HERE');
+            //Seleciona o grupo corrente, aguardando assim o click em alguma letra 
+            // de alguma palavra cruzada, para realizar um novo cruzamento
+            var thisDivGroup = $(this).closest('div[group]');
+            var currentTxtInput = thisDivGroup.find('.element font').text().replace(/\s/g, '');
+            var str = "";
+            if (currentTxtInput != "CliqueparaAlterar..." && currentTxtInput != "Clicktoedit" &&
+                    currentTxtInput != "UpdateCalcel" &&
+                    currentTxtInput != "" &&
+                    typeof thisDivGroup.attr('selected') == "undefined") {
 
-            if ($(this).closest(".elementsPlc").siblings(".crosswords").text().replace( /\s/g, '') == '') {
-                //Primeira palavra, na horizontal
-                $(this).attr('txtDirection', 'h');
-                str += "<div class='Row'>";
-                for (var i = 0; i < currentTxtInput.length; i++) {
-                    str += "<div class='Cell' groups='g" + $(this).attr('group') + "'>" + currentTxtInput[i] + "</div>";
+                if (thisDivGroup.closest(".elementsPlc").siblings(".crosswords").text().replace(/\s/g, '') == '') {
+                    //Primeira palavra, na horizontal
+                    thisDivGroup.attr('txtDirection', 'h');
+                    str += "<div class='Row'>";
+                    for (var i = 0; i < currentTxtInput.length; i++) {
+                        str += "<div class='Cell' groups='g" + thisDivGroup.attr('group') + "'>" + currentTxtInput[i] + "</div>";
+                    }
+                    str += "</div>";
+
+                    thisDivGroup.closest(".elementsPlc").siblings(".crosswords").html(str);
+                    //Então add class de Selecionado nesse grupo
+                    thisDivGroup.attr('selected', 'true');
+
+                } else {
+                    //Já existe uma palavra no CrossWords
+                    thisDivGroup.attr('selected', 'true');
+                    thisDivGroup.siblings('div[lastSelected]').removeAttr('lastSelected');
+                    thisDivGroup.attr('lastSelected', 'true');
                 }
-                str += "</div>";
 
-                $(this).closest(".elementsPlc").siblings(".crosswords").html(str);
-                //Então add class de Selecionado nesse grupo
-                $(this).attr('selected', 'true');
-
-            } else {
-                //Já existe uma palavra no CrossWords
-                $(this).attr('selected', 'true');
-                $(this).siblings('div[lastSelected]').removeAttr('lastSelected');
-                $(this).attr('lastSelected', 'true');
             }
-
-        }
-
     });
 
     $(document).on("click", ".crosswords  div.Cell[groups]", function () {
@@ -235,7 +238,7 @@ $(function () {
             //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
             var letterClicked = $(this).text();
             var wordLastClicked = lastSelected.find(".element > font").text().replace(/\s/g, '');
-            
+
             var positionsMayMerge = new Array();
             for (var i = 0; i < wordLastClicked.length; i++) {
                 if (wordLastClicked[i] == letterClicked) {
@@ -280,13 +283,12 @@ $(function () {
                         tempIndexCurrentRow--;
                         var currentCell = $(this).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                 .eq(indexCurrentColl);
-                       if(currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0){
+                        if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
                             //Célula Vazia
                             break;
                         }
                         if (currentCell.text().replace(/\s/g, '') != '') {
                             //Existe Letra no caminho
-                            console.log(currentCell.text().replace(/\s/g, ''));
                             cancel = true;
                             break;
                         }
@@ -298,11 +300,11 @@ $(function () {
                         tempIndexCurrentRow++;
                         var currentCell = $(this).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                 .eq(indexCurrentColl);
-                         if(currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0){
+                        if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
                             //Célula Vazia
                             break;
                         }
-                        
+
                         if (currentCell.text().replace(/\s/g, '') != '') {
                             //Existe Letra no caminho
                             cancel = true;
@@ -391,7 +393,7 @@ $(function () {
                         tempIndexCurrentColunm--;
                         // groups='g"+lastSelected.attr('group')+"' directions='v'
                         var currentCell = $(this).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                      if(currentCell.size() == 0 || tempIndexCurrentColunm < 0){
+                        if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
                             //Célula Vazia
                             break;
                         }
@@ -407,7 +409,7 @@ $(function () {
                     for (var idx in letterAfterMergePosition) {
                         tempIndexCurrentColunm++;
                         var currentCell = $(this).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                         if(currentCell.size() == 0 || tempIndexCurrentColunm < 0){
+                        if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
                             //Célula Vazia
                             break;
                         }
