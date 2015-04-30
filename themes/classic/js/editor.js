@@ -9,6 +9,9 @@ TYPE.LIBRARY.MOVIE = "MOVIE";
 
 //Classe Editor
 function editor() {
+    //OnNewEditor
+    this.onEditor;
+    
     this.COtypeID;
     this.COthemeID;
     this.COtemplateType;
@@ -61,6 +64,10 @@ function editor() {
     this.crossWords = new Array();
 
     var self = this;
+
+    this.setEventsOnEditor = function (newOnEditor){
+        self.onEditor = newOnEditor;
+    }
 
     /**
      * Verifica se COtemplateType esta setado.
@@ -308,6 +315,45 @@ function editor() {
         }
     }
 
+
+    this.canEditThisWordCross = function (pieceID, group) {
+        var word = $(".piece[id='" + pieceID + "']").find('.element.text input').val();
+
+        if (self.isset(word)) {
+            word = word.replace(/\s/g, '');
+
+            for (var idx in self.crossWords) {
+                var crossWord = self.crossWords[idx];
+
+                if (crossWord['word1Group'] == group || crossWord['word2Group'] == group) {
+                    var crossLetter = crossWord['letter'];
+                    var crossPosition;
+                    // console.log(crossWord['word1Group'] + "==" + group);
+                    if (crossWord['word1Group'] == group) {
+                        crossPosition = crossWord['position1'];
+                        if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
+                            //A letra que já fora cruzada com outra palavra não pode ser alterada
+                            return false;
+                        }
+                    } else if (crossWord['word2Group'] == group) {
+                        crossPosition = crossWord['position2'];
+                        if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
+                            //A letra que já fora cruzada com outra palavra não pode ser alterada
+                            return false;
+                        }
+                    }
+
+                }
+            }
+
+            return true;
+        }
+        
+        return false;
+
+    }
+
+
     this.addText = function (tagAdd, loaddata, idbd) {
         var parent = this;
         ID = this.currentPiece + '_e' + this.countElements[this.currentPiece];
@@ -472,43 +518,50 @@ function editor() {
 
                     if (parent.COTemplateTypeIn(parent.PLC)) {
                         var thisDivGroup = $(this).closest('div[group]');
+                        var currentPieceID = $(this).closest('.piece').attr('id');
                     }
+                    var edited = false;
 
-                    //da submit no formulário
-                    $(form).submit();
-                    //Verificar se foi Alterado em relação a do DB             
-                    parent.textChanged(initial_text, value_txt, text_element, text_div);
-                    var txt_New_noHtml = $(value_txt).text();
-                    //===========================
-                    if (parent.COTemplateTypeIn(parent.PRE) && (txt_New_noHtml == "")) {
-                        // O template é do tipo PRE  e o elemento está vazio
-                        //Deleta o PieceSet
-                        parent.delPieceSet(parent.currentPieceSet, true); // TODO
-                        //Atualiza Total de elementos e o Total alterados
-                        parent.totalElements = $('.element').size();
-                        parent.totalElementsChanged = $('.element[updated="1"]').size();
-                        parent.totalElementsNOchanged = $('.element[updated="0"]').size();
-                        parent.totalPieces = $('.piece').size();
-                        parent.totalPiecesets = $('.PieceSet').size();
 
-                        if (parent.isset(idbd)) {
-                            //Enviar array de objetos a serem excluidos 
-                            parent.saveData({
-                                op: "delete",
-                                array_del: parent.orderDelets
-                            },
-                            //função sucess
-                            function (response, textStatus, jqXHR) {
-                                parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
-                                $('.savescreen').append('<br><p> Objeto PRE Deletado!...</p>');
-                                //Verificar se acabou as requisições
-                                parent.verify_requestFinish();
-                            });
+                    if (!parent.COTemplateTypeIn(parent.PLC) ||
+                            (parent.COTemplateTypeIn(parent.PLC) && parent.canEditThisWordCross(currentPieceID, thisDivGroup.attr('group')))) {
+                        //da submit no formulário
+                        $(form).submit();
+                        //Verificar se foi Alterado em relação a do DB             
+                        parent.textChanged(initial_text, value_txt, text_element, text_div);
+                        var txt_New_noHtml = $(value_txt).text();
+                        //===========================
+                        if (parent.COTemplateTypeIn(parent.PRE) && (txt_New_noHtml == "")) {
+                            // O template é do tipo PRE  e o elemento está vazio
+                            //Deleta o PieceSet
+                            parent.delPieceSet(parent.currentPieceSet, true); // TODO
+                            //Atualiza Total de elementos e o Total alterados
+                            parent.totalElements = $('.element').size();
+                            parent.totalElementsChanged = $('.element[updated="1"]').size();
+                            parent.totalElementsNOchanged = $('.element[updated="0"]').size();
+                            parent.totalPieces = $('.piece').size();
+                            parent.totalPiecesets = $('.PieceSet').size();
+
+                            if (parent.isset(idbd)) {
+                                //Enviar array de objetos a serem excluidos 
+                                parent.saveData({
+                                    op: "delete",
+                                    array_del: parent.orderDelets
+                                },
+                                //função sucess
+                                function (response, textStatus, jqXHR) {
+                                    parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
+                                    $('.savescreen').append('<br><p> Objeto PRE Deletado!...</p>');
+                                    //Verificar se acabou as requisições
+                                    parent.verify_requestFinish();
+                                });
+                            }
+
                         }
 
+                        edited = true;
                     }
-
-                    if (parent.COTemplateTypeIn(parent.PLC)) {
+                    if (parent.COTemplateTypeIn(parent.PLC) && edited) {
                         //Seleciona o grupo corrente, aguardando assim o click em alguma letra 
                         // de alguma palavra cruzada, para realizar um novo cruzamento
 
@@ -516,8 +569,7 @@ function editor() {
                         var str = "";
                         if (currentTxtInput != "CliqueparaAlterar..." && currentTxtInput != "Clicktoedit" &&
                                 currentTxtInput != "UpdateCalcel" &&
-                                currentTxtInput != "" &&
-                                typeof thisDivGroup.attr('selected') == "undefined") {
+                                currentTxtInput != "" ) {
 
                             if (thisDivGroup.closest(".elementsPlc").siblings(".crosswords").text().replace(/\s/g, '') == '') {
                                 //Primeira palavra, na horizontal
@@ -531,7 +583,7 @@ function editor() {
                                 thisDivGroup.closest(".elementsPlc").siblings(".crosswords").html(str);
                                 //Então add class de Selecionado nesse grupo
                                 thisDivGroup.attr('selected', 'true');
-                                
+
                                 //Após add a primeira palavra no CrossWord habilita o botão de criar elemento
                                 thisDivGroup.closest(".tplPlc").find(".newElement").removeAttr('disabled');
                             } else {
@@ -539,6 +591,20 @@ function editor() {
                                 thisDivGroup.attr('selected', 'true');
                                 thisDivGroup.siblings('div[lastSelected]').removeAttr('lastSelected');
                                 thisDivGroup.attr('lastSelected', 'true');
+                                
+                                //Verificar se a palavra já estar no crossWord
+                                //Se estiver então atualiza ela
+                                thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Cell[groups*="'
+                                        +'g'+thisDivGroup.attr('group')+'"]').each(function(index){
+                                            //É encontrado na ordem : de cima para baixo, da esquerda para a direita
+                                    
+//                                           currentTxtInput.substring(0,index);
+//                                             alert($(this).text()); 
+                                             
+                                             self.onEditor.eventClickCellPLC(,true);
+                                             
+                                        });
+                                        
                             }
 
                         }
@@ -552,6 +618,15 @@ function editor() {
             });
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     //Verificar se foi Alterado em relação a do DB
     this.textChanged = function (initial_text, value_txt, text_element, text_div) {
