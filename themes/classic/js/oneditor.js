@@ -192,7 +192,7 @@ function onEditor(newEditor) {
     //Template TPLC
 
     //Função do click na Célula do Template PLC
-    this.eventClickCellPLC = function (clickedCell, editedWord) {
+    this.eventClickCellPLC = function (clickedCell) {
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
         var groupWordOfClickedLetter = $(clickedCell).attr('groups');
         var thisFunc = this;
@@ -508,7 +508,7 @@ function onEditor(newEditor) {
     }
 
     $(document).on("click", ".crosswords  div.Cell[groups]", function(){
-        self.eventClickCellPLC(this, false);
+        self.eventClickCellPLC(this);
     });
 
 
