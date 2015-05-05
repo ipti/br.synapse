@@ -321,28 +321,32 @@ function editor() {
 
         if (self.isset(word)) {
             word = word.replace(/\s/g, '');
+            //OPCIONAL + Antes, se houver letras alteradas antes de algum cruzamento, então incrementa a posição de cada cruzamento
+
             //Verificar se existe um cruzamento com alguma letra e essa letra fora alterada
             for (var idx in self.crossWords) {
                 var crossWord = self.crossWords[idx];
+                //SOMENTE quando estar na mesma Piece
+                if (crossWord['pieceID'] == pieceID) {
+                    if (crossWord['word1Group'] == group || crossWord['word2Group'] == group) {
+                        var crossLetter = crossWord['letter'];
+                        var crossPosition;
+                        // console.log(crossWord['word1Group'] + "==" + group);
+                        if (crossWord['word1Group'] == group) {
+                            crossPosition = crossWord['position1'];
+                            if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
+                                //A letra que já fora cruzada com outra palavra não pode ser alterada
+                                return false;
+                            }
+                        } else if (crossWord['word2Group'] == group) {
+                            crossPosition = crossWord['position2'];
+                            if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
+                                //A letra que já fora cruzada com outra palavra não pode ser alterada
+                                return false;
+                            }
+                        }
 
-                if (crossWord['word1Group'] == group || crossWord['word2Group'] == group) {
-                    var crossLetter = crossWord['letter'];
-                    var crossPosition;
-                    // console.log(crossWord['word1Group'] + "==" + group);
-                    if (crossWord['word1Group'] == group) {
-                        crossPosition = crossWord['position1'];
-                        if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
-                            //A letra que já fora cruzada com outra palavra não pode ser alterada
-                            return false;
-                        }
-                    } else if (crossWord['word2Group'] == group) {
-                        crossPosition = crossWord['position2'];
-                        if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
-                            //A letra que já fora cruzada com outra palavra não pode ser alterada
-                            return false;
-                        }
                     }
-
                 }
             }
 
@@ -649,11 +653,13 @@ function editor() {
                                 var txtDirection = thisDivGroup.attr('txtDirection');
                                 var sizeOldLetters = 0;
                                 var lastCellGroup;
+                                var constLastCellGroup;
                                 thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Cell[groups*="'
                                         + 'g' + thisDivGroup.attr('group') + '"]').each(function (index) {
                                     //É encontrado na ordem : de cima para baixo, da esquerda para a direita
                                     sizeOldLetters++;
                                     $(this).html(currentTxtInput.substring(index, index + 1));
+                                    constLastCellGroup = $(this);
                                     lastCellGroup = $(this);
                                 });
 
@@ -697,7 +703,7 @@ function editor() {
                                                 for (var cont = 0; cont < sizeRowAddAfter; cont++) {
                                                     lastCellGroup.closest('.crosswords').append(newRow);
                                                 }
-                                                
+
                                                 nextCellGroup = lastCellGroup.closest('.Row').next().find('.Cell').eq(indexCellWord);
                                             }
                                             //Adiciona as letras restantes nas próximas células
@@ -709,6 +715,41 @@ function editor() {
                                             lastCellGroup = nextCellGroup;
                                         }
                                     }
+                                } else if (currentTxtInput.length < sizeOldLetters) {
+                                    //Então exclui alguma letras
+                                    var totalDeleted = sizeOldLetters - currentTxtInput.length;
+                                    var idxLastCell = constLastCellGroup.index();
+                                    if (txtDirection == 'h') {
+
+                                        //Então verificar toda a coluna = '' pra a exclusão
+                                        var mayDeleteColunm;
+                                        while (totalDeleted > 0) {
+                                            mayDeleteColunm = true;
+                                            thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').each(function () {
+                                                if ($(this).find('.Cell').eq(idxLastCell).text().replace(/\s/g, '') != '') {
+                                                    //Não pode excluir
+                                                    mayDeleteColunm = false;
+                                                }
+                                            });
+                                            if (mayDeleteColunm) {
+                                                //Então Exlcui a Coluna e continua procurando outras, se existir pra deletar
+                                               thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').each(function () {
+                                                    $(this).find('.Cell').eq(idxLastCell).remove();
+                                                });
+                                            } else {
+                                                //Não pode deletar
+                                                break;
+                                            }
+
+                                            idxLastCell--;
+                                            totalDeleted--;
+                                        }
+                                        
+                                    } else if (txtDirection == 'v') {
+                                        //Então verificar se toda a linha = '' para a deleção de cada
+                                        //STOP HERE !
+                                    }
+
                                 }
 
                             }
