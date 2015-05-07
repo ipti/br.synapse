@@ -658,6 +658,10 @@ function editor() {
                                         + 'g' + thisDivGroup.attr('group') + '"]').each(function (index) {
                                     //É encontrado na ordem : de cima para baixo, da esquerda para a direita
                                     sizeOldLetters++;
+                                    if (currentTxtInput.substring(index, index + 1).replace(/\s/g, '') == '') {
+                                        //Então retira o atributo groups
+                                        $(this).removeAttr('groups');
+                                    }
                                     $(this).html(currentTxtInput.substring(index, index + 1));
                                     constLastCellGroup = $(this);
                                     lastCellGroup = $(this);
@@ -719,6 +723,7 @@ function editor() {
                                     //Então exclui alguma letras
                                     var totalDeleted = sizeOldLetters - currentTxtInput.length;
                                     var idxLastCell = constLastCellGroup.index();
+                                    var idxLastRow = constLastCellGroup.closest('.Row').index();
                                     if (txtDirection == 'h') {
 
                                         //Então verificar toda a coluna = '' pra a exclusão
@@ -733,7 +738,7 @@ function editor() {
                                             });
                                             if (mayDeleteColunm) {
                                                 //Então Exlcui a Coluna e continua procurando outras, se existir pra deletar
-                                               thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').each(function () {
+                                                thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').each(function () {
                                                     $(this).find('.Cell').eq(idxLastCell).remove();
                                                 });
                                             } else {
@@ -744,10 +749,28 @@ function editor() {
                                             idxLastCell--;
                                             totalDeleted--;
                                         }
-                                        
+
                                     } else if (txtDirection == 'v') {
                                         //Então verificar se toda a linha = '' para a deleção de cada
-                                        //STOP HERE !
+                                        var mayDeleteRow;
+                                        while (totalDeleted > 0) {
+                                            mayDeleteRow = true;
+                                            thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().find('.Cell').each(function () {
+                                                if ($(this).text().replace(/\s/g, '') != '') {
+                                                    //Não pode excluir
+                                                    mayDeleteRow = false;
+                                                }
+                                            });
+                                            if (mayDeleteRow) {
+                                                //Então Exlcui a Linha e continua procurando outras, se existir pra deletar
+                                                thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().remove();
+                                            } else {
+                                                //Não pode deletar
+                                                break;
+                                            }
+
+                                            totalDeleted--;
+                                        }
                                     }
 
                                 }
