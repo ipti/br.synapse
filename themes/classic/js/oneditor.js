@@ -373,7 +373,7 @@ function onEditor(newEditor) {
                                 break;
                             }
                         }
-
+                        
                         //Percorre a lista de letras que será posta Depois
                         var tempIndexCurrentColunm = indexCurrentColunm;
                         for (var idx in letterAfterMergePosition) {
@@ -500,7 +500,13 @@ function onEditor(newEditor) {
                 }
             } else {
                 //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
-
+                if($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)'){
+                    $(clickedCell).attr('isShow', 'true');
+                    $(clickedCell).css('background-color', 'yellowgreen');  
+                }else{
+                    $(clickedCell).removeAttr('isShow');
+                    $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');  
+                }
             }
         } else {
             //Já foi cruzado
