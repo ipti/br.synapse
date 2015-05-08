@@ -644,10 +644,11 @@ function editor() {
                                 thisDivGroup.closest(".tplPlc").find(".newElement").removeAttr('disabled');
                             } else {
                                 //Já existe uma palavra no CrossWords
-                                thisDivGroup.attr('selected', 'true');
-                                thisDivGroup.siblings('div[lastSelected]').removeAttr('lastSelected');
-                                thisDivGroup.attr('lastSelected', 'true');
-
+                                if (!self.isset(thisDivGroup.attr('selected'))) {
+                                    thisDivGroup.attr('selected', 'true');
+                                    thisDivGroup.siblings('div[lastSelected]').removeAttr('lastSelected');
+                                    thisDivGroup.attr('lastSelected', 'true');
+                                }
                                 //Verificar se a palavra já estar no crossWord
                                 //Se estiver então atualiza ela
                                 var txtDirection = thisDivGroup.attr('txtDirection');
