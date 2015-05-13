@@ -2055,6 +2055,7 @@ function editor() {
                     ElementID = $(this).attr('id');
                     currentGroup = $(this).closest('div[group]').attr('group');
                     ElementID_BD = $(this).attr('idBD');
+                    
                     //get Atributo position
                     elementPosition = $(this).attr('position');
                     var continuar = true;
@@ -2177,13 +2178,14 @@ function editor() {
                                     });
                                     data["showing_letters"] = positionLettersShows;
                                 }
-
+                                  data["temp_currentGroup"] = currentGroup;
                                 parent.saveData(
                                         //Variáveis dados
                                         data,
                                         //Função de sucess do Save Element
                                                 function (response, textStatus, jqXHR) {
-
+                                                    
+                                                   var currentGroup =  data["temp_currentGroup"];
                                                     if (!parent.isload) {
                                                         $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
                                                     } else {
@@ -2198,15 +2200,14 @@ function editor() {
                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                         saveAllElements = true;
                                                     }
-
                                                     //Acrescenta o atributo idDBElement ao Array do CrossWords
                                                     for (var idx in self.crossWords) {
                                                         var crossword = self.crossWords[idx];
+                                                        
                                                         if (crossword['pieceID'] == curretPieceID) {
                                                             if (crossword['word1Group'] == currentGroup ||
                                                                     crossword['word2Group'] == currentGroup) {
                                                                 //Encontrado um cruzamento para esta palavra
-                                                                
                                                                 if (crossword['word1Group'] == currentGroup) {
                                                                     //Zera o word1Group e acrecenta o novo atributo 
                                                                     self.crossWords[idx]['word1Group'] = "";
@@ -2227,17 +2228,13 @@ function editor() {
                                                         //STOP HERE, verificar 
                                                         //Então salvar os cruzamentos no BD
                                                         var dataCrossWords = {'op':'save', 'step':'plc', 'crossWords':self.crossWords};
-                                                        console.log(dataCrossWords);
                                                         parent.saveData(
                                                                 //Variáveis dados
                                                                 dataCrossWords,
                                                                 //Função de sucess do Save crosses
                                                                         function (response, textStatus, jqXHR) {
-                                                                            
                                                                             console.log(response);
-                                                                            
                                                                         });
-
                                                             }
 
                                                     //Verificar se acabou as requisições

@@ -730,6 +730,31 @@ class EditorController extends Controller {
                                             $newPieceElement->element_id = $elementID;
                                             $newPieceElement->position = $order;
                                             $newPieceElement->insert();
+
+                                            //Se for PLC. Inseri o direction e lettersShows
+                                            if (isset($_POST["direction"])) {
+                                                //Propriedade de Direção
+                                                $newPEPropertyDirection = new EditorPieceelementProperty();
+                                                $newPEPropertyDirection->piece_element_id = $newPieceElement->id;
+
+                                                $propertyName = "direction";
+                                                $propertyContext = "word";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newPEPropertyDirection->property_id = $propertyID;
+                                                $newPEPropertyDirection->value = $_POST["direction"];
+                                                $newPEPropertyDirection->save();
+
+                                                //Propriedade de showing_letters
+                                                $newPEPropertyShowLetters = new EditorPieceelementProperty();
+                                                $newPEPropertyShowLetters->piece_element_id = $newPieceElement->id;
+
+                                                $propertyName = "showing_letters";
+                                                $propertyContext = "word";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newPEPropertyShowLetters->property_id = $propertyID;
+                                                $newPEPropertyShowLetters->value = $_POST["showing_letters"];
+                                                $newPEPropertyShowLetters->save();
+                                            }
                                         } else if ($isElementPieceSet) {
                                             //É um elemento da PIECESET
                                             $newPieceSetElement = new EditorPiecesetElement();
@@ -980,6 +1005,44 @@ class EditorController extends Controller {
                                 throw new Exception("ERROR: Operação inválida.<br>");
                             }
                             break;
+                        case "plc":
+                            foreach ($_POST['crossWords'] as $crossWord):
+                                //Para cada Cruzamento
+                                //Piece_Element
+                                $pieceElementID_w1 = EditorPieceElement::model()->findByAttributes(array('piece_id' => $crossWord['idDbPiece']
+                                            , 'element_id' => $crossWord['idDbElementWord1']))->id;
+
+                                $pieceElementID_w2 = EditorPieceElement::model()->findByAttributes(array('piece_id' => $crossWord['idDbPiece']
+                                            , 'element_id' => $crossWord['idDbElementWord2']))->id;
+
+                                //Associar o PieceElementID que estar cruzando com outro PieceElementID 
+                                $propertyName = "crossword_pieceElementID";
+                                $propertyContext = "word";
+                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+
+                                $newPEPropertyCrosswordPieceElementID = new EditorPieceelementProperty();
+                                $newPEPropertyCrosswordPieceElementID->property_id = $propertyID;
+                                $newPEPropertyCrosswordPieceElementID->piece_element_id = $pieceElementID_w1;
+                                $newPEPropertyCrosswordPieceElementID->value = $pieceElementID_w2;
+                                $newPEPropertyCrosswordPieceElementID->save();
+
+                                //Armazenar todos os pontos de cruzamento de cada relacionamento entre words
+                                //Somente será preciso armazenar as posições de cruzamento para a 1° pieceElementID
+                                $propertyName = "point_crossword";
+                                $propertyContext = "word";
+                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+
+                                $newPEPropertyPOintCrossWord = new EditorPieceelementProperty();
+                                $newPEPropertyPOintCrossWord->property_id = $propertyID;
+                                $newPEPropertyPOintCrossWord->piece_element_id = $pieceElementID_w1;
+                                $newPEPropertyPOintCrossWord->value = $crossWord['position1'] . "|" . $crossWord['position2'];
+                                $newPEPropertyPOintCrossWord->save();
+
+                            endforeach;
+
+
+                            break;
+
                         default:
                             throw new Exception("ERROR: Operação inválida.<br>");
                     }
