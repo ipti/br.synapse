@@ -62,7 +62,7 @@ function editor() {
     this.unLinks = [];
     //Lista de peças e suas palavras cruzadas
     this.crossWords = new Array();
-
+    this.crossInfomationSent = false;
     var self = this;
 
     this.setEventsOnEditor = function (newOnEditor) {
@@ -1519,6 +1519,21 @@ function editor() {
                 }
 
             }
+            if (this.isset(loaddata)) {
+                //Se foi chamando durante o load do editor
+                //Carregar a variável crossWords, se for o template PLC
+                if (parent.isset(loaddata['point_crossword'])) {
+                    //Se possui point_crossword, então o template é PLC
+                    var splitPosition = loaddata['point_crossword'].split('|');
+                    var tempJsonArray = {pieceID: "", idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[0]
+                        , word2Group: loaddata['crossword_elementGroup'], idDbElementWord2: loaddata['crossword_elementID'], position2: splitPosition[1], letter: loaddata['text'].substring(splitPosition[0]
+                                , parseInt(splitPosition[0]) + 1 )};
+                            
+                    self.crossWords.push(tempJsonArray);
+                    //Stop Here. Resta simular o focusOut na ordem que forem montados
+                }
+            }
+
         }
 
 
@@ -2055,7 +2070,7 @@ function editor() {
                     ElementID = $(this).attr('id');
                     currentGroup = $(this).closest('div[group]').attr('group');
                     ElementID_BD = $(this).attr('idBD');
-                    
+
                     //get Atributo position
                     elementPosition = $(this).attr('position');
                     var continuar = true;
@@ -2178,14 +2193,14 @@ function editor() {
                                     });
                                     data["showing_letters"] = positionLettersShows;
                                 }
-                                  data["temp_currentGroup"] = currentGroup;
+                                data["temp_currentGroup"] = currentGroup;
                                 parent.saveData(
                                         //Variáveis dados
                                         data,
                                         //Função de sucess do Save Element
                                                 function (response, textStatus, jqXHR) {
-                                                    
-                                                   var currentGroup =  data["temp_currentGroup"];
+
+                                                    var currentGroup = data["temp_currentGroup"];
                                                     if (!parent.isload) {
                                                         $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
                                                     } else {
@@ -2203,7 +2218,7 @@ function editor() {
                                                     //Acrescenta o atributo idDBElement ao Array do CrossWords
                                                     for (var idx in self.crossWords) {
                                                         var crossword = self.crossWords[idx];
-                                                        
+
                                                         if (crossword['pieceID'] == curretPieceID) {
                                                             if (crossword['word1Group'] == currentGroup ||
                                                                     crossword['word2Group'] == currentGroup) {
@@ -2217,23 +2232,25 @@ function editor() {
                                                                     self.crossWords[idx]['word2Group'] = "";
                                                                     self.crossWords[idx]['idDbElementWord2'] = response['ElementID'];
                                                                 }
-                                                                
+
                                                             }
                                                             //Adiciona o novo atributo idDbPiece
-                                                             self.crossWords[idx]['idDbPiece'] = LastPieceID;
+                                                            self.crossWords[idx]['idDbPiece'] = LastPieceID;
                                                         }
                                                     }
 
                                                     if (saveAllElements) {
-                                                        //STOP HERE, verificar 
                                                         //Então salvar os cruzamentos no BD
-                                                        var dataCrossWords = {'op':'save', 'step':'plc', 'crossWords':self.crossWords};
+                                                        var dataCrossWords = {'op': 'save', 'step': 'plc', 'crossWords': self.crossWords};
                                                         parent.saveData(
                                                                 //Variáveis dados
                                                                 dataCrossWords,
                                                                 //Função de sucess do Save crosses
                                                                         function (response, textStatus, jqXHR) {
-                                                                            console.log(response);
+                                                                            $('.savescreen').append('<br><br><p>Salvou Todas as palavras Cruzadas!</p>');
+                                                                            self.crossInfomationSent = true;
+                                                                            //Verificar se acabou as requisições
+                                                                            parent.verify_requestFinish();
                                                                         });
                                                             }
 
@@ -2634,10 +2651,15 @@ function editor() {
                                         (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
                                                 (!parent.COTemplateTypeIn(parent.MTE) ||
                                                         ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
-                            //chama o posEditor
-                            $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
-                            parent.posEditor();
-                            //=======================================================
+
+                            if ((parent.COTemplateTypeIn(parent.PLC) && self.crossInfomationSent) ||
+                                    !parent.COTemplateTypeIn(parent.PLC)) {
+                                //chama o posEditor
+                                $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
+                                parent.posEditor();
+                                //=======================================================
+                            }
+
                         }
                     }
 
@@ -2797,19 +2819,33 @@ function editor() {
                                                                             }
 
                                                                         });
+
+                                                                        //pega o tipo do element
+                                                                        var type = item['type_name'];
+                                                                        //pega o id do element a partir do indice
+                                                                        var elementID = i.slice(1);
+
                                                                         if (parent.isset(item['text']))
                                                                             data['text'] = item['text'];
                                                                         if (parent.isset(item['language']))
                                                                             data['language'] = item['language'];
                                                                         if (parent.isset(item['classification']))
                                                                             data['classification'] = item['classification'];
-                                                                        //pega o tipo do element
-                                                                        var type = item['type_name'];
-                                                                        //pega o id do element a partir do indice
-                                                                        var elementID = i.slice(1);
+                                                                        //Template Palavra Cruzada
+                                                                        if (parent.isset(item['direction']))
+                                                                            data['direction'] = item['direction'];
+                                                                        if (parent.isset(item['showing_letters']))
+                                                                            data['showing_letters'] = item['showing_letters'];
+                                                                        if (parent.isset(item['point_crossword']))
+                                                                            data['point_crossword'] = item['point_crossword'];
+                                                                        if (parent.isset(item['crossword_elementID'])){
+                                                                            data['crossword_elementID'] = item['crossword_elementID'];
+                                                                            data['pieceID'] = pieceID;
+                                                                            data['crossword_elementGroup'] = item['crossword_elementGroup'];
+                                                                        }
+                                                                        
 
                                                                         parent.addElement(elementID, type, data);
-
                                                                     }
                                                                 });
                                                             } else if (i.slice(0, 1) == "E") {

@@ -1155,6 +1155,41 @@ class EditorController extends Controller {
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
                                         }
+                                        //Se for template Caça-Palavra
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('showing_letters', 'word')));
+                                        if (isset($pe_property)) {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['showing_letters'] = $pe_property->value;
+                                        }
+
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('direction', 'word')));
+                                        if (isset($pe_property)) {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['direction'] = $pe_property->value;
+                                        }
+
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('point_crossword', 'word')));
+                                        if (isset($pe_property)) {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['point_crossword'] = $pe_property->value;
+                                        }
+
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('crossword_pieceElementID', 'word')));
+
+                                        if (isset($pe_property)) {
+                                            $peIDCrossed = EditorPieceElement::model()->findByPk($pe_property->value);
+                                            //Buscar o groupo desse Element do PieceElement estar
+                                            $pe_propertyGroupCrossedWord = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $peIDCrossed->id,
+                                                'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
+                                            if (isset($pe_propertyGroupCrossedWord)) {
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossword_elementGroup'] = $pe_propertyGroupCrossedWord->value;
+                                            }
+                                            //=================================================
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossword_elementID'] = $peIDCrossed->element_id;
+                                        }
+                                        //==========================================================
+
                                         $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                         foreach ($ElementProperty as $ep):
                                             if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
