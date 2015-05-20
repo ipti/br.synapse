@@ -227,179 +227,199 @@ function editor() {
      * 
      * @param {integer} id
      * @param {integer} idbd
-     * @returns {void}
+     * @returns {void|false} False se for do template PRE ou TXT e já possuir piece.
      */
     this.addPiece = function (id, idbd) {
         var parent = this;
-        var PieceSetid = id.replace("pie_", "");
-        this.currentPieceSet = PieceSetid;
+        var PieceSetId = id.replace("pie_", "");
+        this.currentPieceSet = PieceSetId;
         //Se for PRE OU TXT
         //E Verificar se possui classe Piece dentro deste PieceSet 
-        if (!((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT))
-                && $('#' + PieceSetid + ' .piece').length)) {
-            //variável para adição do ID do banco, se ele não existir ficará vazio.
-            var plus = "";
-            //se estiver setado o novo id
-            if (this.isset(idbd)) {
-                //adiciona o código na varíavel
-                plus = ' idBD="' + idbd + '" ';
-            }
-
-            //Monta o id do Piece
-            var pieceID = this.currentPieceSet + '_p' + this.countPieces[this.currentPieceSet];
-            //Adiciona na array de contadores
-            this.countElements[pieceID] = 0;
-            //inicia o html do piece
-            var html = '' +
-                    '<li id="' + pieceID + '" class="piece" ' + plus + '>' +
-                    '<button class="del delPiece pull-right"><i class="fa fa-times"></i></button>';
-            //Se o Template for MTE
-            if (parent.COTemplateTypeIn(parent.MTE)) {
-                html += '<div class="tplMulti tpl"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>';
-                //Se o template for PRE
-            } else if (parent.COTemplateTypeIn(parent.PRE)) {
-                html += '<div class="tplPre tpl"></div>';
-            } else if (parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)
-                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
-                html += '<div class="tplMulti tpl"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>' +
-                        "<ul id='" + pieceID + "_query' class='sortable'></ul>" +
-                        "<ul id='" + pieceID + "_query_resp' class='sortable'></ul>";
-            } else if (parent.COTemplateTypeIn(parent.TXT)) {
-                html += '<div class="tplTxt tpl" ></div>';
-            }else if (parent.COTemplateTypeIn(parent.PLC)){
-                 html += '<div class="tplPlc tpl"><div class="elementsPlc"><button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br></div>\n\
-                          <div class="crosswords Table"> </div> </div>';
-            }
-            //finaliza o html
-            html += '</li>';
-            //appenda o html do piece no pieceset
-            $('#' + PieceSetid).append(html);
-
-            //incrementa o contador de piece
-            this.countPieces[this.currentPieceSet] = this.countPieces[this.currentPieceSet] + 1;
-
-            //se template for MTE ou AEL ou DDROP
-            if (parent.COTemplateTypeIn(parent.MTE)
-                    || parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.DDROP)
-                    || parent.COTemplateTypeIn(parent.ONEDDROP)
-                    || parent.COTemplateTypeIn(parent.PLC)) {
-                //adiciona a função do botão addElement
-                $("#" + pieceID + " button.newElement").click(function () {
-                    parent.addElement();
-                });
-                //se template for PRE ou TXT
-            }
-
-            //altera a seleção de piece
-            parent.changePiece($('#' + pieceID));
-            var iddb = $('#' + pieceID).attr('idbd');
-            if (!this.isset(iddb)) {
-                //adiciona um elemento neste piece se for uma Nova Piece
-                parent.addElement();
-            }
-
-            //adiciona a função do botão delPiece
-            $("#" + pieceID + "> button.delPiece").click(function () {
-                parent.delPiece(pieceID);
-            });
+        if((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT))
+                && $('#' + PieceSetId + ' .piece').length){
+            return false;
         }
+        var isDB = this.isset(idbd);
+        
+        //variável para adição do ID do banco, se ele não existir ficará vazio.
+        var plus = isDB ? ' idBD="' + idbd + '" ' : "";
+        
+        //Monta o id do Piece
+        var pieceID = this.currentPieceSet + '_p' + this.countPieces[this.currentPieceSet];
+        //Adiciona na array de contadores
+        this.countElements[pieceID] = 0;
+        
+        /**
+         * Gera código HTML do 
+         * 
+         * @param {string} id
+         * @param {string} plus
+         * @param {string} tplClass
+         * @param {string} content
+         * 
+         * @return {string} HTML da li
+         */
+        var generateLi = function(id, plus, tplClass, content){
+            return '<li id="' + id + '" class="piece" ' + plus + '>' +
+                    '<button class="del delPiece pull-right"><i class="fa fa-times"></i></button>' +
+                    '<div class="'+tplClass+' tpl">'+
+                        content +
+                        
+                    '</div>'+
+                '</li>';
+        };
+        
+        /**
+         * Gera código HTML do botão de NewElement
+         * 
+         * @return {String} HTML do botão.
+         */
+        var generateNewElementButton = function(){
+            return ('<button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT+'</button><br>');
+        };
+        
+        
+        var MTE = parent.COTemplateTypeIn(parent.MTE);
+        var multi = parent.COTemplateTypeIn(parent.MTE) 
+                || parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP);
+        var pre = parent.COTemplateTypeIn(parent.PRE);
+        var txt = parent.COTemplateTypeIn(parent.TXT);
+        var plc = parent.COTemplateTypeIn(parent.PLC);
+        var dig = parent.COTemplateTypeIn(parent.DIG);
+        
+        var tplClass;
+        var content = "";
+        
+        //Se o Template for MTE
+        if (multi) {
+            tplClass = 'tplMulti';
+            content = generateNewElementButton() + 
+                    (!MTE ? "<ul id='" + pieceID + "_query' class='sortable'></ul>" +
+                            "<ul id='" + pieceID + "_query_resp' class='sortable'></ul>" : "");
+            //Se o template for PRE
+        } else if (pre) {
+            tplClass = 'tplPre';
+            content = "";
+        } else if (txt) {
+            tplClass = 'tplTxt';
+            content = "";
+        }else if (parent.COTemplateTypeIn(parent.PLC)){
+            tplClass = 'tplPlc';
+            content = '<div class="elementsPlc">'+generateNewElementButton() + '</div><div class="crosswords Table"></div>';
+        }
+        else if (parent.COTemplateTypeIn(parent.DIG)){
+            tplClass = 'tplDig';
+            var html = '';
+            for (var i = 0; i < 4; i++){
+                html += "<div class='Row'>";
+                for (var j = 0; j < 10; j++){
+                    
+                    //"ABCDEFGHIJKLMNOPQRSTUVWXYZBCDFGHJKLMNPQRSTVWXYZ" italo 
+                    //ABCDEFGHIJKLMNOPQRSTUVWXYZVOW  bruno
+                   
+                    var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW"; 
+                    //ZYXOWVTSRQPNMKJHGFDC
+                    
+              
+                    html += "<div class='Cell' row='"+i+"' col='"+j+"' >" + rndChar.charAt(Math.floor(Math.random() * rndChar.length)) + "</div>";
+                }
+                
+                html += "</div>";
+            }            
+            content = '<div class="elementsDig">'+generateNewElementButton() + '</div><div class="wordsearch Table pull-left">'+html+'</div><div class="words-list"><b>Palavras:</b><ul></ul></div>';
+        }
+        
+        $('#' + PieceSetId).append(generateLi(pieceID, plus, tplClass, content));
+
+        //incrementa o contador de piece
+        this.countPieces[this.currentPieceSet] = this.countPieces[this.currentPieceSet] + 1;
+            
+        
+        if (!(txt || pre)) {
+            //adiciona a função do botão addElement
+            $("#" + pieceID + " button.newElement").click(function () { parent.addElement(); });
+        }
+
+        //altera a seleção de piece
+        parent.changePiece($('#' + pieceID));
+        var iddb = $('#' + pieceID).attr('idbd');
+        if (!this.isset(iddb)) {
+            //adiciona um elemento neste piece se for uma Nova Piece
+            parent.addElement();
+        }
+
+        //adiciona a função do botão delPiece
+        $("#" + pieceID + "> button.delPiece").click(function () {
+            parent.delPiece(pieceID);
+        });
+        
     }
 
     this.addText = function (tagAdd, loaddata, idbd) {
         var parent = this;
-        ID = this.currentPiece + '_e' + this.countElements[this.currentPiece];
-        //Adciona mais um no contador de elementos dessa peça
+        var ID = this.currentPiece + '_e' + this.countElements[this.currentPiece];
+
         this.countElements[this.currentPiece]++;
-
-        //Posição Default !!
-        var position = 0;
-        if (this.isset(idbd)) {
-            var flag = loaddata['flag'];
-            position = loaddata['position'];
-        } else {
-            if (parent.COTemplateTypeIn(parent.AEL)
-                    || parent.COTemplateTypeIn(parent.MTE)
-                    || parent.COTemplateTypeIn(parent.PLC)
-                    || parent.COTemplateTypeIn(parent.DDROP)
-                    || parent.COTemplateTypeIn(parent.ONEDDROP)) {
-                //Sua Posição dentro do Grupo
-                position = $(tagAdd).find(".element").size() + 1;
-            }
-
-        }
-        var checked = "";
-        if (this.isset(flag) && flag == "Acerto") {
-            checked = 'checked="checked"';
-        }
-
-        //variável para adição do texto se ele não existir ficará com a constante LABEL_INITIAL_TEXT. 
-
-        var txt0 = LABEL_INITIAL_TEXT;
-        var initial_text;
-        if (parent.COTemplateTypeIn(parent.TXT)) {
-            initial_text = this.isset(loaddata) ? loaddata['text'] : "";
-        } else {
-            initial_text = this.isset(loaddata) ? loaddata['text'] : txt0;
-        }
-        var plus = 'position="' + position + '" ';
-        //se estiver setado o novo id
-        var str_match = '';
-        //Em todos os templates há um GRUPO de elementos
-        if (this.isset(idbd)) {
-            var match = loaddata['match'];
-            plus += 'idbd="' + idbd + '" updated="' + 0 + '"  match="' + match + '"';
-        } else {
-            var match = $(tagAdd).attr('group');
-            plus += 'match="' + match + '"';
-        }
-
-
-        //=============  Edit or TextArea =============
-        var input_text = "";
-        if (parent.COTemplateTypeIn(parent.TXT)) {
-            input_text += "<textarea name='" + ID + "_flag' class='TXT' id='" + ID + "_flag' style='width:100%' >" + initial_text + "</textarea>";
-
-        } else {
-            input_text += '<font class="editable" id="' + ID + '_flag">' + initial_text + '</font>';
-        }
-
-        var html;
-        if (parent.COTemplateTypeIn(parent.AEL)
-                || parent.COTemplateTypeIn(parent.DDROP)
-                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
-            html = '<div id="' + ID + '_text" class="text element moptions"' + plus + '>' + input_text;
-        } else if (parent.COTemplateTypeIn(parent.MTE)  || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.PRE)
-                || parent.COTemplateTypeIn(parent.TXT)) {
-            html = '<div id="' + ID + '_text" class="text element"' + plus + '>' + input_text;
-        }
-
-        if (parent.COTemplateTypeIn(parent.MTE)
+        
+        var isLoaded = this.isset(loaddata);
+        var isDB = this.isset(idbd);
+        var FLAG_ACERTO = "Acerto";
+        
+        var haveDeleteButton = parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.PLC)
+                || parent.COTemplateTypeIn(parent.DIG)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
-                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
-            //Se for MTE ou (AEL e For uma PERGUNTA)
-            html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>'
-        }
+                || parent.COTemplateTypeIn(parent.ONEDDROP);
+        var havemOptions = parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP);
+        var isTextArea = parent.COTemplateTypeIn(parent.TXT);
 
-        html += '</div>';
+        var nextPosition = (parent.COTemplateTypeIn(parent.AEL)
+                || parent.COTemplateTypeIn(parent.MTE)
+                || parent.COTemplateTypeIn(parent.PLC)
+                || parent.COTemplateTypeIn(parent.DIG)
+                || parent.COTemplateTypeIn(parent.DDROP)
+                || parent.COTemplateTypeIn(parent.ONEDDROP)) ? $(tagAdd).find(".element").size() + 1 : 0;
+            
+        var flag = (isDB && isLoaded) ? loaddata['flag'] : "";
+        var position = (isDB && isLoaded) ? loaddata['position'] : nextPosition;
+         
+        var checked = isDB && isLoaded && flag === FLAG_ACERTO ? ' checked="checked"' : "";
+        var initial_text = isLoaded? loaddata['text'] :(isTextArea? "":LABEL_INITIAL_TEXT);
+        var match = isDB ? loaddata['match'] : $(tagAdd).attr('group');
+        var plusDB = isDB ? '" idbd="' + idbd + '" updated="' + 0 + '"' : '';
+        var plus = 'position="' + position + ' match="' + match + '" '+plusDB;
+        
+        var addDeleteButton = function(have) {return have ? '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' : '';};
+        var addTextArea     = function(id, text) {return "<textarea name='" + id + "_flag' class='TXT' id='" + id + "_flag' style='width:100%' >" + text + "</textarea>";};
+        var addFontEditable = function(id, text) {return '<font class="editable" id="' + id + '_flag">' + text + '</font>';};
+        var addDiv          = function(id, classes, plus, input, exclude) {return '<div id="' + id + '_text" class="'+ classes +'" ' + plus + '>' + input + exclude + '</div>';};
+
+        var classes = havemOptions? "text element moptions" : "text element";
+        var input = isTextArea ? addTextArea(ID, initial_text) : addFontEditable(ID, initial_text);
+        var del = addDeleteButton(haveDeleteButton);
+        
         if (parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
-                || parent.COTemplateTypeIn(parent.ONEDDROP)) {
-            $(tagAdd).append(html);
-        } else if (parent.COTemplateTypeIn(parent.MTE)  || parent.COTemplateTypeIn(parent.PLC)) {
-            $(tagAdd).find('span:eq(0)').append(html);
-        } else if (parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) {
-            $(tagAdd).append(html);
+                || parent.COTemplateTypeIn(parent.ONEDDROP)
+                || parent.COTemplateTypeIn(parent.PRE) 
+                || parent.COTemplateTypeIn(parent.TXT)) {
+            $(tagAdd).append(addDiv(ID, classes, plus, input, del));
+        } else if (parent.COTemplateTypeIn(parent.MTE)  
+                || parent.COTemplateTypeIn(parent.PLC) 
+                || parent.COTemplateTypeIn(parent.DIG)) {
+            $(tagAdd).find('span:eq(0)').append(addDiv(ID, classes, plus, input, del));
         }
 
         var text_element = "#" + ID;
         var text_div = "#" + ID + "_text";
 
-        if (parent.COTemplateTypeIn(parent.TXT)) {
-            //Para os textarea!      
+        if (isTextArea) {
+            //Para os textarea!
             tinymce.init({
                 selector: "textarea#" + ID + "_flag"
             });
@@ -422,9 +442,6 @@ function editor() {
                 parent.delElement(id_const + "_text");
             });
             $(editable).editable(function (value, settings) {
-                //console.log(this);
-                //console.log(value);
-                //console.log(settings);
                 return(value);
             }, {//save function(or page)
                 submitdata: {
@@ -451,7 +468,7 @@ function editor() {
                 //adiciona a função de foco ao input
                 $(input).on("focus", function () {
                     //se o valor for igual ao initial_text
-                    if ($(input).val() == initial_text && initial_text == txt0) {
+                    if ($(input).val() == initial_text && initial_text == LABEL_INITIAL_TEXT) {
                         //remove o texto
                         $(input).val("");
                     }
@@ -461,7 +478,7 @@ function editor() {
                     if ($(input).val() == "") {
                         //adiciona o texto initial_text
                         $(input).val(initial_text);
-                    } else if (parent.COTemplateTypeIn(parent.PLC)) {
+                    } else if (parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
                         //Converte para maiúsculas se o template for do tipo PLC
                         $(input).val($(input).val().toUpperCase());
                     }
@@ -494,7 +511,7 @@ function editor() {
                             //função sucess
                             function (response, textStatus, jqXHR) {
                                 parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
-                                $('.savescreen').append('<br><p> Objeto PRE Deletado!...</p>');
+                                $('.savescreen').append('<br><p>Objeto PRE Deletado!...</p>');
                                 //Verificar se acabou as requisições
                                 parent.verify_requestFinish();
                             });
@@ -513,7 +530,7 @@ function editor() {
     //Verificar se foi Alterado em relação a do DB
     this.textChanged = function (initial_text, value_txt, text_element, text_div) {
         value_txt = (this.COTemplateTypeIn(this.TXT)) ? value_txt : $(value_txt).text();
-        if (initial_text != value_txt) {
+        if (initial_text !== value_txt) {
             $(text_element).attr('updated', 1); // Fora Alterado!
             $(text_div).attr('updated', 1);
         } else {
@@ -563,6 +580,7 @@ function editor() {
             if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.MTE)
                     || parent.COTemplateTypeIn(parent.PLC)
+                    || parent.COTemplateTypeIn(parent.DIG)
                     || parent.COTemplateTypeIn(parent.DDROP)
                     || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 //Sua Posição dentro do Grupo
@@ -635,7 +653,7 @@ function editor() {
             html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element">'
         }
 
-        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
+        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
             html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
         }
         else {
@@ -656,7 +674,7 @@ function editor() {
         if (isElementPieceSet || isElementCobject) {
             $(tagAdd).append(html);
         } else {
-            if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
+            if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
                 $(tagAdd).find('span:eq(0)').append(html);
             } else if (parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.DDROP)
@@ -866,7 +884,7 @@ function editor() {
 
         var elementID = this.currentPiece + '_e' + this.countElements[this.currentPiece];
 
-        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.TXT) ||
+        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG) || parent.COTemplateTypeIn(parent.TXT) ||
                 parent.COTemplateTypeIn(parent.PRE)) {
             //Agrupando Elementos
             var group;
@@ -893,27 +911,31 @@ function editor() {
             var html = $('<div group="' + group + '"></div>');
         }
 
-        if (parent.MTE.indexOf(parent.COtemplateType) != -1 || parent.COTemplateTypeIn(parent.PLC)) {
+        if (parent.MTE.indexOf(parent.COtemplateType) != -1 || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
             var newDivMatch = false;
             //Verificar se já existe essa div group 
             if ($("#" + parent.currentPiece + " div[group=" + group + "]").length == 0) {
                 //Não existe, então cria um novo
                 newDivMatch = true;
                 var htmlDefault = '<div group="' + group + '">';
-                var html = htmlDefault + '<span>' +
+                var html = htmlDefault + '<span group="' + group + '">' +
                         '<div>';
 
                 html += '' +
                         '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                         '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                         '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
-                        '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
+                        '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
+                if(parent.COTemplateTypeIn(parent.DIG)){
+                    html += '<button class="pull-right changeOrientation" match="' + group +'" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
+                }
+                html +=
                         '<br>' +
                         '<br>' +
                         '<br>' +
                         '<label>' +
                         '</div>';
-                if(!parent.COTemplateTypeIn(parent.PLC)){
+                if(!(parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG))){
                     html += '<input type="checkbox" class="correct" match="' + group +
                             '" value="Correct"' + checked + '/>' + LABEL_CORRECT;
                 }
@@ -966,7 +988,7 @@ function editor() {
                         //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
                         html = '<li>' +
                                 htmlDefault +
-                                '<spam>(' + group + ')</spam>' +
+                                '<spam group="' + group + '">(' + group + ')</spam>' +
                                 '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                                 '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                                 '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
@@ -997,7 +1019,7 @@ function editor() {
                     }
 
                     var html2 = '<li>' + htmlDefault +
-                            '<spam>(' + group + ')</spam>' +
+                            '<spam group="' + group + '">(' + group + ')</spam>' +
                             '<button class="insertImage" ><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                             '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                             '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>';
@@ -1132,6 +1154,34 @@ function editor() {
                 }
 
             }
+        } else if (parent.COTemplateTypeIn(parent.DIG)){
+             if (newDivMatch) {
+                html += '</span></div>';
+
+                if (self.isset(loaddata)) {
+                    var lastGroupASK;
+                    //E um ask
+                    lastGroupASK = $('#' + parent.currentPiece + " > div.tplDig").find('div[group]:last');
+                    var continues = true;
+                    do {
+
+                        if (lastGroupASK.size() == 0) {
+                            $('#' + parent.currentPiece + " > div.tplDig > br").after(html);
+                            continues = false;
+                        } else if (group > lastGroupASK.attr('group')) {
+                            lastGroupASK.after(html);
+                            continues = false;
+                        } else {
+                            //lastList agora e um grupo anterior
+                            lastGroupASK = lastGroupASK.prev();
+                        }
+                    } while (continues);
+
+                } else {
+                    $('#' + parent.currentPiece + " > div.tplDig .elementsDig").append(html);
+                }
+
+            }
         }
         
         
@@ -1139,6 +1189,7 @@ function editor() {
         var tagAdd = "";
         if (parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.PLC)
+                || parent.COTemplateTypeIn(parent.DIG)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1193,7 +1244,7 @@ function editor() {
         if ((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1))
                 ) {
             //É MTE OU PLC
-            if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
+            if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
                 var buttonDelID = "#" + parent.currentPiece + " div[group='" + group + "'] > span > div > button.delElement:eq(0)";
             }
 
@@ -1216,7 +1267,8 @@ function editor() {
         var textoID = "#" + elementID + "_text";
         var imageID = "#" + elementID + "_image";
         if (parent.COTemplateTypeIn(parent.MTE)
-            || parent.COTemplateTypeIn(parent.PLC)
+                || parent.COTemplateTypeIn(parent.PLC)
+                || parent.COTemplateTypeIn(parent.DIG)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1258,6 +1310,7 @@ function editor() {
 
             if (parent.COTemplateTypeIn(parent.MTE)
                     || parent.COTemplateTypeIn(parent.PLC)
+                    || parent.COTemplateTypeIn(parent.DIG)
                     || parent.COTemplateTypeIn(parent.AEL)
                     || parent.COTemplateTypeIn(parent.DDROP)
                     || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1267,7 +1320,7 @@ function editor() {
                                 || parent.COTemplateTypeIn(parent.DDROP)
                                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                             parent.delElement($(this).closest('div[group]').closest('li'));
-                        } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
+                        } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
                             parent.delElement($(this).closest('div[group]'));
                         }
 

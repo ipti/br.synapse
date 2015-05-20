@@ -633,6 +633,12 @@ h5{
     width: 300px; 
     height: 30px;
 }
+.wordsearch{
+    margin: 0 10px 0 10px;
+    height:88px;
+    width:220px;
+    text-align: center;
+}
 .Table{
     display: table;
 }
@@ -643,6 +649,14 @@ h5{
     display: table-cell;
     border: solid;
     border-width: thin;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 2px 5px 2px 5px;
+}
+.words-list{
+    display: inline-block;
+}
+.words-list ul{
+    list-style-type: disc;
+}
+.words-list li{
+    margin-left: 20px;
 }

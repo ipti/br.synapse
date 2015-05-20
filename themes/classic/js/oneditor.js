@@ -186,7 +186,118 @@ $(function () {
     $(document).on("change", '.input_element', function () {
         newEditor.imageChanged($(this));
     });
+    
+    
+    $(document).on('click','.changeOrientation', function(){
+        if($(this).attr('orientation') === "V"){
+            $(this).find(".fa").removeClass('fa-arrows-v');
+            $(this).find(".fa").addClass('fa-arrows-h');
+            $(this).attr('orientation','H');
+        }else{
+            $(this).find(".fa").removeClass('fa-arrows-h');
+            $(this).find(".fa").addClass('fa-arrows-v');
+            $(this).attr('orientation','V');
+        }
+    });
+    
+    
+    
+  $(document).on("click", ".elementsDig div[group]", function () {
+        $("span.active").removeClass('active');
+        $(this).children("span").addClass('active');
+  });
 
+
+  $(document).on("click", ".wordsearch  div.Cell", function () {
+        var row = $(this).attr("row");
+        var col = $(this).attr("col");
+        var word = $("span.active").find('.element font').text();
+        var orientation = $("span.active").find('button.changeOrientation').attr('orientation');
+        var maxW = 10;
+        var maxH = 4;
+        
+        if(word !== "Clique para Alterar..." && word !== "Click to edit" &&
+            word.replace(/^\s+|\s+$/g, "") !== "UpdateCalcel" &&
+            word.replace(/^\s+|\s+$/g, "") !== "" &&
+            typeof $(this).attr('selected') === "undefined"){
+            
+            if (orientation === "H"){
+                if (parseInt(col) + word.length <= maxW){
+                    var currentCell;
+                    var checkWord = "";
+                    for (var i = 0; i < word.length; i++){
+                        currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
+                        if (currentCell.attr("word")){
+                            if (currentCell.attr("orientation") === "V"){
+                                if (currentCell.text() === word[i]){
+                                    checkWord += word[i];                                                                        
+                                } else {
+                                    checkWord += "_";
+                                }
+                            }
+                        } else {
+                            checkWord += word[i];                            
+                        }
+                    }
+                    if (checkWord === word){
+                        var wordExists = false;
+                        $(".words-list > ul li").each(function(){
+                            if ($(this).text().toUpperCase() == word){
+                                wordExists = true;
+                                alert("A palavra " + word + " já existe no diagrama!");
+                            }
+                        });
+                        if (wordExists === false){
+                            for (var i = 0; i < word.length; i++){
+                                currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
+                                currentCell.text(word[i]).css("font-weight", "bold");
+                                currentCell.attr({word: "true", orientation: "H"});
+                            }
+                            word = word.charAt(0) + word.slice(1).toLowerCase();
+                            $(".words-list ul").append('<li>' + word + '</li>');
+                        }
+                    }
+                }
+            } else if (orientation === "V"){
+                if (parseInt(row) + word.length <= maxH){
+                    var currentCell;
+                    var checkWord = "";
+                    for (var i = 0; i < word.length; i++){
+                        currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
+                        if (currentCell.attr("word")){
+                            if (currentCell.attr("orientation") === "H"){
+                                if (currentCell.text() === word[i]){
+                                    checkWord += word[i];
+                                } else {
+                                    checkWord += "_";
+                                }
+                            }
+                        } else {
+                            checkWord += word[i];
+                        }
+                    }
+                    if (checkWord === word){
+                        var wordExists = false;
+                        $(".words-list > ul li").each(function(){
+                            if ($(this).text().toUpperCase() === word){
+                                wordExists = true;
+                                alert("A palavra " + word + " já existe no diagrama!");
+                            }
+                        });
+                        if (wordExists == false){
+                            for (var i = 0; i < word.length; i++){
+                                currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
+                                currentCell.text(word[i]).css("font-weight", "bold");
+                                currentCell.attr({word: "true", orientation: "V"});
+                            }
+                            word = word.charAt(0) + word.slice(1).toLowerCase();
+                            $(".words-list ul").append('<li>' + word + '</li>');
+                        }
+                    }
+                }
+            }
+        }
+  });
 
     //Template TPLC
 
