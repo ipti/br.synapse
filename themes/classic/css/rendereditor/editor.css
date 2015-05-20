@@ -169,7 +169,7 @@ div.PieceSet button:hover{
     width: 60px;
     height: 60px;
     text-align: center;
-    
+
 }
 div.tpl button.newElement{
     position: absolute;
@@ -401,6 +401,8 @@ body{
 }
 .element img{
     margin:0 auto;
+    width:150px; 
+    height: 150px
 }
 .options .element font{
     margin:0 14px;
@@ -651,6 +653,24 @@ h5{
     border-width: thin;
     padding: 2px 5px 2px 5px;
 }
+
+.Cell[groups]{
+    border: 1px solid black; 
+    cursor: pointer;
+}
+
+.elementsPlc{
+    width:300px;
+}
+.tplPlc .crosswords {
+    text-align: center;
+}
+.tplPlc .crosswords div {
+    font-weight: bold; 
+    padding: 7px; 
+    width: 10px;
+}
+
 .words-list{
     display: inline-block;
 }
