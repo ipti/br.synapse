@@ -526,6 +526,7 @@ function editor() {
                     }
                 });
                 if (mayDeleteRow) {
+                    console.log("MAYDELETEROW");
                     //Então Exlcui a Linha e continua procurando outras, se existir pra deletar
                     thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().remove();
                 } else {
