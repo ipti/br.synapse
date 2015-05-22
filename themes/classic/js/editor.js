@@ -1258,9 +1258,9 @@ function editor() {
         //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
         var parent = this;
 
-        //Se o template for PLC e o load que chamou o addElement, só mostra a opção de excluir se for o último grupo
+        //Se o template for PLC, só mostra a opção de excluir se for o último grupo
         //E desabilita o botão new Element da peça corrente
-        if (parent.COTemplateTypeIn(parent.PLC) && parent.isset(idbd)) {
+        if (parent.COTemplateTypeIn(parent.PLC)) {
             var btnNewElementClicked = $('.piece#' + parent.currentPiece + ' .newElement');
             $(btnNewElementClicked).attr('disabled', 'true');
             $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .del').hide();
@@ -3158,6 +3158,6 @@ function editor() {
                         }
                         return false;
                     };
-                    
-                    
+
+
                 }
