@@ -300,10 +300,11 @@ function onEditor(newEditor) {
         }
   });
 
-    //Template TPLC
+      
+       //Template TPLC
 
     //Função do click na Célula do Template PLC
-    this.eventClickCellPLC = function (clickedCell) {
+    this.eventClickCellPLC = function (clickedCell, isload) {
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
         var groupWordOfClickedLetter = $(clickedCell).attr('groups');
         var thisFunc = this;
@@ -484,7 +485,7 @@ function onEditor(newEditor) {
                                 break;
                             }
                         }
-                        
+
                         //Percorre a lista de letras que será posta Depois
                         var tempIndexCurrentColunm = indexCurrentColunm;
                         for (var idx in letterAfterMergePosition) {
@@ -584,25 +585,30 @@ function onEditor(newEditor) {
                         }
                         //Retira a marcação da última palavra clicada
                         $(clickedCell).closest('.tplPlc').children('.elementsPlc').find('div[group][lastSelected]').removeAttr('lastSelected');
-
-                        //Registrar no Editor qual a peça, element e posicao do texto que será curzado com outro
-                        thisFunc.tempPositionThisCellWordMerge = -1;
-                        $(clickedCell).attr('currentClickedCell', 'true');
-
-                        $(clickedCell).closest(".crosswords").find("div.Cell[groups*='" + groupThisCell + "']").each(function (index) {
-                            if (typeof $(this).attr('currentClickedCell') != 'undefined') {
-                                //Econtrou a célula clicada, atual
-                                thisFunc.tempPositionThisCellWordMerge = index;
-                                $(clickedCell).removeAttr('currentClickedCell');
-                            }
-                        });
-
-                        var tempJsonArray = {pieceID: currentPieceId, word1Group: groupThisCell.split('g')[1], position1: thisFunc.tempPositionThisCellWordMerge
-                            , word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
-                        newEditor.crossWords.push(tempJsonArray);
                         
-                        //Deleção do atributo temporário
-                        delete thisFunc.tempPositionThisCellWordMerge;
+                        //Se for load o crossWord já possui essas informações
+                        if (!isload) {
+                            //Registrar no Editor qual a peça, element e posicao do texto que será curzado com outro
+                            thisFunc.tempPositionThisCellWordMerge = -1;
+                            $(clickedCell).attr('currentClickedCell', 'true');
+
+                            $(clickedCell).closest(".crosswords").find("div.Cell[groups*='" + groupThisCell + "']").each(function (index) {
+                                if (typeof $(this).attr('currentClickedCell') != 'undefined') {
+                                    //Econtrou a célula clicada, atual
+                                    thisFunc.tempPositionThisCellWordMerge = index;
+                                    $(clickedCell).removeAttr('currentClickedCell');
+                                }
+                            });
+
+                            var tempJsonArray = {pieceID: currentPieceId, word1Group: groupThisCell.split('g')[1], position1: thisFunc.tempPositionThisCellWordMerge
+                                , word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
+                            newEditor.crossWords.push(tempJsonArray);
+
+                            //Deleção do atributo temporário
+                            delete thisFunc.tempPositionThisCellWordMerge;
+                        }
+
+
                         //Por fim desabilita o botão, novo Elemento
                         $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
                     }
@@ -611,12 +617,12 @@ function onEditor(newEditor) {
                 }
             } else {
                 //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
-                if($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)'){
+                if ($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)') {
                     $(clickedCell).attr('isShow', 'true');
-                    $(clickedCell).css('background-color', 'yellowgreen');  
-                }else{
+                    $(clickedCell).css('background-color', 'yellowgreen');
+                } else {
                     $(clickedCell).removeAttr('isShow');
-                    $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');  
+                    $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');
                 }
             }
         } else {
@@ -624,8 +630,8 @@ function onEditor(newEditor) {
         }
     }
 
-    $(document).on("click", ".crosswords  div.Cell[groups]", function(){
-        self.eventClickCellPLC(this);
+      $(document).on("click", ".crosswords  div.Cell[groups]", function () {
+        self.eventClickCellPLC(this, false);
     });
 
 
