@@ -242,20 +242,20 @@ function editor() {
         this.currentPieceSet = PieceSetId;
         //Se for PRE OU TXT
         //E Verificar se possui classe Piece dentro deste PieceSet 
-        if((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT))
-                && $('#' + PieceSetId + ' .piece').length){
+        if ((parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT))
+                && $('#' + PieceSetId + ' .piece').length) {
             return false;
         }
         var isDB = this.isset(idbd);
-        
+
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = isDB ? ' idBD="' + idbd + '" ' : "";
-        
+
         //Monta o id do Piece
         var pieceID = this.currentPieceSet + '_p' + this.countPieces[this.currentPieceSet];
         //Adiciona na array de contadores
         this.countElements[pieceID] = 0;
-        
+
         /**
          * Gera código HTML do 
          * 
@@ -266,28 +266,27 @@ function editor() {
          * 
          * @return {string} HTML da li
          */
-        var generateLi = function(id, plus, tplClass, content){
+        var generateLi = function (id, plus, tplClass, content) {
             return '<li id="' + id + '" class="piece" ' + plus + '>' +
                     '<button class="del delPiece pull-right"><i class="fa fa-times"></i></button>' +
-                    '<div class="'+tplClass+' tpl">'+
-                        content +
-                        
-                    '</div>'+
-                '</li>';
+                    '<div class="' + tplClass + ' tpl">' +
+                    content +
+                    '</div>' +
+                    '</li>';
         };
-        
+
         /**
          * Gera código HTML do botão de NewElement
          * 
          * @return {String} HTML do botão.
          */
-        var generateNewElementButton = function(){
-            return ('<button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT+'</button><br>');
+        var generateNewElementButton = function () {
+            return ('<button class="newElement"><i class="fa fa-cube fa-2x "></i><br>' + LABEL_ADD_ELEMENT + '</button><br>');
         };
-        
-        
+
+
         var MTE = parent.COTemplateTypeIn(parent.MTE);
-        var multi = parent.COTemplateTypeIn(parent.MTE) 
+        var multi = parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP);
@@ -295,14 +294,14 @@ function editor() {
         var txt = parent.COTemplateTypeIn(parent.TXT);
         var plc = parent.COTemplateTypeIn(parent.PLC);
         var dig = parent.COTemplateTypeIn(parent.DIG);
-        
+
         var tplClass;
         var content = "";
-        
+
         //Se o Template for MTE
         if (multi) {
             tplClass = 'tplMulti';
-            content = generateNewElementButton() + 
+            content = generateNewElementButton() +
                     (!MTE ? "<ul id='" + pieceID + "_query' class='sortable'></ul>" +
                             "<ul id='" + pieceID + "_query_resp' class='sortable'></ul>" : "");
             //Se o template for PRE
@@ -312,41 +311,43 @@ function editor() {
         } else if (txt) {
             tplClass = 'tplTxt';
             content = "";
-        }else if (parent.COTemplateTypeIn(parent.PLC)){
+        } else if (parent.COTemplateTypeIn(parent.PLC)) {
             tplClass = 'tplPlc';
-            content = '<div class="elementsPlc">'+generateNewElementButton() + '</div><div class="crosswords Table"></div>';
+            content = '<div class="elementsPlc">' + generateNewElementButton() + '</div><div class="crosswords Table"></div>';
         }
-        else if (parent.COTemplateTypeIn(parent.DIG)){
+        else if (parent.COTemplateTypeIn(parent.DIG)) {
             tplClass = 'tplDig';
             var html = '';
-            for (var i = 0; i < 4; i++){
+            for (var i = 0; i < 4; i++) {
                 html += "<div class='Row'>";
-                for (var j = 0; j < 10; j++){
-                    
+                for (var j = 0; j < 10; j++) {
+
                     //"ABCDEFGHIJKLMNOPQRSTUVWXYZBCDFGHJKLMNPQRSTVWXYZ" italo 
                     //ABCDEFGHIJKLMNOPQRSTUVWXYZVOW  bruno
-                   
-                    var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW"; 
+
+                    var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW";
                     //ZYXOWVTSRQPNMKJHGFDC
-                    
-              
-                    html += "<div class='Cell' row='"+i+"' col='"+j+"' >" + rndChar.charAt(Math.floor(Math.random() * rndChar.length)) + "</div>";
+
+
+                    html += "<div class='Cell' row='" + i + "' col='" + j + "' >" + rndChar.charAt(Math.floor(Math.random() * rndChar.length)) + "</div>";
                 }
-                
+
                 html += "</div>";
-            }            
-            content = '<div class="elementsDig">'+generateNewElementButton() + '</div><div class="wordsearch Table pull-left">'+html+'</div><div class="words-list"><b>Palavras:</b><ul></ul></div>';
+            }
+            content = '<div class="elementsDig">' + generateNewElementButton() + '</div><div class="wordsearch Table pull-left">' + html + '</div><div class="words-list"><b>Palavras:</b><ul></ul></div>';
         }
-        
+
         $('#' + PieceSetId).append(generateLi(pieceID, plus, tplClass, content));
 
         //incrementa o contador de piece
         this.countPieces[this.currentPieceSet] = this.countPieces[this.currentPieceSet] + 1;
-            
-        
+
+
         if (!(txt || pre)) {
             //adiciona a função do botão addElement
-            $("#" + pieceID + " button.newElement").click(function () { parent.addElement(); });
+            $("#" + pieceID + " button.newElement").click(function () {
+                parent.addElement();
+            });
         }
 
         //altera a seleção de piece
@@ -361,8 +362,10 @@ function editor() {
         $("#" + pieceID + "> button.delPiece").click(function () {
             parent.delPiece(pieceID);
         });
-        
+
     }
+
+
 
 
     this.canEditThisWordCross = function (pieceID, group) {
@@ -551,17 +554,16 @@ function editor() {
     }
 
 
-
     this.addText = function (tagAdd, loaddata, idbd) {
         var parent = this;
         var ID = this.currentPiece + '_e' + this.countElements[this.currentPiece];
 
         this.countElements[this.currentPiece]++;
-        
+
         var isLoaded = this.isset(loaddata);
         var isDB = this.isset(idbd);
         var FLAG_ACERTO = "Acerto";
-        
+
         var haveDeleteButton = parent.COTemplateTypeIn(parent.MTE)
                 || parent.COTemplateTypeIn(parent.PLC)
                 || parent.COTemplateTypeIn(parent.DIG)
@@ -579,33 +581,41 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DIG)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) ? $(tagAdd).find(".element").size() + 1 : 0;
-            
+
         var flag = (isDB && isLoaded) ? loaddata['flag'] : "";
         var position = (isDB && isLoaded) ? loaddata['position'] : nextPosition;
-         
+
         var checked = isDB && isLoaded && flag === FLAG_ACERTO ? ' checked="checked"' : "";
-        var initial_text = isLoaded? loaddata['text'] :(isTextArea? "":LABEL_INITIAL_TEXT);
+        var initial_text = isLoaded ? loaddata['text'] : (isTextArea ? "" : LABEL_INITIAL_TEXT);
         var match = isDB ? loaddata['match'] : $(tagAdd).attr('group');
         var plusDB = isDB ? '" idbd="' + idbd + '" updated="' + 0 + '"' : '';
-        var plus = 'position="' + position + ' match="' + match + '" '+plusDB;
-        
-        var addDeleteButton = function(have) {return have ? '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' : '';};
-        var addTextArea     = function(id, text) {return "<textarea name='" + id + "_flag' class='TXT' id='" + id + "_flag' style='width:100%' >" + text + "</textarea>";};
-        var addFontEditable = function(id, text) {return '<font class="editable" id="' + id + '_flag">' + text + '</font>';};
-        var addDiv          = function(id, classes, plus, input, exclude) {return '<div id="' + id + '_text" class="'+ classes +'" ' + plus + '>' + input + exclude + '</div>';};
+        var plus = 'position="' + position + ' match="' + match + '" ' + plusDB;
 
-        var classes = havemOptions? "text element moptions" : "text element";
+        var addDeleteButton = function (have) {
+            return have ? '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' : '';
+        };
+        var addTextArea = function (id, text) {
+            return "<textarea name='" + id + "_flag' class='TXT' id='" + id + "_flag' style='width:100%' >" + text + "</textarea>";
+        };
+        var addFontEditable = function (id, text) {
+            return '<font class="editable" id="' + id + '_flag">' + text + '</font>';
+        };
+        var addDiv = function (id, classes, plus, input, exclude) {
+            return '<div id="' + id + '_text" class="' + classes + '" ' + plus + '>' + input + exclude + '</div>';
+        };
+
+        var classes = havemOptions ? "text element moptions" : "text element";
         var input = isTextArea ? addTextArea(ID, initial_text) : addFontEditable(ID, initial_text);
         var del = addDeleteButton(haveDeleteButton);
-        
+
         if (parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)
-                || parent.COTemplateTypeIn(parent.PRE) 
+                || parent.COTemplateTypeIn(parent.PRE)
                 || parent.COTemplateTypeIn(parent.TXT)) {
             $(tagAdd).append(addDiv(ID, classes, plus, input, del));
-        } else if (parent.COTemplateTypeIn(parent.MTE)  
-                || parent.COTemplateTypeIn(parent.PLC) 
+        } else if (parent.COTemplateTypeIn(parent.MTE)
+                || parent.COTemplateTypeIn(parent.PLC)
                 || parent.COTemplateTypeIn(parent.DIG)) {
             $(tagAdd).find('span:eq(0)').append(addDiv(ID, classes, plus, input, del));
         }
@@ -1247,6 +1257,16 @@ function editor() {
     this.addElement = function (idbd, type, loaddata) {
         //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
         var parent = this;
+
+        //Se o template for PLC e o load que chamou o addElement, só mostra a opção de excluir se for o último grupo
+        //E desabilita o botão new Element da peça corrente
+        if (parent.COTemplateTypeIn(parent.PLC) && parent.isset(idbd)) {
+            var btnNewElementClicked = $('.piece#' + parent.currentPiece + ' .newElement');
+            $(btnNewElementClicked).attr('disabled', 'true');
+            $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .del').hide();
+        }
+
+
         //variável para adição do ID do banco, se ele não existir ficará vazio.
         var plus = "";
 
@@ -1307,8 +1327,8 @@ function editor() {
                         '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                         '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
                         '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
-                if(parent.COTemplateTypeIn(parent.DIG)){
-                    html += '<button class="pull-right changeOrientation" match="' + group +'" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
+                if (parent.COTemplateTypeIn(parent.DIG)) {
+                    html += '<button class="pull-right changeOrientation" match="' + group + '" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
                 }
                 html +=
                         '<br>' +
@@ -1316,7 +1336,7 @@ function editor() {
                         '<br>' +
                         '<label>' +
                         '</div>';
-                if(!(parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG))){
+                if (!(parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG))) {
                     html += '<input type="checkbox" class="correct" match="' + group +
                             '" value="Correct"' + checked + '/>' + LABEL_CORRECT;
                 }
@@ -1519,7 +1539,7 @@ function editor() {
                     do {
 
                         if (lastGroupASK.size() == 0) {
-                            $('#' + parent.currentPiece + " > div.tplPlc .elementsPlc").after(html);
+                            $('#' + parent.currentPiece + " > div.tplPlc .elementsPlc").append(html);
                             continues = false;
                         } else if (group > lastGroupASK.attr('group')) {
                             lastGroupASK.after(html);
@@ -1543,15 +1563,15 @@ function editor() {
                     var splitPosition = loaddata['point_crossword'].split('|');
                     var tempJsonArray = {pieceID: "", idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[0]
                         , word2Group: loaddata['crossword_elementGroup'], idDbElementWord2: loaddata['crossword_elementID'], position2: splitPosition[1], letter: loaddata['text'].substring(splitPosition[0]
-                                , parseInt(splitPosition[0]) + 1 )};
-                            
+                                , parseInt(splitPosition[0]) + 1)};
+
                     self.crossWords.push(tempJsonArray);
                     //Stop Here. Resta simular o focusOut na ordem que forem montados
                 }
             }
 
-        } else if (parent.COTemplateTypeIn(parent.DIG)){
-             if (newDivMatch) {
+        } else if (parent.COTemplateTypeIn(parent.DIG)) {
+            if (newDivMatch) {
                 html += '</span></div>';
 
                 if (self.isset(loaddata)) {
@@ -1619,6 +1639,59 @@ function editor() {
                     break;
                 default:
             }
+
+            //Se estiver num load de uma template PLC, então Simula o onfocus pra montar o crossword na tela
+            if (parent.COTemplateTypeIn(parent.PLC)) {
+                //Simulação do click e da perda do focus no input text
+                tagAdd.find('.editable').trigger('click');
+                tagAdd.find('.element input').focusout();
+
+
+                var hCrossWord = tagAdd.closest('.tpl').find('.crosswords');
+                //Verificar se possui um cruzamento
+                //Se for texto a ser posto no crossword a partir do segundo
+                if (tagAdd.closest('.elementsPlc').find('div[group]').size() > 1) {
+                    //Verificar qual a célula de cruzamento
+                    var positionCellClick = -1;
+                    var groupCellClick = -1;
+                    for (var idx in self.crossWords) {
+                        var crossWord = self.crossWords[idx];
+                        //Como é carregado no BDm então existe ID do BD único para cada elemento txt
+                        if (crossWord['idDbElementWord1'] == idbd || crossWord['idDbElementWord2'] == idbd) {
+                            //Encontrou
+                            if (crossWord['idDbElementWord1'] == idbd) {
+                                //Então a posição que esse elemento cruza é position1
+                                //Logo a posisão que precisa ser clicada na outra palavra é a position2
+                                positionCellClick = crossWord['position2'];
+                                groupCellClick = crossWord['word2Group'];
+                            } else {
+                                //A posisão que precisa ser clicada na outra palavra é a position1
+                                positionCellClick = crossWord['position1'];
+                                groupCellClick = crossWord['word1Group'];
+                            }
+                            break;
+                        }
+                    }
+                    var cellToClick = hCrossWord.find('.Cell[groups*="g' + groupCellClick + '"]').eq(positionCellClick);
+                    //Simular um click na célula passada
+                    self.onEditor.eventClickCellPLC(cellToClick, true);
+                }
+
+
+                //Verifica as letras isShow
+                var posLettersShow = loaddata['showing_letters'].split("|");
+
+                hCrossWord.find('.Cell[groups*=g' + group + ']').each(function (idx) {
+                    if (posLettersShow.inArray(idx)) {
+                        //A Célular corrente deve ser isShow
+                        $(this).click();
+                    }
+                });
+                //========================================
+
+
+            }
+
         } else if (parent.COTemplateTypeIn(parent.AEL)
                 || parent.COTemplateTypeIn(parent.DDROP)
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1790,6 +1863,8 @@ function editor() {
             delete this.countElements[id];
         }
     }
+
+
     this.delElement = function (id, isRecursion) {
         var isRecursion = this.isset(isRecursion) && isRecursion;
         var isPiecesetElement = false;
@@ -2710,7 +2785,6 @@ function editor() {
                         }
                     }
 
-
                     this.posEditor = function () {
                         //quantidade de elementos.
 
@@ -2728,6 +2802,7 @@ function editor() {
                         }
 
                     }
+
 
                     this.load = function () {
                         //define parent como a classe base
@@ -2885,12 +2960,12 @@ function editor() {
                                                                             data['showing_letters'] = item['showing_letters'];
                                                                         if (parent.isset(item['point_crossword']))
                                                                             data['point_crossword'] = item['point_crossword'];
-                                                                        if (parent.isset(item['crossword_elementID'])){
+                                                                        if (parent.isset(item['crossword_elementID'])) {
                                                                             data['crossword_elementID'] = item['crossword_elementID'];
                                                                             data['pieceID'] = pieceID;
                                                                             data['crossword_elementGroup'] = item['crossword_elementGroup'];
                                                                         }
-                                                                        
+
 
                                                                         parent.addElement(elementID, type, data);
                                                                     }
@@ -3068,4 +3143,21 @@ function editor() {
                         $('#' + id_div + '.image, #' + id_span).attr('updated', 1);
                     }
 
+
+                    //Criação do inArray no JS
+
+                    Array.prototype.inArray = function (value)
+                    {
+                        var i;
+                        for (i = 0; i < this.length; i++)
+                        {
+                            if (this[i].replace(/\s/g, '') != "" && this[i] == value)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                    
+                    
                 }
