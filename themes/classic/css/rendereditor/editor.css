@@ -649,10 +649,16 @@ h5{
 }
 .Cell{
     display: table-cell;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/*.Cell{
+    display: table-cell;
     border: solid;
     border-width: thin;
     padding: 2px 5px 2px 5px;
-}
+}*/
 
 .Cell[groups]{
     border: 1px solid black; 

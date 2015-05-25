@@ -465,11 +465,12 @@ function editor() {
         //Então exclui alguma letras
         var txtDirection = thisDivGroup.attr('txtdirection');
         var currentTxtInput = thisDivGroup.find('font.editable').text().replace(/\s/g, '');
+
         var totalDeleted = currentTxtInput.length;
         //Busca a última célula que possui esse grupo
         var lastCellGroup = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Cell[groups*=g' + thisDivGroup.attr('group') + ']').last();
         var idxLastCell = lastCellGroup.index();
-
+        var idxFirstCell = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Cell[groups*=g' + thisDivGroup.attr('group') + ']').first().index();
         //Apaga as letras 
         thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Cell[groups*="'
                 + 'g' + thisDivGroup.attr('group') + '"]').each(function (index) {
@@ -491,47 +492,96 @@ function editor() {
 
         if (txtDirection == 'h') {
             //Então verificar toda a coluna = '' pra a exclusão
-            var mayDeleteColunm;
+            var mayDeleteColunmRight;
+            var mayDeleteColunmLeft;
             while (totalDeleted > 0) {
-                mayDeleteColunm = true;
-                thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').each(function () {
+                var Row = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row');
+                mayDeleteColunmRight = Row.size() != 0;
+                mayDeleteColunmLeft = Row.size() != 0;
+                Row.each(function () {
+                    //Verificar últimas Células
                     if ($(this).find('.Cell').eq(idxLastCell).text().replace(/\s/g, '') != '') {
                         //Não pode excluir
-                        mayDeleteColunm = false;
+                        mayDeleteColunmRight = false;
                     }
+
+                    //Verificar primeiras Células
+                    if ($(this).find('.Cell').eq(idxFirstCell).text().replace(/\s/g, '') != '') {
+                        //Não pode excluir
+                        mayDeleteColunmLeft = false;
+                    }
+
                 });
-                if (mayDeleteColunm) {
+                if (mayDeleteColunmLeft || mayDeleteColunmRight) {
                     //Então Exlcui a Coluna e continua procurando outras, se existir pra deletar
-                    thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').each(function () {
-                        $(this).find('.Cell').eq(idxLastCell).remove();
+                    Row.each(function () {
+                        if (mayDeleteColunmLeft) {
+                            $(this).find('.Cell').eq(idxFirstCell).remove();
+                        }
+                        if (mayDeleteColunmRight) {
+                            $(this).find('.Cell').eq(idxLastCell).remove();
+                        }
+
                     });
                 } else {
-                    //Não pode deletar
+                    //Não pode deletar Algum
                     break;
                 }
 
-                idxLastCell--;
+                if (mayDeleteColunmRight) {
+                    idxLastCell--;
+                }
+
+
+                if (mayDeleteColunmLeft && mayDeleteColunmRight) {
+                    //Deletou os dois extremos
+                    totalDeleted--;
+                }
+
                 totalDeleted--;
             }
 
         } else if (txtDirection == 'v') {
             //Então verificar se toda a linha = '' para a deleção de cada
-            var mayDeleteRow;
+            var mayDeleteRowTop;
+            var mayDeleteRowDown;
             while (totalDeleted > 0) {
-                mayDeleteRow = true;
-                thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().find('.Cell').each(function () {
+                //Verificar se há linhas vazias Mais Abaixo
+                var lastRow = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().find('.Cell');
+                mayDeleteRowDown = lastRow.size() != 0;
+                lastRow.each(function () {
                     if ($(this).text().replace(/\s/g, '') != '') {
                         //Não pode excluir
-                        mayDeleteRow = false;
+                        mayDeleteRowDown = false;
                     }
                 });
-                if (mayDeleteRow) {
-                    console.log("MAYDELETEROW");
+                if (mayDeleteRowDown) {
                     //Então Exlcui a Linha e continua procurando outras, se existir pra deletar
                     thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().remove();
-                } else {
+                }
+
+                //Verificar se há linhas vazias Mais Acima
+                var firstRow = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').first().find('.Cell');
+                mayDeleteRowTop = firstRow.size() != 0;
+                firstRow.each(function () {
+                    if ($(this).text().replace(/\s/g, '') != '') {
+                        //Não pode excluir
+                        mayDeleteRowTop = false;
+                    }
+                });
+                if (mayDeleteRowTop) {
+                    //Então Exlcui a Linha e continua procurando outras, se existir pra deletar
+                    thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').first().remove();
+                }
+
+                if (!mayDeleteRowDown && !mayDeleteRowTop) {
                     //Não pode deletar
                     break;
+                }
+
+                if (mayDeleteRowDown && mayDeleteRowTop) {
+                    //Deletou os 2
+                    totalDeleted--;
                 }
 
                 totalDeleted--;
@@ -1950,11 +2000,6 @@ function editor() {
                     // Deleta também o li do seu Grupo de Resposta
                     $('#' + idCurrentPiece + ' div[group=' + group + '_1]').parent().remove();
                 } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
-                    //id é o div-grupo a ser excluído
-                    $(id).find('div.element').each(function () {
-                        var id_Element_del = $(this).attr('id');
-                        parent.delElement(id_Element_del, true);
-                    });
 
                     if (parent.COTemplateTypeIn(parent.PLC)) {
                         //Se for PLC, então remove a Palavra cruzada do html e sua associação no Array crossWord
@@ -1962,6 +2007,12 @@ function editor() {
                         //Mostra o botão de exclusão para o último grupo
                         $(id).prev('div[group]').find('.del').show();
                     }
+
+                    //id é o div-grupo a ser excluído
+                    $(id).find('div.element').each(function () {
+                        var id_Element_del = $(this).attr('id');
+                        parent.delElement(id_Element_del, true);
+                    });
 
                     //Por fim Deleta o grupo, a div agora sem elements
                     var group = $(id).attr('group');
