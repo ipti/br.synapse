@@ -1008,6 +1008,7 @@ class EditorController extends Controller {
                         case "plc":
                             if (isset($_POST['crossWords'])) {
                                 foreach ($_POST['crossWords'] as $crossWord):
+                                    
                                     //Para cada Cruzamento
                                     //Piece_Element
                                     $pieceElementID_w1 = EditorPieceElement::model()->findByAttributes(array('piece_id' => $crossWord['idDbPiece']
@@ -1017,16 +1018,15 @@ class EditorController extends Controller {
                                                 , 'element_id' => $crossWord['idDbElementWord2']))->id;
 
                                     //Associar o PieceElementID que estar cruzando com outro PieceElementID 
-                                    $propertyName = "crossword_pieceElementID";
-                                    $propertyContext = "word";
-                                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-
-                                    $newPEPropertyCrosswordPieceElementID = new EditorPieceelementProperty();
-                                    $newPEPropertyCrosswordPieceElementID->property_id = $propertyID;
-                                    $newPEPropertyCrosswordPieceElementID->piece_element_id = $pieceElementID_w1;
-                                    $newPEPropertyCrosswordPieceElementID->value = $pieceElementID_w2;
-                                    $newPEPropertyCrosswordPieceElementID->save();
-
+//                                    $propertyName = "crossword_pieceElementID";
+//                                    $propertyContext = "word";
+//                                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+//
+//                                    $newPEPropertyCrosswordPieceElementID = new EditorPieceelementProperty();
+//                                    $newPEPropertyCrosswordPieceElementID->property_id = $propertyID;
+//                                    $newPEPropertyCrosswordPieceElementID->piece_element_id = $pieceElementID_w1;
+//                                    $newPEPropertyCrosswordPieceElementID->value = $pieceElementID_w2;
+//                                    $newPEPropertyCrosswordPieceElementID->save();
                                     //Armazenar todos os pontos de cruzamento de cada relacionamento entre words
                                     //Somente será preciso armazenar as posições de cruzamento para a 1° pieceElementID
                                     $propertyName = "point_crossword";
@@ -1036,9 +1036,8 @@ class EditorController extends Controller {
                                     $newPEPropertyPOintCrossWord = new EditorPieceelementProperty();
                                     $newPEPropertyPOintCrossWord->property_id = $propertyID;
                                     $newPEPropertyPOintCrossWord->piece_element_id = $pieceElementID_w1;
-                                    $newPEPropertyPOintCrossWord->value = $crossWord['position1'] . "|" . $crossWord['position2'];
+                                    $newPEPropertyPOintCrossWord->value = "w2peID" . $pieceElementID_w2 . "|" . $crossWord['position1'] . "|" . $crossWord['position2'];
                                     $newPEPropertyPOintCrossWord->save();
-
                                 endforeach;
                             }
 
@@ -1172,24 +1171,27 @@ class EditorController extends Controller {
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                             'property_id' => $this->getPropertyIDByName('point_crossword', 'word')));
                                         if (isset($pe_property)) {
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['point_crossword'] = $pe_property->value;
-                                        }
+                                            //==========================================
+                                            $pe_id_w2 = explode("|", $pe_property->value);
+                                            $pe_id_w2 = explode("w2peID", $pe_id_w2[0]);
+                                            $pe_id_w2 = $pe_id_w2[1];
 
-                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('crossword_pieceElementID', 'word')));
+                                            $e_id_w2 = EditorPieceElement::model()->findByPk($pe_id_w2);
 
-                                        if (isset($pe_property)) {
-                                            $peIDCrossed = EditorPieceElement::model()->findByPk($pe_property->value);
+                                            $pointCross = explode("|", $pe_property->value);
+
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]
+                                                    ['point_crossword'] = "w2eID" . $e_id_w2->element_id . "|" . $pointCross[1] . "|" . $pointCross[2];
+
+                                            //============ Groupo do elemeto da Word2
                                             //Buscar o groupo desse Element do PieceElement estar
-                                            $pe_propertyGroupCrossedWord = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $peIDCrossed->id,
+                                            $pe_propertyGroupCrossedWord2 = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe_id_w2,
                                                 'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
-                                            if (isset($pe_propertyGroupCrossedWord)) {
-                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossword_elementGroup'] = $pe_propertyGroupCrossedWord->value;
+                                            if (isset($pe_propertyGroupCrossedWord2)) {
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossword_elementGroup_Word2'] = $pe_propertyGroupCrossedWord2->value;
                                             }
-                                            //=================================================
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossword_elementID'] = $peIDCrossed->element_id;
                                         }
-                                        //==========================================================
+
 
                                         $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                         foreach ($ElementProperty as $ep):

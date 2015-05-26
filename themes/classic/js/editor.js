@@ -1612,12 +1612,12 @@ function editor() {
                 if (parent.isset(loaddata['point_crossword'])) {
                     //Se possui point_crossword, então o template é PLC
                     var splitPosition = loaddata['point_crossword'].split('|');
-                    var tempJsonArray = {pieceID: "", idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[0]
-                        , word2Group: loaddata['crossword_elementGroup'], idDbElementWord2: loaddata['crossword_elementID'], position2: splitPosition[1], letter: loaddata['text'].substring(splitPosition[0]
-                                , parseInt(splitPosition[0]) + 1)};
+                    var elementIDDBWord2 = splitPosition[0].split("w2eID")[1];
+                    var tempJsonArray = {pieceID: "", idDBPieceElementPropertyPointCross: "",idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[1]
+                        , word2Group: loaddata['crossword_elementGroup_Word2'], idDbElementWord2: elementIDDBWord2, position2: splitPosition[2], letter: loaddata['text'].substring(splitPosition[1]
+                                , parseInt(splitPosition[1]) + 1)};
 
                     self.crossWords.push(tempJsonArray);
-                    //Stop Here. Resta simular o focusOut na ordem que forem montados
                 }
             }
 
