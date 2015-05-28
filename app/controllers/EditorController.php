@@ -743,17 +743,29 @@ class EditorController extends Controller {
                                                 $newPEPropertyDirection->property_id = $propertyID;
                                                 $newPEPropertyDirection->value = $_POST["direction"];
                                                 $newPEPropertyDirection->save();
-
+                                            }
+                                            if (isset($_POST["showing_letters"])) {
                                                 //Propriedade de showing_letters
-                                                $newPEPropertyShowLetters = new EditorPieceelementProperty();
-                                                $newPEPropertyShowLetters->piece_element_id = $newPieceElement->id;
-
+                                                //Se for Novo Elemento
                                                 $propertyName = "showing_letters";
                                                 $propertyContext = "word";
                                                 $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                                $newPEPropertyShowLetters->property_id = $propertyID;
-                                                $newPEPropertyShowLetters->value = $_POST["showing_letters"];
-                                                $newPEPropertyShowLetters->save();
+
+                                                if ($_POST['op'] == 'save') {
+                                                    $newPEPropertyShowLetters = new EditorPieceelementProperty();
+                                                    $newPEPropertyShowLetters->piece_element_id = $newPieceElement->id;
+
+                                                    $newPEPropertyShowLetters->property_id = $propertyID;
+                                                    $newPEPropertyShowLetters->value = $_POST["showing_letters"];
+                                                    $newPEPropertyShowLetters->save();
+                                                } elseif ($_POST['op'] == 'update') {
+                                                    //$_POST['ID_BD'] STOP HERE -- Verificar se é aqui é trata o UPDATE !
+                                                    EditorPieceelementProperty::model()->findByAttributes(array(
+                                                        'piece_element_id' => $newPieceElement->id,
+                                                        'property_id'=>$propertyID
+                                                    ));
+
+                                                }
                                             }
                                         } else if ($isElementPieceSet) {
                                             //É um elemento da PIECESET
@@ -780,6 +792,7 @@ class EditorController extends Controller {
 
                                             //===========================================================
                                             if ($match != -1) {
+                                                //CORIGGIR O SALVAR DE CADA GRUPO
                                                 // grouping
                                                 $propertyName = "grouping";
                                                 $propertyContext = "piecelement";
@@ -1007,38 +1020,31 @@ class EditorController extends Controller {
                             break;
                         case "plc":
                             if (isset($_POST['crossWords'])) {
-                                foreach ($_POST['crossWords'] as $crossWord):
-                                    
-                                    //Para cada Cruzamento
-                                    //Piece_Element
-                                    $pieceElementID_w1 = EditorPieceElement::model()->findByAttributes(array('piece_id' => $crossWord['idDbPiece']
-                                                , 'element_id' => $crossWord['idDbElementWord1']))->id;
+                                if ($_POST['op'] = 'save') {
+                                    //Se for um Novo Cobject
+                                    foreach ($_POST['crossWords'] as $crossWord):
+                                        //Para cada Cruzamento
+                                        //Piece_Element
+                                        $pieceElementID_w1 = EditorPieceElement::model()->findByAttributes(array('piece_id' => $crossWord['idDbPiece']
+                                                    , 'element_id' => $crossWord['idDbElementWord1']))->id;
 
-                                    $pieceElementID_w2 = EditorPieceElement::model()->findByAttributes(array('piece_id' => $crossWord['idDbPiece']
-                                                , 'element_id' => $crossWord['idDbElementWord2']))->id;
+                                        $pieceElementID_w2 = EditorPieceElement::model()->findByAttributes(array('piece_id' => $crossWord['idDbPiece']
+                                                    , 'element_id' => $crossWord['idDbElementWord2']))->id;
 
-                                    //Associar o PieceElementID que estar cruzando com outro PieceElementID 
-//                                    $propertyName = "crossword_pieceElementID";
-//                                    $propertyContext = "word";
-//                                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-//
-//                                    $newPEPropertyCrosswordPieceElementID = new EditorPieceelementProperty();
-//                                    $newPEPropertyCrosswordPieceElementID->property_id = $propertyID;
-//                                    $newPEPropertyCrosswordPieceElementID->piece_element_id = $pieceElementID_w1;
-//                                    $newPEPropertyCrosswordPieceElementID->value = $pieceElementID_w2;
-//                                    $newPEPropertyCrosswordPieceElementID->save();
-                                    //Armazenar todos os pontos de cruzamento de cada relacionamento entre words
-                                    //Somente será preciso armazenar as posições de cruzamento para a 1° pieceElementID
-                                    $propertyName = "point_crossword";
-                                    $propertyContext = "word";
-                                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                        //Associar o PieceElemente();
+                                        //Armazenar todos os pontos de cruzamento de cada relacionamento entre words
+                                        //Somente será preciso armazenar as posições de cruzamento para a 1° pieceElementID
+                                        $propertyName = "point_crossword";
+                                        $propertyContext = "word";
+                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
 
-                                    $newPEPropertyPOintCrossWord = new EditorPieceelementProperty();
-                                    $newPEPropertyPOintCrossWord->property_id = $propertyID;
-                                    $newPEPropertyPOintCrossWord->piece_element_id = $pieceElementID_w1;
-                                    $newPEPropertyPOintCrossWord->value = "w2peID" . $pieceElementID_w2 . "|" . $crossWord['position1'] . "|" . $crossWord['position2'];
-                                    $newPEPropertyPOintCrossWord->save();
-                                endforeach;
+                                        $newPEPropertyPOintCrossWord = new EditorPieceelementProperty();
+                                        $newPEPropertyPOintCrossWord->property_id = $propertyID;
+                                        $newPEPropertyPOintCrossWord->piece_element_id = $pieceElementID_w1;
+                                        $newPEPropertyPOintCrossWord->value = "w2peID" . $pieceElementID_w2 . "|" . $crossWord['position1'] . "|" . $crossWord['position2'];
+                                        $newPEPropertyPOintCrossWord->save();
+                                    endforeach;
+                                }
                             }
 
                             break;
@@ -1171,6 +1177,10 @@ class EditorController extends Controller {
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                             'property_id' => $this->getPropertyIDByName('point_crossword', 'word')));
                                         if (isset($pe_property)) {
+                                            //id do pieceElementProperty
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]
+                                                    ['idDBPieceElementPropertyPointCross'] = $pe_property->id;
+
                                             //==========================================
                                             $pe_id_w2 = explode("|", $pe_property->value);
                                             $pe_id_w2 = explode("w2peID", $pe_id_w2[0]);
@@ -1187,6 +1197,7 @@ class EditorController extends Controller {
                                             //Buscar o groupo desse Element do PieceElement estar
                                             $pe_propertyGroupCrossedWord2 = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe_id_w2,
                                                 'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
+
                                             if (isset($pe_propertyGroupCrossedWord2)) {
                                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossword_elementGroup_Word2'] = $pe_propertyGroupCrossedWord2->value;
                                             }
