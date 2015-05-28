@@ -639,8 +639,8 @@ function editor() {
         var checked = isDB && isLoaded && flag === FLAG_ACERTO ? ' checked="checked"' : "";
         var initial_text = isLoaded ? loaddata['text'] : (isTextArea ? "" : LABEL_INITIAL_TEXT);
         var match = isDB ? loaddata['match'] : $(tagAdd).attr('group');
-        var plusDB = isDB ? '" idbd="' + idbd + '" updated="' + 0 + '"' : '';
-        var plus = 'position="' + position + ' match="' + match + '" ' + plusDB;
+        var plusDB = isDB ? 'idbd="' + idbd + '" updated="' + 0 + '"' : '';
+        var plus = 'position="' + position + '" match="' + match + '" ' + plusDB;
 
         var addDeleteButton = function (have) {
             return have ? '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' : '';
@@ -1613,14 +1613,16 @@ function editor() {
                     //Se possui point_crossword, então o template é PLC
                     var splitPosition = loaddata['point_crossword'].split('|');
                     var elementIDDBWord2 = splitPosition[0].split("w2eID")[1];
-                    var tempJsonArray = {pieceID: "", idDBPieceElementPropertyPointCross: "",idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[1]
+
+                    var tempJsonArray = {pieceID: "", idDBPieceElementPropertyPointCross: loaddata['idDBPieceElementPropertyPointCross'], idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[1]
                         , word2Group: loaddata['crossword_elementGroup_Word2'], idDbElementWord2: elementIDDBWord2, position2: splitPosition[2], letter: loaddata['text'].substring(splitPosition[1]
                                 , parseInt(splitPosition[1]) + 1)};
 
                     self.crossWords.push(tempJsonArray);
+                    console.log(self.crossWords);
                 }
             }
-
+            
         } else if (parent.COTemplateTypeIn(parent.DIG)) {
             if (newDivMatch) {
                 html += '</span></div>';
@@ -2307,7 +2309,7 @@ function editor() {
                         var inputSound_NameDB_ID = "#" + ElementID + "_sound_nameDB";
                         var inputSound_NameCurrent_ID = "#" + ElementID + "_sound_input";
                         //var ElementRespID = "#"+ElementID+"_resp_text";
-
+                        console.log(Match);
                         //Dados que serão passados pelo ajax
                         var data = {
                             //Operação Salvar, Element, Type, ID no DOM
@@ -2351,7 +2353,6 @@ function editor() {
                                 if (parent.COTemplateTypeIn(parent.PLC) && !isElementPieceSet && !isElementCobject) {
                                     //Direção
                                     data["direction"] = $(this).closest('div[group]').attr('txtdirection');
-
                                     //Letras que serão exibidas
                                     var positionLettersShows = "";
                                     $(this).closest('.tplPlc').find('.crosswords')
@@ -2389,45 +2390,72 @@ function editor() {
                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                         saveAllElements = true;
                                                     }
-                                                    //Acrescenta o atributo idDBElement ao Array do CrossWords
-                                                    for (var idx in self.crossWords) {
-                                                        var crossword = self.crossWords[idx];
 
-                                                        if (crossword['pieceID'] == curretPieceID) {
-                                                            if (crossword['word1Group'] == currentGroup ||
-                                                                    crossword['word2Group'] == currentGroup) {
-                                                                //Encontrado um cruzamento para esta palavra
-                                                                if (crossword['word1Group'] == currentGroup) {
-                                                                    //Zera o word1Group e acrecenta o novo atributo 
-                                                                    self.crossWords[idx]['word1Group'] = "";
-                                                                    self.crossWords[idx]['idDbElementWord1'] = response['ElementID'];
-                                                                } else {
-                                                                    //Zera o word2Group e acrecenta o novo atributo 
-                                                                    self.crossWords[idx]['word2Group'] = "";
-                                                                    self.crossWords[idx]['idDbElementWord2'] = response['ElementID'];
+                                                    if (parent.COTemplateTypeIn(parent.PLC)) {
+                                                        //Acrescenta o atributo idDBElement ao Array do CrossWords
+                                                        for (var idx in self.crossWords) {
+                                                            var crossword = self.crossWords[idx];
+
+                                                            if (crossword['pieceID'] == curretPieceID) {
+                                                                if (crossword['word1Group'] == currentGroup ||
+                                                                        crossword['word2Group'] == currentGroup) {
+                                                                    //Encontrado um cruzamento para esta palavra
+                                                                    if (crossword['word1Group'] == currentGroup) {
+                                                                        //Zera o word1Group e acrecenta o novo atributo 
+                                                                        self.crossWords[idx]['word1Group'] = "";
+                                                                        self.crossWords[idx]['idDbElementWord1'] = response['ElementID'];
+                                                                    } else {
+                                                                        //Zera o word2Group e acrecenta o novo atributo 
+                                                                        self.crossWords[idx]['word2Group'] = "";
+                                                                        self.crossWords[idx]['idDbElementWord2'] = response['ElementID'];
+                                                                    }
+                                                                    //Adiciona o novo atributo idDbPiece
+                                                                    self.crossWords[idx]['idDbPiece'] = LastPieceID;
                                                                 }
-
                                                             }
-                                                            //Adiciona o novo atributo idDbPiece
-                                                            self.crossWords[idx]['idDbPiece'] = LastPieceID;
+                                                        }
+
+                                                        if (saveAllElements) {
+                                                            //Se for um novo Cobject
+                                                            if (!parent.isload) {
+                                                                //Então salvar os cruzamentos no BD
+                                                                var dataCrossWords = {'op': 'save', 'step': 'plc', 'crossWords': self.crossWords};
+                                                                parent.saveData(
+                                                                        //Variáveis dados
+                                                                        dataCrossWords,
+                                                                        //Função de sucess do Save crosses
+                                                                                function (response, textStatus, jqXHR) {
+                                                                                    $('.savescreen').append('<br><br><p>Salvou Todas as palavras Cruzadas!</p>');
+                                                                                    self.crossInfomationSent = true;
+                                                                                    //Verificar se acabou as requisições
+                                                                                    parent.verify_requestFinish();
+                                                                                });
+                                                                    } else {
+                                                                //Se for um Load
+                                                                //Então salvar os cruzamentos no BD, somente se forem novos Cruzamentos
+                                                                var newCrossWords = new array();
+                                                                for(var idx in self.crossWords){
+                                                                    var crossWord = self.crossWords[idx];
+                                                                    if(!parent.isset(crossWord['idDBPieceElementPropertyPointCross'])){
+                                                                        //É um cruzamento Novo
+                                                                        newCrossWords.push(crossWord);
+                                                                    }
+                                                                }
+                                                                
+                                                                var dataCrossWords = {'op': 'save', 'step': 'plc', 'crossWords': newCrossWords};
+                                                                parent.saveData(
+                                                                        //Variáveis dados
+                                                                        dataCrossWords,
+                                                                        //Função de sucess do Save crosses
+                                                                                function (response, textStatus, jqXHR) {
+                                                                                    $('.savescreen').append('<br><br><p>Salvou Todas as palavras Cruzadas!</p>');
+                                                                                    self.crossInfomationSent = true;
+                                                                                    //Verificar se acabou as requisições
+                                                                                    parent.verify_requestFinish();
+                                                                                });
+                                                                    }
                                                         }
                                                     }
-
-                                                    if (saveAllElements) {
-                                                        //Então salvar os cruzamentos no BD
-                                                        var dataCrossWords = {'op': 'save', 'step': 'plc', 'crossWords': self.crossWords};
-                                                        parent.saveData(
-                                                                //Variáveis dados
-                                                                dataCrossWords,
-                                                                //Função de sucess do Save crosses
-                                                                        function (response, textStatus, jqXHR) {
-                                                                            $('.savescreen').append('<br><br><p>Salvou Todas as palavras Cruzadas!</p>');
-                                                                            self.crossInfomationSent = true;
-                                                                            //Verificar se acabou as requisições
-                                                                            parent.verify_requestFinish();
-                                                                        });
-                                                            }
-
                                                     //Verificar se acabou as requisições
                                                     parent.verify_requestFinish();
 
@@ -3010,13 +3038,14 @@ function editor() {
                                                                             data['direction'] = item['direction'];
                                                                         if (parent.isset(item['showing_letters']))
                                                                             data['showing_letters'] = item['showing_letters'];
-                                                                        if (parent.isset(item['point_crossword']))
-                                                                            data['point_crossword'] = item['point_crossword'];
-                                                                        if (parent.isset(item['crossword_elementID'])) {
-                                                                            data['crossword_elementID'] = item['crossword_elementID'];
+                                                                        if (parent.isset(item['point_crossword'])) {
                                                                             data['pieceID'] = pieceID;
-                                                                            data['crossword_elementGroup'] = item['crossword_elementGroup'];
+                                                                            data['point_crossword'] = item['point_crossword'];
+                                                                            data['crossword_elementGroup_Word2'] = item['crossword_elementGroup_Word2'];
+                                                                            data['idDBPieceElementPropertyPointCross'] = item['idDBPieceElementPropertyPointCross'];
+
                                                                         }
+
 
 
                                                                         parent.addElement(elementID, type, data);
