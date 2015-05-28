@@ -21,8 +21,6 @@ this.Meet = function(options) {
     NEXT_PAGE = "Próxima Página";
     LAST_PAGE = "Última Página";
     NEXT_PIECE = "";
-    time_answer = 0;
-    ismatch = 0;
     
     //================
     var self = this;
@@ -1102,8 +1100,14 @@ this.Meet = function(options) {
                             // 'piece_elementID':current_pieceElementID,
                             'group_id': current_group,
                             'actor_id': self.actor,
+                            /**
+                             * @todo Verificar this.time_answer, aparentemente eesta passando com valor nulo.
+                             */
                             'final_time': this.time_answer, //delta T 
                             'value': "GRP" + current_groupMatched,
+                            /**
+                             * @todo Verificar this.ismatch, aparentemente eesta passando com valor nulo.
+                             */
                             'iscorrect': this.ismatch
                         };
                         //Salvar na performance_User OffLine
