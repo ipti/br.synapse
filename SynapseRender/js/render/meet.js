@@ -1,3 +1,5 @@
+/* global self */
+
 /**
  * Classe do Meet
  * 
@@ -18,6 +20,10 @@ this.Meet = function(options) {
     FINALIZE_ACTIVITY = "Finalizar Atividade";
     NEXT_PAGE = "Próxima Página";
     LAST_PAGE = "Última Página";
+    NEXT_PIECE = "";
+    time_answer = 0;
+    ismatch = 0;
+    
     //================
     var self = this;
     this.isLoadState = false;
@@ -116,15 +122,15 @@ this.Meet = function(options) {
                 self.cobjectsIDsTemplates[json_cobject.cobject_id] = json_cobject.template_code;
             });
         }
-    }
+    };
 
     this.getIdxArrayCobjectsIDs = function(cobjectID) {
         return $.inArray(cobjectID, self.cobjectsIDs);
-    }
+    };
 
     this.setDomCobject = function(domCobject) {
         self.domCobject = domCobject;
-    }
+    };
 
     /**
      * Retorna todos os CObjects de self.domCobject em uma string
@@ -144,7 +150,12 @@ this.Meet = function(options) {
 //        return domCobjectBuildAll;
 //    }
 
-
+    /**
+     * 
+     * @param {DOMString} cobject_id
+     * 
+     * @returns {void}
+     */
     this.domCobjectBuild = function(cobject_id) {
         
         //Construir a Dom do Cobject e append no html
@@ -156,7 +167,7 @@ this.Meet = function(options) {
             //Depois atualiza o template corrente do Meet
             self.currentTemplateCode = self.domCobject.cobject.template_code;
             var domCobjectBuild;
-            if ($('div.cobject_block').size() != 0) {
+            if ($('div.cobject_block').size() !== 0) {
                 //Já existe
                 domCobjectBuild = $('div.cobject_block');
             } else {
@@ -179,7 +190,7 @@ this.Meet = function(options) {
 
         });
 
-    }
+    };
 
     /**
      * Inicializa os eventos dos Cobjects
@@ -189,13 +200,13 @@ this.Meet = function(options) {
     this.beginEvents = function() {
         //iniciar code_Event dos template
         //Evoca o evento para este template
-        if (self.domCobject.cobject.template_code != 'DDROP' &&
-                self.domCobject.cobject.template_code != 'ONEDDROP') {
+        if (self.domCobject.cobject.template_code !== 'DDROP' 
+           && self.domCobject.cobject.template_code !== 'ONEDDROP') {
             eval("self.init_" + self.domCobject.cobject.template_code + "();");
         }
         //Por Fim chama o evento Comum a todos
         self.init_Common();
-    }
+    };
 
     //    /**
     //     * Retorna o cabeçalho do Meet
@@ -219,7 +230,7 @@ this.Meet = function(options) {
      */
     this.restartTimes = function() {
         self.interval_group = self.interval_piece = new Date().getTime();
-    }
+    };
 
     /**
      * Inicializa eventos comuns a todos os templates.
@@ -230,10 +241,10 @@ this.Meet = function(options) {
         //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
-        if (self.currentTemplateCode == 'DDROP') {
+        if (self.currentTemplateCode === 'DDROP') {
             //Existe DDROP
             self.init_DDROP();
-        } else if (self.currentTemplateCode == 'ONEDDROP') {
+        } else if (self.currentTemplateCode === 'ONEDDROP') {
             //Existe  ONEDDROP
             self.init_ONEDDROP();
         }
@@ -264,18 +275,18 @@ this.Meet = function(options) {
             var nextCobject = null;
             var isNextCobject = false;
 
-            if (lastPiece.next('.piece').size() != 0) {
+            if (lastPiece.next('.piece').size() !== 0) {
                 nextPiece = lastPiece.next('.piece');
             } else {
                 //Acabou as Pieces desta PieceSet
                 lastPieceSet = lastPiece.closest('.pieceset');
                 nextPieceSet = lastPieceSet.next('.pieceset');
-                if (nextPieceSet.size() == 0) {
+                if (nextPieceSet.size() === 0) {
                     //Acabou as PieceSets desta Screen
                     lastScreen = lastPieceSet.closest('.T_screen');
                     nextScreen = lastScreen.next('.T_screen');
 
-                    if (nextScreen.size() == 0) {
+                    if (nextScreen.size() === 0) {
                         //Acabou as Screens deste Cobject
                         lastCobject = lastScreen.closest('.cobject');
                         nextCobject = lastCobject.next('.cobject');
@@ -351,7 +362,7 @@ this.Meet = function(options) {
             });
 
             //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-            if (self.domCobject.cobject.template_code == 'TXT') {
+            if (self.domCobject.cobject.template_code === 'TXT') {
                 BtnPageTXT();
             } else {
                 NoBtnPageTXT();
@@ -369,7 +380,7 @@ this.Meet = function(options) {
         }
 
 
-    }
+    };
 
     this.init_eventsGlobals = function() {
         
@@ -403,7 +414,7 @@ this.Meet = function(options) {
 
         });
 
-    }
+    };
 
 
 
@@ -419,7 +430,7 @@ this.Meet = function(options) {
             img.attr('src', "img/icons/play.png");
             $(this).attr('playing', 'false');
         });
-    }
+    };
 
     this.nextPiece = function() {
         //Pausa Todos os Sons
@@ -427,13 +438,13 @@ this.Meet = function(options) {
         $('.nextPiece').hide();
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
-        if (self.domCobject.cobject.template_code == 'PRE') {
+        if (self.domCobject.cobject.template_code === 'PRE') {
             self.isCorrectPRE(currentPiece.attr('id'));
         }
 
         var isCorrectPiece;
         //Salva no BD somente se o template for != TXT
-        if (self.domCobject.cobject.template_code != 'TXT') {
+        if (self.domCobject.cobject.template_code !== 'TXT') {
             //Salva na PerformanceUser
             self.savePerformanceUsr(currentPiece.attr('id'));
             isCorrectPiece = self.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
@@ -445,7 +456,7 @@ this.Meet = function(options) {
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
             var currentPiece = $('.currentPiece');
-            if (self.domCobject.cobject.template_code != 'TXT') {
+            if (self.domCobject.cobject.template_code !== 'TXT') {
                 //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
                 //cobject_block_id + actor_id = PK
                 var info_state = {
@@ -454,7 +465,7 @@ this.Meet = function(options) {
                     last_cobject_id: self.domCobject.cobject.cobject_id,
                     last_piece_id: currentPiece.attr('id'),
                     qtd_correct: self.peformance_qtd_correct,
-                    qtd_wrong: self.peformance_qtd_wrong,
+                    qtd_wrong: self.peformance_qtd_wrong
                 };
                 self.DB_synapse.NewORUpdateUserState(info_state);
                 //Calcula o Score
@@ -464,13 +475,13 @@ this.Meet = function(options) {
 
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
-            if (currentPiece.next().size() == 0) {
+            if (currentPiece.next().size() === 0) {
                 //Acabou Peça, passa pra outra PieceSet se houver
                 var currentPieceSet = $('.currentPieceSet');
                 currentPieceSet.removeClass('currentPieceSet');
                 currentPieceSet.hide();
 
-                if (currentPieceSet.next().size() == 0) {
+                if (currentPieceSet.next().size() === 0) {
                     //Acabou todas as pieceSets dessa Tela
                     // Passa pra a pŕoxima PieceSet
                     var currentScreen = $('.currentScreen');
@@ -478,7 +489,7 @@ this.Meet = function(options) {
                     currentScreen.hide();
                     var nextScreen = currentScreen.next();
 
-                    if (nextScreen.size() != 0) {
+                    if (nextScreen.size() !== 0) {
                         nextScreen.addClass('currentScreen');
                         nextScreen.show();
                         nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
@@ -537,25 +548,25 @@ this.Meet = function(options) {
         }
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if (self.domCobject.cobject.template_code == 'TXT') {
+        if (self.domCobject.cobject.template_code === 'TXT') {
             BtnPageTXT();
         } else {
             NoBtnPageTXT();
         }
 
 
-    }
+    };
 
     this.prevPiece = function() {
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
-        if (self.domCobject.cobject.template_code == 'PRE') {
+        if (self.domCobject.cobject.template_code === 'PRE') {
             self.isCorrectPRE(currentPiece.attr('id'));
         }
 
         var isCorrectPiece;
         //Salva no BD somente se o template for != TXT
-        if (self.domCobject.cobject.template_code != 'TXT') {
+        if (self.domCobject.cobject.template_code !== 'TXT') {
             //Salva na PerformanceUser ?
             // self.savePerformanceUsr(currentPiece.attr('id'));
             isCorrectPiece = self.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
@@ -566,7 +577,7 @@ this.Meet = function(options) {
 
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
-            if (self.domCobject.cobject.template_code != 'TXT') {
+            if (self.domCobject.cobject.template_code !== 'TXT') {
                 //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
                 //cobject_block_id + actor_id = P K
                 var info_state = {
@@ -575,7 +586,7 @@ this.Meet = function(options) {
                     last_cobject_id: self.domCobject.cobject.cobject_id,
                     last_piece_id: currentPiece.attr('id'),
                     qtd_correct: self.peformance_qtd_correct,
-                    qtd_wrong: self.peformance_qtd_wrong,
+                    qtd_wrong: self.peformance_qtd_wrong
                 };
                 self.DB_synapse.NewORUpdateUserState(info_state);
                 //Calcula o Score
@@ -584,13 +595,13 @@ this.Meet = function(options) {
 
             currentPiece.removeClass('currentPiece');
             currentPiece.hide();
-            if (currentPiece.prev().size() == 0) {
+            if (currentPiece.prev().size() === 0) {
                 //Acabou Peça, passa pra outra PieceSet se houver
                 var currentPieceSet = $('.currentPieceSet');
                 currentPieceSet.removeClass('currentPieceSet');
                 currentPieceSet.hide();
 
-                if (currentPieceSet.prev().size() == 0) {
+                if (currentPieceSet.prev().size() === 0) {
                     //Acabou todas as pieceSets dessa Tela
                     // Passa pra a pŕoxima PieceSet
                     var currentScreen = $('.currentScreen');
@@ -598,7 +609,7 @@ this.Meet = function(options) {
                     currentScreen.hide();
                     var prevScreen = currentScreen.prev();
 
-                    if (prevScreen.size() != 0) {
+                    if (prevScreen.size() !== 0) {
                         prevScreen.addClass('currentScreen');
                         prevScreen.show();
                         prevScreen.find('.pieceset').last().addClass('currentPieceSet');
@@ -652,13 +663,13 @@ this.Meet = function(options) {
         }
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if (self.domCobject.cobject.template_code == 'TXT') {
+        if (self.domCobject.cobject.template_code === 'TXT') {
             BtnPageTXT();
         } else {
             NoBtnPageTXT();
         }
 
-    }
+    };
 
 
     var BtnPageTXT = function() {
@@ -708,7 +719,7 @@ this.Meet = function(options) {
             //Somente salva no BD no botão: Próxima Piece
         });
 
-    }
+    };
 
     /**
      * Inicializa eventos do AEL
@@ -762,7 +773,7 @@ this.Meet = function(options) {
                     //Vericar se o match está certo para este element
                     self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                     //Verificar se Não existe mais elementos a serem clicados
-                    if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
+                    if ($(this).siblings('div[group]:not(.ael_clicked)').size() === 0) {
                         //Não existe mais elementos a clicar, Habilita o botão de avançar
                         $('.nextPiece').show();
                     }
@@ -773,7 +784,7 @@ this.Meet = function(options) {
             }
         });
 
-    }
+    };
 
     /**
      * Inicializa eventos do DDROP
@@ -808,7 +819,7 @@ this.Meet = function(options) {
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
 
                 var position = $(this).position();
-                if ($(this).attr('OriginalLeft') != position.left || $(this).attr('OriginalTop') != position.top) {
+                if ($(this).attr('OriginalLeft') !== position.left || $(this).attr('OriginalTop') !== position.top) {
                     $(this).css('left', $(this).attr('OriginalLeft'));
                     $(this).css('top', $(this).attr('OriginalTop'));
 
@@ -844,7 +855,7 @@ this.Meet = function(options) {
                 //Vericar se o match está certo para este element
                 self.isCorrectAEL(thisPieceID, groupAskClicked, groupAnswerClicked, time_answer);
                 //Verificar se Não existe mais elementos a serem clicados
-                if ($(this).siblings('div[group]:not(.ael_clicked)').size() == 0) {
+                if ($(this).siblings('div[group]:not(.ael_clicked)').size() === 0) {
                     //Não existe mais elementos a clicar, Habilita o botão de avançar peça
                     $('.nextPiece').show();
                 }
@@ -857,7 +868,7 @@ this.Meet = function(options) {
 
         });
 
-    }
+    };
 
     /**
      * Inicializa eventos do ONEDDROP
@@ -892,7 +903,7 @@ this.Meet = function(options) {
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
 
                 var position = $(this).position();
-                if ($(this).attr('OriginalLeft') != position.left || $(this).attr('OriginalTop') != position.top) {
+                if ($(this).attr('OriginalLeft') !== position.left || $(this).attr('OriginalTop') !== position.top) {
                     $(this).css('left', $(this).attr('OriginalLeft'));
                     $(this).css('top', $(this).attr('OriginalTop'));
 
@@ -938,7 +949,7 @@ this.Meet = function(options) {
 
         });
 
-    }
+    };
 
 
     /**
@@ -956,7 +967,7 @@ this.Meet = function(options) {
                 $('.nextPiece').hide();
             }
         });
-    }
+    };
 
     /**
      * Inicializa eventos do TXT
@@ -973,22 +984,22 @@ this.Meet = function(options) {
             }
 
         });
-    }
+    };
     //======================
 
 
     this.hasPrevPieceTXT = function() {
         var isTXT = false;
         var currentPiece = $('.currentPiece');
-        if (currentPiece.prev().size() == 0) {
+        if (currentPiece.prev().size() === 0) {
             //Acabou Peça, passa pra outra PieceSet se houver
             var currentPieceSet = $('.currentPieceSet');
-            if (currentPieceSet.prev().size() == 0) {
+            if (currentPieceSet.prev().size() === 0) {
                 //Acabou todas as pieceSets dessa Tela
                 // Passa pra a pŕoxima PieceSet
                 var currentScreen = $('.currentScreen');
                 var prevScreen = currentScreen.prev();
-                if (prevScreen.size() != 0) {
+                if (prevScreen.size() !== 0) {
                     isTXT = prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                 } else {
                     //Finalizou todas as Screen do COBJECT Corrente
@@ -1012,11 +1023,11 @@ this.Meet = function(options) {
             }
         } else {
             var prevPiece = currentPiece.prev();
-            isTXT = prevPiece.find('.group').last().hasClass('TXT')
+            isTXT = prevPiece.find('.group').last().hasClass('TXT');
         }
 
         return isTXT;
-    }
+    };
 
 
 
@@ -1024,6 +1035,7 @@ this.Meet = function(options) {
     /**
      * Salva a performace do usuário no banco. Retorna falso caso haja algum erro.
      * 
+     * @param {DOMString} currentPieceID 
      * @returns {boolean}
      */
     this.savePerformanceUsr = function(currentPieceID) {
@@ -1031,9 +1043,9 @@ this.Meet = function(options) {
         self.interval_piece = (new Date().getTime() - self.interval_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
-        if (self.domCobject.cobject.template_code == 'AEL' ||
-                self.domCobject.cobject.template_code == 'DDROP' ||
-                self.domCobject.cobject.template_code == 'ONEDDROP') {
+        if (self.domCobject.cobject.template_code === 'AEL' ||
+                self.domCobject.cobject.template_code === 'DDROP' ||
+                self.domCobject.cobject.template_code === 'ONEDDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
@@ -1047,7 +1059,7 @@ this.Meet = function(options) {
             'iscorrect': pieceIsTrue
         };
         var data = data_default;
-        if (self.domCobject.cobject.template_code == 'MTE') {
+        if (self.domCobject.cobject.template_code === 'MTE') {
             //Último grupo clicado da Piece Corrente. Divide por 2 como um grupo ASK
             data.group_id = ($('.currentPiece .last_clicked').attr('group') / currentPieceID) / 2;
         }
@@ -1063,7 +1075,7 @@ this.Meet = function(options) {
 
         //Salvo com Sucesso !
         return true;
-    }
+    };
 
     this.saveMatchGroup = function(currentPieceID) {
         //Para Cada GRUPO da Piece
@@ -1072,7 +1084,7 @@ this.Meet = function(options) {
         $.each(self.domCobject.mainPieces[currentPieceID], function(nome_attr, group) {
             //Salva a perfomande do groupo somente se foi dado um Match
             if (self.isset(this.groupMatched)) {
-                if (nome_attr != 'istrue' && nome_attr != 'time_answer') {
+                if (nome_attr !== 'istrue' && nome_attr !== 'time_answer') {
                     if (self.isset(group.ismatch) && (!group.ismatch)) {
                         pieceIsTrue = false;
                     } else if (self.isset(group.ismatch) && group.ismatch) {
@@ -1103,7 +1115,7 @@ this.Meet = function(options) {
         //Salvo com Sucesso
         self.domCobject.mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
         return true;
-    }
+    };
 
     /**
      * Verifica se esta Correto MTE.
@@ -1115,11 +1127,11 @@ this.Meet = function(options) {
     this.isCorrectMTE = function(pieceID, groupClicked) {
         var elements_group = eval("self.domCobject.mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
-        var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype == 'Acerto');
+        var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype === 'Acerto');
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
-    }
+    };
 
     /**
      * Salva os Metadados no objeto e verifica se o AEL esta correto
@@ -1140,7 +1152,7 @@ this.Meet = function(options) {
             //Veridicar Match
             var groupRevertAsk = (groupAskClicked / pieceID) / 2;
             var groupRevertAnswer = ((groupAnswerClicked.split('_')[0]) / pieceID) / 3;
-            var ismatch = (groupRevertAsk == groupRevertAnswer);
+            var ismatch = (groupRevertAsk === groupRevertAnswer);
             //Seta como ismatch o istrue dos dois grupos 
             elements_groupAsk.ismatch = ismatch;
             elements_groupAsk.groupMatched = groupAnswerClicked;
@@ -1153,7 +1165,7 @@ this.Meet = function(options) {
 
         //Se não foi salvo
         return null;
-    }
+    };
 
     /**
      * Verifica se o PRE esta correto
@@ -1168,28 +1180,28 @@ this.Meet = function(options) {
         var idxText = null;
         //BUSCAR PROPRIEDADE  = TEXT
         for (var i = 0; i < elements_group.elements[0].generalProperties.length; i++) {
-            if (elements_group.elements[0].generalProperties[i].name == 'text') {
+            if (elements_group.elements[0].generalProperties[i].name === 'text') {
                 idxText = i;
                 break;
             }
         }
         
-        var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() == digitated_value.toUpperCase());
+        var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() === digitated_value.toUpperCase());
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
-    }
+    };
 
 
     this.hasNextCobject = function() {
         var idxCurrentCobjectID = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id);
         return self.isset(self.cobjectsIDs[idxCurrentCobjectID + 1]);
-    }
+    };
 
     this.hasPrevCobject = function() {
         var idxCurrentCobjectID = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id);
         return idxCurrentCobjectID > 0;
-    }
+    };
     //======================
     /**
      * Deveria finalizar o meet... mas não faz nada.
@@ -1202,7 +1214,7 @@ this.Meet = function(options) {
         sessionStorage.removeItem("login_name_actor");
         location.href = "index.html";
         return true;
-    }
+    };
     /**
      * Verifica se a variavel esta setada.
      * 
@@ -1211,11 +1223,11 @@ this.Meet = function(options) {
      */
     this.isset = function(variable) {
         return (variable !== undefined && variable !== null);
-    }
+    };
 
     this.isEmpty = function(variable) {
         return !self.isset(variable) || variable === '';
-    }
+    };
 
     /**
      * Envia mensagem de Certo ou Errado par ao usuário
@@ -1242,7 +1254,7 @@ this.Meet = function(options) {
             //            $('#message').fadeOut(5000);
         }
 
-    }
+    };
 
     //Contador de Tempo de cada Meet
     this.countTime = function(tag) {
@@ -1281,7 +1293,7 @@ this.Meet = function(options) {
             self.tag_time.html(hours + ':' + mins + ':' + segs);
             self.countTime();
         }, 1000);
-    }
+    };
 
 
 
@@ -1296,7 +1308,7 @@ this.Meet = function(options) {
         $('#points').text(self.score);
 
         //Se for diferente, então Passou de Nível
-        if (!self.isset(self.domCobject) || self.currentGrade != self.domCobject.cobject.grade) {
+        if (!self.isset(self.domCobject) || self.currentGrade !== self.domCobject.cobject.grade) {
             if (self.isset(self.domCobject)) {
                 self.currentGrade = self.domCobject.cobject.grade;
                 $('#level').text(self.currentGrade);
@@ -1307,7 +1319,7 @@ this.Meet = function(options) {
             }
         }
 
-    }
+    };
 
 
 
@@ -1318,6 +1330,6 @@ this.Meet = function(options) {
         html.append("<img class='btn_nextPage' id='nextPage' src='img/icons/next.png' style='display:none' >");
 
         return html;
-    }
+    };
 
-}
+};
