@@ -104,8 +104,8 @@ fieldset{
 /** Nível e Pontos **/
 .game {
     position: absolute;
-    top: 20px;
-    right: 30px;
+    top: 12px;
+    right: 15px;
 }
 
 .level {
@@ -127,8 +127,12 @@ fieldset{
     float: left;
     font-family: tellural, helvetica, arial, sans-serif;
     font-weight: bold;
-    font-size: 40px;
-    color: #FBB03B;
+    font-size: 22px;
+    color: yellow;
+}
+
+#points, #level {
+    color: #fff;
 }
 
 /** PieceSet Global **/
