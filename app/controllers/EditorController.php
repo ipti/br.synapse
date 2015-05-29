@@ -711,6 +711,23 @@ class EditorController extends Controller {
                                             ));
                                             $newElementProperty->value = "português";
                                             $newElementProperty->save();
+
+                                            //Se for template Caça-Palavra, atualiza o Showing Letter
+                                            if (isset($_POST["showing_letters"])) {
+                                                //Propriedade de showing_letters
+                                                $propertyName = "showing_letters";
+                                                $propertyContext = "word";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+
+                                                $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $_POST["pieceID"], 'element_id' => $elementID));
+                                                $pePropertyShowLetters = EditorPieceelementProperty::model()->findByAttributes(array(
+                                                    'piece_element_id' => $pieceElement->id,
+                                                    'property_id' => $propertyID
+                                                ));
+                                                //Altera a propriedade Showing Letters
+                                                $pePropertyShowLetters->value = $_POST["showing_letters"];
+                                                $pePropertyShowLetters->save();
+                                            }
                                         }
                                     } else {
                                         //Cria um novo somente.
@@ -742,7 +759,7 @@ class EditorController extends Controller {
                                                 $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
                                                 $newPEPropertyDirection->property_id = $propertyID;
                                                 $newPEPropertyDirection->value = $_POST["direction"];
-                                                $newPEPropertyDirection->save();
+                                                $newPEPropertyDirection->insert();
                                             }
                                             if (isset($_POST["showing_letters"])) {
                                                 //Propriedade de showing_letters
@@ -751,21 +768,12 @@ class EditorController extends Controller {
                                                 $propertyContext = "word";
                                                 $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
 
-                                                if ($_POST['op'] == 'save') {
-                                                    $newPEPropertyShowLetters = new EditorPieceelementProperty();
-                                                    $newPEPropertyShowLetters->piece_element_id = $newPieceElement->id;
+                                                $newPEPropertyShowLetters = new EditorPieceelementProperty();
+                                                $newPEPropertyShowLetters->piece_element_id = $newPieceElement->id;
 
-                                                    $newPEPropertyShowLetters->property_id = $propertyID;
-                                                    $newPEPropertyShowLetters->value = $_POST["showing_letters"];
-                                                    $newPEPropertyShowLetters->save();
-                                                } elseif ($_POST['op'] == 'update') {
-                                                    //$_POST['ID_BD'] STOP HERE -- Verificar se é aqui é trata o UPDATE !
-                                                    EditorPieceelementProperty::model()->findByAttributes(array(
-                                                        'piece_element_id' => $newPieceElement->id,
-                                                        'property_id'=>$propertyID
-                                                    ));
-
-                                                }
+                                                $newPEPropertyShowLetters->property_id = $propertyID;
+                                                $newPEPropertyShowLetters->value = $_POST["showing_letters"];
+                                                $newPEPropertyShowLetters->insert();
                                             }
                                         } else if ($isElementPieceSet) {
                                             //É um elemento da PIECESET

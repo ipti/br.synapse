@@ -187,87 +187,50 @@ function onEditor(newEditor) {
     $(document).on("change", '.input_element', function () {
         newEditor.imageChanged($(this));
     });
-    
-    
-    $(document).on('click','.changeOrientation', function(){
-        if($(this).attr('orientation') === "V"){
+
+
+    $(document).on('click', '.changeOrientation', function () {
+        if ($(this).attr('orientation') === "V") {
             $(this).find(".fa").removeClass('fa-arrows-v');
             $(this).find(".fa").addClass('fa-arrows-h');
-            $(this).attr('orientation','H');
-        }else{
+            $(this).attr('orientation', 'H');
+        } else {
             $(this).find(".fa").removeClass('fa-arrows-h');
             $(this).find(".fa").addClass('fa-arrows-v');
-            $(this).attr('orientation','V');
+            $(this).attr('orientation', 'V');
         }
     });
-    
-    
-    
-  $(document).on("click", ".elementsDig div[group]", function () {
+
+
+
+    $(document).on("click", ".elementsDig div[group]", function () {
         $("span.active").removeClass('active');
         $(this).children("span").addClass('active');
-  });
+    });
 
 
-  $(document).on("click", ".wordsearch  div.Cell", function () {
+    $(document).on("click", ".wordsearch  div.Cell", function () {
         var row = $(this).attr("row");
         var col = $(this).attr("col");
         var word = $("span.active").find('.element font').text();
         var orientation = $("span.active").find('button.changeOrientation').attr('orientation');
         var maxW = 10;
         var maxH = 4;
-        
-        if(word !== "Clique para Alterar..." && word !== "Click to edit" &&
-            word.replace(/^\s+|\s+$/g, "") !== "UpdateCalcel" &&
-            word.replace(/^\s+|\s+$/g, "") !== "" &&
-            typeof $(this).attr('selected') === "undefined"){
-            
-            if (orientation === "H"){
-                if (parseInt(col) + word.length <= maxW){
+
+        if (word !== "Clique para Alterar..." && word !== "Click to edit" &&
+                word.replace(/^\s+|\s+$/g, "") !== "UpdateCalcel" &&
+                word.replace(/^\s+|\s+$/g, "") !== "" &&
+                typeof $(this).attr('selected') === "undefined") {
+
+            if (orientation === "H") {
+                if (parseInt(col) + word.length <= maxW) {
                     var currentCell;
                     var checkWord = "";
-                    for (var i = 0; i < word.length; i++){
+                    for (var i = 0; i < word.length; i++) {
                         currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
-                        if (currentCell.attr("word")){
-                            if (currentCell.attr("orientation") === "V"){
-                                if (currentCell.text() === word[i]){
-                                    checkWord += word[i];                                                                        
-                                } else {
-                                    checkWord += "_";
-                                }
-                            }
-                        } else {
-                            checkWord += word[i];                            
-                        }
-                    }
-                    if (checkWord === word){
-                        var wordExists = false;
-                        $(".words-list > ul li").each(function(){
-                            if ($(this).text().toUpperCase() == word){
-                                wordExists = true;
-                                alert("A palavra " + word + " já existe no diagrama!");
-                            }
-                        });
-                        if (wordExists === false){
-                            for (var i = 0; i < word.length; i++){
-                                currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
-                                currentCell.text(word[i]).css("font-weight", "bold");
-                                currentCell.attr({word: "true", orientation: "H"});
-                            }
-                            word = word.charAt(0) + word.slice(1).toLowerCase();
-                            $(".words-list ul").append('<li>' + word + '</li>');
-                        }
-                    }
-                }
-            } else if (orientation === "V"){
-                if (parseInt(row) + word.length <= maxH){
-                    var currentCell;
-                    var checkWord = "";
-                    for (var i = 0; i < word.length; i++){
-                        currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
-                        if (currentCell.attr("word")){
-                            if (currentCell.attr("orientation") === "H"){
-                                if (currentCell.text() === word[i]){
+                        if (currentCell.attr("word")) {
+                            if (currentCell.attr("orientation") === "V") {
+                                if (currentCell.text() === word[i]) {
                                     checkWord += word[i];
                                 } else {
                                     checkWord += "_";
@@ -277,16 +240,53 @@ function onEditor(newEditor) {
                             checkWord += word[i];
                         }
                     }
-                    if (checkWord === word){
+                    if (checkWord === word) {
                         var wordExists = false;
-                        $(".words-list > ul li").each(function(){
-                            if ($(this).text().toUpperCase() === word){
+                        $(".words-list > ul li").each(function () {
+                            if ($(this).text().toUpperCase() == word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
                             }
                         });
-                        if (wordExists == false){
-                            for (var i = 0; i < word.length; i++){
+                        if (wordExists === false) {
+                            for (var i = 0; i < word.length; i++) {
+                                currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
+                                currentCell.text(word[i]).css("font-weight", "bold");
+                                currentCell.attr({word: "true", orientation: "H"});
+                            }
+                            word = word.charAt(0) + word.slice(1).toLowerCase();
+                            $(".words-list ul").append('<li>' + word + '</li>');
+                        }
+                    }
+                }
+            } else if (orientation === "V") {
+                if (parseInt(row) + word.length <= maxH) {
+                    var currentCell;
+                    var checkWord = "";
+                    for (var i = 0; i < word.length; i++) {
+                        currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
+                        if (currentCell.attr("word")) {
+                            if (currentCell.attr("orientation") === "H") {
+                                if (currentCell.text() === word[i]) {
+                                    checkWord += word[i];
+                                } else {
+                                    checkWord += "_";
+                                }
+                            }
+                        } else {
+                            checkWord += word[i];
+                        }
+                    }
+                    if (checkWord === word) {
+                        var wordExists = false;
+                        $(".words-list > ul li").each(function () {
+                            if ($(this).text().toUpperCase() === word) {
+                                wordExists = true;
+                                alert("A palavra " + word + " já existe no diagrama!");
+                            }
+                        });
+                        if (wordExists == false) {
+                            for (var i = 0; i < word.length; i++) {
                                 currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
                                 currentCell.text(word[i]).css("font-weight", "bold");
                                 currentCell.attr({word: "true", orientation: "V"});
@@ -298,10 +298,10 @@ function onEditor(newEditor) {
                 }
             }
         }
-  });
+    });
 
-      
-       //Template TPLC
+
+    //Template TPLC
 
     //Função do click na Célula do Template PLC
     this.eventClickCellPLC = function (clickedCell, isload) {
@@ -585,7 +585,7 @@ function onEditor(newEditor) {
                         }
                         //Retira a marcação da última palavra clicada
                         $(clickedCell).closest('.tplPlc').children('.elementsPlc').find('div[group][lastSelected]').removeAttr('lastSelected');
-                        
+
                         //Se for load o crossWord já possui essas informações
                         if (!isload) {
                             //Registrar no Editor qual a peça, element e posicao do texto que será curzado com outro
@@ -624,13 +624,23 @@ function onEditor(newEditor) {
                     $(clickedCell).removeAttr('isShow');
                     $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');
                 }
+                if (!isload) {
+                    //Alterar o atributo updated dos elementos textos referente a esta célula
+                    var cellGroups = groupWordOfClickedLetter.split('g');
+                    for (idx = 1; idx < cellGroups.length; idx++) {
+                        var currentGroup = cellGroups[idx];
+                        $(clickedCell).closest(".tplPlc")
+                                .find(".elementsPlc div[group='" + currentGroup + "']").find(".element.text").attr('updated', '1');
+                    }
+                }
+
             }
         } else {
             //Já foi cruzado
         }
     }
 
-      $(document).on("click", ".crosswords  div.Cell[groups]", function () {
+    $(document).on("click", ".crosswords  div.Cell[groups]", function () {
         self.eventClickCellPLC(this, false);
     });
 

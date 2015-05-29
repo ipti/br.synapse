@@ -383,7 +383,6 @@ function editor() {
                     if (crossWord['word1Group'] == group || crossWord['word2Group'] == group) {
                         var crossLetter = crossWord['letter'];
                         var crossPosition;
-                        // console.log(crossWord['word1Group'] + "==" + group);
                         if (crossWord['word1Group'] == group) {
                             crossPosition = crossWord['position1'];
                             if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
@@ -1619,7 +1618,6 @@ function editor() {
                                 , parseInt(splitPosition[1]) + 1)};
 
                     self.crossWords.push(tempJsonArray);
-                    console.log(self.crossWords);
                 }
             }
             
@@ -1737,7 +1735,7 @@ function editor() {
                 hCrossWord.find('.Cell[groups*=g' + group + ']').each(function (idx) {
                     if (posLettersShow.inArray(idx)) {
                         //A Célular corrente deve ser isShow
-                        $(this).click();
+                        self.onEditor.eventClickCellPLC(this, true);
                     }
                 });
                 //========================================
@@ -2309,7 +2307,6 @@ function editor() {
                         var inputSound_NameDB_ID = "#" + ElementID + "_sound_nameDB";
                         var inputSound_NameCurrent_ID = "#" + ElementID + "_sound_input";
                         //var ElementRespID = "#"+ElementID+"_resp_text";
-                        console.log(Match);
                         //Dados que serão passados pelo ajax
                         var data = {
                             //Operação Salvar, Element, Type, ID no DOM
@@ -2433,7 +2430,7 @@ function editor() {
                                                                     } else {
                                                                 //Se for um Load
                                                                 //Então salvar os cruzamentos no BD, somente se forem novos Cruzamentos
-                                                                var newCrossWords = new array();
+                                                                var newCrossWords = array();
                                                                 for(var idx in self.crossWords){
                                                                     var crossWord = self.crossWords[idx];
                                                                     if(!parent.isset(crossWord['idDBPieceElementPropertyPointCross'])){
