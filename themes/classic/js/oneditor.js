@@ -214,6 +214,7 @@ function onEditor(newEditor) {
         var col = $(this).attr("col");
         var word = $("span.active").find('.element font').text();
         var orientation = $("span.active").find('button.changeOrientation').attr('orientation');
+        var group = "g" + $("span.active").attr("group");
         var maxW = 10;
         var maxH = 4;
 
@@ -228,7 +229,7 @@ function onEditor(newEditor) {
                     var checkWord = "";
                     for (var i = 0; i < word.length; i++) {
                         currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
-                        if (currentCell.attr("word")) {
+                        if (currentCell.attr("groups")) {
                             if (currentCell.attr("orientation") === "V") {
                                 if (currentCell.text() === word[i]) {
                                     checkWord += word[i];
@@ -252,10 +253,14 @@ function onEditor(newEditor) {
                             for (var i = 0; i < word.length; i++) {
                                 currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
                                 currentCell.text(word[i]).css("font-weight", "bold");
-                                currentCell.attr({word: "true", orientation: "H"});
+                                if (currentCell.attr("groups")) {
+                                    currentCell.attr({groups: currentCell.attr("groups") + group, orientation: "HV"});
+                                } else {
+                                    currentCell.attr({groups: group, orientation: "H"});
+                                }
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
-                            $(".words-list ul").append('<li>' + word + '</li>');
+                            $(".words-list ul").append('<li group="' + group + '">' + word + '</li>');
                         }
                     }
                 }
@@ -265,7 +270,7 @@ function onEditor(newEditor) {
                     var checkWord = "";
                     for (var i = 0; i < word.length; i++) {
                         currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
-                        if (currentCell.attr("word")) {
+                        if (currentCell.attr("groups")) {
                             if (currentCell.attr("orientation") === "H") {
                                 if (currentCell.text() === word[i]) {
                                     checkWord += word[i];
@@ -289,10 +294,14 @@ function onEditor(newEditor) {
                             for (var i = 0; i < word.length; i++) {
                                 currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
                                 currentCell.text(word[i]).css("font-weight", "bold");
-                                currentCell.attr({word: "true", orientation: "V"});
+                                if (currentCell.attr("groups")) {
+                                    currentCell.attr({groups: currentCell.attr("groups") + group, orientation: "HV"});
+                                } else {
+                                    currentCell.attr({groups: group, orientation: "V"});
+                                }
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
-                            $(".words-list ul").append('<li>' + word + '</li>');
+                            $(".words-list ul").append('<li group="' + group + '">' + word + '</li>');
                         }
                     }
                 }
