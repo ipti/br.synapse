@@ -2430,14 +2430,17 @@ function editor() {
                                                                     } else {
                                                                 //Se for um Load
                                                                 //Então salvar os cruzamentos no BD, somente se forem novos Cruzamentos
-                                                                var newCrossWords = array();
+                                                                var newCrossWords = new Array();
                                                                 for(var idx in self.crossWords){
                                                                     var crossWord = self.crossWords[idx];
                                                                     if(!parent.isset(crossWord['idDBPieceElementPropertyPointCross'])){
-                                                                        //É um cruzamento Novo
+                                                                        //É um cruzamento Novo. Stop Here. Editar atividade ! erro
                                                                         newCrossWords.push(crossWord);
+                                                                        console.log(crossWord);
                                                                     }
                                                                 }
+                                                                
+                                                                
                                                                 
                                                                 var dataCrossWords = {'op': 'save', 'step': 'plc', 'crossWords': newCrossWords};
                                                                 parent.saveData(
