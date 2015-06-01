@@ -1,8 +1,8 @@
-TYPE = {}
-TYPE.ELEMENT = {}
+TYPE = {};
+TYPE.ELEMENT = {};
 TYPE.ELEMENT.TEXT = "TEXT";
 TYPE.ELEMENT.MULTIMIDIA = "MULTIMIDIA";
-TYPE.LIBRARY = {}
+TYPE.LIBRARY = {};
 TYPE.LIBRARY.IMAGE = "IMAGE";
 TYPE.LIBRARY.SOUND = "SOUND";
 TYPE.LIBRARY.MOVIE = "MOVIE";
@@ -67,7 +67,7 @@ function editor() {
 
     this.setEventsOnEditor = function (newOnEditor) {
         self.onEditor = newOnEditor;
-    }
+    },
 
     /**
      * Verifica se COtemplateType esta setado.
@@ -76,8 +76,8 @@ function editor() {
      * @returns {Boolean}
      */
     this.COTemplateTypeIn = function (array) {
-        return array.indexOf(this.COtemplateType) != -1;
-    }
+        return array.indexOf(this.COtemplateType) !== -1;
+    },
 
     /**
      * Ativa 'Piece' desejada, e desativa todas as outras.
@@ -90,7 +90,7 @@ function editor() {
         var id = piece.attr('id');
         piece.addClass('active');
         this.currentPiece = id;
-    }
+    },
 
 
     /**
@@ -123,7 +123,7 @@ function editor() {
             //adiciona uma PieceSet nesta Screen se for uma Nova Screen
             self.addPieceSet();
         }
-    }
+    },
 
     /**
      * Atualiza a Paginação.
@@ -147,7 +147,7 @@ function editor() {
             nav_panel_id: '.navscreen',
             editor: this
         });
-    }
+    },
 
     /**
      * Adiciona um novo 'PieceSet'.
@@ -191,7 +191,7 @@ function editor() {
 
         // .actName 
         // Descrição Padrão do PieceSet
-        if ($('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val() == '') {
+        if ($('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val() === '') {
             //Deixa a mesma mensagem
             $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição do Cabeçalho .....');
             $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'true');
@@ -227,7 +227,7 @@ function editor() {
             parent.addPiece(piecesetID);
         }
 
-    }
+    },
 
     /**
      * Adiciona um 'Piece', vindo do Banco ou não.
@@ -363,7 +363,7 @@ function editor() {
             parent.delPiece(pieceID);
         });
 
-    }
+    },
 
 
 
@@ -379,19 +379,19 @@ function editor() {
             for (var idx in self.crossWords) {
                 var crossWord = self.crossWords[idx];
                 //SOMENTE quando estar na mesma Piece
-                if (crossWord['pieceID'] == pieceID) {
-                    if (crossWord['word1Group'] == group || crossWord['word2Group'] == group) {
+                if (crossWord['pieceID'] === pieceID) {
+                    if (crossWord['word1Group'] === group || crossWord['word2Group'] === group) {
                         var crossLetter = crossWord['letter'];
                         var crossPosition;
-                        if (crossWord['word1Group'] == group) {
+                        if (crossWord['word1Group'] === group) {
                             crossPosition = crossWord['position1'];
-                            if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
+                            if (!self.isset(word[crossPosition]) || word[crossPosition] !== crossLetter) {
                                 //A letra que já fora cruzada com outra palavra não pode ser alterada
                                 return false;
                             }
-                        } else if (crossWord['word2Group'] == group) {
+                        } else if (crossWord['word2Group'] === group) {
                             crossPosition = crossWord['position2'];
-                            if (!self.isset(word[crossPosition]) || word[crossPosition] != crossLetter) {
+                            if (!self.isset(word[crossPosition]) || word[crossPosition] !== crossLetter) {
                                 //A letra que já fora cruzada com outra palavra não pode ser alterada
                                 return false;
                             }
@@ -415,11 +415,11 @@ function editor() {
 
             if (word.length > sizeOldLetters) {
                 //Verifica se possui Alguma célula com Letra no Caminho
-                if (txtDirection == 'h') {
+                if (txtDirection === 'h') {
                     for (var i = sizeOldLetters; i < word.length; i++) {
-                        if (lastCellGroup.next().length != 0) {
+                        if (lastCellGroup.next().length !== 0) {
                             //Existe uma próxima Célula. Veirificar se ela possui uma letra
-                            if (self.isset(lastCellGroup.next().text()) && lastCellGroup.next().text().replace(/\s/g, '') != '') {
+                            if (self.isset(lastCellGroup.next().text()) && lastCellGroup.next().text().replace(/\s/g, '') !== '') {
                                 //Encontrou uma letra
                                 return false;
                             }
@@ -430,11 +430,11 @@ function editor() {
                             break;
                         }
                     }
-                } else if (txtDirection == 'v') {
+                } else if (txtDirection === 'v') {
                     var indexCellWord = lastCellGroup.index();
                     for (var i = sizeOldLetters; i < word.length; i++) {
                         var nextRow = lastCellGroup.closest('.Row').next();
-                        if (nextRow.length != 0) {
+                        if (nextRow.length !== 0) {
                             //Existe uma próxima Linha. Veirificar se ela possui uma letra na coluna dessa Palavra Corrente
                             var nextCellGroup = nextRow.find('.Cell').eq(indexCellWord);
                             if (self.isset(nextCellGroup.text()) && nextCellGroup.text().replace(/\s/g, '') != '') {
@@ -458,7 +458,7 @@ function editor() {
 
         return false;
 
-    }
+    },
 
     this.delWordPLC = function (thisDivGroup) {
         //Então exclui alguma letras
@@ -489,23 +489,23 @@ function editor() {
             }
         });
 
-        if (txtDirection == 'h') {
+        if (txtDirection === 'h') {
             //Então verificar toda a coluna = '' pra a exclusão
             var mayDeleteColunmRight;
             var mayDeleteColunmLeft;
             while (totalDeleted > 0) {
                 var Row = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row');
-                mayDeleteColunmRight = Row.size() != 0;
-                mayDeleteColunmLeft = Row.size() != 0;
+                mayDeleteColunmRight = Row.size() !== 0;
+                mayDeleteColunmLeft = Row.size() !== 0;
                 Row.each(function () {
                     //Verificar últimas Células
-                    if ($(this).find('.Cell').eq(idxLastCell).text().replace(/\s/g, '') != '') {
+                    if ($(this).find('.Cell').eq(idxLastCell).text().replace(/\s/g, '') !== '') {
                         //Não pode excluir
                         mayDeleteColunmRight = false;
                     }
 
                     //Verificar primeiras Células
-                    if ($(this).find('.Cell').eq(idxFirstCell).text().replace(/\s/g, '') != '') {
+                    if ($(this).find('.Cell').eq(idxFirstCell).text().replace(/\s/g, '') !== '') {
                         //Não pode excluir
                         mayDeleteColunmLeft = false;
                     }
@@ -540,16 +540,16 @@ function editor() {
                 totalDeleted--;
             }
 
-        } else if (txtDirection == 'v') {
+        } else if (txtDirection === 'v') {
             //Então verificar se toda a linha = '' para a deleção de cada
             var mayDeleteRowTop;
             var mayDeleteRowDown;
             while (totalDeleted > 0) {
                 //Verificar se há linhas vazias Mais Abaixo
                 var lastRow = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().find('.Cell');
-                mayDeleteRowDown = lastRow.size() != 0;
+                mayDeleteRowDown = lastRow.size() !== 0;
                 lastRow.each(function () {
-                    if ($(this).text().replace(/\s/g, '') != '') {
+                    if ($(this).text().replace(/\s/g, '') !== '') {
                         //Não pode excluir
                         mayDeleteRowDown = false;
                     }
@@ -561,9 +561,9 @@ function editor() {
 
                 //Verificar se há linhas vazias Mais Acima
                 var firstRow = thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').first().find('.Cell');
-                mayDeleteRowTop = firstRow.size() != 0;
+                mayDeleteRowTop = firstRow.size() !== 0;
                 firstRow.each(function () {
-                    if ($(this).text().replace(/\s/g, '') != '') {
+                    if ($(this).text().replace(/\s/g, '') !== '') {
                         //Não pode excluir
                         mayDeleteRowTop = false;
                     }
@@ -592,16 +592,16 @@ function editor() {
 
         for (var idx in self.crossWords) {
             var crossWord = self.crossWords[idx];
-            if (crossWord['pieceID'] == thisPieceID) {
+            if (crossWord['pieceID'] === thisPieceID) {
                 //É da mesma Piece
-                if (crossWord['word1Group'] == thisDivGroup.attr('group')
-                        || crossWord['word2Group'] == thisDivGroup.attr('group')) {
+                if (crossWord['word1Group'] === thisDivGroup.attr('group')
+                        || crossWord['word2Group'] === thisDivGroup.attr('group')) {
                     //Encontrou, então exlui essse cruzamento
                     self.crossWords.splice(idx, 1);
                 }
             }
         }
-    }
+    },
 
 
     this.addText = function (tagAdd, loaddata, idbd) {
@@ -723,14 +723,14 @@ function editor() {
                 //adiciona a função de foco ao input
                 $(input).on("focus", function () {
                     //se o valor for igual ao initial_text
-                    if ($(input).val() == initial_text && initial_text == LABEL_INITIAL_TEXT) {
+                    if ($(input).val() === initial_text && initial_text === LABEL_INITIAL_TEXT) {
                         //remove o texto
                         $(input).val("");
                     }
                 });
                 $(input).on("change", function () {
                     //se não houver texto
-                    if ($(input).val() == "") {
+                    if ($(input).val() === "") {
                         //adiciona o texto initial_text
                         $(input).val(initial_text);
                     } else if (parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
@@ -756,7 +756,7 @@ function editor() {
                         parent.textChanged(initial_text, value_txt, text_element, text_div);
                         var txt_New_noHtml = $(value_txt).text();
                         //===========================
-                        if (parent.COTemplateTypeIn(parent.PRE) && (txt_New_noHtml == "")) {
+                        if (parent.COTemplateTypeIn(parent.PRE) && (txt_New_noHtml === "")) {
                             // O template é do tipo PRE  e o elemento está vazio
                             //Deleta o PieceSet
                             parent.delPieceSet(parent.currentPieceSet, true); // TODO
@@ -792,11 +792,11 @@ function editor() {
 
                         var currentTxtInput = thisDivGroup.find('.element font').text().replace(/\s/g, '');
                         var str = "";
-                        if (currentTxtInput != "CliqueparaAlterar..." && currentTxtInput != "Clicktoedit" &&
-                                currentTxtInput != "UpdateCalcel" &&
-                                currentTxtInput != "") {
+                        if (currentTxtInput !== "CliqueparaAlterar..." && currentTxtInput !== "Clicktoedit" &&
+                                currentTxtInput !== "UpdateCalcel" &&
+                                currentTxtInput !== "") {
 
-                            if (thisDivGroup.closest(".elementsPlc").siblings(".crosswords").text().replace(/\s/g, '') == '') {
+                            if (thisDivGroup.closest(".elementsPlc").siblings(".crosswords").text().replace(/\s/g, '') === '') {
                                 //Primeira palavra, na horizontal
                                 thisDivGroup.attr('txtDirection', 'h');
                                 str += "<div class='Row'>";
@@ -828,7 +828,7 @@ function editor() {
                                         + 'g' + thisDivGroup.attr('group') + '"]').each(function (index) {
                                     //É encontrado na ordem : de cima para baixo, da esquerda para a direita
                                     sizeOldLetters++;
-                                    if (currentTxtInput.substring(index, index + 1).replace(/\s/g, '') == '') {
+                                    if (currentTxtInput.substring(index, index + 1).replace(/\s/g, '') === '') {
                                         //Então retira o atributo groups
                                         $(this).removeAttr('groups');
                                     }
@@ -841,8 +841,8 @@ function editor() {
 
                                     for (var i = sizeOldLetters; i < currentTxtInput.length; i++) {
                                         //Então adiciona o restante
-                                        if (txtDirection == 'h') {
-                                            if (lastCellGroup.next().length == 0) {
+                                        if (txtDirection === 'h') {
+                                            if (lastCellGroup.next().length === 0) {
                                                 //Então NÃO existe uma célula seguinte
                                                 //Adiciona a quantidade de células restantes
                                                 var sizeColunmAddAfter = currentTxtInput.length - i;
@@ -860,11 +860,11 @@ function editor() {
                                             lastCellGroup.next().html(currentTxtInput[i]);
                                             //Next
                                             lastCellGroup = lastCellGroup.next();
-                                        } else if (txtDirection == 'v') {
+                                        } else if (txtDirection === 'v') {
                                             var indexCellWord = lastCellGroup.index();
                                             var totalCells = lastCellGroup.closest('.Row').find('.Cell').last().index() + 1;
                                             var nextCellGroup = lastCellGroup.closest('.Row').next().find('.Cell').eq(indexCellWord);
-                                            if (nextCellGroup.length == 0) {
+                                            if (nextCellGroup.length === 0) {
                                                 //Então NÃO existe uma Linha seguinte
                                                 //Adiciona a quantidade de Linhas restantes
                                                 var sizeRowAddAfter = currentTxtInput.length - i;
@@ -894,14 +894,14 @@ function editor() {
                                     var totalDeleted = sizeOldLetters - currentTxtInput.length;
                                     var idxLastCell = constLastCellGroup.index();
                                     var idxLastRow = constLastCellGroup.closest('.Row').index();
-                                    if (txtDirection == 'h') {
+                                    if (txtDirection === 'h') {
 
                                         //Então verificar toda a coluna = '' pra a exclusão
                                         var mayDeleteColunm;
                                         while (totalDeleted > 0) {
                                             mayDeleteColunm = true;
                                             thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').each(function () {
-                                                if ($(this).find('.Cell').eq(idxLastCell).text().replace(/\s/g, '') != '') {
+                                                if ($(this).find('.Cell').eq(idxLastCell).text().replace(/\s/g, '') !== '') {
                                                     //Não pode excluir
                                                     mayDeleteColunm = false;
                                                 }
@@ -920,13 +920,13 @@ function editor() {
                                             totalDeleted--;
                                         }
 
-                                    } else if (txtDirection == 'v') {
+                                    } else if (txtDirection === 'v') {
                                         //Então verificar se toda a linha = '' para a deleção de cada
                                         var mayDeleteRow;
                                         while (totalDeleted > 0) {
                                             mayDeleteRow = true;
                                             thisDivGroup.closest('.tplPlc').find('.crosswords').find('.Row').last().find('.Cell').each(function () {
-                                                if ($(this).text().replace(/\s/g, '') != '') {
+                                                if ($(this).text().replace(/\s/g, '') !== '') {
                                                     //Não pode excluir
                                                     mayDeleteRow = false;
                                                 }
@@ -957,17 +957,8 @@ function editor() {
 
             });
         }
-    }
-
-
-
-
-
-
-
-
-
-
+    },
+            
 //Verificar se foi Alterado em relação a do DB
     this.textChanged = function (initial_text, value_txt, text_element, text_div) {
         value_txt = (this.COTemplateTypeIn(this.TXT)) ? value_txt : $(value_txt).text();
@@ -979,7 +970,7 @@ function editor() {
             $(text_div).attr('updated', 0);
         }
 
-    }
+    };
 
     this.addUploadForm = function (tagAdd, type, responseFunction, loaddata, idbd) {
         //Verificar se é um elemento da PieceSet
@@ -1032,7 +1023,7 @@ function editor() {
 
 
         var checked = "";
-        if (this.isset(flag) && flag == "Acerto") {
+        if (this.isset(flag) && flag === "Acerto") {
             checked = 'checked="checked"';
         }
 
@@ -1064,7 +1055,7 @@ function editor() {
 
         $.each(uploadAccept, function (key, value) {
             //sound  tornar-se audio
-            var extAcept = (uploadType == 'sound') ? 'audio' : uploadType;
+            var extAcept = (uploadType === 'sound') ? 'audio' : uploadType;
             accept += extAcept + '/' + value + ', ';
         });
 
@@ -1091,7 +1082,7 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element moptions">';
         } else {
-            html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element">'
+            html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element">';
         }
 
         if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
@@ -1135,7 +1126,7 @@ function editor() {
 
         $("#" + file + " .input_element").change(function () {
             //Se o input do Upload alterou, então verifica se NÃO existe IMG
-            if ($("#" + file + " img").size() == 0) {
+            if ($("#" + file + " img").size() === 0) {
                 // Não existe IMG, logo adicionar uma nova e incrementa o contador do elements
                 parent.countElements[parent.currentPiece]++;
             }
@@ -1148,13 +1139,13 @@ function editor() {
             filesize = Math.round(filesize * 1000) / 1000; //3 decimal
 
             if (filesize <= uploadMaxSize) {
-                var extAcept = (uploadType == 'sound') ? 'audio' : uploadType;
-                if (!(this.files[0].type.indexOf(extAcept) == -1)) {
+                var extAcept = (uploadType === 'sound') ? 'audio' : uploadType;
+                if (!(this.files[0].type.indexOf(extAcept) === -1)) {
 
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         responseFunction(e.target.result, file, form);
-                    }
+                    };
 
                     reader.readAsDataURL(this.files[0]);
                 } else {
@@ -1169,7 +1160,7 @@ function editor() {
 
         //Trigger pra clicar no btn de Upload
         $("#" + input).trigger("click");
-    }
+    },
 
 //Add imagem do PieceSet
     this.insertImgPieceSet = function (piecesetID, idbd, loaddata) { // piecesetID e/ou idbd do element
@@ -1190,7 +1181,7 @@ function editor() {
             }
 
         }
-    }
+    },
 
 //Add imagem do Cobject
     this.insertImgCobject = function (idbd, loaddata) {
@@ -1214,7 +1205,7 @@ function editor() {
             }
             this.addImage(tagAdd.find('span:last'), loaddata, idbd);
         }
-    }
+    },
 
 
 //Add Sound no Cobject
@@ -1238,7 +1229,7 @@ function editor() {
             }
             this.addSound(tagAdd.find('span:last'), loaddata, idbd);
         }
-    }
+    },
 
 
     this.insertAudioPieceSet = function (piecesetID, idbd, loaddata) {
@@ -1259,7 +1250,7 @@ function editor() {
             }
 
         }
-    }
+    },
 
 
     this.addImage = function (tagAdd, loaddata, idbd) {
@@ -1272,7 +1263,7 @@ function editor() {
             $("#" + fileid + " > img").remove("img");
             $("#" + fileid).append('<img  src="' + src + '" width="320" height="240" alt="Image"/>');
         }, loaddata, idbd);
-    }
+    },
 
     this.addSound = function (tagAdd, loaddata, idbd) {
         var parent = this;
@@ -1285,9 +1276,9 @@ function editor() {
             $("#" + fileid).append(
                     //'<object id="obj_sound" height="100" width="150" data="'+src+'" type="audio/x-mpeg"></object>')
                     '<audio controls="controls" loop preload="preload" title="Titulo"> \n\
-             <source src="' + src + '"> ' + ERROR_BROWSER_SUPORT + ' </audio>')
+             <source src="' + src + '"> ' + ERROR_BROWSER_SUPORT + ' </audio>');
         }, loaddata, idbd);
-    }
+    },
 
     this.addVideo = function (tagAdd, loaddata) {
         var parent = this;
@@ -1302,7 +1293,7 @@ function editor() {
                     ERROR_BROWSER_SUPORT +
                     '</video>');
         }, loaddata);
-    }
+    },
 
     this.addElement = function (idbd, type, loaddata) {
         //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
@@ -1329,7 +1320,7 @@ function editor() {
         }
 
         var checked = "";
-        if (this.isset(flag) && flag == "Acerto") {
+        if (this.isset(flag) && flag === "Acerto") {
             checked = 'checked="checked"';
         }
 
@@ -1339,12 +1330,12 @@ function editor() {
                 parent.COTemplateTypeIn(parent.PRE)) {
             //Agrupando Elementos
             var group;
-            if (this.isset(match) && match != -1) {
+            if (this.isset(match) && match !== -1) {
                 // É um load
                 group = match;
                 var sameElement = false;
                 //Já existe o div[elementID]
-                sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length == '1';
+                sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length === '1';
             } else {
                 var last_group = $('#' + parent.currentPiece).find('div[group]').last().attr('group');
                 var next_group;
@@ -1362,10 +1353,10 @@ function editor() {
             var html = $('<div group="' + group + '"></div>');
         }
 
-        if (parent.MTE.indexOf(parent.COtemplateType) != -1 || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
+        if (parent.MTE.indexOf(parent.COtemplateType) !== -1 || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
             var newDivMatch = false;
             //Verificar se já existe essa div group 
-            if ($("#" + parent.currentPiece + " div[group=" + group + "]").length == 0) {
+            if ($("#" + parent.currentPiece + " div[group=" + group + "]").length === 0) {
                 //Não existe, então cria um novo
                 newDivMatch = true;
                 var htmlDefault = '<div group="' + group + '">';
@@ -1405,16 +1396,16 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
             var group;
             var isResp;
-            if (this.isset(match) && match != -1) {
+            if (this.isset(match) && match !== -1) {
                 // É um load
                 var right_match;
                 right_match = match.split('_')[1];
-                isResp = this.isset(right_match)
+                isResp = this.isset(right_match);
                 //If true é a resposta   
                 group = match;
                 var sameElement = false;
                 //Já existe o li[elementID]
-                sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length == '1';
+                sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length === '1';
 
             } else {
                 var last_group = $('#' + parent.currentPiece).find('div[group]').last().attr('group');
@@ -1435,7 +1426,7 @@ function editor() {
                 if (!this.isset(isResp) || !isResp) {
                     if (!parent.COTemplateTypeIn(parent.ONEDDROP) ||
                             (parent.COTemplateTypeIn(parent.ONEDDROP) &&
-                                    group == 1)) {
+                                    group === 1)) {
                         //Possui dois elementos no mesmo li, logo retira o: plus e : class="element moptions"
                         html = '<li>' +
                                 htmlDefault +
@@ -1492,11 +1483,11 @@ function editor() {
                         lastListASK = $("#" + parent.currentPiece + "_query").find('li:last');
                         var continues = true;
                         do {
-                            if (lastListASK.size() != 0) {
+                            if (lastListASK.size() !== 0) {
                                 lastGroupASK = lastListASK.find('div[group]');
                             }
 
-                            if (lastListASK.size() == 0) {
+                            if (lastListASK.size() === 0) {
                                 $("#" + parent.currentPiece + "_query").prepend(html);
                                 continues = false;
                             } else if (group > lastGroupASK.attr('group')) {
@@ -1514,11 +1505,11 @@ function editor() {
                         lastListANSWER = $("#" + parent.currentPiece + "_query_resp").find('li:last');
                         var continues = true;
                         do {
-                            if (lastListANSWER.size() != 0) {
+                            if (lastListANSWER.size() !== 0) {
                                 lastGroupANSWER = lastListANSWER.find('div[group]');
                             }
 
-                            if (lastListANSWER.size() == 0) {
+                            if (lastListANSWER.size() === 0) {
                                 $("#" + parent.currentPiece + "_query_resp").prepend(html2);
                                 continues = false;
                             } else if (numGroupAnswer > lastGroupANSWER.attr('group')) {
@@ -1560,7 +1551,7 @@ function editor() {
                     var continues = true;
                     do {
 
-                        if (lastGroupASK.size() == 0) {
+                        if (lastGroupASK.size() === 0) {
                             $('#' + parent.currentPiece + " > div.tplMulti > br").after(html);
                             continues = false;
                         } else if (group > lastGroupASK.attr('group')) {
@@ -1588,7 +1579,7 @@ function editor() {
                     var continues = true;
                     do {
 
-                        if (lastGroupASK.size() == 0) {
+                        if (lastGroupASK.size() === 0) {
                             $('#' + parent.currentPiece + " > div.tplPlc .elementsPlc").append(html);
                             continues = false;
                         } else if (group > lastGroupASK.attr('group')) {
@@ -1632,7 +1623,7 @@ function editor() {
                     var continues = true;
                     do {
 
-                        if (lastGroupASK.size() == 0) {
+                        if (lastGroupASK.size() === 0) {
                             $('#' + parent.currentPiece + " > div.tplDig > br").after(html);
                             continues = false;
                         } else if (group > lastGroupASK.attr('group')) {
@@ -1708,9 +1699,9 @@ function editor() {
                     for (var idx in self.crossWords) {
                         var crossWord = self.crossWords[idx];
                         //Como é carregado no BDm então existe ID do BD único para cada elemento txt
-                        if (crossWord['idDbElementWord1'] == idbd || crossWord['idDbElementWord2'] == idbd) {
+                        if (crossWord['idDbElementWord1'] === idbd || crossWord['idDbElementWord2'] === idbd) {
                             //Encontrou
-                            if (crossWord['idDbElementWord1'] == idbd) {
+                            if (crossWord['idDbElementWord1'] === idbd) {
                                 //Então a posição que esse elemento cruza é position1
                                 //Logo a posisão que precisa ser clicada na outra palavra é a position2
                                 positionCellClick = crossWord['position2'];
@@ -1761,7 +1752,7 @@ function editor() {
             var firstSplitGroup = group.split('_')[0];
         }
 
-        if ((typeof group == 'number' || (typeof group == 'string' && group.split('_').length == 1))
+        if ((typeof group === 'number' || (typeof group === 'string' && group.split('_').length === 1))
                 ) {
             //É MTE OU PLC
             if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
@@ -1772,7 +1763,7 @@ function editor() {
                 || parent.COTemplateTypeIn(parent.DDROP)) {
             var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > button.delElement";
         } else if (parent.COTemplateTypeIn(parent.ONEDDROP)) {
-            if (firstSplitGroup == 1) {
+            if (firstSplitGroup === 1) {
                 //O primeiro deve excluir o group ask e answer juntos
                 var buttonDelID = "#" + parent.currentPiece + " div[group='" + firstSplitGroup + "'] > button.delElement";
             } else {
@@ -1835,7 +1826,7 @@ function editor() {
                     || parent.COTemplateTypeIn(parent.DDROP)
                     || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                 $(buttonDelID).click(function () {
-                    if ($(buttonDelID).size() == 1) {
+                    if ($(buttonDelID).size() === 1) {
                         if (parent.COTemplateTypeIn(parent.AEL)
                                 || parent.COTemplateTypeIn(parent.DDROP)
                                 || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -1856,7 +1847,7 @@ function editor() {
 
         $('#' + parent.currentPieceSet).scrollTop($('#' + parent.currentPiece).height());
 
-    }
+    },
 
     this.delScreen = function (force) {
         //pega o id da screen atual
@@ -1876,7 +1867,7 @@ function editor() {
             //atualiza o pajinate
             this.attPajinate();
         }
-    }
+    },
 
     this.delPieceSet = function (id, noMessage) {
         if (this.isset(noMessage) && noMessage) {
@@ -1901,7 +1892,7 @@ function editor() {
                 delete this.countPieces[id];
             }
         }
-    }
+    },
 
     this.delPiece = function (id) {
         if (confirm(MSG_REMOVE_PIECE)) {
@@ -1913,7 +1904,7 @@ function editor() {
             $("#" + id).remove();
             delete this.countElements[id];
         }
-    }
+    },
 
 
     this.delElement = function (id, isRecursion) {
@@ -1921,7 +1912,7 @@ function editor() {
         var isPiecesetElement = false;
         var isCobjectElement = false;
         var doDel = isRecursion ? true : confirm(MSG_REMOVE_ELEMENT);
-        if (typeof id != 'object') {
+        if (typeof id !== 'object') {
             //Desconsiderar a última parte do último '_' que é o tipo do elemento
             if (doDel) {
                 var iddb = $("#" + id).attr('idbd');
@@ -1932,15 +1923,15 @@ function editor() {
                 var limitSuper = iddb_Piece.length - 2; // 2=> desconsidera o element e seu tipo
 
                 //Se for = 0 , então é um elemento do Cobject
-                isCobjectElement = (limitSuper == 0);
+                isCobjectElement = (limitSuper === 0);
 
                 for (i = 0; i < limitSuper; i++) {
                     //Menos o último
-                    if (i == limitSuper - 1) {
+                    if (i === limitSuper - 1) {
                         //É o último
                         id_P += iddb_Piece[i];
                         // Verificar se os 2 primeiros carctesres é 'ps', ou seja, se é um PieceSet
-                        isPiecesetElement = (iddb_Piece[i].substring(0, 2) == 'ps');
+                        isPiecesetElement = (iddb_Piece[i].substring(0, 2) === 'ps');
                     } else {
                         id_P += iddb_Piece[i] + '_';
                     }
@@ -2022,20 +2013,20 @@ function editor() {
             }
         }
 
-    }
+    },
 
     this.delObject = function (id) {
         var match_div = $('#' + id).attr('match');
         //Verificar se é um elemento da PieceSet
-        if ($('span.elementPieceSet > ' + '#' + id).size() == 1) {
+        if ($('span.elementPieceSet > ' + '#' + id).size() === 1) {
             $('#' + id).closest('span.elementPieceSet').remove();
-        } else if ($('span.elementCobject > ' + '#' + id).size() == 1) {
+        } else if ($('span.elementCobject > ' + '#' + id).size() === 1) {
             $('#' + id).closest('span.elementCobject').remove();
         } else {
             $("#" + id).remove();
         }
 
-    }
+    },
 
     this.saveData = function (data, sucess, beforeSend) {
         var parent = this;
@@ -2050,7 +2041,7 @@ function editor() {
                 }
                 else {
                     if (parent.isset(data['step'])) {
-                        if (parent.isset(data["justFlag"]) && data["justFlag"] == 1) {
+                        if (parent.isset(data["justFlag"]) && data["justFlag"] === 1) {
                             $('.savescreen').append('<br><p>Atualizando a Flag do Element...</p>');
                         } else {
                             if (!parent.isload) {
@@ -2081,7 +2072,7 @@ function editor() {
                 sucess(response, textStatus, jqXHR);
             }
         });
-    }
+    },
 
 
 //Atualizar o Cobject caso necessário
@@ -2106,7 +2097,7 @@ function editor() {
             }
             );
         }
-    }
+    },
 
 
 
@@ -2271,7 +2262,7 @@ function editor() {
 
                         var txt_New_noHtml = $("body", $(text_element + "_flag_ifr").contents()).text();
                         //Foi alterado  
-                        continuar = (txt_New_noHtml != "" && txt_BD != txt_New);
+                        continuar = (txt_New_noHtml !== "" && txt_BD !== txt_New);
                     }
 
                     if (continuar) {
@@ -2279,7 +2270,7 @@ function editor() {
                         var newElem = '';
                         var ElementIDSplit = ElementID.split('_');
                         for (var i = 0; i < ElementIDSplit.length - 1; i++) {
-                            if (i == ElementIDSplit.length - 2) {
+                            if (i === ElementIDSplit.length - 2) {
                                 newElem += ElementIDSplit[i];
                             } else {
                                 newElem += ElementIDSplit[i] + '_';
@@ -2333,7 +2324,7 @@ function editor() {
                         }
 
                         if (parent.COTemplateTypeIn(parent.TXT) || !(parent.isload && parent.isset(ElementFlag_Updated)
-                                && ElementFlag_Updated == 0)) {
+                                && ElementFlag_Updated === 0)) {
                             // Precisa Salvar ou Atualizar
                             //Se for um Texto
                             if (parent.existID(ElementTextID)) {
@@ -2355,8 +2346,8 @@ function editor() {
                                     $(this).closest('.tplPlc').find('.crosswords')
                                             .find('.Cell[groups*=g' + currentGroup + ']').each(function (idx) {
 
-                                        if ($(this).attr('isshow') == "true") {
-                                            if (positionLettersShows == "") {
+                                        if ($(this).attr('isshow') === "true") {
+                                            if (positionLettersShows === "") {
                                                 positionLettersShows += idx;
                                             } else {
                                                 positionLettersShows += "|" + idx;
@@ -2380,10 +2371,10 @@ function editor() {
                                                     }
                                                     parent.uploadedElements++;
                                                     var saveAllElements = false;
-                                                    if (!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                    if (!parent.isload && parent.totalElements === parent.uploadedElements) {
                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                         saveAllElements = true;
-                                                    } else if (parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
+                                                    } else if (parent.isload && parent.totalElementsChanged === parent.uploadedElements) {
                                                         $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                         saveAllElements = true;
                                                     }
@@ -2393,11 +2384,11 @@ function editor() {
                                                         for (var idx in self.crossWords) {
                                                             var crossword = self.crossWords[idx];
 
-                                                            if (crossword['pieceID'] == curretPieceID) {
-                                                                if (crossword['word1Group'] == currentGroup ||
-                                                                        crossword['word2Group'] == currentGroup) {
+                                                            if (crossword['pieceID'] === curretPieceID) {
+                                                                if (crossword['word1Group'] === currentGroup ||
+                                                                        crossword['word2Group'] === currentGroup) {
                                                                     //Encontrado um cruzamento para esta palavra
-                                                                    if (crossword['word1Group'] == currentGroup) {
+                                                                    if (crossword['word1Group'] === currentGroup) {
                                                                         //Zera o word1Group e acrecenta o novo atributo 
                                                                         self.crossWords[idx]['word1Group'] = "";
                                                                         self.crossWords[idx]['idDbElementWord1'] = response['ElementID'];
@@ -2469,8 +2460,8 @@ function editor() {
 
                                                 var doUpload = true;
                                                 if (parent.isload &&
-                                                        ($(input_NameDB_ID).val() == $(input_NameCurrent_ID).val()
-                                                                || $(input_NameCurrent_ID).val() == '')
+                                                        ($(input_NameDB_ID).val() === $(input_NameCurrent_ID).val()
+                                                                || $(input_NameCurrent_ID).val() === '')
                                                         ) {
                                                     //Não faz upload, pois não houve alterações
                                                     doUpload = false;
@@ -2519,10 +2510,10 @@ function editor() {
                                                                                 //Atualiza o contador dos Elementos
                                                                                 parent.uploadedElements++;
 
-                                                                                if (!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                                                if (!parent.isload && parent.totalElements === parent.uploadedElements) {
                                                                                     $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                                                 }
-                                                                                else if (parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
+                                                                                else if (parent.isload && parent.totalElementsChanged === parent.uploadedElements) {
                                                                                     $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                                                 }
                                                                                 //Verificar se acabou as requisições
@@ -2544,8 +2535,8 @@ function editor() {
                                                 //Se for um Som  
                                                 var doUpload = true;
                                                 if (parent.isload &&
-                                                        ($(inputSound_NameDB_ID).val() == $(inputSound_NameCurrent_ID).val()
-                                                                || $(inputSound_NameCurrent_ID).val() == '')
+                                                        ($(inputSound_NameDB_ID).val() === $(inputSound_NameCurrent_ID).val()
+                                                                || $(inputSound_NameCurrent_ID).val() === '')
                                                         ) {
                                                     //Não faz upload, pois não houve alterações
                                                     doUpload = false;
@@ -2590,10 +2581,10 @@ function editor() {
                                                                                 parent.uploadedSounds++;
                                                                                 //Atualiza o contador dos Elementos
                                                                                 parent.uploadedElements++;
-                                                                                if (!parent.isload && parent.totalElements == parent.uploadedElements) {
+                                                                                if (!parent.isload && parent.totalElements === parent.uploadedElements) {
                                                                                     $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                                                 }
-                                                                                else if (parent.isload && parent.totalElementsChanged == parent.uploadedElements) {
+                                                                                else if (parent.isload && parent.totalElementsChanged === parent.uploadedElements) {
                                                                                     $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                                                 }
 
@@ -2616,7 +2607,7 @@ function editor() {
                                             //Atualiza Somente a Flag
 
                                         }
-                                    } else if (txt_New_noHtml == "") {
+                                    } else if (txt_New_noHtml === "") {
                                         // O template é do tipo texto  e o elemento está vazio
                                         //Deleta o PieceSet
                                         parent.delPieceSet(parent.currentPieceSet, true);
@@ -2678,7 +2669,7 @@ function editor() {
                                     }
                                     //Contador da quantidade de Screen Salva
                                     parent.uploadedScreens++;
-                                    if (parent.totalScreens == parent.uploadedScreens) {
+                                    if (parent.totalScreens === parent.uploadedScreens) {
                                         $('.savescreen').append('<br><br><p>Salvou Todas as Screens!</p>');
                                     }
                                     parent.verify_requestFinish();
@@ -2718,7 +2709,7 @@ function editor() {
                                             }
                                             //Contador da quantidade de PieceSets Salva
                                             parent.uploadedPiecesets++;
-                                            if (parent.totalPiecesets == parent.uploadedPiecesets) {
+                                            if (parent.totalPiecesets === parent.uploadedPiecesets) {
                                                 $('.savescreen').append('<br><br><p>Salvou Todas as PieceSets!</p>');
                                             }
                                             parent.verify_requestFinish();
@@ -2758,7 +2749,7 @@ function editor() {
                                                     }
                                                     //Contador da quantidade de Piece Salva
                                                     parent.uploadedPieces++;
-                                                    if (parent.totalPieces == parent.uploadedPieces) {
+                                                    if (parent.totalPieces === parent.uploadedPieces) {
                                                         $('.savescreen').append('<br><br><p>Salvou Todas as Pieces!</p>');
                                                     }
 
@@ -2839,20 +2830,20 @@ function editor() {
 
                         } // End do PosSaveCobject
                         //======================     
-                    } // End Form SaveAll
+                    }, // End Form SaveAll
 
 //Verificar se acabou as requisições!
                     this.verify_requestFinish = function () {
                         var parent = this;
                         var totalElementsPieceSet = $('span.elementPieceSet > div.element').size();
 
-                        if ((parent.totalScreens == parent.uploadedScreens) &&
-                                (parent.totalPiecesets == parent.uploadedPiecesets) &&
-                                (parent.totalPieces == parent.uploadedPieces) &&
-                                ((!parent.isload && parent.totalElements == parent.uploadedElements) ||
-                                        (parent.isload && parent.totalElementsChanged == parent.uploadedElements &&
+                        if ((parent.totalScreens === parent.uploadedScreens) &&
+                                (parent.totalPiecesets === parent.uploadedPiecesets) &&
+                                (parent.totalPieces === parent.uploadedPieces) &&
+                                ((!parent.isload && parent.totalElements === parent.uploadedElements) ||
+                                        (parent.isload && parent.totalElementsChanged === parent.uploadedElements &&
                                                 (!parent.COTemplateTypeIn(parent.MTE) ||
-                                                        ((parent.uploadedFlags + totalElementsPieceSet) == parent.totalElementsNOchanged))))) {
+                                                        ((parent.uploadedFlags + totalElementsPieceSet) === parent.totalElementsNOchanged))))) {
 
                             if ((parent.COTemplateTypeIn(parent.PLC) && self.crossInfomationSent) ||
                                     !parent.COTemplateTypeIn(parent.PLC)) {
@@ -2863,7 +2854,7 @@ function editor() {
                             }
 
                         }
-                    }
+                    },
 
                     this.posEditor = function () {
                         //quantidade de elementos.
@@ -2881,7 +2872,7 @@ function editor() {
 
                         }
 
-                    }
+                    },
 
 
                     this.load = function () {
@@ -2935,7 +2926,7 @@ function editor() {
                                             $('#cobject_description > #COdescription').attr('valueDB', parent.COdescription);
                                             $('#cobject_description > #COdescription').val(parent.COdescription);
 
-                                            if ($('#COdescription').val() == '') {
+                                            if ($('#COdescription').val() === '') {
                                                 //Deixa a mesma mensagem
                                                 $('#COdescription').val('Descrição da Atividade .....');
                                                 $('#COdescription').attr('noString', 'true');
@@ -2947,7 +2938,7 @@ function editor() {
                                             //se não
                                         default:
                                             //se for uma screen
-                                            if (i.slice(0, 1) == "S") {
+                                            if (i.slice(0, 1) === "S") {
                                                 //pega o id da screen a partir do indice
                                                 var screenID = i.slice(1);
                                                 //adiciona a screen
@@ -2956,7 +2947,7 @@ function editor() {
                                                 //para cada item da screen
                                                 $.each(item, function (i, item) {
                                                     //se for um pieceset
-                                                    if (i.slice(0, 2) == "PS") {
+                                                    if (i.slice(0, 2) === "PS") {
                                                         //pega o id do pieceset a partir do indice
                                                         var piecesetID = i.slice(2);
                                                         //pega a descrição do pieceset a partir do item
@@ -2970,7 +2961,7 @@ function editor() {
 
                                                         //Aplica o texto Padrão no input da descrição do PieceSet
 
-                                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() == '') {
+                                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() === '') {
                                                             //Deixa a mesma mensagem
                                                             $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val('Descrição do Cabeçalho .....');
                                                             $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'true');
@@ -2981,7 +2972,7 @@ function editor() {
                                                         //para cada item do pieceset
                                                         $.each(item, function (i, item) {
                                                             //se for um piece
-                                                            if (i.slice(0, 1) == "P") {
+                                                            if (i.slice(0, 1) === "P") {
                                                                 //pega o id do pieceset a partir do indice
                                                                 var pieceID = i.slice(1);
                                                                 var DOMpiecesetID = $('.piecelist').last().attr('id');
@@ -2992,7 +2983,7 @@ function editor() {
                                                                 //para cada item da piece
                                                                 $.each(item, function (i, item) {
                                                                     //se for um elemento
-                                                                    if (i.slice(0, 1) == "E") {
+                                                                    if (i.slice(0, 1) === "E") {
                                                                         //declara a array de dados das propriedades do elemento
                                                                         var data = new Array();
                                                                         data['position'] = item['position'];
@@ -3000,7 +2991,7 @@ function editor() {
                                                                         data['match'] = item['match'];
                                                                         //preenchimento do array de dados
                                                                         $.each(item, function (i, item) {
-                                                                            if (i.slice(0, 1) == "L") {
+                                                                            if (i.slice(0, 1) === "L") {
                                                                                 data['library'] = new Array();
                                                                                 data['library']['ID'] = i.slice(1);
                                                                                 data['library']['type'] = item['type_name'];
@@ -3051,14 +3042,14 @@ function editor() {
                                                                         parent.addElement(elementID, type, data);
                                                                     }
                                                                 });
-                                                            } else if (i.slice(0, 1) == "E") {
+                                                            } else if (i.slice(0, 1) === "E") {
                                                                 //se for um elemento
                                                                 //declara a array de dados das propriedades do elemento
                                                                 var data = new Array();
                                                                 data['position'] = item['position'];
                                                                 //preenchimento do array de dados
                                                                 $.each(item, function (i, item) {
-                                                                    if (i.slice(0, 1) == "L") {
+                                                                    if (i.slice(0, 1) === "L") {
                                                                         data['library'] = new Array();
                                                                         data['library']['ID'] = i.slice(1);
                                                                         data['library']['type'] = item['type_name'];
@@ -3068,7 +3059,7 @@ function editor() {
                                                                         if (parent.isset(item['extension']))
                                                                             data['library']['extension'] = item['extension'];
 
-                                                                        if (item['type_name'] == 'image') {
+                                                                        if (item['type_name'] === 'image') {
                                                                             if (parent.isset(item['width']))
                                                                                 data['library']['width'] = item['width'];
                                                                             if (parent.isset(item['height']))
@@ -3130,14 +3121,14 @@ function editor() {
                                                         });
                                                     }
                                                 });
-                                            } else if (i.slice(0, 1) == "E") {
+                                            } else if (i.slice(0, 1) === "E") {
                                                 //se for um elemento
                                                 //declara a array de dados das propriedades do elemento
                                                 var data = new Array();
                                                 data['position'] = item['position'];
                                                 //preenchimento do array de dados
                                                 $.each(item, function (i, item) {
-                                                    if (i.slice(0, 1) == "L") {
+                                                    if (i.slice(0, 1) === "L") {
                                                         data['library'] = new Array();
                                                         data['library']['ID'] = i.slice(1);
                                                         data['library']['type'] = item['type_name'];
@@ -3147,7 +3138,7 @@ function editor() {
                                                         if (parent.isset(item['extension']))
                                                             data['library']['extension'] = item['extension'];
 
-                                                        if (item['type_name'] == 'image') {
+                                                        if (item['type_name'] === 'image') {
                                                             if (parent.isset(item['width']))
                                                                 data['library']['width'] = item['width'];
                                                             if (parent.isset(item['height']))
@@ -3208,21 +3199,21 @@ function editor() {
                                 $('#img_load').remove();
                             }
                         });
-                    }
+                    },
 
                     this.existID = function (id) {
                         return $(id).size() > 0;
-                    }
+                    },
                     this.isset = function (variable) {
                         return (typeof variable !== 'undefined' && variable !== null);
-                    }
+                    },
 
                     this.imageChanged = function (input_element) {
                         // Change imagens
                         var id_div = input_element.attr("id").replace('_input', '');
                         var id_span = id_div.replace('_image', '');
                         $('#' + id_div + '.image, #' + id_span).attr('updated', 1);
-                    }
+                    },
 
 
                     //Criação do inArray no JS
@@ -3232,7 +3223,7 @@ function editor() {
                         var i;
                         for (i = 0; i < this.length; i++)
                         {
-                            if (this[i].replace(/\s/g, '') != "" && this[i] == value)
+                            if (this[i].replace(/\s/g, '') !== "" && this[i] === value)
                             {
                                 return true;
                             }
