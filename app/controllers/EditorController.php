@@ -1051,6 +1051,7 @@ class EditorController extends Controller {
                                         $newPEPropertyPOintCrossWord->piece_element_id = $pieceElementID_w1;
                                         $newPEPropertyPOintCrossWord->value = "w2peID" . $pieceElementID_w2 . "|" . $crossWord['position1'] . "|" . $crossWord['position2'];
                                         $newPEPropertyPOintCrossWord->save();
+
                                     endforeach;
                                 }
                             }
@@ -1182,33 +1183,43 @@ class EditorController extends Controller {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['direction'] = $pe_property->value;
                                         }
 
-                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('point_crossword', 'word')));
-                                        if (isset($pe_property)) {
+//                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+//                                            'property_id' => $this->getPropertyIDByName('point_crossword', 'word')));
+                                       $pe_propertyPointCross = Yii::app()->db->createCommand("SELECT * FROM editor_pieceelement_property "
+                                                . "WHERE piece_element_id = $pe->id AND "
+                                                . "property_id = " . $this->getPropertyIDByName('point_crossword', 'word'))->queryAll();
+                                        
+                                        if (count($pe_propertyPointCross) > 0) {
                                             //id do pieceElementProperty
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]
-                                                    ['idDBPieceElementPropertyPointCross'] = $pe_property->id;
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord'] = array();
+                                            
+                                            foreach ($pe_propertyPointCross as $idx => $eachThisElementCross):
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
+                                                        [$idx]['idDBPieceElementPropertyPointCross'] = $eachThisElementCross['id'];
+                                            
+                                                //==========================================
+                                                $pe_id_w2 = explode("|", $eachThisElementCross['value']);
+                                                $pe_id_w2 = explode("w2peID", $pe_id_w2[0]);
+                                                $pe_id_w2 = $pe_id_w2[1];
 
-                                            //==========================================
-                                            $pe_id_w2 = explode("|", $pe_property->value);
-                                            $pe_id_w2 = explode("w2peID", $pe_id_w2[0]);
-                                            $pe_id_w2 = $pe_id_w2[1];
+                                                $e_id_w2 = EditorPieceElement::model()->findByPk($pe_id_w2);
 
-                                            $e_id_w2 = EditorPieceElement::model()->findByPk($pe_id_w2);
+                                                $pointCross = explode("|", $eachThisElementCross['value']);
 
-                                            $pointCross = explode("|", $pe_property->value);
+                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
+                                                        [$idx]['point_crossword'] = "w2eID" . $e_id_w2->element_id . "|" . $pointCross[1] . "|" . $pointCross[2];
 
-                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]
-                                                    ['point_crossword'] = "w2eID" . $e_id_w2->element_id . "|" . $pointCross[1] . "|" . $pointCross[2];
+                                                //============ Groupo do elemeto da Word2
+                                                //Buscar o groupo desse Element do PieceElement estar
+                                                $pe_propertyGroupCrossedWord2 = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe_id_w2,
+                                                    'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
 
-                                            //============ Groupo do elemeto da Word2
-                                            //Buscar o groupo desse Element do PieceElement estar
-                                            $pe_propertyGroupCrossedWord2 = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe_id_w2,
-                                                'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
-
-                                            if (isset($pe_propertyGroupCrossedWord2)) {
-                                                $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossword_elementGroup_Word2'] = $pe_propertyGroupCrossedWord2->value;
-                                            }
+                                                if (isset($pe_propertyGroupCrossedWord2)) {
+                                                    $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
+                                                        [$idx]['crossword_elementGroup_Word2'] = $pe_propertyGroupCrossedWord2->value;
+                                                }
+                                                
+                                            endforeach;
                                         }
 
 

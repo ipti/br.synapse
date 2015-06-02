@@ -10,9 +10,9 @@ body {
 
 /** Barra de informações **/
 #head_meet {
-    display: none;
-    width: 250px;
+    width: 240px;
     position: fixed;
+    left: -255px;
     top: 0;
     bottom: 0;
     padding: 5px;
@@ -60,35 +60,30 @@ body {
 
 #info-button {
     position: fixed;
-    top: 6px;
+    top: 5px;
     left: 6px;
-    width: 28px;
+    width: 25px;
     padding: 5px;
     color: #fff;
     font-size: 20px;
     border: none;
-    border-radius: 0 7px 7px 0;
+    border-radius: 3px;
     cursor: pointer;
 }
 
-.menu-open {
+.menu-open , .menu-close {
     background-image: url(../../img/icons/sidebar-open.png);
     background-repeat: no-repeat;
     background-size: contain;
-    width: 44px;
-    height: 44px;
+    width: 45px;
+    height: 25px;
     z-index: 10000;
 }
-
 .menu-close {
-    background-image: url(../../img/icons/sidebar-close.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 44px;
-    height: 44px;
-    z-index: 10000;
+    background-color: #565656;
 
 }
+
 /** Pergunta da atividade **/
 /*.question-container {
         width: 700px;

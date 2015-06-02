@@ -608,9 +608,21 @@ function onEditor(newEditor) {
                                     $(clickedCell).removeAttr('currentClickedCell');
                                 }
                             });
+                            var tempJsonArray;
+                            var word1Group = groupThisCell.split('g')[1];
+                            if (newEditor.isload) {
+                                //Então é um Cobject isload, porém o click vou dado pelo usuário na célula
+                                var idDbElementWord1 = $(clickedCell).closest(".tplPlc").find(".elementsPlc").find("div[group="+word1Group+"]")
+                                        .find(".element.text").attr("idbd");
+                                
+                                tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, idDbElementWord1: idDbElementWord1,
+                                    position1: thisFunc.tempPositionThisCellWordMerge,
+                                    word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
+                            } else {
+                                tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, position1: thisFunc.tempPositionThisCellWordMerge
+                                    , word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
+                            }
 
-                            var tempJsonArray = {pieceID: currentPieceId, word1Group: groupThisCell.split('g')[1], position1: thisFunc.tempPositionThisCellWordMerge
-                                , word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
                             newEditor.crossWords.push(tempJsonArray);
 
                             //Deleção do atributo temporário
