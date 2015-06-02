@@ -9,7 +9,7 @@
         </script>
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width; initial-scale=1.2; maximum-scale=1.2; target-densitydpi=medium-dpi; user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
         <link rel="stylesheet" type="text/css" href="css/reset.css" />
         <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
         <link rel="stylesheet" type="text/css" href="css/render/render.css">
@@ -121,12 +121,12 @@
                     $('#info-button').bind('tap', function () {
                         if ($('#head_meet').is(':visible')) {
                             $('#head_meet').hide();
-                            $('#info-button').css('left', '0');
+                            $('#info-button').css('left', '5px');
                             $('#info-button').removeClass('menu-close');
                             $('#info-button').addClass('menu-open');
                         } else {
                             $('#head_meet').show();
-                            $('#info-button').css('left', '156px');
+                            $('#info-button').css('left', '5px');
                             $('#info-button').removeClass('menu-open');
                             $('#info-button').addClass('menu-close');
                         }

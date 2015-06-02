@@ -59,36 +59,31 @@ body {
 }
 
 #info-button {
-    position: fixed;
-    top: 6px;
-    left: 6px;
-    width: 28px;
-    padding: 5px;
-    color: #fff;
-    font-size: 20px;
-    border: none;
-    border-radius: 0 7px 7px 0;
-    cursor: pointer;
+position: fixed;
+top: 5px;
+left: 6px;
+width: 25px;
+padding: 5px;
+color: #fff;
+font-size: 20px;
+border: none;
+border-radius: 3px;
+cursor: pointer;
 }
 
-.menu-open {
+.menu-open , .menu-close {
     background-image: url(../../img/icons/sidebar-open.png);
     background-repeat: no-repeat;
     background-size: contain;
-    width: 44px;
-    height: 44px;
+    width: 45px;
+    height: 25px;
     z-index: 10000;
 }
-
 .menu-close {
-    background-image: url(../../img/icons/sidebar-close.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 44px;
-    height: 44px;
-    z-index: 10000;
+    background-color: #565656;
 
 }
+
 /** Pergunta da atividade **/
 /*.question-container {
         width: 700px;
