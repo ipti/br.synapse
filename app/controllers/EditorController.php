@@ -1185,18 +1185,18 @@ class EditorController extends Controller {
 
 //                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
 //                                            'property_id' => $this->getPropertyIDByName('point_crossword', 'word')));
-                                       $pe_propertyPointCross = Yii::app()->db->createCommand("SELECT * FROM editor_pieceelement_property "
-                                                . "WHERE piece_element_id = $pe->id AND "
-                                                . "property_id = " . $this->getPropertyIDByName('point_crossword', 'word'))->queryAll();
-                                        
+                                        $pe_propertyPointCross = Yii::app()->db->createCommand("SELECT * FROM editor_pieceelement_property "
+                                                        . "WHERE piece_element_id = $pe->id AND "
+                                                        . "property_id = " . $this->getPropertyIDByName('point_crossword', 'word'))->queryAll();
+
                                         if (count($pe_propertyPointCross) > 0) {
                                             //id do pieceElementProperty
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord'] = array();
-                                            
+
                                             foreach ($pe_propertyPointCross as $idx => $eachThisElementCross):
                                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
                                                         [$idx]['idDBPieceElementPropertyPointCross'] = $eachThisElementCross['id'];
-                                            
+
                                                 //==========================================
                                                 $pe_id_w2 = explode("|", $eachThisElementCross['value']);
                                                 $pe_id_w2 = explode("w2peID", $pe_id_w2[0]);
@@ -1208,7 +1208,7 @@ class EditorController extends Controller {
 
                                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
                                                         [$idx]['point_crossword'] = "w2eID" . $e_id_w2->element_id . "|" . $pointCross[1] . "|" . $pointCross[2];
-
+                                                
                                                 //============ Groupo do elemeto da Word2
                                                 //Buscar o groupo desse Element do PieceElement estar
                                                 $pe_propertyGroupCrossedWord2 = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe_id_w2,
@@ -1216,9 +1216,9 @@ class EditorController extends Controller {
 
                                                 if (isset($pe_propertyGroupCrossedWord2)) {
                                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
-                                                        [$idx]['crossword_elementGroup_Word2'] = $pe_propertyGroupCrossedWord2->value;
+                                                            [$idx]['crossword_elementGroup_Word2'] = $pe_propertyGroupCrossedWord2->value;
                                                 }
-                                                
+
                                             endforeach;
                                         }
 
@@ -1369,8 +1369,11 @@ class EditorController extends Controller {
         return $delpiece;
     }
 
-    // Dois argumentos, pois, um elemento pode está em várias pieces
+    // Dois argumentos, pois, um elemento pode estar em várias pieces
     private function delElement($id, $id_Pai, $isElementPieceSet, $isElementCobject) {
+        //Verificar se o template é PLC
+        $isTemplatePlc = isset($_POST['isTemplatePlc']) ? $_POST['isTemplatePlc'] : false;
+        
         $isElementPieceSet = isset($isElementPieceSet) && $isElementPieceSet;
         $isElementCobject = isset($isElementCobject) && $isElementCobject;
 
@@ -1393,12 +1396,40 @@ class EditorController extends Controller {
                     // Excluir cada propriedade do Element_Piece
                     $ls->delete();
                 endforeach;
+                //Se for realizado a deleção de elemento do template Caça-Palavra
+                if ($isTemplatePlc) {
+                    //Busca todos os piece_elements para a piece corrente
+                    $AllElement_Piece = Yii::app()->db->CreateCommand(""
+                            . "SELECT * FROM editor_piece_element WHERE piece_id = $id_Pai")->queryAll();
+
+                    $propertyName = "point_crossword";
+                    $propertyContext = "word";
+                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+
+                    foreach ($AllElement_Piece as $pe):
+                        //para cada piece_element com property: point_crossword
+                        $pePropertyPointCross = EditorPieceelementProperty::model()->findByAttributes(
+                                array('piece_element_id' => $pe['id'], 'property_id' => $propertyID));
+                        if (isset($pePropertyPointCross)) {
+                            //Verifica o valor 
+                            $pieceElementIDCross = explode('w2peID', $pePropertyPointCross->value);
+                            $pieceElementIDCross = explode('|', $pieceElementIDCross[1]);
+                            $pieceElementIDCross = $pieceElementIDCross[0];
+                            if ($pieceElementIDCross == $Element_Piece->id) {
+                                //Então deleta esta propriedade
+                                $pePropertyPointCross->delete();
+                                break;
+                            }
+                        }
+                    endforeach;
+                }
+                
                 //Depois, Desvincula o elemento da peça.                                  
                 $Element_Piece->delete();
                 return true;
                 //==========================
             }
-        }else if ($isElementCobject) {
+        } else if ($isElementCobject) {
             //É um elemento do Cobject
             $Element_Cobject = CobjectElement::model()->findByAttributes(
                     array('cobject_id' => $id_Pai, 'element_id' => $newElement->id));

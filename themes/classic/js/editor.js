@@ -2150,9 +2150,10 @@ function editor() {
 
         function posSaveCobject(response, textStatus, jqXHR) {
             if (parent.orderDelets.length > 0) {
-                //Enviar array de objetos a serem excluidos 
+                //Enviar array de objetos a serem excluidos
                 parent.saveData({
                     op: "delete",
+                    isTemplatePlc: parent.COTemplateTypeIn(parent.PLC),
                     array_del: parent.orderDelets
                 },
                 //função sucess do saveData-DelAll
