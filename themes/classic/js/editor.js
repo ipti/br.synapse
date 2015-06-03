@@ -1994,13 +1994,73 @@ function editor() {
                     });
                     // Deleta também o li do seu Grupo de Resposta
                     $('#' + idCurrentPiece + ' div[group=' + group + '_1]').parent().remove();
-                } else if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC)) {
+                } else if (parent.COTemplateTypeIn(parent.MTE) 
+                        || parent.COTemplateTypeIn(parent.PLC)
+                        || parent.COTemplateTypeIn(parent.DIG)) {
 
                     if (parent.COTemplateTypeIn(parent.PLC)) {
                         //Se for PLC, então remove a Palavra cruzada do html e sua associação no Array crossWord
                         self.delWordPLC($(id).closest('div[group]'));
                         //Mostra o botão de exclusão para o último grupo
                         $(id).prev('div[group]').find('.del').show();
+                    } else if(parent.COTemplateTypeIn(parent.DIG)) {                        
+                        var activeGroup = $(".elementsDig div[group]").find("span.active").attr("group");
+                        var delObject = $(".words-list ul").find("li[group='" + activeGroup + "']");
+                        var delWord = delObject.text();
+                        var startRow = delObject.attr("start").split("_")[0];
+                        var startCol = delObject.attr("start").split("_")[1];
+                        var orientation = delObject.attr("start").split("_")[2];                                                
+                        var end = delWord.length - 1;
+                        var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW";
+                        var currentCell;
+                        
+                        if (orientation === "H"){
+                            end += parseInt(startCol);
+                            for (var i = startCol; i <= end; i++){
+//                                console.log(startCol + "/" + i + "/" + end);
+                                currentCell = $(".wordsearch").find(".Cell[row='" + startRow + "'][col='" + i + "']");
+                                if (currentCell.attr("orientation") == "HV"){
+                                    var updatedGroups;
+                                    for (var j = 0; j < currentCell.attr("groups").split("g").length; j++){
+                                        if(currentCell.attr("groups").split("g")[j] != activeGroup){
+                                            updatedGroups = "g" + currentCell.attr("groups").split("g")[j];
+                                        }
+                                    }
+                                    currentCell.attr({groups: updatedGroups, orientation: "V"});
+                                } else {
+                                    currentCell.text(rndChar.charAt(Math.floor(Math.random() * rndChar.length))).removeAttr("groups orientation style");
+                                }
+                                delObject.remove();
+                                
+//                                console.log($(".wordsearch").find(".Cell[row='" + startRow + "'][col='" + i + "']").text());
+//                                console.log(startRow + "/" + i);
+                            }
+                        }
+                        
+                        if (orientation === "V"){
+                            end += parseInt(startRow);
+                            for (var i = startRow; i <= end; i++){
+//                                console.log(startRow + "/" + i + "/" + end);
+                                currentCell = $(".wordsearch").find(".Cell[row='" + i + "'][col='" + startCol + "']");
+                                if (currentCell.attr("orientation") == "HV"){
+                                    var updatedGroups;
+                                    for (var j = 0; j < currentCell.attr("groups").split("g").length; j++){
+                                        if(currentCell.attr("groups").split("g")[j] != activeGroup){
+                                            updatedGroups = "g" + currentCell.attr("groups").split("g")[j];
+                                        }
+                                    }
+                                    currentCell.attr({groups: updatedGroups, orientation: "H"});
+                                } else {
+                                    currentCell.text(rndChar.charAt(Math.floor(Math.random() * rndChar.length))).removeAttr("groups orientation style");
+                                }
+                                delObject.remove();
+                                
+//                                console.log($(".wordsearch").find(".Cell[row='" + i + "'][col='" + startCol + "']").text());
+//                                console.log(i + "/" + startCol);
+                            }
+                        }
+//                        console.log(activeGroup);
+//                        console.log(delWord + "/" + startRow + "/" + startCol + "/" + orientation);
                     }
 
                     //id é o div-grupo a ser excluído

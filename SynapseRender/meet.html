@@ -119,13 +119,13 @@
 
                     //Mostrar/Ocultar barra de informações
                     $('#info-button').bind('tap', function () {
-                        if ($('#head_meet').is(':visible')) {
-                            $('#head_meet').hide();
+                        if ($('#head_meet').css('left') === '0px') {
+                            $('#head_meet').animate({left: '-255px'});
                             $('#info-button').css('left', '5px');
                             $('#info-button').removeClass('menu-close');
                             $('#info-button').addClass('menu-open');
                         } else {
-                            $('#head_meet').show();
+                            $('#head_meet').animate({left: '0'});
                             $('#info-button').css('left', '5px');
                             $('#info-button').removeClass('menu-open');
                             $('#info-button').addClass('menu-close');

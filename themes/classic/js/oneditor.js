@@ -214,7 +214,7 @@ function onEditor(newEditor) {
         var col = $(this).attr("col");
         var word = $("span.active").find('.element font').text();
         var orientation = $("span.active").find('button.changeOrientation').attr('orientation');
-        var group = "g" + $("span.active").attr("group");
+        var group = $("span.active").attr("group");
         var maxW = 10;
         var maxH = 4;
 
@@ -254,13 +254,13 @@ function onEditor(newEditor) {
                                 currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
                                 currentCell.text(word[i]).css("font-weight", "bold");
                                 if (currentCell.attr("groups")) {
-                                    currentCell.attr({groups: currentCell.attr("groups") + group, orientation: "HV"});
+                                    currentCell.attr({groups: currentCell.attr("groups") + "g" + group, orientation: "HV"});
                                 } else {
-                                    currentCell.attr({groups: group, orientation: "H"});
+                                    currentCell.attr({groups: "g" + group, orientation: "H"});
                                 }
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
-                            $(".words-list ul").append('<li group="' + group + '">' + word + '</li>');
+                            $(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
                         }
                     }
                 }
@@ -295,13 +295,13 @@ function onEditor(newEditor) {
                                 currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
                                 currentCell.text(word[i]).css("font-weight", "bold");
                                 if (currentCell.attr("groups")) {
-                                    currentCell.attr({groups: currentCell.attr("groups") + group, orientation: "HV"});
+                                    currentCell.attr({groups: currentCell.attr("groups") + "g" + group, orientation: "HV"});
                                 } else {
-                                    currentCell.attr({groups: group, orientation: "V"});
+                                    currentCell.attr({groups: "g" + group, orientation: "V"});
                                 }
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
-                            $(".words-list ul").append('<li group="' + group + '">' + word + '</li>');
+                            $(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
                         }
                     }
                 }
