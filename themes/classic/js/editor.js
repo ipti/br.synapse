@@ -1696,6 +1696,8 @@ function editor() {
                             }
                             var cellToClick = hCrossWord.find('.Cell[groups*="g' + groupCellClick + '"]').eq(positionCellClick);
                             //Simular um click na célula passada
+                            //STOP HERE !
+                            console.log(groupCellClick);
                             self.onEditor.eventClickCellPLC(cellToClick, true);
                         }
 

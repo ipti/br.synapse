@@ -19,7 +19,6 @@ var DomCobject = function(cobject, idx) {
 
     this.dom = $('<div class="cobject ' + this.cobject.template_code + '" style="display:none" id=' + this.cobject.cobject_id + '></div>');
 
-
     this.domContent = $('<div class="content"></div>');
     this.domScreen = '';
     this.domPieceSet = '';
@@ -296,6 +295,10 @@ var DomCobject = function(cobject, idx) {
         return self.buildElement_P_PS();
     }
 
+    this.buildElement_PLC = function(){
+        return self.buildElement_P_PS();
+    }
+
     this.buildElement_P_PS = function(isElement_PieceSet) {
         var html = "";
         var elementID = 0;
@@ -332,6 +335,7 @@ var DomCobject = function(cobject, idx) {
         }
         self.currentElementType = strBuild_library_type;
         self.domElement = $('<li class="element element-' + strBuild_library_type + '" id="' + elementID + '">' + html + '</li>');
+       
         return self.domElement;
     }
 
