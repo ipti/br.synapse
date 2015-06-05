@@ -8,7 +8,7 @@
  * @param {array} options
  * @returns {Meet}
  */
-this.Meet = function(options) {
+this.Meet = function (options) {
     // MGS
     MSG_CORRECT = 'Parabéns, você acertou';
     MSG_WRONG = 'Ops! Você errou, continue tentando.';
@@ -20,8 +20,9 @@ this.Meet = function(options) {
     FINALIZE_ACTIVITY = "Finalizar Atividade";
     NEXT_PAGE = "Próxima Página";
     LAST_PAGE = "Última Página";
-    NEXT_PIECE = "";
-    
+    //Label Buttons
+    NEXT_PIECE = '<img class="answer-ok" src="img/icons/ok.png">';
+
     //================
     var self = this;
     this.isLoadState = false;
@@ -67,10 +68,10 @@ this.Meet = function(options) {
     this.cobjectsIDsTemplates = new Array();
 
     //Obter todos os Cobject deste Bloco
-    this.start = self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id, function(objectsThisBlock) {
+    this.start = self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id, function (objectsThisBlock) {
         //count do número de objetos
         var num_objects = 0;
-        $.each(objectsThisBlock, function() {
+        $.each(objectsThisBlock, function () {
             num_objects++;
         });
 
@@ -78,7 +79,7 @@ this.Meet = function(options) {
         self.setCobjectsIds(objectsThisBlock);
 
         //Agora Verifica o UserState
-        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, function(info_state) {
+        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, function (info_state) {
             var gotoState = self.isset(info_state);
             var lastCobject_id = null;
             if (gotoState) {
@@ -110,23 +111,23 @@ this.Meet = function(options) {
     });
 
 
-    this.setCobjectsIds = function(cobjectsIDs) {
+    this.setCobjectsIds = function (cobjectsIDs) {
         //Atribui ao array de CobjectsIDs
         self.cobjectsIDs = cobjectsIDs;
         //Agora atribui um novo array que possuirá todos cobjetsIDs e seus templates
         for (var idx in self.cobjectsIDs) {
-            self.DB_synapse.getCobject(self.cobjectsIDs[idx], function(json_cobject) {
+            self.DB_synapse.getCobject(self.cobjectsIDs[idx], function (json_cobject) {
                 //Para cada CobjectID
                 self.cobjectsIDsTemplates[json_cobject.cobject_id] = json_cobject.template_code;
             });
         }
     };
 
-    this.getIdxArrayCobjectsIDs = function(cobjectID) {
+    this.getIdxArrayCobjectsIDs = function (cobjectID) {
         return $.inArray(cobjectID, self.cobjectsIDs);
     };
 
-    this.setDomCobject = function(domCobject) {
+    this.setDomCobject = function (domCobject) {
         self.domCobject = domCobject;
     };
 
@@ -154,14 +155,14 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.domCobjectBuild = function(cobject_id) {
-        
+    this.domCobjectBuild = function (cobject_id) {
+
         //Construir a Dom do Cobject e append no html
-        self.DB_synapse.getCobject(cobject_id, function(json_cobject) {
+        self.DB_synapse.getCobject(cobject_id, function (json_cobject) {
             var dump = new DomCobject(json_cobject);
             //Adicionar o domCobjet no Encontro 'Meet'
             self.setDomCobject(dump);
-         
+
             //Depois atualiza o template corrente do Meet
             self.currentTemplateCode = self.domCobject.cobject.template_code;
             var domCobjectBuild;
@@ -195,11 +196,11 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.beginEvents = function() {
+    this.beginEvents = function () {
         //iniciar code_Event dos template
         //Evoca o evento para este template
-        if (self.domCobject.cobject.template_code !== 'DDROP' 
-           && self.domCobject.cobject.template_code !== 'ONEDDROP') {
+        if (self.domCobject.cobject.template_code !== 'DDROP'
+                && self.domCobject.cobject.template_code !== 'ONEDDROP') {
             eval("self.init_" + self.domCobject.cobject.template_code + "();");
         }
         //Por Fim chama o evento Comum a todos
@@ -226,7 +227,7 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.restartTimes = function() {
+    this.restartTimes = function () {
         self.interval_group = self.interval_piece = new Date().getTime();
     };
 
@@ -235,7 +236,7 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_Common = function() {
+    this.init_Common = function () {
         //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
         $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
@@ -344,18 +345,18 @@ this.Meet = function(options) {
             //Inicio do temporizador
             self.restartTimes();
 
-            $('.nextPiece').bind('tap', function() {
+            $('.nextPiece').bind('tap', function () {
                 self.nextPiece();
             });
 
-            $(".message-button").bind('tap', function() {
+            $(".message-button").bind('tap', function () {
                 $(this).closest('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
             });
 
 
-            $('#finalize_activity').bind('tap', function() {
+            $('#finalize_activity').bind('tap', function () {
                 self.finalizeMeet();
             });
 
@@ -372,7 +373,7 @@ this.Meet = function(options) {
             $('.cobject_block').hide();
             // location.href = "finish-level.html";
             $('#finishLevel-message').show();
-            $('#finishLevel-message button').bind('tap', function() {
+            $('#finishLevel-message button').bind('tap', function () {
                 $('#finishLevel-message').hide();
             });
         }
@@ -380,10 +381,10 @@ this.Meet = function(options) {
 
     };
 
-    this.init_eventsGlobals = function() {
-        
+    this.init_eventsGlobals = function () {
+
         //Botão do SOM
-        $(document).on('tap', '.soundIconPause', function() {
+        $(document).on('tap', '.soundIconPause', function () {
             var selfIconPause = $(this);
             var playing = selfIconPause.attr('playing') !== undefined &&
                     selfIconPause.attr('playing') !== null && selfIconPause.attr('playing') === 'true';
@@ -405,7 +406,7 @@ this.Meet = function(options) {
                 selfIconPause.attr('playing', 'true');
             }
 
-            audio.addEventListener("ended", function() {
+            audio.addEventListener("ended", function () {
                 img.attr('src', "img/icons/play.png");
                 // playing = true;
             });
@@ -416,8 +417,8 @@ this.Meet = function(options) {
 
 
 
-    this.stopAllSounds = function() {
-        $('.soundIconPause[playing="true"]').each(function(idx) {
+    this.stopAllSounds = function () {
+        $('.soundIconPause[playing="true"]').each(function (idx) {
             var li = $(this).parent();
             var span = li.children('span');
             var img = $(this);
@@ -430,7 +431,7 @@ this.Meet = function(options) {
         });
     };
 
-    this.nextPiece = function() {
+    this.nextPiece = function () {
         //Pausa Todos os Sons
         self.stopAllSounds();
         $('.nextPiece').hide();
@@ -507,7 +508,7 @@ this.Meet = function(options) {
                             //Finalizou o Bloco de Atividades
                             $('.cobject_block').hide();
                             $('#finishLevel-message').show();
-                            $('#finishLevel-message button').bind('tap', function() {
+                            $('#finishLevel-message button').bind('tap', function () {
                                 $('#finishLevel-message').hide();
                             });
                         }
@@ -555,7 +556,7 @@ this.Meet = function(options) {
 
     };
 
-    this.prevPiece = function() {
+    this.prevPiece = function () {
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
         if (self.domCobject.cobject.template_code === 'PRE') {
@@ -670,7 +671,7 @@ this.Meet = function(options) {
     };
 
 
-    var BtnPageTXT = function() {
+    var BtnPageTXT = function () {
         $('.game').hide();
         $('#nextPage').show();
         //Verificar se mostrará o botão pra voltar o TXT
@@ -682,7 +683,7 @@ this.Meet = function(options) {
         $('.nextPiece').hide();
     };
 
-    var NoBtnPageTXT = function() {
+    var NoBtnPageTXT = function () {
         $('.game').show();
         $('#nextPage').hide();
         $('#lastPage').hide();
@@ -693,9 +694,9 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_MTE = function() {
+    this.init_MTE = function () {
         // self.init_Common();
-        $('.cobject.MTE div[group]').bind('tap', function() {
+        $('.cobject.MTE div[group]').bind('tap', function () {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
                 $('.nextPiece').hide();
@@ -724,11 +725,11 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_AEL = function() {
+    this.init_AEL = function () {
         // variável de encontro definida no meet.php
         //$('.cobject.AEL div.answer > div[group]').hide();
         $('.cobject.AEL div.answer > div[group]').css('opacity', '0.6');
-        $('.cobject.AEL div[group]').bind('tap', function() {
+        $('.cobject.AEL div[group]').bind('tap', function () {
             var ask_answer = $(this).parents('div');
             if (ask_answer.hasClass('ask')) {
                 if (!$(this).hasClass('ael_clicked')) {
@@ -789,14 +790,14 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_DDROP = function() {
+    this.init_DDROP = function () {
         //Definir Animação Drag and Drop
         $('.drop').css('opacity', '0.6');
 
         $('.drag').draggable({
             containment: "body",
             revert: true,
-            start: function() {
+            start: function () {
                 //armazernar posição  Original
                 var position = $(this).position();
                 if (!self.isset($(this).attr('OriginalLeft'))) {
@@ -811,7 +812,7 @@ this.Meet = function(options) {
                 $(this).siblings('.drag').removeClass('last_clicked');
                 $(this).addClass('last_clicked');
             },
-            stop: function() {
+            stop: function () {
                 $(this).css('border', '3px solid transparent');
                 $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
@@ -824,14 +825,14 @@ this.Meet = function(options) {
                 }
 
             },
-            drag: function() {
+            drag: function () {
             }
 
 
         });
 
         $('.drop').droppable({
-            drop: function(event, ui) {
+            drop: function (event, ui) {
 
                 //Time de resposta
                 var time_answer = (new Date().getTime() - self.interval_group);
@@ -873,14 +874,14 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_ONEDDROP = function() {
+    this.init_ONEDDROP = function () {
         //Definir Animação Drag and Drop
         $('.oneDrop').css('opacity', '0.6');
 
         $('.oneDrag').draggable({
             containment: "body",
             revert: true,
-            start: function() {
+            start: function () {
                 //armazernar posição  Original
                 var position = $(this).position();
                 if (!self.isset($(this).attr('OriginalLeft'))) {
@@ -895,7 +896,7 @@ this.Meet = function(options) {
                 $(this).siblings('.drag').removeClass('last_clicked');
                 $(this).addClass('last_clicked');
             },
-            stop: function() {
+            stop: function () {
                 $(this).css('border', '3px solid transparent');
                 $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
@@ -908,14 +909,14 @@ this.Meet = function(options) {
                 }
 
             },
-            drag: function() {
+            drag: function () {
             }
 
 
         });
 
         $('.oneDrop').droppable({
-            drop: function(event, ui) {
+            drop: function (event, ui) {
 
                 //Time de resposta
                 var time_answer = (new Date().getTime() - self.interval_group);
@@ -955,9 +956,9 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_PRE = function() {
+    this.init_PRE = function () {
         //  self.init_Common();
-        $('input.text').on('keyup', function() {
+        $('input.text').on('keyup', function () {
             if (!self.isEmpty($(this).val())) {
                 //contém algum caractere
                 $('.nextPiece').show();
@@ -972,11 +973,11 @@ this.Meet = function(options) {
      * 
      * @returns {void}
      */
-    this.init_TXT = function() {
-        $('#nextPage').bind('tap', function() {
+    this.init_TXT = function () {
+        $('#nextPage').bind('tap', function () {
             self.nextPiece();
         });
-        $('#lastPage').bind('tap', function() {
+        $('#lastPage').bind('tap', function () {
             if (self.hasPrevPieceTXT()) {
                 self.prevPiece();
             }
@@ -986,7 +987,7 @@ this.Meet = function(options) {
     //======================
 
 
-    this.hasPrevPieceTXT = function() {
+    this.hasPrevPieceTXT = function () {
         var isTXT = false;
         var currentPiece = $('.currentPiece');
         if (currentPiece.prev().size() === 0) {
@@ -1036,7 +1037,7 @@ this.Meet = function(options) {
      * @param {DOMString} currentPieceID 
      * @returns {boolean}
      */
-    this.savePerformanceUsr = function(currentPieceID) {
+    this.savePerformanceUsr = function (currentPieceID) {
         //Obtem o intervalo de resolução da Piece
         self.interval_piece = (new Date().getTime() - self.interval_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
@@ -1075,11 +1076,11 @@ this.Meet = function(options) {
         return true;
     };
 
-    this.saveMatchGroup = function(currentPieceID) {
+    this.saveMatchGroup = function (currentPieceID) {
         //Para Cada GRUPO da Piece
         var pieceIsTrue = true;
         var answer = false;
-        $.each(self.domCobject.mainPieces[currentPieceID], function(nome_attr, group) {
+        $.each(self.domCobject.mainPieces[currentPieceID], function (nome_attr, group) {
             //Salva a perfomande do groupo somente se foi dado um Match
             if (self.isset(this.groupMatched)) {
                 if (nome_attr !== 'istrue' && nome_attr !== 'time_answer') {
@@ -1128,7 +1129,7 @@ this.Meet = function(options) {
      * @param {string} groupClicked
      * @returns {Boolean}
      */
-    this.isCorrectMTE = function(pieceID, groupClicked) {
+    this.isCorrectMTE = function (pieceID, groupClicked) {
         var elements_group = eval("self.domCobject.mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
         var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype === 'Acerto');
@@ -1146,7 +1147,7 @@ this.Meet = function(options) {
      * @param {integer} time_answer
      * @returns {Boolean} null caso não seja salvo
      */
-    this.isCorrectAEL = function(pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
+    this.isCorrectAEL = function (pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
             //Salvar no Objeto o Metadados do acerto e erro de um element
@@ -1177,7 +1178,7 @@ this.Meet = function(options) {
      * @param {integer} pieceID
      * @returns {Boolean}
      */
-    this.isCorrectPRE = function(pieceID) {
+    this.isCorrectPRE = function (pieceID) {
         //PRE somente possuí um grupo em cada piece
         var elements_group = eval("self.domCobject.mainPieces[pieceID]._" + (pieceID * 2));
         var digitated_value = $('.currentPiece').find('div[group] input.text').val();
@@ -1189,7 +1190,7 @@ this.Meet = function(options) {
                 break;
             }
         }
-        
+
         var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() === digitated_value.toUpperCase());
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
@@ -1197,12 +1198,12 @@ this.Meet = function(options) {
     };
 
 
-    this.hasNextCobject = function() {
+    this.hasNextCobject = function () {
         var idxCurrentCobjectID = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id);
         return self.isset(self.cobjectsIDs[idxCurrentCobjectID + 1]);
     };
 
-    this.hasPrevCobject = function() {
+    this.hasPrevCobject = function () {
         var idxCurrentCobjectID = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id);
         return idxCurrentCobjectID > 0;
     };
@@ -1210,7 +1211,7 @@ this.Meet = function(options) {
     /**
      * Deveria finalizar o meet... mas não faz nada.
      */
-    this.finalizeMeet = function() {
+    this.finalizeMeet = function () {
         sessionStorage.removeItem("authorization");
         sessionStorage.removeItem("id_discipline");
         sessionStorage.removeItem("login_id_actor");
@@ -1225,11 +1226,11 @@ this.Meet = function(options) {
      * @param {mixed} variable
      * @returns {Boolean}
      */
-    this.isset = function(variable) {
+    this.isset = function (variable) {
         return (variable !== undefined && variable !== null);
     };
 
-    this.isEmpty = function(variable) {
+    this.isEmpty = function (variable) {
         return !self.isset(variable) || variable === '';
     };
 
@@ -1239,7 +1240,7 @@ this.Meet = function(options) {
      * @param {boolean} isTrue
      * @returns {void}
      */
-    this.showMessageAnswer = function(isTrue) {
+    this.showMessageAnswer = function (isTrue) {
         if (isTrue) {
             $('#hit-message').show();
             //            $('#message').show();
@@ -1261,12 +1262,12 @@ this.Meet = function(options) {
     };
 
     //Contador de Tempo de cada Meet
-    this.countTime = function(tag) {
+    this.countTime = function (tag) {
         //A cada segundo realiza a recursividade
         if (self.isset(tag)) {
             self.tag_time = tag;
         }
-        setTimeout(function() {
+        setTimeout(function () {
             self.time++;
             var current_time = self.time;
 
@@ -1301,7 +1302,7 @@ this.Meet = function(options) {
 
 
 
-    this.scoreCalculator = function(withMSGnextLevel) {
+    this.scoreCalculator = function (withMSGnextLevel) {
         self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
         if (self.score < 0) {
             self.score = 0;
@@ -1327,7 +1328,7 @@ this.Meet = function(options) {
 
 
 
-    this.buildToolBar = function() {
+    this.buildToolBar = function () {
         var html = $('<div class="toolBar"></div>');
         html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
         html.append("<img class='btn_lastPage' id='lastPage' src='img/icons/last.png' style='display:none' >");

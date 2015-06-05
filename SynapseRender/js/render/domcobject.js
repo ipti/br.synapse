@@ -4,7 +4,6 @@ COBJECT_DEGREE_NAME = "Degree Name";
 COBJECT_DISCIPLINE = "Discipline";
 COBJECT_CONTENT = "Content";
 //Label Buttons
-NEXT_PIECE = '<img class="answer-ok" src="img/icons/ok.png">';
 NEXT_SCREEN = "Próxima Tela >>>>>";
 BEGIN_ACTIVITY = "Iniciar Atividade";
 
@@ -19,7 +18,6 @@ var DomCobject = function(cobject, idx) {
     this.currentElementType = '';
 
     this.dom = $('<div class="cobject ' + this.cobject.template_code + '" style="display:none" id=' + this.cobject.cobject_id + '></div>');
-
 
     this.domContent = $('<div class="content"></div>');
     this.domScreen = '';
@@ -297,6 +295,10 @@ var DomCobject = function(cobject, idx) {
         return self.buildElement_P_PS();
     }
 
+    this.buildElement_PLC = function(){
+        return self.buildElement_P_PS();
+    }
+
     this.buildElement_P_PS = function(isElement_PieceSet) {
         var html = "";
         var elementID = 0;
@@ -333,6 +335,7 @@ var DomCobject = function(cobject, idx) {
         }
         self.currentElementType = strBuild_library_type;
         self.domElement = $('<li class="element element-' + strBuild_library_type + '" id="' + elementID + '">' + html + '</li>');
+       
         return self.domElement;
     }
 
