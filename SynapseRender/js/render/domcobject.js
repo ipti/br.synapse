@@ -4,7 +4,6 @@ COBJECT_DEGREE_NAME = "Degree Name";
 COBJECT_DISCIPLINE = "Discipline";
 COBJECT_CONTENT = "Content";
 //Label Buttons
-NEXT_PIECE = '<img class="answer-ok" src="img/icons/ok.png">';
 NEXT_SCREEN = "Próxima Tela >>>>>";
 BEGIN_ACTIVITY = "Iniciar Atividade";
 
