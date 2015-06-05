@@ -2004,7 +2004,8 @@ function editor() {
                         //Mostra o botão de exclusão para o último grupo
                         $(id).prev('div[group]').find('.del').show();
                     } else if(parent.COTemplateTypeIn(parent.DIG)) {                        
-                        var activeGroup = $(".elementsDig div[group]").find("span.active").attr("group");
+//                        var activeGroup = $(".elementsDig div[group]").find("span.active").attr("group");
+                        var activeGroup = $(id).children("span[group]").attr("group");
                         var delObject = $(".words-list ul").find("li[group='" + activeGroup + "']");
                         var delWord = delObject.text();
                         var startRow = delObject.attr("start").split("_")[0];
