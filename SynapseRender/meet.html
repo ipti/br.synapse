@@ -119,18 +119,12 @@
 
                     //Mostrar/Ocultar barra de informações
                     $('#info-button').bind('tap', function () {
-                        if ($('#head_meet').css('left') === '0px') {
-                            $('#head_meet').animate({left: '-255px'});
-                            $('#info-button').css('left', '5px');
-                            $('#info-button').removeClass('menu-close');
-                            $('#info-button').addClass('menu-open');
-                        } else {
-                            $('#head_meet').animate({left: '0'});
-                            $('#info-button').css('left', '5px');
-                            $('#info-button').removeClass('menu-open');
-                            $('#info-button').addClass('menu-close');
-                        }
+                        $('#head_meet').animate({left: '0'});
                     });
+
+                    $('.close-bar').bind('tap', function () {
+                        $('#head_meet').animate({left: '-255px'});
+                    }); 
 
                     // Encerrar atendimento
                     $(".info-exit").bind('tap', function () {
@@ -153,6 +147,12 @@
 
         <!-- Barra de informações -->
         <div id="head_meet">
+            <div class="close-bar">
+                <a href="#"><i class="fa fa-bars"></i></a>
+            </div>
+            <div class="logo-bar">
+                <img src="img/synapse-logo.png">
+            </div>
             <div class="info info-name">
 
             </div>
@@ -178,8 +178,8 @@
             </a>
         </div>
 
-        <div id="info-button" class="menu-open">
-
+        <div id="info-button">
+            <a href="#"><i class="fa fa-bars"></i></a>
         </div>
 
         <div id="message"> 

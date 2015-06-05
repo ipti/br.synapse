@@ -3,7 +3,6 @@
 body {
     margin: 0px;
     background-color: #D1E0CD;
-    /*background-image: url(../img/background-texture.png);*/
     background-repeat: repeat;
     font-family: asap, helvetica, arial, sans-serif;
 }
@@ -21,6 +20,23 @@ body {
     color: #333;
     font-size: 20px;
     z-index: 10000;
+}
+
+.close-bar {
+    padding: 5px 10px;
+    float: left;
+    font-size: 28px;
+}
+
+.close-bar a {
+    color: #000;
+    opacity: .8;
+}
+
+.logo-bar img {
+    width: 90px;
+    opacity: .8;
+    float: right;
 }
 
 .info {
@@ -59,40 +75,21 @@ body {
 }
 
 #info-button {
-    position: fixed;
+    position: absolute;
     top: 5px;
     left: 6px;
     width: 25px;
     padding: 5px;
-    color: #fff;
-    font-size: 20px;
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    z-index: 1;
+    font-size: 28px;
 }
 
-.menu-open , .menu-close {
-    background-image: url(../../img/icons/sidebar-open.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 45px;
-    height: 25px;
-    z-index: 10000;
+#info-button a {
+    color: #fff;
 }
-.menu-close {
-    background-color: #565656;
-
-}
-
-/** Pergunta da atividade **/
-/*.question-container {
-        width: 700px;
-        margin: 0 auto;
-        background: #FBB03B;
-        border-radius: 0 0 5px 5px;
-        padding: 10px;
-        color: #fff;
-}*/
 
 .question-image-container {
     width: 50%;
@@ -104,6 +101,7 @@ body {
 .question-title {
     font-size: 35px;
     line-height: 35px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.64);
 }
 
 /** Respostas **/
