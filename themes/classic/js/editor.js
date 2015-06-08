@@ -1686,7 +1686,7 @@ function editor() {
             }
 
             //Se estiver num load de uma template PLC, então Simula o onfocus pra montar o crossword na tela
-            if (parent.COTemplateTypeIn(parent.PLC)) {
+            if (parent.COTemplateTypeIn(parent.PLC) && type === 'text') {
                 //Simulação do click e da perda do focus no input text
                 tagAdd.find('.editable').trigger('click');
                 tagAdd.find('.element input').focusout();
