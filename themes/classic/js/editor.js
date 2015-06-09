@@ -2397,7 +2397,7 @@ function editor() {
                                             var row = thisCrossWord.find(".Cell[groups*="+currentGroup+"]").first().parent().prevAll().length;
                                             
                                             data["posx"] = column;
-                                            data["poxy"] = row;
+                                            data["posy"] = row;
                                         }
                                         data["temp_currentGroup"] = currentGroup;
                                         parent.saveData(

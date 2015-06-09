@@ -802,7 +802,7 @@ class EditorController extends Controller {
                                                 $newPEPropertyShowLetters->value = $_POST["showing_letters"];
                                                 $newPEPropertyShowLetters->insert();
                                             }
-
+                                            
                                             if (isset($_POST["posx"])) {
                                                 //Propriedade da posição em X (Colunm)
                                                 $newPEPropertyPosX = new EditorPieceelementProperty();
@@ -815,7 +815,7 @@ class EditorController extends Controller {
                                                 $newPEPropertyPosX->value = $_POST["posx"];
                                                 $newPEPropertyPosX->insert();
                                             }
-
+                                            
                                             if (isset($_POST["posy"])) {
                                                 //Propriedade da posição em Y (Row)
                                                 $newPEPropertyPosY = new EditorPieceelementProperty();
