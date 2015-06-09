@@ -182,6 +182,10 @@ this.Meet = function (options) {
 
             //Chamar função para inserir nome html
             $('#render_canvas').html(domCobjectBuild);
+            
+            
+            self.domCobject.posBuildAll();
+            
             //Inicia os eventos somente após a inclusão do html na dom
             self.beginEvents();
             // Render Ready! 
@@ -239,7 +243,9 @@ this.Meet = function (options) {
     this.init_Common = function () {
         //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
-        $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
+        if (self.domCobject.cobject.template_code !== 'PLC')
+            $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
+        
         if (self.currentTemplateCode === 'DDROP') {
             //Existe DDROP
             self.init_DDROP();
@@ -986,6 +992,22 @@ this.Meet = function (options) {
     };
     //======================
 
+    /**
+     * Inicializa eventos do PLC
+     * 
+     * @returns {void}
+     */
+    this.init_PLC = function () {
+        $('input.PLC-input').on('keyup', function () {
+            if (!self.isEmpty($(this).val())) {
+                var val = $(this).attr('value');
+                $(this).attr('value', val.toUpperCase());
+                
+                var inputs = $(this).closest('.PLC-table').find(':input');
+                inputs.eq( inputs.index(this)+ 1 ).focus();
+            }
+        });
+    };
 
     this.hasPrevPieceTXT = function () {
         var isTXT = false;

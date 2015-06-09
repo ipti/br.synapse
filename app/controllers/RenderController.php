@@ -205,7 +205,20 @@ class RenderController extends Controller {
 
         if (!$isPiecesetElement && !$isCobjectElement) {
             foreach ($father->editorPieceelementProperties as $property) {
-                $pe_properties[$property->property->name] = $property->value;
+                $propertyName = $property->property->name;
+                
+                if(isset($pe_properties[$propertyName])){
+                    if(!is_array($pe_properties[$propertyName])){
+                        $tmp = $pe_properties[$propertyName];
+                        $pe_properties[$propertyName] = array();
+                        array_push($pe_properties[$propertyName], $tmp);
+                        array_push($pe_properties[$propertyName], $property->value);
+                    } else {
+                        array_push($pe_properties[$propertyName], $property->value);
+                    }
+                } else {
+                    $pe_properties[$propertyName] = $property->value;
+                }
             }
 
             //===== Agrupar os elementos no Json 
