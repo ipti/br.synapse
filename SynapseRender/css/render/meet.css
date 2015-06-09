@@ -223,3 +223,24 @@ body {
 }
 
 
+.PLC-input{
+    width: 70px;
+    height: 70px;
+    border: none;
+    border-radius: 2px;
+    margin: 2px;
+    font-size: 50px;
+    text-align: center;
+}
+
+.PLC-input:read-only{
+    background-color: lightgray;
+    color: gray;
+}
+
+.PLC-table td{
+    border: none;// 1px solid black;
+    width: 75px;
+    height: 75px;
+    vertical-align: middle;
+}
