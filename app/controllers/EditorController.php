@@ -712,7 +712,7 @@ class EditorController extends Controller {
                                             $newElementProperty->value = "português";
                                             $newElementProperty->save();
 
-                                            //Se for template Caça-Palavra, atualiza o Showing Letter
+                                            //Se for template Caça-Palavra, atualiza o Showing Letter e o PosX e PosY
                                             if (isset($_POST["showing_letters"])) {
                                                 //Propriedade de showing_letters
                                                 $propertyName = "showing_letters";
@@ -727,6 +727,33 @@ class EditorController extends Controller {
                                                 //Altera a propriedade Showing Letters
                                                 $pePropertyShowLetters->value = $_POST["showing_letters"];
                                                 $pePropertyShowLetters->save();
+                                            }
+
+                                            if (isset($_POST["posx"])) {
+                                                //Propriedade da posição em X (Colunm)
+                                                $propertyName = "posx";
+                                                $propertyContext = "piecelement";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $_POST["pieceID"], 'element_id' => $elementID));
+                                                $pePropertyPosX = EditorPieceelementProperty::model()->findByAttributes(array(
+                                                    'piece_element_id' => $pieceElement->id,
+                                                    'property_id' => $propertyID
+                                                ));
+                                                $pePropertyPosX->value = $_POST["posx"];
+                                                $pePropertyPosX->save();
+                                            }
+
+                                            if (isset($_POST["posy"])) {
+                                                //Propriedade da posição em Y (Row)
+                                                $propertyName = "posy";
+                                                $propertyContext = "piecelement";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $pePropertyPosY = EditorPieceelementProperty::model()->findByAttributes(array(
+                                                    'piece_element_id' => $pieceElement->id,
+                                                    'property_id' => $propertyID
+                                                ));
+                                                $pePropertyPosY->value = $_POST["posy"];
+                                                $pePropertyPosY->save();
                                             }
                                         }
                                     } else {
@@ -775,9 +802,9 @@ class EditorController extends Controller {
                                                 $newPEPropertyShowLetters->value = $_POST["showing_letters"];
                                                 $newPEPropertyShowLetters->insert();
                                             }
-                                            
+
                                             if (isset($_POST["posx"])) {
-                                                 //Propriedade da posição em X (Colunm)
+                                                //Propriedade da posição em X (Colunm)
                                                 $newPEPropertyPosX = new EditorPieceelementProperty();
                                                 $newPEPropertyPosX->piece_element_id = $newPieceElement->id;
 
@@ -788,9 +815,9 @@ class EditorController extends Controller {
                                                 $newPEPropertyPosX->value = $_POST["posx"];
                                                 $newPEPropertyPosX->insert();
                                             }
-                                            
-                                              if (isset($_POST["posy"])) {
-                                                 //Propriedade da posição em Y (Row)
+
+                                            if (isset($_POST["posy"])) {
+                                                //Propriedade da posição em Y (Row)
                                                 $newPEPropertyPosY = new EditorPieceelementProperty();
                                                 $newPEPropertyPosY->piece_element_id = $newPieceElement->id;
 
@@ -801,7 +828,6 @@ class EditorController extends Controller {
                                                 $newPEPropertyPosY->value = $_POST["posy"];
                                                 $newPEPropertyPosY->insert();
                                             }
-                                            
                                         } else if ($isElementPieceSet) {
                                             //É um elemento da PIECESET
                                             $newPieceSetElement = new EditorPiecesetElement();
@@ -1235,7 +1261,7 @@ class EditorController extends Controller {
 
                                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
                                                         [$idx]['point_crossword'] = "w2eID" . $e_id_w2->element_id . "|" . $pointCross[1] . "|" . $pointCross[2];
-                                                
+
                                                 //============ Groupo do elemeto da Word2
                                                 //Buscar o groupo desse Element do PieceElement estar
                                                 $pe_propertyGroupCrossedWord2 = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe_id_w2,
@@ -1400,7 +1426,7 @@ class EditorController extends Controller {
     private function delElement($id, $id_Pai, $isElementPieceSet, $isElementCobject) {
         //Verificar se o template é PLC
         $isTemplatePlc = isset($_POST['isTemplatePlc']) ? $_POST['isTemplatePlc'] : false;
-        
+
         $isElementPieceSet = isset($isElementPieceSet) && $isElementPieceSet;
         $isElementCobject = isset($isElementCobject) && $isElementCobject;
 
@@ -1427,7 +1453,7 @@ class EditorController extends Controller {
                 if ($isTemplatePlc) {
                     //Busca todos os piece_elements para a piece corrente
                     $AllElement_Piece = Yii::app()->db->CreateCommand(""
-                            . "SELECT * FROM editor_piece_element WHERE piece_id = $id_Pai")->queryAll();
+                                    . "SELECT * FROM editor_piece_element WHERE piece_id = $id_Pai")->queryAll();
 
                     $propertyName = "point_crossword";
                     $propertyContext = "word";
@@ -1450,7 +1476,7 @@ class EditorController extends Controller {
                         }
                     endforeach;
                 }
-                
+
                 //Depois, Desvincula o elemento da peça.                                  
                 $Element_Piece->delete();
                 return true;
