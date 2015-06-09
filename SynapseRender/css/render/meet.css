@@ -240,7 +240,7 @@ body {
 
 .PLC-table td{
     border: none;// 1px solid black;
-    width: 75px;
-    height: 75px;
+/*    width: 75px;
+    height: 75px;*/
     vertical-align: middle;
 }
