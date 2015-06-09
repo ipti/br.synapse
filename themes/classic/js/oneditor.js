@@ -314,6 +314,9 @@ function onEditor(newEditor) {
 
     //Função do click na Célula do Template PLC
     this.eventClickCellPLC = function (clickedCell, isload) {
+        
+      //console.log(clickedCell);
+        
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
         var groupWordOfClickedLetter = $(clickedCell).attr('groups');
         var thisFunc = this;

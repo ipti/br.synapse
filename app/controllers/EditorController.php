@@ -775,6 +775,33 @@ class EditorController extends Controller {
                                                 $newPEPropertyShowLetters->value = $_POST["showing_letters"];
                                                 $newPEPropertyShowLetters->insert();
                                             }
+                                            
+                                            if (isset($_POST["posx"])) {
+                                                 //Propriedade da posição em X (Colunm)
+                                                $newPEPropertyPosX = new EditorPieceelementProperty();
+                                                $newPEPropertyPosX->piece_element_id = $newPieceElement->id;
+
+                                                $propertyName = "posx";
+                                                $propertyContext = "piecelement";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newPEPropertyPosX->property_id = $propertyID;
+                                                $newPEPropertyPosX->value = $_POST["posx"];
+                                                $newPEPropertyPosX->insert();
+                                            }
+                                            
+                                              if (isset($_POST["posy"])) {
+                                                 //Propriedade da posição em Y (Row)
+                                                $newPEPropertyPosY = new EditorPieceelementProperty();
+                                                $newPEPropertyPosY->piece_element_id = $newPieceElement->id;
+
+                                                $propertyName = "posy";
+                                                $propertyContext = "piecelement";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newPEPropertyPosY->property_id = $propertyID;
+                                                $newPEPropertyPosY->value = $_POST["posy"];
+                                                $newPEPropertyPosY->insert();
+                                            }
+                                            
                                         } else if ($isElementPieceSet) {
                                             //É um elemento da PIECESET
                                             $newPieceSetElement = new EditorPiecesetElement();
