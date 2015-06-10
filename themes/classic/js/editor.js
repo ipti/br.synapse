@@ -1580,6 +1580,9 @@ function editor() {
                     if (this.isset(loaddata)) {
                         //Se foi chamando durante o load do editor
                         //Carregar a variável crossWords, se for o template PLC
+
+                        console.log(loaddata['crossWord']);
+
                         if (parent.isset(loaddata['crossWord'])) {
                             //Se possui point_crossword, então o template é PLC
                             for (var idx in loaddata['crossWord']) {
@@ -1680,6 +1683,9 @@ function editor() {
                             //Verificar qual a célula de cruzamento
                             var positionCellClick = -1;
                             var groupCellClick = -1;
+
+                            console.log(self.crossWords);
+
                             for (var idx in self.crossWords) {
                                 var crossWord = self.crossWords[idx];
                                 //Como é carregado no BD então existe ID do BD único para cada elemento txt
@@ -2225,6 +2231,8 @@ function editor() {
 
                     //Total de elementos e o Total alterados
                     parent.totalElements = $('.element').size();
+                    parent.totalElementsText = $('.element.text').size();
+                    parent.uploadedElementsText = 0;
                     parent.totalElementsChanged = $('.element[updated="1"]').size();
                     parent.totalElementsNOchanged = $('.element[updated="0"]').size();
                     parent.totalPieces = $('.piece').size();
@@ -2393,9 +2401,9 @@ function editor() {
 
 
                                             var thisCrossWord = $(this).closest(".tplPlc").find(".crosswords");
-                                            var column = thisCrossWord.find(".Cell[groups*="+currentGroup+"]").first().prevAll().length;
-                                            var row = thisCrossWord.find(".Cell[groups*="+currentGroup+"]").first().parent().prevAll().length;
-                                            
+                                            var column = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().prevAll().length;
+                                            var row = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().parent().prevAll().length;
+
                                             data["posx"] = column;
                                             data["posy"] = row;
                                         }
@@ -2412,6 +2420,7 @@ function editor() {
                                                             } else {
                                                                 $('.savescreen').append('<br><p>ElementText Atualizado com sucesso!</p>');
                                                             }
+
                                                             parent.uploadedElements++;
                                                             var saveAllElements = false;
                                                             if (!parent.isload && parent.totalElements === parent.uploadedElements) {
@@ -2423,10 +2432,16 @@ function editor() {
                                                             }
 
                                                             if (parent.COTemplateTypeIn(parent.PLC)) {
+                                                                //No template PLC é os elements texts são sempre enviados para o BD pra atualizar
+                                                                //a sua posiçã (x,y)
+                                                                parent.uploadedElementsText++;
+                                                                //Verificar se Enviou todos elementos do tipo text
+                                                                var saveAllTextElements = (parent.totalElementsText === parent.uploadedElementsText);
+                                                                        
                                                                 //Acrescenta o atributo idDBElement ao Array do CrossWords
                                                                 for (var idx in self.crossWords) {
                                                                     var crossword = self.crossWords[idx];
-
+                                                                    
                                                                     if (crossword['pieceID'] === curretPieceID) {
                                                                         if (crossword['word1Group'] === currentGroup ||
                                                                                 crossword['word2Group'] === currentGroup) {
@@ -2445,8 +2460,8 @@ function editor() {
                                                                         }
                                                                     }
                                                                 }
-
-                                                                if (saveAllElements) {
+                                                                
+                                                                if (saveAllTextElements) {
                                                                     //Se for um novo Cobject
                                                                     if (!parent.isload) {
                                                                         //Então salvar os cruzamentos no BD
