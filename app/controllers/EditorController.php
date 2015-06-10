@@ -1081,6 +1081,7 @@ class EditorController extends Controller {
                             break;
                         case "plc":
                             if (isset($_POST['crossWords'])) {
+                                
                                 if ($_POST['op'] = 'save') {
                                     //Se for um Novo Cobject
                                     foreach ($_POST['crossWords'] as $crossWord):
