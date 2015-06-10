@@ -632,7 +632,6 @@ function onEditor(newEditor) {
                             delete thisFunc.tempPositionThisCellWordMerge;
                         }
 
-
                         //Por fim desabilita o botão, novo Elemento
                         $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
                     }
