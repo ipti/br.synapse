@@ -481,7 +481,7 @@ var DomCobject = function(cobject, idx) {
             
             if((self.isset(self.wordsCrossed[peid]) && parseInt(self.wordsCrossed[peid].posC) !== i) 
               || (!self.isset(self.wordsCrossed[peid]))){
-                    html += "<input id='" + peid + "' class='PLC-input' row='"+row+"' col='"+col+"' type='text' word='"+properties["grouping"]+"' "+value+" maxlength='1'></input>";
+                    html += "<input id='" + peid + "' class='PLC-input' i='"+i+"' row='"+row+"' col='"+col+"' type='text' word='"+properties["grouping"]+"' "+value+" maxlength='1'></input>";
             }
             
             if(ori === "H") col++;

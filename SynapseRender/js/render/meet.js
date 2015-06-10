@@ -1001,10 +1001,24 @@ this.Meet = function (options) {
         $('input.PLC-input').on('keyup', function () {
             if (!self.isEmpty($(this).val())) {
                 var val = $(this).attr('value');
-                $(this).attr('value', val.toUpperCase());
-                
-                var inputs = $(this).closest('.PLC-table').find(':input');
-                inputs.eq( inputs.index(this)+ 1 ).focus();
+                if (val === ' '){
+                    $(this).attr('value','');
+                } else {
+                    $(this).attr('value', val.toUpperCase());
+
+                    var inputs = $(this).closest('.PLC-table').find(':input');
+                    inputs.eq( inputs.index(this)+ 1 ).focus();
+                }  
+            }
+            var pieceID = $('.currentPiece').attr('id');
+            var wordNum = $(this).attr('word');
+            var totalInputs = $(".PLC-input").length;
+            var totalAnswered = $(".PLC-input[value!=]").length;
+            if(totalInputs === totalAnswered){
+                self.isCorrectPLC(pieceID);
+                $('.nextPiece').show();
+            }else{
+                $('.nextPiece').hide();
             }
         });
     };
@@ -1142,6 +1156,39 @@ this.Meet = function (options) {
         //Salvo com Sucesso
         self.domCobject.mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
         return true;
+    };
+    
+    /**
+     * Verifica se esta Correto PLC.
+     * 
+     * @param {integer} pieceID
+     * @param {string} groupClicked
+     * @returns {Boolean}
+     */
+    this.isCorrectPLC = function (pieceID) {
+        var piece = self.domCobject.mainPieces[pieceID];
+        var isCorrect = true;
+        $.each(piece, function(i, group){
+            if(i[0] === '_'){
+                var word = group.elements[0].generalProperties[0].value;
+                var row = group.elements[0].pieceElement_Properties.posy;
+                var col = group.elements[0].pieceElement_Properties.posx;
+                var ori = group.elements[0].pieceElement_Properties.direction.toUpperCase();
+                
+                for(var i = 0; i< word.length; i++){
+                    var correctCharactere = word[i];
+                    var typedCharactere = $(".PLC-input[row="+row+"][col="+col+"]").attr("value");
+                    
+                    isCorrect = isCorrect && correctCharactere === typedCharactere;
+                    
+                    if(ori === "H") col++;
+                    else row++;
+                }
+            }
+        });
+        
+        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
+        return isCorrect;
     };
 
     /**
