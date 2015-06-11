@@ -998,8 +998,12 @@ this.Meet = function (options) {
      * @returns {void}
      */
     this.init_PLC = function () {
-        $('input.PLC-input').on('keyup', function () {
-            if (!self.isEmpty($(this).val())) {
+        $('input.PLC-input').on('keyup', function (e) {
+            if(e.keyCode === 8){
+                $(this).attr('value', "");
+                var inputs = $(this).closest('.PLC-table').find(':input');
+                inputs.eq( inputs.index(this)- 1 ).focus();
+            } else if (!self.isEmpty($(this).val())) {
                 var val = $(this).attr('value');
                 if (val === ' '){
                     $(this).attr('value','');
@@ -1020,6 +1024,10 @@ this.Meet = function (options) {
             }else{
                 $('.nextPiece').hide();
             }
+        });
+        $('input.PLC-input').on('focus', function () {
+            if(!$(this).is('[readonly]'))
+                $(this).attr('value', '');
         });
     };
 
