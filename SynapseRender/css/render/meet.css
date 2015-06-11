@@ -224,23 +224,66 @@ body {
 
 
 .PLC-input{
-    width: 70px;
-    height: 70px;
-    border: none;
-    border-radius: 2px;
-    margin: 2px;
-    font-size: 50px;
+    width: 35px;
+    height: 35px;
+    margin: 1px;
+    font-size: 30px;
     text-align: center;
 }
+input.PLC-input{
+    border: 2px solid gray;
+    border-radius: 2px;
+}
 
-.PLC-input:read-only{
+input.PLC-input:read-only{
     background-color: lightgray;
     color: gray;
 }
 
 .PLC-table td{
-    border: none;// 1px solid black;
-/*    width: 75px;
-    height: 75px;*/
+    border: none;
     vertical-align: middle;
+}
+
+.PLC.group.build_image{
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
+}
+
+.PLC-middle-words{
+    width:60%;
+    float:left;
+}
+.PLC-middle-words table, .PLC-left-images div, .PLC-right-images div{
+    margin: 0 auto;
+    position: relative;
+}
+
+.PLC-left-images  span, .PLC-right-images span {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+.PLC-left-images  span, .PLC-right-images span, span.PLC-input {
+    color: rgb(255, 255, 0);
+    text-shadow: 1px 1px 1px #000;
+    font-size: 30px;
+    font-weight: 800;
+    font-family: tellural;
+}
+.PLC-left-images{
+    width:20%;
+    float: left;
+}
+.PLC-right-images{
+    width:20%;
+    float:left;
+}
+.ask {
+    padding-top:10px;
+}
+
+body{
+    overflow-y: hidden;
 }

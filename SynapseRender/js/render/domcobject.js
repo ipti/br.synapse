@@ -82,6 +82,12 @@ var DomCobject = function(cobject, idx) {
                 var col = $(this).attr('col');
                 $(".PLC-table td[row="+row+"][col="+col+"]").append($(this));
             });
+            
+            var side = 'left';
+            $(".PLC.group.build_image").each(function(i,v){
+                $(".PLC-"+side+"-images").append($(this));
+                side = side === 'left'? 'right' : 'left';
+            });
         }
     };
 
@@ -143,25 +149,34 @@ var DomCobject = function(cobject, idx) {
         //Somente Monta a Piece, se existir algum Group dentro dela
         if (self.isset(groups)) {
             self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
-            var domElementASK = $('<div class="ask"></div>');
+            var domElementASK = "";
+            
+            if (self.cobject.template_code === 'PLC' ){
+                var domElementASK = $('<div class="ask" style="width:100%"></div>');
+                var leftDiv = "<div class='PLC-left-images'></div>";
+                var middleDiv = "<div class='PLC-middle-words'>";
+                middleDiv += '<table class="PLC-table">';
+                for (var i = -1; i < 5; i++){
+                    middleDiv += "<tr>";
+                    for (var j = -1; j < 10; j++) {
+                        middleDiv += "<td row='" + i + "' col='" + j + "' ></td>";
+                    }
+                    middleDiv += "</tr>";
+                }
+                middleDiv += "</table></div>";
+                var rightDiv = "<div class='PLC-right-images'></div>";
+                
+                domElementASK.append(leftDiv+middleDiv+rightDiv);
+            }else{
+                domElementASK = $('<div class="ask"></div>');
+            }
+            
             //Verificar se é uma peça do template AEL
             if (self.cobject.template_code === 'AEL' 
                 || self.cobject.template_code === 'DDROP' 
                 || self.cobject.template_code === 'ONEDDROP') {
                 var domElementANSWER = $('<div class="answer"></div>');
             }
-        
-        html = '<table class="PLC-table">';
-        for (var i = 0; i < 4; i++){
-            html += "<tr>";
-            for (var j = 0; j < 10; j++) {
-                html += "<td row='" + i + "' col='" + j + "' ></td>";
-            }
-            html += "</tr>";
-        }
-        html += "</table>";
-        domElementASK.append(html);
-      
             var objGroups_currentPiece = {};
             $.each(groups, function(current_group, elements_group) {
                 self.pos.group = current_group; // O grupo Corrent dessa Piece!
@@ -240,7 +255,7 @@ var DomCobject = function(cobject, idx) {
 
             objGroups_currentPiece.istrue = null;
             self.mainPieces[self.id.piece] = objGroups_currentPiece;
-
+      
             self.domPiece.append(domElementASK);
             if (self.cobject.template_code === 'AEL' ||
                     self.cobject.template_code === 'DDROP' ||
@@ -405,17 +420,36 @@ var DomCobject = function(cobject, idx) {
     };
     
     this.buildElement_PLC = function(){
+        
         var elementID = self.id.element;
         var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
         var type = currentElement.type;
         var peid = currentElement.pieceElementID;
+            var html;
         
         var build_type = "";
         
         var properties = [];
         
-        if (type === 'multimidia') {
+        if (currentElement.type === 'multimidia') {
+            $.each(currentElement.generalProperties, function(i, item){
+                properties[item['name']] = item['value'];  
+                if (item['name'] === 'library_type') {
+                    build_type = "build_"+item['value'];
+                }
+            });
             
+            var src = self.dirLibrary + '/image/' + properties['src'];
+            var library_id = properties['library_id'];
+            var PEProperties = currentElement.pieceElement_Properties;
+            properties["grouping"] = PEProperties.grouping;
+            
+            var side = properties["grouping"] % 2 === 0 ? "left" : "right";
+            
+            html += '<div class="elementImage '+side+'" word="'+properties["grouping"]+'" library_id=' + library_id + ' >\n\
+                     <img src="' + src + '" ><span>'+self.pos.group+'</span></div>';
+            
+
         } else if(type === 'text') {
             build_type = 'build_text';
             $.each(currentElement.generalProperties, function(i, item){
@@ -463,31 +497,37 @@ var DomCobject = function(cobject, idx) {
                 properties["show"] = tmp;
             }else{
                 properties["show"] = null;
-            }
+            } 
 
             var text = properties["text"];
-            var language = properties["language"];
-        }
-        var html;
-        var row = properties["row"];
-        var col = properties["column"];
-        var ori = properties["direction"].toUpperCase();
-        for(var i = 0; i< text.length; i++){
-            var value = "";
-            if(self.isset(properties["show"]) && i in properties["show"]){
-                value = text[i];
-                value = "value='"+value+"' readonly";
-            }
             
-            if((self.isset(self.wordsCrossed[peid]) && parseInt(self.wordsCrossed[peid].posC) !== i) 
-              || (!self.isset(self.wordsCrossed[peid]))){
-                    html += "<input id='" + peid + "' class='PLC-input' i='"+i+"' row='"+row+"' col='"+col+"' type='text' word='"+properties["grouping"]+"' "+value+" maxlength='1'></input>";
+            var row = properties["row"];
+            var col = properties["column"];
+            var ori = properties["direction"].toUpperCase();
+            html += "<span id='" + peid + "' class='PLC-input' i='-1' row='"+((ori === "V")? row-1 : row) +"' col='"+((ori === "H")?col-1:col)+"' type='text' word='"+properties["grouping"]+"'>"+self.pos.group+"</span>";
+            for(var i = 0; i< text.length; i++){
+                var value = "";
+                if(self.isset(properties["show"])){
+                    var exists = false;
+                    $.each(properties["show"], function(j,v){
+                        if(!exists) exists = v == i;
+                    });
+                    if(exists){
+                        value = text[i];
+                        value = "value='"+value+"' readonly";
+                    }
+                }
+                
+                if((self.isset(self.wordsCrossed[peid]) && parseInt(self.wordsCrossed[peid].posC) !== i) 
+                  || (!self.isset(self.wordsCrossed[peid]))){
+                        html += "<input id='" + peid + "' class='PLC-input' i='"+i+"' row='"+row+"' col='"+col+"' type='text' word='"+properties["grouping"]+"' "+value+" maxlength='1'></input>";
+                }
+
+                if(ori === "H") col++;
+                else row++;
             }
-            
-            if(ori === "H") col++;
-            else row++;
-        }
         
+        }
         self.currentElementType = build_type;
         self.domElement = $(html);
         return self.domElement;
