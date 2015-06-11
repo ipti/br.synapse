@@ -634,6 +634,9 @@ function editor() {
                 var plus = 'position="' + position + '" match="' + match + '" ' + plusDB;
 
                 var addDeleteButton = function (have) {
+                    if (parent.COTemplateTypeIn(parent.PLC)) {
+                        return '';
+                    }
                     return have ? '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' : '';
                 };
                 var addTextArea = function (id, text) {
@@ -1284,13 +1287,17 @@ function editor() {
 
                 //Se o template for PLC , só mostra a opção de excluir se for o último grupo
                 //E desabilita o botão new Element da peça corrente
+                var btnNewElementClicked = $('.piece#' + parent.currentPiece + ' .newElement');
                 if (parent.COTemplateTypeIn(parent.PLC) && !parent.isset(loaddata)) {
-                    var btnNewElementClicked = $('.piece#' + parent.currentPiece + ' .newElement');
                     $(btnNewElementClicked).attr('disabled', 'true');
                     $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .delGroup').hide();
-                    $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .element.text .del').hide();
-                }
+                } else if (parent.COTemplateTypeIn(parent.PLC) && parent.isset(loaddata)) {
+                    if ($(btnNewElementClicked).closest('.elementsPlc').find('div[group=' + loaddata['match'] + ']').length == 0) {
+                        //Não existe, logo será adicionado a estrutura do groupo dos elementos
+                        $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .delGroup').hide();
+                    }
 
+                }
 
                 //variável para adição do ID do banco, se ele não existir ficará vazio.
                 var plus = "";
@@ -2188,6 +2195,7 @@ function editor() {
                         //Enviar array de objetos a serem excluidos 
                         parent.saveData({
                             op: "delete",
+                            isTemplatePlc : parent.COTemplateTypeIn(parent.PLC),
                             array_del: parent.orderDelets
                         },
                         //função sucess do saveData-DelAll
