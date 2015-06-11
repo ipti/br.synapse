@@ -803,6 +803,7 @@ function editor() {
 
                                         //Após add a primeira palavra no CrossWord habilita o botão de criar elemento
                                         thisDivGroup.closest(".tplPlc").find(".newElement").removeAttr('disabled');
+
                                     } else {
                                         //Já existe uma palavra no CrossWords
                                         if (!self.isset(thisDivGroup.attr('selected'))) {
@@ -1277,15 +1278,17 @@ function editor() {
                 }, loaddata);
             },
             this.addElement = function (idbd, type, loaddata) {
+                //STOP HERE! CORRIGIR O SHOW DEL
                 //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
                 var parent = this;
 
-                //Se o template for PLC, só mostra a opção de excluir se for o último grupo
+                //Se o template for PLC , só mostra a opção de excluir se for o último grupo
                 //E desabilita o botão new Element da peça corrente
-                if (parent.COTemplateTypeIn(parent.PLC)) {
+                if (parent.COTemplateTypeIn(parent.PLC) && !parent.isset(loaddata)) {
                     var btnNewElementClicked = $('.piece#' + parent.currentPiece + ' .newElement');
                     $(btnNewElementClicked).attr('disabled', 'true');
-                    $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .del').hide();
+                    $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .delGroup').hide();
+                    $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .element.text .del').hide();
                 }
 
 
@@ -1348,7 +1351,7 @@ function editor() {
                                 '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                                 '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                                 '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
-                                '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
+                                '<button class="del delElement delGroup pull-right"><i class="fa fa-times"></i></button>';
                         if (parent.COTemplateTypeIn(parent.DIG)) {
                             html += '<button class="pull-right changeOrientation" match="' + group + '" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
                         }
@@ -1415,7 +1418,7 @@ function editor() {
                                         '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                                         '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                                         '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
-                                        '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
+                                        '<button class="del delElement delGroup pull-right"><i class="fa fa-times"></i></button>' +
                                         '<br><br><br><br></div>' +
                                         '</li>';
                             } else {
@@ -1448,7 +1451,7 @@ function editor() {
                                     '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>';
                             if (parent.COTemplateTypeIn(parent.ONEDDROP) &&
                                     group.split('_')[0] > 1) {
-                                html2 += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
+                                html2 += '<button class="del delElement delGroup pull-right"><i class="fa fa-times"></i></button>';
                             }
                             html2 += '<br><br><br></div></li>';
 
@@ -1581,8 +1584,6 @@ function editor() {
                         //Se foi chamando durante o load do editor
                         //Carregar a variável crossWords, se for o template PLC
 
-                        console.log(loaddata['crossWord']);
-
                         if (parent.isset(loaddata['crossWord'])) {
                             //Se possui point_crossword, então o template é PLC
                             for (var idx in loaddata['crossWord']) {
@@ -1684,8 +1685,6 @@ function editor() {
                             var positionCellClick = -1;
                             var groupCellClick = -1;
 
-                            console.log(self.crossWords);
-
                             for (var idx in self.crossWords) {
                                 var crossWord = self.crossWords[idx];
                                 //Como é carregado no BD então existe ID do BD único para cada elemento txt
@@ -1708,9 +1707,7 @@ function editor() {
                             //Simular um click na célula passada
                             self.onEditor.eventClickCellPLC(cellToClick, true);
 
-                            console.log(groupCellClick);
                         }
-
 
                         //Verifica as letras isShow
                         var posLettersShow = loaddata['showing_letters'].split("|");
@@ -2437,11 +2434,11 @@ function editor() {
                                                                 parent.uploadedElementsText++;
                                                                 //Verificar se Enviou todos elementos do tipo text
                                                                 var saveAllTextElements = (parent.totalElementsText === parent.uploadedElementsText);
-                                                                        
+
                                                                 //Acrescenta o atributo idDBElement ao Array do CrossWords
                                                                 for (var idx in self.crossWords) {
                                                                     var crossword = self.crossWords[idx];
-                                                                    
+
                                                                     if (crossword['pieceID'] === curretPieceID) {
                                                                         if (crossword['word1Group'] === currentGroup ||
                                                                                 crossword['word2Group'] === currentGroup) {
@@ -2460,7 +2457,7 @@ function editor() {
                                                                         }
                                                                     }
                                                                 }
-                                                                
+
                                                                 if (saveAllTextElements) {
                                                                     //Se for um novo Cobject
                                                                     if (!parent.isload) {
