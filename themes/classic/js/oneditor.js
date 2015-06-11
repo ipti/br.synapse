@@ -315,8 +315,6 @@ function onEditor(newEditor) {
     //Função do click na Célula do Template PLC
     this.eventClickCellPLC = function (clickedCell, isload) {
         
-      //console.log(clickedCell);
-        
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
         var groupWordOfClickedLetter = $(clickedCell).attr('groups');
         var thisFunc = this;
@@ -617,7 +615,6 @@ function onEditor(newEditor) {
                                 //Então é um Cobject isload, porém o click vou dado pelo usuário na célula
                                 var idDbElementWord1 = $(clickedCell).closest(".tplPlc").find(".elementsPlc").find("div[group="+word1Group+"]")
                                         .find(".element.text").attr("idbd");
-                                
                                 tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, idDbElementWord1: idDbElementWord1,
                                     position1: thisFunc.tempPositionThisCellWordMerge,
                                     word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
@@ -625,9 +622,9 @@ function onEditor(newEditor) {
                                 tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, position1: thisFunc.tempPositionThisCellWordMerge
                                     , word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
                             }
-
+                            
                             newEditor.crossWords.push(tempJsonArray);
-
+                            
                             //Deleção do atributo temporário
                             delete thisFunc.tempPositionThisCellWordMerge;
                         }

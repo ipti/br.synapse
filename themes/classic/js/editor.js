@@ -1597,7 +1597,6 @@ function editor() {
                                 var currentCrossWord = loaddata['crossWord'][idx];
                                 var splitPosition = currentCrossWord['point_crossword'].split('|');
                                 var elementIDDBWord2 = splitPosition[0].split("w2eID")[1];
-
                                 var tempJsonArray = {pieceID: "", idDBPieceElementPropertyPointCross: currentCrossWord['idDBPieceElementPropertyPointCross'], idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[1]
                                     , word2Group: currentCrossWord['crossword_elementGroup_Word2'], idDbElementWord2: elementIDDBWord2, position2: splitPosition[2], letter: loaddata['text'].substring(splitPosition[1]
                                             , parseInt(splitPosition[1]) + 1)};
@@ -2195,7 +2194,7 @@ function editor() {
                         //Enviar array de objetos a serem excluidos 
                         parent.saveData({
                             op: "delete",
-                            isTemplatePlc : parent.COTemplateTypeIn(parent.PLC),
+                            isTemplatePlc: parent.COTemplateTypeIn(parent.PLC),
                             array_del: parent.orderDelets
                         },
                         //função sucess do saveData-DelAll
@@ -2418,7 +2417,6 @@ function editor() {
                                                 data,
                                                 //Função de sucess do Save Element
                                                         function (response, textStatus, jqXHR) {
-
                                                             var currentGroup = data["temp_currentGroup"];
                                                             if (!parent.isload) {
                                                                 $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
@@ -2451,14 +2449,17 @@ function editor() {
                                                                         if (crossword['word1Group'] === currentGroup ||
                                                                                 crossword['word2Group'] === currentGroup) {
                                                                             //Encontrado um cruzamento para esta palavra
-                                                                            if (crossword['word1Group'] === currentGroup) {
-                                                                                //Zera o word1Group e acrecenta o novo atributo 
-                                                                                self.crossWords[idx]['word1Group'] = "";
-                                                                                self.crossWords[idx]['idDbElementWord1'] = response['ElementID'];
-                                                                            } else {
-                                                                                //Zera o word2Group e acrecenta o novo atributo 
-                                                                                self.crossWords[idx]['word2Group'] = "";
-                                                                                self.crossWords[idx]['idDbElementWord2'] = response['ElementID'];
+                                                                            //Somente substitui, se o idDbElementWord1 Não existir !
+                                                                            if (self.isset(response['ElementID'])) {
+                                                                                if (crossword['word1Group'] === currentGroup) {
+                                                                                    //Zera o word1Group e acrecenta o novo atributo 
+                                                                                    self.crossWords[idx]['word1Group'] = "";
+                                                                                    self.crossWords[idx]['idDbElementWord1'] = response['ElementID'];
+                                                                                } else if (crossword['word2Group'] === currentGroup) {
+                                                                                    //Zera o word2Group e acrecenta o novo atributo 
+                                                                                    self.crossWords[idx]['word2Group'] = "";
+                                                                                    self.crossWords[idx]['idDbElementWord2'] = response['ElementID'];
+                                                                                }
                                                                             }
                                                                             //Adiciona o novo atributo idDbPiece
                                                                             self.crossWords[idx]['idDbPiece'] = LastPieceID;
