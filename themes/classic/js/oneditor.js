@@ -311,7 +311,6 @@ function onEditor(newEditor) {
 
 
     //Template TPLC
-
     //Função do click na Célula do Template PLC
     this.eventClickCellPLC = function (clickedCell, isload) {
         
@@ -663,6 +662,8 @@ function onEditor(newEditor) {
     $(document).on("click", ".crosswords  div.Cell[groups]", function () {
         self.eventClickCellPLC(this, false);
     });
+
+
 
 
 }

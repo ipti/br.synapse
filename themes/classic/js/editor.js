@@ -1841,7 +1841,21 @@ function editor() {
                     parent.addText(tagAdd);
                 }
 
-                $('#' + parent.currentPieceSet).scrollTop($('#' + parent.currentPiece).height());
+                // $('#' + parent.currentPieceSet).scrollTop($('#' + parent.currentPiece).height());
+                //STOP HERE, corrigir o alinhamento Vertical !!
+//                if (parent.COTemplateTypeIn(parent.PLC)) {
+//                    $('#' + parent.currentPieceSet).scroll(function () {
+//                        var total = $(this).find('.piece').eq(0).height();
+//                        var current = $(this).scrollTop();
+//                        var pResult = (current * 100) / total;
+//
+//                        var translater = 'translateY('+pResult.toFixed(0) + '%)';
+//                        console.log(translater);
+//                        $(this).find('.crosswords').css('transform','translateY(100%)');
+//
+//                    });
+//                }
+
 
             },
             this.delScreen = function (force) {
