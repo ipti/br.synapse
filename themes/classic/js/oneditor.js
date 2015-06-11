@@ -207,6 +207,13 @@ function onEditor(newEditor) {
         $("span.active").removeClass('active');
         $(this).children("span").addClass('active');
     });
+    
+    $(document).on("click", ".elementsPlc div[group]", function () {
+        $("div[lastselected]").removeAttr("lastselected");
+        $(this).attr("lastselected", "true");
+        $("span.active").removeClass('active');
+        $(this).children("span").addClass('active');
+    });
 
 
     $(document).on("click", ".wordsearch  div.Cell", function () {
@@ -215,6 +222,7 @@ function onEditor(newEditor) {
         var word = $("span.active").find('.element font').text();
         var orientation = $("span.active").find('button.changeOrientation').attr('orientation');
         var group = $("span.active").attr("group");
+        var wordExists;
         var maxW = 10;
         var maxH = 4;
 
@@ -242,14 +250,14 @@ function onEditor(newEditor) {
                         }
                     }
                     if (checkWord === word) {
-                        var wordExists = false;
+                        wordExists = false;
                         $(".words-list > ul li").each(function () {
                             if ($(this).text().toUpperCase() == word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
                             }
                         });
-                        if (wordExists === false) {
+                        if (!wordExists) {
                             for (var i = 0; i < word.length; i++) {
                                 currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
                                 currentCell.text(word[i]).css("font-weight", "bold");
@@ -283,14 +291,14 @@ function onEditor(newEditor) {
                         }
                     }
                     if (checkWord === word) {
-                        var wordExists = false;
+                        wordExists = false;
                         $(".words-list > ul li").each(function () {
                             if ($(this).text().toUpperCase() === word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
                             }
                         });
-                        if (wordExists == false) {
+                        if (!wordExists) {
                             for (var i = 0; i < word.length; i++) {
                                 currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
                                 currentCell.text(word[i]).css("font-weight", "bold");
@@ -311,135 +319,79 @@ function onEditor(newEditor) {
 
 
     //Template TPLC
+
     //Função do click na Célula do Template PLC
     this.eventClickCellPLC = function (clickedCell, isload) {
         
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
         var groupWordOfClickedLetter = $(clickedCell).attr('groups');
         var thisFunc = this;
-        if (groupWordOfClickedLetter.split('g').length <= 2) {
-            // Possui somente um groupo, ou seja nunca foi cruzado
-
-            var directionWordOfClickedLetter = $(clickedCell).closest(".tplPlc")
-                    .find(".elementsPlc div[group='" + groupWordOfClickedLetter.substring(1) + "']").attr('txtDirection');
-
-            if (lastSelected.length != 0) {
-                var positionNewWordMerge = -1;
-                //Clicou num div Group
-                //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
-                var letterClicked = $(clickedCell).text();
-                var wordLastClicked = lastSelected.find(".element > font").text().replace(/\s/g, '');
-
-                var positionsMayMerge = new Array();
-                for (var i = 0; i < wordLastClicked.length; i++) {
-                    if (wordLastClicked[i] == letterClicked) {
-                        positionsMayMerge.push(i);
-                    }
+        
+        //fazer esse tratamento no FOCUSOUT --inicio--
+        var word = $("span.active").find('.element font').text();
+        var wordExists;
+        var countWord = 0;
+        
+        $(".text font").each(function(){
+            if ($(this).text().toUpperCase() === word){
+                countWord++;
+                if (countWord > 1){
+                    wordExists = true;
+                    alert("A palavra " + word + " já existe no caça-palavras!");
+                    return false;
                 }
+            }
+        });
+        //fazer esse tratamento no FOCUSOUT --fim--
+        
+        if (!wordExists){
+            if (groupWordOfClickedLetter.split('g').length <= 2) {
+                // Possui somente um groupo, ou seja nunca foi cruzado
 
-                if (positionsMayMerge.length > 0) {
-                    //Encontrou uma letra igual, então faz o match por padrão na primeira encontrada
-                    //  $(clickedCell).append(wordLastClicked[positionsMayMerge[0]]);
+                var directionWordOfClickedLetter = $(clickedCell).closest(".tplPlc")
+                        .find(".elementsPlc div[group='" + groupWordOfClickedLetter.substring(1) + "']").attr('txtDirection');
 
-                    var letterBeforeMergePosition = "";
-                    var letterAfterMergePosition = "";
+                if (lastSelected.length != 0) {
+                    var positionNewWordMerge = -1;
+                    //Clicou num div Group
+                    //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
+                    var letterClicked = $(clickedCell).text();
+                    var wordLastClicked = lastSelected.find(".element > font").text().replace(/\s/g, '');
+
+                    var positionsMayMerge = new Array();
                     for (var i = 0; i < wordLastClicked.length; i++) {
-                        if (i < positionsMayMerge[0]) {
-                            letterBeforeMergePosition += wordLastClicked[i];
-                        } else if (i > positionsMayMerge[0]) {
-                            letterAfterMergePosition += wordLastClicked[i];
-                        } else {
-                            //É igual - posição do Merge
-                            positionNewWordMerge = i;
+                        if (wordLastClicked[i] == letterClicked) {
+                            positionsMayMerge.push(i);
                         }
                     }
 
-                    //Aumentar o número de linhas e/ou colunas
+                    if (positionsMayMerge.length > 0) {
+                        //Encontrou uma letra igual, então faz o match por padrão na primeira encontrada
+                        //  $(clickedCell).append(wordLastClicked[positionsMayMerge[0]]);
 
-                    //Quantidades de letras que irá ficar na posição oposta a da letra clicada
-                    var sizeLetterBeforeMergePosition = letterBeforeMergePosition.length;
-                    var sizeLetterAfterMergePosition = letterAfterMergePosition.length;
-                    var cancel = false;
-
-                    if (directionWordOfClickedLetter == 'h') {
-                        //Antes de Tudo verificar se existe alguma letra no Caminho
-
-                        // Posição da letra clicada   
-                        var indexCurrentColl = $(clickedCell).index();
-                        var indexCurrentRow = $(clickedCell).closest('.Row').index();
-
-                        //Percorre a lista de letras que será posta Antes
-                        var tempIndexCurrentRow = indexCurrentRow;
-                        for (var idx = sizeLetterBeforeMergePosition - 1; idx >= 0; idx--) {
-                            tempIndexCurrentRow--;
-                            var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
-                                    .eq(indexCurrentColl);
-                            if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
-                                //Célula Vazia
-                                break;
-                            }
-                            if (currentCell.text().replace(/\s/g, '') != '') {
-                                //Existe Letra no caminho
-                                cancel = true;
-                                break;
+                        var letterBeforeMergePosition = "";
+                        var letterAfterMergePosition = "";
+                        for (var i = 0; i < wordLastClicked.length; i++) {
+                            if (i < positionsMayMerge[0]) {
+                                letterBeforeMergePosition += wordLastClicked[i];
+                            } else if (i > positionsMayMerge[0]) {
+                                letterAfterMergePosition += wordLastClicked[i];
+                            } else {
+                                //É igual - posição do Merge
+                                positionNewWordMerge = i;
                             }
                         }
 
-                        //Percorre a lista de letras que será posta Depois
-                        var tempIndexCurrentRow = indexCurrentRow;
-                        for (var idx in letterAfterMergePosition) {
-                            tempIndexCurrentRow++;
-                            var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
-                                    .eq(indexCurrentColl);
-                            if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
-                                //Célula Vazia
-                                break;
-                            }
+                        //Aumentar o número de linhas e/ou colunas
 
-                            if (currentCell.text().replace(/\s/g, '') != '') {
-                                //Existe Letra no caminho
-                                cancel = true;
-                                break;
-                            }
-                        }
+                        //Quantidades de letras que irá ficar na posição oposta a da letra clicada
+                        var sizeLetterBeforeMergePosition = letterBeforeMergePosition.length;
+                        var sizeLetterAfterMergePosition = letterAfterMergePosition.length;
+                        var cancel = false;
 
-                        if (!cancel) {
-                            //Quandas linhas antes e depois da linha da letra clicada que já fora criada
-                            var currentTotalRowBefore = $(clickedCell).closest('.Row').index();
-                            var currentTotalRowAfter = $(clickedCell).closest('.crosswords').find('.Row').last().index() - currentTotalRowBefore;
-                            var currentTotalRow = currentTotalRowBefore + 1 + currentTotalRowAfter;
-                            var currentTotalCell = $(clickedCell).closest('.Row').find('.Cell').size();
-                            //Criar a quantidade Row Antes  igual a diferença
+                        if (directionWordOfClickedLetter == 'h') {
+                            //Antes de Tudo verificar se existe alguma letra no Caminho
 
-                            if (currentTotalRowBefore < sizeLetterBeforeMergePosition) {
-                                var sizeRowAddBefore = sizeLetterBeforeMergePosition - currentTotalRowBefore;
-                                currentTotalRow += sizeRowAddBefore;
-                                for (var idx = 0; idx < sizeRowAddBefore; idx++) {
-                                    var str = "<div class='Row'>"
-                                    for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
-                                        str += "<div class='Cell'> </div>";
-                                    }
-                                    str += '</div>';
-                                    $(clickedCell).closest('.crosswords').prepend(str);
-                                }
-                            }
-
-                            //Criar a quantidade Row Depois,  igual a diferença
-                            if (currentTotalRowAfter < sizeLetterAfterMergePosition) {
-                                var sizeRowAddAfter = sizeLetterAfterMergePosition - currentTotalRowAfter;
-
-                                currentTotalRow += sizeRowAddAfter;
-                                for (var idx = 0; idx < sizeRowAddAfter; idx++) {
-                                    var str = "<div class='Row'>"
-                                    for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
-                                        str += "<div class='Cell'> </div>";
-                                    }
-                                    str += '</div>';
-                                    $(clickedCell).closest('.crosswords').append(str);
-                                }
-                            }
-
-                            //Após adicionar os linhas e colunas restantes
                             // Posição da letra clicada   
                             var indexCurrentColl = $(clickedCell).index();
                             var indexCurrentRow = $(clickedCell).closest('.Row').index();
@@ -448,15 +400,17 @@ function onEditor(newEditor) {
                             var tempIndexCurrentRow = indexCurrentRow;
                             for (var idx = sizeLetterBeforeMergePosition - 1; idx >= 0; idx--) {
                                 tempIndexCurrentRow--;
-
                                 var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                         .eq(indexCurrentColl);
-
-                                if (typeof currentCell.attr('groups') == 'undefined') {
-                                    //cria os novos atributos
-                                    currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
+                                    //Célula Vazia
+                                    break;
                                 }
-                                currentCell.html(letterBeforeMergePosition[idx]);
+                                if (currentCell.text().replace(/\s/g, '') != '') {
+                                    //Existe Letra no caminho
+                                    cancel = true;
+                                    break;
+                                }
                             }
 
                             //Percorre a lista de letras que será posta Depois
@@ -465,99 +419,108 @@ function onEditor(newEditor) {
                                 tempIndexCurrentRow++;
                                 var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                         .eq(indexCurrentColl);
-                                if (typeof currentCell.attr('groups') == 'undefined') {
-                                    //cria os novos atributos
-                                    currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
+                                    //Célula Vazia
+                                    break;
                                 }
-                                currentCell.html(letterAfterMergePosition[idx]);
-                            }
-                        }
-                    } else if (directionWordOfClickedLetter == 'v') {
-                        //Antes verificar se existe alguma letra na caminho
 
-                        //Após adicionar as colunas restantes
-                        // Posição da letra clicada   
-                        var indexCurrentColunm = $(clickedCell).index();
-                        //Percorre a lista de letras que será posta Antes
-                        var tempIndexCurrentColunm = indexCurrentColunm;
-                        for (var idx = sizeLetterBeforeMergePosition - 1; idx >= 0; idx--) {
-                            tempIndexCurrentColunm--;
-                            // groups='g"+lastSelected.attr('group')+"' directions='v'
-                            var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                            if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
-                                //Célula Vazia
-                                break;
+                                if (currentCell.text().replace(/\s/g, '') != '') {
+                                    //Existe Letra no caminho
+                                    cancel = true;
+                                    break;
+                                }
                             }
-                            if (currentCell.text().replace(/\s/g, '') != '') {
-                                //Existe Letra no caminho
-                                cancel = true;
-                                break;
-                            }
-                        }
 
-                        //Percorre a lista de letras que será posta Depois
-                        var tempIndexCurrentColunm = indexCurrentColunm;
-                        for (var idx in letterAfterMergePosition) {
-                            tempIndexCurrentColunm++;
-                            var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                            if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
-                                //Célula Vazia
-                                break;
-                            }
-                            if (currentCell.text().replace(/\s/g, '') != '') {
-                                //Existe Letra no caminho
-                                cancel = true;
-                                break;
-                            }
-                        }
+                            if (!cancel) {
+                                //Quandas linhas antes e depois da linha da letra clicada que já fora criada
+                                var currentTotalRowBefore = $(clickedCell).closest('.Row').index();
+                                var currentTotalRowAfter = $(clickedCell).closest('.crosswords').find('.Row').last().index() - currentTotalRowBefore;
+                                var currentTotalRow = currentTotalRowBefore + 1 + currentTotalRowAfter;
+                                var currentTotalCell = $(clickedCell).closest('.Row').find('.Cell').size();
+                                //Criar a quantidade Row Antes  igual a diferença
 
-                        if (!cancel) {
-                            //Então a palavra será adicionada na Horizontal
-                            //Quantas Colunas antes e depois da célula da letra clicada que já fora criada
-                            var currentTotalColunmBefore = $(clickedCell).index();
-                            var currentTotalColunmAfter = $(clickedCell).closest(".Row").find('.Cell').last().index() - currentTotalColunmBefore;
-                            var currentTotalColunm = currentTotalColunmBefore + 1 + currentTotalColunmAfter;
-                            var currentTotalRow = $(clickedCell).closest('.crosswords').find('.Row').size();
-                            var rows = $(clickedCell).closest('.crosswords').find('.Row');
-                            //Criar a quantidade Colunm Antes igual a diferença
-                            if (currentTotalColunmBefore < sizeLetterBeforeMergePosition) {
-                                var sizeColunmAddBefore = sizeLetterBeforeMergePosition - currentTotalColunmBefore;
-                                currentTotalColunm += sizeColunmAddBefore;
-                                for (var idx = 0; idx < sizeColunmAddBefore; idx++) {
-                                    for (var idxRow = 0; idxRow < currentTotalRow; idxRow++) {
-                                        $(clickedCell).closest('.crosswords').find('.Row').eq(idxRow).prepend("<div class='Cell'> </div>");
+                                if (currentTotalRowBefore < sizeLetterBeforeMergePosition) {
+                                    var sizeRowAddBefore = sizeLetterBeforeMergePosition - currentTotalRowBefore;
+                                    currentTotalRow += sizeRowAddBefore;
+                                    for (var idx = 0; idx < sizeRowAddBefore; idx++) {
+                                        var str = "<div class='Row'>"
+                                        for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
+                                            str += "<div class='Cell'> </div>";
+                                        }
+                                        str += '</div>';
+                                        $(clickedCell).closest('.crosswords').prepend(str);
                                     }
                                 }
-                            }
 
-                            //Criar a quantidade Colunm Depois,  igual a diferença
-                            if (currentTotalColunmAfter < sizeLetterAfterMergePosition) {
-                                var sizeColunmAddAfter = sizeLetterAfterMergePosition - currentTotalColunmAfter;
+                                //Criar a quantidade Row Depois,  igual a diferença
+                                if (currentTotalRowAfter < sizeLetterAfterMergePosition) {
+                                    var sizeRowAddAfter = sizeLetterAfterMergePosition - currentTotalRowAfter;
 
-                                currentTotalColunm += sizeColunmAddAfter;
-                                for (var idx = 0; idx < sizeColunmAddAfter; idx++) {
-                                    for (var idxRow = 0; idxRow < currentTotalRow; idxRow++) {
-                                        $(clickedCell).closest('.crosswords').find('.Row').eq(idxRow).append("<div class='Cell'> </div>");
+                                    currentTotalRow += sizeRowAddAfter;
+                                    for (var idx = 0; idx < sizeRowAddAfter; idx++) {
+                                        var str = "<div class='Row'>"
+                                        for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
+                                            str += "<div class='Cell'> </div>";
+                                        }
+                                        str += '</div>';
+                                        $(clickedCell).closest('.crosswords').append(str);
                                     }
                                 }
+
+                                //Após adicionar os linhas e colunas restantes
+                                // Posição da letra clicada   
+                                var indexCurrentColl = $(clickedCell).index();
+                                var indexCurrentRow = $(clickedCell).closest('.Row').index();
+
+                                //Percorre a lista de letras que será posta Antes
+                                var tempIndexCurrentRow = indexCurrentRow;
+                                for (var idx = sizeLetterBeforeMergePosition - 1; idx >= 0; idx--) {
+                                    tempIndexCurrentRow--;
+
+                                    var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
+                                            .eq(indexCurrentColl);
+
+                                    if (typeof currentCell.attr('groups') == 'undefined') {
+                                        //cria os novos atributos
+                                        currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                    }
+                                    currentCell.html(letterBeforeMergePosition[idx]);
+                                }
+
+                                //Percorre a lista de letras que será posta Depois
+                                var tempIndexCurrentRow = indexCurrentRow;
+                                for (var idx in letterAfterMergePosition) {
+                                    tempIndexCurrentRow++;
+                                    var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
+                                            .eq(indexCurrentColl);
+                                    if (typeof currentCell.attr('groups') == 'undefined') {
+                                        //cria os novos atributos
+                                        currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                    }
+                                    currentCell.html(letterAfterMergePosition[idx]);
+                                }
                             }
+                        } else if (directionWordOfClickedLetter == 'v') {
+                            //Antes verificar se existe alguma letra na caminho
 
                             //Após adicionar as colunas restantes
                             // Posição da letra clicada   
                             var indexCurrentColunm = $(clickedCell).index();
-
                             //Percorre a lista de letras que será posta Antes
                             var tempIndexCurrentColunm = indexCurrentColunm;
                             for (var idx = sizeLetterBeforeMergePosition - 1; idx >= 0; idx--) {
                                 tempIndexCurrentColunm--;
                                 // groups='g"+lastSelected.attr('group')+"' directions='v'
                                 var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-
-                                if (typeof currentCell.attr('groups') == 'undefined') {
-                                    //cria os novos atributos
-                                    currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
+                                    //Célula Vazia
+                                    break;
                                 }
-                                currentCell.html(letterBeforeMergePosition[idx]);
+                                if (currentCell.text().replace(/\s/g, '') != '') {
+                                    //Existe Letra no caminho
+                                    cancel = true;
+                                    break;
+                                }
                             }
 
                             //Percorre a lista de letras que será posta Depois
@@ -565,105 +528,169 @@ function onEditor(newEditor) {
                             for (var idx in letterAfterMergePosition) {
                                 tempIndexCurrentColunm++;
                                 var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                                if (typeof currentCell.attr('groups') == 'undefined') {
-                                    //cria os novos atributos
-                                    currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
+                                    //Célula Vazia
+                                    break;
                                 }
-                                currentCell.html(letterAfterMergePosition[idx]);
+                                if (currentCell.text().replace(/\s/g, '') != '') {
+                                    //Existe Letra no caminho
+                                    cancel = true;
+                                    break;
+                                }
                             }
 
-
-                        }
-                    }
-                    if (!cancel) {
-
-                        var currentPieceId = $(clickedCell).closest(".piece").attr("id");
-                        var lastClickedGroupElement = lastSelected.attr("group");
-                        var groupThisCell = $(clickedCell).attr("groups");
-
-                        //Adiciona o novo grupo ao atributo groups da Célula corrente
-                        var newGroup = groupWordOfClickedLetter + 'g' + lastClickedGroupElement;
-                        $(clickedCell).attr('groups', newGroup);
-
-                        if (directionWordOfClickedLetter == 'h') {
-                            //Célula atual Atualiza o text Direction do grupo de elementos
-                            lastSelected.attr('txtDirection', 'v');
-                        } else if (directionWordOfClickedLetter == 'v') {
-                            //A célula atual estar na Vertical
-                            lastSelected.attr('txtDirection', 'h');
-                        }
-                        //Retira a marcação da última palavra clicada
-                        $(clickedCell).closest('.tplPlc').children('.elementsPlc').find('div[group][lastSelected]').removeAttr('lastSelected');
-
-                        //Se for load o crossWord já possui essas informações
-                        if (!isload) {
-                            //Registrar no Editor qual a peça, element e posicao do texto que será curzado com outro
-                            thisFunc.tempPositionThisCellWordMerge = -1;
-                            $(clickedCell).attr('currentClickedCell', 'true');
-
-                            $(clickedCell).closest(".crosswords").find("div.Cell[groups*='" + groupThisCell + "']").each(function (index) {
-                                if (typeof $(this).attr('currentClickedCell') != 'undefined') {
-                                    //Econtrou a célula clicada, atual
-                                    thisFunc.tempPositionThisCellWordMerge = index;
-                                    $(clickedCell).removeAttr('currentClickedCell');
+                            if (!cancel) {
+                                //Então a palavra será adicionada na Horizontal
+                                //Quantas Colunas antes e depois da célula da letra clicada que já fora criada
+                                var currentTotalColunmBefore = $(clickedCell).index();
+                                var currentTotalColunmAfter = $(clickedCell).closest(".Row").find('.Cell').last().index() - currentTotalColunmBefore;
+                                var currentTotalColunm = currentTotalColunmBefore + 1 + currentTotalColunmAfter;
+                                var currentTotalRow = $(clickedCell).closest('.crosswords').find('.Row').size();
+                                var rows = $(clickedCell).closest('.crosswords').find('.Row');
+                                //Criar a quantidade Colunm Antes igual a diferença
+                                if (currentTotalColunmBefore < sizeLetterBeforeMergePosition) {
+                                    var sizeColunmAddBefore = sizeLetterBeforeMergePosition - currentTotalColunmBefore;
+                                    currentTotalColunm += sizeColunmAddBefore;
+                                    for (var idx = 0; idx < sizeColunmAddBefore; idx++) {
+                                        for (var idxRow = 0; idxRow < currentTotalRow; idxRow++) {
+                                            $(clickedCell).closest('.crosswords').find('.Row').eq(idxRow).prepend("<div class='Cell'> </div>");
+                                        }
+                                    }
                                 }
-                            });
-                            var tempJsonArray;
-                            var word1Group = groupThisCell.split('g')[1];
-                            if (newEditor.isload) {
-                                //Então é um Cobject isload, porém o click vou dado pelo usuário na célula
-                                var idDbElementWord1 = $(clickedCell).closest(".tplPlc").find(".elementsPlc").find("div[group="+word1Group+"]")
-                                        .find(".element.text").attr("idbd");
-                                tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, idDbElementWord1: idDbElementWord1,
-                                    position1: thisFunc.tempPositionThisCellWordMerge,
-                                    word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
-                            } else {
-                                tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, position1: thisFunc.tempPositionThisCellWordMerge
-                                    , word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
-                            }
-                            
-                            newEditor.crossWords.push(tempJsonArray);
-                            
-                            //Deleção do atributo temporário
-                            delete thisFunc.tempPositionThisCellWordMerge;
-                        }
 
-                        //Por fim desabilita o botão, novo Elemento
-                        $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
+                                //Criar a quantidade Colunm Depois,  igual a diferença
+                                if (currentTotalColunmAfter < sizeLetterAfterMergePosition) {
+                                    var sizeColunmAddAfter = sizeLetterAfterMergePosition - currentTotalColunmAfter;
+
+                                    currentTotalColunm += sizeColunmAddAfter;
+                                    for (var idx = 0; idx < sizeColunmAddAfter; idx++) {
+                                        for (var idxRow = 0; idxRow < currentTotalRow; idxRow++) {
+                                            $(clickedCell).closest('.crosswords').find('.Row').eq(idxRow).append("<div class='Cell'> </div>");
+                                        }
+                                    }
+                                }
+
+                                //Após adicionar as colunas restantes
+                                // Posição da letra clicada   
+                                var indexCurrentColunm = $(clickedCell).index();
+
+                                //Percorre a lista de letras que será posta Antes
+                                var tempIndexCurrentColunm = indexCurrentColunm;
+                                for (var idx = sizeLetterBeforeMergePosition - 1; idx >= 0; idx--) {
+                                    tempIndexCurrentColunm--;
+                                    // groups='g"+lastSelected.attr('group')+"' directions='v'
+                                    var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
+
+                                    if (typeof currentCell.attr('groups') == 'undefined') {
+                                        //cria os novos atributos
+                                        currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                    }
+                                    currentCell.html(letterBeforeMergePosition[idx]);
+                                }
+
+                                //Percorre a lista de letras que será posta Depois
+                                var tempIndexCurrentColunm = indexCurrentColunm;
+                                for (var idx in letterAfterMergePosition) {
+                                    tempIndexCurrentColunm++;
+                                    var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
+                                    if (typeof currentCell.attr('groups') == 'undefined') {
+                                        //cria os novos atributos
+                                        currentCell.attr('groups', 'g' + lastSelected.attr('group'));
+                                    }
+                                    currentCell.html(letterAfterMergePosition[idx]);
+                                }
+
+
+                            }
+                        }
+                        if (!cancel) {
+
+                            var currentPieceId = $(clickedCell).closest(".piece").attr("id");
+                            var lastClickedGroupElement = lastSelected.attr("group");
+                            var groupThisCell = $(clickedCell).attr("groups");
+
+                            //Adiciona o novo grupo ao atributo groups da Célula corrente
+                            var newGroup = groupWordOfClickedLetter + 'g' + lastClickedGroupElement;
+                            $(clickedCell).attr('groups', newGroup);
+
+                            if (directionWordOfClickedLetter == 'h') {
+                                //Célula atual Atualiza o text Direction do grupo de elementos
+                                lastSelected.attr('txtDirection', 'v');
+                            } else if (directionWordOfClickedLetter == 'v') {
+                                //A célula atual estar na Vertical
+                                lastSelected.attr('txtDirection', 'h');
+                            }
+                            //Retira a marcação da última palavra clicada
+                            $(clickedCell).closest('.tplPlc').children('.elementsPlc').find('div[group][lastSelected]').removeAttr('lastSelected');
+
+                            //Se for load o crossWord já possui essas informações
+                            if (!isload) {
+                                //Registrar no Editor qual a peça, element e posicao do texto que será curzado com outro
+                                thisFunc.tempPositionThisCellWordMerge = -1;
+                                $(clickedCell).attr('currentClickedCell', 'true');
+
+                                $(clickedCell).closest(".crosswords").find("div.Cell[groups*='" + groupThisCell + "']").each(function (index) {
+                                    if (typeof $(this).attr('currentClickedCell') != 'undefined') {
+                                        //Econtrou a célula clicada, atual
+                                        thisFunc.tempPositionThisCellWordMerge = index;
+                                        $(clickedCell).removeAttr('currentClickedCell');
+                                    }
+                                });
+                                var tempJsonArray;
+                                var word1Group = groupThisCell.split('g')[1];
+                                if (newEditor.isload) {
+                                    //Então é um Cobject isload, porém o click vou dado pelo usuário na célula
+                                    var idDbElementWord1 = $(clickedCell).closest(".tplPlc").find(".elementsPlc").find("div[group="+word1Group+"]")
+                                            .find(".element.text").attr("idbd");
+                                    tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, idDbElementWord1: idDbElementWord1,
+                                        position1: thisFunc.tempPositionThisCellWordMerge,
+                                        word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
+                                } else {
+                                    tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, position1: thisFunc.tempPositionThisCellWordMerge
+                                        , word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
+                                }
+
+                                newEditor.crossWords.push(tempJsonArray);
+
+                                //Deleção do atributo temporário
+                                delete thisFunc.tempPositionThisCellWordMerge;
+                            }
+
+                            //Por fim desabilita o botão, novo Elemento
+                            $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
+                        }
+                    } else {
+                        //A letra clicada não foi encontrada na palavra 
                     }
                 } else {
-                    //A letra clicada não foi encontrada na palavra 
+                    //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
+                    if ($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)') {
+                        $(clickedCell).attr('isShow', 'true');
+                        $(clickedCell).css('background-color', 'yellowgreen');
+                    } else {
+                        $(clickedCell).removeAttr('isShow');
+                        $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');
+                    }
+                    if (!isload) {
+                        //Alterar o atributo updated dos elementos textos referente a esta célula
+                        var cellGroups = groupWordOfClickedLetter.split('g');
+                        for (idx = 1; idx < cellGroups.length; idx++) {
+                            var currentGroup = cellGroups[idx];
+                            $(clickedCell).closest(".tplPlc")
+                                    .find(".elementsPlc div[group='" + currentGroup + "']").find(".element.text").attr('updated', '1');
+                        }
+                    }
+
                 }
             } else {
-                //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
-                if ($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)') {
-                    $(clickedCell).attr('isShow', 'true');
-                    $(clickedCell).css('background-color', 'yellowgreen');
-                } else {
-                    $(clickedCell).removeAttr('isShow');
-                    $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');
-                }
-                if (!isload) {
-                    //Alterar o atributo updated dos elementos textos referente a esta célula
-                    var cellGroups = groupWordOfClickedLetter.split('g');
-                    for (idx = 1; idx < cellGroups.length; idx++) {
-                        var currentGroup = cellGroups[idx];
-                        $(clickedCell).closest(".tplPlc")
-                                .find(".elementsPlc div[group='" + currentGroup + "']").find(".element.text").attr('updated', '1');
-                    }
-                }
-
+                //Já foi cruzado
             }
-        } else {
-            //Já foi cruzado
         }
     }
 
     $(document).on("click", ".crosswords  div.Cell[groups]", function () {
         self.eventClickCellPLC(this, false);
     });
-
-
 
 
 }
