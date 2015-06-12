@@ -372,13 +372,13 @@ function editor() {
                     var wordExists = false;
                     $(".piece[id='" + pieceID + "'] .element.text font").each(function () {
                         if ($(this).text().toUpperCase() === word) {
-                                wordExists = true;
-                                alert("A palavra " + word + " já existe no caça-palavras!");
-                                return false;
+                            wordExists = true;
+                            alert("A palavra " + word + " já existe no caça-palavras!");
+                            return false;
                         }
                     });
                     //fazer esse tratamento no FOCUSOUT --fim--
-                    if(wordExists){
+                    if (wordExists) {
                         return false;
                     }
 
@@ -751,9 +751,9 @@ function editor() {
                                 $(input).val($(input).val().toUpperCase());
                             }
                         });
+
                         //adiciona a função de perda de foco do input
                         $(input).on("focusout", function () {
-
                             if (parent.COTemplateTypeIn(parent.PLC)) {
                                 var thisDivGroup = $(this).closest('div[group]');
                                 var currentPieceID = $(this).closest('.piece').attr('id');
@@ -966,6 +966,15 @@ function editor() {
 
                             //===========================
                         });
+                        
+                        //Após o BIND do evento ONFOCUS
+                        //Dá um Trigger quando for pressionado o ENTER
+                        $(input).keydown(function (event) {
+                            if (event.keyCode == 13) {
+                                $(this).on("focusout");
+                            }
+                        });
+                        
                         //seta o foco no input
                         $(input).focus();
 
