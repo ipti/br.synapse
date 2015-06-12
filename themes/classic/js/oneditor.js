@@ -209,8 +209,6 @@ function onEditor(newEditor) {
     });
 
     $(document).on("click", ".elementsPlc div[group]", function () {
-        $("div[lastselected]").removeAttr("lastselected");
-        $(this).attr("lastselected", "true");
         $("span.active").removeClass('active');
         $(this).children("span").addClass('active');
     });
@@ -326,24 +324,6 @@ function onEditor(newEditor) {
         var groupWordOfClickedLetter = $(clickedCell).attr('groups');
         var thisFunc = this;
 
-        //fazer esse tratamento no FOCUSOUT --inicio--
-        var word = $("span.active").find('.element font').text();
-        var wordExists;
-        var countWord = 0;
-
-        $(".text font").each(function () {
-            if ($(this).text().toUpperCase() === word) {
-                countWord++;
-                if (countWord > 1) {
-                    wordExists = true;
-                    alert("A palavra " + word + " já existe no caça-palavras!");
-                    return false;
-                }
-            }
-        });
-        //fazer esse tratamento no FOCUSOUT --fim--
-
-        if (!wordExists) {
             var directionWordOfClickedLetter = $(clickedCell).closest(".tplPlc")
                     .find(".elementsPlc div[group='" + groupWordOfClickedLetter.substring(1) + "']").attr('txtDirection');
 
@@ -686,7 +666,6 @@ function onEditor(newEditor) {
 
             }
 
-        }
 
     }
 

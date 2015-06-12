@@ -358,11 +358,30 @@ function editor() {
 
             },
             this.canEditThisWordCross = function (pieceID, group) {
+                //A Word Nova ainda NÃO fora dada o seu Submit
                 var word = $(".piece[id='" + pieceID + "']").find('.element.text input').val();
 
                 if (self.isset(word)) {
                     word = word.replace(/\s/g, '');
                     //OPCIONAL + Antes, se houver letras alteradas antes de algum cruzamento, então incrementa a posição de cada cruzamento
+                    var thisDivGroup = $(".piece[id='" + pieceID + "']").find("div[group='" + group + "']");
+                    var currentPieceID = pieceID;
+
+                    //Verificar se já não existe alguma palavra igual nesta Piece
+                    //fazer esse tratamento no FOCUSOUT --inicio--
+                    var wordExists = false;
+                    $(".piece[id='" + pieceID + "'] .element.text font").each(function () {
+                        if ($(this).text().toUpperCase() === word) {
+                                wordExists = true;
+                                alert("A palavra " + word + " já existe no caça-palavras!");
+                                return false;
+                        }
+                    });
+                    //fazer esse tratamento no FOCUSOUT --fim--
+                    if(wordExists){
+                        return false;
+                    }
+
 
                     //Verificar se existe um cruzamento com alguma letra e essa letra fora alterada
                     for (var idx in self.crossWords) {
@@ -391,7 +410,6 @@ function editor() {
                     }
 
                     //Agora Verifica se existe alguma letra que não pertence ao mesmo groupo no 'caminho' 
-                    var thisDivGroup = $(".piece[id='" + pieceID + "']").find("div[group='" + group + "']");
                     var txtDirection = thisDivGroup.attr('txtDirection');
                     var sizeOldLetters = 0;
                     var lastCellGroup;
@@ -1354,13 +1372,13 @@ function editor() {
                                 '<div>';
 
                         html += '' +
-                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' ;
-                                if(!parent.COTemplateTypeIn(parent.PLC)){
-                                    html += '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' ;
-                                }
-                              html += '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
+                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>';
+                        if (!parent.COTemplateTypeIn(parent.PLC)) {
+                            html += '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>';
+                        }
+                        html += '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
                                 '<button class="del delElement delGroup pull-right"><i class="fa fa-times"></i></button>';
-                        
+
                         if (parent.COTemplateTypeIn(parent.DIG)) {
                             html += '<button class="pull-right changeOrientation" match="' + group + '" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
                         }
