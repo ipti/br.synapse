@@ -634,6 +634,9 @@ function editor() {
                 var plus = 'position="' + position + '" match="' + match + '" ' + plusDB;
 
                 var addDeleteButton = function (have) {
+                    if (parent.COTemplateTypeIn(parent.PLC)) {
+                        return '';
+                    }
                     return have ? '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' : '';
                 };
                 var addTextArea = function (id, text) {
@@ -1278,19 +1281,22 @@ function editor() {
                 }, loaddata);
             },
             this.addElement = function (idbd, type, loaddata) {
-                //STOP HERE! CORRIGIR O SHOW DEL
                 //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
                 var parent = this;
 
                 //Se o template for PLC , só mostra a opção de excluir se for o último grupo
                 //E desabilita o botão new Element da peça corrente
+                var btnNewElementClicked = $('.piece#' + parent.currentPiece + ' .newElement');
                 if (parent.COTemplateTypeIn(parent.PLC) && !parent.isset(loaddata)) {
-                    var btnNewElementClicked = $('.piece#' + parent.currentPiece + ' .newElement');
                     $(btnNewElementClicked).attr('disabled', 'true');
                     $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .delGroup').hide();
-                    $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .element.text .del').hide();
-                }
+                } else if (parent.COTemplateTypeIn(parent.PLC) && parent.isset(loaddata)) {
+                    if ($(btnNewElementClicked).closest('.elementsPlc').find('div[group=' + loaddata['match'] + ']').length == 0) {
+                        //Não existe, logo será adicionado a estrutura do groupo dos elementos
+                        $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .delGroup').hide();
+                    }
 
+                }
 
                 //variável para adição do ID do banco, se ele não existir ficará vazio.
                 var plus = "";
@@ -1348,10 +1354,13 @@ function editor() {
                                 '<div>';
 
                         html += '' +
-                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
-                                '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
-                                '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
+                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' ;
+                                if(!parent.COTemplateTypeIn(parent.PLC)){
+                                    html += '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' ;
+                                }
+                              html += '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
                                 '<button class="del delElement delGroup pull-right"><i class="fa fa-times"></i></button>';
+                        
                         if (parent.COTemplateTypeIn(parent.DIG)) {
                             html += '<button class="pull-right changeOrientation" match="' + group + '" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
                         }
@@ -1590,7 +1599,6 @@ function editor() {
                                 var currentCrossWord = loaddata['crossWord'][idx];
                                 var splitPosition = currentCrossWord['point_crossword'].split('|');
                                 var elementIDDBWord2 = splitPosition[0].split("w2eID")[1];
-
                                 var tempJsonArray = {pieceID: "", idDBPieceElementPropertyPointCross: currentCrossWord['idDBPieceElementPropertyPointCross'], idDbPiece: loaddata['pieceID'], word1Group: group, idDbElementWord1: idbd, position1: splitPosition[1]
                                     , word2Group: currentCrossWord['crossword_elementGroup_Word2'], idDbElementWord2: elementIDDBWord2, position2: splitPosition[2], letter: loaddata['text'].substring(splitPosition[1]
                                             , parseInt(splitPosition[1]) + 1)};
@@ -1711,7 +1719,6 @@ function editor() {
 
                         //Verifica as letras isShow
                         var posLettersShow = loaddata['showing_letters'].split("|");
-
                         hCrossWord.find('.Cell[groups*=g' + group + ']').each(function (idx) {
                             if (self.inArray(posLettersShow, idx)) {
                                 //A Célular corrente deve ser isShow
@@ -1835,7 +1842,21 @@ function editor() {
                     parent.addText(tagAdd);
                 }
 
-                $('#' + parent.currentPieceSet).scrollTop($('#' + parent.currentPiece).height());
+                // $('#' + parent.currentPieceSet).scrollTop($('#' + parent.currentPiece).height());
+                //STOP HERE, corrigir o alinhamento Vertical !!
+//                if (parent.COTemplateTypeIn(parent.PLC)) {
+//                    $('#' + parent.currentPieceSet).scroll(function () {
+//                        var total = $(this).find('.piece').eq(0).height();
+//                        var current = $(this).scrollTop();
+//                        var pResult = (current * 100) / total;
+//
+//                        var translater = 'translateY('+pResult.toFixed(0) + '%)';
+//                        console.log(translater);
+//                        $(this).find('.crosswords').css('transform','translateY(100%)');
+//
+//                    });
+//                }
+
 
             },
             this.delScreen = function (force) {
@@ -2188,6 +2209,7 @@ function editor() {
                         //Enviar array de objetos a serem excluidos 
                         parent.saveData({
                             op: "delete",
+                            isTemplatePlc: parent.COTemplateTypeIn(parent.PLC),
                             array_del: parent.orderDelets
                         },
                         //função sucess do saveData-DelAll
@@ -2396,7 +2418,6 @@ function editor() {
                                             });
                                             data["showing_letters"] = positionLettersShows;
 
-
                                             var thisCrossWord = $(this).closest(".tplPlc").find(".crosswords");
                                             var column = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().prevAll().length;
                                             var row = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().parent().prevAll().length;
@@ -2410,7 +2431,6 @@ function editor() {
                                                 data,
                                                 //Função de sucess do Save Element
                                                         function (response, textStatus, jqXHR) {
-
                                                             var currentGroup = data["temp_currentGroup"];
                                                             if (!parent.isload) {
                                                                 $('.savescreen').append('<br><p>ElementText salvo com sucesso!</p>');
@@ -2443,14 +2463,17 @@ function editor() {
                                                                         if (crossword['word1Group'] === currentGroup ||
                                                                                 crossword['word2Group'] === currentGroup) {
                                                                             //Encontrado um cruzamento para esta palavra
-                                                                            if (crossword['word1Group'] === currentGroup) {
-                                                                                //Zera o word1Group e acrecenta o novo atributo 
-                                                                                self.crossWords[idx]['word1Group'] = "";
-                                                                                self.crossWords[idx]['idDbElementWord1'] = response['ElementID'];
-                                                                            } else {
-                                                                                //Zera o word2Group e acrecenta o novo atributo 
-                                                                                self.crossWords[idx]['word2Group'] = "";
-                                                                                self.crossWords[idx]['idDbElementWord2'] = response['ElementID'];
+                                                                            //Somente substitui, se o idDbElementWord1 Não existir !
+                                                                            if (self.isset(response['ElementID'])) {
+                                                                                if (crossword['word1Group'] === currentGroup) {
+                                                                                    //Zera o word1Group e acrecenta o novo atributo 
+                                                                                    self.crossWords[idx]['word1Group'] = "";
+                                                                                    self.crossWords[idx]['idDbElementWord1'] = response['ElementID'];
+                                                                                } else if (crossword['word2Group'] === currentGroup) {
+                                                                                    //Zera o word2Group e acrecenta o novo atributo 
+                                                                                    self.crossWords[idx]['word2Group'] = "";
+                                                                                    self.crossWords[idx]['idDbElementWord2'] = response['ElementID'];
+                                                                                }
                                                                             }
                                                                             //Adiciona o novo atributo idDbPiece
                                                                             self.crossWords[idx]['idDbPiece'] = LastPieceID;

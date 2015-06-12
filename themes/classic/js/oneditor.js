@@ -208,6 +208,13 @@ function onEditor(newEditor) {
         $(this).children("span").addClass('active');
     });
 
+    $(document).on("click", ".elementsPlc div[group]", function () {
+        $("div[lastselected]").removeAttr("lastselected");
+        $(this).attr("lastselected", "true");
+        $("span.active").removeClass('active');
+        $(this).children("span").addClass('active');
+    });
+
 
     $(document).on("click", ".wordsearch  div.Cell", function () {
         var row = $(this).attr("row");
@@ -215,6 +222,7 @@ function onEditor(newEditor) {
         var word = $("span.active").find('.element font').text();
         var orientation = $("span.active").find('button.changeOrientation').attr('orientation');
         var group = $("span.active").attr("group");
+        var wordExists;
         var maxW = 10;
         var maxH = 4;
 
@@ -242,14 +250,14 @@ function onEditor(newEditor) {
                         }
                     }
                     if (checkWord === word) {
-                        var wordExists = false;
+                        wordExists = false;
                         $(".words-list > ul li").each(function () {
                             if ($(this).text().toUpperCase() == word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
                             }
                         });
-                        if (wordExists === false) {
+                        if (!wordExists) {
                             for (var i = 0; i < word.length; i++) {
                                 currentCell = $(this).closest(".Row").find(".Cell").eq(parseInt(col) + i);
                                 currentCell.text(word[i]).css("font-weight", "bold");
@@ -283,14 +291,14 @@ function onEditor(newEditor) {
                         }
                     }
                     if (checkWord === word) {
-                        var wordExists = false;
+                        wordExists = false;
                         $(".words-list > ul li").each(function () {
                             if ($(this).text().toUpperCase() === word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
                             }
                         });
-                        if (wordExists == false) {
+                        if (!wordExists) {
                             for (var i = 0; i < word.length; i++) {
                                 currentCell = $(this).closest(".Table").find(".Row").eq(parseInt(row) + i).find(".Cell").eq(col);
                                 currentCell.text(word[i]).css("font-weight", "bold");
@@ -314,19 +322,34 @@ function onEditor(newEditor) {
 
     //Função do click na Célula do Template PLC
     this.eventClickCellPLC = function (clickedCell, isload) {
-        
-      //console.log(clickedCell);
-        
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
         var groupWordOfClickedLetter = $(clickedCell).attr('groups');
         var thisFunc = this;
-        if (groupWordOfClickedLetter.split('g').length <= 2) {
-            // Possui somente um groupo, ou seja nunca foi cruzado
 
+        //fazer esse tratamento no FOCUSOUT --inicio--
+        var word = $("span.active").find('.element font').text();
+        var wordExists;
+        var countWord = 0;
+
+        $(".text font").each(function () {
+            if ($(this).text().toUpperCase() === word) {
+                countWord++;
+                if (countWord > 1) {
+                    wordExists = true;
+                    alert("A palavra " + word + " já existe no caça-palavras!");
+                    return false;
+                }
+            }
+        });
+        //fazer esse tratamento no FOCUSOUT --fim--
+
+        if (!wordExists) {
             var directionWordOfClickedLetter = $(clickedCell).closest(".tplPlc")
                     .find(".elementsPlc div[group='" + groupWordOfClickedLetter.substring(1) + "']").attr('txtDirection');
 
-            if (lastSelected.length != 0) {
+            if (lastSelected.length != 0 && groupWordOfClickedLetter.split('g').length <= 2) {
+                // Possui somente um groupo, ou seja nunca foi cruzado
+
                 var positionNewWordMerge = -1;
                 //Clicou num div Group
                 //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
@@ -615,9 +638,8 @@ function onEditor(newEditor) {
                             var word1Group = groupThisCell.split('g')[1];
                             if (newEditor.isload) {
                                 //Então é um Cobject isload, porém o click vou dado pelo usuário na célula
-                                var idDbElementWord1 = $(clickedCell).closest(".tplPlc").find(".elementsPlc").find("div[group="+word1Group+"]")
+                                var idDbElementWord1 = $(clickedCell).closest(".tplPlc").find(".elementsPlc").find("div[group=" + word1Group + "]")
                                         .find(".element.text").attr("idbd");
-                                
                                 tempJsonArray = {pieceID: currentPieceId, word1Group: word1Group, idDbElementWord1: idDbElementWord1,
                                     position1: thisFunc.tempPositionThisCellWordMerge,
                                     word2Group: lastClickedGroupElement, position2: positionNewWordMerge, letter: $(clickedCell).text()};
@@ -640,14 +662,15 @@ function onEditor(newEditor) {
                 }
             } else {
                 //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
-                if ($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)') {
-                    $(clickedCell).attr('isShow', 'true');
-                    $(clickedCell).css('background-color', 'yellowgreen');
-                } else {
-                    $(clickedCell).removeAttr('isShow');
-                    $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');
-                }
                 if (!isload) {
+                    if ($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)') {
+                        $(clickedCell).attr('isShow', 'true');
+                        $(clickedCell).css('background-color', 'yellowgreen');
+                    } else {
+                        $(clickedCell).removeAttr('isShow');
+                        $(clickedCell).css('background-color', 'rgba(0, 0, 0, 0)');
+                    }
+
                     //Alterar o atributo updated dos elementos textos referente a esta célula
                     var cellGroups = groupWordOfClickedLetter.split('g');
                     for (idx = 1; idx < cellGroups.length; idx++) {
@@ -655,12 +678,16 @@ function onEditor(newEditor) {
                         $(clickedCell).closest(".tplPlc")
                                 .find(".elementsPlc div[group='" + currentGroup + "']").find(".element.text").attr('updated', '1');
                     }
+                } else {
+                    //É load, sempre é clicado para tornar isShow = true
+                    $(clickedCell).attr('isShow', 'true');
+                    $(clickedCell).css('background-color', 'yellowgreen');
                 }
 
             }
-        } else {
-            //Já foi cruzado
+
         }
+
     }
 
     $(document).on("click", ".crosswords  div.Cell[groups]", function () {
