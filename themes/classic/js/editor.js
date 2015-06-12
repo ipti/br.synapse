@@ -969,9 +969,10 @@ function editor() {
                         
                         //Após o BIND do evento ONFOCUS
                         //Dá um Trigger quando for pressionado o ENTER
-                        $(input).keydown(function (event) {
-                            if (event.keyCode == 13) {
-                                $(this).on("focusout");
+                        $(input).on("keydown",function (event) {
+                            if (event.keyCode === 13) {
+                                $(input).trigger("change");
+                                $(input).trigger("focusout");
                             }
                         });
                         
