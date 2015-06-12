@@ -1109,12 +1109,12 @@ function editor() {
             html = '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + ' element">';
         }
 
-        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
-            html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
-        }
-        else {
-            html += "";
-        }
+//        if (parent.COTemplateTypeIn(parent.MTE) || parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG)) {
+//            html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
+//        }
+//        else {
+//            html += "";
+//        }
         html += '<form enctype="multipart/form-data" id="' + form + '" method="post" action="/Editor/upload">' +
                 '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + '">' +
                 '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
