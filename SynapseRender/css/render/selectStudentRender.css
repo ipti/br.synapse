@@ -16,6 +16,7 @@
 #select-student {
     margin: 5% auto;
     width: 63%;
+    position: relative;
 }
 
 .block{

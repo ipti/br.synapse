@@ -119,6 +119,9 @@ body {
     font-size: 35px;
     line-height: 35px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.64);
+    height: 180px;
+    vertical-align: middle;
+    display: table-cell;
 }
 
 /** Respostas **/
@@ -279,15 +282,16 @@ input.PLC-input:read-only{
 
 .PLC-left-images  span, .PLC-right-images span {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    top: -4px;
+    left: -20px;
 }
 .PLC-left-images  span, .PLC-right-images span, span.PLC-input {
-    color: #F18318;
+    color: #F27E0C;
     /*text-shadow: 1px 1px 1px #000;*/
     font-size: 30px;
     font-weight: 800;
     font-family: tellural;
+    display: block;
 }
 .PLC-left-images{
     width:20%;
