@@ -20,6 +20,7 @@ body {
     color: #333;
     font-size: 20px;
     z-index: 10000;
+    background-image: url("../../img/background-left.png");
 }
 
 .close-bar {
@@ -39,14 +40,29 @@ body {
     float: right;
 }
 
-.info {
-    padding: 5px;
-    border-bottom: 1px solid #fff;
+
+.drawer-header, .drawer-body-top, .drawer-body-middle, .drawer-footer {
+    color: #000;
+    font-size: 20px;
+    font-family: asap, arial, sans-serif;
 }
 
-.info-name {
-    padding: 30px 0;
+.drawer-header, .drawer-body-top, .drawer-body-middle{
+    border-bottom: 1px solid black;
+}
+.drawer-header{
+    height: 50px;
+}
+.drawer-body-top{
     text-align: center;
+}
+.drawer-body-top, .drawer-body-middle{
+    height: 130px;
+    padding: 10px 0;
+}
+
+.info-name{
+    height: 110px;
 }
 
 .info-icon {
@@ -54,14 +70,15 @@ body {
     width: 40px;
 }
 
+
 .info-exit {
     text-align: center;
     padding: 5px;
     border-bottom: none;
-    border-top: 1px solid #fff;
+    border-top: 1px solid #000;
     position: absolute;
     bottom: 0;
-    color: #fff;
+    color: #000;
     margin-right: 5px;
 }
 
@@ -266,8 +283,8 @@ input.PLC-input:read-only{
     left: 10px;
 }
 .PLC-left-images  span, .PLC-right-images span, span.PLC-input {
-    color: rgb(255, 255, 0);
-    text-shadow: 1px 1px 1px #000;
+    color: #F18318;
+    /*text-shadow: 1px 1px 1px #000;*/
     font-size: 30px;
     font-weight: 800;
     font-family: tellural;
