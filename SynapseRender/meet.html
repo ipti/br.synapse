@@ -9,7 +9,7 @@
         </script>
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
         <link rel="stylesheet" type="text/css" href="css/reset.css" />
         <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
         <link rel="stylesheet" type="text/css" href="css/render/render.css">
@@ -40,6 +40,9 @@
         <!-- Abrir Script do renderDB --> 
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script>
+            var DISCIPLINES = [];
+            DISCIPLINES[1] = "LINGUAGEM";
+            DISCIPLINES[2] = "MATEMÁTICA";
 
             /**
              * @param {mixed} variable The variable to check.
@@ -64,7 +67,7 @@
                     return sessionStorage.getItem(IF);
                 }
             }
-            
+
 
             $(document).ready(function () {
 
@@ -78,20 +81,21 @@
                     var classe = '';
 
                     //var unityfather_name = ''; 
-                    var org_name = '';
-                    var classe_name = '';
+                    var organizationName = '';
+                    var className = '';
 
                     //Verificar se existe um aluno selecionado pelo tutor
                     //Ou se foi o próprio aluno que realizou login
-                    var id_actor = sessionGet('id_actor', 'login_id_actor');
-                    var name_actor = sessionGet('name_actor', 'login_name_actor');
+                    var actorID = sessionGet('id_actor', 'login_id_actor');
+                    var actorName = sessionGet('name_actor', 'login_name_actor');
                     //Personagem de quem fez o login
                     var login_personage_name = sessionGet('login_personage_name');
 
                     //Selecionar o Bloco de Atividades
-                    var discipline_id = sessionGet('id_discipline');
+                    var disciplineID = sessionGet('id_discipline');
+                    var disciplineName = DISCIPLINES[disciplineID];
                     var block_id;
-                    switch (discipline_id) {
+                    switch (disciplineID) {
                         case '1':
                             block_id = '7';
                             break; //Linguagem
@@ -101,10 +105,10 @@
                     }
 
                     var options = {
-                        org: [org, org_name],
-                        classe: [classe, classe_name],
-                        actor: [id_actor, name_actor, login_personage_name],
-                        id_discipline: discipline_id,
+                        org: [org, organizationName],
+                        classe: [classe, className],
+                        actor: [actorID, actorName, login_personage_name],
+                        id_discipline: disciplineID,
                         cobject_block_id: block_id
                     };
 
@@ -114,6 +118,7 @@
 
                     //Atualizar O painel do render
                     $('.info.info-name').html('<p>' + newMeet.actor_name + '</p>');
+                    $('.info.info-discipline').html('<p>' + disciplineName + '</p>');
                     $('.info.info-hits .info-text').html(newMeet.peformance_qtd_correct);
                     $('.info.info-erros .info-text').html(newMeet.peformance_qtd_wrong);
 
@@ -124,7 +129,7 @@
 
                     $('.close-bar').bind('tap', function () {
                         $('#head_meet').animate({left: '-255px'});
-                    }); 
+                    });
 
                     // Encerrar atendimento
                     $(".info-exit").bind('tap', function () {
@@ -147,35 +152,43 @@
 
         <!-- Barra de informações -->
         <div id="head_meet">
-            <div class="close-bar">
-                <a href="#"><i class="fa fa-bars"></i></a>
-            </div>
-            <div class="logo-bar">
-                <img src="img/synapse-logo.png">
-            </div>
-            <div class="info info-name">
 
+            <div class="drawer-header">
+                <div class="close-bar">
+                    <a href="#"><i class="fa fa-bars"></i></a>
+                </div>
+                <div class="logo-bar">
+                    <img src="img/synapse-logo.png">
+                </div>
             </div>
-            <div class="info info-time">
-                <img class="info-icon" src="img/icons/clock.png" alt="Relógio">
-                <p class="info-text"></p>
-                <div class="clear"></div>
+            <div class="drawer-body-top">
+                <div class="info info-name"></div>
+                <div class="info info-discipline"></div>
             </div>
-            <div class="info info-hits">
-                <img class="info-icon" src="img/icons/hit.png" alt="Acerto">
-                <p class="info-text"></p>
-                <div class="clear"></div>
+            <div class="drawer-body-middle">
+                <div class="info info-time">
+                    <img class="info-icon" src="img/icons/clock.png" alt="Relógio">
+                    <p class="info-text"></p>
+                    <div class="clear"></div>
+                </div>
+                <div class="info info-hits">
+                    <img class="info-icon" src="img/icons/hit.png" alt="Acerto">
+                    <p class="info-text"></p>
+                    <div class="clear"></div>
+                </div>
+                <div class="info info-erros">
+                    <img class="info-icon" src="img/icons/error.png" alt="Erro">
+                    <p class="info-text"></p>
+                    <div class="clear"></div>
+                </div>
             </div>
-            <div class="info info-erros">
-                <img class="info-icon" src="img/icons/error.png" alt="Erro">
-                <p class="info-text"></p>
-                <div class="clear"></div>
+            <div class="drawer-footer">
+                <a class="info-exit" href="#">
+                    <img class="info-icon" src="img/icons/exit.png" alt="Sair">
+                    <p class="info-text">Encerrar Atendimento</p>
+                    <div class="clear"></div>
+                </a>
             </div>
-            <a class="info-exit" href="#">
-                <img class="info-icon" src="img/icons/exit.png" alt="Sair">
-                <p class="info-text">Encerrar Atendimento</p>
-                <div class="clear"></div>
-            </a>
         </div>
 
         <div id="info-button">
