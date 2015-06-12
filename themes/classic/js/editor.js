@@ -1281,7 +1281,6 @@ function editor() {
                 }, loaddata);
             },
             this.addElement = function (idbd, type, loaddata) {
-                //STOP HERE! CORRIGIR O SHOW DEL
                 //O position garante que o  último elemento inserido sempre terá o position Maior que Todos
                 var parent = this;
 
@@ -1355,10 +1354,13 @@ function editor() {
                                 '<div>';
 
                         html += '' +
-                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
-                                '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
-                                '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
+                                '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' ;
+                                if(!parent.COTemplateTypeIn(parent.PLC)){
+                                    html += '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' ;
+                                }
+                              html += '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
                                 '<button class="del delElement delGroup pull-right"><i class="fa fa-times"></i></button>';
+                        
                         if (parent.COTemplateTypeIn(parent.DIG)) {
                             html += '<button class="pull-right changeOrientation" match="' + group + '" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
                         }
@@ -1717,7 +1719,6 @@ function editor() {
 
                         //Verifica as letras isShow
                         var posLettersShow = loaddata['showing_letters'].split("|");
-
                         hCrossWord.find('.Cell[groups*=g' + group + ']').each(function (idx) {
                             if (self.inArray(posLettersShow, idx)) {
                                 //A Célular corrente deve ser isShow
@@ -2416,7 +2417,6 @@ function editor() {
                                                 }
                                             });
                                             data["showing_letters"] = positionLettersShows;
-
 
                                             var thisCrossWord = $(this).closest(".tplPlc").find(".crosswords");
                                             var column = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().prevAll().length;
