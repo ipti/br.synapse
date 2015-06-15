@@ -311,7 +311,7 @@ function editor() {
                 else if (parent.COTemplateTypeIn(parent.DIG)) {
                     tplClass = 'tplDig';
                     var html = '';
-                    for (var i = 0; i < 4; i++) {
+                    for (var i = 0; i < 5; i++) {
                         html += "<div class='Row'>";
                         for (var j = 0; j < 10; j++) {
 
@@ -1390,7 +1390,7 @@ function editor() {
                                 '<button class="del delElement delGroup pull-right"><i class="fa fa-times"></i></button>';
 
                         if (parent.COTemplateTypeIn(parent.DIG)) {
-                            html += '<button class="pull-right changeOrientation" match="' + group + '" orientation="V" ><i class="fa fa-arrows-v"></i></button>';
+                            html += '<button class="pull-right changeOrientation" match="' + group + '" orientation="v" ><i class="fa fa-arrows-v"></i></button>';
                         }
                         html +=
                                 '<br>' +
