@@ -146,6 +146,7 @@ body {
 	float: left;
 	text-align: center;
 	cursor: pointer;
+        position: relative;
 }
 
 #select-discipline {
