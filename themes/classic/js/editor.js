@@ -2460,12 +2460,11 @@ function editor() {
 
                                             if (parent.COTemplateTypeIn(parent.DIG)) {
                                                 //Obter posição x,y da primeira letra da palavra
-                                                var firstLetter = $(this).closest(".tplDig").find(".wordsearch").find(".Cell[groups*=" + currentGroup + "]").first();
-                                                var column = firstLetter.attr('col');
-                                                var row = firstLetter.attr('row');
-
-                                                data["posx"] = column;
-                                                data["posy"] = row;
+                                                var wordsList = $(this).closest(".tplDig").find(".words-list").find("li[group=" + currentGroup + "]").attr("start");
+                                                wordsList = wordsList.split('_');
+                                                data["posy"] = wordsList[0];
+                                                data["posx"] = wordsList[1];
+                                                data["direction"] = wordsList[2];
                                             }
 
                                         }
