@@ -966,16 +966,16 @@ function editor() {
 
                             //===========================
                         });
-                        
+
                         //Após o BIND do evento ONFOCUS
                         //Dá um Trigger quando for pressionado o ENTER
-                        $(input).on("keydown",function (event) {
+                        $(input).on("keydown", function (event) {
                             if (event.keyCode === 13) {
                                 $(input).trigger("change");
                                 $(input).trigger("focusout");
                             }
                         });
-                        
+
                         //seta o foco no input
                         $(input).focus();
 
@@ -1115,12 +1115,12 @@ function editor() {
 //        else {
 //            html += "";
 //        }
-        
+
         html += '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>';
-        
+
         html += '<form enctype="multipart/form-data" id="' + form + '" method="post" action="/Editor/upload">' +
                 '<div id="' + file + '" ' + libBDID + ' class="' + uploadType + '">' +
-               // '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
+                // '<button class="del delElement pull-right"><i class="fa fa-times"></i></button>' +
                 '<form enctype="multipart/form-data" id="' + form + '" method="post" action="/Editor/upload">' +
                 '<input type="hidden" name="op" value="' + uploadType + '"/>' +
                 name_db +
@@ -2431,30 +2431,43 @@ function editor() {
                                             data["value"] = $(ElementTextID + " > font").html();
                                         }
                                         //Se for Caça-Palavra, armazena a sua dirençao, wordsShowing, e sua posição inicial x,y
-                                        if (parent.COTemplateTypeIn(parent.PLC) && !isElementPieceSet && !isElementCobject) {
-                                            //Direção
-                                            data["direction"] = $(this).closest('div[group]').attr('txtdirection');
-                                            //Letras que serão exibidas
-                                            var positionLettersShows = "";
-                                            $(this).closest('.tplPlc').find('.crosswords')
-                                                    .find('.Cell[groups*=g' + currentGroup + ']').each(function (idx) {
+                                        if (!isElementPieceSet && !isElementCobject) {
+                                            if (parent.COTemplateTypeIn(parent.PLC)) {
+                                                //Direção
+                                                data["direction"] = $(this).closest('div[group]').attr('txtdirection');
+                                                //Letras que serão exibidas
+                                                var positionLettersShows = "";
+                                                $(this).closest('.tplPlc').find('.crosswords')
+                                                        .find('.Cell[groups*=g' + currentGroup + ']').each(function (idx) {
 
-                                                if ($(this).attr('isshow') === "true") {
-                                                    if (positionLettersShows === "") {
-                                                        positionLettersShows += idx;
-                                                    } else {
-                                                        positionLettersShows += "|" + idx;
+                                                    if ($(this).attr('isshow') === "true") {
+                                                        if (positionLettersShows === "") {
+                                                            positionLettersShows += idx;
+                                                        } else {
+                                                            positionLettersShows += "|" + idx;
+                                                        }
                                                     }
-                                                }
-                                            });
-                                            data["showing_letters"] = positionLettersShows;
+                                                });
+                                                data["showing_letters"] = positionLettersShows;
 
-                                            var thisCrossWord = $(this).closest(".tplPlc").find(".crosswords");
-                                            var column = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().prevAll().length;
-                                            var row = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().parent().prevAll().length;
+                                                var thisCrossWord = $(this).closest(".tplPlc").find(".crosswords");
+                                                var column = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().prevAll().length;
+                                                var row = thisCrossWord.find(".Cell[groups*=" + currentGroup + "]").first().parent().prevAll().length;
 
-                                            data["posx"] = column;
-                                            data["posy"] = row;
+                                                data["posx"] = column;
+                                                data["posy"] = row;
+                                            }
+
+                                            if (parent.COTemplateTypeIn(parent.DIG)) {
+                                                //Obter posição x,y da primeira letra da palavra
+                                                var firstLetter = $(this).closest(".tplDig").find(".wordsearch").find(".Cell[groups*=" + currentGroup + "]").first();
+                                                var column = firstLetter.attr('col');
+                                                var row = firstLetter.attr('row');
+
+                                                data["posx"] = column;
+                                                data["posy"] = row;
+                                            }
+
                                         }
                                         data["temp_currentGroup"] = currentGroup;
                                         parent.saveData(
