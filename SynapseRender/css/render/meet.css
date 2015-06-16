@@ -242,7 +242,6 @@ body {
     cursor: pointer;
 }
 
-
 .PLC-input{
     width: 35px;
     height: 35px;
@@ -265,27 +264,41 @@ input.PLC-input:read-only{
     vertical-align: middle;
 }
 
-.PLC.group.build_image{
+.DIG-table{
+    border: 1px solid gray;
+}
+.DIG-table td{
+    border: none;
+    vertical-align: middle;
+
+    width: 35px;
+    height: 35px;
+    margin: 1px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.group.build_image{
     width: 150px;
     height: 150px;
     margin-bottom: 15px;
 }
 
-.PLC-middle-words{
+.middle-words{
     width:60%;
     float:left;
 }
-.PLC-middle-words table, .PLC-left-images div, .PLC-right-images div{
+.middle-words table, .left-images div, .right-images div{
     margin: 0 auto;
     position: relative;
 }
 
-.PLC-left-images  span, .PLC-right-images span {
+.left-images  span, .right-images span {
     position: absolute;
     top: -4px;
     left: -20px;
 }
-.PLC-left-images  span, .PLC-right-images span, span.PLC-input {
+.left-images  span, .right-images span, span.PLC-input {
     color: #F27E0C;
     /*text-shadow: 1px 1px 1px #000;*/
     font-size: 30px;
@@ -293,11 +306,11 @@ input.PLC-input:read-only{
     font-family: tellural;
     display: block;
 }
-.PLC-left-images{
+.left-images{
     width:20%;
     float: left;
 }
-.PLC-right-images{
+.right-images{
     width:20%;
     float:left;
 }
@@ -307,4 +320,8 @@ input.PLC-input:read-only{
 
 body{
     overflow-y: hidden;
+}
+
+td.marked{
+    background-color:green;
 }

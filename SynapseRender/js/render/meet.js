@@ -243,7 +243,7 @@ this.Meet = function (options) {
     this.init_Common = function () {
         //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
-        if (self.domCobject.cobject.template_code !== 'PLC')
+        if (self.domCobject.cobject.template_code !== 'PLC' && self.domCobject.cobject.template_code !== 'DIG')
             $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
         
         if (self.currentTemplateCode === 'DDROP') {
@@ -991,7 +991,30 @@ this.Meet = function (options) {
         });
     };
     //======================
-
+    /**
+     * Inicializa eventos do PLC
+     * 
+     * @returns {void}
+     */
+    this.init_DIG = function () {
+        $.event.special.tap.tapholdThreshold = 250;
+        $('.DIG-table td').on('vmousedown', function (e) {
+            //spans.push($(this));
+//            var pieceID = $('.currentPiece').attr('id');
+//            var wordNum = $(this).attr('word');
+//            var totalInputs = $("span.dig").length;
+//            var totalAnswered = $("span.marked").length;
+//            if(totalInputs === totalAnswered){
+//                //self.isCorrectPLC(pieceID);
+//                $('.nextPiece').show();
+//            }else{
+//                $('.nextPiece').hide();
+//            }
+        });
+        $('.DIG-table td').on('vmouseup', function (e) {
+            $(this).addClass('marked');
+        });
+    };
     /**
      * Inicializa eventos do PLC
      * 

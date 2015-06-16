@@ -88,6 +88,18 @@ var DomCobject = function(cobject, idx) {
                 $(".PLC-"+side+"-images").append($(this));
                 side = side === 'left'? 'right' : 'left';
             });
+        } else if(self.cobject.template_code === "DIG"){
+            $("span.dig").each(function(i, v){
+                var row = $(this).attr('row');
+                var col = $(this).attr('col');
+                $(".DIG-table td[row="+row+"][col="+col+"]").html($(this));
+            });
+            
+            var side = 'left';
+            $(".DIG.group.build_image").each(function(i,v){
+                $("."+side+"-images").append($(this));
+                side = side === 'left'? 'right' : 'left';
+            });
         }
     };
 
@@ -151,20 +163,28 @@ var DomCobject = function(cobject, idx) {
             self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
             var domElementASK = "";
             
-            if (self.cobject.template_code === 'PLC' ){
+            if (self.cobject.template_code === 'PLC' || self.cobject.template_code === 'DIG'  ){
+                var template = self.cobject.template_code;
                 var domElementASK = $('<div class="ask" style="width:100%"></div>');
-                var leftDiv = "<div class='PLC-left-images'></div>";
-                var middleDiv = "<div class='PLC-middle-words'>";
-                middleDiv += '<table class="PLC-table">';
+                var leftDiv = "<div class='left-images'></div>";
+                var middleDiv = "<div class='middle-words'>";
+                middleDiv += '<table class="'+template+'-table">';
                 for (var i = -1; i < 5; i++){
                     middleDiv += "<tr>";
                     for (var j = -1; j < 10; j++) {
-                        middleDiv += "<td row='" + i + "' col='" + j + "' ></td>";
+                        var html = "";
+                        if(template === 'DIG'){
+                            var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW";
+
+                            html += "<span  row='" + i + "' col='" + j + "' >" + rndChar.charAt(Math.floor(Math.random() * rndChar.length)) + "</span>";
+                        
+                        }
+                        middleDiv += "<td row='" + i + "' col='" + j + "' >"+html+"</td>";
                     }
                     middleDiv += "</tr>";
                 }
                 middleDiv += "</table></div>";
-                var rightDiv = "<div class='PLC-right-images'></div>";
+                var rightDiv = "<div class='right-images'></div>";
                 
                 domElementASK.append(leftDiv+middleDiv+rightDiv);
             }else{
@@ -417,6 +437,68 @@ var DomCobject = function(cobject, idx) {
         }
         TXT.append($(elements_group.elements[0].generalProperties[idxText].value).text());
         return TXT;
+    };
+    
+    this.buildElement_DIG = function(){
+        
+        var elementID = self.id.element;
+        var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
+        var type = currentElement.type;
+        var peid = currentElement.pieceElementID;
+            var html;
+        
+        var build_type = "";
+        
+        var properties = [];
+        
+        if (currentElement.type === 'multimidia') {
+            $.each(currentElement.generalProperties, function(i, item){
+                properties[item['name']] = item['value'];  
+                if (item['name'] === 'library_type') {
+                    build_type = "build_"+item['value'];
+                }
+            });
+            
+            var src = self.dirLibrary + '/image/' + properties['src'];
+            var library_id = properties['library_id'];
+            var PEProperties = currentElement.pieceElement_Properties;
+            properties["grouping"] = PEProperties.grouping;
+            
+            var side = properties["grouping"] % 2 === 0 ? "left" : "right";
+            
+            html += '<div class="elementImage '+side+'" word="'+properties["grouping"]+'" library_id=' + library_id + ' >\n\
+                     <img src="' + src + '" ></div>';
+            
+
+        } else if(type === 'text') {
+            build_type = 'build_text';
+            $.each(currentElement.generalProperties, function(i, item){
+               properties[item['name']] = item['value'];
+            });
+            var PEProperties = currentElement.pieceElement_Properties;
+            properties["direction"] = PEProperties.direction;
+            properties["grouping"] = PEProperties.grouping;
+            properties["layertype"] = PEProperties.layertype;
+            properties["row"] = PEProperties.posy;
+            properties["column"] = PEProperties.posx;
+            
+            var text = properties["text"];
+            
+            var row = properties["row"];
+            var col = properties["column"];
+            var ori = properties["direction"].toUpperCase();
+            for(var i = 0; i< text.length; i++){
+                var value = text[i];
+                html += "<span class='dig' id='" + peid + "'  row='"+row+"' col='"+col+"'  word='"+properties["grouping"]+"'>"+value+"</span>";
+
+                if(ori === "H") col++;
+                else row++;
+            }
+        
+        }
+        self.currentElementType = build_type;
+        self.domElement = $(html);
+        return self.domElement;
     };
     
     this.buildElement_PLC = function(){
