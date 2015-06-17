@@ -7,7 +7,7 @@ COBJECT_CONTENT = "Content";
 NEXT_SCREEN = "Próxima Tela >>>>>";
 BEGIN_ACTIVITY = "Iniciar Atividade";
 
-var DomCobject = function(cobject, idx) {
+var DomCobject = function (cobject, idx) {
     this.cobject = cobject;
     this.idx = idx;
     this.currentScreen = '';
@@ -49,7 +49,7 @@ var DomCobject = function(cobject, idx) {
         element: 0
     };
 
-    this.buildAll = function() {
+    this.buildAll = function () {
         self.dom.append(self.buildInfo_Cobject);
         self.dom.append(self.domContent);
         //Construir o dump dos elementos do CObject
@@ -69,41 +69,44 @@ var DomCobject = function(cobject, idx) {
         }
         return self.dom;
     };
-    
+
     /**
      * Executa tratamentos após a construção do dom
      * 
      * @returns {void}
      */
-    this.posBuildAll = function(){
-        if(self.cobject.template_code === "PLC"){
-            $(".PLC-input").each(function(i, v){
+    this.posBuildAll = function () {
+        if (self.cobject.template_code === "PLC") {
+            $(".PLC-input").each(function (i, v) {
                 var row = $(this).attr('row');
                 var col = $(this).attr('col');
-                $(".PLC-table td[row="+row+"][col="+col+"]").append($(this));
+                $(".PLC-table td[row=" + row + "][col=" + col + "]").append($(this));
             });
-            
+
             var side = 'left';
-            $(".PLC.group.build_image").each(function(i,v){
-                $(".PLC-"+side+"-images").append($(this));
-                side = side === 'left'? 'right' : 'left';
+            $(".PLC.group.build_image").each(function (i, v) {
+                $(".PLC-" + side + "-images").append($(this));
+                side = side === 'left' ? 'right' : 'left';
             });
-        } else if(self.cobject.template_code === "DIG"){
-            $("span.dig").each(function(i, v){
+        } else if (self.cobject.template_code === "DIG") {
+            $("span.dig").each(function (i, v) {
                 var row = $(this).attr('row');
                 var col = $(this).attr('col');
-                $(".DIG-table td[row="+row+"][col="+col+"]").html($(this));
+                $(".DIG-table td[row=" + row + "][col=" + col + "]").html($(this));
             });
-            
+
             var side = 'left';
-            $(".DIG.group.build_image").each(function(i,v){
-                $("."+side+"-images").append($(this));
-                side = side === 'left'? 'right' : 'left';
+            $(".DIG.group.build_image").each(function (i, v) {
+                $("." + side + "-images").append($(this));
+                side = side === 'left' ? 'right' : 'left';
             });
+
+            //Div - HighLight
+            $(".DIG-table").append("<div id='digHighlight'></div>");
         }
     };
 
-    this.buildScreen = function() {
+    this.buildScreen = function () {
         self.domScreen = $('<div class="T_screen" style="display:none" id="S' + self.id.screen + '"></div>');
 
         var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
@@ -120,7 +123,7 @@ var DomCobject = function(cobject, idx) {
         return self.domScreen;
     };
 
-    this.buildRightBook = function() {
+    this.buildRightBook = function () {
         self.pos.group = 1;
         self.domPieceSet = $('<div class="pieceset book" style="display:none" id="' + self.id.pieceset + '"></div>');
         self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
@@ -139,7 +142,7 @@ var DomCobject = function(cobject, idx) {
         return self.domPieceSet;
     };
 
-    this.buildPieceSet = function() {
+    this.buildPieceSet = function () {
         self.domPieceSet = $('<div class="pieceset" style="display:none" id="' + self.id.pieceset + '"></div>');
         self.domPieceSet.append(self.buildInfo_PieceSet());
         var fd = $('<fieldset class="answer-container"></fieldset>');
@@ -155,50 +158,50 @@ var DomCobject = function(cobject, idx) {
         return self.domPieceSet;
     };
 
-    this.buildPiece = function() {
+    this.buildPiece = function () {
         globalVariables();
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
         //Somente Monta a Piece, se existir algum Group dentro dela
         if (self.isset(groups)) {
             self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
             var domElementASK = "";
-            
-            if (self.cobject.template_code === 'PLC' || self.cobject.template_code === 'DIG'  ){
+
+            if (self.cobject.template_code === 'PLC' || self.cobject.template_code === 'DIG') {
                 var template = self.cobject.template_code;
                 var domElementASK = $('<div class="ask" style="width:100%"></div>');
                 var leftDiv = "<div class='left-images'></div>";
                 var middleDiv = "<div class='middle-words'>";
-                middleDiv += '<table class="'+template+'-table">';
-                for (var i = -1; i < 5; i++){
+                middleDiv += '<table class="' + template + '-table">';
+                for (var i = -1; i < 5; i++) {
                     middleDiv += "<tr>";
                     for (var j = -1; j < 10; j++) {
                         var html = "";
-                        if(template === 'DIG'){
+                        if (template === 'DIG') {
                             var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW";
 
                             html += "<span  row='" + i + "' col='" + j + "' >" + rndChar.charAt(Math.floor(Math.random() * rndChar.length)) + "</span>";
-                        
+
                         }
-                        middleDiv += "<td row='" + i + "' col='" + j + "' >"+html+"</td>";
+                        middleDiv += "<td row='" + i + "' col='" + j + "' >" + html + "</td>";
                     }
                     middleDiv += "</tr>";
                 }
                 middleDiv += "</table></div>";
                 var rightDiv = "<div class='right-images'></div>";
-                
-                domElementASK.append(leftDiv+middleDiv+rightDiv);
-            }else{
+
+                domElementASK.append(leftDiv + middleDiv + rightDiv);
+            } else {
                 domElementASK = $('<div class="ask"></div>');
             }
-            
+
             //Verificar se é uma peça do template AEL
-            if (self.cobject.template_code === 'AEL' 
-                || self.cobject.template_code === 'DDROP' 
-                || self.cobject.template_code === 'ONEDDROP') {
+            if (self.cobject.template_code === 'AEL'
+                    || self.cobject.template_code === 'DDROP'
+                    || self.cobject.template_code === 'ONEDDROP') {
                 var domElementANSWER = $('<div class="answer"></div>');
             }
             var objGroups_currentPiece = {};
-            $.each(groups, function(current_group, elements_group) {
+            $.each(groups, function (current_group, elements_group) {
                 self.pos.group = current_group; // O grupo Corrent dessa Piece!
 
                 //array que armazena todos os objetos grupos da piece atual
@@ -226,7 +229,7 @@ var DomCobject = function(cobject, idx) {
                     if (self.cobject.template_code === 'DDROP') {
                         domGroup.addClass(isAskGroup ? 'drag' : 'drop');
                     } else if (self.cobject.template_code === 'ONEDDROP') {
-                        domGroup.addClass(isAskGroup ? 'oneDrag': 'oneDrop');
+                        domGroup.addClass(isAskGroup ? 'oneDrag' : 'oneDrop');
                     }
                 } else {
                     //Grupo existente
@@ -249,19 +252,19 @@ var DomCobject = function(cobject, idx) {
                 //Agora apenda os elementos do grupo acima em ordem: imagem - som - texto
                 if (self.isset(order_type_elements['build_image'])) {
                     //Apenda As Imagens
-                    $.each(order_type_elements['build_image'], function(idx, element) {
+                    $.each(order_type_elements['build_image'], function (idx, element) {
                         domGroup.append(element);
                     });
                 }
                 if (self.isset(order_type_elements['build_sound'])) {
                     //Apenda Os Sons
-                    $.each(order_type_elements['build_sound'], function(idx, element) {
+                    $.each(order_type_elements['build_sound'], function (idx, element) {
                         domGroup.append(element);
                     });
                 }
                 if (self.isset(order_type_elements['build_text'])) {
                     //Apenda os Textos
-                    $.each(order_type_elements['build_text'], function(idx, element) {
+                    $.each(order_type_elements['build_text'], function (idx, element) {
                         domGroup.append(element);
                     });
                 }
@@ -275,7 +278,7 @@ var DomCobject = function(cobject, idx) {
 
             objGroups_currentPiece.istrue = null;
             self.mainPieces[self.id.piece] = objGroups_currentPiece;
-      
+
             self.domPiece.append(domElementASK);
             if (self.cobject.template_code === 'AEL' ||
                     self.cobject.template_code === 'DDROP' ||
@@ -309,13 +312,13 @@ var DomCobject = function(cobject, idx) {
     //        return array;
     //    }
 
-    this.buildEnum = function() {
+    this.buildEnum = function () {
         self.domEnum = $('<div class="enunciation"></div>');
         eval("self.buildEnum_" + self.cobject.template_code + "();");
     };
 
-    this.buildElement = function() {
-        switch (self.cobject.template_code){
+    this.buildElement = function () {
+        switch (self.cobject.template_code) {
             case "MTE":
             case "DDROP":
             case "ONEDDROP":
@@ -338,15 +341,15 @@ var DomCobject = function(cobject, idx) {
                 return self.buildElement_CO();
                 break;
         }
-        
+
     };
 
-    this.buildElementPS = function() {
+    this.buildElementPS = function () {
         var isElement_PieceSet = true;
         return self.buildElement_P_PS(isElement_PieceSet);
     };
 
-    this.buildElement_P_PS = function(isElement_PieceSet) {
+    this.buildElement_P_PS = function (isElement_PieceSet) {
         var html = "";
         var elementID = 0;
         if (self.isset(isElement_PieceSet) && isElement_PieceSet) {
@@ -360,7 +363,7 @@ var DomCobject = function(cobject, idx) {
         var strBuild_library_type = "";
         if (currentElement.type === 'multimidia') {
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function(i, item) {
+            $.each(currentElement.generalProperties, function (i, item) {
                 if (item['name'] === 'library_type') {
                     strBuild_library_type = "build_" + item['value'];
                 } else {
@@ -374,7 +377,7 @@ var DomCobject = function(cobject, idx) {
         } else if (currentElement.type === 'text') {
             strBuild_library_type = 'build_text';
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function(i, item) {
+            $.each(currentElement.generalProperties, function (i, item) {
                 properties += "'" + item['name'] + "':'" + item['value'] + "',";
             });
             properties += "};";
@@ -382,11 +385,11 @@ var DomCobject = function(cobject, idx) {
         }
         self.currentElementType = strBuild_library_type;
         self.domElement = $('<li class="element element-' + strBuild_library_type + '" id="' + elementID + '">' + html + '</li>');
-       
+
         return self.domElement;
     };
 
-    this.buildElement_CO = function() {
+    this.buildElement_CO = function () {
         var html = "";
         var elementID = 0;
         elementID = self.id.elementCO;
@@ -394,7 +397,7 @@ var DomCobject = function(cobject, idx) {
         var strBuild_library_type = "";
         if (currentElement.type === 'multimidia') {
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function(i, item) {
+            $.each(currentElement.generalProperties, function (i, item) {
                 if (item['name'] === 'library_type') {
                     strBuild_library_type = "build_" + item['value'];
                 } else {
@@ -408,7 +411,7 @@ var DomCobject = function(cobject, idx) {
         } else if (currentElement.type === 'text') {
             strBuild_library_type = 'build_text';
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function(i, item) {
+            $.each(currentElement.generalProperties, function (i, item) {
                 properties += "'" + item['name'] + "':'" + item['value'] + "',";
             });
             properties += "};";
@@ -419,12 +422,12 @@ var DomCobject = function(cobject, idx) {
         return self.domElement;
     };
 
-    this.buildElement_PRE = function() {
+    this.buildElement_PRE = function () {
         var html_Answer = "<input type='text' class='text' autocomplete='off'>";
         return html_Answer;
     };
 
-    this.buildElement_TXT = function() {
+    this.buildElement_TXT = function () {
         var TXT = $("<p class='element TXT'></p>");
         var elements_group = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         //BUSCAR PROPRIEDADE  = TEXT
@@ -438,42 +441,42 @@ var DomCobject = function(cobject, idx) {
         TXT.append($(elements_group.elements[0].generalProperties[idxText].value).text());
         return TXT;
     };
-    
-    this.buildElement_DIG = function(){
-        
+
+    this.buildElement_DIG = function () {
+
         var elementID = self.id.element;
         var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
         var type = currentElement.type;
         var peid = currentElement.pieceElementID;
-            var html;
-        
+        var html;
+
         var build_type = "";
-        
+
         var properties = [];
-        
+
         if (currentElement.type === 'multimidia') {
-            $.each(currentElement.generalProperties, function(i, item){
-                properties[item['name']] = item['value'];  
+            $.each(currentElement.generalProperties, function (i, item) {
+                properties[item['name']] = item['value'];
                 if (item['name'] === 'library_type') {
-                    build_type = "build_"+item['value'];
+                    build_type = "build_" + item['value'];
                 }
             });
-            
+
             var src = self.dirLibrary + '/image/' + properties['src'];
             var library_id = properties['library_id'];
             var PEProperties = currentElement.pieceElement_Properties;
             properties["grouping"] = PEProperties.grouping;
-            
-            var side = properties["grouping"] % 2 === 0 ? "left" : "right";
-            
-            html += '<div class="elementImage '+side+'" word="'+properties["grouping"]+'" library_id=' + library_id + ' >\n\
-                     <img src="' + src + '" ></div>';
-            
 
-        } else if(type === 'text') {
+            var side = properties["grouping"] % 2 === 0 ? "left" : "right";
+
+            html += '<div class="elementImage ' + side + '" word="' + properties["grouping"] + '" library_id=' + library_id + ' >\n\
+                     <img src="' + src + '" ></div>';
+
+
+        } else if (type === 'text') {
             build_type = 'build_text';
-            $.each(currentElement.generalProperties, function(i, item){
-               properties[item['name']] = item['value'];
+            $.each(currentElement.generalProperties, function (i, item) {
+                properties[item['name']] = item['value'];
             });
             var PEProperties = currentElement.pieceElement_Properties;
             properties["direction"] = PEProperties.direction;
@@ -481,61 +484,63 @@ var DomCobject = function(cobject, idx) {
             properties["layertype"] = PEProperties.layertype;
             properties["row"] = PEProperties.posy;
             properties["column"] = PEProperties.posx;
-            
+
             var text = properties["text"];
-            
+
             var row = properties["row"];
             var col = properties["column"];
             var ori = properties["direction"].toUpperCase();
-            for(var i = 0; i< text.length; i++){
+            for (var i = 0; i < text.length; i++) {
                 var value = text[i];
-                html += "<span class='dig' id='" + peid + "'  row='"+row+"' col='"+col+"'  word='"+properties["grouping"]+"'>"+value+"</span>";
+                html += "<span class='dig' id='" + peid + "'  row='" + row + "' col='" + col + "'  word='" + properties["grouping"] + "'>" + value + "</span>";
 
-                if(ori === "H") col++;
-                else row++;
+                if (ori === "H")
+                    col++;
+                else
+                    row++;
             }
-        
+
         }
         self.currentElementType = build_type;
         self.domElement = $(html);
         return self.domElement;
     };
-    
-    this.buildElement_PLC = function(){
-        
+
+    this.buildElement_PLC = function () {
+
         var elementID = self.id.element;
         var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
         var type = currentElement.type;
         var peid = currentElement.pieceElementID;
-            var html;
-        
+        var html;
+
         var build_type = "";
-        
+
         var properties = [];
-        
+
         if (currentElement.type === 'multimidia') {
-            $.each(currentElement.generalProperties, function(i, item){
-                properties[item['name']] = item['value'];  
+            $.each(currentElement.generalProperties, function (i, item) {
+                properties[item['name']] = item['value'];
                 if (item['name'] === 'library_type') {
-                    build_type = "build_"+item['value'];
+                    build_type = "build_" + item['value'];
                 }
             });
-            
+
             var src = self.dirLibrary + '/image/' + properties['src'];
             var library_id = properties['library_id'];
             var PEProperties = currentElement.pieceElement_Properties;
             properties["grouping"] = PEProperties.grouping;
-            
-            var side = properties["grouping"] % 2 === 0 ? "left" : "right";
-            
-            html += '<div class="elementImage '+side+'" word="'+properties["grouping"]+'" library_id=' + library_id + ' >\n\
-                     <img src="' + src + '" ><span>'+self.pos.group+'</span></div>';
-            
 
-        } else if(type === 'text') {
+            var side = properties["grouping"] % 2 === 0 ? "left" : "right";
+
+            html += '<div class="elementImage ' + side + '" word="' + properties["grouping"] + '" library_id=' + library_id + ' >\n\
+                     <img src="' + src + '" ><span>' + self.pos.group + '</span></div>';
+
+
+        } else if (type === 'text') {
             build_type = 'build_text';
-            $.each(currentElement.generalProperties, function(i, item){
-               properties[item['name']] = item['value'];
+            $.each(currentElement.generalProperties, function (i, item) {
+                properties[item['name']] = item['value'];
             });
             var PEProperties = currentElement.pieceElement_Properties;
             properties["direction"] = PEProperties.direction;
@@ -548,15 +553,15 @@ var DomCobject = function(cobject, idx) {
             // | posição de cruzamento na palavra cruzada
             properties["point_crossword"] = PEProperties.point_crossword;
             properties["point"] = [];
-            if(self.isset(properties["point_crossword"])){
+            if (self.isset(properties["point_crossword"])) {
                 var point_crossword = [];
-                if(!$.isArray(properties["point_crossword"])){
+                if (!$.isArray(properties["point_crossword"])) {
                     point_crossword = [properties["point_crossword"]];
-                }else{
+                } else {
                     point_crossword = properties["point_crossword"];
                 }
-                
-                $.each(point_crossword, function(i, v){
+
+                $.each(point_crossword, function (i, v) {
                     var tmp = v.split('w')[1];
                     tmp = tmp.split('peID');
                     var tmp2 = tmp[1].split("|");
@@ -574,41 +579,44 @@ var DomCobject = function(cobject, idx) {
             }
             properties["showing_letters"] = PEProperties.showing_letters;
             properties["show"] = [];
-            if(self.isset(properties["showing_letters"]) && properties["showing_letters"].length > 0){
+            if (self.isset(properties["showing_letters"]) && properties["showing_letters"].length > 0) {
                 var tmp = PEProperties.showing_letters.split('|');
                 properties["show"] = tmp;
-            }else{
+            } else {
                 properties["show"] = null;
-            } 
+            }
 
             var text = properties["text"];
-            
+
             var row = properties["row"];
             var col = properties["column"];
             var ori = properties["direction"].toUpperCase();
-            html += "<span id='" + peid + "' class='PLC-input' i='-1' row='"+((ori === "V")? row-1 : row) +"' col='"+((ori === "H")?col-1:col)+"' type='text' word='"+properties["grouping"]+"'>"+self.pos.group+"</span>";
-            for(var i = 0; i< text.length; i++){
+            html += "<span id='" + peid + "' class='PLC-input' i='-1' row='" + ((ori === "V") ? row - 1 : row) + "' col='" + ((ori === "H") ? col - 1 : col) + "' type='text' word='" + properties["grouping"] + "'>" + self.pos.group + "</span>";
+            for (var i = 0; i < text.length; i++) {
                 var value = "";
-                if(self.isset(properties["show"])){
+                if (self.isset(properties["show"])) {
                     var exists = false;
-                    $.each(properties["show"], function(j,v){
-                        if(!exists) exists = v == i;
+                    $.each(properties["show"], function (j, v) {
+                        if (!exists)
+                            exists = v == i;
                     });
-                    if(exists){
+                    if (exists) {
                         value = text[i];
-                        value = "value='"+value+"' readonly";
+                        value = "value='" + value + "' readonly";
                     }
                 }
-                
-                if((self.isset(self.wordsCrossed[peid]) && parseInt(self.wordsCrossed[peid].posC) !== i) 
-                  || (!self.isset(self.wordsCrossed[peid]))){
-                        html += "<input id='" + peid + "' class='PLC-input' i='"+i+"' row='"+row+"' col='"+col+"' type='text' word='"+properties["grouping"]+"' "+value+" maxlength='1'></input>";
+
+                if ((self.isset(self.wordsCrossed[peid]) && parseInt(self.wordsCrossed[peid].posC) !== i)
+                        || (!self.isset(self.wordsCrossed[peid]))) {
+                    html += "<input id='" + peid + "' class='PLC-input' i='" + i + "' row='" + row + "' col='" + col + "' type='text' word='" + properties["grouping"] + "' " + value + " maxlength='1'></input>";
                 }
 
-                if(ori === "H") col++;
-                else row++;
+                if (ori === "H")
+                    col++;
+                else
+                    row++;
             }
-        
+
         }
         self.currentElementType = build_type;
         self.domElement = $(html);
@@ -616,7 +624,7 @@ var DomCobject = function(cobject, idx) {
     };
 
     // Type Text
-    this.build_text = function(properties) {
+    this.build_text = function (properties) {
         //Properties : extension, src, width, height
         eval(properties);
         var text = properties['text'];
@@ -627,7 +635,7 @@ var DomCobject = function(cobject, idx) {
     };
 
     // Type of Elements
-    this.build_image = function(properties) {
+    this.build_image = function (properties) {
         //Properties : extension, src, width, height
         eval(properties);
         var src = self.dirLibrary + '/image/' + properties['src'];
@@ -640,7 +648,7 @@ var DomCobject = function(cobject, idx) {
         return html;
     };
 
-    this.build_sound = function(properties) {
+    this.build_sound = function (properties) {
         //Properties : extension, src
         eval(properties);
         var src = self.dirLibrary + '/sound/' + properties['src'];
@@ -652,7 +660,7 @@ var DomCobject = function(cobject, idx) {
         return html;
     };
 
-    this.build_txt = function(properties) {
+    this.build_txt = function (properties) {
         //Properties : extension, src
         eval(properties);
         var src = self.dirLibrary + '/sound/' + properties['src'];
@@ -665,24 +673,24 @@ var DomCobject = function(cobject, idx) {
         return html;
     };
 
-    this.buildEnum_MTE = function() {
+    this.buildEnum_MTE = function () {
 
     };
-    this.buildEnum_AEL = function() {
+    this.buildEnum_AEL = function () {
 
     };
-    this.buildEnum_TXT = function() {
+    this.buildEnum_TXT = function () {
 
     };
-    this.buildEnum_PRE = function() {
+    this.buildEnum_PRE = function () {
 
     };
 
-    this.buildInfo_MEET = function() {
+    this.buildInfo_MEET = function () {
 
     };
-    
-    this.buildInfo_Cobject = function() {
+
+    this.buildInfo_Cobject = function () {
         var goal = self.cobject.goal;
         var type = self.cobject.cobject_type;
         var degree_name = self.cobject.degree_name;
@@ -694,7 +702,7 @@ var DomCobject = function(cobject, idx) {
         return html;
     };
 
-    this.buildInfo_PieceSet = function() {
+    this.buildInfo_PieceSet = function () {
         var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
         if (self.cobject.template_code === 'TXT') {
             var html = $('<div class="book-left"></div>');
@@ -728,11 +736,11 @@ var DomCobject = function(cobject, idx) {
         return html;
     };
 
-    this.isset = function(variable) {
+    this.isset = function (variable) {
         return (variable !== undefined && variable !== null);
     };
-    
-    var globalVariables = function(){
+
+    var globalVariables = function () {
         self.wordsCrossed = [];
     };
 

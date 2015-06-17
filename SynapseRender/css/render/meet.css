@@ -289,6 +289,17 @@ input.PLC-input:read-only{
     cursor:pointer;
 }
 
+#digHighlight{
+    z-index: 100000;
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border: 2px solid red;
+    border-radius: 15px;
+    display: none;
+}
+
+
 .group.build_image{
     width: 150px;
     height: 150px;
