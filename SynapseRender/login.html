@@ -37,8 +37,8 @@
             $(document).ready(function() {
                 
                 $('#loginform').keypress(function(event){
-                    if (event.keyCode == 13){
-                        $('.login-button').trigger('tap');
+                    if (event.keyCode === 13){
+                        $('.login-button').trigger('mousedown');
                     }
                 })
                 
