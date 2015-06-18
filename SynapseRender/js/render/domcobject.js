@@ -102,7 +102,10 @@ var DomCobject = function (cobject, idx) {
             });
 
             //Div - HighLight
-            $(".DIG-table").append("<div id='digHighlight'></div>");
+            $(".DIG-table").closest('.ask').find('.elementImage').each(function(index){
+                $(".DIG-table").append("<div id='digHighlight"+(index+1)+"' class='digHighlight'></div>");
+            });
+            
         }
     };
 

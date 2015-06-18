@@ -1020,37 +1020,92 @@ this.Meet = function (options) {
         //HighLight
         $('.DIG-table td').on('mousedown touchstart', function () {
             //  $(this).addClass('marked');
+            var currentPiece = $(this).closest('.piece');
             var posBegin = $(this).position();
             var posBeginLeft = posBegin.left;
             var posBeginTop = posBegin.top;
+            //Encontrar o Primeiro HighLight Hide
+            var firstDivHighLight;
+            var finishedSearchWord = true;
 
-            $('#digHighlight').css({
-                'left': posBeginLeft+2,
-                'top': posBeginTop,
-                '-webkit-transform': 'rotate(0deg)'
-
+            currentPiece.find('.digHighlight').each(function () {
+                if (!$(this).is(':visible')) {
+                    //Hide
+                    //Remove  a classe selected de todos as divs HL
+                    $(this).closest('.piece').find('.digHighlight').removeClass('selected');
+                    firstDivHighLight = $(this);
+                    finishedSearchWord = false;
+                    //Add classe .seleted nesta div
+                    $(this).addClass('selected');
+                }
             });
-            $(this).addClass('firstSelected');
-            $(this).addClass('selected');
 
-            $('#digHighlight').show();
+            if (!finishedSearchWord) {
+                firstDivHighLight.css({
+                    'left': posBeginLeft + 2,
+                    'top': posBeginTop,
+                    '-webkit-transform': 'rotate(0deg)'
 
+                });
+                $(this).addClass('firstSelected');
+                $(this).addClass('currentStart');
+                $(this).addClass('selected');
+
+                firstDivHighLight.show();
+            }
         });
 
         $('.DIG-table td').on('mouseover touchmove', function () {
-            var rowFirst = $('.DIG-table td.firstSelected').attr('row');
-            var colFirst = $('.DIG-table td.firstSelected').attr('col');
+            var currentPiece = $(this).closest('.piece');
+            //última Div High Light Selecionada
+            var currentDivHighLight = currentPiece.find('.digHighlight.selected');
+            var rowFirst = currentPiece.find('.DIG-table td.currentStart').attr('row');
+            var colFirst = currentPiece.find('.DIG-table td.currentStart').attr('col');
+            var indexFirst = currentPiece.find('.DIG-table td.currentStart').index();
+            var indexCurrent = $(this).index();
             if ($(this).attr('row') === rowFirst || $(this).attr('col') === colFirst) {
-                $(this).addClass('selected');
-                
-                var posCurrent = $(this).position();
-                var posCurrentLeft = posCurrent.left;
-                var posCurrentTop = posCurrent.top;
-                var sizeSelected = $('.DIG-table td.selected').size();
-                var distance = (sizeSelected * ($('.DIG-table td:eq(0)').width()-1)-2);
-                console.log(distance)
-                $('#digHighlight').css('width', distance);
-                console.log('ok');
+                //Remove toda classe .selected
+                currentPiece.find('.DIG-table td.selected').removeClass('selected');
+
+                if ($(this).attr('row') === rowFirst) {
+                    //Estar na mesma Linha da Primeira Célula clicada
+                    if (indexCurrent >= indexFirst) {
+                        //Centro ou Indo pra Direita
+                        var sizeSelected = (indexCurrent - indexFirst) + 1;
+                        var distance = (sizeSelected * (currentPiece.find('.DIG-table td:eq(0)').width() - 1) - 2);
+                        currentDivHighLight.css('width', distance);
+                        //Add .selected em toda célula da primeira até posição corrente
+                        for (var idx = indexFirst; idx <= indexCurrent; idx++) {
+                            currentPiece.find('.DIG-table td').eq(idx).addClass('selected');
+                        }
+                    } else {
+                        //Indo para a Esquerda
+                        var sizeSelected = (indexFirst - indexCurrent) + 1;
+                        var distance = (sizeSelected * (currentPiece.find('.DIG-table td:eq(0)').width() - 1) - 2);
+                        currentDivHighLight.css('width', distance);
+                        //Add .selected em toda célula da primeira até posição corrente
+                        for (var idx = indexFirst; idx >= indexCurrent; idx--) {
+                            currentPiece.find('.DIG-table td').eq(idx).addClass('selected');
+                        }
+
+                        currentDivHighLight.css({
+                            '-webkit-transform': 'rotate(-180deg)'
+                        }); 
+                    }
+
+
+                }
+
+
+//                var posCurrent = $(this).position();
+//                var posCurrentLeft = posCurrent.left;
+//                var posCurrentTop = posCurrent.top;
+
+
+
+
+
+
 //            if (!self.isset($(this).attr('selected'))) {
 //               // distance = ;
 //                $('#digHighlight').css({
@@ -1065,10 +1120,13 @@ this.Meet = function (options) {
         });
 
         $('.DIG-table td').on('mouseup touchend', function () {
+            var currentPiece = $(this).closest('.piece');
+            currentPiece.find('.DIG-table td.currentStart').removeClass('currentStart');
+            $(this).addClass('lastSelected');
 //            $('.DIG-table td.marked').removeClass('marked');
+//            $('.DIG-table td.selected').removeClass('selected');
 //            $('#digHighlight').hide();
         });
-
 
     };
     /**

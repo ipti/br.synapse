@@ -279,18 +279,17 @@ input.PLC-input:read-only{
 .DIG-table td{
     border: none;
     vertical-align: middle;
-
     width: 35px;
     height: 35px;
     margin: 1px;
     font-size: 30px;
     text-align: center;
-
     cursor:pointer;
 }
 
-#digHighlight{
-    z-index: 100000;
+.digHighlight{
+    pointer-events: none;
+    z-index: 99999;
     position: absolute;
     width: 35px;
     height: 35px;
