@@ -33,7 +33,7 @@ function onEditor(newEditor) {
     });
 
     // #COdescription
-    if ($('#COdescription').val() == '') {
+    if ($('#COdescription').val() === '') {
         //Deixa a mesma mensagem
         $('#COdescription').val('Descrição da Atividade...');
         $('#COdescription').attr('noString', 'true');
@@ -43,14 +43,14 @@ function onEditor(newEditor) {
 
 
     $(document).on('focus', '#COdescription', function () {
-        if ($('#COdescription').attr('noString') == 'true') {
+        if ($('#COdescription').attr('noString') === 'true') {
             //Limpa o input
             $('#COdescription').val('');
         }
     });
 
     $(document).on('focusout', '#COdescription', function () {
-        if ($('#COdescription').val() == '') {
+        if ($('#COdescription').val() === '') {
             //Deixa a mesma mensagem
             $('#COdescription').val('Descrição da Atividade...');
             $('#COdescription').attr('noString', 'true');
@@ -63,14 +63,14 @@ function onEditor(newEditor) {
     // .actName 
     // Descrição Padrão do PieceSet
     $(document).on('focus', '.actName', function () {
-        if ($(this).attr('noString') == 'true') {
+        if ($(this).attr('noString') === 'true') {
             //Limpa o input
             $(this).val('');
         }
     });
 
     $(document).on('focusout', '.actName', function () {
-        if ($(this).val() == '') {
+        if ($(this).val() === '') {
             //Deixa a mesma mensagem
             $(this).val('Descrição do Cabeçalho...');
             $(this).attr('noString', 'true');
@@ -133,7 +133,7 @@ function onEditor(newEditor) {
         } else {
             //click normal
             //Somente adiciona se não possui outro elemento imagem neste grupo
-            if ($(this).closest('div[group]').find('div.image').size() == 0) {
+            if ($(this).closest('div[group]').find('div.image').size() === 0) {
                 newEditor.addImage($(this).closest('div[group]'));
             }
         }
@@ -141,7 +141,7 @@ function onEditor(newEditor) {
 
     $(document).on('click', ".insertText", function () {
         //Somente adiciona se não possui outro elemento texto neste grupo
-        if ($(this).closest('div[group]').find('div.text').size() == 0) {
+        if ($(this).closest('div[group]').find('div.text').size() === 0) {
             newEditor.addText($(this).closest('div[group]'));
         }
 
@@ -149,7 +149,7 @@ function onEditor(newEditor) {
 
     $(document).on('click', ".insertSound", function () { //
         //Somente adiciona se não possui outro elemento imagem neste grupo
-        if ($(this).closest('div[group]').find('div.audio').size() == 0) {
+        if ($(this).closest('div[group]').find('div.audio').size() === 0) {
             newEditor.addSound($(this).closest('div[group]'));
         }
     });
@@ -250,7 +250,7 @@ function onEditor(newEditor) {
                     if (checkWord === word) {
                         wordExists = false;
                         $(".words-list > ul li").each(function () {
-                            if ($(this).text().toUpperCase() == word) {
+                            if ($(this).text().toUpperCase() === word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
                             }
@@ -267,6 +267,7 @@ function onEditor(newEditor) {
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
                             $(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
+                            $("span.active .text.element").attr("updated", 1);
                         }
                     }
                 }
@@ -308,6 +309,8 @@ function onEditor(newEditor) {
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
                             $(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
+                            $("span.active .text.element").attr("updated", 1);
+
                         }
                     }
                 }
@@ -327,7 +330,7 @@ function onEditor(newEditor) {
             var directionWordOfClickedLetter = $(clickedCell).closest(".tplPlc")
                     .find(".elementsPlc div[group='" + groupWordOfClickedLetter.substring(1) + "']").attr('txtDirection');
 
-            if (lastSelected.length != 0 && groupWordOfClickedLetter.split('g').length <= 2) {
+            if (lastSelected.length !== 0 && groupWordOfClickedLetter.split('g').length <= 2) {
                 // Possui somente um groupo, ou seja nunca foi cruzado
 
                 var positionNewWordMerge = -1;
@@ -338,7 +341,7 @@ function onEditor(newEditor) {
 
                 var positionsMayMerge = new Array();
                 for (var i = 0; i < wordLastClicked.length; i++) {
-                    if (wordLastClicked[i] == letterClicked) {
+                    if (wordLastClicked[i] === letterClicked) {
                         positionsMayMerge.push(i);
                     }
                 }
@@ -367,7 +370,7 @@ function onEditor(newEditor) {
                     var sizeLetterAfterMergePosition = letterAfterMergePosition.length;
                     var cancel = false;
 
-                    if (directionWordOfClickedLetter == 'h') {
+                    if (directionWordOfClickedLetter === 'h') {
                         //Antes de Tudo verificar se existe alguma letra no Caminho
 
                         // Posição da letra clicada   
@@ -380,11 +383,11 @@ function onEditor(newEditor) {
                             tempIndexCurrentRow--;
                             var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                     .eq(indexCurrentColl);
-                            if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
+                            if (currentCell.size() === 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
                                 //Célula Vazia
                                 break;
                             }
-                            if (currentCell.text().replace(/\s/g, '') != '') {
+                            if (currentCell.text().replace(/\s/g, '') !== '') {
                                 //Existe Letra no caminho
                                 cancel = true;
                                 break;
@@ -397,12 +400,12 @@ function onEditor(newEditor) {
                             tempIndexCurrentRow++;
                             var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                     .eq(indexCurrentColl);
-                            if (currentCell.size() == 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
+                            if (currentCell.size() === 0 || tempIndexCurrentRow < 0 || indexCurrentColl < 0) {
                                 //Célula Vazia
                                 break;
                             }
 
-                            if (currentCell.text().replace(/\s/g, '') != '') {
+                            if (currentCell.text().replace(/\s/g, '') !== '') {
                                 //Existe Letra no caminho
                                 cancel = true;
                                 break;
@@ -421,7 +424,7 @@ function onEditor(newEditor) {
                                 var sizeRowAddBefore = sizeLetterBeforeMergePosition - currentTotalRowBefore;
                                 currentTotalRow += sizeRowAddBefore;
                                 for (var idx = 0; idx < sizeRowAddBefore; idx++) {
-                                    var str = "<div class='Row'>"
+                                    var str = "<div class='Row'>";
                                     for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
                                         str += "<div class='Cell'> </div>";
                                     }
@@ -436,7 +439,7 @@ function onEditor(newEditor) {
 
                                 currentTotalRow += sizeRowAddAfter;
                                 for (var idx = 0; idx < sizeRowAddAfter; idx++) {
-                                    var str = "<div class='Row'>"
+                                    var str = "<div class='Row'>";
                                     for (var idxCell = 0; idxCell < currentTotalCell; idxCell++) {
                                         str += "<div class='Cell'> </div>";
                                     }
@@ -458,7 +461,7 @@ function onEditor(newEditor) {
                                 var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                         .eq(indexCurrentColl);
 
-                                if (typeof currentCell.attr('groups') == 'undefined') {
+                                if (typeof currentCell.attr('groups') === 'undefined') {
                                     //cria os novos atributos
                                     currentCell.attr('groups', 'g' + lastSelected.attr('group'));
                                 }
@@ -471,14 +474,14 @@ function onEditor(newEditor) {
                                 tempIndexCurrentRow++;
                                 var currentCell = $(clickedCell).closest('.crosswords').find('.Row').eq(tempIndexCurrentRow).find('.Cell')
                                         .eq(indexCurrentColl);
-                                if (typeof currentCell.attr('groups') == 'undefined') {
+                                if (typeof currentCell.attr('groups') === 'undefined') {
                                     //cria os novos atributos
                                     currentCell.attr('groups', 'g' + lastSelected.attr('group'));
                                 }
                                 currentCell.html(letterAfterMergePosition[idx]);
                             }
                         }
-                    } else if (directionWordOfClickedLetter == 'v') {
+                    } else if (directionWordOfClickedLetter === 'v') {
                         //Antes verificar se existe alguma letra na caminho
 
                         //Após adicionar as colunas restantes
@@ -490,11 +493,11 @@ function onEditor(newEditor) {
                             tempIndexCurrentColunm--;
                             // groups='g"+lastSelected.attr('group')+"' directions='v'
                             var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                            if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
+                            if (currentCell.size() === 0 || tempIndexCurrentColunm < 0) {
                                 //Célula Vazia
                                 break;
                             }
-                            if (currentCell.text().replace(/\s/g, '') != '') {
+                            if (currentCell.text().replace(/\s/g, '') !== '') {
                                 //Existe Letra no caminho
                                 cancel = true;
                                 break;
@@ -506,11 +509,11 @@ function onEditor(newEditor) {
                         for (var idx in letterAfterMergePosition) {
                             tempIndexCurrentColunm++;
                             var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                            if (currentCell.size() == 0 || tempIndexCurrentColunm < 0) {
+                            if (currentCell.size() === 0 || tempIndexCurrentColunm < 0) {
                                 //Célula Vazia
                                 break;
                             }
-                            if (currentCell.text().replace(/\s/g, '') != '') {
+                            if (currentCell.text().replace(/\s/g, '') !== '') {
                                 //Existe Letra no caminho
                                 cancel = true;
                                 break;
@@ -559,7 +562,7 @@ function onEditor(newEditor) {
                                 // groups='g"+lastSelected.attr('group')+"' directions='v'
                                 var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
 
-                                if (typeof currentCell.attr('groups') == 'undefined') {
+                                if (typeof currentCell.attr('groups') === 'undefined') {
                                     //cria os novos atributos
                                     currentCell.attr('groups', 'g' + lastSelected.attr('group'));
                                 }
@@ -571,7 +574,7 @@ function onEditor(newEditor) {
                             for (var idx in letterAfterMergePosition) {
                                 tempIndexCurrentColunm++;
                                 var currentCell = $(clickedCell).closest('.Row').find('.Cell').eq(tempIndexCurrentColunm);
-                                if (typeof currentCell.attr('groups') == 'undefined') {
+                                if (typeof currentCell.attr('groups') === 'undefined') {
                                     //cria os novos atributos
                                     currentCell.attr('groups', 'g' + lastSelected.attr('group'));
                                 }
@@ -591,10 +594,10 @@ function onEditor(newEditor) {
                         var newGroup = groupWordOfClickedLetter + 'g' + lastClickedGroupElement;
                         $(clickedCell).attr('groups', newGroup);
 
-                        if (directionWordOfClickedLetter == 'h') {
+                        if (directionWordOfClickedLetter === 'h') {
                             //Célula atual Atualiza o text Direction do grupo de elementos
                             lastSelected.attr('txtDirection', 'v');
-                        } else if (directionWordOfClickedLetter == 'v') {
+                        } else if (directionWordOfClickedLetter === 'v') {
                             //A célula atual estar na Vertical
                             lastSelected.attr('txtDirection', 'h');
                         }
@@ -608,7 +611,7 @@ function onEditor(newEditor) {
                             $(clickedCell).attr('currentClickedCell', 'true');
 
                             $(clickedCell).closest(".crosswords").find("div.Cell[groups*='" + groupThisCell + "']").each(function (index) {
-                                if (typeof $(this).attr('currentClickedCell') != 'undefined') {
+                                if (typeof $(this).attr('currentClickedCell') !== 'undefined') {
                                     //Econtrou a célula clicada, atual
                                     thisFunc.tempPositionThisCellWordMerge = index;
                                     $(clickedCell).removeAttr('currentClickedCell');
@@ -643,7 +646,7 @@ function onEditor(newEditor) {
             } else {
                 //Macar como 'isShow', que indicará a letra que será exibida no Renderizador
                 if (!isload) {
-                    if ($(clickedCell).css('background-color') == 'rgba(0, 0, 0, 0)') {
+                    if ($(clickedCell).css('background-color') === 'rgba(0, 0, 0, 0)') {
                         $(clickedCell).attr('isShow', 'true');
                         $(clickedCell).css('background-color', 'yellowgreen');
                     } else {
@@ -667,7 +670,7 @@ function onEditor(newEditor) {
             }
 
 
-    }
+    };
 
     $(document).on("click", ".crosswords  div.Cell[groups]", function () {
         self.eventClickCellPLC(this, false);
