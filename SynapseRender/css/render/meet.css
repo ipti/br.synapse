@@ -273,8 +273,10 @@ input.PLC-input:read-only{
     vertical-align: middle;
 }
 
-.DIG-table{
+.DIG-table tbody{
     border: 1px solid gray;
+    background-color: rgb(232, 232, 232);
+    color: rgb(42, 42, 42);
 }
 .DIG-table td{
     border: none;
@@ -292,8 +294,8 @@ input.PLC-input:read-only{
     z-index: 99999;
     position: absolute;
     width: 35px;
-    height: 35px;
-    border: 2px solid red;
+    height: 33px;
+    border: 2px solid rgb(226, 123, 23);;
     border-radius: 15px;
     display: none;
 }
