@@ -182,10 +182,10 @@ this.Meet = function (options) {
 
             //Chamar função para inserir nome html
             $('#render_canvas').html(domCobjectBuild);
-            
-            
+
+
             self.domCobject.posBuildAll();
-            
+
             //Inicia os eventos somente após a inclusão do html na dom
             self.beginEvents();
             // Render Ready! 
@@ -245,7 +245,7 @@ this.Meet = function (options) {
         var selector_cobject = '.cobject';
         if (self.domCobject.cobject.template_code !== 'PLC' && self.domCobject.cobject.template_code !== 'DIG')
             $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
-        
+
         if (self.currentTemplateCode === 'DDROP') {
             //Existe DDROP
             self.init_DDROP();
@@ -1011,9 +1011,123 @@ this.Meet = function (options) {
 //                $('.nextPiece').hide();
 //            }
         });
-        $('.DIG-table td').on('vmouseup', function (e) {
-            $(this).addClass('marked');
+//        $('.DIG-table td').on('vmouseup', function (e) {
+//            $(this).addClass('marked');
+//        });
+
+
+
+        //HighLight
+        $('.DIG-table td').on('mousedown touchstart', function () {
+            //  $(this).addClass('marked');
+            var currentPiece = $(this).closest('.piece');
+            var posBegin = $(this).position();
+            var posBeginLeft = posBegin.left;
+            var posBeginTop = posBegin.top;
+            //Encontrar o Primeiro HighLight Hide
+            var firstDivHighLight;
+            var finishedSearchWord = true;
+
+            currentPiece.find('.digHighlight').each(function () {
+                if (!$(this).is(':visible')) {
+                    //Hide
+                    //Remove  a classe selected de todos as divs HL
+                    $(this).closest('.piece').find('.digHighlight').removeClass('selected');
+                    firstDivHighLight = $(this);
+                    finishedSearchWord = false;
+                    //Add classe .seleted nesta div
+                    $(this).addClass('selected');
+                }
+            });
+
+            if (!finishedSearchWord) {
+                firstDivHighLight.css({
+                    'left': posBeginLeft + 2,
+                    'top': posBeginTop,
+                    '-webkit-transform': 'rotate(0deg)'
+
+                });
+                $(this).addClass('firstSelected');
+                $(this).addClass('currentStart');
+                $(this).addClass('selected');
+
+                firstDivHighLight.show();
+            }
         });
+
+        $('.DIG-table td').on('mouseover touchmove', function () {
+            var currentPiece = $(this).closest('.piece');
+            //última Div High Light Selecionada
+            var currentDivHighLight = currentPiece.find('.digHighlight.selected');
+            var rowFirst = currentPiece.find('.DIG-table td.currentStart').attr('row');
+            var colFirst = currentPiece.find('.DIG-table td.currentStart').attr('col');
+            var indexFirst = currentPiece.find('.DIG-table td.currentStart').index();
+            var indexCurrent = $(this).index();
+            if ($(this).attr('row') === rowFirst || $(this).attr('col') === colFirst) {
+                //Remove toda classe .selected
+                currentPiece.find('.DIG-table td.selected').removeClass('selected');
+
+                if ($(this).attr('row') === rowFirst) {
+                    //Estar na mesma Linha da Primeira Célula clicada
+                    if (indexCurrent >= indexFirst) {
+                        //Centro ou Indo pra Direita
+                        var sizeSelected = (indexCurrent - indexFirst) + 1;
+                        var distance = (sizeSelected * (currentPiece.find('.DIG-table td:eq(0)').width() - 1) - 2);
+                        currentDivHighLight.css('width', distance);
+                        //Add .selected em toda célula da primeira até posição corrente
+                        for (var idx = indexFirst; idx <= indexCurrent; idx++) {
+                            currentPiece.find('.DIG-table td').eq(idx).addClass('selected');
+                        }
+                    } else {
+                        //Indo para a Esquerda
+                        var sizeSelected = (indexFirst - indexCurrent) + 1;
+                        var distance = (sizeSelected * (currentPiece.find('.DIG-table td:eq(0)').width() - 1) - 2);
+                        currentDivHighLight.css('width', distance);
+                        //Add .selected em toda célula da primeira até posição corrente
+                        for (var idx = indexFirst; idx >= indexCurrent; idx--) {
+                            currentPiece.find('.DIG-table td').eq(idx).addClass('selected');
+                        }
+
+                        currentDivHighLight.css({
+                            '-webkit-transform': 'rotate(-180deg)'
+                        }); 
+                    }
+
+
+                }
+
+
+//                var posCurrent = $(this).position();
+//                var posCurrentLeft = posCurrent.left;
+//                var posCurrentTop = posCurrent.top;
+
+
+
+
+
+
+//            if (!self.isset($(this).attr('selected'))) {
+//               // distance = ;
+//                $('#digHighlight').css({
+//                    'left': posBeginLeft,
+//                    'top': posBeginTop,
+//                    '-webkit-transform': 'rotate(0deg)'
+//
+//                });
+//            }
+
+            }
+        });
+
+        $('.DIG-table td').on('mouseup touchend', function () {
+            var currentPiece = $(this).closest('.piece');
+            currentPiece.find('.DIG-table td.currentStart').removeClass('currentStart');
+            $(this).addClass('lastSelected');
+//            $('.DIG-table td.marked').removeClass('marked');
+//            $('.DIG-table td.selected').removeClass('selected');
+//            $('#digHighlight').hide();
+        });
+
     };
     /**
      * Inicializa eventos do PLC
@@ -1022,34 +1136,34 @@ this.Meet = function (options) {
      */
     this.init_PLC = function () {
         $('input.PLC-input').on('keyup', function (e) {
-            if(e.keyCode === 8){
+            if (e.keyCode === 8) {
                 $(this).attr('value', "");
                 var inputs = $(this).closest('.PLC-table').find(':input');
-                inputs.eq( inputs.index(this)- 1 ).focus();
+                inputs.eq(inputs.index(this) - 1).focus();
             } else if (!self.isEmpty($(this).val())) {
                 var val = $(this).attr('value');
-                if (val === ' '){
-                    $(this).attr('value','');
+                if (val === ' ') {
+                    $(this).attr('value', '');
                 } else {
                     $(this).attr('value', val.toUpperCase());
 
                     var inputs = $(this).closest('.PLC-table').find(':input');
-                    inputs.eq( inputs.index(this)+ 1 ).focus();
-                }  
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
             }
             var pieceID = $('.currentPiece').attr('id');
             var wordNum = $(this).attr('word');
             var totalInputs = $(".PLC-input").length;
             var totalAnswered = $(".PLC-input[value!=]").length;
-            if(totalInputs === totalAnswered){
+            if (totalInputs === totalAnswered) {
                 self.isCorrectPLC(pieceID);
                 $('.nextPiece').show();
-            }else{
+            } else {
                 $('.nextPiece').hide();
             }
         });
         $('input.PLC-input').on('focus', function () {
-            if(!$(this).is('[readonly]'))
+            if (!$(this).is('[readonly]'))
                 $(this).attr('value', '');
         });
     };
@@ -1188,7 +1302,7 @@ this.Meet = function (options) {
         self.domCobject.mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
         return true;
     };
-    
+
     /**
      * Verifica se esta Correto PLC.
      * 
@@ -1199,25 +1313,27 @@ this.Meet = function (options) {
     this.isCorrectPLC = function (pieceID) {
         var piece = self.domCobject.mainPieces[pieceID];
         var isCorrect = true;
-        $.each(piece, function(i, group){
-            if(i[0] === '_'){
+        $.each(piece, function (i, group) {
+            if (i[0] === '_') {
                 var word = group.elements[0].generalProperties[0].value;
                 var row = group.elements[0].pieceElement_Properties.posy;
                 var col = group.elements[0].pieceElement_Properties.posx;
                 var ori = group.elements[0].pieceElement_Properties.direction.toUpperCase();
-                
-                for(var i = 0; i< word.length; i++){
+
+                for (var i = 0; i < word.length; i++) {
                     var correctCharactere = word[i];
-                    var typedCharactere = $(".PLC-input[row="+row+"][col="+col+"]").attr("value");
-                    
+                    var typedCharactere = $(".PLC-input[row=" + row + "][col=" + col + "]").attr("value");
+
                     isCorrect = isCorrect && correctCharactere === typedCharactere;
-                    
-                    if(ori === "H") col++;
-                    else row++;
+
+                    if (ori === "H")
+                        col++;
+                    else
+                        row++;
                 }
             }
         });
-        
+
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     };

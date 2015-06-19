@@ -5,6 +5,15 @@ body {
     background-color: #D1E0CD;
     background-repeat: repeat;
     font-family: asap, helvetica, arial, sans-serif;
+
+    //Não deixar selecionar elementos no html
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
 }
 
 /** Barra de informações **/
@@ -270,13 +279,25 @@ input.PLC-input:read-only{
 .DIG-table td{
     border: none;
     vertical-align: middle;
-
     width: 35px;
     height: 35px;
     margin: 1px;
     font-size: 30px;
     text-align: center;
+    cursor:pointer;
 }
+
+.digHighlight{
+    pointer-events: none;
+    z-index: 99999;
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border: 2px solid red;
+    border-radius: 15px;
+    display: none;
+}
+
 
 .group.build_image{
     width: 150px;
