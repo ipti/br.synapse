@@ -678,7 +678,11 @@ h5{
     width: 10px;
 }
 
-.words-list{
+.elementsDig{
+    width:65%;    
+}
+
+.words-list{    
     display: inline-block;
 }
 .words-list ul{
@@ -686,4 +690,8 @@ h5{
 }
 .words-list li{
     margin-left: 20px;
+}
+.wordsearch-container{    
+    width: 35%;
+    margin-top: 20px;
 }

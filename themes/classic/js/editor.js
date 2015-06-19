@@ -327,7 +327,7 @@ function editor() {
 
                         html += "</div>";
                     }
-                    content = '<div class="elementsDig">' + generateNewElementButton() + '</div><div class="wordsearch Table pull-left">' + html + '</div><div class="words-list"><b>Palavras:</b><ul></ul></div>';
+                    content = '<div class="wordsearch-container pull-right"><div class="wordsearch Table pull-left">' + html + '</div><div class="words-list pull-left"><b>Palavras:</b><ul></ul></div></div><div class="elementsDig">' + generateNewElementButton() + '</div>';
                 }
 
                 $('#' + PieceSetId).append(generateLi(pieceID, plus, tplClass, content));
@@ -1322,7 +1322,7 @@ function editor() {
                     $(btnNewElementClicked).attr('disabled', 'true');
                     $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .delGroup').hide();
                 } else if (parent.COTemplateTypeIn(parent.PLC) && parent.isset(loaddata)) {
-                    if ($(btnNewElementClicked).closest('.elementsPlc').find('div[group=' + loaddata['match'] + ']').length == 0) {
+                    if ($(btnNewElementClicked).closest('.elementsPlc').find('div[group=' + loaddata['match'] + ']').length === 0) {
                         //Não existe, logo será adicionado a estrutura do groupo dos elementos
                         $(btnNewElementClicked).closest('.elementsPlc').find('div[group] .delGroup').hide();
                     }
@@ -1386,7 +1386,7 @@ function editor() {
 
                         html += '' +
                                 '<button class="insertImage"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>';
-                        if (!parent.COTemplateTypeIn(parent.PLC)) {
+                        if (!(parent.COTemplateTypeIn(parent.PLC) || parent.COTemplateTypeIn(parent.DIG))) {
                             html += '<button class="insertSound"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>';
                         }
                         html += '<button class="insertText" ><i class="fa fa-font fa-2x"></i><br>' + LABEL_ADD_TEXT + '</button>' +
@@ -1667,6 +1667,10 @@ function editor() {
                         }
 
                     }
+                    if (this.isset(loaddata) && type === 'text') {
+                        //clica no botao de novo elemento pra cada elemento carregado                        
+                        $(".newElement").click();
+                    }
                 }
 
 
@@ -1727,7 +1731,7 @@ function editor() {
                             for (var idx in self.crossWords) {
                                 var crossWord = self.crossWords[idx];
                                 //Como é carregado no BD então existe ID do BD único para cada elemento txt
-                                if (crossWord['idDbElementWord1'] == idbd || crossWord['idDbElementWord2'] == idbd) {
+                                if (crossWord['idDbElementWord1'] === idbd || crossWord['idDbElementWord2'] === idbd) {
                                     //Encontrou
                                     if (crossWord['idDbElementWord1'] === idbd) {
                                         //Então a posição que esse elemento cruza é position1
@@ -1761,6 +1765,28 @@ function editor() {
 
                     }
 
+                    if (parent.COTemplateTypeIn(parent.DIG) && type === 'text') {
+                        var toDelete = $.grep($(".elementsDig div[group]"),function(a){
+                            return $(a).find('div[idbd]').length === 0;
+                        });
+                        $.each(toDelete, function(){
+                           $(this).remove(); 
+                        });
+                        var currentWordsearch = $(".wordsearch");
+                        var posx = loaddata['posx'];
+                        var posy = loaddata['posy'];
+                        var direction = loaddata['direction'];
+                        var lastGroup = $("div[group]").last().attr('group');
+                        console.log(lastGroup);
+                        $("div[group=" + lastGroup + "]").click();
+                        if (direction === 'h') {
+                            $("span[group=" + (lastGroup) + "] .changeOrientation").click();
+                        }
+
+                        $(currentWordsearch.find($(".Cell[row=" + posx + "][col= " + posy + "]"))).click();
+
+                        console.log(posx + " | " + posy + " | " + direction);
+                    }
 
                 } else if (parent.COTemplateTypeIn(parent.AEL)
                         || parent.COTemplateTypeIn(parent.DDROP)
@@ -2053,10 +2079,10 @@ function editor() {
                                     for (var i = startCol; i <= end; i++) {
 //                                console.log(startCol + "/" + i + "/" + end);
                                         currentCell = $(".wordsearch").find(".Cell[row='" + startRow + "'][col='" + i + "']");
-                                        if (currentCell.attr("orientation") == "HV") {
+                                        if (currentCell.attr("orientation") === "HV") {
                                             var updatedGroups;
                                             for (var j = 0; j < currentCell.attr("groups").split("g").length; j++) {
-                                                if (currentCell.attr("groups").split("g")[j] != activeGroup) {
+                                                if (currentCell.attr("groups").split("g")[j] !== activeGroup) {
                                                     updatedGroups = "g" + currentCell.attr("groups").split("g")[j];
                                                 }
                                             }
@@ -2076,10 +2102,10 @@ function editor() {
                                     for (var i = startRow; i <= end; i++) {
 //                                console.log(startRow + "/" + i + "/" + end);
                                         currentCell = $(".wordsearch").find(".Cell[row='" + i + "'][col='" + startCol + "']");
-                                        if (currentCell.attr("orientation") == "HV") {
+                                        if (currentCell.attr("orientation") === "HV") {
                                             var updatedGroups;
                                             for (var j = 0; j < currentCell.attr("groups").split("g").length; j++) {
-                                                if (currentCell.attr("groups").split("g")[j] != activeGroup) {
+                                                if (currentCell.attr("groups").split("g")[j] !== activeGroup) {
                                                     updatedGroups = "g" + currentCell.attr("groups").split("g")[j];
                                                 }
                                             }
@@ -2462,8 +2488,8 @@ function editor() {
                                                 //Obter posição x,y da primeira letra da palavra
                                                 var wordsList = $(this).closest(".tplDig").find(".words-list").find("li[group=" + currentGroup + "]").attr("start");
                                                 wordsList = wordsList.split('_');
-                                                data["posy"] = wordsList[0];
-                                                data["posx"] = wordsList[1];
+                                                data["posx"] = wordsList[0];
+                                                data["posy"] = wordsList[1];
                                                 data["direction"] = wordsList[2];
                                             }
 
@@ -3145,6 +3171,10 @@ function editor() {
                                                                                             data['direction'] = item['direction'];
                                                                                         if (parent.isset(item['showing_letters']))
                                                                                             data['showing_letters'] = item['showing_letters'];
+                                                                                        if (parent.isset(item['posx']))
+                                                                                            data['posx'] = item['posx'];
+                                                                                        if (parent.isset(item['posy']))
+                                                                                            data['posy'] = item['posy'];
                                                                                         if (parent.isset(item['crossWord'])) {
                                                                                             //Se existir um cruzamento no templae PLC
                                                                                             data['pieceID'] = pieceID;
@@ -3161,6 +3191,7 @@ function editor() {
 
                                                                                         }
 
+                                                                                        console.log(i);
                                                                                         parent.addElement(elementID, type, data);
                                                                                     }
                                                                                 });
@@ -3341,7 +3372,7 @@ function editor() {
                                         var i;
                                         for (i = 0; i < array.length; i++)
                                         {
-                                            if (array[i].replace(/\s/g, '') != "" && array[i] == value)
+                                            if (array[i].replace(/\s/g, '') !== "" && array[i] === value)
                                             {
                                                 return true;
                                             }

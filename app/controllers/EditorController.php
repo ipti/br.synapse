@@ -606,6 +606,7 @@ class EditorController extends Controller {
                             }
                             break;
                         case "Element":
+//                            var_dump($_POST);exit();
                             if (isset($_POST['typeID']) || isset($_POST['justFlag'])) {
 
                                 if (isset($_POST['typeID'])) {
@@ -1224,12 +1225,26 @@ class EditorController extends Controller {
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
                                         }
-                                        //Se for template Caça-Palavra
+                                        //Se for template Palavra Cruzada
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                             'property_id' => $this->getPropertyIDByName('showing_letters', 'word')));
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['showing_letters'] = $pe_property->value;
                                         }
+
+                                        //Se for template Caça Palavras
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('posx', 'piecelement')));
+                                        if (isset($pe_property)) {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['posx'] = $pe_property->value;
+                                        }
+                                        
+                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
+                                            'property_id' => $this->getPropertyIDByName('posy', 'piecelement')));
+                                        if (isset($pe_property)) {
+                                            $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['posy'] = $pe_property->value;
+                                        }
+                                        //fim do template caça palavras
 
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                             'property_id' => $this->getPropertyIDByName('direction', 'word')));
@@ -1359,6 +1374,8 @@ class EditorController extends Controller {
             //Persiste as alteraçoes no BD
             $transaction->commit();
 
+//            var_dump($json);
+            
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');
