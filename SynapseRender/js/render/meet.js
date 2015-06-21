@@ -1052,8 +1052,10 @@ this.Meet = function (options) {
             if (self.isset(posCurrentDivHighLight)) {
                 var indexCurrent = $(this).index();
                 if ($(this).attr('row') === rowFirst || $(this).attr('col') === colFirst) {
-                    if ($(this).attr('row') === rowFirst && $(this).attr('col') !== colFirst) {
+                    if ($(this).attr('row') === rowFirst && $(this).attr('col') !== colFirst
+                            && currentDivHighLight.height() < (2*currentCellStart.height())) {
                         //Estar na mesma Linha da Primeira Célula clicada
+                        // E Se a Altura  da div HighLIght < 2*(currentCellStart)
                         if (indexCurrent > indexColStartCurrent) {
                             //Centro ou Indo pra Direita
                             var sizeSelected = (indexCurrent - indexColStartCurrent) + 1;
@@ -1089,9 +1091,10 @@ this.Meet = function (options) {
                             }
                         }
 
-                    } else if ($(this).attr('col') === colFirst && $(this).attr('row') !== rowFirst) {
+                    } else if ($(this).attr('col') === colFirst && $(this).attr('row') !== rowFirst
+                            && currentDivHighLight.width() < (2*currentCellStart.width())) {
                         //Estar na Mesma Coluna da Primeira Célula clicada
-
+                        // E Se a Largura  da div HighLight < 2*(Largura da currentCellStart)
                         if (indexRowCurrent > indexRowStartCurrent) {
                             //Indo pra Baixo
                             var sizeSelected = (indexRowCurrent - indexRowStartCurrent) + 1;
