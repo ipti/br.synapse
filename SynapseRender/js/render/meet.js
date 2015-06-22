@@ -1031,7 +1031,7 @@ this.Meet = function (options) {
                 });
                 $(this).addClass('firstSelected');
                 $(this).addClass('currentStart');
-                $(this).addClass('selected');
+                // $(this).addClass('selected');
 
                 firstDivHighLight.show();
             }
@@ -1053,7 +1053,7 @@ this.Meet = function (options) {
                 var indexCurrent = $(this).index();
                 if ($(this).attr('row') === rowFirst || $(this).attr('col') === colFirst) {
                     if ($(this).attr('row') === rowFirst && $(this).attr('col') !== colFirst
-                            && currentDivHighLight.height() < (2*currentCellStart.height())) {
+                            && currentDivHighLight.height() < (2 * currentCellStart.height())) {
                         //Estar na mesma Linha da Primeira Célula clicada
                         // E Se a Altura  da div HighLIght < 2*(currentCellStart)
                         if (indexCurrent > indexColStartCurrent) {
@@ -1062,9 +1062,9 @@ this.Meet = function (options) {
                             var distance = (sizeSelected * sizeCell);
                             currentDivHighLight.css('width', distance);
                             //Add .selected em toda célula da primeira até posição corrente
-                            for (var idx = indexColStartCurrent; idx <= indexCurrent; idx++) {
-                                currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
-                            }
+//                            for (var idx = indexColStartCurrent; idx <= indexCurrent; idx++) {
+//                                currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
+//                            }
                         } else if (indexCurrent < indexColStartCurrent) {
                             //Indo para a Esquerda
                             //Posição de ínicio se Desloca
@@ -1076,9 +1076,9 @@ this.Meet = function (options) {
                                 var increase = Math.abs(distance - oldWidthDivHighLight);
                                 currentDivHighLight.css('width', distance);
                                 //Add .selected em toda célula da primeira até posição corrente
-                                for (var idx = indexColStartCurrent; idx >= indexCurrent; idx--) {
-                                    currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
-                                }
+//                                for (var idx = indexColStartCurrent; idx >= indexCurrent; idx--) {
+//                                    currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
+//                                }
 
                                 if (oldWidthDivHighLight < distance) {
                                     //Aumentou
@@ -1092,7 +1092,7 @@ this.Meet = function (options) {
                         }
 
                     } else if ($(this).attr('col') === colFirst && $(this).attr('row') !== rowFirst
-                            && currentDivHighLight.width() < (2*currentCellStart.width())) {
+                            && currentDivHighLight.width() < (2 * currentCellStart.width())) {
                         //Estar na Mesma Coluna da Primeira Célula clicada
                         // E Se a Largura  da div HighLight < 2*(Largura da currentCellStart)
                         if (indexRowCurrent > indexRowStartCurrent) {
@@ -1101,9 +1101,9 @@ this.Meet = function (options) {
                             var distance = (sizeSelected * sizeCell);
                             currentDivHighLight.css('height', distance);
                             //Add .selected em toda célula da primeira até posição corrente
-                            for (var idx = indexRowStartCurrent; idx <= indexRowCurrent; idx++) {
-                                currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
-                            }
+//                            for (var idx = indexRowStartCurrent; idx <= indexRowCurrent; idx++) {
+//                                currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
+//                            }
                         } else if (indexRowCurrent < indexRowStartCurrent) {
                             //Indo para Cima
                             //Posição de ínicio se Desloca
@@ -1115,9 +1115,9 @@ this.Meet = function (options) {
                                 var increase = Math.abs(distance - oldHeightDivHighLight);
                                 currentDivHighLight.css('height', distance);
                                 //Add .selected em toda célula da primeira até posição corrente
-                                for (var idx = indexRowStartCurrent; idx >= indexRowCurrent; idx--) {
-                                    currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
-                                }
+//                                for (var idx = indexRowStartCurrent; idx >= indexRowCurrent; idx--) {
+//                                    currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
+//                                }
 
                                 if (oldHeightDivHighLight < distance) {
                                     //Aumentou
@@ -1154,18 +1154,58 @@ this.Meet = function (options) {
 
         $('.DIG-table td').on('mouseup touchend', function () {
             var currentPiece = $(this).closest('.piece');
-            currentPiece.find('.DIG-table td.currentStart').removeClass('currentStart');
+
+            //Armazenar na div high Light a posição da matriz 
+            //que inicia e termina a palavra selecionada atual
+            var currentStart = currentPiece.find('.DIG-table td.currentStart');
+            var posStart = currentStart.attr('row') + "_" + currentStart.attr('col');
+            var posFinish = $(this).attr('row') + "_" + $(this).attr('col');
+            var currentDivHighLight = currentPiece.find('.DIG-table .digHighlight.currentSelected');
+            currentDivHighLight.attr('posStart', posStart);
+            currentDivHighLight.attr('posFinish', posFinish);
+
+            currentStart.removeClass('currentStart');
             $(this).addClass('lastSelected');
 
             if (currentPiece.find('.DIG-table .digHighlight:not(.selected)').size() === 0) {
-                //Selecionou 4 Palavras
+                //Selecionou Todas as Palavras referentes a imagem
                 var pieceID = $('.currentPiece').attr('id');
-                self.isCorrectDIG(pieceID);
+                var allDivHighLight = currentPiece.find('.DIG-table .digHighlight');
+                //Armazenar as palavras selecionadas num Array
+                var listWords = new Array();
+                allDivHighLight.each(function () {
+                    var posStart = $(this).attr('posStart');
+                    var posFinish = $(this).attr('posFinish');
+                    var rowStart = posStart.split('_')[0];
+                    var colStart = posStart.split('_')[1];
+                    var rowFinish = posFinish.split('_')[0];
+                    var colFinish = posFinish.split('_')[1];
+                    var word = "";
+                    if (rowStart === rowFinish) {
+                        //Possui a mesma Linha
+                        var minCol = Math.min(colStart, colFinish);
+                        var maxCol = Math.max(colStart, colFinish);
+                        for (var col = minCol; col <= maxCol; col++) {
+                            //Percorre todas as colunas selecionadas
+                            word += currentPiece.find('.DIG-table').find('td[row="' + rowStart + '"][col="' + col + '"]').text();
+                        }
+
+                    } else if (colStart === colFinish) {
+                        //Possui a mesma Coluna
+                        var minRow = Math.min(rowStart, rowFinish);
+                        var maxRow = Math.max(rowStart, rowFinish);
+                        for (var row = minRow; row <= maxRow; row++) {
+                            //Percorre todas as linhas selecionadas
+                            word += currentPiece.find('.DIG-table').find('td[row="' + row + '"][col="' + colStart + '"]').text();
+                        }
+                    }
+                    listWords.push(word);
+                });
+
+                self.isCorrectDIG(pieceID, listWords);
                 $('.nextPiece').show();
             }
-//            $('.DIG-table td.marked').removeClass('marked');
-//            $('.DIG-table td.selected').removeClass('selected');
-//            $('#digHighlight').hide();
+
 
         });
 
@@ -1387,17 +1427,18 @@ this.Meet = function (options) {
      * @param {string} groupClicked
      * @returns {Boolean}
      */
-    this.isCorrectDIG = function (pieceID) {
+    this.isCorrectDIG = function (pieceID, listWords) {
         var piece = self.domCobject.mainPieces[pieceID];
         var isCorrect = true;
+
         $.each(piece, function (i, group) {
             if (i[0] === '_') {
                 var word = group.elements[0].generalProperties[0].value;
-
-                for (var i = 0; i < word.length; i++) {
-                    var correctCharactere = word[i];
-
+                if($.inArray(word,listWords) === -1){
+                    //Não encontrou a palavra no Array
+                    isCorrect = false;
                 }
+
             }
         });
 
