@@ -1035,21 +1035,20 @@ this.Meet = function (options) {
                 firstDivHighLight.show();
             }
         });
-        
+
         //Se for disparo um evento touchMove 
-         $(".DIG-table").on('touchmove', function(event){
-                         var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
-                         console.log(elementAtual);
-                        if($(elementAtual).attr("id") === "me"){
-                            if($(elementAtual).css('background-color')==='rgb(255, 0, 0)'){
-                                $(elementAtual).css('background-color','blue');
-                            }else{
-                                 $(elementAtual).css('background-color','red');
-                            }
-                        }
-                });
-                
-                
+        $(".DIG-table td").on('vmousemove', function (event) {
+            var currentPiece = $(this).closest('.piece');
+            var currentCellStart = currentPiece.find('.DIG-table td.currentStart');
+            var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
+            var isTdDIGTable = $(elementAtual).closest(".DIG-table").size() !== 0;
+            if ($(elementAtual).get(0).nodeName === "TD" && isTdDIGTable && currentCellStart.size() !== 0) {
+                //É uma célula TD com uma letra, e há uma célula que iniciou a seleção corrente
+                $(elementAtual).trigger('mouseover');
+            }
+        });
+
+
 
         $('.DIG-table td').on('mouseover', function () {
             var currentPiece = $(this).closest('.piece');
@@ -1448,7 +1447,7 @@ this.Meet = function (options) {
         $.each(piece, function (i, group) {
             if (i[0] === '_') {
                 var word = group.elements[0].generalProperties[0].value;
-                if($.inArray(word,listWords) === -1){
+                if ($.inArray(word, listWords) === -1) {
                     //Não encontrou a palavra no Array
                     isCorrect = false;
                 }
