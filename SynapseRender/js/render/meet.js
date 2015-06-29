@@ -1001,7 +1001,6 @@ this.Meet = function (options) {
 
         //HighLight
         $('.DIG-table td').on('mousedown touchstart', function () {
-            //  $(this).addClass('marked');
             var currentPiece = $(this).closest('.piece');
             var posBegin = $(this).position();
             var posBeginLeft = posBegin.left;
@@ -1036,8 +1035,23 @@ this.Meet = function (options) {
                 firstDivHighLight.show();
             }
         });
+        
+        //Se for disparo um evento touchMove
+         $(".DIG-table").on('touchmove', function(event){
+                         var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
+                         console.log(elementAtual);
+                        if($(elementAtual).attr("id") === "me"){
+                            if($(elementAtual).css('background-color')==='rgb(255, 0, 0)'){
+                                $(elementAtual).css('background-color','blue');
+                            }else{
+                                 $(elementAtual).css('background-color','red');
+                            }
+                        }
+                });
+                
+                
 
-        $('.DIG-table td').on('mouseover touchmove', function () {
+        $('.DIG-table td').on('mouseover', function () {
             var currentPiece = $(this).closest('.piece');
             //última Div High Light Selecionada
             var currentDivHighLight = currentPiece.find('.digHighlight.currentSelected');
