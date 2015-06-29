@@ -1036,7 +1036,7 @@ this.Meet = function (options) {
             }
         });
         
-        //Se for disparo um evento touchMove
+        //Se for disparo um evento touchMove 
          $(".DIG-table").on('touchmove', function(event){
                          var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
                          console.log(elementAtual);
