@@ -1164,10 +1164,30 @@ this.Meet = function (options) {
                 }
             }
         });
-
-        $('.DIG-table td').on('mouseup touchend', function () {
+        
+        
+        //Se for disparo um evento touchEnd
+        $(".DIG-table td").on('vmouseup', function (event) {
             var currentPiece = $(this).closest('.piece');
+            var currentCellStart = currentPiece.find('.DIG-table td.currentStart');
+            var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
+             elementAtual = $(elementAtual);
+            var isTdDIGTable = elementAtual.closest(".DIG-table").size() !== 0;
+            if (isTdDIGTable && currentCellStart.size() !== 0) {
+                if(elementAtual.get(0).nodeName !== "TD"){
+                    //Então é um filho de TD
+                    elementAtual = elementAtual.closest('td');
+                }
+                //É uma célula TD com uma letra, e há uma célula que iniciou a seleção corrente
+                elementAtual.trigger('mouseup');
+            }
+        });
+        
+        
 
+        $('.DIG-table td').on('mouseup', function () {
+            var currentPiece = $(this).closest('.piece');
+            
             //Armazenar na div high Light a posição da matriz 
             //que inicia e termina a palavra selecionada atual
             var currentStart = currentPiece.find('.DIG-table td.currentStart');
