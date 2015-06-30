@@ -482,11 +482,12 @@ var DomCobject = function (cobject, idx) {
                 properties[item['name']] = item['value'];
             });
             var PEProperties = currentElement.pieceElement_Properties;
+            
             properties["direction"] = PEProperties.direction;
             properties["grouping"] = PEProperties.grouping;
             properties["layertype"] = PEProperties.layertype;
-            properties["row"] = PEProperties.posy;
-            properties["column"] = PEProperties.posx;
+            properties["row"] = PEProperties.posx;
+            properties["column"] = PEProperties.posy;
 
             var text = properties["text"];
 
