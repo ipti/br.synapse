@@ -1776,7 +1776,8 @@ function editor() {
                         var posx = loaddata['posx'];
                         var posy = loaddata['posy'];
                         var direction = loaddata['direction'];
-                        var lastGroup = $("div[group]").last().attr('group');
+                       // var lastGroup = $("div[group]").last().attr('group');
+                        var lastGroup = group;
                         console.log(lastGroup);
                         $("div[group=" + lastGroup + "]").click();
                         if (direction === 'h') {
@@ -2555,6 +2556,9 @@ function editor() {
                                                                     if (!parent.isload) {
                                                                         //Então salvar os cruzamentos no BD
                                                                         var dataCrossWords = {'op': 'save', 'step': 'plc', 'crossWords': self.crossWords};
+                                                                        
+                                                                        //console.log(dataCrossWords);
+                                                                        
                                                                         parent.saveData(
                                                                                 //Variáveis dados
                                                                                 dataCrossWords,
