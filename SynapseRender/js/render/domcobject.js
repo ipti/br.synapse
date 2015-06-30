@@ -85,7 +85,7 @@ var DomCobject = function (cobject, idx) {
 
             var side = 'left';
             $(".PLC.group.build_image").each(function (i, v) {
-                $(".PLC-" + side + "-images").append($(this));
+                $("." + side + "-images").append($(this));
                 side = side === 'left' ? 'right' : 'left';
             });
         } else if (self.cobject.template_code === "DIG") {
