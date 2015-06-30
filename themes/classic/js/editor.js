@@ -3191,7 +3191,6 @@ function editor() {
 
                                                                                         }
 
-                                                                                        console.log(i);
                                                                                         parent.addElement(elementID, type, data);
                                                                                     }
                                                                                 });
@@ -3372,7 +3371,8 @@ function editor() {
                                         var i;
                                         for (i = 0; i < array.length; i++)
                                         {
-                                            if (array[i].replace(/\s/g, '') !== "" && array[i] === value)
+                                            //DEVE SER ==, pois independe do tipo !!!
+                                            if (array[i].replace(/\s/g, '') !== "" && array[i] == value)
                                             {
                                                 return true;
                                             }
