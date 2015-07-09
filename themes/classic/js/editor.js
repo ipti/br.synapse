@@ -314,13 +314,10 @@ function editor() {
                     for (var i = 0; i < 5; i++) {
                         html += "<div class='Row'>";
                         for (var j = 0; j < 10; j++) {
-
                             //"ABCDEFGHIJKLMNOPQRSTUVWXYZBCDFGHJKLMNPQRSTVWXYZ" italo 
                             //ABCDEFGHIJKLMNOPQRSTUVWXYZVOW  bruno
-
                             var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW";
                             //ZYXOWVTSRQPNMKJHGFDC
-
 
                             html += "<div class='Cell' row='" + i + "' col='" + j + "' >" + rndChar.charAt(Math.floor(Math.random() * rndChar.length)) + "</div>";
                         }
@@ -1778,17 +1775,14 @@ function editor() {
                         var direction = loaddata['direction'];
                         // var lastGroup = $("div[group]").last().attr('group');
                         var lastGroup = group;
-                        console.log(lastGroup);
                         $("div[group=" + lastGroup + "]").click();
                         if (direction === 'h') {
                             $("span[group=" + (lastGroup) + "] .changeOrientation").click();
                         }
 
                         $(currentWordsearch.find($(".Cell[row=" + posx + "][col= " + posy + "]"))).click();
-
-                        console.log(posx + " | " + posy + " | " + direction);
                     }
-
+                    
                 } else if (parent.COTemplateTypeIn(parent.AEL)
                         || parent.COTemplateTypeIn(parent.DDROP)
                         || parent.COTemplateTypeIn(parent.ONEDDROP)) {

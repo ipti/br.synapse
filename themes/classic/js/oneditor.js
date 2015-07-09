@@ -215,11 +215,12 @@ function onEditor(newEditor) {
 
 
     $(document).on("click", ".wordsearch  div.Cell", function () {
+        var currentPiece = $(this).closest('.piece');
         var row = $(this).attr("row");
         var col = $(this).attr("col");
-        var word = $("span.active").find('.element font').text();
-        var orientation = $("span.active").find('button.changeOrientation').attr('orientation');
-        var group = $("span.active").attr("group");
+        var word = currentPiece.find("span.active").find('.element font').text();
+        var orientation = currentPiece.find("span.active").find('button.changeOrientation').attr('orientation');
+        var group = currentPiece.find("span.active").attr("group");
         var wordExists;
         var maxW = 10;
         var maxH = 5;
@@ -249,7 +250,7 @@ function onEditor(newEditor) {
                     }
                     if (checkWord === word) {
                         wordExists = false;
-                        $(".words-list > ul li").each(function () {
+                        currentPiece.find(".words-list > ul li").each(function () {
                             if ($(this).text().toUpperCase() === word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
@@ -266,8 +267,8 @@ function onEditor(newEditor) {
                                 }
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
-                            $(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
-                            $("span.active .text.element").attr("updated", 1);
+                            currentPiece.find(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
+                            currentPiece.find("span.active .text.element").attr("updated", 1);
                         }
                     }
                 }
@@ -291,7 +292,7 @@ function onEditor(newEditor) {
                     }
                     if (checkWord === word) {
                         wordExists = false;
-                        $(".words-list > ul li").each(function () {
+                        currentPiece.find(".words-list > ul li").each(function () {
                             if ($(this).text().toUpperCase() === word) {
                                 wordExists = true;
                                 alert("A palavra " + word + " já existe no diagrama!");
@@ -308,8 +309,8 @@ function onEditor(newEditor) {
                                 }
                             }
                             word = word.charAt(0) + word.slice(1).toLowerCase();
-                            $(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
-                            $("span.active .text.element").attr("updated", 1);
+                            currentPiece.find(".words-list ul").append('<li group="' + group + '" start="' + row + '_' + col + '_' + orientation + '">' + word + '</li>');
+                            currentPiece.find("span.active .text.element").attr("updated", 1);
 
                         }
                     }
