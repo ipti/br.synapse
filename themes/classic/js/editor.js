@@ -1782,7 +1782,7 @@ function editor() {
 
                         $(currentWordsearch.find($(".Cell[row=" + posx + "][col= " + posy + "]"))).click();
                     }
-                    
+
                 } else if (parent.COTemplateTypeIn(parent.AEL)
                         || parent.COTemplateTypeIn(parent.DDROP)
                         || parent.COTemplateTypeIn(parent.ONEDDROP)) {
@@ -2059,29 +2059,31 @@ function editor() {
                                 $(id).prev('div[group]').find('.del').show();
                             } else if (parent.COTemplateTypeIn(parent.DIG)) {
 //                        var activeGroup = $(".elementsDig div[group]").find("span.active").attr("group");
+                                var currentPiece = $(id).closest('.piece');
                                 var activeGroup = $(id).children("span[group]").attr("group");
-                                var delObject = $(".words-list ul").find("li[group='" + activeGroup + "']");
+                                var delObject = currentPiece.find(".words-list ul").find("li[group='" + activeGroup + "']");
                                 var delWord = delObject.text();
                                 var startRow = delObject.attr("start").split("_")[0];
                                 var startCol = delObject.attr("start").split("_")[1];
                                 var orientation = delObject.attr("start").split("_")[2];
+                                
                                 var end = delWord.length - 1;
                                 var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW";
                                 var currentCell;
 
-                                if (orientation === "H") {
+                                if (orientation === "h") {
                                     end += parseInt(startCol);
                                     for (var i = startCol; i <= end; i++) {
 //                                console.log(startCol + "/" + i + "/" + end);
-                                        currentCell = $(".wordsearch").find(".Cell[row='" + startRow + "'][col='" + i + "']");
-                                        if (currentCell.attr("orientation") === "HV") {
+                                        currentCell = currentPiece.find(".wordsearch").find(".Cell[row='" + startRow + "'][col='" + i + "']");
+                                        if (currentCell.attr("orientation") === "hv") {
                                             var updatedGroups;
                                             for (var j = 0; j < currentCell.attr("groups").split("g").length; j++) {
                                                 if (currentCell.attr("groups").split("g")[j] !== activeGroup) {
                                                     updatedGroups = "g" + currentCell.attr("groups").split("g")[j];
                                                 }
                                             }
-                                            currentCell.attr({groups: updatedGroups, orientation: "V"});
+                                            currentCell.attr({groups: updatedGroups, orientation: "v"});
                                         } else {
                                             currentCell.text(rndChar.charAt(Math.floor(Math.random() * rndChar.length))).removeAttr("groups orientation style");
                                         }
@@ -2092,30 +2094,25 @@ function editor() {
                                     }
                                 }
 
-                                if (orientation === "V") {
+                                if (orientation === "v") {
                                     end += parseInt(startRow);
                                     for (var i = startRow; i <= end; i++) {
 //                                console.log(startRow + "/" + i + "/" + end);
-                                        currentCell = $(".wordsearch").find(".Cell[row='" + i + "'][col='" + startCol + "']");
-                                        if (currentCell.attr("orientation") === "HV") {
+                                        currentCell = currentPiece.find(".wordsearch").find(".Cell[row='" + i + "'][col='" + startCol + "']");
+                                        if (currentCell.attr("orientation") === "hv") {
                                             var updatedGroups;
                                             for (var j = 0; j < currentCell.attr("groups").split("g").length; j++) {
                                                 if (currentCell.attr("groups").split("g")[j] !== activeGroup) {
                                                     updatedGroups = "g" + currentCell.attr("groups").split("g")[j];
                                                 }
                                             }
-                                            currentCell.attr({groups: updatedGroups, orientation: "H"});
+                                            currentCell.attr({groups: updatedGroups, orientation: "h"});
                                         } else {
                                             currentCell.text(rndChar.charAt(Math.floor(Math.random() * rndChar.length))).removeAttr("groups orientation style");
                                         }
                                         delObject.remove();
-
-//                                console.log($(".wordsearch").find(".Cell[row='" + i + "'][col='" + startCol + "']").text());
-//                                console.log(i + "/" + startCol);
                                     }
                                 }
-//                        console.log(activeGroup);
-//                        console.log(delWord + "/" + startRow + "/" + startCol + "/" + orientation);
                             }
 
                             //id é o div-grupo a ser excluído
@@ -2350,8 +2347,8 @@ function editor() {
                             ElementID = $(this).attr('id');
                             currentGroup = $(this).closest('div[group]').attr('group');
                             ElementID_BD = $(this).attr('idBD');
-                            
-                            
+
+
                             //get Atributo position
                             elementPosition = $(this).attr('position');
                             var continuar = true;
