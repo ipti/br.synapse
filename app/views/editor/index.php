@@ -57,25 +57,25 @@ $this->breadcrumbs = array(
 ?>
 <script language ="javascript" type="text/javascript">
     $(document).ready(function () {
-      var newEditor = new editor();  
-      var newOnEditor = new onEditor(newEditor);  
-      newEditor.setEventsOnEditor(newOnEditor);
-        
-        <?php
-        echo "newEditor.isload = $load; \n";
-        if ($load == 'false') {
-            $cobjectTheme = ($cobjectTheme != '') ? $cobjectTheme : -1;
-            echo "newEditor.COtypeID = $commonType ; \n";
-            echo "newEditor.COthemeID = $cobjectTheme; \n";
-            echo "newEditor.COtemplateType = $cobjectTemplate; \n";
-            echo "newEditor.COgoalID = $actGoal; \n";
-            echo "newEditor.addScreen(); \n ";
-        } else {
-            echo "newEditor.CObjectID = $cobjectID; \n";
-            //Sendo um load entao chama a funçao de Load
-            echo "newEditor.load(); \n";
-        }
-        ?>
+        var newEditor = new editor();
+        var newOnEditor = new onEditor(newEditor);
+        newEditor.setEventsOnEditor(newOnEditor);
+
+<?php
+echo "newEditor.isload = $load; \n";
+if ($load == 'false') {
+    $cobjectTheme = ($cobjectTheme != '') ? $cobjectTheme : -1;
+    echo "newEditor.COtypeID = $commonType ; \n";
+    echo "newEditor.COthemeID = $cobjectTheme; \n";
+    echo "newEditor.COtemplateType = $cobjectTemplate; \n";
+    echo "newEditor.COgoalID = $actGoal; \n";
+    echo "newEditor.addScreen(); \n ";
+} else {
+    echo "newEditor.CObjectID = $cobjectID; \n";
+    //Sendo um load entao chama a funçao de Load
+    echo "newEditor.load(); \n";
+}
+?>
 
     });
 
@@ -84,33 +84,38 @@ $this->breadcrumbs = array(
 
 <div class="canvas">
 
-<header>
-    <ul id="tools">
-        <li id="logo"></li>
-        <li id="addPieceSet" class="btn-tools"><i class="fa fa-question-circle fa-2x"></i> <?php echo Yii::t('default', 'Add PieceSet'); ?></li>
-        <li id="addimage" class="btn-tools"><i class="fa fa-file-image-o fa-2x"></i> <?php echo Yii::t('default', 'Add Imagem'); ?></li>
-        <li id="addsound" class="btn-tools"><i class="fa fa-file-audio-o fa-2x"></i> <?php echo Yii::t('default', 'Add Sound'); ?></li>
-        <li id="btn-addScreen" class="btn-addScreen btn-tools" ><i class="fa fa-plus-circle fa-2x"></i> <?php echo Yii::t('default', 'Add Page'); ?></li>
-        <li id="btn-delScreen" class="btn-delScreen btn-tools" ><i class="fa fa-minus-circle fa-2x"></i> <?php echo Yii::t('default', 'Remove Page'); ?></li>
-        <li id="save" class="btn-tools pull-right"><i class="fa fa-floppy-o fa-2x"></i> <?php echo Yii::t('default', 'Save'); ?></li>
-    </ul>   
-    <table id="informations">
-        <tr>
-            <th>Tipo</th>       <td><?php echo $name_commonType; ?></td>
-            <th>Template</th>   <td><?php echo $name_cobjectTemplate; ?> </td>
-            <th>Tema</th>       <td><?php echo $name_cobjectTheme; ?> </td>
-        </tr>
-        <tr>
-            <th>Objetivo</th>   <td colspan="5"><?php echo $name_actGoal; ?> </td>
-        </tr>
-        <tr>
-            <th>Disciplina</th> <td><?php echo $name_Discipline; ?></td>
-            <th>Série</th>      <td colspan="3"><?php echo $name_Degree; ?></td>
-            <th>Código</th>      <td colspan="3"><?php echo isset($cobjectID)?$cobjectID:""; ?></td>
-        </tr>
-    </table>
-</header>
-        <ul class="navscreen"></ul>   
+    <header>
+        <ul id="tools">
+            <li id="logo"></li>
+            <li id="addPieceSet" class="btn-tools"><i class="fa fa-question-circle fa-2x"></i> <?php echo Yii::t('default', 'Add PieceSet'); ?></li>
+            <li id="addimage" class="btn-tools"><i class="fa fa-file-image-o fa-2x"></i> <?php echo Yii::t('default', 'Add Imagem'); ?></li>
+            <li id="addsound" class="btn-tools"><i class="fa fa-file-audio-o fa-2x"></i> <?php echo Yii::t('default', 'Add Sound'); ?></li>
+            <li id="btn-addScreen" class="btn-addScreen btn-tools" ><i class="fa fa-plus-circle fa-2x"></i> <?php echo Yii::t('default', 'Add Page'); ?></li>
+            <li id="btn-delScreen" class="btn-delScreen btn-tools" ><i class="fa fa-minus-circle fa-2x"></i> <?php echo Yii::t('default', 'Remove Page'); ?></li>
+            <li id="save" class="btn-tools pull-right"><i class="fa fa-floppy-o fa-2x"></i> <?php echo Yii::t('default', 'Save'); ?></li>
+        </ul>   
+        <table id="informations">
+            <tr>
+                <th>Tipo</th>       <td><?php echo $name_commonType; ?></td>
+                <th>Template</th>   <td><?php echo $name_cobjectTemplate; ?> </td>
+                <th>Tema</th>       <td><?php echo $name_cobjectTheme; ?> </td>
+            </tr>
+            <tr>
+                <th>Objetivo</th>   <td colspan="5"><?php echo $name_actGoal; ?> </td>
+            </tr>
+            <tr>
+                <th>Disciplina</th> <td><?php echo $name_Discipline; ?></td>
+                <th>Série</th>      <td colspan="3"><?php echo $name_Degree; ?></td>
+                <?php
+                if (isset($cobjectID)) {
+                    echo "<th>Código</th> <td colspan='3'>$cobjectID</td>";
+                }
+                ?>
+
+            </tr>
+        </table>
+    </header>
+    <ul class="navscreen"></ul>   
     <br>
     <span class="clear"></span>
 
