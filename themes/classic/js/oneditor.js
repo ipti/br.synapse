@@ -35,7 +35,7 @@ function onEditor(newEditor) {
     // #COdescription
     if ($('#COdescription').val() === '') {
         //Deixa a mesma mensagem
-        $('#COdescription').val('Descrição da Atividade ...');
+        $('#COdescription').val('Descrição do Cabeçalho ...');
         $('#COdescription').attr('noString', 'true');
     } else {
         $('#COdescription').attr('noString', 'false');
@@ -52,7 +52,7 @@ function onEditor(newEditor) {
     $(document).on('focusout', '#COdescription', function () {
         if ($('#COdescription').val() === '') {
             //Deixa a mesma mensagem
-            $('#COdescription').val('Descrição da Atividade ...');
+            $('#COdescription').val('Descrição do Cabeçalho ...');
             $('#COdescription').attr('noString', 'true');
         } else {
             $('#COdescription').attr('noString', 'false');
@@ -72,7 +72,7 @@ function onEditor(newEditor) {
     $(document).on('focusout', '.actName', function () {
         if ($(this).val() === '') {
             //Deixa a mesma mensagem
-            $(this).val('Descrição do Cabeçalho ...');
+            $(this).val('Descrição da Questão ...');
             $(this).attr('noString', 'true');
         } else {
             $(this).attr('noString', 'false');

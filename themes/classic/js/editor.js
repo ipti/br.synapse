@@ -187,7 +187,7 @@ function editor() {
                 // Descrição Padrão do PieceSet
                 if ($('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val() === '') {
                     //Deixa a mesma mensagem
-                    $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição do Cabeçalho ...');
+                    $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição da Questão ...');
                     $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'true');
 
                 } else {
@@ -3103,7 +3103,7 @@ function editor() {
                                                             parent.COdescription = item;
                                                             $('#cobject_description > #COdescription').attr('valueDB', parent.COdescription);
                                                             $('#cobject_description > #COdescription').val(parent.COdescription);
-                                                            if ($('#COdescription').val() === 'Descrição da Atividade ...') {
+                                                            if ($('#COdescription').val() === 'Descrição do Cabeçalho ...') {
                                                                 //Deixa a mesma mensagem
                                                                 $('#COdescription').attr('noString', 'true');
                                                             } else {
@@ -3136,7 +3136,7 @@ function editor() {
                                                                         parent.addPieceSet(piecesetID, desc, type);
 
                                                                         //Aplica o texto Padrão no input da descrição do PieceSet
-                                                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() === 'Descrição do Cabeçalho ...') {
+                                                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() === 'Descrição da Questão ...') {
                                                                             //Deixa a mesma mensagem
                                                                             $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'true');
                                                                         } else {
