@@ -106,7 +106,7 @@ $this->breadcrumbs = array(
         <tr>
             <th>Disciplina</th> <td><?php echo $name_Discipline; ?></td>
             <th>Série</th>      <td colspan="3"><?php echo $name_Degree; ?></td>
-            <th>Código</th>      <td colspan="3"><?php echo $cobjectID; ?></td>
+            <th>Código</th>      <td colspan="3"><?php echo isset($cobjectID)?$cobjectID:""; ?></td>
         </tr>
     </table>
 </header>
