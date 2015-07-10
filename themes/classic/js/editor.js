@@ -187,8 +187,9 @@ function editor() {
                 // Descrição Padrão do PieceSet
                 if ($('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val() === '') {
                     //Deixa a mesma mensagem
-                    $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição do Cabeçalho .....');
+                    $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição do Cabeçalho ...');
                     $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'true');
+                    
                 } else {
                     $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'false');
                 }
@@ -2826,9 +2827,17 @@ function editor() {
 
                                             //Para cada PieceSet da Screen
                                             $('#' + curretScreenID + ' .PieceSet').each(function () {
+                                                //Verificar o atributo nostring
                                                 PieceSetID = $(this).attr('id');
                                                 PieceSetID_BD = $(this).attr('idBD');
-                                                pieceSetDescription = $('#' + PieceSetID + ' .actName').val();
+                                                if($('#' + PieceSetID + ' .actName').attr('nostring') === 'true'){
+                                                    //Não possui valor 
+                                                    pieceSetDescription = "";
+                                                }else{
+                                                    //Possui valor
+                                                    pieceSetDescription = $('#' + PieceSetID + ' .actName').val();
+                                                }
+                                                 
                                                 //Salva PieceSet
                                                 parent.saveData({
                                                     //Operação Salvar, PieceSet, ID no DOM
@@ -3066,10 +3075,8 @@ function editor() {
                                                             parent.COdescription = item;
                                                             $('#cobject_description > #COdescription').attr('valueDB', parent.COdescription);
                                                             $('#cobject_description > #COdescription').val(parent.COdescription);
-
-                                                            if ($('#COdescription').val() === '') {
+                                                            if ($('#COdescription').val() === 'Descrição da Atividade ...') {
                                                                 //Deixa a mesma mensagem
-                                                                $('#COdescription').val('Descrição da Atividade .....');
                                                                 $('#COdescription').attr('noString', 'true');
                                                             } else {
                                                                 $('#COdescription').attr('noString', 'false');
@@ -3101,10 +3108,8 @@ function editor() {
                                                                         parent.addPieceSet(piecesetID, desc, type);
 
                                                                         //Aplica o texto Padrão no input da descrição do PieceSet
-
-                                                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() === '') {
+                                                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() === 'Descrição do Cabeçalho ...') {
                                                                             //Deixa a mesma mensagem
-                                                                            $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val('Descrição do Cabeçalho .....');
                                                                             $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'true');
                                                                         } else {
                                                                             $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'false');
