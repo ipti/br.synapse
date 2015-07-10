@@ -189,7 +189,7 @@ function editor() {
                     //Deixa a mesma mensagem
                     $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição do Cabeçalho ...');
                     $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'true');
-                    
+
                 } else {
                     $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'false');
                 }
@@ -788,6 +788,7 @@ function editor() {
                                         function (response, textStatus, jqXHR) {
                                             parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
                                             $('.savescreen').append('<br><p> Objeto PRE Deletado!...</p>');
+                                            self.scroolSaveScreen();
                                             //Verificar se acabou as requisições
                                             parent.verify_requestFinish();
                                         });
@@ -2067,7 +2068,7 @@ function editor() {
                                 var startRow = delObject.attr("start").split("_")[0];
                                 var startCol = delObject.attr("start").split("_")[1];
                                 var orientation = delObject.attr("start").split("_")[2];
-                                
+
                                 var end = delWord.length - 1;
                                 var rndChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZVOW";
                                 var currentCell;
@@ -2171,6 +2172,7 @@ function editor() {
                                 $('.savescreen').append('<br><p>X Deletando Objetos!...</p>');
                             }
 
+                            self.scroolSaveScreen();
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -2182,6 +2184,8 @@ function editor() {
 
                         $('.savescreen').append('<br><p>Error mensage:</p>');
                         $('.savescreen').append(jqXHR.responseText);
+                        self.scroolSaveScreen();
+
                     },
                     success: function (response, textStatus, jqXHR) {
                         sucess(response, textStatus, jqXHR);
@@ -2207,9 +2211,15 @@ function editor() {
                     function (response, textStatus, jqXHR) {
                         //atualiza a tela de log
                         $('.savescreen').append('<br><p>Cobject Atualizado com Sucesso!</p>');
+                        self.scroolSaveScreen();
                     }
                     );
                 }
+            },
+            this.scroolSaveScreen = function () {
+                //Abaixa o Scroll a partir da quantidade de elementos que o .saveScreen possui
+                //16px ==> altura média dos elementos 
+                $('.savescreen').scrollTop($('.savescreen').find('*').size()*16);
             },
 //Função de salvamento.
 //salva utilizando Ajax, parte por parte.
@@ -2221,7 +2231,9 @@ function editor() {
                 $('.theme').append('<div style="overflow:auto; left: 0px; width: 100%;\n\
                              height: 100%; position: fixed; top: 0px; background: none repeat scroll 0px 0px black; \n\
                                 opacity: 0.8;" class="savebg"></div>');
-                $('.theme').append('<div style="overflow:auto; background: none repeat scroll 0px 0px white; height: 300px; border-radius: 5px 5px 5px 5px; width: 800px; margin-top: 100px; margin-left: 250px; position: fixed; border: 2px solid black; padding: 10px;" class="savescreen">' +
+                $('.theme').append('<div style="overflow:auto; background: none repeat scroll 0px 0px white; height: 300px;\n\
+                border-radius: 5px 5px 5px 5px; width: 800px; margin-top: 100px; margin-left: 250px; position: fixed; border: 2px solid black; \n\
+               padding: 10px;" class="savescreen">' +
                         '<p>Aguarde um instante...</p>' +
                         '</div>');
                 //Salva o CObject
@@ -2243,6 +2255,8 @@ function editor() {
                     function (response, textStatus, jqXHR) {
                         //atualiza a tela de log
                         $('.savescreen').append('<br><p>CObject salvo com sucesso!</p>');
+                        self.scroolSaveScreen();
+
                         posSaveCobject(response, textStatus, jqXHR);
                     }
                     );
@@ -2266,6 +2280,7 @@ function editor() {
                         function (response, textStatus, jqXHR) {
                             parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
                             $('.savescreen').append('<br><p>X Objetos Deletados!...</p>');
+                            self.scroolSaveScreen();
                         });
                     }
                     //==================================
@@ -2593,6 +2608,8 @@ function editor() {
                                                                     }
                                                                 }
                                                             }
+
+                                                            self.scroolSaveScreen();
                                                             //Verificar se acabou as requisições
                                                             parent.verify_requestFinish();
 
@@ -2661,6 +2678,9 @@ function editor() {
                                                                                         else if (parent.isload && parent.totalElementsChanged === parent.uploadedElements) {
                                                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                                                         }
+
+                                                                                        self.scroolSaveScreen();
+
                                                                                         //Verificar se acabou as requisições
                                                                                         parent.verify_requestFinish();
 
@@ -2732,6 +2752,7 @@ function editor() {
                                                                                         else if (parent.isload && parent.totalElementsChanged === parent.uploadedElements) {
                                                                                             $('.savescreen').append('<br><br><p>Salvou Todos os Elements!</p>');
                                                                                         }
+                                                                                        self.scroolSaveScreen();
 
                                                                                         parent.verify_requestFinish();
                                                                                     });
@@ -2773,6 +2794,7 @@ function editor() {
                                                     function (response, textStatus, jqXHR) {
                                                         parent.orderDelets = []; // ZERA array de objetos a serem excluidos 
                                                         $('.savescreen').append('<br><p> Objeto TEXT Deletado!...</p>');
+                                                        self.scroolSaveScreen();
                                                         //Verificar se acabou as requisições
                                                         parent.verify_requestFinish();
                                                     });
@@ -2830,14 +2852,14 @@ function editor() {
                                                 //Verificar o atributo nostring
                                                 PieceSetID = $(this).attr('id');
                                                 PieceSetID_BD = $(this).attr('idBD');
-                                                if($('#' + PieceSetID + ' .actName').attr('nostring') === 'true'){
+                                                if ($('#' + PieceSetID + ' .actName').attr('nostring') === 'true') {
                                                     //Não possui valor 
                                                     pieceSetDescription = "";
-                                                }else{
+                                                } else {
                                                     //Possui valor
                                                     pieceSetDescription = $('#' + PieceSetID + ' .actName').val();
                                                 }
-                                                 
+
                                                 //Salva PieceSet
                                                 parent.saveData({
                                                     //Operação Salvar, PieceSet, ID no DOM
@@ -2976,6 +2998,9 @@ function editor() {
 
                                                         });
                                                     });
+
+                                                    self.scroolSaveScreen();
+
                                                 });
                                             });
                                         });
@@ -3002,6 +3027,8 @@ function editor() {
                                                     !parent.COTemplateTypeIn(parent.PLC)) {
                                                 //chama o posEditor
                                                 $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
+                                                self.scroolSaveScreen();
+
                                                 parent.posEditor();
                                                 //=======================================================
                                             }
@@ -3021,6 +3048,7 @@ function editor() {
 
                                             //cria formulário para enviar o array de library para o poseditor
                                             $('.savescreen').append('<form action="/editor/poseditor" method="post">' + inputs + '<input type="submit" value="PosEditor"></form>');
+                                            self.scroolSaveScreen();
 
                                         }
 
