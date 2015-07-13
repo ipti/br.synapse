@@ -1292,7 +1292,7 @@ function editor() {
                     $("#" + fileid + " > audio").remove("audio");
                     $("#" + fileid).append(
                             //'<object id="obj_sound" height="100" width="150" data="'+src+'" type="audio/x-mpeg"></object>')
-                            '<audio controls="controls" loop preload="preload" title="Titulo"> \n\
+                            '<audio controls="controls" style="width: 220px" preload="preload" title="Titulo"> \n\
              <source src="' + src + '"> ' + ERROR_BROWSER_SUPORT + ' </audio>');
                 }, loaddata, idbd);
             },
@@ -1355,7 +1355,7 @@ function editor() {
                         group = match;
                         var sameElement = false;
                         //Já existe o div[elementID]
-                        sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length === '1';
+                        sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length === 1;
                     } else {
                         var last_group = $('#' + parent.currentPiece).find('div[group]').last().attr('group');
                         var next_group;
@@ -1428,8 +1428,7 @@ function editor() {
                         group = match;
                         var sameElement = false;
                         //Já existe o li[elementID]
-                        sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length === '1';
-
+                        sameElement = $('#' + parent.currentPiece + ' div[group=' + match + ']').length === 1;
                     } else {
                         var last_group = $('#' + parent.currentPiece).find('div[group]').last().attr('group');
                         var next_group;
