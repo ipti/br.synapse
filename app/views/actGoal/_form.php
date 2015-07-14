@@ -4,6 +4,16 @@ $form = $this->beginWidget('CActiveForm', array(
     'enableAjaxValidation' => false,
         ));
 ?>
+
+<script type="text/javascript">
+   var phpMsgRemove = "<?php echo Yii::t("default", "Remove"); ?>";
+</script>
+
+<?php
+$baseUrl = Yii::app()->theme->baseUrl;
+$cs = Yii::app()->getClientScript();
+$cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
+?>
 <div class="panelGroup form">
     <?php echo $form->errorSummary($model); ?>
     <div class="panelGroupHeader"><div class=""> <?php echo $title; ?>
@@ -23,10 +33,10 @@ $form = $this->beginWidget('CActiveForm', array(
 
         <div class="formField">
             <?php echo $form->labelEx($model, 'discipline_id'); ?>
-            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actGoal/loadcontent'), 'update' => '#contentID'))); ?>                    
+            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'), array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actGoal/loadcontent'), 'update' => '#contentID'))); ?>                    
             <?php echo $form->error($model, 'discipline_id'); ?>
         </div>
- </div>
+    </div>
 </div>
 <div class="panelGroup form">
     <div class="panelGroupHeader"><div><?php echo Yii::t('default', 'Add Modality') ?></div></div>
