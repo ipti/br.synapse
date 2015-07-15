@@ -3,35 +3,45 @@ this.addItem = function (params) {
     var strItem = "";
     switch (params) {
         case "ActGoalModality":
-            console.log($('#modalityItens').find('input[value=1]'));
-            
-            if ($('#modalityItens').find('input[value=' + $('#modalityID').val() + ']').size() === 0) {
+            if ($('#modalityItens').find('input[value=' + $('#modalityID').val() + ']').size() === 0
+                    && $('#modalityID').val() !== null) {
                 //Add Novo
-                strItem += '<li><input type="hidden" value="\n\
-            ' + $('#modalityID').val() + '" name="ActGoalModality[]">' +
+                strItem += '<li><input type="hidden" value="' + $('#modalityID').val() + '" name="ActGoalModality[]">' +
                         $('#modalityID').find('option[value="' + $('#modalityID').val() + '"]').text()
-                        + '  - <a id="$modality->modality_id"\n\
+                        + '  - <a id="' + $('#modalityID').val() + '"\n\
             onclick="delItem($(this))" href="javascript:void(0)">' + phpMsgRemove + '</a>';
                 $('#modalityItens').append(strItem);
-
             }
             break;
         case "ActGoalSkill":
-            console.log("ActGoalSkill");
+            if ($('#skillItens').find('input[value=' + $('#skillID').val() + ']').size() === 0
+                    && $('#skillID').val() !== null) {
+                //Add Novo
+                strItem += '<li><input type="hidden" value="' + $('#skillID').val() + '" name="ActGoalSkill[]">' +
+                        $('#skillID').find('option[value="' + $('#skillID').val() + '"]').text()
+                        + '  - <a id="' + $('#skillID').val() + '"\n\
+            onclick="delItem($(this))" href="javascript:void(0)">' + phpMsgRemove + '</a>';
+                $('#skillItens').append(strItem);
+            }
             ;
             break;
         case "ActGoalContent":
-            console.log("ActGoalContent");
+             if ($('#contentItens').find('input[value=' + $('#contentID').val() + ']').size() === 0
+                     && $('#contentID').val() !== null) {
+                //Add Novo
+                strItem += '<li><input type="hidden" value="' + $('#contentID').val() + '" name="ActGoalContent[]">' +
+                        $('#contentID').find('option[value="' + $('#contentID').val() + '"]').text()
+                        + '  - <a id="' + $('#contentID').val() + '"\n\
+            onclick="delItem($(this))" href="javascript:void(0)">' + phpMsgRemove + '</a>';
+                $('#contentItens').append(strItem);
+            }
             ;
             break;
     }
-
-
-
-
-
-
-
 };
+
+this.delItem = function (item) {
+    item.closest('li').remove();
+}
 
 
