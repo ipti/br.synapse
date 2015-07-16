@@ -22,7 +22,7 @@ $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
     <div class="panelGroupBody">
         <div class="formField">
             <?php echo $form->labelEx($model, 'name'); ?>
-            <?php echo $form->textField($model, 'name', array('size' => 60, 'maxlength' => 60)); ?>
+            <?php echo $form->textField($model, 'name', array('size' => 60, 'maxlength' => 200)); ?>
             <?php echo $form->error($model, 'name'); ?>
         </div>
 
