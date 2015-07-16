@@ -13,6 +13,7 @@ $form = $this->beginWidget('CActiveForm', array(
 $baseUrl = Yii::app()->theme->baseUrl;
 $cs = Yii::app()->getClientScript();
 $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
+
 ?>
 <div class="panelGroup form">
     <?php echo $form->errorSummary($model); ?>
@@ -33,7 +34,7 @@ $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
 
         <div class="formField">
             <?php echo $form->labelEx($model, 'discipline_id'); ?>
-            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'), array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actGoal/loadcontent'), 'update' => '#contentID'))); ?>                    
+            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'), array('prompt' => "Selecione ...", 'ajax' => array('type' => 'POST', 'url' => CController::createUrl('actGoal/loadcontent'), 'update' => '#contentID'))); ?>                    
             <?php echo $form->error($model, 'discipline_id'); ?>
         </div>
     </div>
@@ -78,7 +79,7 @@ $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
     <div class="panelGroupHeader"><div class=""> <?php echo Yii::t('default', 'Add Content') ?></div></div>
     <div class="panelGroupBody">
         <div class="formField">
-            <?php echo CHtml::dropDownList('contentID', '', array()); ?>
+            <?php echo CHtml::dropDownList('contentID', '', CHtml::listData(ActContent::model()->findAllByAttributes(array('discipline_id' => $model->discipline_id)), 'id', 'name')); ?>
             <?php echo CHtml::button(Yii::t('default', 'Add'), array('onclick' => 'addItem(\'ActGoalContent\')', 'id' => 'addGoalContent', 'class' => 'buttonLink button')); ?>
         </div>
         <ul id="contentItens" class="multItens">

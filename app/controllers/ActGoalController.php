@@ -25,7 +25,7 @@ class ActGoalController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'loadcontent','delete'),
+                'actions' => array('index', 'view', 'create', 'update', 'loadcontent', 'delete'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -54,7 +54,7 @@ class ActGoalController extends Controller {
      */
     public function actionCreate() {
         $model = new ActGoal;
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/',array('file'=>'common.js')),CClientScript::POS_END); 
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
@@ -62,24 +62,32 @@ class ActGoalController extends Controller {
             $model->attributes = $_POST['ActGoal'];
             if ($model->save()) {
                 Yii::app()->user->setFlash('success', Yii::t('default', 'ActGoal Created Successful:'));
-                foreach ($_POST['ActGoalModality'] as $m) {
-                    $modality = new ActGoalModality();
-                    $modality->modality_id = (int) $m;
-                    $modality->goal_id = (int) $model->id;
-                    $modality->save();
+                if (isset($_POST['ActGoalModality'])) {
+                    foreach ($_POST['ActGoalModality'] as $m) {
+                        $modality = new ActGoalModality();
+                        $modality->modality_id = (int) $m;
+                        $modality->goal_id = (int) $model->id;
+                        $modality->save();
+                    }
                 }
-                foreach ($_POST['ActGoalSkill'] as $s) {
-                    $skill = new ActGoalSkill();
-                    $skill->skill_id = (int) $s;
-                    $skill->goal_id = (int) $model->id;
-                    $skill->save();
+
+                if (isset($_POST['ActGoalSkill'])) {
+                    foreach ($_POST['ActGoalSkill'] as $s) {
+                        $skill = new ActGoalSkill();
+                        $skill->skill_id = (int) $s;
+                        $skill->goal_id = (int) $model->id;
+                        $skill->save();
+                    }
                 }
-                foreach ($_POST['ActGoalContent'] as $c) {
-                    $content = new ActGoalContent();
-                    $content->content_id = (int) $c;
-                    $content->goal_id = (int) $model->id;
-                    $content->save();
+                if (isset($_POST['ActGoalContent'])) {
+                    foreach ($_POST['ActGoalContent'] as $c) {
+                        $content = new ActGoalContent();
+                        $content->content_id = (int) $c;
+                        $content->goal_id = (int) $model->id;
+                        $content->save();
+                    }
                 }
+                
                 $this->redirect(array('index'));
             }
         }
@@ -95,7 +103,7 @@ class ActGoalController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/',array('file'=>'common.js')),CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
         $model = $this->loadModel($id);
         $modalities = ActGoalModality::model()->findAllByAttributes(array('goal_id' => $id));
         $skills = ActGoalSkill::model()->findAllByAttributes(array('goal_id' => $id));
@@ -147,7 +155,7 @@ class ActGoalController extends Controller {
                 } else {
                     ActGoalSkill::model()->deleteAllByAttributes(array('goal_id' => $model->id));
                 }
-                 if (isset($_POST['ActGoalContent'])) {
+                if (isset($_POST['ActGoalContent'])) {
                     $removed = array_diff($icontents, $_POST['ActGoalContent']);
                     ActGoalContent::model()->deleteAllByAttributes(array('goal_id' => $model->id, 'content_id' => array_values($removed)));
                     $insert = array_diff($_POST['ActGoalContent'], $icontents);
@@ -161,18 +169,18 @@ class ActGoalController extends Controller {
                     }
                 } else {
                     ActGoalContent::model()->deleteAllByAttributes(array('goal_id' => $model->id));
-                }    
+                }
 
 
 
 
-               // $this->redirect(array('view', 'id' => $model->ID));
+                // $this->redirect(array('view', 'id' => $model->ID));
             }
         }
         $modalities = ActGoalModality::model()->findAllByAttributes(array('goal_id' => $id));
         $skills = ActGoalSkill::model()->findAllByAttributes(array('goal_id' => $id));
         $contents = ActGoalContent::model()->findAllByAttributes(array('goal_id' => $id));
-        Yii::app()->clientScript->registerScript('updateSelect',"updateLoad('actGoal');",CClientScript::POS_LOAD);
+        Yii::app()->clientScript->registerScript('updateSelect', "updateLoad('actGoal');", CClientScript::POS_LOAD);
         $this->render('update', array(
             'model' => $model,
             'modalities' => $modalities,
@@ -188,25 +196,24 @@ class ActGoalController extends Controller {
      */
     public function actionDelete($id) {
         //if (Yii::app()->request->isPostRequest) {
-            // we only allow deletion via POST request
-            $this->loadModel($id)->delete();
+        // we only allow deletion via POST request
+        $this->loadModel($id)->delete();
 
-            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-          //  if (!isset($_GET['ajax']))
-            //    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-       // }
+        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+        //  if (!isset($_GET['ajax']))
+        //    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        // }
         //else
-         //   throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+        //   throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     /**
      * Lists all models.
      */
     public function actionIndex() {
-        $dataProvider = new CActiveDataProvider('ActGoal',
-                        array('pagination' => array(
-                                'pageSize' => 12,
-                        )));
+        $dataProvider = new CActiveDataProvider('ActGoal', array('pagination' => array(
+                'pageSize' => 12,
+        )));
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
