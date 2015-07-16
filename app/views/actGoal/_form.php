@@ -79,7 +79,7 @@ $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
     <div class="panelGroupHeader"><div class=""> <?php echo Yii::t('default', 'Add Content') ?></div></div>
     <div class="panelGroupBody">
         <div class="formField">
-            <?php echo CHtml::dropDownList('contentID', '', CHtml::listData(ActContent::model()->findAllByAttributes(array('discipline_id' => $model->discipline_id)), 'id', 'name')); ?>
+            <?php echo CHtml::dropDownList('contentID', '', CHtml::listData(ActContent::model()->findAllByAttributes(array('discipline_id' => $model->discipline_id)), 'id', 'description')); ?>
             <?php echo CHtml::button(Yii::t('default', 'Add'), array('onclick' => 'addItem(\'ActGoalContent\')', 'id' => 'addGoalContent', 'class' => 'buttonLink button')); ?>
         </div>
         <ul id="contentItens" class="multItens">
