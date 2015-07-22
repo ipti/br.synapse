@@ -7,6 +7,10 @@
     $this->menu = array(
         array('label' => Yii::t('default', 'Create a new ActGoal'), 'url' => array('create'), 'description' => Yii::t('default', 'This action create a new ActGoal')),
     );
+
+    $baseUrl = Yii::app()->theme->baseUrl;
+    $cs = Yii::app()->getClientScript();
+    $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
     ?>
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">
@@ -21,17 +25,21 @@
                 <div class="panelGroupBody">
                     <?php
                     $this->widget('zii.widgets.grid.CGridView', array(
-                        'dataProvider' => $dataProvider,
+                        'dataProvider' => $filter->search(),
                         'enablePagination' => true,
+                        'filter' => $filter,
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
-                            'name',
                             array(
-                                'name' => Yii::t('default', 'Degree'),
+                                'name' => 'name',
+                                'value' => '$data->name',
+                            ),
+                            array(
+                                'name' => 'degree_id',
                                 'value' => '$data->degree->name',
                             ),
                             array(
-                                'name' => Yii::t('default', 'Discipline'),
+                                'name' => 'discipline_id',
                                 'value' => '$data->discipline->name',
                             ),
                             array('class' => 'CButtonColumn',),),
@@ -41,7 +49,7 @@
             </div>
         </div>
         <div class="columntwo">
-<?php echo $this->renderPartial('////common/defaultcontext', array('contextDesc' => $contextDesc)); ?>        </div>
+            <?php echo $this->renderPartial('////common/defaultcontext', array('contextDesc' => $contextDesc)); ?>        </div>
     </div>
 
 </div>

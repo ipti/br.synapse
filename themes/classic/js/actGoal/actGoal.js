@@ -45,6 +45,8 @@ this.delItem = function (item) {
 }
 
 $(document).ready(function () {
+    
+    //============== Form ===========================
     $('#ActGoal_name').on('keyup', function () {
         var currentVal = $(this).val();
         //Armazenar último nome válido
@@ -59,8 +61,9 @@ $(document).ready(function () {
             //Nome Inválido
             $(this).val(($(this).data('lastNameValid') !== undefined) ? $(this).data('lastNameValid') : "");
         }
-
     });
+    //================================================
+  
 });
 
 

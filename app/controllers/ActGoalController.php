@@ -87,7 +87,7 @@ class ActGoalController extends Controller {
                         $content->save();
                     }
                 }
-                
+
                 $this->redirect(array('index'));
             }
         }
@@ -211,11 +211,19 @@ class ActGoalController extends Controller {
      * Lists all models.
      */
     public function actionIndex() {
+        $filter = new ActGoal('search');
+        $filter->unsetAttributes();  // clear any default values
+        if (isset($_GET['ActGoal'])) {
+            $filter->attributes = $_GET['ActGoal'];
+        }
+        // Get rawData and create dataProvider
         $dataProvider = new CActiveDataProvider('ActGoal', array('pagination' => array(
                 'pageSize' => 12,
         )));
+        // Render
         $this->render('index', array(
             'dataProvider' => $dataProvider,
+            'filter' => $filter,
         ));
     }
 

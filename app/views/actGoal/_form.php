@@ -13,7 +13,6 @@ $form = $this->beginWidget('CActiveForm', array(
 $baseUrl = Yii::app()->theme->baseUrl;
 $cs = Yii::app()->getClientScript();
 $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
-
 ?>
 <div class="panelGroup form">
     <?php echo $form->errorSummary($model); ?>
