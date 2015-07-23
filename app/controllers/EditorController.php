@@ -317,8 +317,9 @@ class EditorController extends Controller {
             $idDiscipline = $_POST['idDiscipline'];
             $idDegree = $_POST['idDegree'];
             if ($idDegree == "undefined") {
-                $actGoal_disc = Yii::app()->db->createCommand('SELECT degree_id FROM act_goal 
-            WHERE discipline_id =' . $idDiscipline . ' GROUP BY degree_id')->queryAll();
+                $actGoal_disc = Yii::app()->db->createCommand('SELECT g.degree_id FROM act_goal AS g 
+                  INNER JOIN act_degree AS d ON(g.degree_id = d.id) 
+                  WHERE g.discipline_id =' . $idDiscipline . ' AND d.name LIKE "%Fundamental%" GROUP BY g.degree_id')->queryAll();
                 $count_Agoal_disc = count($actGoal_disc);
                 if ($count_Agoal_disc > 0) {
                     for ($i = 0; $i < $count_Agoal_disc; $i++) {
@@ -803,7 +804,7 @@ class EditorController extends Controller {
                                                 $newPEPropertyShowLetters->value = $_POST["showing_letters"];
                                                 $newPEPropertyShowLetters->insert();
                                             }
-                                            
+
                                             if (isset($_POST["posx"])) {
                                                 //Propriedade da posição em X (Colunm)
                                                 $newPEPropertyPosX = new EditorPieceelementProperty();
@@ -816,7 +817,7 @@ class EditorController extends Controller {
                                                 $newPEPropertyPosX->value = $_POST["posx"];
                                                 $newPEPropertyPosX->insert();
                                             }
-                                            
+
                                             if (isset($_POST["posy"])) {
                                                 //Propriedade da posição em Y (Row)
                                                 $newPEPropertyPosY = new EditorPieceelementProperty();
@@ -1082,7 +1083,7 @@ class EditorController extends Controller {
                             break;
                         case "plc":
                             if (isset($_POST['crossWords'])) {
-                                
+
                                 if ($_POST['op'] = 'save') {
                                     //Se for um Novo Cobject
                                     foreach ($_POST['crossWords'] as $crossWord):
@@ -1238,7 +1239,7 @@ class EditorController extends Controller {
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['posx'] = $pe_property->value;
                                         }
-                                        
+
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
                                             'property_id' => $this->getPropertyIDByName('posy', 'piecelement')));
                                         if (isset($pe_property)) {
@@ -1375,7 +1376,7 @@ class EditorController extends Controller {
             $transaction->commit();
 
 //            var_dump($json);
-            
+
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');

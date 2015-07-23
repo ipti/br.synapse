@@ -27,7 +27,7 @@ $cs->registerScriptFile($baseUrl . "/js/actGoal/actGoal.js");
 
         <div class="formField">
             <?php echo $form->labelEx($model, 'degree_id'); ?>
-            <?php echo $form->dropDownList($model, 'degree_id', CHtml::listData(ActDegree::model()->findAll('degree_parent IS NOT NULL'), 'id', 'name')); ?>                    
+            <?php echo $form->dropDownList($model, 'degree_id', CHtml::listData(ActDegree::model()->findAll('degree_parent IS NOT NULL AND name LIKE "%Fundamental%" '), 'id', 'name')); ?>                    
             <?php echo $form->error($model, 'degree_id'); ?>
         </div>
 
