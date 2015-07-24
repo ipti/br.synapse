@@ -635,6 +635,11 @@ h5{
     width: 300px; 
     height: 30px;
 }
+
+div.flashing{
+    text-decoration: blink;
+}
+
 .wordsearch{
     margin: 0 10px 0 10px;
     height:88px;
