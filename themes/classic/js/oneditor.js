@@ -324,14 +324,30 @@ function onEditor(newEditor) {
 
     //Função do click na Célula do Template PLC
     this.eventClickCellPLC = function (clickedCell, isload) {
-        if (newEditor.isset(arguments[2])) {
+        var comDivCrossWord = $(clickedCell).closest('div.crosswords');
+        var positionMergeSelected = null;
+        
+        if ($(clickedCell).hasClass('flashing') && !$(clickedCell).hasClass('defaultPositionMerged')) {
             //O 3ª parâmetro é a posição do positionsMayMerge escolhida
-            var positionMergeSelected = arguments[2];
+            var currentCell = $(clickedCell);
+            positionMergeSelected = $(clickedCell).data('posMayMerge');
+            
             clickedCell = $(clickedCell).closest(".crosswords").find('div.defaultPositionMerged');
             var lastGroup = clickedCell.attr('groups').split('g');
-            lastGroup = lastGroup[lastGroup.size()-1];
-            $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group="+lastGroup+"]").attr('lastSelected','true');
-            //Stop HERE ---> falta deletar a última palavra cruzada. E add Novamente com a nova posição mayMerged
+            lastGroup = lastGroup[lastGroup.length - 1];
+            var elementsPlc = $(clickedCell).closest("div.tplPlc").children("div.elementsPlc");
+            elementsPlc.find("div[group=" + lastGroup + "]").attr('lastSelected', 'true');
+            //Deleta a última palavra cruzada. E add Novamente com a nova posição positionMergeSelected
+            //Se for PLC, então remove a Palavra cruzada do html e sua associação no Array crossWord
+            var lastSelected = elementsPlc.find('div[lastSelected]');
+            newEditor.delWordPLC(lastSelected);
+            //Remove a class .flashing dos elementos
+            var comDivFlashing = comDivCrossWord.find('div.flashing');
+            comDivFlashing.css('opacity', '1.0');
+            comDivFlashing.removeClass('flashing');
+            //Para de piscar
+            comDivCrossWord.find('div.defaultPositionMerged').removeClass('defaultPositionMerged');
+            
         }
 
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
@@ -346,29 +362,38 @@ function onEditor(newEditor) {
 
             var positionNewWordMerge = -1;
             //Clicou num div Group
-            //Percorre o texto dessa Div.LastSelected e verifica se possue a letra que fora clicada
+            //Percorre o texto dessa Div[LastSelected] e verifica se possue a letra que fora clicada
             var letterClicked = $(clickedCell).text();
             var wordLastClicked = lastSelected.find(".element > font").text().replace(/\s/g, '');
 
 
-
-            var positionsMayMerge = new Array();
-            for (var i = 0; i < wordLastClicked.length; i++) {
-                if (wordLastClicked[i] === letterClicked) {
-                    positionsMayMerge.push(i);
+            if (!newEditor.isset(positionMergeSelected)) {
+                //Primeiro click para este cruzamento
+                var positionsMayMerge = new Array();
+                for (var i = 0; i < wordLastClicked.length; i++) {
+                    if (wordLastClicked[i] === letterClicked) {
+                        positionsMayMerge.push(i);
+                    }
                 }
             }
 
-            if (positionsMayMerge.length > 0) {
+            if (newEditor.isset(positionMergeSelected) || (newEditor.isset(positionsMayMerge) && positionsMayMerge.length > 0)) {
                 //Encontrou uma letra igual, então faz o match por padrão na primeira encontrada
                 //  $(clickedCell).append(wordLastClicked[positionsMayMerge[0]]);
-
+                var posMayMerge;
+                if (newEditor.isset(positionMergeSelected)) {
+                    //Entao foi escolhido qual das letras iguais cruzará
+                    posMayMerge = positionMergeSelected;
+                } else {
+                    //Primeiro click para este cruzamento
+                    posMayMerge = positionsMayMerge[0];
+                }
                 var letterBeforeMergePosition = "";
                 var letterAfterMergePosition = "";
                 for (var i = 0; i < wordLastClicked.length; i++) {
-                    if (i < positionsMayMerge[0]) {
+                    if (i < posMayMerge) {
                         letterBeforeMergePosition += wordLastClicked[i];
-                    } else if (i > positionsMayMerge[0]) {
+                    } else if (i > posMayMerge) {
                         letterAfterMergePosition += wordLastClicked[i];
                     } else {
                         //É igual - posição do Merge
@@ -650,17 +675,18 @@ function onEditor(newEditor) {
                         delete thisFunc.tempPositionThisCellWordMerge;
                     }
 
-                    //
-                    if (!newEditor.isset(arguments[2]) && !isload) {
+                    if (!newEditor.isset(positionMergeSelected) && !isload) {
                         //Se NÃO foi um click na .Cell para uma Escolha da posição que será mergeda, se existir(ou seja,
                         // foi o primeiro click pra escolher o cruzamento da palavra corrente)
                         //Deixa piscando as células que podem ser ecolhidas pra o cruzamento
-                        $(clickedCell).addClass('defaultPositionMerged');
-                        var newWordsCells = $(clickedCell).closest('div.crosswords').find('div.Cell[groups*=g' + lastSelected.attr('group') + ']');
-                        for (var i in positionsMayMerge) {
-                            newWordsCells.eq(positionsMayMerge[i]).addClass('flashing');
+                        if (positionsMayMerge.length > 1) {
+                            $(clickedCell).addClass('defaultPositionMerged');
+                            var newWordsCells = comDivCrossWord.find('div.Cell[groups*=g' + lastSelected.attr('group') + ']');
+                            for (var i in positionsMayMerge) {
+                                newWordsCells.eq(positionsMayMerge[i]).addClass('flashing');
+                                newWordsCells.eq(positionsMayMerge[i]).data('posMayMerge',positionsMayMerge[i]);
+                            }
                         }
-
                     }
 
                     //Por fim desabilita o botão, novo Elemento
