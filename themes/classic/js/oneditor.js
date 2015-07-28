@@ -326,12 +326,12 @@ function onEditor(newEditor) {
     this.eventClickCellPLC = function (clickedCell, isload) {
         var comDivCrossWord = $(clickedCell).closest('div.crosswords');
         var positionMergeSelected = null;
-        
+
         if ($(clickedCell).hasClass('flashing') && !$(clickedCell).hasClass('defaultPositionMerged')) {
             //O 3ª parâmetro é a posição do positionsMayMerge escolhida
             var currentCell = $(clickedCell);
             positionMergeSelected = $(clickedCell).data('posMayMerge');
-            
+
             clickedCell = $(clickedCell).closest(".crosswords").find('div.defaultPositionMerged');
             var lastGroup = clickedCell.attr('groups').split('g');
             lastGroup = lastGroup[lastGroup.length - 1];
@@ -341,13 +341,20 @@ function onEditor(newEditor) {
             //Se for PLC, então remove a Palavra cruzada do html e sua associação no Array crossWord
             var lastSelected = elementsPlc.find('div[lastSelected]');
             newEditor.delWordPLC(lastSelected);
+        }
+
+        if ($(clickedCell).hasClass('defaultPositionMerged')) {
+            //Por fim abilita o botão, novo Elemento
+            $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
+        }
+
+        if ($(clickedCell).hasClass('flashing')) {
             //Remove a class .flashing dos elementos
             var comDivFlashing = comDivCrossWord.find('div.flashing');
+            //Para de piscar
             comDivFlashing.css('opacity', '1.0');
             comDivFlashing.removeClass('flashing');
-            //Para de piscar
             comDivCrossWord.find('div.defaultPositionMerged').removeClass('defaultPositionMerged');
-            
         }
 
         var lastSelected = $(clickedCell).closest(".tplPlc").children(".elementsPlc").find("div[group][lastSelected]");
@@ -359,13 +366,11 @@ function onEditor(newEditor) {
 
         if (lastSelected.length !== 0 && groupWordOfClickedLetter.split('g').length <= 2) {
             // Possui somente um groupo, ou seja nunca foi cruzado
-
             var positionNewWordMerge = -1;
             //Clicou num div Group
             //Percorre o texto dessa Div[LastSelected] e verifica se possue a letra que fora clicada
             var letterClicked = $(clickedCell).text();
             var wordLastClicked = lastSelected.find(".element > font").text().replace(/\s/g, '');
-
 
             if (!newEditor.isset(positionMergeSelected)) {
                 //Primeiro click para este cruzamento
@@ -684,13 +689,22 @@ function onEditor(newEditor) {
                             var newWordsCells = comDivCrossWord.find('div.Cell[groups*=g' + lastSelected.attr('group') + ']');
                             for (var i in positionsMayMerge) {
                                 newWordsCells.eq(positionsMayMerge[i]).addClass('flashing');
-                                newWordsCells.eq(positionsMayMerge[i]).data('posMayMerge',positionsMayMerge[i]);
+                                newWordsCells.eq(positionsMayMerge[i]).data('posMayMerge', positionsMayMerge[i]);
                             }
                         }
                     }
+                    if (!newEditor.isset(positionMergeSelected) && !isload) {
+                        //Se NÃO foi um click na .Cell para uma Escolha da posição que será mergeda, se existir(ou seja,
+                        // foi o primeiro click pra escolher o cruzamento da palavra corrente)
+                        if (positionsMayMerge.length <= 1) {
+                            //Por fim abilita o botão, novo Elemento
+                            $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
+                        }
+                    } else {
+                        //Por fim abilita o botão, novo Elemento
+                        $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
+                    }
 
-                    //Por fim desabilita o botão, novo Elemento
-                    $(clickedCell).closest(".tplPlc").find(".newElement").removeAttr('disabled');
                 }
             } else {
                 //A letra clicada não foi encontrada na palavra 
