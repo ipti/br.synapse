@@ -171,10 +171,9 @@ body {
     z-index: 100000;
 }
 
-#hit-message, #error-message{
+#hit-message, #error-message, #add-new-user{
     z-index: 100001;
 }
-
 
 .error {
     background: #FBB03B;
@@ -184,8 +183,28 @@ body {
     background: #51b899;
 }
 
+.addNewUser input{
+    height:30px;
+    font-size: 27px;
+} 
+
 .exit {
     background: #666666;
+}
+
+.message-container.addNewUser {
+    background: rgba(78, 184, 152, 0.75);
+    font-size: 25px;
+}
+
+.title-add-new-user{
+     font-size: 36px;
+     margin-bottom: 10px;
+}
+
+.message-form-error{
+    font-size: 18px;
+    color:#F18318;
 }
 
 .message-container {
@@ -200,6 +219,7 @@ body {
     line-height: 44px;
     box-shadow: 1px 1px 8px #2C2C2C;
 }
+
 
 .message-container.exit {
     width: 500px;
@@ -225,6 +245,17 @@ body {
     margin-top: 10px;
     cursor: pointer;
 }
+
+.message-button-addNewUser {
+    border: none;
+    border-radius: 3px;
+    color: #666666;
+    font-family: tellural, helvetica, arial, sans-serif;
+    font-size: 20px;
+    padding: 7px 14px;
+    margin-top: 10px;
+}
+
 .error .message-button {
     background: #F18318;
 }

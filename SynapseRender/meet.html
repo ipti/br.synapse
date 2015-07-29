@@ -115,6 +115,10 @@
                     //Passar parâmetro do tipo do Encontro
                     var newMeet = new Meet(options);
 
+                    //Verificar se fora seleciona algum Aluno
+                    if (actorID === 'null') {
+                        $('#add-new-user').show();
+                    }
 
                     //Atualizar O painel do render
                     $('.info.info-name').html('<p>' + newMeet.actor_name + '</p>');
@@ -141,6 +145,20 @@
                     $("#close-icon").bind('tap', function () {
                         $("#finalize-message").hide();
                     });
+
+                    $('#btnAddNewUser').on('tap', function () {
+                        var usrName = $('#nome_aluno').val();
+                        if (usrName.replace(/\s/g, '') === '') {
+                            //Mensagem erro
+                            $('.message-form-error').html("Nome do Aluno é Obrigatório!");
+                        } else {
+                            $('.message-form-error').html("");
+                            //Cadastra Usuário
+                            
+                        }
+
+                    });
+
                 }
             });
 
@@ -152,7 +170,6 @@
 
         <!-- Barra de informações -->
         <div id="head_meet">
-
             <div class="drawer-header">
                 <div class="close-bar">
                     <a href="#"><i class="fa fa-bars"></i></a>
@@ -207,6 +224,24 @@
             </div>
             <div class="points">
                 <p class="score-number"><i class="fa fa-star"></i> <span id="points">0</span></p>
+            </div>
+        </div>
+
+        <!-- Adicionar Novo Usuário -->
+        <div id="add-new-user" class="modal_message overlay">
+            <div class="message-container addNewUser">
+                <div class="title-add-new-user">
+                    Registrar Aluno
+                </div>
+                <div class="message-form-error">
+                </div>
+                <label for="school">Escola</label>
+                <input type="text" size="20" maxlength="40" name="school" id="school"/>
+                <label for="classroom">Turma</label>
+                <input type="text" size="20" maxlength="40" name="classroom" id="classroom"/> 
+                <label for="nome_aluno">Nome do Aluno*</label>
+                <input type="text" size="20" maxlength="40" name="nome_aluno" id="nome_aluno"/> 
+                <button class="message-button-addNewUser" id="btnAddNewUser">Registrar</button>
             </div>
         </div>
 
