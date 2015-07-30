@@ -145,7 +145,13 @@
                     $("#close-icon").bind('tap', function () {
                         $("#finalize-message").hide();
                     });
-
+                    
+                    //Retira os eventos padrões para elementos select
+                    $('#school').unbind();
+                    $('#classroom').unbind();
+                    $('#school').siblings('span').remove();
+                    $('#classroom').siblings('span').remove();
+                    
                     $('#btnAddNewUser').on('tap', function () {
                         var usrName = $('#nome_aluno').val();
                         if (usrName.replace(/\s/g, '') === '') {
@@ -153,7 +159,7 @@
                             $('.message-form-error').html("Nome do Aluno é Obrigatório!");
                         } else {
                             $('.message-form-error').html("");
-                            //Cadastra Usuário
+                            //Cadastrar Usuário Offline no IndexDB
                             
                         }
 
@@ -235,10 +241,18 @@
                 </div>
                 <div class="message-form-error">
                 </div>
+                
                 <label for="school">Escola</label>
-                <input type="text" size="20" maxlength="40" name="school" id="school"/>
+                <select name="school" id="school">
+                    <option value="1">Priapu</option>
+                    <option value="2">Jessé</option>
+                </select>
                 <label for="classroom">Turma</label>
-                <input type="text" size="20" maxlength="40" name="classroom" id="classroom"/> 
+                <select name="classroom" id="classroom"> 
+                     <option value="2">2° Ano</option>
+                     <option value="3">3° Ano</option>
+                </select>
+                
                 <label for="nome_aluno">Nome do Aluno*</label>
                 <input type="text" size="20" maxlength="40" name="nome_aluno" id="nome_aluno"/> 
                 <button class="message-button-addNewUser" id="btnAddNewUser">Registrar</button>

@@ -407,7 +407,7 @@ class RenderController extends Controller {
             if (isset($_REQUEST['school'])) {
                 $school = Unity::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
-                $query = "SELECT u.id AS unity_id, u.name AS unity_name, 
+                $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, u.id AS unity_id, u.name AS unity_name, 
                     u.organization_id AS unity_organization_id, u.father_id AS unity_father,
                     act.id, person.name, personage.name AS personage, person.login, person.password 
                     FROM unity_tree AS ut

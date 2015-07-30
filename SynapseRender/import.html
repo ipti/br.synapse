@@ -2,7 +2,7 @@
     <head>
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
         <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen, projection" />
         <link rel="stylesheet" type="text/css" href="css/render/global.css">
         <link rel="stylesheet" type="text/css" href="css/render/admin.css">
@@ -59,18 +59,34 @@
                 }
 
                 function dataImportFunction() {
-                    importLinguagem();
-                    importMatematica();
+                    if(dataJsonLin !== undefined && dataJsonLin !== null){
+                        //Importar Linguagem
+                        importGeneral(dataJsonLin);
+                    }
+                    if(dataJsonMat !== undefined && dataJsonMat !== null){
+                        //Importar Matemática
+                        importGeneral(dataJsonMat);
+                    }
                 }
 
-                function importLinguagem() {
+                function importGeneral(dataJson) {
+                    var schools = new Array();
                     var unitys = new Array();
                     var actors = new Array();
 
                     //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJsonLin.ActorsOwnUnity, function (idx, object) {
+                    $.each(dataJson.ActorsOwnUnity, function (idx, object) {
+                        var tempSchool = {};
+                        tempSchool.id = object.school_id;
+                        tempSchool.name = object.school_name;
+                        if (!existInArray(schools, tempSchool.id)) {
+                            schools.push(tempSchool);
+                        }
+                        
                         var tempUnity = {};
                         tempUnity.id = object.unity_id;
+                        //FK para a school
+                        tempUnity.school_id = object.school_id;
                         tempUnity.father_id = object.unity_father;
                         tempUnity.name = object.unity_name;
                         tempUnity.organization_id = object.unity_organization_id;
@@ -88,56 +104,17 @@
                         if (!existInArray(actors, tempActor.id)) {
                             actors.push(tempActor);
                         }
-
                     });
-                    var disciplines = dataJsonLin.Disciplines;
-                    var cobjectblock = dataJsonLin.CobjectBlock;
-                    var cobject_cobjectblocks = dataJsonLin.Cobject_cobjectBlocks;
-                    var cobjects = dataJsonLin.Cobjects;
-
-
+                    var disciplines = dataJson.Disciplines;
+                    var cobjectblock = dataJson.CobjectBlock;
+                    var cobject_cobjectblocks = dataJson.Cobject_cobjectBlocks;
+                    var cobjects = dataJson.Cobjects;
+                    
+                    
                     //2° Importar
-                    db.importAllDataRender(unitys, actors, disciplines, cobjectblock
+                    db.importAllDataRender(schools, unitys, actors, disciplines, cobjectblock
                             , cobject_cobjectblocks, cobjects);
 
-                }
-
-                function importMatematica() {
-                    var unitys = new Array();
-                    var actors = new Array();
-
-                    //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJsonMat.ActorsOwnUnity, function (idx, object) {
-                        var tempUnity = {};
-                        tempUnity.id = object.unity_id;
-                        tempUnity.father_id = object.unity_father;
-                        tempUnity.name = object.unity_name;
-                        tempUnity.organization_id = object.unity_organization_id;
-                        if (!existInArray(unitys, tempUnity.id)) {
-                            unitys.push(tempUnity);
-                        }
-                        var tempActor = {};
-                        tempActor.id = object.id;
-                        tempActor.login = object.login;
-                        tempActor.name = object.name;
-                        tempActor.password = object.password;
-                        tempActor.personage_name = object.personage;
-                        //Chave Estrageira para a sua unidade
-                        tempActor.unity_id = object.unity_id;
-                        if (!existInArray(actors, tempActor.id)) {
-                            actors.push(tempActor);
-                        }
-
-                    });
-                    var disciplines = dataJsonMat.Disciplines;
-                    var cobjectblock = dataJsonMat.CobjectBlock;
-                    var cobject_cobjectblocks = dataJsonMat.Cobject_cobjectBlocks;
-                    var cobjects = dataJsonMat.Cobjects;
-
-
-                    //2° Importar
-                    db.importAllDataRender(unitys, actors, disciplines, cobjectblock
-                            , cobject_cobjectblocks, cobjects);
                 }
 
                 function deleteDatabase() {
@@ -164,14 +141,13 @@
                 });
 
                 $('#importLinguagem').bind('tap', function () {
-                    importLinguagem();
+                     importGeneral(dataJsonLin);
                 });
 
 
                 $('#importMatematica').bind('tap', function () {
-                    importMatematica();
+                    importGeneral(dataJsonMat);
                 });
-
 
                 $('#back').bind('tap', function () {
                     location.href = "index.html";

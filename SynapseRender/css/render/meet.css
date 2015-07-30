@@ -183,7 +183,7 @@ body {
     background: #51b899;
 }
 
-.addNewUser input{
+.addNewUser input, .addNewUser select{
     height:30px;
     font-size: 27px;
 } 

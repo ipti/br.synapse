@@ -257,10 +257,26 @@ this.DB = function() {
     // IMPORT PARA BANCO DE DADOS //
     // - - - - - - - - - -  //
 
-    this.importAllDataRender = function(unitys, actors, disciplines, cobjectblock
+    this.importAllDataRender = function(schools, unitys, actors, disciplines, cobjectblock
             , cobject_cobjectblocks, cobjects) {
-
+                //Add campo 'createdOffline' nos actors
+                for(var idx in actors){
+                    var actor = actors[idx];
+                    actor.createdOffline = false;
+                }
+                //Add campo 'createdOffline' nos 'schools'
+                for(var idx in schools){
+                    var school = schools[idx];
+                    school.createdOffline = false;
+                }
+                //Add campo 'createdOffline' nas 'unitys'
+                for(var idx in unitys){
+                    var unity = unitys[idx];
+                    unity.createdOffline = false;
+                }
+                
         var options = {
+            schools: schools,
             unitys: unitys,
             actors: actors,
             disciplines: disciplines,
@@ -268,15 +284,14 @@ this.DB = function() {
             cobject_cobjectblocks: cobject_cobjectblocks,
             cobjects: cobjects
         };
-        self.verifyExistBlock(options, function(unitys, actors, disciplines, cobjectblock
+        self.verifyExistBlock(options, function(schools, unitys, actors, disciplines, cobjectblock
                 , cobject_cobjectblocks, cobjects, existBlock) {
             //Call Back
-
             if (!existBlock) {
                 //=================================================
-                //Unidade e Usuário
+                //Escola, Unidade e Usuário
+                var data_school = schools;
                 var data_unity = unitys;
-
                 var data_actor = actors;
                 //======================================
                 //Blocos de Atividades para cada Disciplina
@@ -304,6 +319,9 @@ this.DB = function() {
 
                 if (!existBlock) {
                     //==================================================
+                    //Importar as schools
+                    self.importSchool(db, data_school);
+                    
                     //Importar as unitys
                     self.importUnity(db, data_unity);
 
@@ -352,9 +370,20 @@ this.DB = function() {
     //Métodos de Import 
     /////////////////////
 
+     //Importar as schools
+    this.importSchool = function(db, data_school) {
+        var SchoolObjectStore = db.transaction("school", "readwrite").objectStore("school");
+        for (var i in data_school) {
+            SchoolObjectStore.add(data_school[i]);
+        }
+        SchoolObjectStore.transaction.oncomplete = function(event) {
+            db.close();
+            console.log("Schools IMPORTED!");
+        };
+    };
+    
     //Importar as unitys
     this.importUnity = function(db, data_unity) {
-
         var UnityObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
         for (var i in data_unity) {
             UnityObjectStore.add(data_unity[i]);
