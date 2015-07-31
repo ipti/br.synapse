@@ -1,7 +1,7 @@
 // // - - - - - - - - - -  //
 // CRIAR BANCO DE DADOS //
 // - - - - - - - - - -  //
-this.DB = function() {
+this.DB = function () {
     self = this;
     nameBD = "synapseDB";
     DBversion = 1;
@@ -12,7 +12,7 @@ this.DB = function() {
 
     dataImportFunction = null;
 
-    this.verifyIDBrownser = function() {
+    this.verifyIDBrownser = function () {
         // Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
         window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
         // Não use "var indexedDB = ..." se você não está numa function.
@@ -23,11 +23,9 @@ this.DB = function() {
         return window.indexedDB;
     }
 
-    this.openDBuild = function(alterSchema, dataImportFunction) {
-        
-        console.log(dataImportFunction);
+    this.openDBuild = function (alterSchema, dataImportFunction) {
         self.dataImportFunction = dataImportFunction;
-        
+
         window.indexedDB = self.verifyIDBrownser();
         if (!window.indexedDB) {
             console.log("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
@@ -39,14 +37,14 @@ this.DB = function() {
         var synapseBD;
         synapseBD = window.indexedDB.open(nameBD);
 
-        synapseBD.onerror = function(event) {
+        synapseBD.onerror = function (event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
-        
-        synapseBD.onsuccess = function(event) {
-            
+
+        synapseBD.onsuccess = function (event) {
+
             var db = event.target.result;
-            db.onerror = function(event) {
+            db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 alert("Database error: " + event.target.errorCode);
             };
@@ -56,6 +54,8 @@ this.DB = function() {
                 DBversion++;
             }
             //Antes de abrir o banco novamente, fecha essa conexão com o BD
+            //synapseBD.result.close();
+
             db.close();
             openBuild();
         }
@@ -64,14 +64,20 @@ this.DB = function() {
 
 
 
-    var openBuild = function() {
+    var openBuild = function () {
         DBsynapse = window.indexedDB.open(nameBD, DBversion);
-        DBsynapse.onerror = function(event) {
+        
+        DBsynapse.onversionchange = function (event) {
+            //STOP HERE
+            DBsynapse.close();
+        };
+        
+        DBsynapse.onerror = function (event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         };
-        DBsynapse.onsuccess = function(event) {
+        DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
-            db.onerror = function(event) {
+            db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 alert("Database error: " + event.target.errorCode);
             };
@@ -79,7 +85,7 @@ this.DB = function() {
         //Se for uma nova versão é criado o novo schemma do banco
         self.buildAllSchema();
 
-        DBsynapse.onblocked = function(event) {
+        DBsynapse.onblocked = function (event) {
             // Se existe outra aba com a versão antiga
             console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         };
@@ -87,10 +93,10 @@ this.DB = function() {
     }
 
 
-    this.buildAllSchema = function() {
+    this.buildAllSchema = function () {
         //Criar Schemas das tabelas
-        
-        DBsynapse.onupgradeneeded = function(event) {
+
+        DBsynapse.onupgradeneeded = function (event) {
             var db = event.target.result;
 
             var unityStore = db.createObjectStore("unity", {
@@ -196,50 +202,50 @@ this.DB = function() {
             // Usando transação oncomplete para afirmar que a criação do objectStore 
             // é terminada antes de adicionar algum dado nele.
 
-            unityStore.transaction.oncomplete = function(event) {
+            unityStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction();
                 console.log('Criou os Schemas');
             }
 
-            actorStore.transaction.oncomplete = function(event) {
+            actorStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction();
                 console.log('Criou os Schemas');
             }
-            disciplineStore.transaction.oncomplete = function(event) {
+            disciplineStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction();
                 console.log('Criou os Schemas');
             }
-            cobjectblockStore.transaction.oncomplete = function(event) {
+            cobjectblockStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction();
                 console.log('Criou os Schemas');
             }
-            cobject_cobjectblockStore.transaction.oncomplete = function(event) {
+            cobject_cobjectblockStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction();
                 console.log('Criou os Schemas');
             }
-            cobjectStore.transaction.oncomplete = function(event) {
-                //Se for o último dos 8 então contruiu todos os schemas
-                db.close();
-                 self.dataImportFunction();
-                console.log('Criou os Schemas');
-            }
-            performance_actorStore.transaction.oncomplete = function(event) {
+            cobjectStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction();
                 console.log('Criou os Schemas');
             }
-            state_actorStore.transaction.oncomplete = function(event) {
+            performance_actorStore.transaction.oncomplete = function (event) {
+                //Se for o último dos 8 então contruiu todos os schemas
+                db.close();
+                self.dataImportFunction();
+                console.log('Criou os Schemas');
+            }
+            state_actorStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 8 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction();
@@ -257,24 +263,24 @@ this.DB = function() {
     // IMPORT PARA BANCO DE DADOS //
     // - - - - - - - - - -  //
 
-    this.importAllDataRender = function(schools, unitys, actors, disciplines, cobjectblock
+    this.importAllDataRender = function (schools, unitys, actors, disciplines, cobjectblock
             , cobject_cobjectblocks, cobjects) {
-                //Add campo 'createdOffline' nos actors
-                for(var idx in actors){
-                    var actor = actors[idx];
-                    actor.createdOffline = false;
-                }
-                //Add campo 'createdOffline' nos 'schools'
-                for(var idx in schools){
-                    var school = schools[idx];
-                    school.createdOffline = false;
-                }
-                //Add campo 'createdOffline' nas 'unitys'
-                for(var idx in unitys){
-                    var unity = unitys[idx];
-                    unity.createdOffline = false;
-                }
-                
+        //Add campo 'createdOffline' nos actors
+        for (var idx in actors) {
+            var actor = actors[idx];
+            actor.createdOffline = false;
+        }
+        //Add campo 'createdOffline' nos 'schools'
+        for (var idx in schools) {
+            var school = schools[idx];
+            school.createdOffline = false;
+        }
+        //Add campo 'createdOffline' nas 'unitys'
+        for (var idx in unitys) {
+            var unity = unitys[idx];
+            unity.createdOffline = false;
+        }
+
         var options = {
             schools: schools,
             unitys: unitys,
@@ -284,7 +290,7 @@ this.DB = function() {
             cobject_cobjectblocks: cobject_cobjectblocks,
             cobjects: cobjects
         };
-        self.verifyExistBlock(options, function(schools, unitys, actors, disciplines, cobjectblock
+        self.verifyExistBlock(options, function (schools, unitys, actors, disciplines, cobjectblock
                 , cobject_cobjectblocks, cobjects, existBlock) {
             //Call Back
             if (!existBlock) {
@@ -304,15 +310,14 @@ this.DB = function() {
             //Cobjets
             var data_cobject = cobjects;
 
-            
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function(event) {
+            DBsynapse.onerror = function (event) {
                 alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function(event) {
+            DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
-                db.onerror = function(event) {
+                db.onerror = function (event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.error.message);
                 };
@@ -321,7 +326,7 @@ this.DB = function() {
                     //==================================================
                     //Importar as schools
                     self.importSchool(db, data_school);
-                    
+
                     //Importar as unitys
                     self.importUnity(db, data_unity);
 
@@ -350,7 +355,7 @@ this.DB = function() {
                 db.close();
 
             }
-            DBsynapse.onblocked = function(event) {
+            DBsynapse.onblocked = function (event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -370,74 +375,74 @@ this.DB = function() {
     //Métodos de Import 
     /////////////////////
 
-     //Importar as schools
-    this.importSchool = function(db, data_school) {
+    //Importar as schools
+    this.importSchool = function (db, data_school) {
         var SchoolObjectStore = db.transaction("school", "readwrite").objectStore("school");
         for (var i in data_school) {
             SchoolObjectStore.add(data_school[i]);
         }
-        SchoolObjectStore.transaction.oncomplete = function(event) {
+        SchoolObjectStore.transaction.oncomplete = function (event) {
             db.close();
             console.log("Schools IMPORTED!");
         };
     };
-    
+
     //Importar as unitys
-    this.importUnity = function(db, data_unity) {
+    this.importUnity = function (db, data_unity) {
         var UnityObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
         for (var i in data_unity) {
             UnityObjectStore.add(data_unity[i]);
         }
-        UnityObjectStore.transaction.oncomplete = function(event) {
+        UnityObjectStore.transaction.oncomplete = function (event) {
             db.close();
             console.log("Unitys IMPORTED!");
         }
     }
 
     //Importar os atores
-    this.importActor = function(db, data_actor) {
+    this.importActor = function (db, data_actor) {
         var ActorObjectStore = db.transaction("actor", "readwrite").objectStore("actor");
         for (var i in data_actor) {
             ActorObjectStore.add(data_actor[i]);
         }
-        ActorObjectStore.transaction.oncomplete = function(event) {
+        ActorObjectStore.transaction.oncomplete = function (event) {
             db.close();
             console.log("Actors IMPORTED!");
         }
     }
 
     //Importar as disciplines
-    this.importDiscipline = function(db, data_discipline) {
+    this.importDiscipline = function (db, data_discipline) {
         var DisciplineObjectStore = db.transaction("discipline", "readwrite").objectStore("discipline");
         for (var i in data_discipline) {
             DisciplineObjectStore.add(data_discipline[i]);
         }
-        DisciplineObjectStore.transaction.oncomplete = function(event) {
+        DisciplineObjectStore.transaction.oncomplete = function (event) {
             db.close();
             console.log("Disciplines IMPORTED!");
         }
     }
 
     //Importar os cobjectblocks
-    this.importCobjectblock = function(db, data_cobjectBlock) {
+    this.importCobjectblock = function (db, data_cobjectBlock) {
         var CobjectblockObjectStore = db.transaction("cobjectblock", "readwrite").objectStore("cobjectblock");
         for (var i in data_cobjectBlock) {
             CobjectblockObjectStore.add(data_cobjectBlock[i]);
         }
-        CobjectblockObjectStore.transaction.oncomplete = function(event) {
+        CobjectblockObjectStore.transaction.oncomplete = function (event) {
             db.close();
             console.log("Cobjectblocks IMPORTED!");
         }
     }
 
     //Importar os cobject_cobjectblocks
-    this.importCobject_cobjectblock = function(db, data_cobject_cobjectBlock) {
+    this.importCobject_cobjectblock = function (db, data_cobject_cobjectBlock) {
         var Cobject_cobjectBlockObjectStore = db.transaction("cobject_cobjectblock", "readwrite").objectStore("cobject_cobjectblock");
         for (var i in data_cobject_cobjectBlock) {
             data_cobject_cobjectBlock[i].id = eval(data_cobject_cobjectBlock[i].id);
             Cobject_cobjectBlockObjectStore.add(data_cobject_cobjectBlock[i]);
         }
-        Cobject_cobjectBlockObjectStore.transaction.oncomplete = function(event) {
+        Cobject_cobjectBlockObjectStore.transaction.oncomplete = function (event) {
             db.close();
             console.log("Cobject_cobjectblocks IMPORTED!");
         }
@@ -445,24 +450,24 @@ this.DB = function() {
 
     // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
     //Importar os cobjects
-    this.importCobject = function(db, data_cobject) {
+    this.importCobject = function (db, data_cobject) {
         var CobjectObjectStore = db.transaction("cobject", "readwrite").objectStore("cobject");
         for (var i in data_cobject) {
             CobjectObjectStore.add(data_cobject[i]);
         }
-        CobjectObjectStore.transaction.oncomplete = function(event) {
+        CobjectObjectStore.transaction.oncomplete = function (event) {
             db.close();
             window.alert("Cobjects IMPORTED!");
         }
     }
 
     //Importar os performance_actors
-    this.importPerformance_actor = function(db, data_performance_actor) {
+    this.importPerformance_actor = function (db, data_performance_actor) {
         var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
         for (var i in data_performance_actor) {
             Performance_actorObjectStore.add(data_performance_actor[i]);
         }
-        Performance_actorObjectStore.transaction.oncomplete = function(event) {
+        Performance_actorObjectStore.transaction.oncomplete = function (event) {
             db.close();
             console.log("Performance_actors IMPORTED!");
         }
@@ -473,15 +478,15 @@ this.DB = function() {
     // - - - - - - - - - -  //
 
     //Export os performances_actors
-    this.exportPerformance_actor = function() {
+    this.exportPerformance_actor = function () {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function(event) {
+        DBsynapse.onerror = function (event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         };
-        DBsynapse.onsuccess = function(event) {
+        DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
-            db.onerror = function(event) {
+            db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 console.log("Database error: " + event.target.errorCode);
             };
@@ -489,7 +494,7 @@ this.DB = function() {
             var performances = new Array();
 
             var Performance_actorObjectStore = db.transaction("performance_actor", "readonly").objectStore("performance_actor");
-            Performance_actorObjectStore.openCursor().onsuccess = function(event) {
+            Performance_actorObjectStore.openCursor().onsuccess = function (event) {
                 var cursor = event.target.result;
                 if (cursor) {
                     var currentPerformance = '{"actor_id":"' + cursor.value.actor_id;
@@ -525,7 +530,7 @@ this.DB = function() {
             };
 
         }
-        DBsynapse.onblocked = function(event) {
+        DBsynapse.onblocked = function (event) {
             // Se existe outra aba com a versão antiga
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
@@ -538,26 +543,26 @@ this.DB = function() {
 
 
     //Pesquisas No Banco        
-    this.login = function(login, password, callBack) {
+    this.login = function (login, password, callBack) {
         if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function(event) {
+            DBsynapse.onerror = function (event) {
                 alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
-            DBsynapse.onsuccess = function(event) {
+            DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
-                db.onerror = function(event) {
+                db.onerror = function (event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 }
                 //Tudo ok Então Busca O Actor
                 var ActorObjectStore = db.transaction("actor").objectStore("actor");
                 var requestGet = ActorObjectStore.index("login").get(login);
-                requestGet.onerror = function(event) {
+                requestGet.onerror = function (event) {
                     // Tratar erro!
                 }
-                requestGet.onsuccess = function(event) {
+                requestGet.onsuccess = function (event) {
                     // Fazer algo com request.result!
                     if (self.isset(requestGet.result)) {
                         //Encontrou o Usuário
@@ -585,7 +590,7 @@ this.DB = function() {
                 }
 
             }
-            DBsynapse.onblocked = function(event) {
+            DBsynapse.onblocked = function (event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -598,32 +603,32 @@ this.DB = function() {
     }
 
     //===================
-    this.getCobject = function(cobject_id, callBack) {
+    this.getCobject = function (cobject_id, callBack) {
         if (self.isset(cobject_id)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function(event) {
+            DBsynapse.onerror = function (event) {
                 alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
-            DBsynapse.onsuccess = function(event) {
+            DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
-                db.onerror = function(event) {
+                db.onerror = function (event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     window.alert("Database error: " + event.target.errorCode);
                 }
                 //Tudo ok Então Busca O Cobject
                 var cobjectStore = db.transaction("cobject").objectStore("cobject");
                 var requestGet = cobjectStore.get(cobject_id);
-                requestGet.onerror = function(event) {
+                requestGet.onerror = function (event) {
                     // Tratar erro!
                 }
-                requestGet.onsuccess = function(event) {
+                requestGet.onsuccess = function (event) {
                     var json_cobject = requestGet.result;
                     callBack(json_cobject);
                 }
 
             }
-            DBsynapse.onblocked = function(event) {
+            DBsynapse.onblocked = function (event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -631,16 +636,16 @@ this.DB = function() {
     }
 
     //===================
-    this.getCobjectsFromBlock = function(block_id, callBack) {
+    this.getCobjectsFromBlock = function (block_id, callBack) {
         if (self.isset(block_id)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function(event) {
+            DBsynapse.onerror = function (event) {
                 alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
-            DBsynapse.onsuccess = function(event) {
+            DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
-                db.onerror = function(event) {
+                db.onerror = function (event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     window.alert("Database error: " + event.target.errorCode);
                 }
@@ -650,7 +655,7 @@ this.DB = function() {
                 var objectsThisBlock = new Array();
                 var singleKeyRange = IDBKeyRange.only(block_id);
                 var existBlock = false;
-                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         // Faz algo com o que encontrar
@@ -668,12 +673,12 @@ this.DB = function() {
                     }
 
                 };
-                requestGet.onerror = function(event) {
+                requestGet.onerror = function (event) {
                     // Tratar erro!
                     console.log("Não encontrou Cobjects para estes Bloco!");
                 }
             }
-            DBsynapse.onblocked = function(event) {
+            DBsynapse.onblocked = function (event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -681,7 +686,7 @@ this.DB = function() {
     }
 
     //Armazenar a  performance
-    this.addPerformance_actor = function(data) {
+    this.addPerformance_actor = function (data) {
         var piece_id = data.piece_id;
         var actor_id = data.actor_id;
         var final_time = data.final_time;
@@ -700,23 +705,23 @@ this.DB = function() {
 
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function(event) {
+        DBsynapse.onerror = function (event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
-        DBsynapse.onsuccess = function(event) {
+        DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
-            db.onerror = function(event) {
+            db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 console.log("Database error: " + event.target.errorCode);
             }
             var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
             Performance_actorObjectStore.add(data_performance_actor);
-            Performance_actorObjectStore.transaction.oncomplete = function(event) {
+            Performance_actorObjectStore.transaction.oncomplete = function (event) {
                 // console.log('Performance Salva !!!! ');
             }
 
         }
-        DBsynapse.onblocked = function(event) {
+        DBsynapse.onblocked = function (event) {
             // Se existe outra aba com a versão antiga
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
@@ -724,19 +729,19 @@ this.DB = function() {
     }
 
     //Adicionar ou Realiza UPDATE dos registros do estado atual deste actor no block
-    this.NewORUpdateUserState = function(data_state_actor) {
+    this.NewORUpdateUserState = function (data_state_actor) {
         var actor_id = data_state_actor.actor_id;
         var cobject_block_id = data_state_actor.cobject_block_id;
         //Escolhe a pesquisa por Ator
         if (self.isset(actor_id)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function(event) {
+            DBsynapse.onerror = function (event) {
                 alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
-            DBsynapse.onsuccess = function(event) {
+            DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
-                db.onerror = function(event) {
+                db.onerror = function (event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 }
@@ -745,7 +750,7 @@ this.DB = function() {
                 var requestGet = stateActorStore.index('actor_id');
                 var user_state_id = null;
                 var singleKeyRange = IDBKeyRange.only(actor_id);
-                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         // Faz algo com o que encontrar
@@ -766,10 +771,10 @@ this.DB = function() {
                             }
 
                             var request_update = cursor.update(cursor.value);
-                            request_update.onsuccess = function(event) {
+                            request_update.onsuccess = function (event) {
                                 console.log(' State Actor Atualizado !!!! ');
                             };
-                            request_update.onerror = function(event) {
+                            request_update.onerror = function (event) {
                                 console.log(' ERRO ao Atualizar State Actor !!!! ');
                             };
                         }
@@ -782,18 +787,18 @@ this.DB = function() {
                         if (!update) {
                             var state_actorObjectStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
                             state_actorObjectStore.add(data_state_actor);
-                            state_actorObjectStore.transaction.oncomplete = function(event) {
+                            state_actorObjectStore.transaction.oncomplete = function (event) {
                                 console.log(' NEW State Actor Salvo !!!! ');
                             }
                         }
                     }
 
                 };
-                requestGet.onerror = function(event) {
+                requestGet.onerror = function (event) {
                     // Tratar erro!
                 }
             }
-            DBsynapse.onblocked = function(event) {
+            DBsynapse.onblocked = function (event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -801,26 +806,26 @@ this.DB = function() {
     }
 
     //Recuperar o estado do usuário
-    this.getUserState = function(actor_id, cobject_block_id, callBack) {
+    this.getUserState = function (actor_id, cobject_block_id, callBack) {
 
         if (self.isset(actor_id) && self.isset(cobject_block_id)) {
             var info_state = null;
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function(event) {
+            DBsynapse.onerror = function (event) {
                 alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
-            DBsynapse.onsuccess = function(event) {
+            DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
-                db.onerror = function(event) {
+                db.onerror = function (event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
-                   console.log("Database error: " + event.target.errorCode);
+                    console.log("Database error: " + event.target.errorCode);
                 }
                 //Tudo ok Então Busca O Cobject
                 var state_actorStore = db.transaction("state_actor").objectStore("state_actor");
                 var requestGet = state_actorStore.index('actor_id');
                 var singleKeyRange = IDBKeyRange.only(actor_id);
-                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         // Para cada id do Actor encontrado, verificar cobject_block_id
@@ -844,11 +849,11 @@ this.DB = function() {
                     }
 
                 };
-                requestGet.onerror = function(event) {
+                requestGet.onerror = function (event) {
                     // Tratar erro!
                 }
             }
-            DBsynapse.onblocked = function(event) {
+            DBsynapse.onblocked = function (event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -856,21 +861,21 @@ this.DB = function() {
     }
 
 
-    this.getAllClass = function(callBack, callBackEvent) {
+    this.getAllClass = function (callBack, callBackEvent) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function(event) {
+        DBsynapse.onerror = function (event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
-        DBsynapse.onsuccess = function(event) {
+        DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
-            db.onerror = function(event) {
+            db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 console.log("Database error: " + event.target.errorCode);
             }
             var unityStore = db.transaction("unity").objectStore("unity");
             var unitys = new Array();
-            unityStore.openCursor().onsuccess = function(event) {
+            unityStore.openCursor().onsuccess = function (event) {
 
                 var cursor = event.target.result;
                 if (cursor) {
@@ -889,34 +894,34 @@ this.DB = function() {
                 }
 
             };
-            unityStore.onerror = function(event) {
+            unityStore.onerror = function (event) {
                 // Tratar erro!
             }
         }
-        DBsynapse.onblocked = function(event) {
+        DBsynapse.onblocked = function (event) {
             // Se existe outra aba com a versão antiga
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
 
     }
-    this.getAllStudentFromClasses = function(unitys, callBackEvent) {
+    this.getAllStudentFromClasses = function (unitys, callBackEvent) {
         self.totalUnitys = unitys.length;
         for (var idx = 0; idx < unitys.length; idx++) {
             self.getAllStudentFromClass(unitys[idx], callBackEvent);
         }
     }
 
-    this.getAllStudentFromClass = function(unity, callBackEvent) {
+    this.getAllStudentFromClass = function (unity, callBackEvent) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function(event) {
+        DBsynapse.onerror = function (event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
-        DBsynapse.onsuccess = function(event) {
+        DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
-            db.onerror = function(event) {
+            db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
-               console.log("Database error: " + event.target.errorCode);
+                console.log("Database error: " + event.target.errorCode);
             }
             var unity_id = unity.unity_id;
             var actorStore = db.transaction("actor").objectStore("actor");
@@ -924,7 +929,7 @@ this.DB = function() {
             var singleKeyRange = IDBKeyRange.only(unity_id);
             var actors = new Array();
             var contStudent = 0;
-            requestGet.openCursor().onsuccess = function(event) {
+            requestGet.openCursor().onsuccess = function (event) {
                 var cursorActor = event.target.result;
                 if (cursorActor) {
                     // Percorre cada registro no actor para a unity corrent e personage = 'Aluno'
@@ -957,11 +962,11 @@ this.DB = function() {
                 }
 
             };
-            requestGet.onerror = function(event) {
+            requestGet.onerror = function (event) {
                 // Tratar erro!
             }
         }
-        DBsynapse.onblocked = function(event) {
+        DBsynapse.onblocked = function (event) {
             // Se existe outra aba com a versão antiga
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
@@ -970,24 +975,26 @@ this.DB = function() {
 
 
     //Verificar se já possui um bloco
-    this.verifyExistBlock = function(options, callBack) {
+    this.verifyExistBlock = function (options, callBack) {
         var existBlock = false;
-
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function(event) {
+        DBsynapse.onerror = function (event) {
             alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
 
-        DBsynapse.onsuccess = function(event) {
+        DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
-            db.onerror = function(event) {
+            db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 console.log("Database error: " + event.target.errorCode);
             }
+
+            console.log(db);
+
             var blockStore = db.transaction("cobjectblock").objectStore("cobjectblock");
             var cobjectblock = new Array();
-            blockStore.openCursor().onsuccess = function(event) {
+            blockStore.openCursor().onsuccess = function (event) {
                 var cursor = event.target.result;
                 if (cursor && !existBlock) {
                     // Percorre cada registro do cobjectblock
@@ -998,12 +1005,12 @@ this.DB = function() {
                         , options.cobject_cobjectblocks, options.cobjects, existBlock);
 
             };
-            blockStore.onerror = function(event) {
+            blockStore.onerror = function (event) {
                 // Tratar erro!
             }
         }
 
-        DBsynapse.onblocked = function(event) {
+        DBsynapse.onblocked = function (event) {
             // Se existe outra aba com a versão antiga
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
@@ -1013,14 +1020,14 @@ this.DB = function() {
     function useDatabase(db) {
         // Esteja certo de que adicionou um evento para notificar se a página muda a versão
         // Devemos fechar o banco. Isso permite à outra página ser atualizada
-        db.onversionchange = function(event) {
+        db.onversionchange = function (event) {
             db.close();
             alert("Uma nova versão desta web app está pronta. Atualiza, por favor!");
         }
     }
 
 
-    this.isset = function(variable) {
+    this.isset = function (variable) {
         return (typeof variable !== 'undefined' && variable !== null);
     }
 

@@ -42,10 +42,9 @@
 
 
             $(document).ready(function () {
-
                 //Somente para retirar o 'loading' que o jquery cria automaticamente
                 $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
-
+                
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
 
@@ -55,10 +54,12 @@
 
                 function buildAllSchemas() {
                     //1° Criar
-                    db.openDBuild(true, dataImportFunction);
+                    var tempDataJsonLin = window["dataJsonLin"] !== undefined ? dataJsonLin: null;
+                    var tempDataJsonMat = window["dataJsonMat"] !== undefined ? dataJsonMat: null;
+                    db.openDBuild(true, dataImportFunction(tempDataJsonLin, tempDataJsonMat));
                 }
-
-                function dataImportFunction() {
+                
+                function dataImportFunction(dataJsonLin, dataJsonMat) {
                     if(dataJsonLin !== undefined && dataJsonLin !== null){
                         //Importar Linguagem
                         importGeneral(dataJsonLin);
