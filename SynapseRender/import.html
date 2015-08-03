@@ -44,7 +44,7 @@
             $(document).ready(function () {
                 //Somente para retirar o 'loading' que o jquery cria automaticamente
                 $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
-                
+
                 //Criar Objeto para Manipulação do Banco
                 var db = new DB();
 
@@ -54,20 +54,19 @@
 
                 function buildAllSchemas() {
                     //1° Criar
-                    var tempDataJsonLin = window["dataJsonLin"] !== undefined ? dataJsonLin: null;
-                    var tempDataJsonMat = window["dataJsonMat"] !== undefined ? dataJsonMat: null;
-                    db.openDBuild(true, dataImportFunction(tempDataJsonLin, tempDataJsonMat));
-                }
-                
-                function dataImportFunction(dataJsonLin, dataJsonMat) {
-                    if(dataJsonLin !== undefined && dataJsonLin !== null){
-                        //Importar Linguagem
-                        importGeneral(dataJsonLin);
-                    }
-                    if(dataJsonMat !== undefined && dataJsonMat !== null){
-                        //Importar Matemática
-                        importGeneral(dataJsonMat);
-                    }
+                    var dataJsonLin = window["dataJsonLin"] !== undefined ? window["dataJsonLin"] : null;
+                    var dataJsonMat = window["dataJsonMat"] !== undefined ? window["dataJsonMat"] : null;
+
+                    db.openDBuild(true, function (dataJsonLin, dataJsonMat) {
+                        if (dataJsonLin !== undefined && dataJsonLin !== null) {
+                            //Importar Linguagem
+                            importGeneral(dataJsonLin);
+                        }
+                        if (dataJsonMat !== undefined && dataJsonMat !== null) {
+                            //Importar Matemática
+                            importGeneral(dataJsonMat);
+                        }
+                    }, dataJsonLin, dataJsonMat);
                 }
 
                 function importGeneral(dataJson) {
@@ -83,7 +82,7 @@
                         if (!existInArray(schools, tempSchool.id)) {
                             schools.push(tempSchool);
                         }
-                        
+
                         var tempUnity = {};
                         tempUnity.id = object.unity_id;
                         //FK para a school
@@ -110,16 +109,11 @@
                     var cobjectblock = dataJson.CobjectBlock;
                     var cobject_cobjectblocks = dataJson.Cobject_cobjectBlocks;
                     var cobjects = dataJson.Cobjects;
-                    
-                    
+
                     //2° Importar
                     db.importAllDataRender(schools, unitys, actors, disciplines, cobjectblock
                             , cobject_cobjectblocks, cobjects);
 
-                }
-
-                function deleteDatabase() {
-                    indexedDB.deleteDatabase("synapseDB");
                 }
 
 
@@ -142,7 +136,7 @@
                 });
 
                 $('#importLinguagem').bind('tap', function () {
-                     importGeneral(dataJsonLin);
+                    importGeneral(dataJsonLin);
                 });
 
 

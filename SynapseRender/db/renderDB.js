@@ -23,8 +23,11 @@ this.DB = function () {
         return window.indexedDB;
     }
 
-    this.openDBuild = function (alterSchema, dataImportFunction) {
+    this.openDBuild = function (alterSchema, dataImportFunction, dataJsonLin, dataJsonMat) {
+
         self.dataImportFunction = dataImportFunction;
+        self.dataJsonLin = dataJsonLin;
+        self.dataJsonMat = dataJsonMat;
 
         window.indexedDB = self.verifyIDBrownser();
         if (!window.indexedDB) {
@@ -35,18 +38,27 @@ this.DB = function () {
 
         //Se ainda não atualizou o DBversion, então abre o banco na sua versão atual
         var synapseBD;
-        synapseBD = window.indexedDB.open(nameBD);
+        synapseBD = window.indexedDB.open(nameBD, 2);
 
         synapseBD.onerror = function (event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
 
         synapseBD.onsuccess = function (event) {
-
             var db = event.target.result;
             db.onerror = function (event) {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 alert("Database error: " + event.target.errorCode);
+            };
+
+            db.onclose = function (event) {
+                console.log(event);
+            };
+
+            db.onversionchange = function (event) {
+                console.log(event);
             };
 
             DBversion = db.version;
@@ -55,25 +67,36 @@ this.DB = function () {
             }
             //Antes de abrir o banco novamente, fecha essa conexão com o BD
             //synapseBD.result.close();
-
             db.close();
             openBuild();
         }
+
+        synapseBD.onversionchange = function (event) {
+            console.log(event);
+        };
+
+        synapseBD.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        };
 
     }
 
 
 
     var openBuild = function () {
+
         DBsynapse = window.indexedDB.open(nameBD, DBversion);
-        
+
         DBsynapse.onversionchange = function (event) {
             //STOP HERE
-            DBsynapse.close();
+            console.log(event);
         };
-        
+
         DBsynapse.onerror = function (event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+            console.log("Error: ");
+            console.log(event);
+            // alert("Você não habilitou minha web app para usar IndexedDB?!");
         };
         DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
@@ -82,13 +105,14 @@ this.DB = function () {
                 alert("Database error: " + event.target.errorCode);
             };
         }
-        //Se for uma nova versão é criado o novo schemma do banco
-        self.buildAllSchema();
 
         DBsynapse.onblocked = function (event) {
             // Se existe outra aba com a versão antiga
             console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         };
+
+        //Se for uma nova versão é criado o novo schemma do banco
+        self.buildAllSchema();
 
     }
 
@@ -99,6 +123,17 @@ this.DB = function () {
         DBsynapse.onupgradeneeded = function (event) {
             var db = event.target.result;
 
+            //============  School  ===========================
+            var schoolStore = db.createObjectStore("school", {
+                keyPath: "id"
+            });
+            // Podemos ter nomes duplicados, então não podemos usar como índice único.
+            schoolStore.createIndex("name", "name", {
+                unique: false
+            });
+
+            //=============================================
+            
             var unityStore = db.createObjectStore("unity", {
                 keyPath: "id"
             });
@@ -201,54 +236,60 @@ this.DB = function () {
 
             // Usando transação oncomplete para afirmar que a criação do objectStore 
             // é terminada antes de adicionar algum dado nele.
-
-            unityStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+             schoolStore.transaction.oncomplete = function (event) {
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                console.log('Criou os Schemas');
+            }
+            
+            unityStore.transaction.oncomplete = function (event) {
+                //Se for o último dos 9 então contruiu todos os schemas
+                db.close();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
 
             actorStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
             disciplineStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
             cobjectblockStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
             cobject_cobjectblockStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
             cobjectStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
             performance_actorStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
             state_actorStore.transaction.oncomplete = function (event) {
-                //Se for o último dos 8 então contruiu todos os schemas
+                //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
-                self.dataImportFunction();
+                self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
 
@@ -293,6 +334,7 @@ this.DB = function () {
         self.verifyExistBlock(options, function (schools, unitys, actors, disciplines, cobjectblock
                 , cobject_cobjectblocks, cobjects, existBlock) {
             //Call Back
+            
             if (!existBlock) {
                 //=================================================
                 //Escola, Unidade e Usuário
@@ -313,7 +355,9 @@ this.DB = function () {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
-                alert("Você não habilitou minha web app para usar IndexedDB?!");
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
             DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
@@ -321,7 +365,7 @@ this.DB = function () {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.error.message);
                 };
-
+                
                 if (!existBlock) {
                     //==================================================
                     //Importar as schools
@@ -482,7 +526,9 @@ this.DB = function () {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function (event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
         };
         DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
@@ -548,7 +594,9 @@ this.DB = function () {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
-                alert("Você não habilitou minha web app para usar IndexedDB?!");
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
             DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
@@ -608,7 +656,9 @@ this.DB = function () {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
-                alert("Você não habilitou minha web app para usar IndexedDB?!");
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
             DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
@@ -641,7 +691,9 @@ this.DB = function () {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
-                alert("Você não habilitou minha web app para usar IndexedDB?!");
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
             DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
@@ -706,7 +758,9 @@ this.DB = function () {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function (event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
         DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
@@ -737,7 +791,9 @@ this.DB = function () {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
-                alert("Você não habilitou minha web app para usar IndexedDB?!");
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
             DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
@@ -813,7 +869,9 @@ this.DB = function () {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
-                alert("Você não habilitou minha web app para usar IndexedDB?!");
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
             DBsynapse.onsuccess = function (event) {
                 var db = event.target.result;
@@ -865,7 +923,9 @@ this.DB = function () {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function (event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
         DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
@@ -915,7 +975,9 @@ this.DB = function () {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function (event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
         DBsynapse.onsuccess = function (event) {
             var db = event.target.result;
@@ -980,7 +1042,9 @@ this.DB = function () {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function (event) {
-            alert("Você não habilitou minha web app para usar IndexedDB?!");
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
         }
 
         DBsynapse.onsuccess = function (event) {
@@ -989,8 +1053,6 @@ this.DB = function () {
                 // Função genérica para tratar os erros de todos os requests desse banco!
                 console.log("Database error: " + event.target.errorCode);
             }
-
-            console.log(db);
 
             var blockStore = db.transaction("cobjectblock").objectStore("cobjectblock");
             var cobjectblock = new Array();
@@ -1001,7 +1063,7 @@ this.DB = function () {
                     existBlock = true;
                 }
 
-                callBack(options.unitys, options.actors, options.disciplines, options.cobjectblock
+                callBack(options.schools, options.unitys, options.actors, options.disciplines, options.cobjectblock
                         , options.cobject_cobjectblocks, options.cobjects, existBlock);
 
             };
