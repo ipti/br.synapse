@@ -42,8 +42,7 @@ this.Meet = function (options) {
     this.actor_name = options.actor[1];
     this.login_personage_name = options.actor[2];
     this.discipline_id = options.id_discipline;
-    this.cobject_block_id = options.cobject_block_id;
-    //============================
+    this.cobject_block_id = null;
 
     //==== Armazenar a performance do usuário
     this.peformance_qtd_correct = 0;
@@ -67,48 +66,64 @@ this.Meet = function (options) {
     //Array com todos templates por CobjectsIDs
     this.cobjectsIDsTemplates = new Array();
 
-    //Obter todos os Cobject deste Bloco
-    this.start = self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id, function (objectsThisBlock) {
-        //count do número de objetos
-        var num_objects = 0;
-        $.each(objectsThisBlock, function () {
-            num_objects++;
-        });
-
-        //Setar todos os CobjectsIds
-        self.setCobjectsIds(objectsThisBlock);
-
-        //Agora Verifica o UserState
-        self.DB_synapse.getUserState(self.actor, self.cobject_block_id, function (info_state) {
-            var gotoState = self.isset(info_state);
-            var lastCobject_id = null;
-            if (gotoState) {
-                //Encontrou O estado do usuário
-                self.isLoadState = true;
-                lastCobject_id = info_state.last_cobject_id;
-                self.firstPieceCurrentMeet = info_state.last_piece_id;
-                self.peformance_qtd_correct = info_state.qtd_correct;
-                self.peformance_qtd_wrong = info_state.qtd_wrong;
-                //Calcula o Score
-                self.scoreCalculator(false);
-            } else {
-                //Abre o Primeiro Cobject
-                lastCobject_id = self.cobjectsIDs[0];
-                self.isLoadState = false;
-            }
-            //Construçao do DOM do 1° cobject de cada Meet
-            self.domCobjectBuild(lastCobject_id);
-            //Depois inicia os eventos globais 
-            self.init_eventsGlobals();
-
-        });
-
-        /*  $.each(objectsThisBlock, function(idx, object){
-         //Para cada Cobject Cria sua Dom
-         
-         }); */
-
+    //Obter bloco a partir da disciplina selecionada
+    this.cobject_block_id = this.DB_synapse.getBlockByDiscipline(self.discipline_id, function (cobject_block_id) {
+        self.cobject_block_id = cobject_block_id;
+        if (self.isset(self.cobject_block_id)) {
+            //Inicia o encontro. Agora que já sabe qual Bloco carregar. 
+            self.start();
+        }else{
+            //Não inicia
+            console.log("Nenhum Bloco foi encontrado para a Disciplina selecionada !!!");
+        }
     });
+    //============================
+
+
+    //Obter todos os Cobject deste Bloco
+    this.start = function () {
+        self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id
+                , function (objectsThisBlock) {
+                    //count do número de objetos
+                    var num_objects = 0;
+                    $.each(objectsThisBlock, function () {
+                        num_objects++;
+                    });
+
+                    //Setar todos os CobjectsIds
+                    self.setCobjectsIds(objectsThisBlock);
+
+                    //Agora Verifica o UserState
+                    self.DB_synapse.getUserState(self.actor, self.cobject_block_id, function (info_state) {
+                        var gotoState = self.isset(info_state);
+                        var lastCobject_id = null;
+                        if (gotoState) {
+                            //Encontrou O estado do usuário
+                            self.isLoadState = true;
+                            lastCobject_id = info_state.last_cobject_id;
+                            self.firstPieceCurrentMeet = info_state.last_piece_id;
+                            self.peformance_qtd_correct = info_state.qtd_correct;
+                            self.peformance_qtd_wrong = info_state.qtd_wrong;
+                            //Calcula o Score
+                            self.scoreCalculator(false);
+                        } else {
+                            //Abre o Primeiro Cobject
+                            lastCobject_id = self.cobjectsIDs[0];
+                            self.isLoadState = false;
+                        }
+                        //Construçao do DOM do 1° cobject de cada Meet
+                        self.domCobjectBuild(lastCobject_id);
+                        //Depois inicia os eventos globais 
+                        self.init_eventsGlobals();
+
+                    });
+
+                    /*  $.each(objectsThisBlock, function(idx, object){
+                     //Para cada Cobject Cria sua Dom
+                     
+                     }); */
+                });
+    }
 
 
     this.setCobjectsIds = function (cobjectsIDs) {
@@ -1164,17 +1179,17 @@ this.Meet = function (options) {
                 }
             }
         });
-        
-        
+
+
         //Se for disparo um evento touchEnd
         $(".DIG-table td").on('vmouseup', function (event) {
             var currentPiece = $(this).closest('.piece');
             var currentCellStart = currentPiece.find('.DIG-table td.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
-             elementAtual = $(elementAtual);
+            elementAtual = $(elementAtual);
             var isTdDIGTable = elementAtual.closest(".DIG-table").size() !== 0;
             if (isTdDIGTable && currentCellStart.size() !== 0) {
-                if(elementAtual.get(0).nodeName !== "TD"){
+                if (elementAtual.get(0).nodeName !== "TD") {
                     //Então é um filho de TD
                     elementAtual = elementAtual.closest('td');
                 }
@@ -1182,12 +1197,12 @@ this.Meet = function (options) {
                 elementAtual.trigger('mouseup');
             }
         });
-        
-        
+
+
 
         $('.DIG-table td').on('mouseup', function () {
             var currentPiece = $(this).closest('.piece');
-            
+
             //Armazenar na div high Light a posição da matriz 
             //que inicia e termina a palavra selecionada atual
             var currentStart = currentPiece.find('.DIG-table td.currentStart');

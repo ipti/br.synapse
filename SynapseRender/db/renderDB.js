@@ -133,7 +133,7 @@ this.DB = function () {
             });
 
             //=============================================
-            
+
             var unityStore = db.createObjectStore("unity", {
                 keyPath: "id"
             });
@@ -178,7 +178,11 @@ this.DB = function () {
             cobjectblockStore.createIndex("name", "name", {
                 unique: true
             });
-            // Falta discipline_id
+
+            // discipline_id
+            cobjectblockStore.createIndex("discipline_id", "discipline_id", {
+                unique: false
+            });
 
             //================================================
 
@@ -236,13 +240,13 @@ this.DB = function () {
 
             // Usando transação oncomplete para afirmar que a criação do objectStore 
             // é terminada antes de adicionar algum dado nele.
-             schoolStore.transaction.oncomplete = function (event) {
+            schoolStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
                 self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                 console.log('Criou os Schemas');
             }
-            
+
             unityStore.transaction.oncomplete = function (event) {
                 //Se for o último dos 9 então contruiu todos os schemas
                 db.close();
@@ -334,7 +338,7 @@ this.DB = function () {
         self.verifyExistBlock(options, function (schools, unitys, actors, disciplines, cobjectblock
                 , cobject_cobjectblocks, cobjects, existBlock) {
             //Call Back
-            
+
             if (!existBlock) {
                 //=================================================
                 //Escola, Unidade e Usuário
@@ -365,7 +369,7 @@ this.DB = function () {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.error.message);
                 };
-                
+
                 if (!existBlock) {
                     //==================================================
                     //Importar as schools
@@ -715,7 +719,7 @@ this.DB = function () {
                         objectsThisBlock.push(cursor.value.cobject_id);
                         cursor.continue();
                     } else {
-                        //Finalisou a Pesquisa
+                        //Finalizou a Pesquisa
                         if (existBlock) {
                             callBack(objectsThisBlock);
                         } else {
@@ -1088,6 +1092,48 @@ this.DB = function () {
         }
     }
 
+    this.getBlockByDiscipline = function (discipline_id, callBack) {
+        if (self.isset(discipline_id)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function (event) {
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function (event) {
+                var cobject_block_id = null;
+                var db = event.target.result;
+                db.onerror = function (event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.errorCode);
+                }
+                //Tudo ok Então Busca O CobjectBlock
+                var cobjectBlockStore = db.transaction("cobjectblock").objectStore("cobjectblock");
+                var requestGet = cobjectBlockStore.index('discipline_id');
+                var singleKeyRange = IDBKeyRange.only(discipline_id);
+                requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        //Encontrou o Bloco que possui a disciplina escolhida
+                        cobject_block_id = cursor.value.id;
+                        callBack(cobject_block_id);
+                    }else{
+                        //Não encontrou
+                        callBack(null);
+                    }
+                    
+                };
+                requestGet.onerror = function (event) {
+                    // Tratar erro!
+                }
+            }
+            DBsynapse.onblocked = function (event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+    }
 
     this.isset = function (variable) {
         return (typeof variable !== 'undefined' && variable !== null);

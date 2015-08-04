@@ -94,7 +94,7 @@
                     //Selecionar o Bloco de Atividades
                     var disciplineID = sessionGet('id_discipline');
                     var disciplineName = DISCIPLINES[disciplineID];
-                    var block_id;
+                   /* var block_id;
                     switch (disciplineID) {
                         case '1':
                             block_id = '8';
@@ -102,14 +102,14 @@
                         case '2':
                             block_id = '';
                             break; //Matemática   
-                    }
-
+                    } */
+                    
                     var options = {
                         org: [org, organizationName],
                         classe: [classe, className],
                         actor: [actorID, actorName, login_personage_name],
                         id_discipline: disciplineID,
-                        cobject_block_id: block_id
+                        //cobject_block_id: block_id
                     };
 
                     //Passar parâmetro do tipo do Encontro
@@ -145,13 +145,13 @@
                     $("#close-icon").bind('tap', function () {
                         $("#finalize-message").hide();
                     });
-                    
+
                     //Retira os eventos padrões para elementos select
                     $('#school').unbind();
                     $('#classroom').unbind();
                     $('#school').siblings('span').remove();
                     $('#classroom').siblings('span').remove();
-                    
+
                     $('#btnAddNewUser').on('tap', function () {
                         var usrName = $('#nome_aluno').val();
                         if (usrName.replace(/\s/g, '') === '') {
@@ -160,7 +160,7 @@
                         } else {
                             $('.message-form-error').html("");
                             //Cadastrar Usuário Offline no IndexDB
-                            
+
                         }
 
                     });
@@ -241,7 +241,7 @@
                 </div>
                 <div class="message-form-error">
                 </div>
-                
+
                 <label for="school">Escola</label>
                 <select name="school" id="school">
                     <option value="1">Priapu</option>
@@ -249,10 +249,10 @@
                 </select>
                 <label for="classroom">Turma</label>
                 <select name="classroom" id="classroom"> 
-                     <option value="2">2° Ano</option>
-                     <option value="3">3° Ano</option>
+                    <option value="2">2° Ano</option>
+                    <option value="3">3° Ano</option>
                 </select>
-                
+
                 <label for="nome_aluno">Nome do Aluno*</label>
                 <input type="text" size="20" maxlength="40" name="nome_aluno" id="nome_aluno"/> 
                 <button class="message-button-addNewUser" id="btnAddNewUser">Registrar</button>
