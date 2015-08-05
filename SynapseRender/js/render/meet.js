@@ -67,21 +67,23 @@ this.Meet = function (options) {
     this.cobjectsIDsTemplates = new Array();
 
     //Obter bloco a partir da disciplina selecionada
-    this.cobject_block_id = this.DB_synapse.getBlockByDiscipline(self.discipline_id, function (cobject_block_id) {
-        self.cobject_block_id = cobject_block_id;
-        if (self.isset(self.cobject_block_id)) {
-            //Inicia o encontro. Agora que já sabe qual Bloco carregar. 
-            self.start();
-        }else{
-            //Não inicia
-            console.log("Nenhum Bloco foi encontrado para a Disciplina selecionada !!!");
-        }
-    });
+    this.start = function () {
+        this.DB_synapse.getBlockByDiscipline(self.discipline_id, function (cobject_block_id) {
+            self.cobject_block_id = cobject_block_id;
+            if (self.isset(self.cobject_block_id)) {
+                //Inicia o encontro. Agora que já sabe qual Bloco carregar. 
+                self.getCobjectsFromBlock();
+            } else {
+                //Não inicia
+                console.log("Nenhum Bloco foi encontrado para a Disciplina selecionada !!!");
+            }
+        });
+    }
     //============================
 
 
     //Obter todos os Cobject deste Bloco
-    this.start = function () {
+    this.getCobjectsFromBlock = function () {
         self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id
                 , function (objectsThisBlock) {
                     //count do número de objetos

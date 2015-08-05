@@ -585,10 +585,6 @@ this.DB = function () {
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
 
-
-        ///=====
-
-
     }
 
 
@@ -841,7 +837,7 @@ this.DB = function () {
 
                         cursor.continue();
                     } else {
-                        //Finalisou a Pesquisa, se não existir um estado corrent, o parms=null
+                        //Finalizou a Pesquisa, se não existir um estado corrent, o parms=null
                         var update = self.isset(user_state_id);
                         //Cria um novo Se NÃO houve update
                         if (!update) {
@@ -1118,15 +1114,75 @@ this.DB = function () {
                         //Encontrou o Bloco que possui a disciplina escolhida
                         cobject_block_id = cursor.value.id;
                         callBack(cobject_block_id);
-                    }else{
+                    } else {
                         //Não encontrou
                         callBack(null);
                     }
-                    
+
                 };
                 requestGet.onerror = function (event) {
                     // Tratar erro!
                 }
+            }
+            DBsynapse.onblocked = function (event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+    }
+
+
+    //Registrar Aluno
+    this.addStudent = function (classroom_id, user_name) {
+        if (self.isset(user_name)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function (event) {
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function (event) {
+                var db = event.target.result;
+
+                db.onerror = function (event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.error.message);
+                }
+                var maxID = 0;
+                var findStudentsObjectStore = db.transaction("actor", "readonly").objectStore("actor");
+                findStudentsObjectStore.openCursor().onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    //Encontrar Maior ID
+                    if (cursor) {
+                        //Encontrou pelo menos um ID
+                        if (cursor.value.id > maxID) {
+                            maxID = cursor.value.id;
+                        }
+                        cursor.continue();
+                    } else {
+                        //Finalizou
+                        //Agora add O estudante com este ID
+                        var dataStudent = {
+                            createdOffline: true,
+                            id: ++maxID,
+                            login: user_name,
+                            name: user_name,
+                            password: "123456",
+                            personage_name: "Aluno",
+                            unity_id: classroom_id,
+                        };
+
+                        //Tudo ok Então Registra o Novo Aluno
+                        var studentObjectStore = db.transaction("actor", "readwrite").objectStore("actor");
+                        studentObjectStore.add(dataStudent);
+                        studentObjectStore.transaction.oncomplete = function (event) {
+                            console.log(' NEW Actor Salvo !!!! ');
+                            location.href = "select.html";
+                        };
+                    }
+                }
+
             }
             DBsynapse.onblocked = function (event) {
                 // Se existe outra aba com a versão antiga

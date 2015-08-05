@@ -202,7 +202,7 @@ body {
      margin-bottom: 10px;
 }
 
-.message-form-error{
+.message-form{
     font-size: 18px;
     color:#F18318;
 }
@@ -254,6 +254,7 @@ body {
     font-size: 20px;
     padding: 7px 14px;
     margin-top: 10px;
+    cursor:pointer;
 }
 
 .error .message-button {

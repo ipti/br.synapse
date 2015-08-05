@@ -94,16 +94,16 @@
                     //Selecionar o Bloco de Atividades
                     var disciplineID = sessionGet('id_discipline');
                     var disciplineName = DISCIPLINES[disciplineID];
-                   /* var block_id;
-                    switch (disciplineID) {
-                        case '1':
-                            block_id = '8';
-                            break; //Linguagem
-                        case '2':
-                            block_id = '';
-                            break; //Matemática   
-                    } */
-                    
+                    /* var block_id;
+                     switch (disciplineID) {
+                     case '1':
+                     block_id = '8';
+                     break; //Linguagem
+                     case '2':
+                     block_id = '';
+                     break; //Matemática   
+                     } */
+
                     var options = {
                         org: [org, organizationName],
                         classe: [classe, className],
@@ -118,13 +118,21 @@
                     //Verificar se fora seleciona algum Aluno
                     if (actorID === 'null') {
                         $('#add-new-user').show();
+                    } else {
+                        //Iniciar o Meet e Atualiza O painel do render
+                        newMeet.start();
+                        loadInfos();
                     }
 
-                    //Atualizar O painel do render
-                    $('.info.info-name').html('<p>' + newMeet.actor_name + '</p>');
-                    $('.info.info-discipline').html('<p>' + disciplineName + '</p>');
-                    $('.info.info-hits .info-text').html(newMeet.peformance_qtd_correct);
-                    $('.info.info-erros .info-text').html(newMeet.peformance_qtd_wrong);
+                    function loadInfos() {
+                        $('.info.info-name').html('<p>' + newMeet.actor_name + '</p>');
+                        $('.info.info-discipline').html('<p>' + disciplineName + '</p>');
+                        $('.info.info-hits .info-text').html(newMeet.peformance_qtd_correct);
+                        $('.info.info-erros .info-text').html(newMeet.peformance_qtd_wrong);
+                    }
+
+
+
 
                     //Mostrar/Ocultar barra de informações
                     $('#info-button').bind('tap', function () {
@@ -156,14 +164,14 @@
                         var usrName = $('#nome_aluno').val();
                         if (usrName.replace(/\s/g, '') === '') {
                             //Mensagem erro
-                            $('.message-form-error').html("Nome do Aluno é Obrigatório!");
+                            $('.message-form').html("Nome do Aluno é Obrigatório!");
                         } else {
-                            $('.message-form-error').html("");
                             //Cadastrar Usuário Offline no IndexDB
-
+                            newMeet.DB_synapse.addStudent($('#classroom').val(), $('#nome_aluno').val());
                         }
-
                     });
+
+
 
                 }
             });
@@ -239,18 +247,18 @@
                 <div class="title-add-new-user">
                     Registrar Aluno
                 </div>
-                <div class="message-form-error">
+                <div class="message-form">
                 </div>
+
 
                 <label for="school">Escola</label>
                 <select name="school" id="school">
                     <option value="1">Priapu</option>
-                    <option value="2">Jessé</option>
                 </select>
                 <label for="classroom">Turma</label>
                 <select name="classroom" id="classroom"> 
+                    <option value="1">1° Ano</option>
                     <option value="2">2° Ano</option>
-                    <option value="3">3° Ano</option>
                 </select>
 
                 <label for="nome_aluno">Nome do Aluno*</label>
