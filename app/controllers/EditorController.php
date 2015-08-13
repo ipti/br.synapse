@@ -165,6 +165,7 @@ class EditorController extends Controller {
     public $TYPE_LIBRARY_IMAGE = "IMAGE";
     public $TYPE_LIBRARY_SOUND = "SOUND";
     public $TYPE_LIBRARY_MOVIE = "MOVIE";
+    public $TYPE_ELEMENT_SHAPE = "SHAPE";
 
     //==== Transaction Variable-  ====//
     // private $transaction;
@@ -607,20 +608,20 @@ class EditorController extends Controller {
                             }
                             break;
                         case "Element":
-//                            var_dump($_POST);exit();
+                            // var_dump($_POST);exit();
                             if (isset($_POST['typeID']) || isset($_POST['justFlag'])) {
 
                                 if (isset($_POST['typeID'])) {
                                     $typeName = $_POST['typeID'];
                                     $typeID = $this->getTypeIDByName($typeName);
                                 }
+
                                 $justFlag = false;
 
                                 if ((isset($_POST['pieceID']) || isset($_POST['pieceSetID']) ||
-                                        isset($_POST['cobjectID'])) && isset($_POST['ordem']) &&
+                                        isset($_POST['cobjectID'])) &&
                                         isset($_POST['value']) && isset($_POST['DomID'])) {
                                     $DomID = $_POST['DomID'];
-
                                     $isElementPieceSet = false;
                                     $isElementCobject = false;
 
@@ -640,8 +641,12 @@ class EditorController extends Controller {
                                     if (isset($_POST['value'])) {
                                         $value = $_POST['value'];
                                     }
-
-                                    $order = $_POST['ordem'];
+                                    if (isset($_POST['ordem'])) {
+                                        $order = $_POST['ordem'];
+                                    } else {
+                                        //Não importa a posição
+                                        $order = 0;
+                                    }
 
                                     $new = false;
                                     $unlink_New = false;
@@ -763,13 +768,13 @@ class EditorController extends Controller {
                                         $new = true;
                                     }
 
-
                                     if ($new || $unlink_New) {
                                         $newElement = new EditorElement(); // Cria um novo
                                         $newElement->type_id = $typeID; // novo tipo ou alterado
                                         $newElement->insert();
                                         $element = EditorElement::model()->findByAttributes(array(), array('order' => 'id desc'));
                                         $elementID = $element->id;
+
                                         if (!$isElementPieceSet && !$isElementCobject) {
                                             $newPieceElement = new EditorPieceElement();
                                             $newPieceElement->piece_id = $pieceID;
@@ -845,7 +850,6 @@ class EditorController extends Controller {
                                             $newCobjectElement->position = $order;
                                             $newCobjectElement->insert();
                                         }
-
 
                                         $json['ElementID'] = $elementID;
 
@@ -1051,6 +1055,20 @@ class EditorController extends Controller {
                                             $newElementProperty->property_id = $propertyID;
                                             $newElementProperty->value = "português";
                                             $newElementProperty->insert();
+                                        } else if ($typeName == $this->TYPE_ELEMENT_SHAPE) {
+                                            if (isset($_POST['shape'])) {
+                                                //O Template é o Desenho
+                                                //Propriedade Type_Shape
+                                                $newEPropertyShape = new EditorElementProperty();
+                                                $newEPropertyShape->element_id = $elementID;
+
+                                                $propertyName = "type_shape";
+                                                $propertyContext = "element";
+                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $newEPropertyShape->property_id = $propertyID;
+                                                $newEPropertyShape->value = $_POST["shape"];
+                                                $newEPropertyShape->insert();
+                                            }
                                         } else {
                                             throw new Exception("ERROR: Tipo inválido.<br>");
                                         }
@@ -1080,6 +1098,7 @@ class EditorController extends Controller {
                             } else {
                                 throw new Exception("ERROR: Operação inválida.<br>");
                             }
+
                             break;
                         case "plc":
                             if (isset($_POST['crossWords'])) {

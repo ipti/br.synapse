@@ -702,4 +702,21 @@ div.flashing{
 }
 
 
+div.shapes {
+    text-align: center;
+    display: inline-flex;
+    padding-left: 27%;
+    padding-top: 10px;
+}
+
+div.shapes img{
+    cursor: pointer;
+    margin-left: 20px;
+    
+}
+div.shapes img.selected{
+    border: 5px solid rgb(154, 205, 50);
+}
+
+
 

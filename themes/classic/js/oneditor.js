@@ -744,6 +744,7 @@ function onEditor(newEditor) {
 
 
     $(window).load(function () {
+        //Intervalo de flashs no PLC
         setInterval(function () {
             if ($('div.flashing').css('opacity') === '0.5') {
                 $('div.flashing').css('opacity', '1');
@@ -751,6 +752,14 @@ function onEditor(newEditor) {
                 $('div.flashing').css('opacity', '0.5');
             }
         }, 500);
+
+
+        $('div.shapes img').on('click', function () {
+            $(this).addClass('selected');
+            $(this).siblings('img').removeClass('selected');
+            $(this).closest('div.shapes').data('value', $(this).attr('id'));
+        });
+
 
     });
 
