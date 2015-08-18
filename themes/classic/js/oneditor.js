@@ -753,11 +753,13 @@ function onEditor(newEditor) {
             }
         }, 500);
 
-
-        $('div.shapes img').on('click', function () {
+        $(document).on('click', 'div.shapes img:not(.selected)' , function () {
             $(this).addClass('selected');
             $(this).siblings('img').removeClass('selected');
-            $(this).closest('div.shapes').data('value', $(this).attr('id'));
+            $(this).closest('div.shapes').data('value', $(this).attr('name'));
+            if(newEditor.isload){
+                $(this).closest('div.shapes').attr('updated',1);
+            }
         });
 
 

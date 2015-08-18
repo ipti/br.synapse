@@ -1,28 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "editor_piece".
+ * This is the model class for table "editor_piece_property".
  *
- * The followings are the available columns in table 'editor_piece':
+ * The followings are the available columns in table 'editor_piece_property':
  * @property integer $id
- * @property string $name
- * @property string $description
- * @property integer $type_id
- * @property integer $oldID
+ * @property integer $property_id
+ * @property integer $piece_id
+ * @property string $value
  *
  * The followings are the available model relations:
- * @property CommonType $type
- * @property EditorPieceElement[] $editorPieceElements
- * @property EditorPieceProperty[] $editorPieceProperties
- * @property EditorPiecesetPiece[] $editorPiecesetPieces
- * @property PeformanceActor[] $peformanceActors
+ * @property CommonProperty $property
+ * @property EditorPiece $piece
  */
-class EditorPiece extends CActiveRecord
+class EditorPieceProperty extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return EditorPiece the static model class
+	 * @return EditorPieceProperty the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -34,7 +30,7 @@ class EditorPiece extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'editor_piece';
+		return 'editor_piece_property';
 	}
 
 	/**
@@ -45,11 +41,12 @@ class EditorPiece extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type_id, oldID', 'numerical', 'integerOnly'=>true),
-			array('name, description', 'safe'),
+			array('property_id, piece_id', 'required'),
+			array('property_id, piece_id', 'numerical', 'integerOnly'=>true),
+			array('value', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, description, type_id, oldID', 'safe', 'on'=>'search'),
+			array('id, property_id, piece_id, value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,11 +58,8 @@ class EditorPiece extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'type' => array(self::BELONGS_TO, 'CommonType', 'type_id'),
-			'editorPieceElements' => array(self::HAS_MANY, 'EditorPieceElement', 'piece_id'),
-			'editorPieceProperties' => array(self::HAS_MANY, 'EditorPieceProperty', 'piece_id'),
-			'editorPiecesetPieces' => array(self::HAS_MANY, 'EditorPiecesetPiece', 'piece_id'),
-			'peformanceActors' => array(self::HAS_MANY, 'PeformanceActor', 'piece_id'),
+			'property' => array(self::BELONGS_TO, 'CommonProperty', 'property_id'),
+			'piece' => array(self::BELONGS_TO, 'EditorPiece', 'piece_id'),
 		);
 	}
 
@@ -76,10 +70,9 @@ class EditorPiece extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('default', 'ID'),
-			'name' => Yii::t('default', 'Name'),
-			'description' => Yii::t('default', 'Description'),
-			'type_id' => Yii::t('default', 'Type'),
-			'oldID' => Yii::t('default', 'Old'),
+			'property_id' => Yii::t('default', 'Property'),
+			'piece_id' => Yii::t('default', 'Piece'),
+			'value' => Yii::t('default', 'Value'),
 		);
 	}
 
@@ -95,10 +88,9 @@ class EditorPiece extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('type_id',$this->type_id);
-		$criteria->compare('oldID',$this->oldID);
+		$criteria->compare('property_id',$this->property_id);
+		$criteria->compare('piece_id',$this->piece_id);
+		$criteria->compare('value',$this->value,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
