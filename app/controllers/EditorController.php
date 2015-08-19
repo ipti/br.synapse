@@ -573,10 +573,10 @@ class EditorController extends Controller {
                                 } else {
                                     $newPiece = new EditorPiece();
                                 }
-                                
-                                if(isset($typeName)){
-                                   $typeID = $this->getTypeIDbyName_Context('piece', $typeName);
-                                   $newPiece->type_id = $typeID;
+
+                                if (isset($typeName)) {
+                                    $typeID = $this->getTypeIDbyName_Context('piece', $typeName);
+                                    $newPiece->type_id = $typeID;
                                 }
 
                                 if ($_POST['op'] == 'update' && isset($_POST['ID_BD'])) {
@@ -591,7 +591,7 @@ class EditorController extends Controller {
                                             $propertyName = "type_shape";
                                             $propertyContext = "piece";
                                             $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
-                                          
+
                                             $piecePropertyShape = EditorPieceProperty::model()
                                                     ->findByAttributes(array('piece_id' => $newPiece->id, 'property_id' => $propertyID));
 
@@ -1256,19 +1256,18 @@ class EditorController extends Controller {
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id] = array();
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['description'] = $Piece->description;
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['name'] = $Piece->name;
-                                     
-                                    if(isset($Piece->type_id) && $Piece->type_id == $this->getTypeIDbyName_Context('piece', 'shape')){
+
+                                    if (isset($Piece->type_id) && $Piece->type_id == $this->getTypeIDbyName_Context('piece', 'shape')) {
                                         //O template é Desenho. 
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['type_name'] = $Piece->type->name;
                                         $piece_property = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $Piece->id,
                                             'property_id' => $this->getPropertyIDByName('type_shape', 'piece')));
                                         //Forma do Desenho
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['shape'] = $piece_property->value;
-                                        
                                     }
-                                            
-                                    
-                                    
+
+
+
 
                                     $PieceElement = EditorPieceElement::model()->findAllByAttributes(array('piece_id' => $psp->piece_id), array('order' => '`position`'));
 
@@ -1501,6 +1500,18 @@ class EditorController extends Controller {
         //Depois, Exclui a peça Se Não existir Algum piece_element <=> performance_actor
         if ($delpiece) {
             $delete_piece = EditorPiece::model()->findByPk($id);
+            //Exclui todas as propriedades da Piece
+            $Piece_Property = EditorPieceProperty::model()
+                    ->findAll(array(
+                'condition' => 'piece_id=:idPiece',
+                'params' => array(':idPiece' => $delete_piece->id)
+            ));
+            $ls = null;
+            foreach ($Piece_Property as $ls):
+                // Excluir cada propriedade da Piece
+                $ls->delete();
+            endforeach;
+            // Por fim deleta a piece
             $delete_piece->delete();
         }
 

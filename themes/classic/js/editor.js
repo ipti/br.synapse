@@ -347,10 +347,12 @@ function editor() {
                 $('#' + PieceSetId).append(generateLi(pieceID, plus, tplClass, content));
                 
                 //Após o append no HTML, se for um template Desenho
-                if (parent.COTemplateTypeIn(parent.DES)) {
+                if (parent.COTemplateTypeIn(parent.DES) && parent.isload) {
                     if(dataPiece["type_name"] == "shape"){
                          var divShapes = $('#' + PieceSetId).find('li#'+pieceID).find('div.shapes');
                          divShapes.find('img.'+dataPiece["shape"]).trigger('click');
+                          divShapes.attr('updated',0);
+                         
                     }
                 }
 
@@ -3062,10 +3064,11 @@ function editor() {
                                         if ((parent.totalScreens === parent.uploadedScreens) &&
                                                 (parent.totalPiecesets === parent.uploadedPiecesets) &&
                                                 (parent.totalPieces === parent.uploadedPieces) &&
-                                                ((!parent.isload && parent.totalElements === parent.uploadedElements) ||
+                                                (((!parent.isload && parent.totalElements === parent.uploadedElements) ||
                                                         (parent.isload && parent.totalElementsChanged === parent.uploadedElements &&
                                                                 (!parent.COTemplateTypeIn(parent.MTE) ||
-                                                                        ((parent.uploadedFlags + totalElementsPieceSet) === parent.totalElementsNOchanged))))) {
+                                                                        ((parent.uploadedFlags + totalElementsPieceSet) === parent.totalElementsNOchanged))))
+                                                                        || parent.COTemplateTypeIn(parent.DES)) ) {
 
                                             if ((parent.COTemplateTypeIn(parent.PLC) && self.crossInfomationSent) ||
                                                     !parent.COTemplateTypeIn(parent.PLC)) {
