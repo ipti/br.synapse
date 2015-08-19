@@ -337,7 +337,7 @@ function editor() {
                 } else if (parent.COTemplateTypeIn(parent.DES)) {
                     tplClass = 'tplDes';
                     var updated = isDB ? 'updated = 0' : 'updated = 1';
-                    content = '<div class="element shapes"' + updated + ' id="' + pieceID + '_e0' + '" >\n\
+                    content = '<div class="shapes"' + updated + ' id="' + pieceID + '_e0' + '" >\n\
                       <img src="/themes/classic/images/rectangle.png" width="182px" height="96px" class="rectangle" name="rectangle"  />\n\
                     <img src="/themes/classic/images/square.png" width="128px" height="106px" class="square" name="square"  />\n\
                     <img src="/themes/classic/images/triangle.png" width="147px" height="117px" class="triangle" name="triangle"  />\n\
@@ -347,7 +347,7 @@ function editor() {
                 $('#' + PieceSetId).append(generateLi(pieceID, plus, tplClass, content));
                 
                 //Após o append no HTML, se for um template Desenho
-                if (parent.COTemplateTypeIn(parent.DES) && parent.isload) {
+                if (parent.COTemplateTypeIn(parent.DES) && parent.isload && parent.isset(idbd)) {
                     if(dataPiece["type_name"] == "shape"){
                          var divShapes = $('#' + PieceSetId).find('li#'+pieceID).find('div.shapes');
                          divShapes.find('img.'+dataPiece["shape"]).trigger('click');
@@ -2953,7 +2953,7 @@ function editor() {
                                                         };
                                                         //Se for Template Desenho Salva de Maneira diferente
                                                         if (parent.COTemplateTypeIn(parent.DES)) {
-                                                            var property_value = $(this).find('div.element.shapes').data('value');
+                                                            var property_value = $(this).find('div.shapes').data('value');
                                                             var typeName = TYPE.PIECE.SHAPE;
                                                             data['shape'] = property_value;
                                                             data['typeName'] = typeName;
@@ -3056,7 +3056,7 @@ function editor() {
                                 //======================     
                             }, // End Form SaveAll
 
-//Verificar se acabou as requisições!
+                                    //Verificar se acabou as requisições!
                                     this.verify_requestFinish = function () {
                                         var parent = this;
                                         var totalElementsPieceSet = $('span.elementPieceSet > div.element').size();
@@ -3068,14 +3068,13 @@ function editor() {
                                                         (parent.isload && parent.totalElementsChanged === parent.uploadedElements &&
                                                                 (!parent.COTemplateTypeIn(parent.MTE) ||
                                                                         ((parent.uploadedFlags + totalElementsPieceSet) === parent.totalElementsNOchanged))))
-                                                                        || parent.COTemplateTypeIn(parent.DES)) ) {
+                                                                        || (parent.COTemplateTypeIn(parent.DES) && parent.totalElements === 0) ) ) {
 
                                             if ((parent.COTemplateTypeIn(parent.PLC) && self.crossInfomationSent) ||
                                                     !parent.COTemplateTypeIn(parent.PLC)) {
                                                 //chama o posEditor
                                                 $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
                                                 self.scroolSaveScreen();
-
                                                 parent.posEditor();
                                                 //=======================================================
                                             }
