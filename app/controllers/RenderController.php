@@ -182,6 +182,18 @@ class RenderController extends Controller {
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
                         $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
+
+                        if (isset($pieceset_piece->piece->type_id)) {
+                            $typeName = CommonType::getTypeNameByID($pieceset_piece->piece->type_id);
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['type_name'] = $typeName;
+
+                            if ($typeName === "shape") {
+                                //O template é Desenho. Possue então a propriedade type_shape
+                                $pieceProperty = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $pieceset_piece->piece->id));
+                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['shape'] = $pieceProperty->value;
+                            }
+                        }
+
                         $a5 = (int) -1;
                         foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
                             $a5++;
@@ -206,9 +218,9 @@ class RenderController extends Controller {
         if (!$isPiecesetElement && !$isCobjectElement) {
             foreach ($father->editorPieceelementProperties as $property) {
                 $propertyName = $property->property->name;
-                
-                if(isset($pe_properties[$propertyName])){
-                    if(!is_array($pe_properties[$propertyName])){
+
+                if (isset($pe_properties[$propertyName])) {
+                    if (!is_array($pe_properties[$propertyName])) {
                         $tmp = $pe_properties[$propertyName];
                         $pe_properties[$propertyName] = array();
                         array_push($pe_properties[$propertyName], $tmp);
@@ -424,7 +436,7 @@ class RenderController extends Controller {
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
             }
-            
+
             $nameDisciplineSelected = "";
             //Obter as disciplinas
             $disciplines = ActDiscipline::model()->findAll();
@@ -432,13 +444,13 @@ class RenderController extends Controller {
             foreach ($disciplines as $idx => $discipline):
                 $array_disciplines[$idx]['id'] = $discipline->id;
                 $array_disciplines[$idx]['name'] = $discipline->name;
-                
-                if($_POST['discipline'] == $discipline->id){
-                    $nameDisciplineSelected = substr($discipline->name,0,3);
+
+                if ($_POST['discipline'] == $discipline->id) {
+                    $nameDisciplineSelected = substr($discipline->name, 0, 3);
                 }
             endforeach;
-            
-            
+
+
             //Obter o CobjectBloco Selecionado
             $cobjectBlock = Cobjectblock::model()->findByPk($_REQUEST['cobject_block']);
             $array_cobjectBlock = array();
@@ -530,12 +542,12 @@ class RenderController extends Controller {
                             . '", "' . $peform->group_id . '", "' . $peform->final_time
                             . '", "' . $peform->iscorrect . '", "' . $peform->value;
                     $strSqlPerformInserts.='" )';
-                    if($idx < $totalPeformances-1){
+                    if ($idx < $totalPeformances - 1) {
                         $strSqlPerformInserts.=", ";
                     }
-                        
+
                 endforeach;
-                
+
                 //Executa a Query
                 Yii::app()->db->createCommand($strSqlPerformInserts)->query();
                 $imported = true;

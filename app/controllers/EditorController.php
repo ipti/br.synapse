@@ -249,7 +249,7 @@ class EditorController extends Controller {
 
             $num_img = count($uploaded_ImagesIDs);
             $i = 0;
-            $idPropertySrc = $this->getPropertyIDByName('src', 'library');
+            $idPropertySrc = CommonProperty::getPropertyIDByName('src', 'library');
             foreach ($uploaded_ImagesIDs as $upLibId):
                 $libsProperty[$i] = LibraryProperty::model()->findByAttributes(array('library_id' => $upLibId,
                     'property_id' => $idPropertySrc));
@@ -374,7 +374,7 @@ class EditorController extends Controller {
         //context = CobjectData  ; name = goal_id
         $context = "CobjectData";
         $name = "goal_id";
-        $Cobj_met_typeID = $this->getTypeIDbyName_Context($context, $name);
+        $Cobj_met_typeID = CommonType::getTypeIDbyName_Context($context, $name);
         $cobject_metadata = Yii::app()->db->createCommand('SELECT cobject_id FROM cobject_metadata
             WHERE type_id =' . $Cobj_met_typeID . ' AND  value = ' . $IDActGoal)->queryAll();
         $count_CobjMdata = count($cobject_metadata);
@@ -450,7 +450,7 @@ class EditorController extends Controller {
                                     $cobject = Cobject::model()->findByAttributes(array(), array('order' => 'id desc'));
                                     $cobjectID = $cobject->id;
 
-                                    $type_id = $this->getTypeIDbyName_Context('CobjectData', 'goal_id');
+                                    $type_id = CommonType::getTypeIDbyName_Context('CobjectData', 'goal_id');
                                     $newCobjectMetadata = new CobjectMetadata();
                                     $newCobjectMetadata->cobject_id = $cobjectID;
                                     $newCobjectMetadata->type_id = $type_id;
@@ -575,7 +575,7 @@ class EditorController extends Controller {
                                 }
 
                                 if (isset($typeName)) {
-                                    $typeID = $this->getTypeIDbyName_Context('piece', $typeName);
+                                    $typeID = CommonType::getTypeIDbyName_Context('piece', $typeName);
                                     $newPiece->type_id = $typeID;
                                 }
 
@@ -590,7 +590,7 @@ class EditorController extends Controller {
                                             //Propriedade Type_Shape
                                             $propertyName = "type_shape";
                                             $propertyContext = "piece";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
 
                                             $piecePropertyShape = EditorPieceProperty::model()
                                                     ->findByAttributes(array('piece_id' => $newPiece->id, 'property_id' => $propertyID));
@@ -614,7 +614,7 @@ class EditorController extends Controller {
 
                                             $propertyName = "type_shape";
                                             $propertyContext = "piece";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                             $newPiecePropertyShape->property_id = $propertyID;
                                             $newPiecePropertyShape->value = $_POST["shape"];
                                             $newPiecePropertyShape->insert();
@@ -750,7 +750,7 @@ class EditorController extends Controller {
                                             $elementID = $newElement->id;
                                             $propertyName = "text";
                                             $propertyContext = "phrase";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                             $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
                                                 'element_id' => $elementID, 'property_id' => $propertyID
                                             ));
@@ -760,7 +760,7 @@ class EditorController extends Controller {
                                             //language
                                             $propertyName = "language";
                                             $propertyContext = "element";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                             $newElementProperty = EditorElementProperty::model()->findByAttributes(array(
                                                 'element_id' => $elementID, 'property_id' => $propertyID
                                             ));
@@ -772,7 +772,7 @@ class EditorController extends Controller {
                                                 //Propriedade de showing_letters
                                                 $propertyName = "showing_letters";
                                                 $propertyContext = "word";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
 
                                                 $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $_POST["pieceID"], 'element_id' => $elementID));
                                                 $pePropertyShowLetters = EditorPieceelementProperty::model()->findByAttributes(array(
@@ -788,7 +788,7 @@ class EditorController extends Controller {
                                                 //Propriedade da posição em X (Colunm)
                                                 $propertyName = "posx";
                                                 $propertyContext = "piecelement";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $pieceElement = EditorPieceElement::model()->findByAttributes(array('piece_id' => $_POST["pieceID"], 'element_id' => $elementID));
                                                 $pePropertyPosX = EditorPieceelementProperty::model()->findByAttributes(array(
                                                     'piece_element_id' => $pieceElement->id,
@@ -802,7 +802,7 @@ class EditorController extends Controller {
                                                 //Propriedade da posição em Y (Row)
                                                 $propertyName = "posy";
                                                 $propertyContext = "piecelement";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $pePropertyPosY = EditorPieceelementProperty::model()->findByAttributes(array(
                                                     'piece_element_id' => $pieceElement->id,
                                                     'property_id' => $propertyID
@@ -838,7 +838,7 @@ class EditorController extends Controller {
 
                                                 $propertyName = "direction";
                                                 $propertyContext = "word";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newPEPropertyDirection->property_id = $propertyID;
                                                 $newPEPropertyDirection->value = $_POST["direction"];
                                                 $newPEPropertyDirection->insert();
@@ -848,7 +848,7 @@ class EditorController extends Controller {
                                                 //Se for Novo Elemento
                                                 $propertyName = "showing_letters";
                                                 $propertyContext = "word";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
 
                                                 $newPEPropertyShowLetters = new EditorPieceelementProperty();
                                                 $newPEPropertyShowLetters->piece_element_id = $newPieceElement->id;
@@ -865,7 +865,7 @@ class EditorController extends Controller {
 
                                                 $propertyName = "posx";
                                                 $propertyContext = "piecelement";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newPEPropertyPosX->property_id = $propertyID;
                                                 $newPEPropertyPosX->value = $_POST["posx"];
                                                 $newPEPropertyPosX->insert();
@@ -878,7 +878,7 @@ class EditorController extends Controller {
 
                                                 $propertyName = "posy";
                                                 $propertyContext = "piecelement";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newPEPropertyPosY->property_id = $propertyID;
                                                 $newPEPropertyPosY->value = $_POST["posy"];
                                                 $newPEPropertyPosY->insert();
@@ -911,7 +911,7 @@ class EditorController extends Controller {
                                                 // grouping
                                                 $propertyName = "grouping";
                                                 $propertyContext = "piecelement";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 //===========================================================
                                                 $newPieceElementProperty = new EditorPieceelementProperty();
                                                 $newPieceElementProperty->piece_element_id = $pieceElementID;
@@ -923,7 +923,7 @@ class EditorController extends Controller {
                                                 //Inseri a Flag
                                                 $propertyName = "layertype";
                                                 $propertyContext = "piecelement";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 //===========================================================
                                                 $newPieceElementProperty = new EditorPieceelementProperty();
                                                 $newPieceElementProperty->piece_element_id = $pieceElementID;
@@ -960,7 +960,7 @@ class EditorController extends Controller {
                                                 //1 width
                                                 $propertyName = "width";
                                                 $propertyContext = $libraryTypeName;
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
 
                                                 $newLibraryProperty = new LibraryProperty();
 
@@ -972,7 +972,7 @@ class EditorController extends Controller {
                                                 //2 height
                                                 $propertyName = "height";
                                                 $propertyContext = $libraryTypeName;
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newLibraryProperty = new LibraryProperty();
 
                                                 $newLibraryProperty->library_id = $libraryID;
@@ -983,7 +983,7 @@ class EditorController extends Controller {
                                                 //5 src
                                                 $propertyName = "src";
                                                 $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newLibraryProperty = new LibraryProperty();
                                                 $newLibraryProperty->library_id = $libraryID;
                                                 $newLibraryProperty->property_id = $propertyID;
@@ -993,7 +993,7 @@ class EditorController extends Controller {
                                                 //12 extension
                                                 $propertyName = "extension";
                                                 $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newLibraryProperty = new LibraryProperty();
                                                 $newLibraryProperty->library_id = $libraryID;
                                                 $newLibraryProperty->property_id = $propertyID;
@@ -1003,7 +1003,7 @@ class EditorController extends Controller {
                                                 //46 Alias
                                                 $propertyName = "alias";
                                                 $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newLibraryProperty = new LibraryProperty();
                                                 $newLibraryProperty->library_id = $libraryID;
                                                 $newLibraryProperty->property_id = $propertyID;
@@ -1014,7 +1014,7 @@ class EditorController extends Controller {
                                                 //4 libraryID
                                                 $propertyName = "library_id";
                                                 $propertyContext = $typeName;
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newElementProperty = new EditorElementProperty();
 
                                                 $newElementProperty->element_id = $elementID;
@@ -1041,7 +1041,7 @@ class EditorController extends Controller {
                                                 //5 src
                                                 $propertyName = "src";
                                                 $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newLibraryProperty = new LibraryProperty();
                                                 $newLibraryProperty->library_id = $libraryID;
                                                 $newLibraryProperty->property_id = $propertyID;
@@ -1051,7 +1051,7 @@ class EditorController extends Controller {
                                                 //12 extension
                                                 $propertyName = "extension";
                                                 $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newLibraryProperty = new LibraryProperty();
                                                 $newLibraryProperty->library_id = $libraryID;
                                                 $newLibraryProperty->property_id = $propertyID;
@@ -1061,7 +1061,7 @@ class EditorController extends Controller {
                                                 //46 Alias
                                                 $propertyName = "alias";
                                                 $propertyContext = "library";
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newLibraryProperty = new LibraryProperty();
                                                 $newLibraryProperty->library_id = $libraryID;
                                                 $newLibraryProperty->property_id = $propertyID;
@@ -1073,7 +1073,7 @@ class EditorController extends Controller {
                                                 //4 libraryID
                                                 $propertyName = "library_id";
                                                 $propertyContext = $typeName;
-                                                $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                                $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                                 $newElementProperty = new EditorElementProperty();
 
                                                 $newElementProperty->element_id = $elementID;
@@ -1087,7 +1087,7 @@ class EditorController extends Controller {
                                             //text   
                                             $propertyName = "text";
                                             $propertyContext = "phrase";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                             $newElementProperty = new EditorElementProperty();
                                             $newElementProperty->element_id = $elementID;
                                             $newElementProperty->property_id = $propertyID;
@@ -1097,7 +1097,7 @@ class EditorController extends Controller {
                                             //language
                                             $propertyName = "language";
                                             $propertyContext = "element";
-                                            $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                            $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
                                             $newElementProperty = new EditorElementProperty();
                                             $newElementProperty->element_id = $elementID;
                                             $newElementProperty->property_id = $propertyID;
@@ -1122,7 +1122,7 @@ class EditorController extends Controller {
                                             'element_id' => $IDDB));
                                         $change_flag = EditorPieceelementProperty::model()->findByAttributes(
                                                 array('piece_element_id' => $pieceElement->id,
-                                                    'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
+                                                    'property_id' => CommonProperty::getPropertyIDByName('layertype', 'piecelement')));
                                         $change_flag->value = $flag == "true" ? "Acerto" : "Erro";
                                         $change_flag->save();
                                     }
@@ -1153,7 +1153,7 @@ class EditorController extends Controller {
                                         //Somente será preciso armazenar as posições de cruzamento para a 1° pieceElementID
                                         $propertyName = "point_crossword";
                                         $propertyContext = "word";
-                                        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                                        $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
 
                                         $newPEPropertyPOintCrossWord = new EditorPieceelementProperty();
                                         $newPEPropertyPOintCrossWord->property_id = $propertyID;
@@ -1194,7 +1194,7 @@ class EditorController extends Controller {
 
                             $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                             foreach ($ElementProperty as $ep):
-                                if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                if ($ep->property_id == CommonProperty::getPropertyIDByName('library_id', 'multimidia')) { //libraryID
                                     $Library = Library::model()->findByAttributes(array('id' => $ep->value));
                                     $json['E' . $Element->id]['L' . $Library->id] = array();
                                     $json['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
@@ -1234,7 +1234,7 @@ class EditorController extends Controller {
 
                                     $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                     foreach ($ElementProperty as $ep):
-                                        if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                        if ($ep->property_id == CommonProperty::getPropertyIDByName('library_id', 'multimidia')) { //libraryID
                                             $Library = Library::model()->findByAttributes(array('id' => $ep->value));
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id] = array();
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
@@ -1257,11 +1257,11 @@ class EditorController extends Controller {
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['description'] = $Piece->description;
                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['name'] = $Piece->name;
 
-                                    if (isset($Piece->type_id) && $Piece->type_id == $this->getTypeIDbyName_Context('piece', 'shape')) {
+                                    if (isset($Piece->type_id) && $Piece->type_id == CommonType::getTypeIDbyName_Context('piece', 'shape')) {
                                         //O template é Desenho. 
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['type_name'] = $Piece->type->name;
                                         $piece_property = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $Piece->id,
-                                            'property_id' => $this->getPropertyIDByName('type_shape', 'piece')));
+                                            'property_id' => CommonProperty::getPropertyIDByName('type_shape', 'piece')));
                                         //Forma do Desenho
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['shape'] = $piece_property->value;
                                     }
@@ -1276,7 +1276,7 @@ class EditorController extends Controller {
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id] = array();
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['type_name'] = $Element->type->name;
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('layertype', 'piecelement')));
+                                            'property_id' => CommonProperty::getPropertyIDByName('layertype', 'piecelement')));
 
                                         //=============POSITION==================================
                                         $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['position'] = $pe->position;
@@ -1286,43 +1286,43 @@ class EditorController extends Controller {
                                         }
                                         //=============== grouping ===============================
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
+                                            'property_id' => CommonProperty::getPropertyIDByName('grouping', 'piecelement')));
                                         //var_dump($pe_property->value); exit();
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['match'] = $pe_property->value;
                                         }
                                         //Se for template Palavra Cruzada
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('showing_letters', 'word')));
+                                            'property_id' => CommonProperty::getPropertyIDByName('showing_letters', 'word')));
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['showing_letters'] = $pe_property->value;
                                         }
 
                                         //Se for template Caça Palavras
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('posx', 'piecelement')));
+                                            'property_id' => CommonProperty::getPropertyIDByName('posx', 'piecelement')));
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['posx'] = $pe_property->value;
                                         }
 
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('posy', 'piecelement')));
+                                            'property_id' => CommonProperty::getPropertyIDByName('posy', 'piecelement')));
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['posy'] = $pe_property->value;
                                         }
                                         //fim do template caça palavras
 
                                         $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-                                            'property_id' => $this->getPropertyIDByName('direction', 'word')));
+                                            'property_id' => CommonProperty::getPropertyIDByName('direction', 'word')));
                                         if (isset($pe_property)) {
                                             $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['direction'] = $pe_property->value;
                                         }
 
 //                                        $pe_property = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe->id,
-//                                            'property_id' => $this->getPropertyIDByName('point_crossword', 'word')));
+//                                            'property_id' => CommonProperty::getPropertyIDByName('point_crossword', 'word')));
                                         $pe_propertyPointCross = Yii::app()->db->createCommand("SELECT * FROM editor_pieceelement_property "
                                                         . "WHERE piece_element_id = $pe->id AND "
-                                                        . "property_id = " . $this->getPropertyIDByName('point_crossword', 'word'))->queryAll();
+                                                        . "property_id = " . CommonProperty::getPropertyIDByName('point_crossword', 'word'))->queryAll();
 
                                         if (count($pe_propertyPointCross) > 0) {
                                             //id do pieceElementProperty
@@ -1347,7 +1347,7 @@ class EditorController extends Controller {
                                                 //============ Groupo do elemeto da Word2
                                                 //Buscar o groupo desse Element do PieceElement estar
                                                 $pe_propertyGroupCrossedWord2 = EditorPieceelementProperty::model()->findByAttributes(array('piece_element_id' => $pe_id_w2,
-                                                    'property_id' => $this->getPropertyIDByName('grouping', 'piecelement')));
+                                                    'property_id' => CommonProperty::getPropertyIDByName('grouping', 'piecelement')));
 
                                                 if (isset($pe_propertyGroupCrossedWord2)) {
                                                     $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['crossWord']
@@ -1360,7 +1360,7 @@ class EditorController extends Controller {
 
                                         $ElementProperty = EditorElementProperty::model()->findAllByAttributes(array('element_id' => $Element->id));
                                         foreach ($ElementProperty as $ep):
-                                            if ($ep->property_id == $this->getPropertyIDByName('library_id', 'multimidia')) { //libraryID
+                                            if ($ep->property_id == CommonProperty::getPropertyIDByName('library_id', 'multimidia')) { //libraryID
                                                 $Library = Library::model()->findByAttributes(array('id' => $ep->value));
                                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id] = array();
                                                 $json['S' . $sc->id]['PS' . $PieceSet->id]['P' . $Piece->id]['E' . $Element->id]['L' . $Library->id]['type_name'] = $Library->type->name; //9 image; 17 movie; 20 sound 
@@ -1553,7 +1553,7 @@ class EditorController extends Controller {
 
                     $propertyName = "point_crossword";
                     $propertyContext = "word";
-                    $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+                    $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
 
                     foreach ($AllElement_Piece as $pe):
                         //para cada piece_element com property: point_crossword
@@ -1702,7 +1702,7 @@ class EditorController extends Controller {
         //46 Alias
         $propertyName = "alias";
         $propertyContext = "library";
-        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+        $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
         $where = "";
         if (isset($filterAlias) && !empty($filterAlias)) {
             $where = " WHERE property_id=$propertyID";
@@ -1716,7 +1716,7 @@ class EditorController extends Controller {
         //4 src
         $propertyName = "src";
         $propertyContext = "library";
-        $propertyID = $this->getPropertyIDByName($propertyName, $propertyContext);
+        $propertyID = CommonProperty::getPropertyIDByName($propertyName, $propertyContext);
 
         $librarys = array();
         foreach ($librarysIdAlias AS $libId_Alias):
@@ -1756,25 +1756,6 @@ class EditorController extends Controller {
         return $typeID;
     }
 
-    private function getTypeIDbyName_Context($context, $name) {
-        $type = CommonType::model()->findByAttributes(array('context' => $context, 'name' => $name));
-        return $type->id;
-    }
-
-    private function getTypeNameByID($str) {
-        $typeID = $str;
-        $type = CommonType::model()->findByAttributes(array('id' => $typeName));
-        $typeName = $type->name;
-
-        return $typeName;
-    }
-
-    private function getPropertyIDByName($propertyName, $propertyContext) {
-        $property = CommonProperty::model()->findByAttributes(array('name' => strtolower($propertyName), 'context' => strtolower($propertyContext)));
-        $propertyID = $property->id;
-
-        return $propertyID;
-    }
 
     public function actionGetLastCobjectID() {
         $lastID = Yii::app()->db->createCommand('SELECT Max(id) AS lastID FROM cobject;')->queryAll();
