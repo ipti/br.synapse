@@ -380,3 +380,13 @@ body{
 td.marked{
     background-color:green;
 }
+
+//Template Desenho
+
+div.piece.DES {
+    
+}
+
+div.draw-point{
+   border-radius: 50px 50px 50px 50px;
+}

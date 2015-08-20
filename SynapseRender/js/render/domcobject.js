@@ -102,10 +102,10 @@ var DomCobject = function (cobject, idx) {
             });
 
             //Div - HighLight
-            $(".DIG-table").closest('.ask').find('.elementImage').each(function(index){
-                $(".DIG-table").append("<div id='digHighlight"+(index+1)+"' class='digHighlight'></div>");
+            $(".DIG-table").closest('.ask').find('.elementImage').each(function (index) {
+                $(".DIG-table").append("<div id='digHighlight" + (index + 1) + "' class='digHighlight'></div>");
             });
-            
+
         }
     };
 
@@ -154,7 +154,12 @@ var DomCobject = function (cobject, idx) {
         //Construir os pieces desta pieceSet
         for (this.pos.piece = 0; this.pos.piece < pieces_length; this.pos.piece++) {
             self.id.piece = this.cobject.screens[this.pos.screen].piecesets[this.pos.pieceset].pieces[this.pos.piece].id;
-            fd.append(this.buildPiece());
+            if (self.cobject.template_code != 'DES') {
+                fd.append(this.buildPiece());
+            } else {
+                fd.append(this.buildPiece_DES());
+            }
+
         }
         ;
         self.domPieceSet.append(fd);
@@ -295,6 +300,34 @@ var DomCobject = function (cobject, idx) {
         //NÃO HÁ GRUPO 
         return "";
     };
+
+
+    this.buildPiece_DES = function () {
+        self.domPiece = $('<div class="piece ' + self.cobject.template_code + '" style="display:none" id="' + self.id.piece + '"></div>');
+        var current_piece = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece];
+        
+        console.log(current_piece);
+        
+        var domElementASK = $('<div class="ask draw"></div>');
+        var strTable = '<div class ="Table">';
+        var totalCol = 7;
+        var totalLin = 4;
+
+        for (var row = 0; row < totalLin; row++) {
+            //Montar Cada Linha
+            strTable += '<div class="Row">';
+            for (var col = 0; col < totalCol; col++) {
+                //Montar Cada Coluna
+                strTable += '<div class="Col" row="' + (row + 1) + '" col="' + (col + 1) + '" >';
+                strTable +='<div class="draw-point">&nbsp;</div>';
+                strTable += '</div>';
+            }
+            strTable += '</div>';
+        }
+        strTable += '</div>';
+        domElementASK.append(strTable);
+        return self.domPiece.append(domElementASK);
+    }
 
 
     //Embaralhar qualquer Array
@@ -482,7 +515,7 @@ var DomCobject = function (cobject, idx) {
                 properties[item['name']] = item['value'];
             });
             var PEProperties = currentElement.pieceElement_Properties;
-            
+
             properties["direction"] = PEProperties.direction;
             properties["grouping"] = PEProperties.grouping;
             properties["layertype"] = PEProperties.layertype;
