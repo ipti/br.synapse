@@ -319,7 +319,7 @@ var DomCobject = function (cobject, idx) {
             for (var col = 0; col < totalCol; col++) {
                 //Montar Cada Coluna
                 strTable += '<div class="Col" row="' + (row + 1) + '" col="' + (col + 1) + '" >';
-                strTable +='<div class="draw-point">&nbsp;</div>';
+                strTable +='<div class="draw-point"></div>';
                 strTable += '</div>';
             }
             strTable += '</div>';

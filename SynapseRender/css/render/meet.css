@@ -128,9 +128,6 @@ body {
     font-size: 35px;
     line-height: 35px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.64);
-    height: 180px;
-    vertical-align: middle;
-    display: table-cell;
 }
 
 /** Respostas **/
@@ -332,7 +329,6 @@ input.PLC-input:read-only{
     display: none;
 }
 
-
 .group.build_image{
     width: 150px;
     height: 150px;
@@ -381,12 +377,44 @@ td.marked{
     background-color:green;
 }
 
+
+.Table{
+    display: table;
+}
+.Row{
+    display: table-row;
+}
+
+.Col{
+    display: table-cell;
+    padding: 2px 5px 2px 5px;
+}
+
 //Template Desenho
 
-div.piece.DES {
+
+
+div.piece.DES{
     
 }
 
 div.draw-point{
-   border-radius: 50px 50px 50px 50px;
+   border-radius: 100% 100% 100% 100%;
+   background-color: #4EB898;
+   width: 50px;
+   height: 50px;
+   margin:20px;
+}
+
+
+.desHighLight{
+    pointer-events: none;
+    z-index: 99999;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 2px solid rgb(226, 123, 23);
+    background-color: rgb(226, 123, 23);
+    border-radius: 30px;
+    display: none;
 }
