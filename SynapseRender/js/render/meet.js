@@ -1419,8 +1419,8 @@ this.Meet = function (options) {
                 var posBegin;
                 var posBeginLeft;
                 var posBeginTop;
-                var incrLeft;
-                var incrTop;
+                var incrLeft = +1;
+                var incrTop = -9;
 
                 if (angle === 0
                         || angle === 90
@@ -1432,7 +1432,6 @@ this.Meet = function (options) {
                     if (angle === 0) {
                         //Esqueda para a Direita (verificar diferença das Colunas)
                         sizeCurrentSelectedPoint = Math.abs(colCurrent - colStart) + 1;
-
 
                     } else if (angle === 90) {
                         //Cima para baixo
@@ -1447,9 +1446,9 @@ this.Meet = function (options) {
                         sizeCurrentSelectedPoint = Math.abs(rowStart - rowCurrent) + 1;
                     }
 
-                    if(angle === 180 || angle === -90){
+                    if (angle === 180 || angle === -90) {
                         //Decrescendo o Rows ou Cols
-                         //Precisa Mudar a Posição Inicial do HighLight
+                        //Precisa Mudar a Posição Inicial do HighLight
                         posBegin = $(this).position();
                         posBeginLeft = posBegin.left;
                         posBeginTop = posBegin.top;
@@ -1483,7 +1482,64 @@ this.Meet = function (options) {
                     });
 
 
+                } else {
+                    //Não forma uma Reta entre os pontos p1 e p2. Será necessário usar o grau
+                    //Calcular distância entre esses dois pontos
+                    //Sentido HORÁRIO => -90, 0, 90, 180
 
+                    //Calcular a hipotenusa
+                    var catetoCol = colCurrent - colStart;
+                    var catetoRow = rowCurrent - rowStart;
+
+                    //Os catetos ao quadrado sempre serão positivos
+                    var hypotenuse = Math.sqrt(Math.pow(catetoCol, 2) + Math.pow(catetoRow, 2));
+                    //Incrementa o 2*diameter_point, pra que ocupe cada ponto
+                    var distance = (hypotenuse * (diameter_point * 2)) + diameter_point;
+
+                    divCurrentHighLight.width(distance);
+                    divCurrentHighLight.css("transform", "rotate(" + angle + "deg)");
+                    divCurrentHighLight.css("transform-origin", "28px 28px");
+
+                    //Precisa de Ajuste   
+                    var currentLeft = divCurrentHighLight.css('left');
+                    var currentTop = divCurrentHighLight.css('top');
+                    if (catetoRow > 0) {
+                        //Cima para Baixo
+                        divCurrentHighLight.css({
+                            'left': currentLeft + incrLeft,
+                            'top': currentTop + incrTop
+                        });
+                    } else {
+                        //Baixo para Cima
+
+                    }
+
+
+                    if (catetoCol > 0) {
+                        //Da Esquerda para a direita
+
+
+                    } else {
+                        //Da direita para a esquerda
+
+                        if (catetoRow > 0) {
+                            //Cima para Baixo
+
+                        } else {
+                            //Baixo para Cima
+
+                        }
+
+                    }
+
+
+
+                    sizeCurrentSelectedPoint = Math.abs(colCurrent - colStart) + 1;
+
+
+
+                    console.log(sizeCurrentSelectedPoint);
+                    console.log(angle);
                 }
 
 
