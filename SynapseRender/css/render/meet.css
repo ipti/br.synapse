@@ -387,7 +387,7 @@ td.marked{
 
 .Col{
     display: table-cell;
-    padding: 2px 5px 2px 5px;
+    padding: 4px 4px 4px 4px;
 }
 
 //Template Desenho
@@ -401,8 +401,8 @@ div.piece.DES{
 div.draw-point{
    border-radius: 100% 100% 100% 100%;
    background-color: #4EB898;
-   width: 50px;
-   height: 50px;
+   width: 40px;
+   height: 40px;
    margin:20px;
 }
 
@@ -411,8 +411,8 @@ div.draw-point{
     pointer-events: none;
     z-index: 99999;
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border: 2px solid rgb(226, 123, 23);
     background-color: rgb(226, 123, 23);
     border-radius: 30px;

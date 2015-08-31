@@ -1304,7 +1304,6 @@ this.Meet = function (options) {
     this.init_DES = function () {
         //Iniciar Seleção
         $('div.draw-point').on('mousedown touchstart', function () {
-            console.log('start');
 
             var currentPiece = $(this).closest('.piece');
             var divCurrentDraw = currentPiece.find("div.draw");
@@ -1325,8 +1324,8 @@ this.Meet = function (options) {
             //Add classe .seleted nesta div
             divCurrentHighLight.addClass('currentSelected');
 
-            var incrLeft = ($('.draw-point').width() / 3) + 1;
-            var incrTop = ($('.draw-point').height() / 3) + 1;
+            var incrLeft = ($('.draw-point').width() / 3) + 5;
+            var incrTop = ($('.draw-point').height() / 3) + 5;
 
             divCurrentHighLight.css({
                 'left': posBeginLeft + incrLeft,
@@ -1354,7 +1353,6 @@ this.Meet = function (options) {
 
         //Se for disparo um evento touchMove 
         $("div.draw-point").on('vmousemove', function (event) {
-            console.log("VmouseMove");
             var currentCellStart = $(this).closest('div.Table').find('div.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
 
@@ -1368,229 +1366,194 @@ this.Meet = function (options) {
 
 
         $('div.draw-point').on('mouseover', function () {
-            console.log("mouseover");
 
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
-
-            //Não faz algo, quando o HighLight corrente já foi utilizado pra passar sobre este Ponto
-            if (divCurrentHighLight.size() > 0 && !$(this).hasClass(divCurrentHighLight.attr('id'))) {
-
-                $(this).addClass('selected');
-
-                //Elimina a classe end do último point do traço atual
-                var currentLastStop = currentPiece.find('.draw-point.' + divCurrentHighLight.attr('id') + '.stop');
-                currentLastStop.removeClass('stop');
-
-                //Add classe de finalização do traço (Suponhe que é o fim do traço)
-                $(this).addClass('stop');
-
-
-                var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
-                var divParentStartPoint = currentStartPoint.closest('div.Col');
-                var diameter_point = currentStartPoint.width();
-                //Add classe representando o id corrente do HighLight
-                $(this).addClass(divCurrentHighLight.attr('id'));
-
-
+            var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
+            //Verificar se existe o draw-point current Start
+            if (currentStartPoint.size() > 0) {
                 //Calcular ângulo entre a posição do currentStartPoint e a posição Point corrente
-
                 var x1 = currentStartPoint.offset().left;
                 var y1 = currentStartPoint.offset().top;
                 var x2 = $(this).offset().left;
                 var y2 = $(this).offset().top;
-
                 var angle = self.calcAngleBetween2Points(x1, y1, x2, y2);
-                var distanceBtwPoints = 0;
-
-                //Linha e coluna do StartPoint Corrent
-                var celCurrentStartPoint = currentStartPoint.closest('.Col');
-                var rowStart = celCurrentStartPoint.attr('row');
-                var colStart = celCurrentStartPoint.attr('col');
-
-                //Linha e Coluna do draw-Point Atual
-                var celCurrentPoint = $(this).closest('.Col');
-                var rowCurrent = celCurrentPoint.attr('row');
-                var colCurrent = celCurrentPoint.attr('col');
-
-                var sizeCurrentSelectedPoint = 0;
-
-                //Verificar se não precisa mudar a posição inicial do HighLight
-                var posBegin;
-                var posBeginLeft;
-                var posBeginTop;
-                var incrLeft = +1;
-                var incrTop = -9;
-
-                if (angle === 0
-                        || angle === 90
-                        || angle === 180
-                        || angle === -90) {
-                    //Forma um Reta entre os pontos p1 e p2
-                    //Calcular distância entre esses dois pontos
-                    //Sentido HORÁRIO => -90, 0, 90, 180
-                    if (angle === 0) {
-                        //Esqueda para a Direita (verificar diferença das Colunas)
-                        sizeCurrentSelectedPoint = Math.abs(colCurrent - colStart) + 1;
-
-                    } else if (angle === 90) {
-                        //Cima para baixo
-                        sizeCurrentSelectedPoint = Math.abs(rowCurrent - rowStart) + 1;
-
-                    } else if (angle === 180) {
-                        //Direita para a Esquerda
-                        sizeCurrentSelectedPoint = Math.abs(colStart - colCurrent) + 1;
-
-                    } else if (angle === -90) {
-                        //Baixo para Cima
-                        sizeCurrentSelectedPoint = Math.abs(rowStart - rowCurrent) + 1;
-                    }
-
-                    if (angle === 180 || angle === -90) {
-                        //Decrescendo o Rows ou Cols
-                        //Precisa Mudar a Posição Inicial do HighLight
-                        posBegin = $(this).position();
-                        posBeginLeft = posBegin.left;
-                        posBeginTop = posBegin.top;
-
-                        incrLeft = (currentStartPoint.width() / 3) + 1;
-                        incrTop = (currentStartPoint.height() / 3) + 1;
-                    }
 
 
-                    //Se é o mesmo ponto de inicío, então, não múltiplica por dois o diameter_point
-                    var distance = 0;
-                    if (sizeCurrentSelectedPoint == 1) {
-                        distance = (sizeCurrentSelectedPoint * diameter_point);
-                    } else {
-                        //Incrementa o 2*diameter_point, pra que ocupe cada ponto
-                        distance = (sizeCurrentSelectedPoint * (diameter_point * 2)) - diameter_point;
-
-                    }
-
-                    if (angle === 0 || angle === 180) {
-                        //Horizontal
-                        divCurrentHighLight.width(distance);
-                    } else {
-                        //Vertical
-                        divCurrentHighLight.height(distance);
-                    }
-
-                    divCurrentHighLight.css({
-                        'left': posBeginLeft + incrLeft,
-                        'top': posBeginTop + incrTop
-                    });
-
-
+                if (self.isset(divCurrentHighLight.attr('angle')) && divCurrentHighLight.attr('angle') != angle) {
+                    //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
+                    //Procura o último draw-point para esta highLight. E finaliza o Traço para a highLight corrente
+                    var lastCurrentDrawPoint = currentPiece.find('div.draw-point.stop.' + divCurrentHighLight.attr('id'));
+                    lastCurrentDrawPoint.trigger('mouseup');
+                    //Depois Inicia um novo HighLight
+                    lastCurrentDrawPoint.trigger('mousedown');
                 } else {
-                    //Não forma uma Reta entre os pontos p1 e p2. Será necessário usar o grau
-                    //Calcular distância entre esses dois pontos
-                    //Sentido HORÁRIO => -90, 0, 90, 180
+                    //Traçando com o mesmo Ângulo
 
-                    //Calcular a hipotenusa
-                    var catetoCol = colCurrent - colStart;
-                    var catetoRow = rowCurrent - rowStart;
+                    //Não faz algo, quando o HighLight corrente já foi utilizado pra passar sobre este Ponto
+                    if (divCurrentHighLight.size() > 0 && !$(this).hasClass(divCurrentHighLight.attr('id'))) {
 
-                    //Os catetos ao quadrado sempre serão positivos
-                    var hypotenuse = Math.sqrt(Math.pow(catetoCol, 2) + Math.pow(catetoRow, 2));
-                    //Incrementa o 2*diameter_point, pra que ocupe cada ponto
-                    var distance = (hypotenuse * (diameter_point * 2)) + diameter_point;
+                        $(this).addClass('selected');
 
-                    divCurrentHighLight.width(distance);
-                    divCurrentHighLight.css("transform", "rotate(" + angle + "deg)");
-                    divCurrentHighLight.css("transform-origin", "28px 28px");
+                        //Elimina a classe end do último point do traço atual
+                        var currentLastStop = currentPiece.find('.draw-point.' + divCurrentHighLight.attr('id') + '.stop');
+                        currentLastStop.removeClass('stop');
 
-                    //Precisa de Ajuste   
-                    var currentLeft = divCurrentHighLight.css('left');
-                    var currentTop = divCurrentHighLight.css('top');
-                    if (catetoRow > 0) {
-                        //Cima para Baixo
-                        divCurrentHighLight.css({
-                            'left': currentLeft + incrLeft,
-                            'top': currentTop + incrTop
-                        });
-                    } else {
-                        //Baixo para Cima
-
-                    }
+                        //Add classe de finalização do traço (Suponhe que é o fim do traço)
+                        $(this).addClass('stop');
 
 
-                    if (catetoCol > 0) {
-                        //Da Esquerda para a direita
+
+                        var divParentStartPoint = currentStartPoint.closest('div.Col');
+                        var diameter_point = currentStartPoint.width();
+
+                        //distância entre os pontos
+                        var sizeSideCell = divParentStartPoint.width() + (parseInt(divParentStartPoint.css('padding').split('px')[0])) * 2;
+
+                        //Add classe representando o id corrente do HighLight
+                        $(this).addClass(divCurrentHighLight.attr('id'));
+
+                        var distanceBtwPoints = 0;
+
+                        //Linha e coluna do StartPoint Corrent
+                        var celCurrentStartPoint = currentStartPoint.closest('.Col');
+                        var rowStart = celCurrentStartPoint.attr('row');
+                        var colStart = celCurrentStartPoint.attr('col');
+
+                        //Linha e Coluna do draw-Point Atual
+                        var celCurrentPoint = $(this).closest('.Col');
+                        var rowCurrent = celCurrentPoint.attr('row');
+                        var colCurrent = celCurrentPoint.attr('col');
+
+                        var sizeCurrentSelectedPoint = 0;
+
+                        //Verificar se não precisa mudar a posição inicial do HighLight
+                        var posBegin;
+                        var posBeginLeft;
+                        var posBeginTop;
+                        var incrLeft = +1;
+                        var incrTop = -9;
+
+                        if (angle === 0
+                                || angle === 90
+                                || angle === 180
+                                || angle === -90) {
+                            //Forma um Reta entre os pontos p1 e p2
+                            //Calcular distância entre esses dois pontos
+                            //Sentido HORÁRIO => -90, 0, 90, 180
+                            if (angle === 0) {
+                                //Esqueda para a Direita (verificar diferença das Colunas)
+                                sizeCurrentSelectedPoint = Math.abs(colCurrent - colStart) + 1;
+
+                            } else if (angle === 90) {
+                                //Cima para baixo
+                                sizeCurrentSelectedPoint = Math.abs(rowCurrent - rowStart) + 1;
+
+                            } else if (angle === 180) {
+                                //Direita para a Esquerda
+                                sizeCurrentSelectedPoint = Math.abs(colStart - colCurrent) + 1;
+
+                            } else if (angle === -90) {
+                                //Baixo para Cima
+                                sizeCurrentSelectedPoint = Math.abs(rowStart - rowCurrent) + 1;
+                            }
+
+                            if (angle === 180 || angle === -90) {
+                                //Decrescendo o Rows ou Cols
+                                //Precisa Mudar a Posição Inicial do HighLight
+                                posBegin = $(this).position();
+                                posBeginLeft = posBegin.left;
+                                posBeginTop = posBegin.top;
+
+                                incrLeft = (currentStartPoint.width() / 3) + 5;
+                                incrTop = (currentStartPoint.height() / 3) + 5;
+                            }
 
 
-                    } else {
-                        //Da direita para a esquerda
+                            //Se é o mesmo ponto de inicío, então, não múltiplica por dois o diameter_point
+                            var distance = 0;
+                            if (sizeCurrentSelectedPoint == 1) {
+                                distance = (sizeCurrentSelectedPoint * diameter_point);
+                            } else {
+                                //Incrementa o 2*diameter_point, pra que ocupe cada ponto
+                                distance = (sizeSideCell * sizeCurrentSelectedPoint)
+                                        - (sizeSideCell - diameter_point);
 
-                        if (catetoRow > 0) {
-                            //Cima para Baixo
+                            }
+
+                            if (angle === 0 || angle === 180) {
+                                //Horizontal
+                                divCurrentHighLight.width(distance);
+                            } else {
+                                //Vertical
+                                divCurrentHighLight.height(distance);
+                            }
+
+                            divCurrentHighLight.css({
+                                'left': posBeginLeft + incrLeft,
+                                'top': posBeginTop + incrTop
+                            });
+
 
                         } else {
-                            //Baixo para Cima
+                            //Não forma uma Reta entre os pontos p1 e p2. Será necessário usar o grau
+                            //Calcular distância entre esses dois pontos
+                            //Sentido HORÁRIO => -90, 0, 90, 180
+
+                            //Calcular a hipotenusa
+                            var catetoCol = (colCurrent - colStart) * sizeSideCell;
+                            var catetoRow = (rowCurrent - rowStart) * sizeSideCell;
+
+                            //Os catetos ao quadrado sempre serão positivos
+                            var hypotenusePoint = Math.sqrt(Math.pow(catetoCol, 2) + Math.pow(catetoRow, 2));
+                            //Incrementa o 2*diameter_point, pra que ocupe cada ponto
+                            var distance = hypotenusePoint + diameter_point;
+
+
+                            var originTransform = (diameter_point / 2) + 3;
+                            divCurrentHighLight.width(distance);
+                            divCurrentHighLight.css("transform", "rotate(" + angle + "deg)");
+                            divCurrentHighLight.css("transform-origin", originTransform + "px " + originTransform + "px");
+
+                            //Precisa de Ajuste   
+                            var currentLeft = divCurrentHighLight.css('left');
+                            var currentTop = divCurrentHighLight.css('top');
+                            if (catetoRow > 0) {
+                                //Cima para Baixo
+                                divCurrentHighLight.css({
+                                    'left': currentLeft + incrLeft,
+                                    'top': currentTop + incrTop
+                                });
+                            } else {
+                                //Baixo para Cima
+
+                            }
+
+
+                            if (catetoCol > 0) {
+                                //Da Esquerda para a direita
+
+
+                            } else {
+                                //Da direita para a esquerda
+
+                                if (catetoRow > 0) {
+                                    //Cima para Baixo
+
+                                } else {
+                                    //Baixo para Cima
+
+                                }
+
+                            }
+
 
                         }
 
+                        divCurrentHighLight.attr('angle', angle);
+
                     }
-
-
-
-                    sizeCurrentSelectedPoint = Math.abs(colCurrent - colStart) + 1;
-
-
-
-                    console.log(sizeCurrentSelectedPoint);
-                    console.log(angle);
                 }
-
-
-
-                /*
-                 
-                 
-                 var divParentCurrentPoint = $(this).closest('div.Col');
-                 
-                 var colStartCurrent = divParentStartPoint.attr('col');
-                 var colCurrent = divParentCurrentPoint.attr('col');
-                 var sizeSelected = Math.abs(colCurrent - colStartCurrent) + 1;
-                 
-                 //Verificar se não precisa mudar a posição inicial do HighLight
-                 if (colCurrent < colStartCurrent) {
-                 //Precisa
-                 var posBegin = $(this).position();
-                 var posBeginLeft = posBegin.left;
-                 var posBeginTop = posBegin.top;
-                 
-                 var incrLeft = ($('.draw-point').width() / 3) + 1;
-                 var incrTop = ($('.draw-point').height() / 3) + 1;
-                 
-                 
-                 divCurrentHighLight.css({
-                 'left': posBeginLeft + incrLeft,
-                 'top': posBeginTop + incrTop
-                 });
-                 
-                 }
-                 
-                 //Se é o mesmo ponto de inicío, então, não múltiplica por dois o diameter_point
-                 var distance = 0;
-                 if (sizeSelected == 1) {
-                 distance = (sizeSelected * diameter_point);
-                 } else {
-                 //Incrementa o 2*diameter_point, pra que ocupe cada ponto
-                 distance = (sizeSelected * (diameter_point * 2)) - diameter_point;
-                 
-                 }
-                 
-                 divCurrentHighLight.width(distance);
-                 
-                 
-                 //======= Se não for uma Reta ===================
-                 
-                 
-                 
-                 */
-                //===============================================
-
             }
         });
 
@@ -1610,6 +1573,7 @@ this.Meet = function (options) {
             console.log('vmouseup');
             var currentCellStart = $(this).closest('div.Table').find('div.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
+
             if ($(elementAtual).hasClass('draw-point') && currentCellStart.size() !== 0) {
                 //É uma célula div e há uma célula que iniciou a seleção corrente
                 $(elementAtual).trigger('mouseup');
