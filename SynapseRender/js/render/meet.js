@@ -1304,7 +1304,6 @@ this.Meet = function (options) {
     this.init_DES = function () {
         //Iniciar Seleção
         $('div.draw-point').on('mousedown touchstart', function () {
-
             var currentPiece = $(this).closest('.piece');
             var divCurrentDraw = currentPiece.find("div.draw");
             //Add Nova Div HighLight, nesta Piece
@@ -1336,7 +1335,6 @@ this.Meet = function (options) {
                 $(this).addClass('firstSelected');
             }
 
-
             //Já foi desenhado
             $(this).addClass('selected');
 
@@ -1345,6 +1343,9 @@ this.Meet = function (options) {
 
             //É um início mais novo
             $(this).addClass('currentStart');
+
+            //Retira, se existitr a classe .top
+            $(this).removeClass('stop');
 
             divCurrentHighLight.show();
 
@@ -1384,9 +1385,14 @@ this.Meet = function (options) {
                     //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
                     //Procura o último draw-point para esta highLight. E finaliza o Traço para a highLight corrente
                     var lastCurrentDrawPoint = currentPiece.find('div.draw-point.stop.' + divCurrentHighLight.attr('id'));
+
                     lastCurrentDrawPoint.trigger('mouseup');
                     //Depois Inicia um novo HighLight
                     lastCurrentDrawPoint.trigger('mousedown');
+                    //add a classe referente ao novo highLight 
+                    var newIdDivCurrentHighLight = currentPiece.find('.desHighLight.currentSelected').attr('id');
+                    lastCurrentDrawPoint.addClass(newIdDivCurrentHighLight);
+                    
                 } else {
                     //Traçando com o mesmo Ângulo
 
@@ -1558,16 +1564,6 @@ this.Meet = function (options) {
         });
 
 
-        this.calcAngleBetween2Points = function (x1, y1, x2, y2) {
-            var dy = y2 - y1;
-            var dx = x2 - x1;
-            var theta = Math.atan2(dy, dx); // range (-PI, PI]
-            theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-            //if (theta < 0) theta = 360 + theta; // range [0, 360)
-            return theta;
-        }
-
-
         //Se for disparo um evento touchEnd
         $("div.draw-point").on('vmouseup', function (event) {
             console.log('vmouseup');
@@ -1579,7 +1575,6 @@ this.Meet = function (options) {
                 $(elementAtual).trigger('mouseup');
             }
         });
-
 
 
         $('div.draw-point').on('mouseup', function (event) {
@@ -1595,8 +1590,37 @@ this.Meet = function (options) {
             currentStartPoint.removeClass('currentStart');
             var firstSelect = currentPiece.find('.firstSelected');
 
+            var matrizSelectedPoints = [];
+
+            currentPiece.find('.selected').each(function () {
+                if (!self.isset(matrizSelectedPoints[$(this).attr('row')])) {
+                    matrizSelectedPoints[$(this).attr('row')] = [];
+                }
+                matrizSelectedPoints[$(this).attr('row')].push($(this).attr('col'));
+            });
+            if (self.isPolygon(matrizSelectedPoints)) {
+
+            }
 
         });
+
+        //Cálculo de angulo entre dois Pontos
+        this.calcAngleBetween2Points = function (x1, y1, x2, y2) {
+            var dy = y2 - y1;
+            var dx = x2 - x1;
+            var theta = Math.atan2(dy, dx); // range (-PI, PI]
+            theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+            //if (theta < 0) theta = 360 + theta; // range [0, 360)
+            return theta;
+        }
+
+
+        this.isPolygon = function (matrizSelectedPoints) {
+
+            console.log(matrizSelectedPoints);
+
+            return true;
+        }
 
 
     }
