@@ -1378,13 +1378,18 @@ this.Meet = function (options) {
                 var y1 = currentStartPoint.offset().top;
                 var x2 = $(this).offset().left;
                 var y2 = $(this).offset().top;
+
                 var angle = self.calcAngleBetween2Points(x1, y1, x2, y2);
 
+                console.log(self.isset(divCurrentHighLight.attr('angle')));
 
                 if (self.isset(divCurrentHighLight.attr('angle')) && divCurrentHighLight.attr('angle') != angle) {
                     //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
                     //Procura o último draw-point para esta highLight. E finaliza o Traço para a highLight corrente
                     var lastCurrentDrawPoint = currentPiece.find('div.draw-point.stop.' + divCurrentHighLight.attr('id'));
+
+                    //Sera marcado como um vértice
+                    lastCurrentDrawPoint.addClass('vertex');
 
                     lastCurrentDrawPoint.trigger('mouseup');
                     //Depois Inicia um novo HighLight
@@ -1392,9 +1397,30 @@ this.Meet = function (options) {
                     //add a classe referente ao novo highLight 
                     var newIdDivCurrentHighLight = currentPiece.find('.desHighLight.currentSelected').attr('id');
                     lastCurrentDrawPoint.addClass(newIdDivCurrentHighLight);
-                    
+
                 } else {
                     //Traçando com o mesmo Ângulo
+
+                    //Verificar se Acessará um ponto Start, onde outra div de diferente ângulo já passou sobre ele.
+                    if ($(this).hasClass('start')) {
+                        var startPoint = $(this);
+                        var currentHlAngle = self.isset(divCurrentHighLight.attr('angle')) ? divCurrentHighLight.attr('angle') : 0;
+                        $(this).closest('.Table').find('div.desHighLight').each(function () {
+                            if (startPoint.hasClass($(this).attr('id'))) {
+                                //O startPoint foi 'riscado' com o highLight corrente
+                                //Verifica, se o ângulo do hl atual é diferente desse hl
+                                var angleThisHl = self.isset($(this).attr('angle')) ? $(this).attr('angle') : 0;
+                                if (currentHlAngle != angleThisHl) {
+                                    //É um vértice
+                                    startPoint.addClass('vertex');
+                                }
+                            }
+
+
+                        });
+
+
+                    }
 
                     //Não faz algo, quando o HighLight corrente já foi utilizado pra passar sobre este Ponto
                     if (divCurrentHighLight.size() > 0 && !$(this).hasClass(divCurrentHighLight.attr('id'))) {
@@ -1556,7 +1582,13 @@ this.Meet = function (options) {
 
                         }
 
-                        divCurrentHighLight.attr('angle', angle);
+                        if ((x1 != x2) || (y1 != y2)) {
+                            // Não é o mesmo ponto que inicio o traço atual
+                            //Então existe um ângulo entre estes ponto
+                            divCurrentHighLight.attr('angle', angle);
+                        }
+                        
+                        
 
                     }
                 }
@@ -1601,6 +1633,8 @@ this.Meet = function (options) {
             if (self.isPolygon(matrizSelectedPoints)) {
 
             }
+
+            self.isCorrectDES();
 
         });
 
@@ -1898,6 +1932,29 @@ this.Meet = function (options) {
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     };
+
+
+    this.isCorrectDES = function (pieceID) {
+        var currentMainPiece = self.domCobject.mainPieces[pieceID];
+        var shapeDrawed = self.getCurrentShapeDES();
+        return true;
+    }
+
+
+    this.getCurrentShapeDES = function () {
+        var currentAskDraw = $('.currentPiece').find('.draw');
+        var numVertex = currentAskDraw.find('div.vertex').size();
+        if (numVertex == 3 || numVertex == 4) {
+            //Verificar os vértices formam uma figura fechada
+
+            console.log('3 ou 4');
+
+            //Verificar o tipo de figura que estes vértices formam
+        } else {
+            // Não é uma forma válida
+            return null;
+        }
+    }
 
 
     this.hasNextCobject = function () {
