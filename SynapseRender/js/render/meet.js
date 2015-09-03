@@ -1381,8 +1381,6 @@ this.Meet = function (options) {
 
                 var angle = self.calcAngleBetween2Points(x1, y1, x2, y2);
 
-                console.log(divCurrentHighLight.attr('angle'));
-
                 if (self.isset(divCurrentHighLight.attr('angle')) && divCurrentHighLight.attr('angle') != angle) {
                     //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
                     //Procura o último draw-point para esta highLight. E finaliza o Traço para a highLight corrente
@@ -1642,15 +1640,8 @@ this.Meet = function (options) {
             currentStartPoint.removeClass('currentStart');
             var firstSelect = currentPiece.find('.firstSelected');
 
-            var matrizSelectedPoints = [];
 
-            currentPiece.find('.selected').each(function () {
-                if (!self.isset(matrizSelectedPoints[$(this).attr('row')])) {
-                    matrizSelectedPoints[$(this).attr('row')] = [];
-                }
-                matrizSelectedPoints[$(this).attr('row')].push($(this).attr('col'));
-            });
-            if (self.isPolygon(matrizSelectedPoints)) {
+            if (self.isPolygon()) {
 
             }
 
@@ -1957,6 +1948,9 @@ this.Meet = function (options) {
     this.isCorrectDES = function (pieceID) {
         var currentMainPiece = self.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
+        
+        console.log(shapeDrawed);
+        
         return true;
     }
 
@@ -1964,12 +1958,224 @@ this.Meet = function (options) {
     this.getCurrentShapeDES = function () {
         var currentAskDraw = $('.currentPiece').find('.draw');
         var numVertex = currentAskDraw.find('div.vertex').size();
-        if (numVertex == 3 || numVertex == 4) {
-            //Verificar os vértices formam uma figura fechada
+        //Verificar se o número de vértices esta entro o aceitável
+        //Verificar se os vértices formam uma figura fechada
+        //Verificar o tipo de figura que estes vértices formam
+        if (numVertex == 3) {
+            //Pode ser um Triângulo
 
-            console.log('3 ou 4');
+        } else if (numVertex == 4) {
+            //Pode ser um Quadrado ou retângulo
+            var isRectangle = false;
+            var isSquare = false;
 
-            //Verificar o tipo de figura que estes vértices formam
+            var vertexs = {};
+            currentAskDraw.find('div.vertex').each(function (idx) {
+                vertexs[idx] = {};
+                vertexs[idx]['row'] = $(this).attr('row');
+                vertexs[idx]['col'] = $(this).attr('col');
+            });
+
+            var vertex1 = vertexs[0];
+            var vertex2 = vertexs[1];
+            var vertex3 = vertexs[2];
+            var vertex4 = vertexs[3];
+
+
+            // 1 - Verificar se pares distintos possuem a mesma Row
+            var vertexSameRowVx1 = null;
+            var vertexSameRowVx2 = null;
+            var vertexSameRowVx3 = null;
+            var vertexSameRowVx4 = null;
+
+            switch (vertex1['row']) {
+                case vertex2['row']:
+                    vertexSameRowVx1 = vertex2;
+                    vertexSameRowVx2 = vertex1;
+                    break;
+                case vertex3['row']:
+                    vertexSameRowVx1 = vertex3;
+                    vertexSameRowVx3 = vertex1;
+                    break;
+                case vertex4['row']:
+                    vertexSameRowVx1 = vertex4;
+                    vertexSameRowVx4 = vertex1;
+                    break;
+            }
+
+            if (vertexSameRowVx2 === null) {
+                switch (vertex2['row']) {
+                    case vertex3['row']:
+                        vertexSameRowVx2 = vertex3;
+                        vertexSameRowVx3 = vertex2;
+                        break;
+
+                    case vertex4['row']:
+                        vertexSameRowVx2 = vertex4;
+                        vertexSameRowVx4 = vertex2;
+                        break;
+                }
+            }
+
+            if (vertexSameRowVx3 === null && vertexSameRowVx4 === null) {
+                if (vertex3['row'] == vertex4['row']) {
+                    vertexSameRowVx3 = vertex4;
+                    vertexSameRowVx4 = vertex3;
+                }
+            }
+
+            if (vertexSameRowVx1 === null || vertexSameRowVx2 === null || vertexSameRowVx3 === null || vertexSameRowVx4 === null) {
+                //Figura inválida
+                return null;
+            } else {
+                // 2 - Verificar se pares distintos possuem a mesma Col
+                var vertexSameColVx1 = null;
+                var vertexSameColVx2 = null;
+                var vertexSameColVx3 = null;
+                var vertexSameColVx4 = null;
+
+                switch (vertex1['col']) {
+                    case vertex2['col']:
+                        vertexSameColVx1 = vertex2;
+                        vertexSameColVx2 = vertex1;
+                        break;
+                    case vertex3['col']:
+                        vertexSameColVx1 = vertex3;
+                        vertexSameColVx3 = vertex1;
+                        break;
+                    case vertex4['col']:
+                        vertexSameColVx1 = vertex4;
+                        vertexSameColVx4 = vertex1;
+                        break;
+                }
+
+                if (vertexSameColVx2 === null) {
+                    switch (vertex2['col']) {
+                        case vertex3['col']:
+                            vertexSameColVx2 = vertex3;
+                            vertexSameColVx3 = vertex2;
+                            break;
+
+                        case vertex4['col']:
+                            vertexSameColVx2 = vertex4;
+                            vertexSameColVx4 = vertex2;
+                            break;
+                    }
+                }
+
+                if (vertexSameColVx3 === null && vertexSameColVx4 === null) {
+                    if (vertex3['col'] == vertex4['col']) {
+                        vertexSameColVx3 = vertex4;
+                        vertexSameColVx4 = vertex3;
+                    }
+                }
+
+                if (vertexSameColVx1 === null || vertexSameColVx2 === null || vertexSameColVx3 === null || vertexSameColVx4 === null) {
+                    //Figura inválida
+                    return null;
+                } else {
+                    //Até aqui. Sabe-se  que possue ângulos Retos com 4 lados.
+                    // 3 - Verificar se entre os vértices, possui um traço
+                    var findRole = false;
+
+                    var row1 = vertex1['row'];
+                    var row2 = vertexSameColVx1['row'];
+
+                    var col1 = vertex1['col'];
+                    var col2 = vertexSameRowVx1['col'];
+
+                    var countPointsCol = Math.abs(col1 - col2);
+                    var countPointsRow = Math.abs(row1 - row2);
+
+                    var pointLimitColMax = Math.max(col1, col2);
+                    var pointLimitColMin = Math.min(col1, col2);
+
+                    var pointLimitRowMax = Math.max(row1, row2);
+                    var pointLimitRowMin = Math.min(row1, row2);
+
+
+                    //Percorrer Points da Primeira Linha
+                    currentAskDraw.find('div.draw-point[row=' + row1 + ']').each(function (idx) {
+                        if ($(this).attr('col') >= pointLimitColMin && $(this).attr('col') <= pointLimitColMax) {
+                            //Verificar se todos os points nesse intervalo possuem a classe .selected
+                            if (!$(this).hasClass('selected')) {
+                                findRole = true;
+                                return false;
+                            }
+                        }
+                    });
+
+                    //Verificar se encotrou um buraco entre o intervalo
+                    if (findRole) {
+                        return null;
+                    }
+
+                    //Percorrer Points da Segunda Linha
+                    currentAskDraw.find('div.draw-point[row=' + row2 + ']').each(function (idx) {
+                        if ($(this).attr('col') >= pointLimitColMin && $(this).attr('col') <= pointLimitColMax) {
+                            //Verificar se todos os points nesse intervalo possuem a classe .selected
+                            if (!$(this).hasClass('selected')) {
+                                findRole = true;
+                                return false;
+                            }
+                        }
+                    });
+
+                    //Verificar se encotrou um buraco entre o intervalo
+                    if (findRole) {
+                        return null;
+                    }
+
+
+                    //Percorrer Points da Primeira Coluna
+                    currentAskDraw.find('div.draw-point[col=' + col1 + ']').each(function (idx) {
+                        if ($(this).attr('row') >= pointLimitRowMin && $(this).attr('row') <= pointLimitRowMax) {
+                            //Verificar se todos os points nesse intervalo possuem a classe .selected
+                            if (!$(this).hasClass('selected')) {
+                                findRole = true;
+                                return false;
+                            }
+                        }
+                    });
+
+                    //Verificar se encotrou um buraco entre o intervalo
+                    if (findRole) {
+                        return null;
+                    }
+
+                    //Percorrer Points da Segunda Coluna
+                    currentAskDraw.find('div.draw-point[col=' + col2 + ']').each(function (idx) {
+                        if ($(this).attr('row') >= pointLimitRowMin && $(this).attr('row') <= pointLimitRowMax) {
+                            //Verificar se todos os points nesse intervalo possuem a classe .selected
+                            if (!$(this).hasClass('selected')) {
+                                findRole = true;
+                                return false;
+                            }
+                        }
+                    });
+
+                    //Verificar se encotrou um buraco entre o intervalo
+                    if (findRole) {
+                        return null;
+                    }
+
+                    //Se chegou até aqui é um Retângulo
+                    isRectangle = true;
+
+                    //Verificar se possuem os lados iguais (Quadrado)
+                    isSquare = countPointsRow === countPointsCol;
+                    
+                    if(isSquare){
+                        //É um quadrado
+                        return "square";
+                    }else{
+                        //É somente retângulo
+                        return "rectangle";
+                    }
+
+                }
+            }
+
         } else {
             // Não é uma forma válida
             return null;
