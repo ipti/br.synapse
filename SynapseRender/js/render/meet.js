@@ -1616,7 +1616,6 @@ this.Meet = function (options) {
 
         //Se for disparo um evento touchEnd
         $("div.draw-point").on('vmouseup', function (event) {
-            console.log('vmouseup');
             var currentCellStart = $(this).closest('div.Table').find('div.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
 
@@ -1628,7 +1627,6 @@ this.Meet = function (options) {
 
 
         $('div.draw-point').on('mouseup', function (event) {
-            console.log('mouseup');
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
@@ -1661,8 +1659,6 @@ this.Meet = function (options) {
 
 
         this.isPolygon = function (matrizSelectedPoints) {
-
-            console.log(matrizSelectedPoints);
 
             return true;
         }
@@ -1948,9 +1944,9 @@ this.Meet = function (options) {
     this.isCorrectDES = function (pieceID) {
         var currentMainPiece = self.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
-        
+
         console.log(shapeDrawed);
-        
+
         return true;
     }
 
@@ -1963,6 +1959,52 @@ this.Meet = function (options) {
         //Verificar o tipo de figura que estes vértices formam
         if (numVertex == 3) {
             //Pode ser um Triângulo
+            var vertexs = {};
+            currentAskDraw.find('div.vertex').each(function (idx) {
+                vertexs[idx] = {};
+                vertexs[idx]['row'] = $(this).attr('row');
+                vertexs[idx]['col'] = $(this).attr('col');
+            });
+
+            var vertex1 = vertexs[0];
+            var vertex2 = vertexs[1];
+            var vertex3 = vertexs[2];
+            console.log(vertex1);
+            console.log(vertex2);
+            console.log(vertex3);
+
+            //Verificar se possui algum 'buraco' entre os 3 vértices
+            if (currentAskDraw.find('div.draw-point.stop').size() > 1) {
+                //Figura inválida, pois possui dois pontos '.stop'
+                //Ou seja, eles não se conectam
+                return null;
+            } else {
+                //Verificar se o primeiro ponto que foi selecionado esta 'aberto'
+                //Pra Não estar aberto, ele deverá possuir a classe que representa Mais de 1 HighLight
+                var pointFirstSelected = currentAskDraw.find('div.draw-point.firstSelected');
+                var countHlFirstSelected = 0;
+                currentAskDraw.find('div.desHighLight').each(function () {
+                    if (pointFirstSelected.hasClass($(this).attr('id'))) {
+                        countHlFirstSelected++;
+                        if (countHlFirstSelected > 1) {
+                            //Está 'fechado'
+                            return false;
+                        }
+                    }
+                });
+
+                if (countHlFirstSelected <= 1) {
+                    //Está 'aberto'
+                    return null;
+                } 
+                
+                //É um Triângulo
+                return "triangle";
+            }
+
+
+
+
 
         } else if (numVertex == 4) {
             //Pode ser um Quadrado ou retângulo
@@ -2164,11 +2206,11 @@ this.Meet = function (options) {
 
                     //Verificar se possuem os lados iguais (Quadrado)
                     isSquare = countPointsRow === countPointsCol;
-                    
-                    if(isSquare){
+
+                    if (isSquare) {
                         //É um quadrado
                         return "square";
-                    }else{
+                    } else {
                         //É somente retângulo
                         return "rectangle";
                     }

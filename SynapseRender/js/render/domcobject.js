@@ -306,8 +306,6 @@ var DomCobject = function (cobject, idx) {
         self.domPiece = $('<div class="piece ' + self.cobject.template_code + '" style="display:none" id="' + self.id.piece + '"></div>');
         var current_piece = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece];
         
-        console.log(current_piece);
-        
         var domElementASK = $('<div class="ask draw"></div>');
         var strTable = '<div class ="Table">';
         var totalCol = 7;
