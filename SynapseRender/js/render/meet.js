@@ -173,7 +173,6 @@ this.Meet = function (options) {
      * @returns {void}
      */
     this.domCobjectBuild = function (cobject_id) {
-
         //Construir a Dom do Cobject e append no html
         self.DB_synapse.getCobject(cobject_id, function (json_cobject) {
             var dump = new DomCobject(json_cobject);
@@ -209,7 +208,6 @@ this.Meet = function (options) {
             self.countTime($('.info-time .info-text'));
 
         });
-
     };
 
     /**
@@ -1304,6 +1302,11 @@ this.Meet = function (options) {
     this.init_DES = function () {
         //Iniciar Seleção
         $('div.draw-point').on('mousedown touchstart', function () {
+            //Armazena antes de tudo o conjunto de classes antigas.
+            //Para no futuro poder ser retornada, caso o traço seja cancelado(quanto o mesmo ponto de sto = start)
+            $(this).data('oldClass', $(this).attr('class'));
+
+
             var currentPiece = $(this).closest('.piece');
             var divCurrentDraw = currentPiece.find("div.draw");
             //Add Nova Div HighLight, nesta Piece
@@ -1364,7 +1367,17 @@ this.Meet = function (options) {
             }
         });
 
+        self.hasEquivalentAngle = function (angle1, angle2) {
+            if (angle1 < 0) {
+                angle1 = parseInt(angle1) + 180;
+            }
 
+            if (angle2 < 0) {
+                angle2 = parseInt(angle2) + 180;
+            }
+
+            return angle1 == angle2;
+        }
 
         $('div.draw-point').on('mouseover', function () {
 
@@ -1379,9 +1392,13 @@ this.Meet = function (options) {
                 var x2 = $(this).offset().left;
                 var y2 = $(this).offset().top;
 
+                //Calcula o angulo Atual
                 var angle = self.calcAngleBetween2Points(x1, y1, x2, y2);
 
-                if (self.isset(divCurrentHighLight.attr('angle')) && divCurrentHighLight.attr('angle') != angle) {
+                var angleDivCurrent = divCurrentHighLight.attr('angle');
+
+
+                if (self.isset(angleDivCurrent) && !self.hasEquivalentAngle(angleDivCurrent, angle)) {
                     //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
                     //Procura o último draw-point para esta highLight. E finaliza o Traço para a highLight corrente
                     var lastCurrentDrawPoint = currentPiece.find('div.draw-point.stop.' + divCurrentHighLight.attr('id'));
@@ -1398,51 +1415,52 @@ this.Meet = function (options) {
 
                 } else {
                     //Traçando com o mesmo Ângulo
-
                     // 1- Verificar se Acessará um ponto, onde outra div de diferente ângulo já passou sobre ele.
                     var currentPoint = $(this);
-                    var currentHlAngle = self.isset(divCurrentHighLight.attr('angle')) ? divCurrentHighLight.attr('angle') : 0;
-                    if (!currentPoint.hasClass('vertex')) {
-                        $(this).closest('.Table').find('div.desHighLight').each(function () {
-                            if (currentPoint.hasClass($(this).attr('id'))) {
-                                //O Point foi 'riscado' com o highLight corrente
-                                //Verifica, se o ângulo do hl atual é diferente desse hl
-                                var angleThisHl = self.isset($(this).attr('angle')) ? $(this).attr('angle') : 0;
-                                if (currentHlAngle != angleThisHl) {
-                                    //É um vértice
-                                    currentPoint.addClass('vertex');
-                                    //Sai do each
-                                    return false;
+
+                    if (self.isset(angleDivCurrent)) {
+                        //Se existir um ângulo formado por essa div 
+                        if (!currentPoint.hasClass('vertex')) {
+                            $(this).closest('.Table').find('div.desHighLight').each(function () {
+                                if (currentPoint.hasClass($(this).attr('id'))) {
+                                    //O Point foi 'riscado' com o highLight corrente
+                                    //Verifica, se o ângulo do hl atual é diferente desse hl
+                                    var angleThisHl = $(this).attr('angle');
+
+                                    if (!self.hasEquivalentAngle(angleDivCurrent, angleThisHl)) {
+                                        //É um vértice
+                                        currentPoint.addClass('vertex');
+                                        //Sai do each
+                                        return false;
+                                    }
                                 }
-                            }
 
-                        });
-                    }
+                            });
+                        }
 
-                    // 1.2- Verificar se Iniciou o traço atual onde outra div de diferente ângulo já passou sobre ele.
-                    if (!currentStartPoint.hasClass('vertex')) {
-                        $(this).closest('.Table').find('div.desHighLight').each(function () {
-                            if ($(this).attr('id') != divCurrentHighLight.attr('id') &&
-                                    currentStartPoint.hasClass($(this).attr('id'))) {
-                                // O StartPoint possui uma outra HighLight
-                                //Verifica, se o ângulo do hl atual é diferente desse hl
-                                var angleThisHl = self.isset($(this).attr('angle')) ? $(this).attr('angle') : 0;
-                                if (currentHlAngle != angleThisHl) {
-                                    //É um vértice
-                                    currentStartPoint.addClass('vertex');
-                                    //Sai do each
-                                    return false;
+                        // 1.2- Verificar se Iniciou o traço atual onde outra div de diferente ângulo já passou sobre ele.
+                        if (!currentStartPoint.hasClass('vertex')) {
+                            $(this).closest('.Table').find('div.desHighLight').each(function () {
+                                if ($(this).attr('id') != divCurrentHighLight.attr('id') &&
+                                        currentStartPoint.hasClass($(this).attr('id'))) {
+                                    // O StartPoint possui uma outra HighLight
+                                    //Verifica, se o ângulo do hl atual é diferente desse hl
+                                    var angleThisHl = $(this).attr('angle');
+                                    if (!self.hasEquivalentAngle(angleDivCurrent, angleThisHl)) {
+                                        //É um vértice
+                                        currentStartPoint.addClass('vertex');
+                                        //Sai do each
+                                        return false;
+                                    }
                                 }
-                            }
 
-                        });
+                            });
+                        }
 
                     }
-
 
                     //Não faz algo, quando o HighLight corrente já foi utilizado pra passar sobre este Ponto
                     if (divCurrentHighLight.size() > 0 && !$(this).hasClass(divCurrentHighLight.attr('id'))) {
-
                         $(this).addClass('selected');
 
                         //Elimina a classe end do último point do traço atual
@@ -1609,6 +1627,7 @@ this.Meet = function (options) {
 
 
                     }
+
                 }
             }
         });
@@ -1630,14 +1649,20 @@ this.Meet = function (options) {
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
+            //Verificar se foi solto no mesmo ponto que iniciou
+            if (currentStartPoint.attr('row') == $(this).attr('row')
+                    && currentStartPoint.attr('col') == $(this).attr('col')) {
+                //Retrona a classe antiga e remove a currentDivHighLight
+                $(this).attr('class', $(this).data('oldClass'));
+                divCurrentHighLight.remove();
+            }
+
 
             //Remove a classe currentSelected, da divCurrentHighLight
             divCurrentHighLight.removeClass('currentSelected');
-
             //Remove a classe do point que indica onde começou o traço corrente
             currentStartPoint.removeClass('currentStart');
             var firstSelect = currentPiece.find('.firstSelected');
-
 
             if (self.isPolygon()) {
 
@@ -1996,8 +2021,8 @@ this.Meet = function (options) {
                 if (countHlFirstSelected <= 1) {
                     //Está 'aberto'
                     return null;
-                } 
-                
+                }
+
                 //É um Triângulo
                 return "triangle";
             }
