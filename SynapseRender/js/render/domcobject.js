@@ -283,7 +283,6 @@ var DomCobject = function (cobject, idx) {
 
             });
             //Armazena todos os grupos de cada peça
-
             objGroups_currentPiece.istrue = null;
             self.mainPieces[self.id.piece] = objGroups_currentPiece;
 
@@ -305,7 +304,7 @@ var DomCobject = function (cobject, idx) {
     this.buildPiece_DES = function () {
         self.domPiece = $('<div class="piece ' + self.cobject.template_code + '" style="display:none" id="' + self.id.piece + '"></div>');
         var current_piece = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece];
-        
+
         var domElementASK = $('<div class="ask draw"></div>');
         var strTable = '<div class ="Table">';
         var totalCol = 7;
@@ -317,13 +316,18 @@ var DomCobject = function (cobject, idx) {
             for (var col = 0; col < totalCol; col++) {
                 //Montar Cada Coluna
                 strTable += '<div class="Col" row="' + (row + 1) + '" col="' + (col + 1) + '" >';
-                strTable +='<div class="draw-point" row="' + (row + 1) + '" col="' + (col + 1) + '"></div>';
+                strTable += '<div class="draw-point" row="' + (row + 1) + '" col="' + (col + 1) + '"></div>';
                 strTable += '</div>';
             }
             strTable += '</div>';
         }
         strTable += '</div>';
         domElementASK.append(strTable);
+
+        //Armazena todos os elementos de cada peça
+        var objCurrentPiece = current_piece;
+        objCurrentPiece.istrue = null;
+        self.mainPieces[self.id.piece] = objCurrentPiece;
         return self.domPiece.append(domElementASK);
     }
 

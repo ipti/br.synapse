@@ -1597,25 +1597,6 @@ this.Meet = function (options) {
 
                             }
 
-
-                            if (catetoCol > 0) {
-                                //Da Esquerda para a direita
-
-
-                            } else {
-                                //Da direita para a esquerda
-
-                                if (catetoRow > 0) {
-                                    //Cima para Baixo
-
-                                } else {
-                                    //Baixo para Cima
-
-                                }
-
-                            }
-
-
                         }
 
                         if ((x1 != x2) || (y1 != y2)) {
@@ -1664,12 +1645,12 @@ this.Meet = function (options) {
             currentStartPoint.removeClass('currentStart');
             var firstSelect = currentPiece.find('.firstSelected');
 
-            if (self.isPolygon()) {
-
-            }
-
-            self.isCorrectDES();
-
+            //Verificar se está certo
+            self.isCorrectDES(currentPiece.attr('id'));
+            
+            if(currentPiece.find())
+            $('.nextPiece').show();
+            
         });
 
         //Cálculo de angulo entre dois Pontos
@@ -1969,10 +1950,11 @@ this.Meet = function (options) {
     this.isCorrectDES = function (pieceID) {
         var currentMainPiece = self.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
+        var isCorrect = currentMainPiece['type_name'] === "shape" && shapeDrawed === currentMainPiece['shape'];
+        //Armazena o resultado no mainPiece
+        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
 
-        console.log(shapeDrawed);
-
-        return true;
+        return isCorrect;
     }
 
 
