@@ -1647,10 +1647,13 @@ this.Meet = function (options) {
 
             //Verificar se está certo
             self.isCorrectDES(currentPiece.attr('id'));
-            
-            if(currentPiece.find())
-            $('.nextPiece').show();
-            
+
+            //Se encontrar algum traço
+            if (currentPiece.find('.desHighLight')) {
+                $('.nextPiece').show();
+            }
+
+
         });
 
         //Cálculo de angulo entre dois Pontos
@@ -1662,13 +1665,6 @@ this.Meet = function (options) {
             //if (theta < 0) theta = 360 + theta; // range [0, 360)
             return theta;
         }
-
-
-        this.isPolygon = function (matrizSelectedPoints) {
-
-            return true;
-        }
-
 
     }
 
@@ -1976,7 +1972,7 @@ this.Meet = function (options) {
             var vertex1 = vertexs[0];
             var vertex2 = vertexs[1];
             var vertex3 = vertexs[2];
-            
+
             //Verificar se possui algum 'buraco' entre os 3 vértices
             if (currentAskDraw.find('div.draw-point.stop').size() > 1) {
                 //Figura inválida, pois possui dois pontos '.stop'
