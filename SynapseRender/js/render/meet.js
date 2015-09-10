@@ -1386,6 +1386,11 @@ this.Meet = function (options) {
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
             //Verificar se existe o draw-point current Start
             if (currentStartPoint.size() > 0) {
+                
+                //Adiciona a classe para indicar que este ponto foi o último a ser selecionado
+                currentPiece.find('div.draw-point.lastSelected').removeClass('lastSelected');
+                $(this).addClass('lastSelected');
+
                 //Calcular ângulo entre a posição do currentStartPoint e a posição Point corrente
                 var x1 = currentStartPoint.offset().left;
                 var y1 = currentStartPoint.offset().top;
@@ -1396,7 +1401,6 @@ this.Meet = function (options) {
                 var angle = self.calcAngleBetween2Points(x1, y1, x2, y2);
 
                 var angleDivCurrent = divCurrentHighLight.attr('angle');
-
 
                 if (self.isset(angleDivCurrent) && !self.hasEquivalentAngle(angleDivCurrent, angle)) {
                     //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
@@ -1469,7 +1473,6 @@ this.Meet = function (options) {
 
                         //Add classe de finalização do traço (Suponhe que é o fim do traço)
                         $(this).addClass('stop');
-
 
 
                         var divParentStartPoint = currentStartPoint.closest('div.Col');
@@ -1552,7 +1555,8 @@ this.Meet = function (options) {
                             if (angle === 0 || angle === 180) {
                                 //Horizontal
                                 divCurrentHighLight.width(distance);
-                            } else {
+                                
+                            } else if(angle === 90 || angle === -90){
                                 //Vertical
                                 divCurrentHighLight.height(distance);
                             }
@@ -1615,13 +1619,24 @@ this.Meet = function (options) {
 
 
         //Se for disparo um evento touchEnd
-        $("div.draw-point").on('vmouseup', function (event) {
-            var currentCellStart = $(this).closest('div.Table').find('div.currentStart');
+        //o vmouseup é disparado quando o ponteiro é solto em QUALQUER elemento
+        $(document).on('vmouseup', function (event) {
+            var currentPiece = $('div.currentPiece');
+            var divTable = currentPiece.find('div.Table');
+            var currentCellStart = divTable.find('div.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
 
-            if ($(elementAtual).hasClass('draw-point') && currentCellStart.size() !== 0) {
-                //É uma célula div e há uma célula que iniciou a seleção corrente
-                $(elementAtual).trigger('mouseup');
+            if (currentCellStart.size() !== 0) {
+                //Iniciou um Traço.
+                if ($(elementAtual).hasClass('draw-point')) {
+                    //É uma célula div e há uma célula que iniciou a seleção corrente
+                    $(elementAtual).trigger('mouseup');
+                } else {
+                    //É um elemento qualquer. Então busca o último point selecionado e dispara o mouseup
+                    var lastSelected = divTable.find('div.draw-point.lastSelected');
+                    lastSelected.trigger('mouseup');
+                }
+
             }
         });
 
