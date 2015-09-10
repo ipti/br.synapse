@@ -410,8 +410,8 @@ div.draw-point {
     pointer-events: none;
     z-index: 99999;
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border: 2px solid rgb(226, 123, 23);
     background-color: rgb(226, 123, 23);
     border-radius: 30px;

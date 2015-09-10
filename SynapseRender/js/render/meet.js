@@ -1326,8 +1326,8 @@ this.Meet = function (options) {
             //Add classe .seleted nesta div
             divCurrentHighLight.addClass('currentSelected');
 
-            var incrLeft = ($('.draw-point').width() / 3) + 5;
-            var incrTop = ($('.draw-point').height() / 3) + 5;
+            var incrLeft = ($('.draw-point').width() / 3) + 8;
+            var incrTop = ($('.draw-point').height() / 3) + 8;
 
             divCurrentHighLight.css({
                 'left': posBeginLeft + incrLeft,
@@ -1533,8 +1533,8 @@ this.Meet = function (options) {
                                 posBeginLeft = posBegin.left;
                                 posBeginTop = posBegin.top;
 
-                                incrLeft = (currentStartPoint.width() / 3) + 5;
-                                incrTop = (currentStartPoint.height() / 3) + 5;
+                                incrLeft = (currentStartPoint.width() / 3) + 8;
+                                incrTop = (currentStartPoint.height() / 3) + 8;
                             }
 
 
@@ -1976,10 +1976,7 @@ this.Meet = function (options) {
             var vertex1 = vertexs[0];
             var vertex2 = vertexs[1];
             var vertex3 = vertexs[2];
-            console.log(vertex1);
-            console.log(vertex2);
-            console.log(vertex3);
-
+            
             //Verificar se possui algum 'buraco' entre os 3 vértices
             if (currentAskDraw.find('div.draw-point.stop').size() > 1) {
                 //Figura inválida, pois possui dois pontos '.stop'
