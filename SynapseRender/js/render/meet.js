@@ -1406,7 +1406,7 @@ this.Meet = function (options) {
                     //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
                     //Procura o último draw-point para esta highLight. E finaliza o Traço para a highLight corrente
                     var lastCurrentDrawPoint = currentPiece.find('div.draw-point.stop.' + divCurrentHighLight.attr('id'));
-
+                    
                     //Sera marcado como um vértice
                     lastCurrentDrawPoint.addClass('vertex');
 
@@ -1653,7 +1653,6 @@ this.Meet = function (options) {
                 divCurrentHighLight.remove();
             }
 
-
             //Remove a classe currentSelected, da divCurrentHighLight
             divCurrentHighLight.removeClass('currentSelected');
             //Remove a classe do point que indica onde começou o traço corrente
@@ -1667,7 +1666,6 @@ this.Meet = function (options) {
             if (currentPiece.find('.desHighLight')) {
                 $('.nextPiece').show();
             }
-
 
         });
 
@@ -1962,6 +1960,9 @@ this.Meet = function (options) {
         var currentMainPiece = self.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
         var isCorrect = currentMainPiece['type_name'] === "shape" && shapeDrawed === currentMainPiece['shape'];
+        
+        console.log(shapeDrawed);
+        
         //Armazena o resultado no mainPiece
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
 
@@ -2037,6 +2038,13 @@ this.Meet = function (options) {
             var vertex2 = vertexs[1];
             var vertex3 = vertexs[2];
             var vertex4 = vertexs[3];
+            
+            
+            
+            var vTopLeft = ;
+            var vTopRight = ;
+            var vDownLeft = ;
+            var vDownRight = ;
 
 
             // 1 - Verificar se pares distintos possuem a mesma Row
