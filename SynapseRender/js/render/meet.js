@@ -1386,7 +1386,7 @@ this.Meet = function (options) {
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
             //Verificar se existe o draw-point current Start
             if (currentStartPoint.size() > 0) {
-                
+
                 //Adiciona a classe para indicar que este ponto foi o último a ser selecionado
                 currentPiece.find('div.draw-point.lastSelected').removeClass('lastSelected');
                 $(this).addClass('lastSelected');
@@ -1406,7 +1406,7 @@ this.Meet = function (options) {
                     //Se o ângulo durante o movimento mudar. Cria uma nova Div.highLight
                     //Procura o último draw-point para esta highLight. E finaliza o Traço para a highLight corrente
                     var lastCurrentDrawPoint = currentPiece.find('div.draw-point.stop.' + divCurrentHighLight.attr('id'));
-                    
+
                     //Sera marcado como um vértice
                     lastCurrentDrawPoint.addClass('vertex');
 
@@ -1555,8 +1555,8 @@ this.Meet = function (options) {
                             if (angle === 0 || angle === 180) {
                                 //Horizontal
                                 divCurrentHighLight.width(distance);
-                                
-                            } else if(angle === 90 || angle === -90){
+
+                            } else if (angle === 90 || angle === -90) {
                                 //Vertical
                                 divCurrentHighLight.height(distance);
                             }
@@ -1960,9 +1960,9 @@ this.Meet = function (options) {
         var currentMainPiece = self.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
         var isCorrect = currentMainPiece['type_name'] === "shape" && shapeDrawed === currentMainPiece['shape'];
-        
+
         console.log(shapeDrawed);
-        
+
         //Armazena o resultado no mainPiece
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
 
@@ -2028,24 +2028,117 @@ this.Meet = function (options) {
             var isSquare = false;
 
             var vertexs = {};
+            var minRow = 999;
+            var minCol = 999;
+
+            var maxRow = -1;
+            var maxCol = -1;
+
+            var idxMinVertex = -1;
+            var idxMaxVertex = -1;
+            var idxAnotherVertex1 = -1;
+            var idxAnotherVertex2 = -1;
+
+            var isNotMin = false;
+            var isNotMax = false;
             currentAskDraw.find('div.vertex').each(function (idx) {
                 vertexs[idx] = {};
                 vertexs[idx]['row'] = $(this).attr('row');
                 vertexs[idx]['col'] = $(this).attr('col');
+                //Identificar o vetex TopLeft => Menor Linha e Coluna
+                //Substitui o Minimo atual se possui Menor Row e Menor Col
+                var oldIdxMinVertex = -1;
+                var oldIdxMaxVertex = -1;
+
+                if (vertexs[idx]['row'] < minRow && vertexs[idx]['col'] < minCol) {
+                    //Encontrou um Mínimo Vertex
+                    isNotMin = false;
+                    if (idxMinVertex > -1) {
+                        //Não é o primeiro idx a ser verificado
+                        oldIdxMinVertex = idxMinVertex;
+
+                    }
+
+                    idxMinVertex = idx;
+                    //Novo Mínimo Vertex
+                    minRow = vertexs[idx]['row'];
+                    minCol = vertexs[idx]['col'];
+
+                } else {
+                    isNotMin = true;
+                }
+
+                //Identificar o vetex DownRight => Maior Linha e Coluna
+                //Substitui o Maximo atual se possui Maior Row e Maior Col
+                if (vertexs[idx]['row'] > maxRow && vertexs[idx]['col'] > maxCol) {
+                    //Encontrou um Máximo Vertex
+                    isNotMax = false;
+                    if (idxMaxVertex > -1) {
+                        //Não é o primeiro idx a ser verificado
+                        oldIdxMaxVertex = idxMaxVertex;
+
+                    }
+                    idxMaxVertex = idx;
+
+                    //Novo Máximo Vertex
+                    maxRow = vertexs[idx]['row'];
+                    maxCol = vertexs[idx]['col'];
+
+                } else {
+                    isNotMax = true;
+                }
+
+
+                if (isNotMin && isNotMax) {
+                    //Pode ser o LeftDown ou RightTop
+                    if (idxAnotherVertex1 > -1) {
+                        //Já existe, então add no outro Vertex2
+                        idxAnotherVertex2 = idx;
+                    } else {
+                        idxAnotherVertex1 = idx;
+                    }
+
+                } else {
+                    // É mínimo ou máximo / ou os dois(no primeiro idx)
+
+                    if (!isNotMin && oldIdxMinVertex > -1) {
+                        //O atual idx é mínimo e substituiu o antigo mínimo
+                        //Verifica se o oldIdxMinVertex NÃO é Max também
+                        if (oldIdxMinVertex != idxMaxVertex) {
+                            if (idxAnotherVertex1 > -1) {
+                                //Já existe, então add no outro Vertex2
+                                idxAnotherVertex2 = oldIdxMinVertex;
+                            } else {
+                                idxAnotherVertex1 = oldIdxMinVertex;
+                            }
+                        }
+
+                    }
+
+                    if (!isNotMax && oldIdxMaxVertex > -1) {
+                        //O atual idx é máximo e substituiu o antigo máximo
+                        //Verifica se o oldIdxMaxVertex NÃO é Min também
+                        if (oldIdxMaxVertex != idxMinVertex) {
+                            if (idxAnotherVertex1 > -1) {
+                                //Já existe, então add no outro Vertex2
+                                idxAnotherVertex2 = oldIdxMaxVertex;
+                            } else {
+                                idxAnotherVertex1 = oldIdxMaxVertex;
+                            }
+                        }
+
+                    }
+
+                }
+
+
             });
+
 
             var vertex1 = vertexs[0];
             var vertex2 = vertexs[1];
             var vertex3 = vertexs[2];
             var vertex4 = vertexs[3];
-            
-            
-            
-            var vTopLeft = ;
-            var vTopRight = ;
-            var vDownLeft = ;
-            var vDownRight = ;
-
 
             // 1 - Verificar se pares distintos possuem a mesma Row
             var vertexSameRowVx1 = null;
@@ -2223,6 +2316,52 @@ this.Meet = function (options) {
                     if (findRole) {
                         return null;
                     }
+
+                    //Verificar se possui algum draw select fora do retângulo
+                    var vertexTopLeft = vertexs[idxMinVertex];
+                    var vertexDownRight = vertexs[idxMaxVertex];
+                    //Verificar qual another vertex possui a mesma Coluna do TopLeft
+                    //Ecnontrando assim o DownLeft
+                    var vertexDownLeft = -1;
+                    var vertexTopRight = -1;
+
+
+                    if (vertexTopLeft['col'] == idxAnotherVertex1['col']) {
+                        //É o vertexDownLeft
+                        vertexDownLeft = vertexs[idxAnotherVertex1];
+                        vertexTopRight = vertexs[idxAnotherVertex2];
+                    } else {
+                        vertexDownLeft = vertexs[idxAnotherVertex2];
+                        vertexTopRight = vertexs[idxAnotherVertex1];
+                    }
+
+                    //Obter as mínimas e máximas Linhas e Colunas
+                    var minRow = vertexTopLeft['row'];
+                    var minCol = vertexTopLeft['col'];
+                    var maxRow = vertexDownRight['row'];
+                    var maxCol = vertexDownRight['col'];
+                    
+                    var therePointOutSideSquare = false;
+                    
+                    currentAskDraw.find('div.draw-point.selected').each(function (idx) {
+                            //Verificar se esse ponto de seleção Não está dentro do retângulo
+                            var row = $(this).attr('row');
+                            var col = $(this).attr('col');
+                            if(row < minRow || row > maxRow || col < minCol || col > maxCol){
+                                //Este ponto está fora do retângulo
+                                therePointOutSideSquare = true;
+                                //Saí do each
+                                return false;
+                            }
+                    });
+                    
+                    if(therePointOutSideSquare){
+                        //Possui um traço fora do retângulo
+                        return null;
+                    }
+                    
+
+                    
 
                     //Se chegou até aqui é um Retângulo
                     isRectangle = true;
