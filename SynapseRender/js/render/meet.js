@@ -1347,8 +1347,11 @@ this.Meet = function (options) {
             //É um início mais novo
             $(this).addClass('currentStart');
 
-            //Retira, se existitr a classe .top
-            $(this).removeClass('stop');
+            //Retira, se existitr a classe .stop. E não for final
+            //de um desenho válido
+            if (!$(this).hasClass('endCorrectDES')) {
+                $(this).removeClass('stop');
+            }
 
             divCurrentHighLight.show();
 
@@ -1468,9 +1471,13 @@ this.Meet = function (options) {
                         $(this).addClass('selected');
 
                         //Elimina a classe end do último point do traço atual
-                        var currentLastStop = currentPiece.find('.draw-point.' + divCurrentHighLight.attr('id') + '.stop');
-                        currentLastStop.removeClass('stop');
-
+                        var currentLastStop = 
+                                currentPiece.find('.draw-point.' + divCurrentHighLight.attr('id') + '.stop:not(.endCorrectDES)');
+                        //Retira, se existitr a classe .stop. E não for final
+                        //de um desenho válido
+                         currentLastStop.removeClass('stop');
+                        
+                        
                         //Add classe de finalização do traço (Suponhe que é o fim do traço)
                         $(this).addClass('stop');
 
@@ -1660,7 +1667,11 @@ this.Meet = function (options) {
             var firstSelect = currentPiece.find('.firstSelected');
 
             //Verificar se está certo
-            self.isCorrectDES(currentPiece.attr('id'));
+            var isCorrect = self.isCorrectDES(currentPiece.attr('id'));
+
+            if (isCorrect) {
+                $(this).addClass('endCorrectDES');
+            }
 
             //Se encontrar algum traço
             if (currentPiece.find('.desHighLight')) {
@@ -2020,8 +2031,6 @@ this.Meet = function (options) {
 
 
 
-
-
         } else if (numVertex == 4) {
             //Pode ser um Quadrado ou retângulo
             var isRectangle = false;
@@ -2340,28 +2349,35 @@ this.Meet = function (options) {
                     var minCol = vertexTopLeft['col'];
                     var maxRow = vertexDownRight['row'];
                     var maxCol = vertexDownRight['col'];
-                    
+
                     var therePointOutSideSquare = false;
-                    
+
                     currentAskDraw.find('div.draw-point.selected').each(function (idx) {
-                            //Verificar se esse ponto de seleção Não está dentro do retângulo
-                            var row = $(this).attr('row');
-                            var col = $(this).attr('col');
-                            if(row < minRow || row > maxRow || col < minCol || col > maxCol){
-                                //Este ponto está fora do retângulo
-                                therePointOutSideSquare = true;
-                                //Saí do each
-                                return false;
-                            }
+                        //Verificar se esse ponto de seleção Não está dentro do retângulo
+                        var row = $(this).attr('row');
+                        var col = $(this).attr('col');
+                        if (row < minRow || row > maxRow || col < minCol || col > maxCol) {
+                            //Este ponto está fora do retângulo
+                            therePointOutSideSquare = true;
+                            //Saí do each
+                            return false;
+                        }
+
+                        //Verificar se tem algum ponto 'dentro' da figura
+                        if ((row > minRow && row < maxRow) && (col > minCol && col < maxCol)) {
+                            //Este ponto está 'dentro' do retângulo
+                            therePointOutSideSquare = true;
+                            //Saí do each
+                            return false;
+                        }
+
                     });
-                    
-                    if(therePointOutSideSquare){
+
+                    if (therePointOutSideSquare) {
                         //Possui um traço fora do retângulo
                         return null;
                     }
-                    
 
-                    
 
                     //Se chegou até aqui é um Retângulo
                     isRectangle = true;
