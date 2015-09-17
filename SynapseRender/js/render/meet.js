@@ -1463,6 +1463,12 @@ this.Meet = function (options) {
 
                             });
                         }
+                        
+                        //Add se não existir o id do traço
+                        if(self.isset($(this).attr('dashes'))){
+                             //STOP HERE
+                        }
+                       
 
                     }
 
@@ -1477,8 +1483,33 @@ this.Meet = function (options) {
                         //de um desenho válido
                          currentLastStop.removeClass('stop');
                         
+                        //Não adiciona a classe stop, se for verificado que alguma HighLight com mesmo ângulo
+                        //Já não passou por esse mesmo ponto(ou pontos diretamente interligado pelos HL) e possui a classe stop
                         
                         //Add classe de finalização do traço (Suponhe que é o fim do traço)
+                        
+                        /*
+                         * 
+                        var thisClass = $(this).attr('class');
+                        var thisHls = thisClass.match(/hl\d/g);
+                        var singlingThisHLSameAngle = [];
+                        
+                        for(var idx in thisHls){
+                          var hlSibling = currentPiece.find('div.desHighLight#'+thisHls[idx]);
+                          if(self.hasEquivalentAngle(hlSibling.attr('angle'), angleDivCurrent)){
+                              singlingThisHLSameAngle = thisHls[idx];
+                          }
+                        }
+                        *
+                        */
+                        
+                        //currentPiece.find('div.desHighLight').each()
+                        
+                        // var siblingsPoint_HL = [];
+                        
+                       // var siblingsPoint_HL_angle = [];
+                       
+                        
                         $(this).addClass('stop');
 
 
@@ -1655,7 +1686,7 @@ this.Meet = function (options) {
             //Verificar se foi solto no mesmo ponto que iniciou
             if (currentStartPoint.attr('row') == $(this).attr('row')
                     && currentStartPoint.attr('col') == $(this).attr('col')) {
-                //Retrona a classe antiga e remove a currentDivHighLight
+                //Retorna a classe antiga e remove a currentDivHighLight
                 $(this).attr('class', $(this).data('oldClass'));
                 divCurrentHighLight.remove();
             }
