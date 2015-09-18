@@ -726,7 +726,7 @@ this.Meet = function (options) {
                 $(this).removeClass('last_clicked');
             } else {
                 var siblings = $(this).siblings();
-                $(this).css('border', '3px dashed #FBB03B');
+                $(this).css('border', '3px dashd #FBB03B');
                 var siblings = $(this).siblings();
                 siblings.css('border', '3px solid transparent');
                 siblings.removeClass('last_clicked');
@@ -756,14 +756,14 @@ this.Meet = function (options) {
             if (ask_answer.hasClass('ask')) {
                 if (!$(this).hasClass('ael_clicked')) {
                     $('.nextPiece').hide();
-                    $(this).css('border', '3px dashed #FBB03B');
+                    $(this).css('border', '3px dashd #FBB03B');
                     $(this).siblings().hide();
                     // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '1');
                     $(this).addClass('ael_clicked');
                     $(this).addClass('last_clicked');
                 } else {
-                    $(this).css('border', '3px dashed transparent');
+                    $(this).css('border', '3px dashd transparent');
                     $(this).siblings(':not(.ael_clicked)').show();
                     // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
@@ -828,7 +828,7 @@ this.Meet = function (options) {
                 }
 
                 $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity', '1');
-                $(this).css('border', '3px dashed #FBB03B');
+                $(this).css('border', '3px dashd #FBB03B');
                 $(this).siblings().css('opacity', '0');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
                 $(this).siblings('.drag').removeClass('last_clicked');
@@ -912,7 +912,7 @@ this.Meet = function (options) {
                 }
 
                 $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity', '1');
-                $(this).css('border', '3px dashed #FBB03B');
+                $(this).css('border', '3px dashd #FBB03B');
                 $(this).siblings().css('opacity', '0');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
                 $(this).siblings('.drag').removeClass('last_clicked');
@@ -1310,7 +1310,7 @@ this.Meet = function (options) {
             var currentPiece = $(this).closest('.piece');
             var divCurrentDraw = currentPiece.find("div.draw");
             //Add Nova Div HighLight, nesta Piece
-            divCurrentDraw.find('div.Table').append("<div class='desHighLight'></div>");
+            divCurrentDraw.find('div.Table').append("<div class='desHighLight' ></div>");
 
             var posBegin = $(this).position();
             var posBeginLeft = posBegin.left;
@@ -1371,11 +1371,11 @@ this.Meet = function (options) {
         });
 
         self.hasEquivalentAngle = function (angle1, angle2) {
-            if (angle1 < 0) {
+            if (angle1 <= 0) {
                 angle1 = parseInt(angle1) + 180;
             }
 
-            if (angle2 < 0) {
+            if (angle2 <= 0) {
                 angle2 = parseInt(angle2) + 180;
             }
 
@@ -1463,12 +1463,75 @@ this.Meet = function (options) {
 
                             });
                         }
-                        
-                        //Add se não existir o id do traço
-                        if(self.isset($(this).attr('dashes'))){
-                             //STOP HERE
+
+                        //Somente se não existir o atributo dash(ou seja, é então um Início do traço)
+                        if (!self.isset(divCurrentHighLight.attr('dash'))) {
+                            //Então verificar se há algum HL no startPoint
+                            //Com ângulo equivalente, e assim obterá seu dash
+                            var startClass = currentStartPoint.attr('class');
+                            var startHls = startClass.match(/hl\d/g);
+                            var startHLSameDashe = null;
+
+                            for (var idx in startHls) {
+                                var hl = currentPiece.find('div.desHighLight#' + startHls[idx]);
+                                //Procurar um outro hl(com mesmo ângulo) que passa por esse ponto
+                                if (hl.attr('id') !== divCurrentHighLight.attr('id')
+                                        && self.hasEquivalentAngle(hl.attr('angle'), angleDivCurrent)) {
+                                    startHLSameDashe = hl;
+                                    //Encontrou um traço equivalente
+                                    break;
+                                }
+
+                            }
+
+
+                            if (startHLSameDashe !== null) {
+                                //Então a o traço do currentHighLight 
+                                //será o mesmo traço que o startHLSameDashe
+                                divCurrentHighLight.attr('dash', startHLSameDashe.attr('dash'));
+                            } else {
+                                // Iniciará um novo e independete traço
+                                //Armezenar qual traço ele representa, dashs
+                                var newDashe = currentPiece.find('div.desHighLight').size() + 1;
+                                divCurrentHighLight.attr('dash', newDashe);
+                            }
+
+
                         }
-                       
+
+
+                        //Quando passar sobre cada draw-Point, verificar se está continuando um traço.
+                        //E assim sempre muda o atributo dash de todos os Hls conectados com o Hl atual
+                        //Atualizando assim todos esses Hls que possuem o mesmo Hl dash corrente
+                        //para o Hl do draw-point corrente.
+                        
+                        var thisClass = $(this).attr('class');
+                        var thisHls = thisClass.match(/hl\d/g);
+                        var thisHLSameDashe = null;
+
+                        for (var idx in thisHls) {
+                            var hl = currentPiece.find('div.desHighLight#' + thisHls[idx]);
+                            //Procurar um outro hl(com mesmo ângulo) que passa por esse ponto
+                            if (hl.attr('id') !== divCurrentHighLight.attr('id')
+                                    && self.hasEquivalentAngle(hl.attr('angle'), angleDivCurrent)) {
+                                thisHLSameDashe = hl;
+                                //Encontrou um traço equivalente
+                                break;
+                            }
+
+                        }
+
+
+                        if (thisHLSameDashe !== null) {
+                            //Então a o traço do currentHighLight 
+                            //será o mesmo traço que o thisHLSameDashe
+                            currentPiece.find('div.desHighLight[dash=' + divCurrentHighLight.attr('dash')
+                                    + ']').each(
+                                    function () {
+                                        $(this).attr('dash', thisHLSameDashe.attr('dash'));
+                                    });
+                        }
+
 
                     }
 
@@ -1477,39 +1540,39 @@ this.Meet = function (options) {
                         $(this).addClass('selected');
 
                         //Elimina a classe end do último point do traço atual
-                        var currentLastStop = 
+                        var currentLastStop =
                                 currentPiece.find('.draw-point.' + divCurrentHighLight.attr('id') + '.stop:not(.endCorrectDES)');
                         //Retira, se existitr a classe .stop. E não for final
                         //de um desenho válido
-                         currentLastStop.removeClass('stop');
-                        
+                        currentLastStop.removeClass('stop');
+
                         //Não adiciona a classe stop, se for verificado que alguma HighLight com mesmo ângulo
                         //Já não passou por esse mesmo ponto(ou pontos diretamente interligado pelos HL) e possui a classe stop
-                        
+
                         //Add classe de finalização do traço (Suponhe que é o fim do traço)
-                        
+
                         /*
                          * 
-                        var thisClass = $(this).attr('class');
-                        var thisHls = thisClass.match(/hl\d/g);
-                        var singlingThisHLSameAngle = [];
-                        
-                        for(var idx in thisHls){
-                          var hlSibling = currentPiece.find('div.desHighLight#'+thisHls[idx]);
-                          if(self.hasEquivalentAngle(hlSibling.attr('angle'), angleDivCurrent)){
-                              singlingThisHLSameAngle = thisHls[idx];
-                          }
-                        }
-                        *
-                        */
-                        
+                         var thisClass = $(this).attr('class');
+                         var thisHls = thisClass.match(/hl\d/g);
+                         var singlingThisHLSameAngle = [];
+                         
+                         for(var idx in thisHls){
+                         var hlSibling = currentPiece.find('div.desHighLight#'+thisHls[idx]);
+                         if(self.hasEquivalentAngle(hlSibling.attr('angle'), angleDivCurrent)){
+                         singlingThisHLSameAngle = thisHls[idx];
+                         }
+                         }
+                         *
+                         */
+
                         //currentPiece.find('div.desHighLight').each()
-                        
+
                         // var siblingsPoint_HL = [];
-                        
-                       // var siblingsPoint_HL_angle = [];
-                       
-                        
+
+                        // var siblingsPoint_HL_angle = [];
+
+
                         $(this).addClass('stop');
 
 
