@@ -1316,13 +1316,13 @@ this.Meet = function (options) {
             var posBeginLeft = posBegin.left;
             var posBeginTop = posBegin.top;
             //Encontrar o Primeiro HighLight Hide
-            var allDivCurrentHighLight = currentPiece.find('.desHighLight');
-            var divCurrentHighLight = allDivCurrentHighLight.last();
+            var allDivHighLight = currentPiece.find('.desHighLight');
+            var divCurrentHighLight = allDivHighLight.last();
 
-            divCurrentHighLight.attr('id', 'hl' + allDivCurrentHighLight.size());
+            divCurrentHighLight.attr('id', 'hl' + allDivHighLight.size());
 
             //Remove a classe currentSelected, das outras divsHighLight
-            allDivCurrentHighLight.removeClass('currentSelected');
+            allDivHighLight.removeClass('currentSelected');
             //Add classe .seleted nesta div
             divCurrentHighLight.addClass('currentSelected');
 
@@ -1336,6 +1336,15 @@ this.Meet = function (options) {
             //Deixar para verificar se o lastSelected seŕá na mesma div. E assim fecha a figura(corretamente)
             if (divCurrentDraw.find('.firstSelected').size() === 0) {
                 $(this).addClass('firstSelected');
+            }
+
+            //Verificar se é uma extremidade
+            //Ou seja se iniciou num ponto que nunca foi desenhado
+            if (!$(this).hasClass('selected')) {
+                $(this).addClass('extremity');
+            } else {
+                //Se já foi selecionado, e possui uma classe extremity, remove-a
+                //$(this)
             }
 
             //Já foi desenhado
@@ -1383,7 +1392,6 @@ this.Meet = function (options) {
         }
 
         $('div.draw-point').on('mouseover', function () {
-
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
@@ -1391,7 +1399,8 @@ this.Meet = function (options) {
             if (currentStartPoint.size() > 0) {
 
                 //Adiciona a classe para indicar que este ponto foi o último a ser selecionado
-                currentPiece.find('div.draw-point.lastSelected').removeClass('lastSelected');
+                var lastSelected = currentPiece.find('div.draw-point.lastSelected');
+                lastSelected.removeClass('lastSelected');
                 $(this).addClass('lastSelected');
 
                 //Calcular ângulo entre a posição do currentStartPoint e a posição Point corrente
@@ -1424,6 +1433,7 @@ this.Meet = function (options) {
                     //Traçando com o mesmo Ângulo
                     // 1- Verificar se Acessará um ponto, onde outra div de diferente ângulo já passou sobre ele.
                     var currentPoint = $(this);
+                    var continueDash = false;
 
                     if (self.isset(angleDivCurrent)) {
                         //Se existir um ângulo formado por essa div 
@@ -1486,7 +1496,7 @@ this.Meet = function (options) {
 
 
                             if (startHLSameDashe !== null) {
-                                //Então a o traço do currentHighLight 
+                                //Então o traço do currentHighLight
                                 //será o mesmo traço que o startHLSameDashe
                                 divCurrentHighLight.attr('dash', startHLSameDashe.attr('dash'));
                             } else {
@@ -1496,15 +1506,13 @@ this.Meet = function (options) {
                                 divCurrentHighLight.attr('dash', newDashe);
                             }
 
-
                         }
 
 
-                        //Quando passar sobre cada draw-Point, verificar se está continuando um traço.
-                        //E assim sempre muda o atributo dash de todos os Hls conectados com o Hl atual
-                        //Atualizando assim todos esses Hls que possuem o mesmo Hl dash corrente
-                        //para o Hl do draw-point corrente.
-                        
+                        //Quando passar sobre cada draw-Point, verificar se está continuando um traço já existente.
+                        //E assim sempre muda o atributo dash de todos os Hls conectados com o Hl atual novo
+                        //Atualizando assim todos esses Hls para o Hls do draw-point atual que já fazia parte do traço
+
                         var thisClass = $(this).attr('class');
                         var thisHls = thisClass.match(/hl\d/g);
                         var thisHLSameDashe = null;
@@ -1518,13 +1526,13 @@ this.Meet = function (options) {
                                 //Encontrou um traço equivalente
                                 break;
                             }
-
                         }
 
 
                         if (thisHLSameDashe !== null) {
-                            //Então a o traço do currentHighLight 
+                            //Então o traço do currentHighLight 
                             //será o mesmo traço que o thisHLSameDashe
+                            continueDash = true;
                             currentPiece.find('div.desHighLight[dash=' + divCurrentHighLight.attr('dash')
                                     + ']').each(
                                     function () {
@@ -1546,35 +1554,7 @@ this.Meet = function (options) {
                         //de um desenho válido
                         currentLastStop.removeClass('stop');
 
-                        //Não adiciona a classe stop, se for verificado que alguma HighLight com mesmo ângulo
-                        //Já não passou por esse mesmo ponto(ou pontos diretamente interligado pelos HL) e possui a classe stop
-
-                        //Add classe de finalização do traço (Suponhe que é o fim do traço)
-
-                        /*
-                         * 
-                         var thisClass = $(this).attr('class');
-                         var thisHls = thisClass.match(/hl\d/g);
-                         var singlingThisHLSameAngle = [];
-                         
-                         for(var idx in thisHls){
-                         var hlSibling = currentPiece.find('div.desHighLight#'+thisHls[idx]);
-                         if(self.hasEquivalentAngle(hlSibling.attr('angle'), angleDivCurrent)){
-                         singlingThisHLSameAngle = thisHls[idx];
-                         }
-                         }
-                         *
-                         */
-
-                        //currentPiece.find('div.desHighLight').each()
-
-                        // var siblingsPoint_HL = [];
-
-                        // var siblingsPoint_HL_angle = [];
-
-
                         $(this).addClass('stop');
-
 
                         var divParentStartPoint = currentStartPoint.closest('div.Col');
                         var diameter_point = currentStartPoint.width();
@@ -1759,6 +1739,38 @@ this.Meet = function (options) {
             //Remove a classe do point que indica onde começou o traço corrente
             currentStartPoint.removeClass('currentStart');
             var firstSelect = currentPiece.find('.firstSelected');
+
+            //Verificar se o ponto corrente é uma extremidade
+            var thisClass = $(this).attr('class');
+            var thisHls = thisClass.match(/hl\d/g);
+            var numHls = 0;
+            for (var idx in thisHls) {
+                numHls++;
+            }
+
+
+            //Retira todas as classes .extremity dessa currentHl, se o ponto pertencer a mais de um Hl
+            var extremityCurrentHl = currentPiece.find('div.draw-point.' + divCurrentHighLight.attr('id') + '.extremity');
+            extremityCurrentHl.each(function () {
+                //Verificar se há um HighLight diferente do HL corrente
+                var thisClass = $(this).attr('class');
+                var thisHls = thisClass.match(/hl\d/g);
+                var numThisHls = 0;
+                for (var idx in thisHls) {
+                    numThisHls++;
+                }
+                
+                if (numThisHls > 1) {
+                    //Remove a classe extremity
+                    $(this).removeClass('extremity');
+                }
+
+            });
+
+            if (numHls === 1) {
+                //É uma extremidade
+                $(this).addClass('extremity');
+            }
 
             //Verificar se está certo
             var isCorrect = self.isCorrectDES(currentPiece.attr('id'));
@@ -2095,10 +2107,21 @@ this.Meet = function (options) {
             var vertex3 = vertexs[2];
 
             //Verificar se possui algum 'buraco' entre os 3 vértices
-            if (currentAskDraw.find('div.draw-point.stop').size() > 1) {
-                //Figura inválida, pois possui dois pontos '.stop'
-                //Ou seja, eles não se conectam
+            var distinctDash = [];
+            var numDistinctDash = 0;
+            currentAskDraw.find('div.desHighLight').each(function () {
+                if (distinctDash.indexOf($(this).attr('dash')) === -1) {
+                    //Add o novo Dash
+                    distinctDash.push($(this).attr('dash'));
+                    numDistinctDash++;
+                }
+            });
+
+
+            if (numDistinctDash > 3) {
+                //Figura inválida, pois possui mais de três traços
                 return null;
+
             } else {
                 //Verificar se o primeiro ponto que foi selecionado esta 'aberto'
                 //Pra Não estar aberto, ele deverá possuir a classe que representa Mais de 1 HighLight
@@ -2116,6 +2139,12 @@ this.Meet = function (options) {
 
                 if (countHlFirstSelected <= 1) {
                     //Está 'aberto'
+                    return null;
+                }
+
+
+                //Verificar se possuí alguma extremidade
+                if(currentAskDraw.find('div.extremity').size() > 0){
                     return null;
                 }
 
