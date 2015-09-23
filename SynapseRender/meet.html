@@ -30,6 +30,14 @@
         <script src="js/jquery/jquery.ui.droppable.js"></script>
 
         <!-- JQUERY FOR MOBILE-->
+        <script>
+            //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
+            $(document).bind('mobileinit', function () {
+                $.mobile.changePage.defaults.changeHash = false;
+                $.mobile.hashListeningEnabled = false;
+                $.mobile.pushStateEnabled = false;
+            });
+        </script>
         <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
         <!-- ================= -->
 

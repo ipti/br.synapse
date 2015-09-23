@@ -2,7 +2,7 @@
     <head>
         <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen, projection" />
         <link rel="stylesheet" type="text/css" href="css/render/global.css">
         <link rel="stylesheet" type="text/css" href="css/render/admin.css">
@@ -18,7 +18,17 @@
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
 
+
         <!-- JQUERY FOR MOBILE-->
+        <script>
+            //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
+            $(document).bind('mobileinit', function () {
+                $.mobile.changePage.defaults.changeHash = false;
+                $.mobile.hashListeningEnabled = false;
+                $.mobile.pushStateEnabled = false;
+            });
+        </script>
+        
         <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
         <!-- ======= -->
 

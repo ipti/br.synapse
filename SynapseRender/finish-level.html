@@ -8,6 +8,14 @@
     <link rel="stylesheet" type="text/css" href="css/render/finish-level.css">
     <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
     <!-- JQUERY FOR MOBILE-->
+    <script>
+        //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
+        $(document).bind('mobileinit', function () {
+            $.mobile.changePage.defaults.changeHash = false;
+            $.mobile.hashListeningEnabled = false;
+            $.mobile.pushStateEnabled = false;
+        });
+    </script>
     <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
     <!-- ======= -->
     <script type="text/javascript">
@@ -16,12 +24,12 @@
         }
     </script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            
-            $('#boxbotao').bind('tap', function() {
+        $(document).ready(function () {
+
+            $('#boxbotao').bind('tap', function () {
                 location.href = "login.html";
             });
-            
+
         });
     </script>
 </head>
