@@ -1392,6 +1392,9 @@ this.Meet = function (options) {
         }
 
         $('div.draw-point').on('mouseover', function () {
+            
+            console.log('MOUSE OVER');
+            
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
