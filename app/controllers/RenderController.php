@@ -460,7 +460,9 @@ class RenderController extends Controller {
 
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
-                    array('cobject_block_id' => $array_cobjectBlock[0]['id']));
+                    array('cobject_block_id' => $array_cobjectBlock[0]['id']), 
+                    array('group'=> "cobject_block_id, cobject_id"));
+            
             $array_cobject_cobjectBlocks = array();
 
             foreach ($cobject_cobjectBlocks as $idx => $cobject_cobjectBlock):
