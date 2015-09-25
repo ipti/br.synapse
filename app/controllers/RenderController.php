@@ -459,9 +459,10 @@ class RenderController extends Controller {
             $array_cobjectBlock[0]['discipline_id'] = $cobjectBlock->discipline_id;
 
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
+            //Somente obterá Cobjects(atividades) únicos em cada bloco, ou seja não haverá repetição de atividades num mesmo bloco.
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
                     array('cobject_block_id' => $array_cobjectBlock[0]['id']), 
-                    array('group'=> "cobject_block_id, cobject_id"));
+                    array('group'=> "cobject_id"));
             
             $array_cobject_cobjectBlocks = array();
 

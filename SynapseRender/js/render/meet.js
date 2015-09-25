@@ -1393,8 +1393,6 @@ this.Meet = function (options) {
 
         $('div.draw-point').on('mouseover', function () {
             
-            console.log('MOUSE OVER');
-            
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
@@ -2081,7 +2079,7 @@ this.Meet = function (options) {
         var shapeDrawed = self.getCurrentShapeDES();
         var isCorrect = currentMainPiece['type_name'] === "shape" && shapeDrawed === currentMainPiece['shape'];
 
-        console.log(shapeDrawed);
+        //console.log(shapeDrawed);
 
         //Armazena o resultado no mainPiece
         self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;

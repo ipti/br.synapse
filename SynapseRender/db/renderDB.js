@@ -486,9 +486,6 @@ this.DB = function () {
     //Importar os cobject_cobjectblocks
     this.importCobject_cobjectblock = function (db, data_cobject_cobjectBlock) {
         var Cobject_cobjectBlockObjectStore = db.transaction("cobject_cobjectblock", "readwrite").objectStore("cobject_cobjectblock");
-       
-       //Controlar, se será salvo mais de uma combinação de :  (cobject_block + cobject_cobjectblock)
-        console.log(data_cobject_cobjectBlock);
         
         for (var i in data_cobject_cobjectBlock) {
             data_cobject_cobjectBlock[i].id = eval(data_cobject_cobjectBlock[i].id);
