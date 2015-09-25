@@ -1133,6 +1133,65 @@ this.DB = function () {
     }
 
 
+ //Registrar Turma
+    this.addClassroom = function (school_name, classroom_name, callBack) {
+        if (self.isset(classroom_name)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function (event) {
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function (event) {
+                var db = event.target.result;
+
+                db.onerror = function (event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.error.message);
+                }
+                var maxID = 0;
+                var findClassroomsObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+                findClassroomsObjectStore.openCursor().onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    //Encontrar Maior ID
+                    if (cursor) {
+                        //Encontrou pelo menos um ID
+                        if (cursor.value.id > maxID) {
+                            maxID = cursor.value.id;
+                        }
+                        cursor.continue();
+                    } else {
+                        //Finalizou
+                        //Agora add a nova classroom com este ID
+                        var dataClassroom = {
+                            createdOffline: true,
+                            father_id: "-1",
+                            id: ++maxID,
+                            name: classroom_name,
+                            organization_id: "-1",
+                            school_id: "-1",
+                            school_name: school_name,
+                        };
+
+                        //Tudo ok Então Registra a Nova Turma
+                        var classroomObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
+                        classroomObjectStore.add(dataClassroom);
+                        classroomObjectStore.transaction.oncomplete = function (event) {
+                            console.log(' NEW Classroom Salvo !!!! ');
+                            callBack();
+                        };
+                    }
+                }
+
+            }
+            DBsynapse.onblocked = function (event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+    }
+
     //Registrar Aluno
     this.addStudent = function (classroom_id, user_name) {
         if (self.isset(user_name)) {

@@ -174,8 +174,16 @@
                             //Mensagem erro
                             $('.message-form').html("Nome do Aluno é Obrigatório!");
                         } else {
-                            //Cadastrar Usuário Offline no IndexDB
-                            newMeet.DB_synapse.addStudent($('#classroom').val(), $('#nome_aluno').val());
+                            //Cadastrar Turma e Usuário Offline no IndexDB
+                            
+                            newMeet.DB_synapse.addClassroom($('#school').find('option:selected').text(),
+                            $('#classroom').find('option:selected').text(), function(){
+                                //CallBack
+                                newMeet.DB_synapse.addStudent($('#classroom').val(), $('#nome_aluno').val());
+                            });
+                            
+                            
+                            
                         }
                     });
 
@@ -258,15 +266,18 @@
                 <div class="message-form">
                 </div>
 
-
+                <!-- Rua da Palha : EMEF Raimundo Carvalho menezesE
+Povoado Pedra Furada : EMEF Vereador Paulo Fernando Ribeiro Soutelo -->
                 <label for="school">Escola</label>
                 <select name="school" id="school">
-                    <option value="1">Priapu</option>
+                    <option value="1">EMEF Raimundo Menezes</option>
+                    <option value="2">EMEF Vereador Soutelo</option>
                 </select>
                 <label for="classroom">Turma</label>
                 <select name="classroom" id="classroom"> 
                     <option value="2">2° Ano</option>
                     <option value="3">3° Ano</option>
+                    <option value="4">4° Ano</option>
                 </select>
 
                 <label for="nome_aluno">Nome do Aluno*</label>
