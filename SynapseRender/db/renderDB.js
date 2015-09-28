@@ -336,7 +336,7 @@ this.DB = function () {
             cobjects: cobjects
         };
         self.verifyExistBlock(options, function (schools, unitys, actors, disciplines, cobjectblock
-                , cobject_cobjectblocks, cobjects, existBlock) {
+                , cobject_cobjectblocks, cobjects, schoolsClassrooms, existBlock) {
             //Call Back
 
             if (!existBlock) {
@@ -355,6 +355,9 @@ this.DB = function () {
             var data_cobject_cobjectBlock = cobject_cobjectblocks;
             //Cobjets
             var data_cobject = cobjects;
+
+            //Escola e Turmas Offlines
+            var data_schoolsClassrooms = schoolsClassrooms;
 
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
@@ -383,6 +386,11 @@ this.DB = function () {
 
                     //Importar as disciplines
                     self.importDiscipline(db, data_discipline);
+
+                    //Importar Escolas e Turmas Offline
+                    self.importSchoolsClassroomsOff(db, data_schoolsClassrooms);
+
+
                     //==================================================
                 }
 
@@ -486,7 +494,7 @@ this.DB = function () {
     //Importar os cobject_cobjectblocks
     this.importCobject_cobjectblock = function (db, data_cobject_cobjectBlock) {
         var Cobject_cobjectBlockObjectStore = db.transaction("cobject_cobjectblock", "readwrite").objectStore("cobject_cobjectblock");
-        
+
         for (var i in data_cobject_cobjectBlock) {
             data_cobject_cobjectBlock[i].id = eval(data_cobject_cobjectBlock[i].id);
             Cobject_cobjectBlockObjectStore.add(data_cobject_cobjectBlock[i]);
@@ -521,6 +529,33 @@ this.DB = function () {
             console.log("Performance_actors IMPORTED!");
         }
     }
+
+    //Importar os Escolas OffLine, se houver
+    this.importSchoolsClassroomsOff = function (db, schoolClassrooms) {
+        //schoolsClassrooms['schools'][0]['classrooms']
+        var schoolClassrooms = schoolClassrooms['schools'];
+
+        for (var idx in schoolClassrooms) {
+            var school = schoolClassrooms[idx];
+            var school_name = school['name'];
+            var listClassrooms_name = school['classrooms'];
+
+            self.addSchoolClassroomsOff(school_name,
+                    listClassrooms_name,
+                    function (school_id, listClassrooms_name) {
+                        //Após ter salvo uma nova Escola (Offline)
+                        //Salvar cada ClassRoom para esta school_id
+                        var idxClassroomStart = 0;
+                        self.addClassroomsOff(school_id, listClassrooms_name, idxClassroomStart);
+                        
+                    }
+            );
+
+        }
+
+
+    }
+
 
     // - - - - - - - - - -  //
     // EXPORTE PARA BANCO DE DADOS //
@@ -1064,8 +1099,32 @@ this.DB = function () {
                     existBlock = true;
                 }
 
+                var schoolsClassrooms = null;
+                //===== Somente se for necessário definir o nome das Escolas-Turmas Novas ===========
+                var schoolsClassrooms = new Array();
+                schoolsClassrooms['schools'] = new Array();
+
+                schoolsClassrooms['schools'][0] = new Array();
+                schoolsClassrooms['schools'][0]['classrooms'] = new Array();
+
+                schoolsClassrooms['schools'][1] = new Array();
+                schoolsClassrooms['schools'][1]['classrooms'] = new Array();
+
+
+                schoolsClassrooms['schools'][0]['name'] = "EMEF Raimundo Menezes";
+                schoolsClassrooms['schools'][0]['classrooms'].push("2° Ano");
+                schoolsClassrooms['schools'][0]['classrooms'].push("3° Ano");
+                schoolsClassrooms['schools'][0]['classrooms'].push("4° Ano");
+
+                schoolsClassrooms['schools'][1]['name'] = "EMEF Vereador Soutelo";
+                schoolsClassrooms['schools'][1]['classrooms'].push("2° Ano");
+                schoolsClassrooms['schools'][1]['classrooms'].push("3° Ano");
+                schoolsClassrooms['schools'][1]['classrooms'].push("4° Ano");
+
+                //====================================
+
                 callBack(options.schools, options.unitys, options.actors, options.disciplines, options.cobjectblock
-                        , options.cobject_cobjectblocks, options.cobjects, existBlock);
+                        , options.cobject_cobjectblocks, options.cobjects, schoolsClassrooms, existBlock);
 
             };
             blockStore.onerror = function (event) {
@@ -1133,8 +1192,70 @@ this.DB = function () {
     }
 
 
- //Registrar Turma
-    this.addClassroom = function (school_name, classroom_name, callBack) {
+
+//Registrar Turma
+    this.addSchoolClassroomsOff = function (school_name, listClassrooms_name, callBackAddClassroom) {
+        if (self.isset(school_name)) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function (event) {
+                console.log("Error: ");
+                console.log(event);
+                // alert("Você não habilitou minha web app para usar IndexedDB?!");
+            }
+            DBsynapse.onsuccess = function (event) {
+                var db = event.target.result;
+
+                db.onerror = function (event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.error.message);
+                }
+                var maxID = 0;
+                var findSchoolsObjectStore = db.transaction("school", "readonly").objectStore("school");
+                findSchoolsObjectStore.openCursor().onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    //Encontrar Maior ID
+                    if (cursor) {
+                        //Encontrou pelo menos um ID
+                        if (cursor.value.id > maxID) {
+                            maxID = cursor.value.id;
+                        }
+                        cursor.continue();
+                    } else {
+                        //Finalizou
+                        //Agora add a nova school com este ID
+                        var dataSchool = {
+                            createdOffline: true,
+                            id: ++maxID,
+                            name: school_name,
+                        };
+
+                        //Tudo ok Então Registra a Nova Escola
+                        var schoolObjectStore = db.transaction("school", "readwrite").objectStore("school");
+                        schoolObjectStore.add(dataSchool);
+                        schoolObjectStore.transaction.oncomplete = function (event) {
+                            console.log(' NEW School Salvo !!!! ');
+                            //Salva agora as Turmas para esta Escola
+                            callBackAddClassroom(maxID, listClassrooms_name);
+                        };
+                    }
+                }
+
+            }
+            DBsynapse.onblocked = function (event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+    }
+
+
+
+    //Registrar Turma
+    this.addClassroomsOff = function (school_id, listClassrooms_name, idxClassroom) {
+        var classroom_name = listClassrooms_name[idxClassroom];
+        //STOP HERE
+        
         if (self.isset(classroom_name)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
@@ -1170,8 +1291,7 @@ this.DB = function () {
                             id: ++maxID,
                             name: classroom_name,
                             organization_id: "-1",
-                            school_id: "-1",
-                            school_name: school_name,
+                            school_id: school_id
                         };
 
                         //Tudo ok Então Registra a Nova Turma
@@ -1179,7 +1299,7 @@ this.DB = function () {
                         classroomObjectStore.add(dataClassroom);
                         classroomObjectStore.transaction.oncomplete = function (event) {
                             console.log(' NEW Classroom Salvo !!!! ');
-                            callBack();
+                            callBackAddNext();
                         };
                     }
                 }
@@ -1193,7 +1313,7 @@ this.DB = function () {
     }
 
     //Registrar Aluno
-    this.addStudent = function (classroom_id, user_name) {
+    this.addStudentOff = function (classroom_id, user_name) {
         if (self.isset(user_name)) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
