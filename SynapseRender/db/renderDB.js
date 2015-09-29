@@ -533,25 +533,10 @@ this.DB = function () {
     //Importar os Escolas OffLine, se houver
     this.importSchoolsClassroomsOff = function (db, schoolClassrooms) {
         //schoolsClassrooms['schools'][0]['classrooms']
-        var schoolClassrooms = schoolClassrooms['schools'];
+        var listSchools = schoolClassrooms['schools'];
+        var idxSchool = 0;
+        self.addSchoolClassroomsOff(listSchools, idxSchool);
 
-        for (var idx in schoolClassrooms) {
-            var school = schoolClassrooms[idx];
-            var school_name = school['name'];
-            var listClassrooms_name = school['classrooms'];
-
-            self.addSchoolClassroomsOff(school_name,
-                    listClassrooms_name,
-                    function (school_id, listClassrooms_name) {
-                        //Após ter salvo uma nova Escola (Offline)
-                        //Salvar cada ClassRoom para esta school_id
-                        var idxClassroomStart = 0;
-                        self.addClassroomsOff(school_id, listClassrooms_name, idxClassroomStart);
-                        
-                    }
-            );
-
-        }
 
 
     }
@@ -1194,8 +1179,13 @@ this.DB = function () {
 
 
 //Registrar Turma
-    this.addSchoolClassroomsOff = function (school_name, listClassrooms_name, callBackAddClassroom) {
-        if (self.isset(school_name)) {
+    this.addSchoolClassroomsOff = function (listSchools, idxSchool) {
+        var school = listSchools[idxSchool];
+        if (self.isset(school)) {
+            var school_name = school['name'];
+            var listClassrooms_name = school['classrooms'];
+
+            //=========================
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
@@ -1235,8 +1225,15 @@ this.DB = function () {
                         schoolObjectStore.add(dataSchool);
                         schoolObjectStore.transaction.oncomplete = function (event) {
                             console.log(' NEW School Salvo !!!! ');
-                            //Salva agora as Turmas para esta Escola
-                            callBackAddClassroom(maxID, listClassrooms_name);
+                            //Após ter salvo uma nova Escola (Offline)
+                            //Salvar cada ClassRoom para esta school_id
+                            var idxClassroomStart = 0;
+                            var infoSchools = {};
+                            infoSchools['listSchools'] = listSchools;
+                            infoSchools['idxSchool'] = idxSchool;
+                            
+                            self.addClassroomsOff(maxID, listClassrooms_name, idxClassroomStart, infoSchools);
+
                         };
                     }
                 }
@@ -1252,11 +1249,12 @@ this.DB = function () {
 
 
     //Registrar Turma
-    this.addClassroomsOff = function (school_id, listClassrooms_name, idxClassroom) {
+    this.addClassroomsOff = function (school_id, listClassrooms_name, idxClassroom, infoSchools) {
         var classroom_name = listClassrooms_name[idxClassroom];
-        //STOP HERE
-        
+
         if (self.isset(classroom_name)) {
+            idxClassroom++;
+
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
@@ -1299,7 +1297,7 @@ this.DB = function () {
                         classroomObjectStore.add(dataClassroom);
                         classroomObjectStore.transaction.oncomplete = function (event) {
                             console.log(' NEW Classroom Salvo !!!! ');
-                            callBackAddNext();
+                            self.addClassroomsOff(school_id, listClassrooms_name, idxClassroom, infoSchools);
                         };
                     }
                 }
@@ -1309,6 +1307,11 @@ this.DB = function () {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
+        }else{
+            //Salvou Todas as Turmas para a Escola Corrente.
+            //Salva a próxima escola e suas turmas se existirem
+            self.addSchoolClassroomsOff(infoSchools['listSchools'], ++infoSchools['idxSchool']);
+            
         }
     }
 
