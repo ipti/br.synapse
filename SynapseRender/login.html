@@ -37,12 +37,16 @@
         <!-- Abrir Script do renderDB --> 
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script>
+            
             if (sessionStorage.getItem("authorization") != null 
                 && sessionStorage.getItem("authorization") == 'true') {
                 //Usuário Logado
                 location.href = "select.html";
             }
             $(document).ready(function() {
+                //Retirando a div loading, que o jquery mobile adicionou
+                $('.ui-loader').hide();
+                
                 
                 $('#loginform').keypress(function(event){
                     if (event.keyCode === 13){
@@ -104,7 +108,7 @@
                 <input class="login-input" type="text" id="username" name="username">
                 <label class="login-label" for="password">senha</label>
                 <input class="login-input" type="password" id="password" name="password">
-                <input class="login-button" type="button" id="entrar" value="entrar">
+                <input class="login-button" type="button" id="entrar" value="entrar" data-role="none">
             </form>
         </section>
     </body>
