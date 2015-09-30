@@ -82,6 +82,14 @@
                 //Somente para retirar o 'loading' que o jquery cria automaticamente
                 $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
 
+                //Retira os eventos padrões para elementos select
+                $('#school').unbind();
+                $('#classroom').unbind();
+                $('#school').siblings('span').remove();
+                $('#classroom').siblings('span').remove();
+
+
+
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
 
@@ -123,7 +131,7 @@
                     //Passar parâmetro do tipo do Encontro
                     var newMeet = new Meet(options);
 
-                    //Verificar se fora seleciona algum Aluno
+                    //Verificar se foi selecionado algum Aluno
                     if (actorID === 'null') {
                         $('#add-new-user').show();
                     } else {
@@ -139,11 +147,53 @@
                         $('.info.info-erros .info-text').html(newMeet.peformance_qtd_wrong);
                     }
 
-                   //Carregar as Escolas   
-                    var newMeet.DB_synapse.findAllSchools(function(listSchools){
-                        console.log(listSchools);
+                    //Carregar as Escolas   
+                    newMeet.DB_synapse.findAllSchools(function (listSchools) {
+                        var foundAnySchool = false;
+                        for (var idx in listSchools) {
+                            foundAnySchool = true;
+                            var school = listSchools[idx];
+                            $('#school').append("<option value='" + school['id'] + "'>" + school['name'] + "</option>");
+                        }
+
+                        if (!foundAnySchool) {
+                            //Sem Escola
+                            $('#school').html("<option value='-1'>Sem Escola</option>");
+                            //Sem classe
+                            $('#classroom').html("<option value='-1'>Sem Turma</option>");
+                        } else {
+                            //Econtrou pelo menos uma escola
+                            $('#school').trigger('change');
+                        }
+
                     });
-                    
+                    //======================================
+
+
+
+                    $('#school').on('change', function () {
+                        var school_id = $(this).val();
+                        //Carregar Turmas da escola Selecionada 
+                        newMeet.DB_synapse.findClassroomBySchool(school_id, function (listClassrooms) {
+                            var foundAnyClassroom = false;
+                            var htmlOptions = "";
+                            for (var idx in listClassrooms) {
+                                foundAnyClassroom = true;
+                                var classroom = listClassrooms[idx];
+                                htmlOptions += "<option value='" + classroom['id'] + "'>" + classroom['name'] + "</option>";
+                            }
+
+                            if (!foundAnyClassroom) {
+                                //Sem classe
+                                $('#classroom').html("<option value='-1'>Sem Turma</option>");
+                            } else {
+                                //Encontrou alguma Classe
+                                $('#classroom').html(htmlOptions);
+                            }
+
+                        });
+
+                    });
 
                     //Mostrar/Ocultar barra de informações
                     $('#info-button').bind('tap', function () {
@@ -165,11 +215,6 @@
                         $("#finalize-message").hide();
                     });
 
-                    //Retira os eventos padrões para elementos select
-                    $('#school').unbind();
-                    $('#classroom').unbind();
-                    $('#school').siblings('span').remove();
-                    $('#classroom').siblings('span').remove();
 
                     $('#btnAddNewUser').on('tap', function () {
                         var usrName = $('#nome_aluno').val();
@@ -182,7 +227,7 @@
 
                         }
                     });
-                    
+
                 }
             });
 
@@ -264,14 +309,9 @@
                      Povoado Pedra Furada : EMEF Vereador Paulo Fernando Ribeiro Soutelo -->
                 <label for="school">Escola</label>
                 <select name="school" id="school">
-                    <option value="1">EMEF Raimundo Menezes</option>
-                    <option value="2">EMEF Vereador Soutelo</option>
                 </select>
                 <label for="classroom">Turma</label>
                 <select name="classroom" id="classroom"> 
-                    <option value="2">2° Ano</option>
-                    <option value="3">3° Ano</option>
-                    <option value="4">4° Ano</option>
                 </select>
 
                 <label for="nome_aluno">Nome do Aluno*</label>

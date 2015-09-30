@@ -141,6 +141,11 @@ this.DB = function () {
             unityStore.createIndex("name", "name", {
                 unique: false
             });
+            // Podemos ter school_id duplicados, então não podemos usar como índice único.
+            unityStore.createIndex("school_id", "school_id", {
+                unique: false
+            });
+
             // Falta organization_id & father_id 
             //===========================================
 
@@ -1207,8 +1212,9 @@ this.DB = function () {
                     //Encontrar Maior ID
                     if (cursor) {
                         //Encontrou pelo menos um ID
-                        if (cursor.value.id > maxID) {
-                            maxID = cursor.value.id;
+                        var currentID = parseInt(cursor.value.id);
+                        if (currentID > maxID) {
+                            maxID = currentID;
                         }
                         cursor.continue();
                     } else {
@@ -1216,7 +1222,7 @@ this.DB = function () {
                         //Agora add a nova school com este ID
                         var dataSchool = {
                             createdOffline: true,
-                            id: ++maxID,
+                            id: (++maxID).toString(),
                             name: school_name,
                         };
 
@@ -1231,7 +1237,7 @@ this.DB = function () {
                             var infoSchools = {};
                             infoSchools['listSchools'] = listSchools;
                             infoSchools['idxSchool'] = idxSchool;
-                            
+
                             self.addClassroomsOff(maxID, listClassrooms_name, idxClassroomStart, infoSchools);
 
                         };
@@ -1276,8 +1282,9 @@ this.DB = function () {
                     //Encontrar Maior ID
                     if (cursor) {
                         //Encontrou pelo menos um ID
-                        if (cursor.value.id > maxID) {
-                            maxID = cursor.value.id;
+                        var currentID = parseInt(cursor.value.id);
+                        if (currentID > maxID) {
+                            maxID = currentID;
                         }
                         cursor.continue();
                     } else {
@@ -1286,10 +1293,10 @@ this.DB = function () {
                         var dataClassroom = {
                             createdOffline: true,
                             father_id: "-1",
-                            id: ++maxID,
+                            id: (++maxID).toString(),
                             name: classroom_name,
                             organization_id: "-1",
-                            school_id: school_id
+                            school_id: school_id.toString()
                         };
 
                         //Tudo ok Então Registra a Nova Turma
@@ -1307,11 +1314,11 @@ this.DB = function () {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
-        }else{
+        } else {
             //Salvou Todas as Turmas para a Escola Corrente.
             //Salva a próxima escola e suas turmas se existirem
             self.addSchoolClassroomsOff(infoSchools['listSchools'], ++infoSchools['idxSchool']);
-            
+
         }
     }
 
@@ -1339,8 +1346,9 @@ this.DB = function () {
                     //Encontrar Maior ID
                     if (cursor) {
                         //Encontrou pelo menos um ID
-                        if (cursor.value.id > maxID) {
-                            maxID = cursor.value.id;
+                        var currentID = parseInt(cursor.value.id);
+                        if (currentID > maxID) {
+                            maxID = currentID;
                         }
                         cursor.continue();
                     } else {
@@ -1348,7 +1356,7 @@ this.DB = function () {
                         //Agora add O estudante com este ID
                         var dataStudent = {
                             createdOffline: true,
-                            id: ++maxID,
+                            id: (++maxID).toString(),
                             login: user_name,
                             name: user_name,
                             password: "123456",
@@ -1373,9 +1381,96 @@ this.DB = function () {
             }
         }
     }
-    
-    this.findAllSchools = function(){
-        
+
+    //Pesquisar Todas as escolas
+    this.findAllSchools = function (callBack) {
+
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function (event) {
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function (event) {
+            var db = event.target.result;
+            db.onerror = function (event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                console.log("Database error: " + event.target.errorCode);
+            };
+
+            var schools = new Array();
+
+            var schoolObjectStore = db.transaction("school", "readonly").objectStore("school");
+            schoolObjectStore.openCursor().onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    schools.push({
+                        id: cursor.value.id,
+                        name: cursor.value.name
+                    });
+
+                    cursor.continue();
+                } else {
+                    //Não existe mais registros!
+                    //Passa as escolas pra a função de callBack
+                    callBack(schools);
+                }
+            };
+
+        }
+        DBsynapse.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+
+    }
+
+    //Pesquisar todas as classes de uma determinada escola
+    this.findClassroomBySchool = function (school_id, callBack) {
+
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function (event) {
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function (event) {
+            var db = event.target.result;
+            db.onerror = function (event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                console.log("Database error: " + event.target.errorCode);
+            };
+
+            var classrooms = new Array();
+            var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+
+            //Selecionar somente as turmas pra a escola específica
+            var requestGet = classroomObjectStore.index('school_id');
+            var singleKeyRange = IDBKeyRange.only(school_id);
+
+            requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    classrooms.push({
+                        id: cursor.value.id,
+                        name: cursor.value.name
+                    });
+
+                    cursor.continue();
+                } else {
+                    //Não existe mais registros!
+                    //Passa as turmas pra a função de callBack
+                    callBack(classrooms);
+                }
+            };
+
+        }
+        DBsynapse.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
     }
 
     this.isset = function (variable) {
