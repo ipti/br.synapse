@@ -24,7 +24,7 @@ function editor() {
     this.COdescription;
     this.currentScreenId;
     this.lastScreenId;
-    this.countScreen = 0;
+    this.countScreen = -1;
     this.countPieceSet = new Array();
     this.countPieces = new Array();
     this.countElements = new Array();
@@ -1714,6 +1714,7 @@ function editor() {
                             || parent.COTemplateTypeIn(parent.DDROP)
                             || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                         //TagAdd para o load
+                        
                         tagAdd = $('#' + parent.currentPiece + ' div[group=' + group + ']');
                     } else if (parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) {
                         tagAdd = $('li[id="' + parent.currentPiece + '"] div[group=' + group + ']');  // 
@@ -3197,6 +3198,11 @@ function editor() {
                                                                                 var pieceID = i.slice(1);
                                                                                 var DOMpiecesetID = $('.piecelist').last().attr('id');
                                                                                 
+                                                                                //adiciona a piece
+                                                                                parent.addPiece(DOMpiecesetID, pieceID, dataPiece);
+                                                                                //seleciona o piece adicionado
+                                                                                parent.changePiece($('.piece').last());
+                                                                                
                                                                                 //para cada item da piece
                                                                                 var dataPiece = new Array();
                                                                                 $.each(item, function (i, item) {
@@ -3278,10 +3284,6 @@ function editor() {
                                                                                     
                                                                                 });
                                                                                 
-                                                                                //adiciona a piece
-                                                                                parent.addPiece(DOMpiecesetID, pieceID, dataPiece);
-                                                                                //seleciona o piece adicionado
-                                                                                parent.changePiece($('.piece').last());
                                                                                 
                                                                             } else if (i.slice(0, 1) === "E") {
                                                                                 //se for um elemento
