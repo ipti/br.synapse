@@ -139,8 +139,10 @@
                         $('.info.info-erros .info-text').html(newMeet.peformance_qtd_wrong);
                     }
 
-                   //Carregar as Escolas    STOP HERE   
-                    //newMeet.DB_synapse
+                   //Carregar as Escolas   
+                    var newMeet.DB_synapse.findAllSchools(function(listSchools){
+                        console.log(listSchools);
+                    });
                     
 
                     //Mostrar/Ocultar barra de informações

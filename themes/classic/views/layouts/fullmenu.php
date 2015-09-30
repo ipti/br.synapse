@@ -53,7 +53,8 @@
                             array('label' => Yii::t('menu', 'Block'), 'url' => array('/cobjectblock/index')),
                             array('label' => Yii::t('menu', 'Cobjects Block'), 'url' => array('/CobjectCobjectblock/index')),
                             array('label' => Yii::t('menu', 'Render'), 'url' => array('/render/index')),
-                            array('label' => Yii::t('menu', 'Editor'), 'url' => array('/editor/index'))
+                            array('label' => Yii::t('menu', 'Editor'), 'url' => array('/editor/index')),
+                            array('label' => Yii::t('menu', 'ExportToOffline'), 'url' => array('/Render/exportToOffline'))
                         ),
                     ),
                     array(

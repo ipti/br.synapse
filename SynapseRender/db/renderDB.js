@@ -1373,6 +1373,10 @@ this.DB = function () {
             }
         }
     }
+    
+    this.findAllSchools = function(){
+        
+    }
 
     this.isset = function (variable) {
         return (typeof variable !== 'undefined' && variable !== null);
