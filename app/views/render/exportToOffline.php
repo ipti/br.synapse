@@ -14,7 +14,7 @@
                 },
                 success: function(response, textStatus, jqXHR){
                     var schools = response;
-                    var htmlSelect = "<option value=''>Selecione uma Escola</option>";
+                    var htmlSelect = "<option value='null'>Selecione uma Escola</option>";
                     $.each(schools,function(index, value){
                         htmlSelect+='<option value="'+index+'">'+value+'</option>\n';
                     });
@@ -32,7 +32,7 @@
                 },
                 success: function(response, textStatus, jqXHR){
                     var disciplines = response;
-                    var htmlSelect = "<option value=''>Selecione uma Disciplina</option>";
+                    var htmlSelect = "<option value='null'>Selecione uma Disciplina</option>";
                     $.each(disciplines,function(index, value){
                         htmlSelect+='<option value="'+index+'">'+value+'</option>\n';
                     });

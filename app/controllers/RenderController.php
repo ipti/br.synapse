@@ -416,7 +416,9 @@ class RenderController extends Controller {
 
     public function actionExportToOffline() {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
-            if (isset($_REQUEST['school'])) {
+            $array_actorsOwnUnity = [];
+            
+            if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
                 $school = Unity::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
                 $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, u.id AS unity_id, u.name AS unity_name, 
@@ -435,6 +437,9 @@ class RenderController extends Controller {
 
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
+            }else{
+                //Escola Não selecionada
+                $array_actorsOwnUnity = [];
             }
 
             $nameDisciplineSelected = "";
@@ -508,9 +513,7 @@ class RenderController extends Controller {
                 //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
 
-
                 if (file_exists($zipname)) {
-
                     header('Content-type: application/zip');
                     header('Content-Disposition: attachment; filename="' . $zipname . '"');
                     readfile($zipname);

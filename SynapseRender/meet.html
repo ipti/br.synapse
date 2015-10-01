@@ -132,7 +132,7 @@
                     var newMeet = new Meet(options);
 
                     //Verificar se foi selecionado algum Aluno
-                    if (actorID === 'null') {
+                    if (actorID === 'null' || actorID === '-1' ) {
                         $('#add-new-user').show();
                     } else {
                         //Iniciar o Meet e Atualiza O painel do render

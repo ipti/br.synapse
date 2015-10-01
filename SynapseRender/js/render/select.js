@@ -70,28 +70,28 @@ $(document).ready(function () {
             });
         });
 
-        $('#classroom').on('change',function() {
-           var classroom_id = $(this).find('option:selected').val();
-           DB_synapse.findStudentByClassroom(classroom_id, function(students){
-               //Adicionar os estudantes encontrados no select
-               var hActor = $('#actor');
-               var strOptionsActors = "";
-               for(var idx in students){
-                   var student = students[idx];
-                   strOptionsActors += "<option value="+student['id']+">"+student['name']+"</option>";
-               }
-               
-               if(students.length > 0){
-                   //Encontrou pelo menos um aluno
-                   hActor.html(strOptionsActors);
-               }else{
-                   hActor.html("<option value='-1'>Sem Aluno</option>");
-               }
-               
-           });
+        $('#classroom').on('change', function () {
+            var classroom_id = $(this).find('option:selected').val();
+            DB_synapse.findStudentByClassroom(classroom_id, function (students) {
+                //Adicionar os estudantes encontrados no select
+                var hActor = $('#actor');
+                var strOptionsActors = "";
+                for (var idx in students) {
+                    var student = students[idx];
+                    strOptionsActors += "<option value=" + student['id'] + ">" + student['name'] + "</option>";
+                }
+
+                if (students.length > 0) {
+                    //Encontrou pelo menos um aluno
+                    hActor.html(strOptionsActors);
+                } else {
+                    hActor.html("<option value='-1'>Sem Aluno</option>");
+                }
+
+            });
         });
-        
-        
+
+
     } else {
         $("#login-select").hide();
         $('#select-student').hide();
@@ -99,12 +99,14 @@ $(document).ready(function () {
     }
 
     $('.discipline').click(function () {
-        sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
-        if (sessionStorage.getItem('login_personage_name') == 'Tutor') {
-            sessionStorage.setItem('id_actor', $('#actor').val());
-            sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());
-        }
-        window.location = "./meet.html";
+            //Um aluno foi selecionado
+            sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
+            if (sessionStorage.getItem('login_personage_name') == 'Tutor') {
+                sessionStorage.setItem('id_actor', $('#actor').val());
+                sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());
+            }
+            window.location = "./meet.html";
+        
     });
 
 
