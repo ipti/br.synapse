@@ -83,10 +83,10 @@
                 $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
 
                 //Retira os eventos padrões para elementos select
-                $('#school').unbind();
-                $('#classroom').unbind();
-                $('#school').siblings('span').remove();
-                $('#classroom').siblings('span').remove();
+                $('#regSchool').unbind();
+                $('#regClassroom').unbind();
+                $('#regSchool').siblings('span').remove();
+                $('#regClassroom').siblings('span').remove();
 
 
 
@@ -153,27 +153,25 @@
                         for (var idx in listSchools) {
                             foundAnySchool = true;
                             var school = listSchools[idx];
-                            $('#school').append("<option value='" + school['id'] + "'>" + school['name'] + "</option>");
+                            $('#regSchool').append("<option value='" + school['id'] + "'>" + school['name'] + "</option>");
                         }
 
                         if (!foundAnySchool) {
                             //Sem Escola
-                            $('#school').html("<option value='-1'>Sem Escola</option>");
+                            $('#regSchool').html("<option value='-1'>Sem Escola</option>");
                             //Sem classe
-                            $('#classroom').html("<option value='-1'>Sem Turma</option>");
+                            $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
                         } else {
                             //Econtrou pelo menos uma escola
-                            $('#school').trigger('change');
+                            $('#regSchool').trigger('change');
                         }
 
                     });
                     //======================================
-
-
-
-                    $('#school').on('change', function () {
+                    
+                     //Carregar Turmas da escola Selecionada 
+                    $('#regSchool').on('change', function () {
                         var school_id = $(this).val();
-                        //Carregar Turmas da escola Selecionada 
                         newMeet.DB_synapse.findClassroomBySchool(school_id, function (listClassrooms) {
                             var foundAnyClassroom = false;
                             var htmlOptions = "";
@@ -185,10 +183,10 @@
 
                             if (!foundAnyClassroom) {
                                 //Sem classe
-                                $('#classroom').html("<option value='-1'>Sem Turma</option>");
+                                $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
                             } else {
                                 //Encontrou alguma Classe
-                                $('#classroom').html(htmlOptions);
+                                $('#regClassroom').html(htmlOptions);
                             }
 
                         });
@@ -215,15 +213,20 @@
                         $("#finalize-message").hide();
                     });
 
-
                     $('#btnAddNewUser').on('tap', function () {
-                        var usrName = $('#nome_aluno').val();
+                        var usrName = $('#regNome_aluno').val();
                         if (usrName.replace(/\s/g, '') === '') {
                             //Mensagem erro
                             $('.message-form').html("Nome do Aluno é Obrigatório!");
                         } else {
                             //Cadastrar Usuário Offline no IndexDB
-                            newMeet.DB_synapse.addStudentOff($('#classroom').val(), $('#nome_aluno').val());
+                            if($('#regClassroom').val() != "-1"){
+                                newMeet.DB_synapse.addStudentOff($('#regClassroom').val(), $('#regNome_aluno').val());
+                                alert('Novo aluno salvo com sucesso!');
+                            }else{
+                                alert('Sem Turma!');
+                            }
+                            
 
                         }
                     });
@@ -305,17 +308,15 @@
                 <div class="message-form">
                 </div>
 
-                <!-- Rua da Palha : EMEF Raimundo Carvalho menezesE
-                     Povoado Pedra Furada : EMEF Vereador Paulo Fernando Ribeiro Soutelo -->
-                <label for="school">Escola</label>
-                <select name="school" id="school">
+                <label for="regSchool">Escola</label>
+                <select name="regSchool" id="regSchool">
                 </select>
-                <label for="classroom">Turma</label>
-                <select name="classroom" id="classroom"> 
+                <label for="regClassroom">Turma</label>
+                <select name="regClassroom" id="regClassroom"> 
                 </select>
 
-                <label for="nome_aluno">Nome do Aluno*</label>
-                <input type="text" size="20" maxlength="40" name="nome_aluno" id="nome_aluno"/> 
+                <label for="regNome_aluno">Nome do Aluno*</label>
+                <input type="text" size="20" maxlength="40" name="regNome_aluno" id="regNome_aluno"/> 
                 <button class="message-button-addNewUser" id="btnAddNewUser">Registrar</button>
             </div>
         </div>

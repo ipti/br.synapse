@@ -944,7 +944,7 @@ this.DB = function () {
         }
     }
 
-
+/*
     this.getAllClass = function (callBack, callBackEvent) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
@@ -1060,6 +1060,10 @@ this.DB = function () {
         }
 
     }
+    
+    */
+   
+   
 
 
     //Verificar se já possui um bloco
@@ -1384,7 +1388,6 @@ this.DB = function () {
 
     //Pesquisar Todas as escolas
     this.findAllSchools = function (callBack) {
-
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
         DBsynapse.onerror = function (event) {
@@ -1415,6 +1418,50 @@ this.DB = function () {
                     //Não existe mais registros!
                     //Passa as escolas pra a função de callBack
                     callBack(schools);
+                }
+            };
+
+        }
+        DBsynapse.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+
+    }
+    
+     //Pesquisar Todas as escolas
+    this.findAllClassrooms = function (callBack) {
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function (event) {
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function (event) {
+            var db = event.target.result;
+            db.onerror = function (event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                console.log("Database error: " + event.target.errorCode);
+            };
+
+            var classrooms = new Array();
+
+            var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+            classroomObjectStore.openCursor().onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    classrooms.push({
+                        id: cursor.value.id,
+                        name: cursor.value.name,
+                        school_id: cursor.value.school_id
+                    });
+
+                    cursor.continue();
+                } else {
+                    //Não existe mais registros!
+                    //Passa as classrooms pra a função de callBack
+                    callBack(classrooms);
                 }
             };
 
@@ -1472,6 +1519,59 @@ this.DB = function () {
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
     }
+    
+    
+    
+    
+    //Pesquisar todas as classes de uma determinada escola
+    this.findStudentByClassroom = function (classroom_id, callBack) {
+
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function (event) {
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function (event) {
+            var db = event.target.result;
+            db.onerror = function (event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                console.log("Database error: " + event.target.errorCode);
+            };
+
+            var students = new Array();
+            var studentObjectStore = db.transaction("actor", "readonly").objectStore("actor");
+
+            //Selecionar somente os alunos pra a turma específica
+            var requestGet = studentObjectStore.index('unity_id');
+            var singleKeyRange = IDBKeyRange.only(classroom_id);
+
+            requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    students.push({
+                        id: cursor.value.id,
+                        name: cursor.value.name
+                    });
+
+                    cursor.continue();
+                } else {
+                    //Não existe mais registros!
+                    //Passa os estudantes pra a função de callBack
+                    callBack(students);
+                }
+            };
+
+        }
+        DBsynapse.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+    }
+    
+    
+    
 
     this.isset = function (variable) {
         return (typeof variable !== 'undefined' && variable !== null);
