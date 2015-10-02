@@ -36,8 +36,8 @@ this.Meet = function (options) {
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     this.org = options.org[0];
     this.org_name = options.org[1];
-    this.classroomID = options.classroom[0];
-    this.classroomName = options.classroom[1];
+    this.studentClassroomID = options.studentClassroom[0];
+    this.studentClassroomName = options.studentClassroom[1];
     this.actor = options.actor[0];
     this.actor_name = options.actor[1];
     this.login_personage_name = options.actor[2];
@@ -109,19 +109,32 @@ this.Meet = function (options) {
                             //Calcula o Score
                             self.scoreCalculator(false);
                         } else {
-                            //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
-                            var StartIdx = 0;
-                            self.cobjectsIDs;
-                            self.DB_synapse.findAllMinCobjects(function(cobjects){
-                                //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
-                                for(var idx in cobjects){
-                                    var currentCobject = cobjects[idx];
-                                    //if(currentCobject['year'] === self.)
-                                    //Como pegar o Ano do Aluno logado. STOP HERE!
-                                }
-                            });
+                            //Primeiro Acesso do usuário; Não possui nenhum estado registrado
+                            var studentCurrentYear = parseInt(self.studentClassroomName.match(/\d/)[0]);
+
+                            if (studentCurrentYear > 2) {
+                                //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
+                                var StartIdx = 0;
+                                var startCobjectYear = studentCurrentYear - 1;
+                               
+                                self.DB_synapse.findAllMinCobjects(function (cobjects) {
+                                    //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
+                                    for (var idx in cobjects) {
+                                        var currentCobject = cobjects[idx];
+                                         if(currentCobject['year'] == startCobjectYear){
+                                             //Encontrou o Cobject do ano Anterior a do Aluno
+                                             lastCobject_id = currentCobject['cobject_id'];
+                                            //Finaliza a pesquisa, pois incia sempre do 1° 
+                                            break;
+                                         }
+                                    }
+                                });
+                            }else{
+                                //Carrega o 1° Cobject, referente ao 1° Ano
+                                lastCobject_id = self.cobjectsIDs[0];
+                            }
                             
-                            lastCobject_id = self.cobjectsIDs[0];
+                            //Indica que Não possui algum estado carregado 
                             self.isLoadState = false;
                         }
                         //Construçao do DOM do 1° cobject de cada Meet
@@ -1403,7 +1416,7 @@ this.Meet = function (options) {
         }
 
         $('div.draw-point').on('mouseover', function () {
-            
+
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
@@ -1771,7 +1784,7 @@ this.Meet = function (options) {
                 for (var idx in thisHls) {
                     numThisHls++;
                 }
-                
+
                 if (numThisHls > 1) {
                     //Remove a classe extremity
                     $(this).removeClass('extremity');
@@ -2156,7 +2169,7 @@ this.Meet = function (options) {
 
 
                 //Verificar se possuí alguma extremidade
-                if(currentAskDraw.find('div.extremity').size() > 0){
+                if (currentAskDraw.find('div.extremity').size() > 0) {
                     return null;
                 }
 
@@ -2602,7 +2615,7 @@ this.Meet = function (options) {
     };
 
     //Contador de Tempo de cada Meet
-    
+
     this.countTime = function (tag) {
         //A cada segundo realiza a recursividade
         //Dando a cada chamada recursiva da função, 1s de intervalo

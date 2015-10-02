@@ -99,20 +99,48 @@ $(document).ready(function () {
     }
 
     $('.discipline').click(function () {
-            //Um aluno foi selecionado
-            sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
-            if (sessionStorage.getItem('login_personage_name') == 'Tutor') {
-                //Ator
-                sessionStorage.setItem('id_actor', $('#actor').val());
-                sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());
-                
-                //Turma
-                sessionStorage.setItem('id_classroom', $('#classroom').val());
-                sessionStorage.setItem('name_classroom', $('#classroom').find(":selected").text());
-                
-            }
+        //Um aluno foi selecionado
+        sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
+        //Tutor que logou
+        if (sessionStorage.getItem('login_personage_name') == 'Tutor') {
+            //Ator
+            sessionStorage.setItem('id_actor', $('#actor').val());
+            sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());
+
+            //Turma
+            sessionStorage.setItem('id_classroom', $('#classroom').val());
+            sessionStorage.setItem('name_classroom', $('#classroom').find(":selected").text());
+
             window.location = "./meet.html";
-        
+        } else {
+            //Aluno que logou
+            //Ator
+            var id_actor_student = sessionStorage.getItem('login_id_actor');
+            var name_actor_student = sessionStorage.getItem('login_name_actor');
+            sessionStorage.setItem('id_actor', id_actor_student);
+            sessionStorage.setItem('name_actor', name_actor_student);
+
+            //Turma
+            var id_classroom_student = sessionStorage.getItem('login_classroom_id_actor');
+            sessionStorage.setItem('id_classroom', id_classroom_student);
+
+            DB_synapse.findClassroomById(id_classroom_student, function (classroom) {
+                if (classroom !== null) {
+                    //Encontrou
+                    sessionStorage.setItem('name_classroom', classroom['name']);
+                    window.location = "./meet.html";
+                } else {
+                    //Não encontrou
+                }
+
+            });
+
+
+
+
+        }
+
+
     });
 
 

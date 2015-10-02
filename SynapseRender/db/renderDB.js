@@ -645,11 +645,13 @@ this.DB = function () {
                             var name = requestGet.result.name;
                             var id = requestGet.result.id;
                             var personage_name = requestGet.result.personage_name;
+                            var classroom_id = requestGet.result.unity_id;
                             //Armazenar nome do usuário e id_Actor na sessão 
                             sessionStorage.setItem("authorization", true);
                             sessionStorage.setItem("login_id_actor", id);
                             sessionStorage.setItem("login_name_actor", name);
                             sessionStorage.setItem('login_personage_name', personage_name);
+                            sessionStorage.setItem("login_classroom_id_actor", classroom_id);
                         } else {
                             sessionStorage.setItem("authorization", false);
                         }
@@ -944,126 +946,126 @@ this.DB = function () {
         }
     }
 
-/*
-    this.getAllClass = function (callBack, callBackEvent) {
-        window.indexedDB = self.verifyIDBrownser();
-        DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function (event) {
-            console.log("Error: ");
-            console.log(event);
-            //alert("Você não habilitou minha web app para usar IndexedDB?!");
-        }
-        DBsynapse.onsuccess = function (event) {
-            var db = event.target.result;
-            db.onerror = function (event) {
-                // Função genérica para tratar os erros de todos os requests desse banco!
-                console.log("Database error: " + event.target.errorCode);
-            }
-            var unityStore = db.transaction("unity").objectStore("unity");
-            var unitys = new Array();
-            unityStore.openCursor().onsuccess = function (event) {
+    /*
+     this.getAllClass = function (callBack, callBackEvent) {
+     window.indexedDB = self.verifyIDBrownser();
+     DBsynapse = window.indexedDB.open(nameBD);
+     DBsynapse.onerror = function (event) {
+     console.log("Error: ");
+     console.log(event);
+     //alert("Você não habilitou minha web app para usar IndexedDB?!");
+     }
+     DBsynapse.onsuccess = function (event) {
+     var db = event.target.result;
+     db.onerror = function (event) {
+     // Função genérica para tratar os erros de todos os requests desse banco!
+     console.log("Database error: " + event.target.errorCode);
+     }
+     var unityStore = db.transaction("unity").objectStore("unity");
+     var unitys = new Array();
+     unityStore.openCursor().onsuccess = function (event) {
+     
+     var cursor = event.target.result;
+     if (cursor) {
+     // Percorre cada registro da unity
+     var unity_id = cursor.value.id;
+     var unity_name = cursor.value.name;
+     var currentUnity = {
+     'unity_id': unity_id,
+     'unity_name': unity_name
+     };
+     unitys.push(currentUnity);
+     cursor.continue();
+     } else {
+     //Finalizou a Pesquisa das Unitys
+     callBack(unitys, callBackEvent);
+     }
+     
+     };
+     unityStore.onerror = function (event) {
+     // Tratar erro!
+     }
+     }
+     DBsynapse.onblocked = function (event) {
+     // Se existe outra aba com a versão antiga
+     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+     }
+     
+     }
+     this.getAllStudentFromClasses = function (unitys, callBackEvent) {
+     self.totalUnitys = unitys.length;
+     for (var idx = 0; idx < unitys.length; idx++) {
+     self.getAllStudentFromClass(unitys[idx], callBackEvent);
+     }
+     }
+     
+     this.getAllStudentFromClass = function (unity, callBackEvent) {
+     window.indexedDB = self.verifyIDBrownser();
+     DBsynapse = window.indexedDB.open(nameBD);
+     DBsynapse.onerror = function (event) {
+     console.log("Error: ");
+     console.log(event);
+     //alert("Você não habilitou minha web app para usar IndexedDB?!");
+     }
+     DBsynapse.onsuccess = function (event) {
+     var db = event.target.result;
+     db.onerror = function (event) {
+     // Função genérica para tratar os erros de todos os requests desse banco!
+     console.log("Database error: " + event.target.errorCode);
+     }
+     var unity_id = unity.unity_id;
+     var actorStore = db.transaction("actor").objectStore("actor");
+     var requestGet = actorStore.index('unity_id');
+     var singleKeyRange = IDBKeyRange.only(unity_id);
+     var actors = new Array();
+     var contStudent = 0;
+     requestGet.openCursor().onsuccess = function (event) {
+     var cursorActor = event.target.result;
+     if (cursorActor) {
+     // Percorre cada registro no actor para a unity corrent e personage = 'Aluno'
+     if (cursorActor.value.personage_name == 'Aluno') {
+     var actor_id = cursorActor.value.id;
+     var actor_name = cursorActor.value.name;
+     //Pesquisar Todos os alunos desta unidade
+     actors[contStudent] = {
+     'actor_id': actor_id,
+     'actor_name': actor_name
+     };
+     contStudent++;
+     }
+     
+     cursorActor.continue();
+     
+     } else {
+     //Finalisou para os Actors desta Class
+     var currentUnity = {
+     'unity_id': unity_id,
+     'unity_name': unity.unity_name,
+     'actors': actors
+     };
+     self.actorOwnUnity.push(currentUnity);
+     //Verificar se é a ÚLTIMA Class
+     if (self.actorOwnUnity.length == self.totalUnitys) {
+     //Dispara o evento para o filter do select
+     callBackEvent(self.actorOwnUnity);
+     }
+     }
+     
+     };
+     requestGet.onerror = function (event) {
+     // Tratar erro!
+     }
+     }
+     DBsynapse.onblocked = function (event) {
+     // Se existe outra aba com a versão antiga
+     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+     }
+     
+     }
+     
+     */
 
-                var cursor = event.target.result;
-                if (cursor) {
-                    // Percorre cada registro da unity
-                    var unity_id = cursor.value.id;
-                    var unity_name = cursor.value.name;
-                    var currentUnity = {
-                        'unity_id': unity_id,
-                        'unity_name': unity_name
-                    };
-                    unitys.push(currentUnity);
-                    cursor.continue();
-                } else {
-                    //Finalizou a Pesquisa das Unitys
-                    callBack(unitys, callBackEvent);
-                }
 
-            };
-            unityStore.onerror = function (event) {
-                // Tratar erro!
-            }
-        }
-        DBsynapse.onblocked = function (event) {
-            // Se existe outra aba com a versão antiga
-            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-        }
-
-    }
-    this.getAllStudentFromClasses = function (unitys, callBackEvent) {
-        self.totalUnitys = unitys.length;
-        for (var idx = 0; idx < unitys.length; idx++) {
-            self.getAllStudentFromClass(unitys[idx], callBackEvent);
-        }
-    }
-
-    this.getAllStudentFromClass = function (unity, callBackEvent) {
-        window.indexedDB = self.verifyIDBrownser();
-        DBsynapse = window.indexedDB.open(nameBD);
-        DBsynapse.onerror = function (event) {
-            console.log("Error: ");
-            console.log(event);
-            //alert("Você não habilitou minha web app para usar IndexedDB?!");
-        }
-        DBsynapse.onsuccess = function (event) {
-            var db = event.target.result;
-            db.onerror = function (event) {
-                // Função genérica para tratar os erros de todos os requests desse banco!
-                console.log("Database error: " + event.target.errorCode);
-            }
-            var unity_id = unity.unity_id;
-            var actorStore = db.transaction("actor").objectStore("actor");
-            var requestGet = actorStore.index('unity_id');
-            var singleKeyRange = IDBKeyRange.only(unity_id);
-            var actors = new Array();
-            var contStudent = 0;
-            requestGet.openCursor().onsuccess = function (event) {
-                var cursorActor = event.target.result;
-                if (cursorActor) {
-                    // Percorre cada registro no actor para a unity corrent e personage = 'Aluno'
-                    if (cursorActor.value.personage_name == 'Aluno') {
-                        var actor_id = cursorActor.value.id;
-                        var actor_name = cursorActor.value.name;
-                        //Pesquisar Todos os alunos desta unidade
-                        actors[contStudent] = {
-                            'actor_id': actor_id,
-                            'actor_name': actor_name
-                        };
-                        contStudent++;
-                    }
-
-                    cursorActor.continue();
-
-                } else {
-                    //Finalisou para os Actors desta Class
-                    var currentUnity = {
-                        'unity_id': unity_id,
-                        'unity_name': unity.unity_name,
-                        'actors': actors
-                    };
-                    self.actorOwnUnity.push(currentUnity);
-                    //Verificar se é a ÚLTIMA Class
-                    if (self.actorOwnUnity.length == self.totalUnitys) {
-                        //Dispara o evento para o filter do select
-                        callBackEvent(self.actorOwnUnity);
-                    }
-                }
-
-            };
-            requestGet.onerror = function (event) {
-                // Tratar erro!
-            }
-        }
-        DBsynapse.onblocked = function (event) {
-            // Se existe outra aba com a versão antiga
-            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-        }
-
-    }
-    
-    */
-   
-   
 
 
     //Verificar se já possui um bloco
@@ -1428,8 +1430,8 @@ this.DB = function () {
         }
 
     }
-    
-     //Pesquisar Todas as Turmas
+
+    //Pesquisar Todas as Turmas
     this.findAllClassrooms = function (callBack) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
@@ -1472,9 +1474,9 @@ this.DB = function () {
         }
 
     }
-    
-    
-     //Pesquisar Todos os Cobjects, porém retorna somente informações importantes
+
+
+    //Pesquisar Todos os Cobjects, porém retorna somente informações importantes
     this.findAllMinCobjects = function (callBack) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
@@ -1491,7 +1493,7 @@ this.DB = function () {
             };
 
             var cobjects = new Array();
-            
+
             var cobjectObjectStore = db.transaction("cobject", "readonly").objectStore("cobject");
             cobjectObjectStore.openCursor().onsuccess = function (event) {
                 var cursor = event.target.result;
@@ -1517,6 +1519,48 @@ this.DB = function () {
         }
 
     }
+
+    //Pesquisar todas as classes de uma determinada escola
+    this.findClassroomById = function (classroom_id, callBack) {
+
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function (event) {
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function (event) {
+            var db = event.target.result;
+            db.onerror = function (event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                console.log("Database error: " + event.target.errorCode);
+            };
+
+            var classroom = null;
+            var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+
+            //Selecionar somente a turma que possui o classroom_id especificado
+            classroomObjectStore.get(classroom_id).onsuccess = function (event) {
+                var result = event.target.result;
+                if (result) {
+                    //Encontrou a classroom
+                    classroom = result;
+                    callBack(classroom);
+                }else{
+                    //Não encontrou a class room
+                    callBack(classroom);
+                }
+
+            }
+
+        }
+        DBsynapse.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+    }
+
 
 
     //Pesquisar todas as classes de uma determinada escola
@@ -1565,10 +1609,10 @@ this.DB = function () {
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
     }
-    
-    
-    
-    
+
+
+
+
     //Pesquisar todas as classes de uma determinada escola
     this.findStudentByClassroom = function (classroom_id, callBack) {
 
@@ -1615,9 +1659,9 @@ this.DB = function () {
             window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
         }
     }
-    
-    
-    
+
+
+
 
     this.isset = function (variable) {
         return (typeof variable !== 'undefined' && variable !== null);
