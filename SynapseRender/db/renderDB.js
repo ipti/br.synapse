@@ -1429,7 +1429,7 @@ this.DB = function () {
 
     }
     
-     //Pesquisar Todas as escolas
+     //Pesquisar Todas as Turmas
     this.findAllClassrooms = function (callBack) {
         window.indexedDB = self.verifyIDBrownser();
         DBsynapse = window.indexedDB.open(nameBD);
@@ -1472,6 +1472,52 @@ this.DB = function () {
         }
 
     }
+    
+    
+     //Pesquisar Todos os Cobjects, porém retorna somente informações importantes
+    this.findAllMinCobjects = function (callBack) {
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function (event) {
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function (event) {
+            var db = event.target.result;
+            db.onerror = function (event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                console.log("Database error: " + event.target.errorCode);
+            };
+
+            var cobjects = new Array();
+            
+            var cobjectObjectStore = db.transaction("cobject", "readonly").objectStore("cobject");
+            cobjectObjectStore.openCursor().onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    cobjects.push({
+                        cobject_id: cursor.value.cobject_id,
+                        goal: cursor.value.goal,
+                        year: cursor.value.year
+                    });
+
+                    cursor.continue();
+                } else {
+                    //Não existe mais registros!
+                    //Passa os cobjects pra a função de callBack
+                    callBack(cobjects);
+                }
+            };
+
+        }
+        DBsynapse.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+
+    }
+
 
     //Pesquisar todas as classes de uma determinada escola
     this.findClassroomBySchool = function (school_id, callBack) {

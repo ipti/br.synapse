@@ -36,8 +36,8 @@ this.Meet = function (options) {
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     this.org = options.org[0];
     this.org_name = options.org[1];
-    this.classe = options.classe[0];
-    this.classe_name = options.classe[1];
+    this.classroomID = options.classroom[0];
+    this.classroomName = options.classroom[1];
     this.actor = options.actor[0];
     this.actor_name = options.actor[1];
     this.login_personage_name = options.actor[2];
@@ -109,7 +109,18 @@ this.Meet = function (options) {
                             //Calcula o Score
                             self.scoreCalculator(false);
                         } else {
-                            //Abre o Primeiro Cobject
+                            //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
+                            var StartIdx = 0;
+                            self.cobjectsIDs;
+                            self.DB_synapse.findAllMinCobjects(function(cobjects){
+                                //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
+                                for(var idx in cobjects){
+                                    var currentCobject = cobjects[idx];
+                                    //if(currentCobject['year'] === self.)
+                                    //Como pegar o Ano do Aluno logado. STOP HERE!
+                                }
+                            });
+                            
                             lastCobject_id = self.cobjectsIDs[0];
                             self.isLoadState = false;
                         }

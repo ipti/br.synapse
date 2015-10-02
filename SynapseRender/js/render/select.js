@@ -102,8 +102,14 @@ $(document).ready(function () {
             //Um aluno foi selecionado
             sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
             if (sessionStorage.getItem('login_personage_name') == 'Tutor') {
+                //Ator
                 sessionStorage.setItem('id_actor', $('#actor').val());
                 sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());
+                
+                //Turma
+                sessionStorage.setItem('id_classroom', $('#classroom').val());
+                sessionStorage.setItem('name_classroom', $('#classroom').find(":selected").text());
+                
             }
             window.location = "./meet.html";
         

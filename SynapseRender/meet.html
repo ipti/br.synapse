@@ -94,11 +94,13 @@
                     console.log("Suporta BD-HTML5");
 
                     var org = '';
-                    var classe = '';
+                    
+                    var classroomID = sessionGet('id_classroom');
+                    var classroomName = sessionGet('name_classroom');
 
                     //var unityfather_name = ''; 
                     var organizationName = '';
-                    var className = '';
+                    
 
                     //Verificar se existe um aluno selecionado pelo tutor
                     //Ou se foi o próprio aluno que realizou login
@@ -122,7 +124,7 @@
 
                     var options = {
                         org: [org, organizationName],
-                        classe: [classe, className],
+                        classroom: [classroomID, classroomName],
                         actor: [actorID, actorName, login_personage_name],
                         id_discipline: disciplineID,
                         //cobject_block_id: block_id
