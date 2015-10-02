@@ -617,65 +617,93 @@ this.DB = function () {
     //Pesquisas No Banco        
     this.login = function (login, password, callBack) {
         if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
-            window.indexedDB = self.verifyIDBrownser();
-            DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
-                console.log("Error: ");
-                console.log(event);
-                // alert("Você não habilitou minha web app para usar IndexedDB?!");
-            }
-            DBsynapse.onsuccess = function (event) {
-                var db = event.target.result;
-                db.onerror = function (event) {
-                    // Função genérica para tratar os erros de todos os requests desse banco!
-                    console.log("Database error: " + event.target.errorCode);
+
+            if (login == 'admin') {
+                if (password == '123456') {
+                    //Senha correta
+                    var name = "Administrador";
+                    var id = "-1";
+                    var personage_name = "admin";
+                    var classroom_id = "-1";
+                    //Armazenar nome do usuário e id_Actor na sessão 
+                    sessionStorage.setItem("authorization", true);
+                    sessionStorage.setItem("login_id_actor", id);
+                    sessionStorage.setItem("login_name_actor", name);
+                    sessionStorage.setItem('login_personage_name', personage_name);
+                    sessionStorage.setItem("login_classroom_id_actor", classroom_id);
+
+                } else {
+                    //Senha incorreta
+                    sessionStorage.setItem("authorization", false);
                 }
-                //Tudo ok Então Busca O Actor
-                var ActorObjectStore = db.transaction("actor").objectStore("actor");
-                var requestGet = ActorObjectStore.index("login").get(login);
-                requestGet.onerror = function (event) {
-                    // Tratar erro!
+                
+                //Chama o callBack
+                callBack();
+                
+            } else {
+                //Não é um admin
+                window.indexedDB = self.verifyIDBrownser();
+                DBsynapse = window.indexedDB.open(nameBD);
+                DBsynapse.onerror = function (event) {
+                    console.log("Error: ");
+                    console.log(event);
+                    // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                requestGet.onsuccess = function (event) {
-                    // Fazer algo com request.result!
-                    if (self.isset(requestGet.result)) {
-                        //Encontrou o Usuário
-                        if (password == requestGet.result.password) {
-                            //Senha correta
-                            var name = requestGet.result.name;
-                            var id = requestGet.result.id;
-                            var personage_name = requestGet.result.personage_name;
-                            var classroom_id = requestGet.result.unity_id;
-                            //Armazenar nome do usuário e id_Actor na sessão 
-                            sessionStorage.setItem("authorization", true);
-                            sessionStorage.setItem("login_id_actor", id);
-                            sessionStorage.setItem("login_name_actor", name);
-                            sessionStorage.setItem('login_personage_name', personage_name);
-                            sessionStorage.setItem("login_classroom_id_actor", classroom_id);
+                DBsynapse.onsuccess = function (event) {
+                    var db = event.target.result;
+                    db.onerror = function (event) {
+                        // Função genérica para tratar os erros de todos os requests desse banco!
+                        console.log("Database error: " + event.target.errorCode);
+                    }
+                    //Tudo ok Então Busca O Actor
+                    var ActorObjectStore = db.transaction("actor").objectStore("actor");
+                    var requestGet = ActorObjectStore.index("login").get(login);
+                    requestGet.onerror = function (event) {
+                        // Tratar erro!
+                    }
+                    requestGet.onsuccess = function (event) {
+                        // Fazer algo com request.result!
+                        if (self.isset(requestGet.result)) {
+                            //Encontrou o Usuário
+                            if (password == requestGet.result.password) {
+                                //Senha correta
+                                var name = requestGet.result.name;
+                                var id = requestGet.result.id;
+                                var personage_name = requestGet.result.personage_name;
+                                var classroom_id = requestGet.result.unity_id;
+                                //Armazenar nome do usuário e id_Actor na sessão 
+                                sessionStorage.setItem("authorization", true);
+                                sessionStorage.setItem("login_id_actor", id);
+                                sessionStorage.setItem("login_name_actor", name);
+                                sessionStorage.setItem('login_personage_name', personage_name);
+                                sessionStorage.setItem("login_classroom_id_actor", classroom_id);
+                            } else {
+                                sessionStorage.setItem("authorization", false);
+                            }
+
                         } else {
+                            //Usuário Não encontrado
                             sessionStorage.setItem("authorization", false);
                         }
 
-                    } else {
-                        //Usuário Não encontrado
-                        sessionStorage.setItem("authorization", false);
+                        //Chama o método callBack
+                        callBack();
                     }
 
-                    //Chama o método callBack
-                    callBack();
                 }
+                DBsynapse.onblocked = function (event) {
+                    // Se existe outra aba com a versão antiga
+                    window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+                }
+            }
 
-            }
-            DBsynapse.onblocked = function (event) {
-                // Se existe outra aba com a versão antiga
-                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
-            }
         } else {
             //Usuário ou Senha nulos
             sessionStorage.setItem("authorization", false);
             //Chama o método callBack
             callBack();
         }
+
     }
 
     //===================
@@ -1547,7 +1575,7 @@ this.DB = function () {
                     //Encontrou a classroom
                     classroom = result;
                     callBack(classroom);
-                }else{
+                } else {
                     //Não encontrou a class room
                     callBack(classroom);
                 }

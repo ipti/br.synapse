@@ -22,7 +22,7 @@ $(document).ready(function () {
 
 
 
-    if (sessionStorage.getItem('login_personage_name') === 'Tutor') {
+    if (sessionStorage.getItem('login_personage_name') === 'Tutor' || sessionStorage.getItem('login_personage_name') === 'admin') {
         $("#login-select").show();
         $("#classroom").html("<option value='-1'>Selecione uma Turma</option>");
 
@@ -102,7 +102,7 @@ $(document).ready(function () {
         //Um aluno foi selecionado
         sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
         //Tutor que logou
-        if (sessionStorage.getItem('login_personage_name') == 'Tutor') {
+        if (sessionStorage.getItem('login_personage_name') == 'Tutor' || sessionStorage.getItem('login_personage_name') == 'admin') {
             //Ator
             sessionStorage.setItem('id_actor', $('#actor').val());
             sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());

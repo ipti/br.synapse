@@ -2566,10 +2566,15 @@ this.Meet = function (options) {
      */
     this.finalizeMeet = function () {
         sessionStorage.removeItem("authorization");
+        sessionStorage.removeItem("id_actor");
+        sessionStorage.removeItem("id_classroom");
         sessionStorage.removeItem("id_discipline");
+        sessionStorage.removeItem("login_classroom_id_actor");
         sessionStorage.removeItem("login_id_actor");
         sessionStorage.removeItem("login_personage_name");
+        sessionStorage.removeItem("name_actor");
         sessionStorage.removeItem("login_name_actor");
+        sessionStorage.removeItem("name_classroom");
         location.href = "index.html";
         return true;
     };

@@ -70,18 +70,19 @@
                 }
 
                 $('#entrar').bind('mousedown', function() {
-                    if($('#username').val() == 'admin'){
-                        if($('#password').val() == '123456'){
-                            location.href = "import.html";
-                        }
-                    }
                     //Criar Objeto para MAnipulação do Banco
                     var db = new DB();
                     db.login($('#username').val(), $('#password').val(), function(){
                         var authorization = sessionStorage.getItem("authorization");
+                        var login_personage_name = sessionStorage.getItem("login_personage_name");
                         if (authorization == 'true') {
                             //Usuário Logado
-                            location.href = "select.html";
+                            if(login_personage_name == "admin"){
+                                 location.href = "import.html";
+                            }else{
+                                 location.href = "select.html";
+                            }
+                           
                         }else{
                             //Remove a sessão do authorization
                             sessionStorage.removeItem("authorization");
