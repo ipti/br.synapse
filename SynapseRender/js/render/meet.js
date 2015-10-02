@@ -2591,8 +2591,10 @@ this.Meet = function (options) {
     };
 
     //Contador de Tempo de cada Meet
+    
     this.countTime = function (tag) {
         //A cada segundo realiza a recursividade
+        //Dando a cada chamada recursiva da função, 1s de intervalo
         if (self.isset(tag)) {
             self.tag_time = tag;
         }
