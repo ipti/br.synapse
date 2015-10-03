@@ -764,7 +764,7 @@ this.Meet = function (options) {
                 $(this).removeClass('last_clicked');
             } else {
                 var siblings = $(this).siblings();
-                $(this).css('border', '3px dashd #FBB03B');
+                $(this).css('border', '3px dashed #FBB03B');
                 var siblings = $(this).siblings();
                 siblings.css('border', '3px solid transparent');
                 siblings.removeClass('last_clicked');
