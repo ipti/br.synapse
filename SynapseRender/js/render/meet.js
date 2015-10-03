@@ -108,39 +108,53 @@ this.Meet = function (options) {
                             self.peformance_qtd_wrong = info_state.qtd_wrong;
                             //Calcula o Score
                             self.scoreCalculator(false);
+
+                            //Construçao do DOM do 1° cobject de cada Meet
+                            self.domCobjectBuild(lastCobject_id);
+                            //Depois inicia os eventos globais 
+                            self.init_eventsGlobals();
                         } else {
                             //Primeiro Acesso do usuário; Não possui nenhum estado registrado
+                            //Indica que Não possui algum estado carregado 
+                            self.isLoadState = false;
                             var studentCurrentYear = parseInt(self.studentClassroomName.match(/\d/)[0]);
 
                             if (studentCurrentYear > 2) {
                                 //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
                                 var StartIdx = 0;
                                 var startCobjectYear = studentCurrentYear - 1;
-                               
+
                                 self.DB_synapse.findAllMinCobjects(function (cobjects) {
                                     //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
                                     for (var idx in cobjects) {
                                         var currentCobject = cobjects[idx];
-                                         if(currentCobject['year'] == startCobjectYear){
-                                             //Encontrou o Cobject do ano Anterior a do Aluno
-                                             lastCobject_id = currentCobject['cobject_id'];
+                                        if (currentCobject['year'] == startCobjectYear) {
+                                            //Encontrou o Cobject do ano Anterior a do Aluno
+                                            lastCobject_id = currentCobject['cobject_id'];
                                             //Finaliza a pesquisa, pois incia sempre do 1° 
                                             break;
-                                         }
+                                        }
                                     }
+
+                                    //Inicia com o cobject encontrado
+                                    //Construçao do DOM do 1° cobject de cada Meet
+                                    self.domCobjectBuild(lastCobject_id);
+                                    //Depois inicia os eventos globais 
+                                    self.init_eventsGlobals();
+
                                 });
-                            }else{
+                            } else {
                                 //Carrega o 1° Cobject, referente ao 1° Ano
                                 lastCobject_id = self.cobjectsIDs[0];
+                                //Construçao do DOM do 1° cobject de cada Meet
+                                self.domCobjectBuild(lastCobject_id);
+                                //Depois inicia os eventos globais 
+                                self.init_eventsGlobals();
                             }
+
                             
-                            //Indica que Não possui algum estado carregado 
-                            self.isLoadState = false;
                         }
-                        //Construçao do DOM do 1° cobject de cada Meet
-                        self.domCobjectBuild(lastCobject_id);
-                        //Depois inicia os eventos globais 
-                        self.init_eventsGlobals();
+
 
                     });
 
@@ -2562,7 +2576,7 @@ this.Meet = function (options) {
     };
     //======================
     /**
-     * Deveria finalizar o meet... mas não faz nada.
+     *
      */
     this.finalizeMeet = function () {
         sessionStorage.removeItem("authorization");
