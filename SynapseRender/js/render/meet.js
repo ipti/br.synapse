@@ -448,7 +448,9 @@ this.Meet = function (options) {
                 self.nextPiece();
             });
 
-            $(".message-button").bind('tap', function () {
+            //mouseup ao invés de tap , por que os elementos por traś do elemento clicado
+            //Estavam sendo clicados
+            $(".message-button").bind('mouseup', function () {
                 $(this).closest('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
