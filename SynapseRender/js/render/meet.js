@@ -1342,6 +1342,28 @@ this.Meet = function (options) {
      * @returns {void}
      */
     this.init_PLC = function () {
+        $('input.PLC-input').attr('disabled','disabled');
+         
+        var elementsImagePiece = $('div.PLC.group').find('div.elementImage');
+        elementsImagePiece.css('cursor', 'pointer');
+        
+        elementsImagePiece.on('tap', function(){
+            var currentPiece = $('.currentPiece');
+            currentPiece.find('div.PLC.group').find('div.elementImage').removeClass('selectedItem');
+            $(this).addClass('selectedItem');
+            var wordClicked = $(this).attr('word');
+            
+            //Habilitar todos os inputs que referente à apalavra da imagem clicada
+            currentPiece.find('.PLC-input').each(function(){
+                if($(this).attr('word') == wordClicked){
+                    $(this).removeAttr('disabled');
+                }
+            });
+            
+        });
+        
+        
+        
         $('input.PLC-input').on('keyup', function (e) {
             if (e.keyCode === 8) {
                 $(this).attr('value', "");

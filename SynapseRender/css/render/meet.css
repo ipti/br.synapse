@@ -417,3 +417,8 @@ div.draw-point {
     border-radius: 30px;
     display: none;
 }
+
+.selectedItem {
+    border: 3px dashed rgb(251, 176, 59);
+    
+}
