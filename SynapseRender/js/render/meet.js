@@ -38,6 +38,7 @@ this.Meet = function (options) {
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
     this.studentClassroomName = options.studentClassroom[1];
+    this.studentCurrentYear = 0;
     this.actor = options.actor[0];
     this.actor_name = options.actor[1];
     this.login_personage_name = options.actor[2];
@@ -99,6 +100,10 @@ this.Meet = function (options) {
                     self.DB_synapse.getUserState(self.actor, self.cobject_block_id, function (info_state) {
                         var gotoState = self.isset(info_state);
                         var lastCobject_id = null;
+
+                        //Ano atual no estudante
+                        self.studentCurrentYear = parseInt(self.studentClassroomName.match(/\d/)[0]);
+
                         if (gotoState) {
                             //Encontrou O estado do usuário
                             self.isLoadState = true;
@@ -117,12 +122,11 @@ this.Meet = function (options) {
                             //Primeiro Acesso do usuário; Não possui nenhum estado registrado
                             //Indica que Não possui algum estado carregado 
                             self.isLoadState = false;
-                            var studentCurrentYear = parseInt(self.studentClassroomName.match(/\d/)[0]);
 
-                            if (studentCurrentYear > 2) {
+                            if (self.studentCurrentYear > 2) {
                                 //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
                                 var StartIdx = 0;
-                                var startCobjectYear = studentCurrentYear - 1;
+                                var startCobjectYear = self.studentCurrentYear - 1;
 
                                 self.DB_synapse.findAllMinCobjects(function (cobjects) {
                                     //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
@@ -152,7 +156,7 @@ this.Meet = function (options) {
                                 self.init_eventsGlobals();
                             }
 
-                            
+
                         }
 
 
@@ -288,6 +292,52 @@ this.Meet = function (options) {
         self.interval_group = self.interval_piece = new Date().getTime();
     };
 
+
+
+    this.loadNextCobject = function (needScoredCalculator) {
+        //Carregar a próxima atividade, se for permitido!
+        
+        var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
+        var nextCobjectID = self.cobjectsIDs[idxNextCobject];
+
+        //Verificar o Ano do próximo Cobject, só poderá continuar se for Menor que o ano do Estudante
+        //Com exeção, do estudante do 1° ano, que poderá resolver atividades do seu ano.
+        self.DB_synapse.findCobjectById(nextCobjectID, function (cobject) {
+            //Sempre encontrará o cobject referente ao nextCobjectID
+            var nextCobjectYear = parseInt(cobject.year);
+            if ((self.studentCurrentYear == nextCobjectYear && self.studentCurrentYear == 1)
+                    || (nextCobjectYear < self.studentCurrentYear)) {
+                //Pode avançar para esse Próximo Cobject
+                //Criar a Dom do Próximo Cobject
+                self.domCobjectBuild(nextCobjectID);
+                //Verificar o nível do próximo Cobject
+                self.scoreCalculator(needScoredCalculator);
+                
+                //Mostrar a primeira Questão deste Próximo Cobject
+                var selector_cobject = '.cobject';
+                $(selector_cobject + ':eq(0)').addClass('currentCobject');
+                $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
+                $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
+                $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
+                $(selector_cobject + '.currentCobject, ' + selector_cobject +
+                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
+                        ' .currentPiece').show();
+                
+
+            } else {
+                //Finalizou as Atividades do Ano Anterior ao ano corrente do estudante.
+                self.messageFinishedLevel();
+            }
+
+        });
+
+    }
+
+
+
+
+
+
     /**
      * Inicializa eventos comuns a todos os templates.
      * 
@@ -352,12 +402,9 @@ this.Meet = function (options) {
 
                         if (self.hasNextCobject()) {
                             isNextCobject = true;
-                            var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
-                            var nextCobjectID = self.cobjectsIDs[idxNextCobject];
-                            //Criar a Dom do Próximo Cobject
-                            self.domCobjectBuild(nextCobjectID);
-                            //Verificar o nível do próximo Cobject
-                            self.scoreCalculator(true);
+                            //Carrega o Cobject se permitido
+                            self.loadNextCobject(true);
+                            
                         } else {
                             //Acabou todos os Cobjets, ATIVIDADE JÁ FINALIZADA
                             self.isFinalBlock = true;
@@ -376,15 +423,7 @@ this.Meet = function (options) {
 
             }
 
-            if (!self.isFinalBlock && isNextCobject) {
-                $(selector_cobject + ':eq(0)').addClass('currentCobject');
-                $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
-                $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
-                $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
-                $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                        ' .currentPiece').show();
-            }
+           
 
             //Se NÃO for o final do bloco
             //Existe uma próxima peça neste CObject
@@ -430,12 +469,7 @@ this.Meet = function (options) {
 
         } else {
             //Atividade Já Finalizada !
-            $('.cobject_block').hide();
-            // location.href = "finish-level.html";
-            $('#finishLevel-message').show();
-            $('#finishLevel-message button').bind('tap', function () {
-                $('#finishLevel-message').hide();
-            });
+            self.messageFinishedLevel();
         }
 
 
@@ -556,21 +590,14 @@ this.Meet = function (options) {
                         nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
                     } else {
                         //Finalizou todas as Screen do COBJECT Corrente
-                        if (self.hasNextCobject()) {
-                            var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
-                            var nextCobjectID = self.cobjectsIDs[idxNextCobject];
-                            //Criar a Dom do Próximo Cobject
-                            self.domCobjectBuild(nextCobjectID);
-                            //Verificar o nível do próximo Cobject
-                            self.scoreCalculator(true);
 
+                        if (self.hasNextCobject()) {
+                            //Carrega próxima atividade se permitido
+                            self.loadNextCobject(true);
+                            
                         } else {
                             //Finalizou o Bloco de Atividades
-                            $('.cobject_block').hide();
-                            $('#finishLevel-message').show();
-                            $('#finishLevel-message button').bind('tap', function () {
-                                $('#finishLevel-message').hide();
-                            });
+                            self.messageFinishedLevel();
                         }
 
                     }
@@ -615,6 +642,16 @@ this.Meet = function (options) {
 
 
     };
+
+
+    this.messageFinishedLevel = function () {
+        $('.cobject_block').hide();
+        $('#finishLevel-message').show();
+        $('#finishLevel-message button').bind('tap', function () {
+            $('#finishLevel-message').hide();
+        });
+    }
+
 
     this.prevPiece = function () {
         var currentPiece = $('.currentPiece');

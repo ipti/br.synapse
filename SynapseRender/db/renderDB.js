@@ -1547,8 +1547,51 @@ this.DB = function () {
         }
 
     }
+    
+    
+     //Pesquisar Cobject específico
+    this.findCobjectById = function (cobject_id, callBack) {
 
-    //Pesquisar todas as classes de uma determinada escola
+        window.indexedDB = self.verifyIDBrownser();
+        DBsynapse = window.indexedDB.open(nameBD);
+        DBsynapse.onerror = function (event) {
+            console.log("Error: ");
+            console.log(event);
+            //alert("Você não habilitou minha web app para usar IndexedDB?!");
+        };
+        DBsynapse.onsuccess = function (event) {
+            var db = event.target.result;
+            db.onerror = function (event) {
+                // Função genérica para tratar os erros de todos os requests desse banco!
+                console.log("Database error: " + event.target.errorCode);
+            };
+
+            var cobject = null;
+            var cobjectObjectStore = db.transaction("cobject", "readonly").objectStore("cobject");
+
+            //Selecionar somente o cobject que possui o cobject_id especificado
+            cobjectObjectStore.get(cobject_id).onsuccess = function (event) {
+                var result = event.target.result;
+                if (result) {
+                    //Encontrou o cobject
+                    cobject = result;
+                    callBack(cobject);
+                } else {
+                    //Não encontrou o cobject
+                    callBack(cobject);
+                }
+
+            }
+
+        }
+        DBsynapse.onblocked = function (event) {
+            // Se existe outra aba com a versão antiga
+            window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+        }
+    }
+    
+
+    //Pesquisar Turma específica
     this.findClassroomById = function (classroom_id, callBack) {
 
         window.indexedDB = self.verifyIDBrownser();
