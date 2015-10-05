@@ -402,10 +402,13 @@ var DomCobject = function (cobject, idx) {
         if (currentElement.type === 'multimidia') {
             var properties = "var properties = {";
             $.each(currentElement.generalProperties, function (i, item) {
+                //Realiza o scape de aspas
+                var value = item['value'].replace("'","");
+                value = value.replace('"', '');
                 if (item['name'] === 'library_type') {
-                    strBuild_library_type = "build_" + item['value'];
+                    strBuild_library_type = "build_" + value;
                 } else {
-                    properties += "'" + item['name'] + "':'" + item['value'] + "',";
+                    properties += "'" + item['name'] + "':'" + value + "',";
                 }
             });
             properties += "};";
