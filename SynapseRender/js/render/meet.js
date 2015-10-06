@@ -235,6 +235,7 @@ this.Meet = function (options) {
 
 
             domCobjectBuild.html(self.domCobject.buildAll());
+            
             //Por último a div de ferramentas
             domCobjectBuild.append(self.buildToolBar);
 

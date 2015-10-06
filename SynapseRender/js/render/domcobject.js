@@ -82,7 +82,7 @@ var DomCobject = function (cobject, idx) {
                 var col = $(this).attr('col');
                 $(".PLC-table td[row=" + row + "][col=" + col + "]").append($(this));
             });
-
+            
             var side = 'left';
             $(".PLC.group.build_image").each(function (i, v) {
                 $("." + side + "-images").append($(this));
@@ -180,7 +180,7 @@ var DomCobject = function (cobject, idx) {
                 var leftDiv = "<div class='left-images'></div>";
                 var middleDiv = "<div class='middle-words'>";
                 middleDiv += '<table class="' + template + '-table">';
-                for (var i = -1; i < 5; i++) {
+                for (var i = -1; i < 6; i++) {
                     middleDiv += "<tr>";
                     for (var j = -1; j < 10; j++) {
                         var html = "";
@@ -660,6 +660,7 @@ var DomCobject = function (cobject, idx) {
             }
 
         }
+        
         self.currentElementType = build_type;
         self.domElement = $(html);
         return self.domElement;
