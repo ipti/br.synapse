@@ -179,6 +179,9 @@ var DomCobject = function (cobject, idx) {
                 var domElementASK = $('<div class="ask" style="width:100%"></div>');
                 var leftDiv = "<div class='left-images'></div>";
                 var middleDiv = "<div class='middle-words'>";
+                
+                middleDiv +="<div><i class='fa fa-undo refleshQuestion'></i></div>";
+                
                 middleDiv += '<table class="' + template + '-table">';
                 for (var i = -1; i < 6; i++) {
                     middleDiv += "<tr>";
