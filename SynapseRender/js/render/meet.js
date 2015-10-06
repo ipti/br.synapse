@@ -300,7 +300,7 @@ this.Meet = function (options) {
 
     this.loadNextCobject = function (needScoredCalculator) {
         //Carregar a próxima atividade, se for permitido!
-        
+
         var idxNextCobject = self.getIdxArrayCobjectsIDs(self.domCobject.cobject.cobject_id) + 1;
         var nextCobjectID = self.cobjectsIDs[idxNextCobject];
 
@@ -316,7 +316,7 @@ this.Meet = function (options) {
                 self.domCobjectBuild(nextCobjectID);
                 //Verificar o nível do próximo Cobject
                 self.scoreCalculator(needScoredCalculator);
-                
+
                 //Mostrar a primeira Questão deste Próximo Cobject
                 var selector_cobject = '.cobject';
                 $(selector_cobject + ':eq(0)').addClass('currentCobject');
@@ -326,7 +326,7 @@ this.Meet = function (options) {
                 $(selector_cobject + '.currentCobject, ' + selector_cobject +
                         ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
                         ' .currentPiece').show();
-                
+
 
             } else {
                 //Finalizou as Atividades do Ano Anterior ao ano corrente do estudante.
@@ -408,7 +408,7 @@ this.Meet = function (options) {
                             isNextCobject = true;
                             //Carrega o Cobject se permitido
                             self.loadNextCobject(true);
-                            
+
                         } else {
                             //Acabou todos os Cobjets, ATIVIDADE JÁ FINALIZADA
                             self.isFinalBlock = true;
@@ -427,7 +427,7 @@ this.Meet = function (options) {
 
             }
 
-           
+
 
             //Se NÃO for o final do bloco
             //Existe uma próxima peça neste CObject
@@ -600,7 +600,7 @@ this.Meet = function (options) {
                         if (self.hasNextCobject()) {
                             //Carrega próxima atividade se permitido
                             self.loadNextCobject(true);
-                            
+
                         } else {
                             //Finalizou o Bloco de Atividades
                             self.messageFinishedLevel();
@@ -1346,41 +1346,50 @@ this.Meet = function (options) {
      * @returns {void}
      */
     this.init_PLC = function () {
-        $('input.PLC-input').attr('disabled','disabled');
-         
+        $('input.PLC-input').attr('disabled', 'disabled');
+
         var elementsImagePiece = $('div.PLC.group').find('div.elementImage');
         elementsImagePiece.css('cursor', 'pointer');
-        
-        elementsImagePiece.on('tap', function(){
+
+        elementsImagePiece.on('tap', function () {
             var currentPiece = $('.currentPiece');
-            currentPiece.find('div.PLC.group').find('div.elementImage').removeClass('selectedItem');
+            var elementsImagePiece = currentPiece.find('div.PLC.group').find('div.elementImage');
+            elementsImagePiece.removeClass('selectedItem');
+            var inputsPLC = currentPiece.find('.PLC-input');
+            inputsPLC.attr('disabled', 'disabled');
+
             $(this).addClass('selectedItem');
             var wordClicked = $(this).attr('word');
-            
+
             //Habilitar todos os inputs que referente à apalavra da imagem clicada
-            currentPiece.find('.PLC-input').each(function(){
-                if($(this).attr('word') == wordClicked){
-                    $(this).removeAttr('disabled');
+            currentPiece.find('.PLC-input[word=' + wordClicked + ']').each(function (idx) {
+                if (idx == 0) {
+                    $(this).focus();
                 }
+                $(this).removeAttr('disabled');
             });
-            
+
+
         });
-        
-        
-        
+
+
+
         $('input.PLC-input').on('keyup', function (e) {
-            if (e.keyCode === 8) {
-                $(this).attr('value', "");
-                var inputs = $(this).closest('.PLC-table').find(':input');
-                inputs.eq(inputs.index(this) - 1).focus();
-            } else if (!self.isEmpty($(this).val())) {
+//            if (e.keyCode === 8) {
+//                console.log('8');
+//                $(this).attr('value', "");
+//                var inputs = $(this).closest('.PLC-table').find(':input');
+//                inputs.eq(inputs.index(this) - 1).focus();
+//            } 
+                
+            if (!self.isEmpty($(this).val())) {
                 var val = $(this).attr('value');
                 if (val === ' ') {
                     $(this).attr('value', '');
                 } else {
                     $(this).attr('value', val.toUpperCase());
-
-                    var inputs = $(this).closest('.PLC-table').find(':input');
+                    var inputs = $(this).closest('.PLC-table').
+                            find('input:not(:disabled):not([readonly])');
                     inputs.eq(inputs.index(this) + 1).focus();
                 }
             }
@@ -1395,10 +1404,22 @@ this.Meet = function (options) {
                 $('.nextPiece').hide();
             }
         });
+
         $('input.PLC-input').on('focus', function () {
-            if (!$(this).is('[readonly]'))
+            if (!$(this).is('[readonly]')) {
+                $(this).data('value', $(this).val());
                 $(this).attr('value', '');
+            }
         });
+
+        $('input.PLC-input').on('focusout', function () {
+            if (!$(this).is('[readonly]')) {
+                if ($(this).val() == '') {
+                    $(this).attr('value', $(this).data('value'));
+                }
+            }
+        });
+
     };
 
     //Inicializa os eventos do template Desenho
