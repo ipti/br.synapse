@@ -236,7 +236,7 @@ this.Meet = function (options) {
 
 
             domCobjectBuild.html(self.domCobject.buildAll());
-            
+
             //Por último a div de ferramentas
             domCobjectBuild.append(self.buildToolBar);
 
@@ -249,7 +249,7 @@ this.Meet = function (options) {
             //Inicia os eventos somente após a inclusão do html na dom
             self.beginEvents();
             // Render Ready! 
-            if(!isClockStarted){
+            if (!isClockStarted) {
                 isClockStarted = true;
                 self.countTime($('.info-time .info-text'));
             }
@@ -478,6 +478,38 @@ this.Meet = function (options) {
             //Atividade Já Finalizada !
             self.messageFinishedLevel();
         }
+
+        if (self.domCobject.cobject.template_code == 'PLC'
+                || self.domCobject.cobject.template_code == 'DIG'
+                || self.domCobject.cobject.template_code == 'DES') {
+            $('.refreshQuestion').on('tap', function () {
+                var currentPiece = $('div.currentPiece');
+                if (self.domCobject.cobject.template_code == 'PLC') {
+                    var inputsPlc = currentPiece.find('input.PLC-input:not([readonly])');
+                    inputsPlc.val('');
+                    inputsPlc.data('value', '');
+                }
+
+                if (self.domCobject.cobject.template_code == 'DIG') {
+                    //Zerar as Colunas
+                    var colsPlc = currentPiece.find('.DIG-table').find('td');
+                    colsPlc.removeClass('firstSelected');
+                    colsPlc.removeClass('lastSelected');
+
+                    //Zerar os HighLight
+                    var highLightPlc = currentPiece.find('.DIG-table').find('div.digHighlight');
+                    highLightPlc.attr('style', '');
+                    highLightPlc.removeClass('currentSelected');
+                    highLightPlc.removeClass('selected');
+                    highLightPlc.removeAttr('posstart');
+                    highLightPlc.removeAttr('posfinish');
+                }
+                
+                //Esconde o NextPiece
+                $('.nextPiece').hide();
+            });
+        }
+
 
 
     };
@@ -1382,7 +1414,7 @@ this.Meet = function (options) {
 //                var inputs = $(this).closest('.PLC-table').find(':input');
 //                inputs.eq(inputs.index(this) - 1).focus();
 //            } 
-                
+
             if (!self.isEmpty($(this).val())) {
                 var val = $(this).attr('value');
                 if (val === ' ') {
@@ -2722,7 +2754,7 @@ this.Meet = function (options) {
 
     //Contador de Tempo de cada Meet
 
-    this.countTime = function (tag) { 
+    this.countTime = function (tag) {
         //A cada segundo realiza a recursividade
         //Dando a cada chamada recursiva da função, 1s de intervalo
         if (self.isset(tag)) {

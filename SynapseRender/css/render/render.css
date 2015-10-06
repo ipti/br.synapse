@@ -151,7 +151,7 @@ fieldset{
     font-size: 35px;
     line-height: 35px;
     height: 180px !important;
-    width: 600px;
+    width: 800px;
     margin: 0 auto;
     position: relative;
 }
@@ -380,6 +380,13 @@ fieldset{
     width: 100px;
     height: auto;
     cursor: pointer;
+    float: left;
+}
+
+.question-container.build_sound.build_text > .element-question {
+    text-align: left;
+    margin-left: 110px;
+    margin-top: 10px;
 }
 
 /** Dropdown **/
@@ -450,4 +457,12 @@ fieldset{
     width: 672px;
     padding: 5px 15px;
     font-size: 25px;
+}
+
+.refreshQuestion {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 35px !important;
+    cursor:pointer;
 }

@@ -338,7 +338,9 @@ input.PLC-input:read-only{
 .middle-words{
     width:60%;
     float:left;
+    position: relative;
 }
+
 .middle-words table, .left-images div, .right-images div{
     margin: 0 auto;
     position: relative;
