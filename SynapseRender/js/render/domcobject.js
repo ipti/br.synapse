@@ -464,7 +464,8 @@ var DomCobject = function (cobject, idx) {
     };
 
     this.buildElement_PRE = function () {
-        var html_Answer = "<input type='text' class='text' autocomplete='off'>";
+        var html_Answer = "<input type='text' class='text' autocomplete='off'/>";
+        self.currentElementType = "build_text";
         return html_Answer;
     };
 

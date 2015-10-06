@@ -25,6 +25,7 @@ this.Meet = function (options) {
 
     //================
     var self = this;
+    var isClockStarted = false;
     this.isLoadState = false;
     //Primeira peça mostrada na tela no Encontro Corrente
     this.firstPieceCurrentMeet = null;
@@ -247,7 +248,10 @@ this.Meet = function (options) {
             //Inicia os eventos somente após a inclusão do html na dom
             self.beginEvents();
             // Render Ready! 
-            self.countTime($('.info-time .info-text'));
+            if(!isClockStarted){
+                isClockStarted = true;
+                self.countTime($('.info-time .info-text'));
+            }
 
         });
     };
@@ -2696,13 +2700,13 @@ this.Meet = function (options) {
 
     //Contador de Tempo de cada Meet
 
-    this.countTime = function (tag) {
+    this.countTime = function (tag) { 
         //A cada segundo realiza a recursividade
         //Dando a cada chamada recursiva da função, 1s de intervalo
         if (self.isset(tag)) {
             self.tag_time = tag;
         }
-        setTimeout(function () {
+        setInterval(function () {
             self.time++;
             var current_time = self.time;
 
@@ -2731,7 +2735,6 @@ this.Meet = function (options) {
                 segs = '0' + segs;
             }
             self.tag_time.html(hours + ':' + mins + ':' + segs);
-            self.countTime();
         }, 1000);
     };
 
