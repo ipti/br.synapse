@@ -153,6 +153,7 @@ fieldset{
     height: 180px !important;
     width: 600px;
     margin: 0 auto;
+    position: relative;
 }
 
 .pieceSetInfo .elementImage {
@@ -366,7 +367,7 @@ fieldset{
     position: absolute;
     width: 67px;
     height: auto;
-    left: 292px;
+    left: 15px;
     cursor: pointer;
 }
 
@@ -441,7 +442,6 @@ fieldset{
 /** Template PRE **/
 .PRE fieldset {
     margin: auto;
-    width: 720px;
     text-align: center;
 }
 .PRE input {
