@@ -2398,7 +2398,13 @@ function editor() {
                             //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                             ElementID = $(this).attr('id');
                             ElementID_BD = $(this).attr('idBD');
-                            ElementFlag_Updated = $(this).attr('updated');
+                            
+                            if(parent.COTemplateTypeIn(parent.TXT)){
+                                //Atualiza todos elementos do TXT
+                                ElementFlag_Updated = "1";
+                            }else{
+                                ElementFlag_Updated = $(this).attr('updated');
+                            }
 
                             currentGroup = $(this).closest('div[group]').attr('group');
                             //get Atributo position
@@ -2477,7 +2483,7 @@ function editor() {
                                     ID_BD: ElementID_BD,
                                     updated: ElementFlag_Updated
                                 };
-
+                                
 
                                 if (isElementPieceSet) {
                                     data["pieceSetID"] = idBDLastPieceSet;
@@ -2990,6 +2996,7 @@ function editor() {
 
                                                                             // Só Salva ou faz Update dos elementos que foram alimentados
                                                                             var limit_element = "";
+                                                                            // || (parent.COTemplateTypeIn(parent.TXT) && parent.isload)
                                                                             if (!parent.COTemplateTypeIn(parent.TXT)) {
                                                                                 limit_element = '[updated="1"]';
                                                                             }
