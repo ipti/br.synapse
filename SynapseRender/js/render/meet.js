@@ -870,14 +870,14 @@ this.Meet = function (options) {
             if (ask_answer.hasClass('ask')) {
                 if (!$(this).hasClass('ael_clicked')) {
                     $('.nextPiece').hide();
-                    $(this).css('border', '3px dashd #FBB03B');
+                    $(this).css('border', '3px dashed #FBB03B');
                     $(this).siblings().hide();
                     // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '1');
                     $(this).addClass('ael_clicked');
                     $(this).addClass('last_clicked');
                 } else {
-                    $(this).css('border', '3px dashd transparent');
+                    $(this).css('border', '3px dashed transparent');
                     $(this).siblings(':not(.ael_clicked)').show();
                     // $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').hide(500);
                     $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
@@ -942,7 +942,7 @@ this.Meet = function (options) {
                 }
 
                 $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity', '1');
-                $(this).css('border', '3px dashd #FBB03B');
+                $(this).css('border', '3px dashed #FBB03B');
                 $(this).siblings().css('opacity', '0');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
                 $(this).siblings('.drag').removeClass('last_clicked');
@@ -1026,7 +1026,7 @@ this.Meet = function (options) {
                 }
 
                 $(this).closest('.ask').siblings('.answer').children('.drop').css('opacity', '1');
-                $(this).css('border', '3px dashd #FBB03B');
+                $(this).css('border', '3px dashed #FBB03B');
                 $(this).siblings().css('opacity', '0');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').show(300);
                 $(this).siblings('.drag').removeClass('last_clicked');
