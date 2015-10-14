@@ -5,20 +5,20 @@
         <meta name="viewport" content="width=device-width; initial-scale=1.2; maximum-scale=1.2; target-densitydpi=medium-dpi; user-scalable=no" />
         <title>Entrar no Synapse</title>
         <link rel="icon" type="image/png" href="icons/icon-48.png" /> 
-        
+
         <link rel="stylesheet" type="text/css" href="css/reset.css">
         <link rel="stylesheet" type="text/css" href="css/render/global.css">
         <link rel="stylesheet" type="text/css" href="css/render/login.css">
         <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
         <script src="js/jquery/jquery-1.7.2.js"></script>
-        
+
         <script src="js/jquery/jquery.ui.core.js"></script>
         <script src="js/jquery/jquery.ui.widget.js"></script>
         <script src="js/jquery/jquery.ui.mouse.js"></script>
         <script src="js/jquery/jquery.ui.draggable.js"></script>
         <script src="js/jquery/jquery.ui.droppable.js"></script>
-        
-          <!-- JQUERY FOR MOBILE-->
+
+        <!-- JQUERY FOR MOBILE-->
         <script>
             //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
             $(document).bind('mobileinit', function () {
@@ -29,39 +29,41 @@
         </script>
         <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
         <!-- ======= -->
-        
+
         <script type="text/javascript" src="js/render/meet.js"></script>
         <script type="text/javascript" src="js/render/domcobject.js"></script>
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
-       
+
         <!-- Abrir Script do renderDB --> 
         <script type="text/javascript" src="db/renderDB.js"></script>
+        <script type="text/javascript" src="db/onlineRenderDB.js"></script>
+        
         <script>
             //Verificar se é o RenderOnline
             var isOnline = false;
-            if(sessionStorage.getItem("isOnline") !== null &&
-                     sessionStorage.getItem("isOnline") == 'true'){
+            if (sessionStorage.getItem("isOnline") !== null &&
+                    sessionStorage.getItem("isOnline") == 'true') {
                 //Render Online
                 isOnline = true;
-             }
-            
-            
-            if (sessionStorage.getItem("authorization") != null 
-                && sessionStorage.getItem("authorization") == 'true') {
+            }
+
+
+            if (sessionStorage.getItem("authorization") != null
+                    && sessionStorage.getItem("authorization") == 'true') {
                 //Usuário Logado
                 location.href = "select.html";
             }
-            $(document).ready(function() {
+            $(document).ready(function () {
                 //Retirando a div loading, que o jquery mobile adicionou
                 $('.ui-loader').hide();
-                
-                
-                $('#loginform').keypress(function(event){
-                    if (event.keyCode === 13){
+
+
+                $('#loginform').keypress(function (event) {
+                    if (event.keyCode === 13) {
                         $('.login-button').trigger('mousedown');
                     }
                 })
-                
+
                 //animação
 //                $('.bg-login').hide();
 //                $('#login-form').hide();
@@ -72,32 +74,47 @@
 //                });
 //                $('.bg-login').fadeIn(3200, "linear", function(){
 //                });
-                
+
                 if (window.openDatabase) {
                     console.log("Suporta BD-HTML5");
                 }
 
-                $('#entrar').bind('mousedown', function() {
-                    //Criar Objeto para MAnipulação do Banco
-                    var db = new DB();
-                    db.login($('#username').val(), $('#password').val(), function(){
-                        var authorization = sessionStorage.getItem("authorization");
-                        var login_personage_name = sessionStorage.getItem("login_personage_name");
-                        if (authorization == 'true') {
-                            //Usuário Logado
-                            if(login_personage_name == "admin"){
-                                 location.href = "import.html";
-                            }else{
-                                 location.href = "select.html";
+                $('#entrar').bind('mousedown', function () {
+                    
+                    function callBackLogin (){
+                         var authorization = sessionStorage.getItem("authorization");
+                            var login_personage_name = sessionStorage.getItem("login_personage_name");
+                            if (authorization == 'true') {
+                                //Usuário Logado
+                                if (login_personage_name == "admin") {
+                                    location.href = "import.html";
+                                } else {
+                                    location.href = "select.html";
+                                }
+
+                            } else {
+                                //Remove a sessão do authorization
+                                sessionStorage.removeItem("authorization");
+                                //Usuário ou Senha Incorretos
+                                $('#error').css('opacity', '1');
                             }
-                           
-                        }else{
-                            //Remove a sessão do authorization
-                            sessionStorage.removeItem("authorization");
-                            //Usuário ou Senha Incorretos
-                            $('#error').css('opacity','1');
-                        }
-                    });
+                    }
+                    
+                    //Verificar se NÃO é o RenderOnline
+                    if (sessionStorage.getItem("isOnline") === null ||
+                            sessionStorage.getItem("isOnline") == 'false') {
+                        //Render Offline
+                        //Criar Objeto para Manipulação do Banco
+                        var db = new DB();
+                        db.login($('#username').val(), $('#password').val(), callBackLogin);
+
+                    }else{
+                        //Render Online
+                        //Precisa Realizar Login Online
+                        var dbOn = new DBOn();
+                        dbOn.login($('#username').val(), $('#password').val(), callBackLogin);
+                        
+                    }
                 });
             });
         </script>

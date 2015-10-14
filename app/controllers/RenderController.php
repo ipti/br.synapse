@@ -324,7 +324,7 @@ class RenderController extends Controller {
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
                     'importPeformance', 'getSchool', 'getCobject_blocks', 'getDisciplines',
-                    'SynapseRender'),
+                    'SynapseRender', 'login'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -348,7 +348,7 @@ class RenderController extends Controller {
     public function actionExportToOffline() {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             $array_actorsOwnUnity = [];
-            
+
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
                 $school = Unity::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
@@ -368,7 +368,7 @@ class RenderController extends Controller {
 
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
-            }else{
+            } else {
                 //Escola Não selecionada
                 $array_actorsOwnUnity = [];
             }
@@ -397,9 +397,8 @@ class RenderController extends Controller {
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
             //Somente obterá Cobjects(atividades) únicos em cada bloco, ou seja não haverá repetição de atividades num mesmo bloco.
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
-                    array('cobject_block_id' => $array_cobjectBlock[0]['id']), 
-                    array('group'=> "cobject_id"));
-            
+                    array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
+
             $array_cobject_cobjectBlocks = array();
 
             foreach ($cobject_cobjectBlocks as $idx => $cobject_cobjectBlock):
@@ -542,16 +541,16 @@ class RenderController extends Controller {
 
     public function actionIndex() {
         /*
-        if (Yii::app()->session['personage'] == "Tutor") {
-            $this->redirect("/render/SynapseRender/index.html");
-            
-        } else {
-            $this->redirect("/render/meet");
-        }
+          if (Yii::app()->session['personage'] == "Tutor") {
+          $this->redirect("/render/SynapseRender/index.html");
+
+          } else {
+          $this->redirect("/render/meet");
+          }
          */
-        
-         //Redirecina para o render, passando a flag indicando que será Online   
-         $this->redirect(array('/themes/SynapseRender/index.html?isOnline=true'));
+
+        //Redirecina para o render, passando a flag indicando que será Online   
+        $this->redirect(array('/themes/SynapseRender/index.html?isOnline=true'));
     }
 
     public function actionTestepreview() {
@@ -963,6 +962,55 @@ class RenderController extends Controller {
         header('Content-type: application/json');
         echo json_encode($json);
         exit;
+    }
+
+    //Funções para Render DB Online
+    public function actionLogin() {
+        $json = array();
+        $login = isset($_POST['login']) ? $_POST['login'] : null;
+        $password = isset($_POST['password']) ? $_POST['password'] : null;
+
+        if ($login !== null && $password !== null) {
+            //Verificar se o usuário e senha são válidos
+            $person = Person::model()->findByAttributes(array('login' => $login, 'password' => $password));
+            if (count($person) > 0) {
+                //Login e Senha estão corretos
+                //
+                //Actor
+                $actor = Actor::model()->findByAttributes(array('person_id' => $person['id']));
+                if (count($actor) > 0) {
+                    //Essa pessoa possui um personagem. Então pode realizar Login
+                    $json['authorization'] = true;
+                    $json['actor']['name'] = $person['name'];
+
+                    $json['actor']['id'] = $actor['id'];
+                    $json['actor']['unity_id'] = $actor['unity_id'];
+
+                    //Personage
+                    $personage = Personage::model()->findByPk($actor['personage_id']);
+                    $json['actor']['personage_name'] = $personage['name'];
+                    
+                    
+                } else {
+                    //Pessoa Sem Personagem
+                    $json['actor'] = null;
+                    $json['authorization'] = false;
+                }
+            } else {
+                //Login e/ou a Senha está incorreta
+                $json['actor'] = null;
+                $json['authorization'] = false;
+            }
+        } else {
+            $json['actor'] = null;
+            $json['authorization'] = false;
+        }
+
+
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($json);
     }
 
 }
