@@ -1,76 +1,6 @@
 
 <?php
 
-/*
-  @done-1 - Correções nas condicionais do método loadCobject
-  @done-2 - Agrupar elementos no Json
-  @done-3 - Criar Arrays para a tree da atividade para todos os templates
-  @done 4 - Criação do método no controller para acesso ao novo render
-  @done 5 - Criar função ajax para carregar um Cobject específico.
-  @done 6 - Corrigir o que é array e objeto nos grupos de elementos
-  @done 7 - Corrigir o que é array e objeto nos elementos
-  @done 8 - Construção da estrutura principal do build_image
-  @done 9 - Criação do render.css
-  @done 10 - Listar html básico do elememt Img
-  @done 11 - Listar html básico do elememt sound
-  @done 12 - Listar html básico do element Text
-  @done 13 - Criação de um novo layout para o render
-  @done 14 - Correção do seletor de elementos img do render.css
-  @todo 15 - Corrigir a substituição de elementos de mesmo grupo na rendenrização do elemento na tela
-  @done 16 - Corrigir o contador de elementos no Json do getCobjectID do RenderController
-  @done 17 - Verificar se o array de elementos no Json já foi para criar o array de elementos do getCobjectID do RenderController
-  @done 18 - Criação do buildInfo_Cobject, para apresentar informações do CObject corrente.
-  @done 19 - Criação de classes css para a div de Informações do Cobject
-  @done 20 - Separar visualmente os pieceSets.
-  @done 21 - Separar o conteúdo do CObject das Informações do CObject
-
-  @done 22 - Criação da função buildToolBar para adicionar ferramentas para usar durante a atividade
-  @done 23 - Adicionar o botão nextScreen para viajar nas telas
-  @done 24 - Criação do Script events.js para a criação das funcionalidade de cada evento chamado no render
-  @done 25 - Criação da função para o botão nextSreen em events
- * @done 26 - Iniciar todas as screens como hide, com exeção do '.currentSreen'
- * @done 27 - Criação do buildInfo_PieceSet, para apresentar a descrição dos PieceSets.
- * @done 28 - Chamar o script de eventos, events.js somente depois de caregado todo o cobjects
- * @done 29 - Definir destaque para os grupos de elementos, no onclick
- * @done 30 - Construir style para organizar horizontalmente as divs dos grupos de  elementos
- * @done 31 - Torna os divs[group] do answer do AEL, hide quando iniciar o render
- * @done 32 - Definir opacidade quando clica um ou duas vezes
- * @done 33 - Quando clicar adcionar classe que indica o clique em cada elemento
- * @done 34 - Quando clicar em elementos do  ask - AEL, dá um hidden nos irmãos visíveis
- * @done 35 - Quando clicar em elementos do  ask - AEL, dá um show nos divs[group] do answer
- * @done 36 - Quando clicar em elementos do answer - AEL, dá um hidden na divs[group] do answer
- * @done 37 - Quando clicar em elementos do answer - Dá um show em todas as divs[group] que não estão 'clicadas'
- * @done 38 - Voltar o click do elemento ask-AEL, e assim escolher outro element ask
- * @done 39 - Criação da classe Meet.js 
- * @done 40 - Criação do método showMessage no Meet.js
-
- * @done 41 - Deixar o CObject como atributo de 'delegação' no Meet.js
- * @done 42 - Criação do setDomCobjects
- * @done 43 - Adcionar o headMeet
- * @done 44 - Criar o 'construtor' com informações do aluno,turma,escola
- * @done 45 - (antigo) Criação da função isset no meet.js
- * 
- * @todo 46 - Transpor as funções do events.js para meet.js
- * @todo 47 - Criação da função de init_Common para eventos 
- * @todo 48 - Criação da função init_AEL
- * @todo 49 - Criação da função isMatch para verificar se os elementos estão em right matched
- * @todo 50 - Criação da função shuffleArray para embaralhar um array qualquer
- * @todo 51 - 
- * @todo 52 - 
- * @todo 53 - 
- * 
- * 
- * 
- * 
- * 
-  @todo 54 - Criar Login para o Render Somente com o JS(CPF + SENHA[Data_Nascimento])
- * 
- * 
-  today:6:6;
-
- * 
- */
-
 class RenderController extends Controller {
 
     public $layout = 'render';
@@ -393,7 +323,8 @@ class RenderController extends Controller {
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
-                    'importPeformance', 'getSchool', 'getCobject_blocks', 'getDisciplines'),
+                    'importPeformance', 'getSchool', 'getCobject_blocks', 'getDisciplines',
+                    'SynapseRender'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -610,11 +541,17 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
+        /*
         if (Yii::app()->session['personage'] == "Tutor") {
-            $this->redirect("/render/filter");
+            $this->redirect("/render/SynapseRender/index.html");
+            
         } else {
             $this->redirect("/render/meet");
         }
+         */
+        
+         //Redirecina para o render, passando a flag indicando que será Online   
+         $this->redirect(array('/themes/SynapseRender/index.html?isOnline=true'));
     }
 
     public function actionTestepreview() {
