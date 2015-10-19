@@ -9,9 +9,6 @@ if (sessionStorage.getItem("isOnline") !== null &&
 
         var self = this;
 
-
-
-
         this.login = function (login, password, CBposLogin) {
             if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
 
