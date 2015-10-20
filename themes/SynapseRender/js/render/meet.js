@@ -22,7 +22,6 @@ this.Meet = function (options) {
     LAST_PAGE = "Última Página";
     
     
-    
     //Strings Html
     NEXT_PIECE = '<img class="answer-ok" src="img/icons/ok.png">';
 
@@ -77,7 +76,7 @@ this.Meet = function (options) {
     this.DB_synapse = new DB();
     //======================================
     
-    //Array com as principais informações de cada Cobject
+    //Array com as principais informações de cada Cobject do bloco selecionado
     this.cobjects = new Array();
 
     //Obter bloco a partir da disciplina selecionada
@@ -140,18 +139,17 @@ this.Meet = function (options) {
                                 //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
                                 var StartIdx = 0;
                                 var startCobjectYear = self.studentCurrentYear - 1;
-
-                                self.DB_synapse.findAllMinCobjects(function (cobjects) {
-                                    //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
-                                    for (var idx in cobjects) {
-                                        var currentCobject = cobjects[idx];
+                                
+                                for(var idx in self.cobjects){
+                                     //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
+                                     var currentCobject =  self.cobjects[idx];
                                         if (currentCobject['year'] == startCobjectYear) {
                                             //Encontrou o Cobject do ano Anterior a do Aluno
                                             lastCobject_id = currentCobject['cobject_id'];
                                             //Finaliza a pesquisa, pois incia sempre do 1° 
                                             break;
                                         }
-                                    }
+                                }
 
                                     //Inicia com o cobject encontrado
                                     //Construçao do DOM do 1° cobject de cada Meet
@@ -159,7 +157,7 @@ this.Meet = function (options) {
                                     //Depois inicia os eventos globais 
                                     self.init_eventsGlobals();
 
-                                });
+                               
                             } else {
                                 //Carrega o 1° Cobject, referente ao 1° Ano
                                lastCobject_id = self.cobjects[0]['cobject_id'];
@@ -183,11 +181,11 @@ this.Meet = function (options) {
     }
 
 
-    this.setCobjects = function (cobjectsIDs) {
-        //Atribui ao array de CobjectsIDs
+    this.setCobjects = function (cobjectIDsCurrentBlock) {
+        //Atribui ao array de cobjects do bloco corrente
         //Agora atribui um novo array que possuirá todos cobjects com seus principais atributos
-        for (var idx in cobjectsIDs) {
-            self.DB_synapse.getCobject(cobjectsIDs[idx], function (json_cobject) {
+        for (var idx in cobjectIDsCurrentBlock) {
+            self.DB_synapse.getCobject(cobjectIDsCurrentBlock[idx], function (json_cobject) {
                 //Para cada CobjectID
                 var currentCobject = new Array(); 
                 currentCobject['cobject_id'] = json_cobject.cobject_id;
@@ -222,6 +220,11 @@ this.Meet = function (options) {
                 idxCobject = idx;
                 break;
             }
+        }
+        
+         if(typeof idxCobject === "string"){
+            //Se for String, transforma para inteiro
+            idxCobject = parseInt(idxCobject);
         }
         
         return idxCobject;
@@ -1998,9 +2001,8 @@ this.Meet = function (options) {
                     if (self.hasPrevCobject()) {
 
                         var idxPrevCobject = self.getIdxArrayCobjects(self.domCobject.cobject.cobject_id) - 1;
-                        var prevCobjectID = self.cobjects[idxPrevCobject]['cobject_id'];
-
-                        isTXT = self.cobjects[prevCobjectID]['template_code'] === 'TXT';
+                        var prevCobject = self.cobjects[idxPrevCobject];
+                        isTXT = prevCobject['template_code'] === 'TXT';
 
                     } else {
                         //Está na Primeira Peça
