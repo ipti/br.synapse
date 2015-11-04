@@ -332,6 +332,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 //===============================================
 
                 //Criar o ObjectStore específico do RENDER
+                // state_actor
                 var state_actorStore = db.createObjectStore("state_actor", {
                     keyPath: "id",
                     autoIncrement: true
@@ -344,7 +345,23 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
+                // stop_point_diagnostic
+                var stop_point_diagnosticStore = db.createObjectStore("stop_point_diagnostic", {
+                    keyPath: "id",
+                    autoIncrement: true
+                });
 
+                stop_point_diagnosticStore.createIndex("actor_id", "actor_id", {
+                    unique: false
+                });
+                stop_point_diagnosticStore.createIndex("act_goal_content_id", "act_goal_content_id", {
+                    unique: false
+                });
+                
+                // falta o {mode => [activity, proficiency, train] }
+                
+                
+                
                 // Usando transação oncomplete para afirmar que a criação do objectStore 
                 // é terminada antes de adicionar algum dado nele.
                 schoolStore.transaction.oncomplete = function (event) {
@@ -435,6 +452,12 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                 act_script_contentStore.transaction.oncomplete = function (event) {
                     //Se for o último dos 9 então contruiu todos os schemas
+                    db.close();
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    console.log('Criou os Schemas');
+                }
+                
+                stop_point_diagnosticStore.transaction.oncomplete = function (event) {
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
