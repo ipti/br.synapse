@@ -209,17 +209,17 @@ if (sessionStorage.getItem("isOnline") === null ||
                 // Faltam cobject_id
 
                 //================================================
-                
+
                 //Criar Schema para os scripts(roteiros), contents e goals. E outro schema para relacionar
                 //os goals em seu content e os contents no seu respectivo script(Roteiro). 
-                
-              /*  act_goal {
-                    `id`,
-                    `name`,
-                    `degree_id`,
-                    `discipline_id`
-                }*/
-                
+
+                /*  act_goal {
+                 `id`,
+                 `name`,
+                 `degree_id`,
+                 `discipline_id`
+                 }*/
+
                 // cria um objectStore do act_goal
                 var act_goalStore = db.createObjectStore("act_goal", {
                     keyPath: "id"
@@ -228,15 +228,15 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_goalStore.createIndex("discipline_id", "discipline_id", {
                     unique: false
                 });
-                
-                 /* act_content {
-                    `id`,
-                    `content_parent`,
-                    `discipline_id`,
-                    `description`
-                } */
-                
-                 // cria um objectStore do act_content
+
+                /* act_content {
+                 `id`,
+                 `content_parent`,
+                 `discipline_id`,
+                 `description`
+                 } */
+
+                // cria um objectStore do act_content
                 var act_contentStore = db.createObjectStore("act_content", {
                     keyPath: "id"
                 });
@@ -244,15 +244,15 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_contentStore.createIndex("discipline_id", "discipline_id", {
                     unique: false
                 });
-                
-                
+
+
                 /* act_goal_content{
-                    `id`,
-                    `goal_id`,
-                    `content_id`
-                }  */
-                
-                 // cria um objectStore do act_goal_content
+                 `id`,
+                 `goal_id`,
+                 `content_id`
+                 }  */
+
+                // cria um objectStore do act_goal_content
                 var act_goal_contentStore = db.createObjectStore("act_goal_content", {
                     keyPath: "id"
                 });
@@ -264,17 +264,17 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_goal_contentStore.createIndex("content_id", "content_id", {
                     unique: false
                 });
-                
-                
-               /* act_script {
-                    `id`,
-                    `discipline_id`,
-                    `performance_index`,
-                    `father_content`
-                }
-                */
-                
-                 // cria um objectStore do act_script
+
+
+                /* act_script {
+                 `id`,
+                 `discipline_id`,
+                 `performance_index`,
+                 `father_content`
+                 }
+                 */
+
+                // cria um objectStore do act_script
                 var act_scriptStore = db.createObjectStore("act_script", {
                     keyPath: "id"
                 });
@@ -282,16 +282,16 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_scriptStore.createIndex("discipline_id", "discipline_id", {
                     unique: false
                 });
-                
-                
-               /* act_script_content {
-                    `id`,
-                    `content_id`,
-                    `script_id`,
-                    `status`
-                } */
-                
-                 // cria um objectStore do act_script_content
+
+
+                /* act_script_content {
+                 `id`,
+                 `content_id`,
+                 `script_id`,
+                 `status`
+                 } */
+
+                // cria um objectStore do act_script_content
                 var act_script_contentStore = db.createObjectStore("act_script_content", {
                     keyPath: "id"
                 });
@@ -299,13 +299,13 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_script_contentStore.createIndex("content_id", "content_id", {
                     unique: false
                 });
-                 //Criar Index para script_id
+                //Criar Index para script_id
                 act_script_contentStore.createIndex("script_id", "script_id", {
                     unique: false
                 });
-                
+
                 //==============================================================
-                
+
 
                 // cria um objectStore do cobject
                 var cobjectStore = db.createObjectStore("cobject", {
@@ -403,51 +403,50 @@ if (sessionStorage.getItem("isOnline") === null ||
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                
-                
-                 act_goalStore.transaction.oncomplete = function (event) {
+
+
+                act_goalStore.transaction.oncomplete = function (event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                
-                 act_contentStore.transaction.oncomplete = function (event) {
+
+                act_contentStore.transaction.oncomplete = function (event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                
-                 act_goal_contentStore.transaction.oncomplete = function (event) {
+
+                act_goal_contentStore.transaction.oncomplete = function (event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                
-                 act_scriptStore.transaction.oncomplete = function (event) {
+
+                act_scriptStore.transaction.oncomplete = function (event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                
-                 act_script_contentStore.transaction.oncomplete = function (event) {
+
+                act_script_contentStore.transaction.oncomplete = function (event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                
-                
+
+
 
                 useDatabase(db);
-                
-                
+
+
             }
         }
-
 
 
 
@@ -473,6 +472,81 @@ if (sessionStorage.getItem("isOnline") === null ||
                 unity.createdOffline = false;
             }
 
+            //Obter o goal, content e script do cobjects
+            var act_goals = new Array();
+            var act_contents = new Array();
+            var act_goal_contents = new Array();
+            var act_scripts = new Array();
+            var act_script_contents = new Array();
+
+            for (var idx in cobjects) {
+                var current_cobject = cobjects[idx];
+                //Objetivo corrente
+                var current_goal_id = current_cobject.goal_id;
+                var current_goal = current_cobject.goal;
+                var current_goal_discipline_id = current_cobject.goal_discipline_id;
+
+                //Conteúdo corrente
+                var current_content_id = current_cobject.content_id;
+                var current_content = current_cobject.content;
+                var current_content_discipline_id = current_cobject.content_discipline_id;
+
+                //Roteiro Corrente
+                var current_script_id = current_cobject.script_id;
+                var current_script_discipline_id = current_cobject.script_discipline_id;
+
+                //Na relação objetivo + conteúdo
+                var current_goal_content_id = current_cobject.goal_content_id;
+
+                //Na relação roteiro + conteúdo
+                var current_script_content_id = current_cobject.script_content_id;
+                var current_script_content_status = current_cobject.script_content_status;
+
+                //indexar array com o id do banco, para que não insira repetições;
+
+                act_goals[current_goal_id] = {
+                    id: current_goal_id,
+                    name: current_goal,
+                    discipline_id: current_goal_discipline_id
+                };
+
+                act_contents[current_content_id] = {
+                    id: current_content_id,
+                    name: current_content,
+                    discipline_id: current_content_discipline_id
+                };
+
+                act_scripts[current_script_id] = {
+                    id: current_script_id,
+                    discipline_id: current_script_discipline_id
+                };
+
+                act_goal_contents[current_goal_content_id] = {
+                    id: current_goal_content_id,
+                    goal_id: current_goal_id,
+                    content_id: current_content_id
+                };
+
+                act_script_contents[current_script_content_id] = {
+                    id: current_script_content_id,
+                    script_id: current_script_id,
+                    content_id: current_content_id,
+                    status: current_script_content_status
+                };
+
+
+            }
+
+
+            console.log(act_goals);
+            console.log(act_contents);
+            console.log(act_scripts);
+
+            console.log(act_goal_contents);
+            console.log(act_script_contents);
+
+
+
             var options = {
                 schools: schools,
                 unitys: unitys,
@@ -480,11 +554,33 @@ if (sessionStorage.getItem("isOnline") === null ||
                 disciplines: disciplines,
                 cobjectblock: cobjectblock,
                 cobject_cobjectblocks: cobject_cobjectblocks,
-                cobjects: cobjects
+                cobjects: cobjects,
+                act_goals: act_goals,
+                act_contents: act_contents,
+                act_scripts: act_scripts,
+                act_goal_contents: act_goal_contents,
+                act_script_contents: act_script_contents
+
             };
-            self.verifyExistBlock(options, function (schools, unitys, actors, disciplines, cobjectblock
-                    , cobject_cobjectblocks, cobjects, schoolsClassrooms, existBlock) {
+
+
+
+            self.verifyExistBlock(options, function (options, schoolsClassrooms, existBlock) {
                 //Call Back
+
+                var schools = options.schools;
+                var unitys = options.unitys;
+                var actors = options.actors;
+                var disciplines = options.disciplines;
+                var cobjectblock = options.cobjectblock;
+                var cobject_cobjectblocks = options.cobject_cobjectblocks;
+                var cobjects = options.cobjects;
+
+                var act_goals = options.act_goals;
+                var act_contents = options.act_contents;
+                var act_scripts = options.act_scripts;
+                var act_goal_contents = options.act_goal_contents;
+                var act_script_contents = options.act_script_contents;
 
                 if (!existBlock) {
                     //=================================================
@@ -536,6 +632,23 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                         //Importar Escolas e Turmas Offline
                         self.importSchoolsClassroomsOff(db, data_schoolsClassrooms);
+
+
+
+                        //Importar as act_goals
+                        self.importActGoals(db, act_goals);
+
+                        //Importar as act_contents
+                        self.importActContents(db, act_contents);
+
+                        //Importar as act_scripts
+                        self.importActScripts(db, act_scripts);
+
+                        //Importar as act_goal_contents
+                        self.importActGoalContent(db, act_goal_contents);
+
+                        //Importar as act_script_contents
+                        self.importActScriptContent(db, act_script_contents);
 
 
                         //==================================================
@@ -684,9 +797,77 @@ if (sessionStorage.getItem("isOnline") === null ||
             var listSchools = schoolClassrooms['schools'];
             var idxSchool = 0;
             self.addSchoolClassroomsOff(listSchools, idxSchool);
+        }
 
 
+        ;
 
+        ;
+
+        ;
+
+        ;
+
+        ;
+
+        //Importar as act_goals
+        this.importActGoals = function (db, act_goals) {
+            var ActGoalObjectStore = db.transaction("act_goal", "readwrite").objectStore("act_goal");
+            for (var i in act_goals) {
+                ActGoalObjectStore.add(act_goals[i]);
+            }
+            ActGoalObjectStore.transaction.oncomplete = function (event) {
+                db.close();
+                console.log("ActGoals IMPORTED!");
+            }
+        }
+
+        //Importar as act_contents
+        this.importActContents = function (db, act_contents) {
+            var ActContentObjectStore = db.transaction("act_content", "readwrite").objectStore("act_content");
+            for (var i in act_contents) {
+                ActContentObjectStore.add(act_contents[i]);
+            }
+            ActContentObjectStore.transaction.oncomplete = function (event) {
+                db.close();
+                console.log("ActContents IMPORTED!");
+            }
+        }
+
+        //Importar as act_scripts
+        this.importActScripts = function (db, act_scripts) {
+            var ActScriptObjectStore = db.transaction("act_script", "readwrite").objectStore("act_script");
+            for (var i in act_scripts) {
+                ActScriptObjectStore.add(act_scripts[i]);
+            }
+            ActScriptObjectStore.transaction.oncomplete = function (event) {
+                db.close();
+                console.log("ActScript IMPORTED!");
+            }
+        }
+
+        //Importar as act_goal_contents
+        this.importActGoalContent = function (db, act_goal_contents) {
+            var ActGoalContentObjectStore = db.transaction("act_goal_content", "readwrite").objectStore("act_goal_content");
+            for (var i in act_goal_contents) {
+                ActGoalContentObjectStore.add(act_goal_contents[i]);
+            }
+            ActGoalContentObjectStore.transaction.oncomplete = function (event) {
+                db.close();
+                console.log("ActGoalContent IMPORTED!");
+            }
+        }
+
+        //Importar as act_script_contents
+        this.importActScriptContent = function (db, act_script_contents) {
+            var ActScriptContentObjectStore = db.transaction("act_script_content", "readwrite").objectStore("act_script_content");
+            for (var i in act_script_contents) {
+                ActScriptContentObjectStore.add(act_script_contents[i]);
+            }
+            ActScriptContentObjectStore.transaction.oncomplete = function (event) {
+                db.close();
+                console.log("ActScriptContent IMPORTED!");
+            }
         }
 
 
@@ -1290,8 +1471,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                     //====================================
 
-                    callBack(options.schools, options.unitys, options.actors, options.disciplines, options.cobjectblock
-                            , options.cobject_cobjectblocks, options.cobjects, schoolsClassrooms, existBlock);
+                    callBack(options, schoolsClassrooms, existBlock);
 
                 };
                 blockStore.onerror = function (event) {

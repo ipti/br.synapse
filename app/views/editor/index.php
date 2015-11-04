@@ -43,12 +43,18 @@ if (isset($cobjectID)) {
                     . " theme, goal, degree_name, discipline FROM render_cobjects "
                     . "WHERE cobject_id = $cobjectID ;")->queryAll();
 
-    $name_commonType = $viewRenderCobjet[0]["cobject_type"];
-    $name_cobjectTemplate = $viewRenderCobjet[0]["template_name"];
-    $name_cobjectTheme = isset($viewRenderCobjet[0]["theme"]) && $viewRenderCobjet[0]["theme"] != "" ? $viewRenderCobjet[0]["theme"] : "SEM TEMA";
-    $name_actGoal = $viewRenderCobjet[0]["goal"];
-    $name_Discipline = $viewRenderCobjet[0]["discipline"];
-    $name_Degree = $viewRenderCobjet[0]["degree_name"];
+    if (count($viewRenderCobjet) != 0) {
+        $name_commonType = $viewRenderCobjet[0]["cobject_type"];
+        $name_cobjectTemplate = $viewRenderCobjet[0]["template_name"];
+        $name_cobjectTheme = isset($viewRenderCobjet[0]["theme"]) && $viewRenderCobjet[0]["theme"] != "" ? $viewRenderCobjet[0]["theme"] : "SEM TEMA";
+        $name_actGoal = $viewRenderCobjet[0]["goal"];
+        $name_Discipline = $viewRenderCobjet[0]["discipline"];
+        $name_Degree = $viewRenderCobjet[0]["degree_name"];
+    }else{
+        echo "Atividade Não encontrada ou Não pertence a algum Roteiro !";
+        exit();
+    }
+    
 }
 
 $this->breadcrumbs = array(
