@@ -107,11 +107,13 @@ $(document).ready(function () {
         $("#select-discipline").css('margin-top', '10%');
     }
 
-    $('.discipline').click(function () {
+
+    function goRender() {
         //Um aluno foi selecionado
-        sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
-        //Tutor que logou
-        if (sessionStorage.getItem('login_personage_name') == 'Tutor' || sessionStorage.getItem('login_personage_name') == 'admin') {
+
+        if (sessionStorage.getItem('login_personage_name') == 'Tutor' ||
+                sessionStorage.getItem('login_personage_name') == 'admin') {
+            //Tutor que logou
             //Ator
             sessionStorage.setItem('id_actor', $('#actor').val());
             sessionStorage.setItem('name_actor', $('#actor').find(":selected").text());
@@ -144,11 +146,29 @@ $(document).ready(function () {
 
             });
 
-
-
-
         }
+    }
 
+
+
+    $('.discipline').click(function () {
+         sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
+        //Antes de continuar, solicitar a seleção do Modo do Render
+        //Se algum aluno foi selecionado
+        if ($('#actor').val() != -1) {
+            $('#select-mode').show();
+        } else {
+            //Abrirá um modal para cadastro de Alunos
+            goRender();
+        }
+    });
+
+
+    $('#mode').on('change',function () {
+        if($(this).val() != -1 ){
+            //Selecionou um Modo
+             goRender();
+        }
 
     });
 
@@ -156,5 +176,6 @@ $(document).ready(function () {
     $('#toolsAdmin').on('click', function () {
         location.href = "import.html";
     });
+
 
 });

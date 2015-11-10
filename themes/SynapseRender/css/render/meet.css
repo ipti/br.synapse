@@ -168,7 +168,7 @@ body {
     z-index: 100000;
 }
 
-#hit-message, #error-message, #add-new-user{
+#hit-message, #error-message, #add-new-user {
     z-index: 100001;
 }
 

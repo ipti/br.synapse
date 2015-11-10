@@ -48,14 +48,32 @@
         </section>
 
         <section id="select-discipline">
-            <div class="discipline"  discipline="1">
+            <div class="discipline" id="discipline_language"  discipline="1">
                 <img src="img/icons/discipline-language.png" alt="Linguagem" />
                 <button class="discipline-button">Linguagem</button>
             </div>
-            <div class="discipline" discipline="2">
+            <div class="discipline" id="discipline_math" discipline="2">
                 <img src="img/icons/discipline-math.png" alt="Matemática">
                 <button class="discipline-button">Matemática</button>
             </div>
         </section>
+        
+        
+        <!-- Selecionar Modo do Render -->
+        <div id="select-mode" class="modal_message overlay">
+            <div class="message-container">
+                <div class="modal-title">
+                    Selecionar Módulo
+                </div>
+                <div class="message-form">
+                </div>
+                <select name="mode" id="mode">
+                     <option value="-1">Selecione</option>
+                    <option value="evaluation">Avaliação</option>
+                    <option value="proficiency">Proficiência</option>
+                    <option value="training">Treino</option>
+                </select>
+            </div>
+        </div>
     </body>
 </html>
