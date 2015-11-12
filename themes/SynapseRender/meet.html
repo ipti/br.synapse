@@ -47,6 +47,9 @@
 
         <!-- Abrir Script do renderDB --> 
         <script type="text/javascript" src="db/renderDB.js"></script>
+        <!-- Abrir Script do meetEvaluation --> 
+        <script type="text/javascript" src="js/render/meetEvaluation.js"></script>
+        
         <script>
             var DISCIPLINES = [];
             DISCIPLINES[1] = "LINGUAGEM";
@@ -101,6 +104,9 @@
                     //var unityfather_name = ''; 
                     var organizationName = '';
                     
+                    //Obter o modo do render na sessão
+                    var render_mode = sessionGet('render_mode');
+                    
 
                     //Verificar se existe um aluno selecionado pelo tutor
                     //Ou se foi o próprio aluno que realizou login
@@ -127,6 +133,7 @@
                         studentClassroom: [classroomID, classroomName],
                         actor: [actorID, actorName, login_personage_name],
                         id_discipline: disciplineID,
+                        render_mode : render_mode,
                         //cobject_block_id: block_id
                     };
 
@@ -150,7 +157,7 @@
                     }
 
                     //Carregar as Escolas   
-                    newMeet.DB_synapse.findAllSchools(function (listSchools) {
+                    Meet.DB_synapse.findAllSchools(function (listSchools) {
                         var foundAnySchool = false;
                         for (var idx in listSchools) {
                             foundAnySchool = true;
@@ -174,7 +181,7 @@
                      //Carregar Turmas da escola Selecionada 
                     $('#regSchool').on('change', function () {
                         var school_id = $(this).val();
-                        newMeet.DB_synapse.findClassroomBySchool(school_id, function (listClassrooms) {
+                        Meet.DB_synapse.findClassroomBySchool(school_id, function (listClassrooms) {
                             var foundAnyClassroom = false;
                             var htmlOptions = "";
                             for (var idx in listClassrooms) {
@@ -223,7 +230,7 @@
                         } else {
                             //Cadastrar Usuário Offline no IndexDB
                             if($('#regClassroom').val() != "-1"){
-                                newMeet.DB_synapse.addStudentOff($('#regClassroom').val(), $('#regNome_aluno').val());
+                                Meet.DB_synapse.addStudentOff($('#regClassroom').val(), $('#regNome_aluno').val());
                                 alert('Novo aluno salvo com sucesso!');
                             }else{
                                 alert('Sem Turma!');

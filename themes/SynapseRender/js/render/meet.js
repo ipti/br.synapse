@@ -9,6 +9,10 @@
  * @returns {Meet}
  */
 this.Meet = function (options) {
+    //Apontador para o próprio objeto Meet
+    var self = this;
+    this.meetEvaluation;
+
     // MGS
     MSG_CORRECT = 'Parabéns, você acertou';
     MSG_WRONG = 'Ops! Você errou, continue tentando.';
@@ -20,13 +24,12 @@ this.Meet = function (options) {
     FINALIZE_ACTIVITY = "Finalizar Atividade";
     NEXT_PAGE = "Próxima Página";
     LAST_PAGE = "Última Página";
-    
-    
+
+
     //Strings Html
     NEXT_PIECE = '<img class="answer-ok" src="img/icons/ok.png">';
-
     //================
-    var self = this;
+
 
     //Verificar se é o RenderOnline
     self.isOnline = false;
@@ -42,21 +45,26 @@ this.Meet = function (options) {
     //Primeira peça mostrada na tela no Encontro Corrente
     this.firstPieceCurrentMeet = null;
     this.currentGrade = 0;
-    this.domCobject = null;
+    Meet.domCobject = null;
     this.num_cobjects = 0;
     this.isFinalBlock = false;
-    self.currentTemplateCode = null;
+    this.currentTemplateCode = null;
     //======== Variáveis Recuperadas do Filtro Inicial ===========
+    //Modo do Render selecionado
+    //type: {evaluation, proficiency, training}
+    this.render_mode = options.render_mode;
+
     this.org = options.org[0];
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
-    this.studentClassroomName = options.studentClassroom[1];
+    Meet.studentClassroomName = options.studentClassroom[1];
     this.studentCurrentYear = 0;
-    this.actor = options.actor[0];
-    this.actor_name = options.actor[1];
-    this.login_personage_name = options.actor[2];
-    this.discipline_id = options.id_discipline;
-    this.cobject_block_id = null;
+    Meet.actor = options.actor[0];
+    Meet.actor_name = options.actor[1];
+    Meet.login_personage_name = options.actor[2];
+    
+    Meet.discipline_id = options.id_discipline;
+    
 
     //==== Armazenar a performance do usuário
     this.peformance_qtd_correct = 0;
@@ -73,176 +81,38 @@ this.Meet = function (options) {
     this.tag_time;
     //======================================
     //Criar Objeto para Manipulação do Banco
-    this.DB_synapse = new DB();
+    Meet.DB_synapse = new DB();
     //======================================
-    
-    //Array com as principais informações de cada Cobject do bloco selecionado
-    this.cobjects = new Array();
+
+
 
     //Obter bloco a partir da disciplina selecionada
     this.start = function () {
-        this.DB_synapse.getBlockByDiscipline(self.discipline_id, function (cobject_block_id) {
-            self.cobject_block_id = cobject_block_id;
-            if (self.isset(self.cobject_block_id)) {
-                //Inicia o encontro. Agora que já sabe qual Bloco carregar. 
-                self.getCobjectsFromBlock();
-            } else {
-                //Não inicia
-                console.log("Nenhum Bloco foi encontrado para a Disciplina selecionada !!!");
-            }
-        });
+
+        if (self.render_mode == 'evaluation') {
+            //Instancia o meetEvaluation
+            self.meetEvaluation = new MeetEvaluation(Meet.DB_synapse, self.discipline_id);
+            //Inicia o Render
+             self.meetEvaluation.start();
+        }
+
+        
     }
     //============================
 
-
-    //Obter todos os Cobject deste Bloco
-    this.getCobjectsFromBlock = function () {
-        self.DB_synapse.getCobjectsFromBlock(self.cobject_block_id
-                , function (objectsThisBlock) {
-                    //count do número de objetos
-                    var num_objects = 0;
-                    $.each(objectsThisBlock, function () {
-                        num_objects++;
-                    });
-
-                    //Setar todos os Cobjects
-                    self.setCobjects(objectsThisBlock);
-
-                    //Agora Verifica o UserState
-                    self.DB_synapse.getUserState(self.actor, self.cobject_block_id, function (info_state) {
-                        var gotoState = self.isset(info_state);
-                        var lastCobject_id = null;
-
-                        //Ano atual no estudante
-                        self.studentCurrentYear = parseInt(self.studentClassroomName.match(/\d/)[0]);
-
-                        if (gotoState) {
-                            //Encontrou O estado do usuário
-                            self.isLoadState = true;
-                            lastCobject_id = info_state.last_cobject_id;
-                            self.firstPieceCurrentMeet = info_state.last_piece_id;
-                            self.peformance_qtd_correct = info_state.qtd_correct;
-                            self.peformance_qtd_wrong = info_state.qtd_wrong;
-                            //Calcula o Score
-                            self.scoreCalculator(false);
-
-                            //Construçao do DOM do 1° cobject de cada Meet
-                            self.domCobjectBuild(lastCobject_id);
-                            //Depois inicia os eventos globais 
-                            self.init_eventsGlobals();
-                        } else {
-                            //Primeiro Acesso do usuário; Não possui nenhum estado registrado
-                            //Indica que Não possui algum estado carregado 
-                            self.isLoadState = false;
-
-                            if (self.studentCurrentYear > 2) {
-                                //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
-                                var StartIdx = 0;
-                                var startCobjectYear = self.studentCurrentYear - 1;
-                                
-                                for(var idx in self.cobjects){
-                                     //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
-                                     var currentCobject =  self.cobjects[idx];
-                                        if (currentCobject['year'] == startCobjectYear) {
-                                            //Encontrou o Cobject do ano Anterior a do Aluno
-                                            lastCobject_id = currentCobject['cobject_id'];
-                                            //Finaliza a pesquisa, pois incia sempre do 1° 
-                                            break;
-                                        }
-                                }
-
-                                    //Inicia com o cobject encontrado
-                                    //Construçao do DOM do 1° cobject de cada Meet
-                                    self.domCobjectBuild(lastCobject_id);
-                                    //Depois inicia os eventos globais 
-                                    self.init_eventsGlobals();
-
-                               
-                            } else {
-                                //Carrega o 1° Cobject, referente ao 1° Ano
-                               lastCobject_id = self.cobjects[0]['cobject_id'];
-                                //Construçao do DOM do 1° cobject de cada Meet
-                                self.domCobjectBuild(lastCobject_id);
-                                //Depois inicia os eventos globais 
-                                self.init_eventsGlobals();
-                            }
-
-
-                        }
-
-
-                    });
-
-                    /*  $.each(objectsThisBlock, function(idx, object){
-                     //Para cada Cobject Cria sua Dom
-                     
-                     }); */
-                });
-    }
-
-
-    this.setCobjects = function (cobjectIDsCurrentBlock) {
-        //Atribui ao array de cobjects do bloco corrente
-        //Agora atribui um novo array que possuirá todos cobjects com seus principais atributos
-        for (var idx in cobjectIDsCurrentBlock) {
-            self.DB_synapse.getCobject(cobjectIDsCurrentBlock[idx], function (json_cobject) {
-                //Para cada CobjectID
-                var currentCobject = new Array(); 
-                currentCobject['cobject_id'] = json_cobject.cobject_id;
-                currentCobject['cobject_type'] = json_cobject.cobject_type;
-                currentCobject['content'] = json_cobject.content;
-                currentCobject['degree_name'] = json_cobject.degree_name;
-                currentCobject['degree_parent'] = json_cobject.degree_parent;
-                currentCobject['description'] = json_cobject.description;
-                currentCobject['discipline'] = json_cobject.discipline;
-                currentCobject['goal'] = json_cobject.goal;
-                currentCobject['grade'] = json_cobject.grade;
-                currentCobject['stage'] = json_cobject.stage;
-                currentCobject['template_code'] = json_cobject.template_code;
-                currentCobject['template_name'] = json_cobject.template_name;
-                currentCobject['theme'] = json_cobject.theme;
-                currentCobject['year'] = json_cobject.year;
-                
-                //Adiciona atributos do cobject corrente
-                self.cobjects.push(currentCobject);
-                
-            });
-        }
-    };
-
-    this.getIdxArrayCobjects = function (cobjectID) {
-        var idxCobject = -1;
-        for(var idx in self.cobjects){
-            //Percorrer o Array dos Cobjects
-            var currentCobjectID = self.cobjects[idx]['cobject_id'];
-            if(currentCobjectID == cobjectID){
-                //Econtrado
-                idxCobject = idx;
-                break;
-            }
-        }
-        
-         if(typeof idxCobject === "string"){
-            //Se for String, transforma para inteiro
-            idxCobject = parseInt(idxCobject);
-        }
-        
-        return idxCobject;
-    };
-
     this.setDomCobject = function (domCobject) {
-        self.domCobject = domCobject;
+        Meet.domCobject = domCobject;
     };
 
     /**
-     * Retorna todos os CObjects de self.domCobject em uma string
+     * Retorna todos os CObjects de Meet.domCobject em uma string
      * 
      * @returns {String.domCobjectBuildAll}
      */
 //    this.domCobjectBuildAll = function() {
 //        var domCobjectBuildAll = $('<div class="cobject_block"></div>');
-//        for (var idx in self.domCobject) {
-//            domCobjectBuildAll.append(self.domCobject[idx].buildAll());
+//        for (var idx in Meet.domCobject) {
+//            domCobjectBuildAll.append(Meet.domCobject[idx].buildAll());
 //            self.num_cobjects++;
 //        }
 //        //Por último a div de ferramentas
@@ -258,15 +128,15 @@ this.Meet = function (options) {
      * 
      * @returns {void}
      */
-    this.domCobjectBuild = function (cobject_id) {
+    Meet.domCobjectBuild = function (cobject_id) {
         //Construir a Dom do Cobject e append no html
-        self.DB_synapse.getCobject(cobject_id, function (json_cobject) {
+        Meet.DB_synapse.getCobject(cobject_id, function (json_cobject) {
             var dump = new DomCobject(json_cobject);
             //Adicionar o domCobjet no Encontro 'Meet'
             self.setDomCobject(dump);
 
             //Depois atualiza o template corrente do Meet
-            self.currentTemplateCode = self.domCobject.cobject.template_code;
+            self.currentTemplateCode = Meet.domCobject.cobject.template_code;
             var domCobjectBuild;
             if ($('div.cobject_block').size() !== 0) {
                 //Já existe
@@ -278,7 +148,7 @@ this.Meet = function (options) {
 
 
 
-            domCobjectBuild.html(self.domCobject.buildAll());
+            domCobjectBuild.html(Meet.domCobject.buildAll());
 
             //Por último a div de ferramentas
             domCobjectBuild.append(self.buildToolBar);
@@ -287,7 +157,7 @@ this.Meet = function (options) {
             $('#render_canvas').html(domCobjectBuild);
 
 
-            self.domCobject.posBuildAll();
+            Meet.domCobject.posBuildAll();
 
             //Inicia os eventos somente após a inclusão do html na dom
             self.beginEvents();
@@ -308,9 +178,9 @@ this.Meet = function (options) {
     this.beginEvents = function () {
         //iniciar code_Event dos template
         //Evoca o evento para este template
-        if (self.domCobject.cobject.template_code !== 'DDROP'
-                && self.domCobject.cobject.template_code !== 'ONEDDROP') {
-            eval("self.init_" + self.domCobject.cobject.template_code + "();");
+        if (Meet.domCobject.cobject.template_code !== 'DDROP'
+                && Meet.domCobject.cobject.template_code !== 'ONEDDROP') {
+            eval("self.init_" + Meet.domCobject.cobject.template_code + "();");
         }
         //Por Fim chama o evento Comum a todos
         self.init_Common();
@@ -342,44 +212,20 @@ this.Meet = function (options) {
 
 
 
-    this.loadNextCobject = function (needScoredCalculator) {
-        //Carregar a próxima atividade, se for permitido!
-
-        var idxNextCobject = self.getIdxArrayCobjects(self.domCobject.cobject.cobject_id) + 1;
-        var nextCobjectID = self.cobjects[idxNextCobject]['cobject_id'];
-
-        //Verificar o Ano do próximo Cobject, só poderá continuar se for Menor que o ano do Estudante
-        //Com exeção, do estudante do 1° ano, que poderá resolver atividades do seu ano.
-        self.DB_synapse.findCobjectById(nextCobjectID, function (cobject) {
-            //Sempre encontrará o cobject referente ao nextCobjectID
-            var nextCobjectYear = parseInt(cobject.year);
-            if ((self.studentCurrentYear == nextCobjectYear && self.studentCurrentYear == 1)
-                    || ((nextCobjectYear+1) == self.studentCurrentYear)) {
-                //Pode avançar para esse Próximo Cobject
-                //Criar a Dom do Próximo Cobject
-                self.domCobjectBuild(nextCobjectID);
-                //Verificar o nível do próximo Cobject
-                self.scoreCalculator(needScoredCalculator);
-
-                //Mostrar a primeira Questão deste Próximo Cobject
-                var selector_cobject = '.cobject';
-                $(selector_cobject + ':eq(0)').addClass('currentCobject');
-                $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
-                $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
-                $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
-                $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                        ' .currentPiece').show();
 
 
-            } else {
-                //Finalizou as Atividades do Ano Anterior ao ano corrente do estudante.
-                self.messageFinishedLevel();
-            }
-
-        });
+    //Carregar Primeira Piece do atendimento corrente
+    this.loadFirstPiece = function () {
+        if (self.render_mode == 'evaluation') {
+            self.meetEvaluation.loadFirstPiece_Evaluation();
+        } else if (self.render_mode == 'proficiency') {
+            
+        } else if (self.render_mode == 'training') {
+            
+        }
 
     }
+
 
 
 
@@ -391,10 +237,10 @@ this.Meet = function (options) {
     this.init_Common = function () {
         //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
-        if (self.domCobject.cobject.template_code !== 'PLC' && self.domCobject.cobject.template_code !== 'DIG'){
-             $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
+        if (Meet.domCobject.cobject.template_code !== 'PLC' && Meet.domCobject.cobject.template_code !== 'DIG') {
+            $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
         }
-           
+
 
         if (self.currentTemplateCode === 'DDROP') {
             //Existe DDROP
@@ -408,84 +254,9 @@ this.Meet = function (options) {
         //$(selector_cobject).find('.pieceset, .piece, .nextPiece').hide();
         $('.nextPiece').hide();
 
-        if (!self.isLoadState) {
-            $(selector_cobject + ':eq(0)').addClass('currentCobject');
-            $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
-            $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
-            $(selector_cobject + ':eq(0) .piece:eq(0)').addClass('currentPiece');
-            $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                    ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                    ' .currentPiece').show();
-        } else {
-            //Ir para a piece->pieceSet->Screen->cobject 
-            // O A partir daqui torna falso o isLoadState, pois só é carregado o estado no primeira vez
-            self.isLoadState = false;
+        //Carregar a primeira Piece deste atendimento atual na Tela
+        self.loadFirstPiece();
 
-            var lastPiece = $(selector_cobject + ' .piece[id=' + self.firstPieceCurrentMeet + ']');
-            var nextPiece = null;
-            var lastPieceSet = null;
-            var lastScreen = null;
-            var lastCobject = null;
-            var nextPieceSet = null;
-            var nextScreen = null;
-            var nextCobject = null;
-            var isNextCobject = false;
-
-            if (lastPiece.next('.piece').size() !== 0) {
-                nextPiece = lastPiece.next('.piece');
-            } else {
-                //Acabou as Pieces desta PieceSet
-                lastPieceSet = lastPiece.closest('.pieceset');
-                nextPieceSet = lastPieceSet.next('.pieceset');
-                if (nextPieceSet.size() === 0) {
-                    //Acabou as PieceSets desta Screen
-                    lastScreen = lastPieceSet.closest('.T_screen');
-                    nextScreen = lastScreen.next('.T_screen');
-
-                    if (nextScreen.size() === 0) {
-                        //Acabou as Screens deste Cobject
-                        lastCobject = lastScreen.closest('.cobject');
-                        nextCobject = lastCobject.next('.cobject');
-
-                        if (self.hasNextCobject()) {
-                            isNextCobject = true;
-                            //Carrega o Cobject se permitido
-                            self.loadNextCobject(true);
-
-                        } else {
-                            //Acabou todos os Cobjets, ATIVIDADE JÁ FINALIZADA
-                            self.isFinalBlock = true;
-                        }
-
-                    } else {
-                        //Ir pra a piece next Screen
-                        nextPiece = nextScreen.find('.pieceset:eq(0) .piece:eq(0)');
-                    }
-                } else {
-                    //Ir pra a piece next PieceSet
-                    nextPiece = nextPieceSet.find('.piece:eq(0)');
-
-                }
-
-
-            }
-
-
-
-            //Se NÃO for o final do bloco
-            //Existe uma próxima peça neste CObject
-            if (!self.isFinalBlock && !isNextCobject) {
-                nextPiece.addClass('currentPiece');
-                nextPiece.closest('.pieceset').addClass('currentPieceSet');
-                var parentScreen = nextPiece.closest('.T_screen').addClass('currentScreen');
-                parentScreen.closest('.cobject').addClass('currentCobject');
-
-                $(selector_cobject + '.currentCobject, ' + selector_cobject +
-                        ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
-                        ' .currentPiece').show();
-            }
-
-        }
 
         if (!self.isFinalBlock) {
             //Inicio do temporizador
@@ -509,7 +280,7 @@ this.Meet = function (options) {
             });
 
             //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-            if (self.domCobject.cobject.template_code === 'TXT') {
+            if (Meet.domCobject.cobject.template_code === 'TXT') {
                 BtnPageTXT();
             } else {
                 NoBtnPageTXT();
@@ -521,18 +292,18 @@ this.Meet = function (options) {
             self.messageFinishedLevel();
         }
 
-        if (self.domCobject.cobject.template_code == 'PLC'
-                || self.domCobject.cobject.template_code == 'DIG'
-                || self.domCobject.cobject.template_code == 'DES') {
+        if (Meet.domCobject.cobject.template_code == 'PLC'
+                || Meet.domCobject.cobject.template_code == 'DIG'
+                || Meet.domCobject.cobject.template_code == 'DES') {
             $('.refreshQuestion').on('tap', function () {
                 var currentPiece = $('div.currentPiece');
-                if (self.domCobject.cobject.template_code == 'PLC') {
+                if (Meet.domCobject.cobject.template_code == 'PLC') {
                     var inputsPlc = currentPiece.find('input.PLC-input:not([readonly])');
                     inputsPlc.val('');
                     inputsPlc.data('value', '');
                 }
 
-                if (self.domCobject.cobject.template_code == 'DIG') {
+                if (Meet.domCobject.cobject.template_code == 'DIG') {
                     //Zerar as Colunas
                     var colsPlc = currentPiece.find('.DIG-table').find('td');
                     colsPlc.removeClass('firstSelected');
@@ -556,7 +327,7 @@ this.Meet = function (options) {
 
     };
 
-    this.init_eventsGlobals = function () {
+    Meet.init_eventsGlobals = function () {
 
         //Botão do SOM
         $(document).on('tap', '.soundIconPause', function () {
@@ -612,94 +383,94 @@ this.Meet = function (options) {
         $('.nextPiece').hide();
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
-        if (self.domCobject.cobject.template_code === 'PRE') {
+        if (Meet.domCobject.cobject.template_code === 'PRE') {
             self.isCorrectPRE(currentPiece.attr('id'));
         }
 
         var isCorrectPiece;
         //Salva no BD somente se o template for != TXT
-        if (self.domCobject.cobject.template_code !== 'TXT') {
+        if (Meet.domCobject.cobject.template_code !== 'TXT') {
             //Salva na PerformanceUser
             self.savePerformanceUsr(currentPiece.attr('id'));
-            isCorrectPiece = self.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
+            isCorrectPiece = Meet.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
         } else {
             isCorrectPiece = true;
         }
 
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
-            var currentPiece = $('.currentPiece');
-            if (self.domCobject.cobject.template_code !== 'TXT') {
-                //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-                //cobject_block_id + actor_id = PK
-                var info_state = {
-                    cobject_block_id: self.cobject_block_id,
-                    actor_id: self.actor,
-                    last_cobject_id: self.domCobject.cobject.cobject_id,
-                    last_piece_id: currentPiece.attr('id'),
-                    qtd_correct: self.peformance_qtd_correct,
-                    qtd_wrong: self.peformance_qtd_wrong
-                };
-                self.DB_synapse.NewORUpdateUserState(info_state);
-                //Calcula o Score
-                self.scoreCalculator(false);
-            }
+        var currentPiece = $('.currentPiece');
+        if (Meet.domCobject.cobject.template_code !== 'TXT') {
+            //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+            //cobject_block_id + actor_id = PK
+            var info_state = {
+                cobject_block_id: self.cobject_block_id,
+                actor_id: self.actor,
+                last_cobject_id: Meet.domCobject.cobject.cobject_id,
+                last_piece_id: currentPiece.attr('id'),
+                qtd_correct: self.peformance_qtd_correct,
+                qtd_wrong: self.peformance_qtd_wrong
+            };
+            Meet.DB_synapse.NewORUpdateUserState(info_state);
+            //Calcula o Score
+            Meet.scoreCalculator(false);
+        }
 
-            //Avanço de Questão
-            currentPiece.removeClass('currentPiece');
-            currentPiece.hide();
-            if (currentPiece.next().size() === 0) {
-                //Acabou Peça, passa pra outra PieceSet se houver
-                var currentPieceSet = $('.currentPieceSet');
-                currentPieceSet.removeClass('currentPieceSet');
-                currentPieceSet.hide();
+        //Avanço de Questão
+        currentPiece.removeClass('currentPiece');
+        currentPiece.hide();
+        if (currentPiece.next().size() === 0) {
+            //Acabou Peça, passa pra outra PieceSet se houver
+            var currentPieceSet = $('.currentPieceSet');
+            currentPieceSet.removeClass('currentPieceSet');
+            currentPieceSet.hide();
 
-                if (currentPieceSet.next().size() === 0) {
-                    //Acabou todas as pieceSets dessa Tela
-                    // Passa pra a pŕoxima PieceSet
-                    var currentScreen = $('.currentScreen');
-                    currentScreen.removeClass('currentScreen');
-                    currentScreen.hide();
-                    var nextScreen = currentScreen.next();
+            if (currentPieceSet.next().size() === 0) {
+                //Acabou todas as pieceSets dessa Tela
+                // Passa pra a pŕoxima PieceSet
+                var currentScreen = $('.currentScreen');
+                currentScreen.removeClass('currentScreen');
+                currentScreen.hide();
+                var nextScreen = currentScreen.next();
 
-                    if (nextScreen.size() !== 0) {
-                        nextScreen.addClass('currentScreen');
-                        nextScreen.show();
-                        nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
-                        nextScreen.find('.piece:eq(0)').addClass('currentPiece');
-                        nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                if (nextScreen.size() !== 0) {
+                    nextScreen.addClass('currentScreen');
+                    nextScreen.show();
+                    nextScreen.find('.pieceset:eq(0)').addClass('currentPieceSet');
+                    nextScreen.find('.piece:eq(0)').addClass('currentPiece');
+                    nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
+                } else {
+                    //Finalizou todas as Screen do COBJECT Corrente
+
+                    if (self.meetEvaluation.hasNextCobjectInBlock()) {
+                        //Carrega próxima atividade se permitido
+                        self.meetEvaluation.loadNextCobjectInBlock(true);
+
                     } else {
-                        //Finalizou todas as Screen do COBJECT Corrente
-
-                        if (self.hasNextCobject()) {
-                            //Carrega próxima atividade se permitido
-                            self.loadNextCobject(true);
-
-                        } else {
-                            //Finalizou o Bloco de Atividades
-                            self.messageFinishedLevel();
-                        }
-
+                        //Finalizou o Bloco de Atividades
+                        self.messageFinishedLevel();
                     }
 
-                } else {
-                    var nextPieceSet = currentPieceSet.next();
-                    nextPieceSet.addClass('currentPieceSet');
-                    nextPieceSet.show();
-
-                    var nextPiece = nextPieceSet.find('.piece:eq(0)');
-                    nextPiece.addClass('currentPiece');
-                    nextPiece.show();
                 }
+
             } else {
-                var nextPiece = currentPiece.next();
+                var nextPieceSet = currentPieceSet.next();
+                nextPieceSet.addClass('currentPieceSet');
+                nextPieceSet.show();
+
+                var nextPiece = nextPieceSet.find('.piece:eq(0)');
                 nextPiece.addClass('currentPiece');
                 nextPiece.show();
             }
+        } else {
+            var nextPiece = currentPiece.next();
+            nextPiece.addClass('currentPiece');
+            nextPiece.show();
+        }
 
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if (self.domCobject.cobject.template_code === 'TXT') {
+        if (Meet.domCobject.cobject.template_code === 'TXT') {
             BtnPageTXT();
         } else {
             NoBtnPageTXT();
@@ -722,16 +493,16 @@ this.Meet = function (options) {
     this.prevPiece = function () {
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
-        if (self.domCobject.cobject.template_code === 'PRE') {
+        if (Meet.domCobject.cobject.template_code === 'PRE') {
             self.isCorrectPRE(currentPiece.attr('id'));
         }
 
         var isCorrectPiece;
         //Salva no BD somente se o template for != TXT
-        if (self.domCobject.cobject.template_code !== 'TXT') {
+        if (Meet.domCobject.cobject.template_code !== 'TXT') {
             //Salva na PerformanceUser ?
             // self.savePerformanceUsr(currentPiece.attr('id'));
-            isCorrectPiece = self.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
+            isCorrectPiece = Meet.domCobject.mainPieces[currentPiece.attr('id')].isCorrect;
             self.showMessageAnswer(isCorrectPiece);
         } else {
             isCorrectPiece = true;
@@ -739,20 +510,20 @@ this.Meet = function (options) {
 
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
-            if (self.domCobject.cobject.template_code !== 'TXT') {
+            if (Meet.domCobject.cobject.template_code !== 'TXT') {
                 //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
                 //cobject_block_id + actor_id = P K
                 var info_state = {
                     cobject_block_id: self.cobject_block_id,
                     actor_id: self.actor,
-                    last_cobject_id: self.domCobject.cobject.cobject_id,
+                    last_cobject_id: Meet.domCobject.cobject.cobject_id,
                     last_piece_id: currentPiece.attr('id'),
                     qtd_correct: self.peformance_qtd_correct,
                     qtd_wrong: self.peformance_qtd_wrong
                 };
-                self.DB_synapse.NewORUpdateUserState(info_state);
+                Meet.DB_synapse.NewORUpdateUserState(info_state);
                 //Calcula o Score
-                self.scoreCalculator(false);
+                Meet.scoreCalculator(false);
             }
 
             currentPiece.removeClass('currentPiece');
@@ -780,11 +551,11 @@ this.Meet = function (options) {
                         prevScreen.find('.piece').last().show();
                     } else {
                         //Finalisou todas as Screen do COBJECT Corrente
-                        if (self.hasPrevCobject()) {
-                            var idxPrevCobject = self.getIdxArrayCobjects(self.domCobject.cobject.cobject_id) - 1;
-                            var prevCobjectID = self.cobjects[idxPrevCobject]['cobject_id'];
+                        if (self.hasPrevCobjectInBlock()) {
+                            var idxPrevCobject = self.getIdxArrayCobjectsInBlock(Meet.domCobject.cobject.cobject_id) - 1;
+                            var prevCobjectID = self.cobjectsInBlock[idxPrevCobject]['cobject_id'];
                             //Criar a Dom do Cobject Anterior
-                            self.domCobjectBuild(prevCobjectID);
+                            Meet.domCobjectBuild(prevCobjectID);
 
                         } else {
                             //Está na Primeira Peça
@@ -818,14 +589,14 @@ this.Meet = function (options) {
             //                        qtd_wrong: self.peformance_qtd_wrong,
             //                        currentCobject_idx: null
             //                    };
-            //                    self.DB_synapse.NewORUpdateUserState(info_state);
+            //                    Meet.DB_synapse.NewORUpdateUserState(info_state);
             //                    //Calcula o Score
-            //                    self.scoreCalculator(false);
+            //                    Meet.scoreCalculator(false);
 
         }
         //Verificar se ainda é TXT
         //Se for o Tipo Texto o Cobject Corrent, então add passar páginas
-        if (self.domCobject.cobject.template_code === 'TXT') {
+        if (Meet.domCobject.cobject.template_code === 'TXT') {
             BtnPageTXT();
         } else {
             NoBtnPageTXT();
@@ -1998,10 +1769,10 @@ this.Meet = function (options) {
                     isTXT = prevScreen.find('.piece').last().find('.group').last().hasClass('TXT');
                 } else {
                     //Finalizou todas as Screen do COBJECT Corrente
-                    if (self.hasPrevCobject()) {
+                    if (self.hasPrevCobjectInBlock()) {
 
-                        var idxPrevCobject = self.getIdxArrayCobjects(self.domCobject.cobject.cobject_id) - 1;
-                        var prevCobject = self.cobjects[idxPrevCobject];
+                        var idxPrevCobject = self.getIdxArrayCobjectsInBlock(Meet.domCobject.cobject.cobject_id) - 1;
+                        var prevCobject = self.cobjectsInBlock[idxPrevCobject];
                         isTXT = prevCobject['template_code'] === 'TXT';
 
                     } else {
@@ -2037,15 +1808,15 @@ this.Meet = function (options) {
         self.interval_piece = (new Date().getTime() - self.interval_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
         // e a armazena no objeto piece.isCorrect da piece corrente 
-        if (self.domCobject.cobject.template_code === 'AEL' ||
-                self.domCobject.cobject.template_code === 'DDROP' ||
-                self.domCobject.cobject.template_code === 'ONEDDROP') {
+        if (Meet.domCobject.cobject.template_code === 'AEL' ||
+                Meet.domCobject.cobject.template_code === 'DDROP' ||
+                Meet.domCobject.cobject.template_code === 'ONEDDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
         //Salva isCorrect da PIECE toda
-        var pieceIsTrue = self.domCobject.mainPieces[currentPieceID].isCorrect;
-        self.domCobject.mainPieces[currentPieceID].time_answer = self.interval_piece;
+        var pieceIsTrue = Meet.domCobject.mainPieces[currentPieceID].isCorrect;
+        Meet.domCobject.mainPieces[currentPieceID].time_answer = self.interval_piece;
         var data_default = {
             'piece_id': currentPieceID,
             'actor_id': self.actor,
@@ -2053,13 +1824,13 @@ this.Meet = function (options) {
             'iscorrect': pieceIsTrue
         };
         var data = data_default;
-        if (self.domCobject.cobject.template_code === 'MTE') {
+        if (Meet.domCobject.cobject.template_code === 'MTE') {
             //Último grupo clicado da Piece Corrente. Divide por 2 como um grupo ASK
             data.group_id = ($('.currentPiece .last_clicked').attr('group') / currentPieceID) / 2;
         }
 
         //Salvar na performance_User OffLine
-        self.DB_synapse.addPerformance_actor(data);
+        Meet.DB_synapse.addPerformance_actor(data);
 
         if (pieceIsTrue) {
             self.peformance_qtd_correct++;
@@ -2075,7 +1846,7 @@ this.Meet = function (options) {
         //Para Cada GRUPO da Piece
         var pieceIsTrue = true;
         var answer = false;
-        $.each(self.domCobject.mainPieces[currentPieceID], function (nome_attr, group) {
+        $.each(Meet.domCobject.mainPieces[currentPieceID], function (nome_attr, group) {
             //Salva a perfomande do groupo somente se foi dado um Match
             if (self.isset(this.groupMatched)) {
                 if (nome_attr !== 'istrue' && nome_attr !== 'time_answer') {
@@ -2107,13 +1878,13 @@ this.Meet = function (options) {
                             'iscorrect': this.ismatch
                         };
                         //Salvar na performance_User OffLine
-                        self.DB_synapse.addPerformance_actor(data);
+                        Meet.DB_synapse.addPerformance_actor(data);
                     }
                 }
             }
         });
         //Salvo com Sucesso
-        self.domCobject.mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
+        Meet.domCobject.mainPieces[currentPieceID].isCorrect = (answer && pieceIsTrue);
         return true;
     };
 
@@ -2125,7 +1896,7 @@ this.Meet = function (options) {
      * @returns {Boolean}
      */
     this.isCorrectPLC = function (pieceID) {
-        var piece = self.domCobject.mainPieces[pieceID];
+        var piece = Meet.domCobject.mainPieces[pieceID];
         var isCorrect = true;
         $.each(piece, function (i, group) {
             if (i[0] === '_') {
@@ -2148,7 +1919,7 @@ this.Meet = function (options) {
             }
         });
 
-        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
+        Meet.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     };
 
@@ -2161,7 +1932,7 @@ this.Meet = function (options) {
      * @returns {Boolean}
      */
     this.isCorrectDIG = function (pieceID, listWords) {
-        var piece = self.domCobject.mainPieces[pieceID];
+        var piece = Meet.domCobject.mainPieces[pieceID];
         var isCorrect = true;
 
         $.each(piece, function (i, group) {
@@ -2175,7 +1946,7 @@ this.Meet = function (options) {
             }
         });
 
-        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
+        Meet.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     };
 
@@ -2189,11 +1960,11 @@ this.Meet = function (options) {
      * @returns {Boolean}
      */
     this.isCorrectMTE = function (pieceID, groupClicked) {
-        var elements_group = eval("self.domCobject.mainPieces[pieceID]._" + groupClicked);
+        var elements_group = eval("Meet.domCobject.mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
         var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype === 'Acerto');
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
-        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
+        Meet.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     };
 
@@ -2210,8 +1981,8 @@ this.Meet = function (options) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
             //Salvar no Objeto o Metadados do acerto e erro de um element
-            var elements_groupAsk = eval("self.domCobject.mainPieces[pieceID]._" + groupAskClicked);
-            var elements_groupAnswer = eval("self.domCobject.mainPieces[pieceID]._" + groupAnswerClicked);
+            var elements_groupAsk = eval("Meet.domCobject.mainPieces[pieceID]._" + groupAskClicked);
+            var elements_groupAnswer = eval("Meet.domCobject.mainPieces[pieceID]._" + groupAnswerClicked);
 
             //Veridicar Match
             var groupRevertAsk = (groupAskClicked / pieceID) / 2;
@@ -2239,7 +2010,7 @@ this.Meet = function (options) {
      */
     this.isCorrectPRE = function (pieceID) {
         //PRE somente possuí um grupo em cada piece
-        var elements_group = eval("self.domCobject.mainPieces[pieceID]._" + (pieceID * 2));
+        var elements_group = eval("Meet.domCobject.mainPieces[pieceID]._" + (pieceID * 2));
         var digitated_value = $('.currentPiece').find('div[group] input.text').val();
         var idxText = null;
         //BUSCAR PROPRIEDADE  = TEXT
@@ -2252,20 +2023,20 @@ this.Meet = function (options) {
 
         var isCorrect = (elements_group.elements[0].generalProperties[idxText].value.toUpperCase() === digitated_value.toUpperCase());
         //Só precisar selecionar 1 para atualizar o isCorrect da piece corrente
-        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
+        Meet.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
         return isCorrect;
     };
 
 
     this.isCorrectDES = function (pieceID) {
-        var currentMainPiece = self.domCobject.mainPieces[pieceID];
+        var currentMainPiece = Meet.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
         var isCorrect = currentMainPiece['type_name'] === "shape" && shapeDrawed === currentMainPiece['shape'];
 
         //console.log(shapeDrawed);
 
         //Armazena o resultado no mainPiece
-        self.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
+        Meet.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
 
         return isCorrect;
     }
@@ -2710,15 +2481,7 @@ this.Meet = function (options) {
     }
 
 
-    this.hasNextCobject = function () {
-        var idxCurrentCobject = self.getIdxArrayCobjects(self.domCobject.cobject.cobject_id);
-        return self.isset(self.cobjects[idxCurrentCobject + 1]);
-    };
 
-    this.hasPrevCobject = function () {
-        var idxCurrentCobject = self.getIdxArrayCobjects(self.domCobject.cobject.cobject_id);
-        return idxCurrentCobject > 0;
-    };
     //======================
     /**
      *
@@ -2819,8 +2582,7 @@ this.Meet = function (options) {
     };
 
 
-
-    this.scoreCalculator = function (withMSGnextLevel) {
+    Meet.scoreCalculator = function (withMSGnextLevel) {
         self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
         if (self.score < 0) {
             self.score = 0;
@@ -2831,9 +2593,9 @@ this.Meet = function (options) {
         $('#points').text(self.score);
 
         //Se for diferente, então Passou de Nível
-        if (!self.isset(self.domCobject) || self.currentGrade !== self.domCobject.cobject.grade) {
-            if (self.isset(self.domCobject)) {
-                self.currentGrade = self.domCobject.cobject.grade;
+        if (!self.isset(Meet.domCobject) || self.currentGrade !== Meet.domCobject.cobject.grade) {
+            if (self.isset(Meet.domCobject)) {
+                self.currentGrade = Meet.domCobject.cobject.grade;
                 $('#level').text(self.currentGrade);
             }
 

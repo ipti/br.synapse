@@ -151,8 +151,9 @@ $(document).ready(function () {
 
 
 
-    $('.discipline').click(function () {
-         sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
+    $('.discipline').on('click', function () {
+        //Inclui na sessão o id da disciplina selecionada
+        sessionStorage.setItem('id_discipline', $(this).attr('discipline'));
         //Antes de continuar, solicitar a seleção do Modo do Render
         //Se algum aluno foi selecionado
         if ($('#actor').val() != -1) {
@@ -164,10 +165,13 @@ $(document).ready(function () {
     });
 
 
-    $('#mode').on('change',function () {
-        if($(this).val() != -1 ){
+    $('#mode').on('change', function () {
+        if ($(this).val() != -1) {
             //Selecionou um Modo
-             goRender();
+            //
+            //Inclui na sessão o nome do modo do render
+            sessionStorage.setItem('render_mode', $(this).val());
+            goRender();
         }
 
     });
