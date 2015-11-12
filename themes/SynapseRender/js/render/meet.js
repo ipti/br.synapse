@@ -62,13 +62,13 @@ this.Meet = function (options) {
     Meet.actor = options.actor[0];
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];
-    
+
     Meet.discipline_id = options.id_discipline;
-    
+
 
     //==== Armazenar a performance do usuário
-    this.peformance_qtd_correct = 0;
-    this.peformance_qtd_wrong = 0;
+    Meet.peformance_qtd_correct = 0;
+    Meet.peformance_qtd_wrong = 0;
     this.score = 0;
     var script_id = 0;
     var start_time = 0;
@@ -93,10 +93,10 @@ this.Meet = function (options) {
             //Instancia o meetEvaluation
             self.meetEvaluation = new MeetEvaluation(Meet.DB_synapse, self.discipline_id);
             //Inicia o Render
-             self.meetEvaluation.start();
+            self.meetEvaluation.start();
         }
 
-        
+
     }
     //============================
 
@@ -219,13 +219,12 @@ this.Meet = function (options) {
         if (self.render_mode == 'evaluation') {
             self.meetEvaluation.loadFirstPiece_Evaluation();
         } else if (self.render_mode == 'proficiency') {
-            
+
         } else if (self.render_mode == 'training') {
-            
+
         }
 
     }
-
 
 
 
@@ -376,6 +375,19 @@ this.Meet = function (options) {
             $(this).attr('playing', 'false');
         });
     };
+    
+    
+    //Salvar os Pontos de parada do usuário
+    this.saveBreakPoint = function (piece_id) {
+        if (self.render_mode == 'evaluation') {
+            self.meetEvaluation.saveBreakPoint(piece_id);
+        } else if (self.render_mode == 'proficiency') {
+
+        } else if (self.render_mode == 'training') {
+
+        }
+
+    }
 
     this.nextPiece = function () {
         //Pausa Todos os Sons
@@ -401,17 +413,9 @@ this.Meet = function (options) {
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         var currentPiece = $('.currentPiece');
         if (Meet.domCobject.cobject.template_code !== 'TXT') {
-            //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
+            //Salva o estado do Usuário, assim que resolve a questão
             //cobject_block_id + actor_id = PK
-            var info_state = {
-                cobject_block_id: self.cobject_block_id,
-                actor_id: self.actor,
-                last_cobject_id: Meet.domCobject.cobject.cobject_id,
-                last_piece_id: currentPiece.attr('id'),
-                qtd_correct: self.peformance_qtd_correct,
-                qtd_wrong: self.peformance_qtd_wrong
-            };
-            Meet.DB_synapse.NewORUpdateUserState(info_state);
+            self.saveBreakPoint(currentPiece.attr('id'));
             //Calcula o Score
             Meet.scoreCalculator(false);
         }
@@ -511,17 +515,10 @@ this.Meet = function (options) {
         //Veficar se o bool da currentPiece, modificado pelas funções isCorrect.
         if (isCorrectPiece || !isCorrectPiece) {
             if (Meet.domCobject.cobject.template_code !== 'TXT') {
-                //Salvar o estado do Actor(última peça Acertada), se Acertou a questão e assim Avançou.
-                //cobject_block_id + actor_id = P K
-                var info_state = {
-                    cobject_block_id: self.cobject_block_id,
-                    actor_id: self.actor,
-                    last_cobject_id: Meet.domCobject.cobject.cobject_id,
-                    last_piece_id: currentPiece.attr('id'),
-                    qtd_correct: self.peformance_qtd_correct,
-                    qtd_wrong: self.peformance_qtd_wrong
-                };
-                Meet.DB_synapse.NewORUpdateUserState(info_state);
+                //Salva o estado do Usuário, assim que resolve a questão
+                //cobject_block_id + actor_id = PK
+                self.saveBreakPoint(currentPiece.attr('id'));
+                
                 //Calcula o Score
                 Meet.scoreCalculator(false);
             }

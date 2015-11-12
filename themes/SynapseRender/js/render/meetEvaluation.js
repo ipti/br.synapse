@@ -5,14 +5,14 @@ this.MeetEvaluation = function () {
     var self = this;
 
     //======================================
-   
+
     this.cobject_block_id = null;
-    
+
     //Array com as principais informações de cada Cobject do bloco selecionado
     this.cobjectsInBlock = new Array();
-    
-    
-    this.start = function(){
+
+
+    this.start = function () {
         Meet.DB_synapse.getBlockByDiscipline(Meet.discipline_id, function (cobject_block_id) {
             // Seta o Bloco para a disciplina selecionada
             self.cobject_block_id = cobject_block_id;
@@ -301,7 +301,25 @@ this.MeetEvaluation = function () {
         var idxCurrentCobject = self.getIdxArrayCobjectsInBlock(Meet.domCobject.cobject.cobject_id);
         return idxCurrentCobject > 0;
     };
-    
+
+
+    this.saveBreakPoint = function (piece_id) {
+        //Salva o estado do Usuário, assim que resolve a questão
+        //cobject_block_id + actor_id = PK
+        var info_state = {
+            cobject_block_id: self.cobject_block_id,
+            actor_id: Meet.actor,
+            last_cobject_id: Meet.domCobject.cobject.cobject_id,
+            last_piece_id: piece_id,
+            qtd_correct: Meet.peformance_qtd_correct,
+            qtd_wrong: Meet.peformance_qtd_wrong
+        };
+        Meet.DB_synapse.NewORUpdateUserState(info_state);
+        
+    }
+
+
+
     /**
      * Verifica se a variavel esta setada.
      * 
