@@ -168,18 +168,77 @@ $(document).ready(function () {
     $('#mode').on('change', function () {
         if ($(this).val() != -1) {
             //Selecionou um Modo
-            //
             //Inclui na sessão o nome do modo do render
             sessionStorage.setItem('render_mode', $(this).val());
-            goRender();
+
+            if ($(this).val() == 'evaluation') {
+                //O modo selecionado é avaliação
+                //Se o aluno não possuir state_user para esta disciplina(bloco)
+                //Então é o primeiro encontro do aluno nessa disciplina(bloco)
+                //É necessário, selecionar qual o nível da avaliação
+                var id_disciplineSelected = sessionStorage.getItem('id_discipline');
+                var id_actorSelected = $("#actor").val();
+
+                DB_synapse.getBlockByDiscipline(id_disciplineSelected, function (cobject_block_id) {
+                    // Verifica se encontrou Bloco para a disciplina selecionada
+                    if (isset(cobject_block_id)) {
+                        //Bloco encontrado
+                        //Obter O estado do usuário selecionado neste bloco
+                        DB_synapse.getUserState(id_actorSelected, cobject_block_id, function (info_state) {
+                            if (isset(info_state)) {
+                                //Aluno já possui um estado nesse bloco
+                                //Então inicia o render
+                                goRender();
+                            } else {
+                                //É o primeiro acesso do Aluno nesse bloco
+                                //É necessário selecionar o Nível
+                                $('#select-mode').hide();
+                                $('#select-level').show();
+                            }
+                        });
+
+                    } else {
+                        //Não encontrou bloco
+                        console.log("Nenhum Bloco foi encontrado para a Disciplina selecionada !!!");
+                    }
+                });
+
+
+            } else {
+                //Dá início ao Render
+                goRender();
+            }
+
+
         }
 
+    });
+
+    $('#level').on('change', function () {
+        if ($(this).val() != -1) {
+            //Selecionou um Nível
+            //Inclui na sessão o Nível Selecionado para o Modo Atividade
+            sessionStorage.setItem('selected_level_evaluation', $(this).val());
+            //Dá início ao Render
+            goRender();
+        }
     });
 
 
     $('#toolsAdmin').on('click', function () {
         location.href = "import.html";
     });
+
+    /**
+     * Verifica se a variavel esta setada.
+     * 
+     * @param {mixed} variable
+     * @returns {Boolean}
+     */
+    function isset(variable) {
+        return (variable !== undefined && variable !== null);
+    }
+    ;
 
 
 });

@@ -54,7 +54,7 @@ select {
     box-shadow: 1px 1px 8px #2C2C2C;
 }
 
- #select-mode .message-container {
+ #select-mode .message-container, #select-level .message-container{
     background: rgba(78, 184, 152, 0.75);
     font-size: 25px;
 }

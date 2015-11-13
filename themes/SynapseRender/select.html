@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
         <title>Entrar no Synapse</title>
         <link rel="icon" type="image/png" href="icons/icon-48.png" /> 
         <link rel="stylesheet" type="text/css" href="css/reset.css">
@@ -18,6 +18,7 @@
         <script src="js/jquery/jquery.ui.droppable.js"></script>
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script type="text/javascript" src="js/render/select.js"></script>
+        <script type="text/javascript" src="js/render/meet.js"></script>
     </head>
 
     <body>
@@ -57,8 +58,8 @@
                 <button class="discipline-button">Matemática</button>
             </div>
         </section>
-        
-        
+
+
         <!-- Selecionar Modo do Render -->
         <div id="select-mode" class="modal_message overlay">
             <div class="message-container">
@@ -68,12 +69,31 @@
                 <div class="message-form">
                 </div>
                 <select name="mode" id="mode">
-                     <option value="-1">Selecione</option>
+                    <option value="-1">Selecione</option>
                     <option value="evaluation">Avaliação</option>
                     <option value="proficiency">Proficiência</option>
                     <option value="training">Treino</option>
                 </select>
             </div>
         </div>
+
+
+        <!-- Selecionar Nível da Atividade -->
+        <div id="select-level" class="modal_message overlay">
+            <div class="message-container">
+                <div class="modal-title">
+                    Selecionar Nível da Atividade
+                </div>
+                <div class="message-form">
+                </div>
+                <select name="level" id="level">
+                    <option value="-1">Selecione o Nível</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+        </div>
+
     </body>
 </html>

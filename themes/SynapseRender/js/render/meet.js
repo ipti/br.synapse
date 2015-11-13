@@ -375,8 +375,8 @@ this.Meet = function (options) {
             $(this).attr('playing', 'false');
         });
     };
-    
-    
+
+
     //Salvar os Pontos de parada do usuário
     this.saveBreakPoint = function (piece_id) {
         if (self.render_mode == 'evaluation') {
@@ -445,15 +445,25 @@ this.Meet = function (options) {
                     nextScreen.find('.pieceset:eq(0), .piece:eq(0)').show();
                 } else {
                     //Finalizou todas as Screen do COBJECT Corrente
+                    //Vai para a próxima atividade de acordo com o Modo do Render
+                    if (self.render_mode == 'evaluation') {
+                        //Modo Avaliação
+                        if (self.meetEvaluation.hasNextCobjectInBlock()) {
+                            //Carrega próxima atividade se permitido
+                            self.meetEvaluation.loadNextCobjectInBlock(true);
 
-                    if (self.meetEvaluation.hasNextCobjectInBlock()) {
-                        //Carrega próxima atividade se permitido
-                        self.meetEvaluation.loadNextCobjectInBlock(true);
+                        } else {
+                            //Finalizou o Bloco de Atividades
+                            self.messageFinishedLevel();
+                        }
 
-                    } else {
-                        //Finalizou o Bloco de Atividades
-                        self.messageFinishedLevel();
+                    } else if (self.render_mode == 'proficiency') {
+
+                    } else if (self.render_mode == 'training') {
+
                     }
+
+
 
                 }
 
@@ -518,7 +528,7 @@ this.Meet = function (options) {
                 //Salva o estado do Usuário, assim que resolve a questão
                 //cobject_block_id + actor_id = PK
                 self.saveBreakPoint(currentPiece.attr('id'));
-                
+
                 //Calcula o Score
                 Meet.scoreCalculator(false);
             }
@@ -582,8 +592,8 @@ this.Meet = function (options) {
             //                        cobject_block_id: self.cobject_block_id,
             //                        actor_id: self.actor,
             //                        last_piece_id: null,
-            //                        qtd_correct: self.peformance_qtd_correct,
-            //                        qtd_wrong: self.peformance_qtd_wrong,
+            //                        qtd_correct: Meet.peformance_qtd_correct,
+            //                        qtd_wrong: Meet.peformance_qtd_wrong,
             //                        currentCobject_idx: null
             //                    };
             //                    Meet.DB_synapse.NewORUpdateUserState(info_state);
@@ -1830,9 +1840,9 @@ this.Meet = function (options) {
         Meet.DB_synapse.addPerformance_actor(data);
 
         if (pieceIsTrue) {
-            self.peformance_qtd_correct++;
+            Meet.peformance_qtd_correct++;
         } else {
-            self.peformance_qtd_wrong++;
+            Meet.peformance_qtd_wrong++;
         }
 
         //Salvo com Sucesso !
@@ -2580,13 +2590,13 @@ this.Meet = function (options) {
 
 
     Meet.scoreCalculator = function (withMSGnextLevel) {
-        self.score = (self.peformance_qtd_correct * 10) - (self.peformance_qtd_wrong * 10);
+        self.score = (Meet.peformance_qtd_correct * 10) - (Meet.peformance_qtd_wrong * 10);
         if (self.score < 0) {
             self.score = 0;
         }
-        //Atualiza a contidade de corretos
-        $('.info.info-hits .info-text').html(self.peformance_qtd_correct);
-        $('.info.info-erros .info-text').html(self.peformance_qtd_wrong);
+        //Atualiza a quantidade de corretos
+        $('.info.info-hits .info-text').html(Meet.peformance_qtd_correct);
+        $('.info.info-erros .info-text').html(Meet.peformance_qtd_wrong);
         $('#points').text(self.score);
 
         //Se for diferente, então Passou de Nível
