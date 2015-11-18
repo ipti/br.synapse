@@ -50,11 +50,11 @@ this.MeetEvaluation = function () {
 
                         if (gotoState) {
                             //Encontrou O estado do usuário
-                            self.isLoadState = true;
+                            Meet.isLoadState = true;
                             lastCobject_id = info_state.last_cobject_id;
-                            self.firstPieceCurrentMeet = info_state.last_piece_id;
-                            self.peformance_qtd_correct = info_state.qtd_correct;
-                            self.peformance_qtd_wrong = info_state.qtd_wrong;
+                            Meet.firstPieceCurrentMeet = info_state.last_piece_id;
+                            Meet.peformance_qtd_correct = info_state.qtd_correct;
+                            Meet.peformance_qtd_wrong = info_state.qtd_wrong;
                             //Calcula o Score
                             Meet.scoreCalculator(false);
 
@@ -65,7 +65,7 @@ this.MeetEvaluation = function () {
                         } else {
                             //Primeiro Acesso do usuário; Não possui nenhum estado registrado
                             //Indica que Não possui algum estado carregado 
-                            self.isLoadState = false;
+                            Meet.isLoadState = false;
 
                             //Abre o Primeiro Cobject, referente ao Nível Selecionado
                             var startCobjectYear = Meet.selected_level_evaluation;
@@ -201,7 +201,8 @@ this.MeetEvaluation = function () {
     //Quando o modo do render for Avaliação
     this.loadFirstPiece_Evaluation = function () {
         var selector_cobject = '.cobject';
-        if (!self.isLoadState) {
+        if (!Meet.isLoadState) {
+            //Carrega a primeira Piece
             $(selector_cobject + ':eq(0)').addClass('currentCobject');
             $(selector_cobject + ':eq(0) .T_screen:eq(0)').addClass('currentScreen');
             $(selector_cobject + ':eq(0) .pieceset:eq(0)').addClass('currentPieceSet');
@@ -211,8 +212,8 @@ this.MeetEvaluation = function () {
                     ' .currentPiece').show();
         } else {
             //Ir para a piece->pieceSet->Screen->cobject 
-            // O A partir daqui torna falso o isLoadState, pois só é carregado o estado no primeira vez
-            self.isLoadState = false;
+            // O A partir daqui torna falso o isLoadState, pois só é carregado o estado na primeira vez
+            Meet.isLoadState = false;
 
             var lastPiece = $(selector_cobject + ' .piece[id=' + self.firstPieceCurrentMeet + ']');
             var nextPiece = null;

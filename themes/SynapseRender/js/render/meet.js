@@ -41,9 +41,9 @@ this.Meet = function (options) {
 
 
     var isClockStarted = false;
-    this.isLoadState = false;
+    Meet.isLoadState = false;
     //Primeira peça mostrada na tela no Encontro Corrente
-    this.firstPieceCurrentMeet = null;
+    Meet.firstPieceCurrentMeet = null;
     this.currentGrade = 0;
     Meet.domCobject = null;
     this.num_cobjects = 0;
