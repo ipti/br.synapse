@@ -106,7 +106,7 @@
                     
                     //Obter o modo do render na sessão
                     var render_mode = sessionGet('render_mode');
-                    
+                    var selected_level_evaluation = sessionGet('selected_level_evaluation');
 
                     //Verificar se existe um aluno selecionado pelo tutor
                     //Ou se foi o próprio aluno que realizou login
@@ -134,6 +134,7 @@
                         actor: [actorID, actorName, login_personage_name],
                         id_discipline: disciplineID,
                         render_mode : render_mode,
+                        selected_level_evaluation: selected_level_evaluation,
                         //cobject_block_id: block_id
                     };
 

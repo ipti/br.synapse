@@ -53,7 +53,12 @@ this.Meet = function (options) {
     //Modo do Render selecionado
     //type: {evaluation, proficiency, training}
     this.render_mode = options.render_mode;
-
+    if(this.render_mode == 'evaluation'){
+        //Possui o nível que a avaliação deve ser aplicada
+         Meet.selected_level_evaluation = options.selected_level_evaluation;
+    }
+   
+    
     this.org = options.org[0];
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];

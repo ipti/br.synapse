@@ -67,36 +67,31 @@ this.MeetEvaluation = function () {
                             //Indica que Não possui algum estado carregado 
                             self.isLoadState = false;
 
-                            if (self.studentCurrentYear > 2) {
-                                //Abre o Primeiro Cobject, referente ao Ano anterior da série Aluno
-                                var StartIdx = 0;
-                                var startCobjectYear = self.studentCurrentYear - 1;
+                            //Abre o Primeiro Cobject, referente ao Nível Selecionado
+                            var startCobjectYear = Meet.selected_level_evaluation;
 
-                                for (var idx in self.cobjectsInBlock) {
-                                    //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
-                                    var currentCobject = self.cobjectsInBlock[idx];
-                                    if (currentCobject['year'] == startCobjectYear) {
-                                        //Encontrou o Cobject do ano Anterior a do Aluno
-                                        lastCobject_id = currentCobject['cobject_id'];
-                                        //Finaliza a pesquisa, pois incia sempre do 1° 
-                                        break;
-                                    }
+                            for (var idx in self.cobjectsInBlock) {
+                                //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
+                                var currentCobject = self.cobjectsInBlock[idx];
+                                if (currentCobject['year'] == startCobjectYear) {
+                                    //Encontrou o Cobject do Level selecionado
+                                    lastCobject_id = currentCobject['cobject_id'];
+                                    //Finaliza a pesquisa, pois incia sempre do 1° 
+                                    break;
                                 }
-
+                            }
+                            
+                            //Se encontrou algum Cobject no bloco para o Nível selecionado
+                            if (self.isset(lastCobject_id)) {
                                 //Inicia com o cobject encontrado
                                 //Construçao do DOM do 1° cobject de cada Meet
                                 Meet.domCobjectBuild(lastCobject_id);
                                 //Depois inicia os eventos globais 
                                 Meet.init_eventsGlobals();
-
-
-                            } else {
-                                //Carrega o 1° Cobject, referente ao 1° Ano
-                                lastCobject_id = self.cobjectsInBlock[0]['cobject_id'];
-                                //Construçao do DOM do 1° cobject de cada Meet
-                                Meet.domCobjectBuild(lastCobject_id);
-                                //Depois inicia os eventos globais 
-                                Meet.init_eventsGlobals();
+                            }else{
+                                //Volta para o select
+                                location.href = "select.html";
+                                alert("Nenhuma Atividade foi Encontrada nesse Nível");
                             }
 
 
@@ -171,13 +166,11 @@ this.MeetEvaluation = function () {
         var idxNextCobject = self.getIdxArrayCobjectsInBlock(Meet.domCobject.cobject.cobject_id) + 1;
         var nextCobjectID = self.cobjectsInBlock[idxNextCobject]['cobject_id'];
 
-        //Verificar o Ano do próximo Cobject, só poderá continuar se for Menor que o ano do Estudante
-        //Com exeção, do estudante do 1° ano, que poderá resolver atividades do seu ano.
+        //Verificar o Ano do próximo Cobject, só poderá continuar se for igual ao Nível selecionado
         Meet.DB_synapse.findCobjectById(nextCobjectID, function (cobject) {
             //Sempre encontrará o cobject referente ao nextCobjectID
             var nextCobjectYear = parseInt(cobject.year);
-            if ((self.studentCurrentYear == nextCobjectYear && self.studentCurrentYear == 1)
-                    || ((nextCobjectYear + 1) == self.studentCurrentYear)) {
+            if (Meet.selected_level_evaluation == nextCobjectYear) {
                 //Pode avançar para esse Próximo Cobject
                 //Criar a Dom do Próximo Cobject
                 Meet.domCobjectBuild(nextCobjectID);
@@ -196,7 +189,7 @@ this.MeetEvaluation = function () {
 
 
             } else {
-                //Finalizou as Atividades do Ano Anterior ao ano corrente do estudante.
+                //Finalizou as Atividades do Nível Selecionado, do bloco selecionado.
                 self.messageFinishedLevel();
             }
 
@@ -315,7 +308,7 @@ this.MeetEvaluation = function () {
             qtd_wrong: Meet.peformance_qtd_wrong
         };
         Meet.DB_synapse.NewORUpdateUserState(info_state);
-        
+
     }
 
 

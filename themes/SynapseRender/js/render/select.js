@@ -170,7 +170,7 @@ $(document).ready(function () {
             //Selecionou um Modo
             //Inclui na sessão o nome do modo do render
             sessionStorage.setItem('render_mode', $(this).val());
-
+           
             if ($(this).val() == 'evaluation') {
                 //O modo selecionado é avaliação
                 //Se o aluno não possuir state_user para esta disciplina(bloco)
