@@ -341,7 +341,13 @@ if (sessionStorage.getItem("isOnline") === null ||
                 state_actorStore.createIndex("actor_id", "actor_id", {
                     unique: false
                 });
+                state_actorStore.createIndex("render_mode", "render_mode", {
+                    unique: false
+                });
                 state_actorStore.createIndex("cobject_block_id", "cobject_block_id", {
+                    unique: false
+                });
+                state_actorStore.createIndex("evaluation_selected_level", "evaluation_selected_level", {
                     unique: false
                 });
 
@@ -357,11 +363,11 @@ if (sessionStorage.getItem("isOnline") === null ||
                 stop_point_diagnosticStore.createIndex("act_goal_content_id", "act_goal_content_id", {
                     unique: false
                 });
-                
+
                 // falta o {mode => [activity, proficiency, train] }
-                
-                
-                
+
+
+
                 // Usando transação oncomplete para afirmar que a criação do objectStore 
                 // é terminada antes de adicionar algum dado nele.
                 schoolStore.transaction.oncomplete = function (event) {
@@ -456,7 +462,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                
+
                 stop_point_diagnosticStore.transaction.oncomplete = function (event) {
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
@@ -1187,8 +1193,9 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         //Adicionar ou Realiza UPDATE dos registros do estado atual deste actor no block
         this.NewORUpdateUserState = function (data_state_actor) {
+            var render_mode = data_state_actor.render_mode;
             var actor_id = data_state_actor.actor_id;
-            var cobject_block_id = data_state_actor.cobject_block_id;
+
             //Escolhe a pesquisa por Ator
             if (self.isset(actor_id)) {
                 window.indexedDB = self.verifyIDBrownser();
@@ -1213,9 +1220,20 @@ if (sessionStorage.getItem("isOnline") === null ||
                         var cursor = event.target.result;
                         if (cursor) {
                             // Faz algo com o que encontrar
-                            //Verificar se JÁ POSSUI UM ESTADO ATUAL PARA ESTE USUÁRIO NESTE BLOCK
-                            if (cursor.value.cobject_block_id == cobject_block_id) {
-                                //Realiza Update
+                            // If for modo Avaliação
+                            var mayUpdate = false;
+                            if (render_mode == 'evaluation' && cursor.value.render_mode == render_mode ) {
+                                var cobject_block_id = data_state_actor.cobject_block_id;
+                                var evaluation_selected_level = data_state_actor.evaluation_selected_level;
+                                //Verificar se possui o mesmo bloco e nível
+                                if (cursor.value.cobject_block_id == cobject_block_id
+                                        && cursor.value.evaluation_selected_level == evaluation_selected_level) {
+                                    //Realiza Update
+                                    mayUpdate = true;    
+                                }
+                            }
+                            
+                            if (mayUpdate) {
                                 user_state_id = cursor.value.id;
                                 //Set os novos dados do estado do actor corrente
                                 if (self.isset(data_state_actor.last_piece_id)) {
@@ -1265,9 +1283,14 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Recuperar o estado do usuário
-        this.getUserState = function (actor_id, cobject_block_id, callBack) {
+        this.getUserState = function (actor_id, render_mode, userStateFilterInfo, callBack) {
+            if (render_mode == 'evaluation') {
+                var cobject_block_id = userStateFilterInfo['cobject_block_id'];
+                var evaluation_selected_level = userStateFilterInfo['evaluation_selected_level'];
+            }
 
-            if (self.isset(actor_id) && self.isset(cobject_block_id)) {
+            if (self.isset(actor_id) && self.isset(cobject_block_id)
+                    && self.isset(evaluation_selected_level)) {
                 var info_state = null;
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
@@ -1289,20 +1312,28 @@ if (sessionStorage.getItem("isOnline") === null ||
                     requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
                         var cursor = event.target.result;
                         if (cursor) {
-                            // Para cada id do Actor encontrado, verificar cobject_block_id
-                            if (cursor.value.cobject_block_id == cobject_block_id) {
-                                //Encontrou o estado deste Actor para este Bloco
-                                info_state = {
-                                    cobject_block_id: cursor.value.cobject_block_id,
-                                    actor_id: cursor.value.actor_id,
-                                    last_cobject_id: cursor.value.last_cobject_id,
-                                    last_piece_id: cursor.value.last_piece_id,
-                                    qtd_correct: cursor.value.qtd_correct,
-                                    qtd_wrong: cursor.value.qtd_wrong,
-                                    last_cobject_id: cursor.value.last_cobject_id
-                                };
+                            if (render_mode == 'evaluation') {
+                                // Para cada id do Actor encontrado, verificar se possui o 
+                                // modo do reder, cobject_block_id  e o nível selecionado
+                                if (cursor.value.render_mode == render_mode &&
+                                        cursor.value.cobject_block_id == cobject_block_id &&
+                                        cursor.value.evaluation_selected_level == evaluation_selected_level) {
+                                    //Encontrou o estado deste Actor para este Bloco
+                                    info_state = {
+                                        actor_id: cursor.value.actor_id,
+                                        cobject_block_id: cursor.value.cobject_block_id,
+                                        render_mode: cursor.value.render_mode,
+                                        evaluation_selected_level: cursor.value.evaluation_selected_level,
+                                        last_cobject_id: cursor.value.last_cobject_id,
+                                        last_piece_id: cursor.value.last_piece_id,
+                                        qtd_correct: cursor.value.qtd_correct,
+                                        qtd_wrong: cursor.value.qtd_wrong,
+                                        last_cobject_id: cursor.value.last_cobject_id
+                                    };
+                                }
                             }
-                            //else { Se não encontrou, vai pro próximo
+
+                            // Se não encontrou, vai pro próximo
                             cursor.continue();
                         } else {
                             //Finalizou a Pesquisa

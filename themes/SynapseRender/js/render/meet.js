@@ -52,12 +52,7 @@ this.Meet = function (options) {
     //======== Variáveis Recuperadas do Filtro Inicial ===========
     //Modo do Render selecionado
     //type: {evaluation, proficiency, training}
-    this.render_mode = options.render_mode;
-    if(this.render_mode == 'evaluation'){
-        //Possui o nível que a avaliação deve ser aplicada
-         Meet.selected_level_evaluation = options.selected_level_evaluation;
-    }
-   
+    Meet.render_mode = options.render_mode;
     
     this.org = options.org[0];
     this.org_name = options.org[1];
@@ -94,9 +89,9 @@ this.Meet = function (options) {
     //Obter bloco a partir da disciplina selecionada
     this.start = function () {
 
-        if (self.render_mode == 'evaluation') {
+        if (Meet.render_mode == 'evaluation') {
             //Instancia o meetEvaluation
-            self.meetEvaluation = new MeetEvaluation(Meet.DB_synapse, self.discipline_id);
+            self.meetEvaluation = new MeetEvaluation(sessionStorage.getItem("evaluation_selected_level"));
             //Inicia o Render
             self.meetEvaluation.start();
         }
@@ -221,11 +216,11 @@ this.Meet = function (options) {
 
     //Carregar Primeira Piece do atendimento corrente
     this.loadFirstPiece = function () {
-        if (self.render_mode == 'evaluation') {
+        if (Meet.render_mode == 'evaluation') {
             self.meetEvaluation.loadFirstPiece_Evaluation();
-        } else if (self.render_mode == 'proficiency') {
+        } else if (Meet.render_mode == 'proficiency') {
 
-        } else if (self.render_mode == 'training') {
+        } else if (Meet.render_mode == 'training') {
 
         }
 
@@ -293,7 +288,7 @@ this.Meet = function (options) {
 
         } else {
             //Atividade Já Finalizada !
-            self.messageFinishedLevel();
+            Meet.messageFinishedLevel();
         }
 
         if (Meet.domCobject.cobject.template_code == 'PLC'
@@ -384,11 +379,11 @@ this.Meet = function (options) {
 
     //Salvar os Pontos de parada do usuário
     this.saveBreakPoint = function (piece_id) {
-        if (self.render_mode == 'evaluation') {
+        if (Meet.render_mode == 'evaluation') {
             self.meetEvaluation.saveBreakPoint(piece_id);
-        } else if (self.render_mode == 'proficiency') {
+        } else if (Meet.render_mode == 'proficiency') {
 
-        } else if (self.render_mode == 'training') {
+        } else if (Meet.render_mode == 'training') {
 
         }
 
@@ -451,7 +446,7 @@ this.Meet = function (options) {
                 } else {
                     //Finalizou todas as Screen do COBJECT Corrente
                     //Vai para a próxima atividade de acordo com o Modo do Render
-                    if (self.render_mode == 'evaluation') {
+                    if (Meet.render_mode == 'evaluation') {
                         //Modo Avaliação
                         if (self.meetEvaluation.hasNextCobjectInBlock()) {
                             //Carrega próxima atividade se permitido
@@ -459,12 +454,12 @@ this.Meet = function (options) {
 
                         } else {
                             //Finalizou o Bloco de Atividades
-                            self.messageFinishedLevel();
+                            Meet.messageFinishedLevel();
                         }
 
-                    } else if (self.render_mode == 'proficiency') {
+                    } else if (Meet.render_mode == 'proficiency') {
 
-                    } else if (self.render_mode == 'training') {
+                    } else if (Meet.render_mode == 'training') {
 
                     }
 
@@ -500,7 +495,7 @@ this.Meet = function (options) {
     };
 
 
-    this.messageFinishedLevel = function () {
+    Meet.messageFinishedLevel = function () {
         $('.cobject_block').hide();
         $('#finishLevel-message').show();
         $('#finishLevel-message button').bind('tap', function () {

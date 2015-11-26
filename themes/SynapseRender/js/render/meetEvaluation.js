@@ -1,16 +1,16 @@
 
 
-this.MeetEvaluation = function () {
+this.MeetEvaluation = function (evaluation_selected_level) {
     //Apontador para o próprio objeto MeetEvaluation
     var self = this;
 
     //======================================
-
+    //Bloco id atual
     this.cobject_block_id = null;
-
     //Array com as principais informações de cada Cobject do bloco selecionado
     this.cobjectsInBlock = new Array();
-
+    //Nível Selecionado
+    this.evaluation_selected_level = evaluation_selected_level;
 
     this.start = function () {
         Meet.DB_synapse.getBlockByDiscipline(Meet.discipline_id, function (cobject_block_id) {
@@ -41,7 +41,11 @@ this.MeetEvaluation = function () {
                     self.setCobjectsFromBlock(objectsThisBlock);
 
                     //Agora Verifica o UserState
-                    Meet.DB_synapse.getUserState(Meet.actor, self.cobject_block_id, function (info_state) {
+                    var userStateEvaluationInfo = {
+                          cobject_block_id: self.cobject_block_id,
+                          evaluation_selected_level: self.evaluation_selected_level
+                    };
+                    Meet.DB_synapse.getUserState(Meet.actor, Meet.render_mode, userStateEvaluationInfo, function (info_state) {
                         var gotoState = self.isset(info_state);
                         var lastCobject_id = null;
 
@@ -55,6 +59,8 @@ this.MeetEvaluation = function () {
                             Meet.firstPieceCurrentMeet = info_state.last_piece_id;
                             Meet.peformance_qtd_correct = info_state.qtd_correct;
                             Meet.peformance_qtd_wrong = info_state.qtd_wrong;
+                            Meet.render_mode = info_state.render_mode;
+                            self.evaluation_selected_level = info_state.evaluation_selected_level;
                             //Calcula o Score
                             Meet.scoreCalculator(false);
 
@@ -68,7 +74,7 @@ this.MeetEvaluation = function () {
                             Meet.isLoadState = false;
 
                             //Abre o Primeiro Cobject, referente ao Nível Selecionado
-                            var startCobjectYear = Meet.selected_level_evaluation;
+                            var startCobjectYear = self.evaluation_selected_level;
 
                             for (var idx in self.cobjectsInBlock) {
                                 //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
@@ -170,7 +176,7 @@ this.MeetEvaluation = function () {
         Meet.DB_synapse.findCobjectById(nextCobjectID, function (cobject) {
             //Sempre encontrará o cobject referente ao nextCobjectID
             var nextCobjectYear = parseInt(cobject.year);
-            if (Meet.selected_level_evaluation == nextCobjectYear) {
+            if (self.evaluation_selected_level == nextCobjectYear) {
                 //Pode avançar para esse Próximo Cobject
                 //Criar a Dom do Próximo Cobject
                 Meet.domCobjectBuild(nextCobjectID);
@@ -190,7 +196,7 @@ this.MeetEvaluation = function () {
 
             } else {
                 //Finalizou as Atividades do Nível Selecionado, do bloco selecionado.
-                self.messageFinishedLevel();
+                Meet.messageFinishedLevel();
             }
 
         });
@@ -215,7 +221,7 @@ this.MeetEvaluation = function () {
             // O A partir daqui torna falso o isLoadState, pois só é carregado o estado na primeira vez
             Meet.isLoadState = false;
 
-            var lastPiece = $(selector_cobject + ' .piece[id=' + self.firstPieceCurrentMeet + ']');
+            var lastPiece = $(selector_cobject + ' .piece[id=' + Meet.firstPieceCurrentMeet + ']');
             var nextPiece = null;
             var lastPieceSet = null;
             var lastScreen = null;
@@ -296,13 +302,15 @@ this.MeetEvaluation = function () {
         return idxCurrentCobject > 0;
     };
 
-
+    
     this.saveBreakPoint = function (piece_id) {
         //Salva o estado do Usuário, assim que resolve a questão
         //cobject_block_id + actor_id = PK
         var info_state = {
+            render_mode: Meet.render_mode,
             cobject_block_id: self.cobject_block_id,
             actor_id: Meet.actor,
+            evaluation_selected_level: self.evaluation_selected_level,
             last_cobject_id: Meet.domCobject.cobject.cobject_id,
             last_piece_id: piece_id,
             qtd_correct: Meet.peformance_qtd_correct,
