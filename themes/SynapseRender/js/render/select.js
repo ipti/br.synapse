@@ -181,6 +181,10 @@ $(document).ready(function () {
                 goRender();
             }
 
+            //Retira a seleção atual
+            $(this).find('option:selected').removeAttr('selected');
+            //Volta a posição inicial
+            $(this).find('option[value=-1]').attr('selected');
 
         }
 
@@ -193,6 +197,12 @@ $(document).ready(function () {
             sessionStorage.setItem('evaluation_selected_level', $(this).val());
             //Dá início ao Render
             goRender();
+
+            //Retira a seleção atual
+            $(this).find('option:selected').removeAttr('selected');
+            //Volta a posição inicial
+            $(this).find('option[value=-1]').attr('selected');
+
         }
     });
 
