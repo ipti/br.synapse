@@ -21,13 +21,29 @@
 
         <!-- JQUERY FOR MOBILE-->
         <script>
-            
-             if(sessionStorage.getItem("isOnline") !== null &&
-                     sessionStorage.getItem("isOnline") == 'true'){
+
+            //Condições de Redirecionamentos
+
+            if (sessionStorage.getItem("isOnline") !== null &&
+                    sessionStorage.getItem("isOnline") == 'true') {
                 //Render Online, não precisa do Import
                 location.href = "select.html";
-             }
-             
+            }
+
+            var authorization = sessionStorage.getItem("authorization");
+            var login_personage_name = sessionStorage.getItem("login_personage_name");
+            if (authorization == 'true') {
+                //Usuário Logado
+                if (login_personage_name != "admin") {
+                    // Não é admin
+                    location.href = "meet.html";
+                }
+            } else {
+                //Volta pra a tela de login
+                location.href = "login.html";
+            }
+
+
             //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
             $(document).bind('mobileinit', function () {
                 $.mobile.changePage.defaults.changeHash = false;
@@ -35,7 +51,7 @@
                 $.mobile.pushStateEnabled = false;
             });
         </script>
-        
+
         <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
         <!-- ======= -->
 
@@ -139,28 +155,41 @@
                 });
 
                 $('#installAll').on('tap', function () {
-                    deleteDatabase();
-                    buildAllSchemas();
+                    //Somente realiza a instalação, após a confirmação 
+                    //da senha do admin
+                    $("#import-confirm-admin-password").show();
+
                 });
 
-                $('#deleteAllDB').bind('tap', function () {
-                    deleteDatabase();
+                $('#btnConfirmPassword').on('tap', function () {
+                    //Somente realiza a instalação, após a confirmação 
+                    //da senha do admin
+                    var passWord = $("#password").val();
+                    db.confirmPassWordAdmin(passWord, function (passWordOk) {
+                        if (passWordOk) {
+                            //Confirmado!
+                            deleteDatabase();
+                            buildAllSchemas();
+
+                            //Limpar mensagens e inputs do form
+                            $(".message-form").html("");
+                            $("#password").val("");
+                            //Sair do Modal
+                            $("#import-confirm-admin-password").hide();
+                        } else {
+                            //Senha incorreta
+                            $(".message-form").html("Senha Incorreta!");
+                        }
+                    });
+
                 });
 
-
-                $('#buildAllSchemas').bind('tap', function () {
-                    buildAllSchemas();
+                $('#btnClose').on('tap', function () {
+                    //Sair do Modal
+                    $("#import-confirm-admin-password").hide();
                 });
 
-                $('#importLinguagem').bind('tap', function () {
-                    importGeneral(dataJsonLin);
-                });
-
-
-                $('#importMatematica').bind('tap', function () {
-                    importGeneral(dataJsonMat);
-                });
-
+                
                 $('#back').bind('tap', function () {
                     location.href = "select.html";
                 });
@@ -181,17 +210,29 @@
 
         <section id="import-form">
             <div id="import_data">
-
-                <!--
-                <button class="import-button buttons" type="button" id="deleteAllDB"> Limpar Banco </button>  
-                <button class="import-button buttons" type="button" id="buildAllSchemas" name="buildAllSchemas" >Construir Esquemas</button>
-                <button class="import-button buttons" type="button" id="importLinguagem" name="importLinguagem" >Importar Dados - 1º Ano LINGUAGEM</button>
-                <button class="import-button buttons" type="button" id="importMatematica" name="importMatematica" >Importar Dados - 1º Ano MATEMÁTICA</button>
-                -->
                 <button class="import-button buttons" type="button" id="installAll" name="installAll" >Instalar</button>
                 <button class="back-button buttons" type="button" id="back" name="back" >Voltar</button>
             </div>
         </section>
+
+
+        <!-- Modals -->
+
+        <!-- Confirmação da Senha do Admin -->
+        <div id="import-confirm-admin-password" class="modal_message overlay">
+            <div class="message-container confirmAdminPassword">
+                <div class="title-confirm-admin-password">
+                    Confirmar Senha do Administrador
+                </div>
+                <div class="message-form">
+                </div>
+                <input type="password" size="20" maxlength="40" name="password" id="password"/> 
+                <button class="message-button-confirm-admin-password" id="btnConfirmPassword">Confirmar</button>
+                <button class="message-button-confirm-admin-password" id="btnClose">Sair</button>
+            </div>
+        </div>
+
+
     </body>
 </html>
 

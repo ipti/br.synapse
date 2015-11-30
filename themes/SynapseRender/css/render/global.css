@@ -29,3 +29,63 @@
     height: 100% !important;
     min-height: 100% !important;
  }
+ 
+ /** Overlay **/
+
+.overlay {
+    background: rgba(255, 255, 255, 0.7);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: none;
+    z-index: 100000;
+}
+
+.message-container {
+    width: 350px;
+    margin: 150px auto;
+    text-align: center;
+    font-family: tellural, helvetica, arial, sans-serif;
+    color: #fff;
+    font-size: 36px;
+    padding: 30px;
+    border-radius: 6px;
+    line-height: 44px;
+    box-shadow: 1px 1px 8px #2C2C2C;
+}
+
+ #import-confirm-admin-password {
+    z-index: 100001;
+}
+
+.title-confirm-admin-password{
+     font-size: 36px;
+     margin-bottom: 10px;
+}
+
+.message-container.confirmAdminPassword {
+    background: rgba(78, 184, 152, 0.75);
+    font-size: 25px;
+}
+
+.message-form{
+    font-size: 18px;
+    color:#F18318;
+}
+
+.message-button-confirm-admin-password {
+    border: none;
+    border-radius: 3px;
+    color: #666666;
+    font-family: tellural, helvetica, arial, sans-serif;
+    font-size: 20px;
+    padding: 7px 14px;
+    margin-top: 10px;
+    cursor:pointer;
+}
+
+.confirmAdminPassword input {
+    height:30px;
+    font-size: 27px;
+}

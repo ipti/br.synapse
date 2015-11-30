@@ -1060,6 +1060,27 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         }
 
+
+
+        //Confirmar a snha do administrador
+        this.confirmPassWordAdmin = function (password, callBack) {
+            var login = "admin";
+            var passWordOk = false;
+            if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
+                if (password == '123456') {
+                    //Senha correta
+                    passWordOk = true;
+                }
+                //Chama o callBack
+                callBack(passWordOk);
+
+            } else {
+                //Chama o método callBack
+                callBack(passWordOk);
+            }
+
+        }
+
         //===================
         this.getCobject = function (cobject_id, callBack) {
             if (self.isset(cobject_id)) {
@@ -1223,17 +1244,17 @@ if (sessionStorage.getItem("isOnline") === null ||
                             // Faz algo com o que encontrar
                             // If for modo Avaliação
                             var mayUpdate = false;
-                            if (render_mode == 'evaluation' && cursor.value.render_mode == render_mode ) {
+                            if (render_mode == 'evaluation' && cursor.value.render_mode == render_mode) {
                                 var cobject_block_id = data_state_actor.cobject_block_id;
                                 var evaluation_selected_level = data_state_actor.evaluation_selected_level;
                                 //Verificar se possui o mesmo bloco e nível
                                 if (cursor.value.cobject_block_id == cobject_block_id
                                         && cursor.value.evaluation_selected_level == evaluation_selected_level) {
                                     //Realiza Update
-                                    mayUpdate = true;    
+                                    mayUpdate = true;
                                 }
                             }
-                            
+
                             if (mayUpdate) {
                                 user_state_id = cursor.value.id;
                                 //Set os novos dados do estado do actor corrente
