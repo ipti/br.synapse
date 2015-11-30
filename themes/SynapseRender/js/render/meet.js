@@ -11,7 +11,11 @@
 this.Meet = function (options) {
     //Apontador para o próprio objeto Meet
     var self = this;
+    //Modo do Render selecionado
+    //type: {evaluation, proficiency, training}
+    Meet.render_mode = options.render_mode;
     this.meetEvaluation;
+    this.meetProficiency;
 
     // MGS
     MSG_CORRECT = 'Parabéns, você acertou';
@@ -50,10 +54,8 @@ this.Meet = function (options) {
     this.isFinalBlock = false;
     this.currentTemplateCode = null;
     //======== Variáveis Recuperadas do Filtro Inicial ===========
-    //Modo do Render selecionado
-    //type: {evaluation, proficiency, training}
-    Meet.render_mode = options.render_mode;
-    
+
+
     this.org = options.org[0];
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
@@ -94,6 +96,11 @@ this.Meet = function (options) {
             self.meetEvaluation = new MeetEvaluation(sessionStorage.getItem("evaluation_selected_level"));
             //Inicia o Render
             self.meetEvaluation.start();
+        } else if (Meet.render_mode == 'proficiency') {
+            //Instancia o meetProficiency
+            self.meetProficiency = new MeetProficiency();
+            //Inicia o Render
+            self.meetProficiency.start();
         }
 
 

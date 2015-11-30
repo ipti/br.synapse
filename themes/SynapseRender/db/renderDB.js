@@ -4,7 +4,8 @@
 
 //Verificar se NÃO é o RenderOnline
 if (sessionStorage.getItem("isOnline") === null ||
-        sessionStorage.getItem("isOnline") == 'false') {
+        sessionStorage.getItem("isOnline") == 'false' ||
+        sessionStorage.getItem("isOnline") == '-1') {
 
     this.DB = function () {
         self = this;
