@@ -198,8 +198,6 @@ fieldset{
     color: #51B899;
     font-weight: bold;
     font-size: 30px;
-    top:50%;
-    transform: translateY(30%);
 }
 
 .book-right {

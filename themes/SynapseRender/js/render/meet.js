@@ -60,7 +60,8 @@ this.Meet = function (options) {
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
     Meet.studentClassroomName = options.studentClassroom[1];
-    this.studentCurrentYear = 0;
+    //Ano atual do Aluno
+    Meet.studentCurrentYear = 0;
     Meet.actor = options.actor[0];
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];

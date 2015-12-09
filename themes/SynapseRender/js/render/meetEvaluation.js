@@ -50,7 +50,7 @@ this.MeetEvaluation = function (evaluation_selected_level) {
                         var lastCobject_id = null;
 
                         //Ano atual no estudante
-                        self.studentCurrentYear = parseInt(Meet.studentClassroomName.match(/\d/)[0]);
+                        Meet.studentCurrentYear = parseInt(Meet.studentClassroomName.match(/\d/)[0]);
 
                         if (gotoState) {
                             //Encontrou O estado do usuário

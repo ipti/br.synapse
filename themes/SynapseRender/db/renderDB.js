@@ -229,6 +229,18 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_goalStore.createIndex("discipline_id", "discipline_id", {
                     unique: false
                 });
+                //Criar Index para stage
+                act_goalStore.createIndex("stage", "stage", {
+                    unique: false
+                });
+                //Criar Index para year
+                act_goalStore.createIndex("year", "year", {
+                    unique: false
+                });
+                //Criar Index para grade
+                act_goalStore.createIndex("grade", "grade", {
+                    unique: false
+                });
 
                 /* act_content {
                  `id`,
@@ -349,6 +361,10 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
                 state_actorStore.createIndex("evaluation_selected_level", "evaluation_selected_level", {
+                    unique: false
+                });
+                
+                 state_actorStore.createIndex("discipline_id", "discipline_id", {
                     unique: false
                 });
 
@@ -515,6 +531,9 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var current_goal_id = current_cobject.goal_id;
                 var current_goal = current_cobject.goal;
                 var current_goal_discipline_id = current_cobject.goal_discipline_id;
+                var stage = current_cobject.stage;
+                var year = current_cobject.year;
+                var grade = current_cobject.grade;
 
                 //Conteúdo corrente
                 var current_content_id = current_cobject.content_id;
@@ -537,7 +556,10 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_goals[current_goal_id] = {
                     id: current_goal_id,
                     name: current_goal,
-                    discipline_id: current_goal_discipline_id
+                    discipline_id: current_goal_discipline_id,
+                    stage: stage,
+                    year: year,
+                    grade: grade
                 };
 
                 act_contents[current_content_id] = {
@@ -1373,6 +1395,73 @@ if (sessionStorage.getItem("isOnline") === null ||
                 }
             }
         }
+
+
+        //Recuperar o estado do usuário
+        this.getUserState_ModeDiagnostic = function (actor_id, render_mode, userStateFilterInfo, callBack) {
+            if (render_mode == 'proficiency') {
+                var discipline_id = userStateFilterInfo['discipline_id'];
+            }
+            
+            if (self.isset(actor_id) && self.isset(discipline_id)) {
+                var info_state = null;
+                window.indexedDB = self.verifyIDBrownser();
+                DBsynapse = window.indexedDB.open(nameBD);
+                DBsynapse.onerror = function (event) {
+                    console.log("Error: ");
+                    console.log(event);
+                    // alert("Você não habilitou minha web app para usar IndexedDB?!");
+                }
+                DBsynapse.onsuccess = function (event) {
+                    var db = event.target.result;
+                    db.onerror = function (event) {
+                        // Função genérica para tratar os erros de todos os requests desse banco!
+                        console.log("Database error: " + event.target.errorCode);
+                    }
+                    //Tudo ok Então Busca O Cobject
+                    var state_actorStore = db.transaction("state_actor").objectStore("state_actor");
+                    var requestGet = state_actorStore.index('actor_id');
+                    var singleKeyRange = IDBKeyRange.only(actor_id);
+                    requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                        var cursor = event.target.result;
+                        if (cursor) {
+                            if (render_mode == 'proficiency') {
+                                // Para cada id do Actor encontrado, verificar se possui o 
+                                // modo do render e discipline_id 
+                                if (cursor.value.render_mode == render_mode &&
+                                        cursor.value.discipline_id == discipline_id ) {
+                                    //Encontrou o estado deste Actor + discipline + modo proficiency
+                                    info_state = {
+                                        actor_id: cursor.value.actor_id,
+                                        discipline_id: cursor.value.discipline_id,
+                                        render_mode: cursor.value.render_mode,
+                                        last_cobject_id: cursor.value.last_cobject_id,
+                                        last_piece_id: cursor.value.last_piece_id,
+                                        qtd_correct: cursor.value.qtd_correct,
+                                        qtd_wrong: cursor.value.qtd_wrong,
+                                    };
+                                }
+                            }
+
+                            // Se não encontrou, vai pro próximo
+                            cursor.continue();
+                        } else {
+                            //Finalizou a Pesquisa
+                            callBack(info_state);
+                        }
+
+                    };
+                    requestGet.onerror = function (event) {
+                        // Tratar erro!
+                    }
+                }
+                DBsynapse.onblocked = function (event) {
+                    // Se existe outra aba com a versão antiga
+                    window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+                }
+            }
+        }
+
 
         /*
          this.getAllClass = function (callBack, callBackEvent) {
