@@ -590,15 +590,6 @@ if (sessionStorage.getItem("isOnline") === null ||
             }
 
 
-            console.log(act_goals);
-            console.log(act_contents);
-            console.log(act_scripts);
-
-            console.log(act_goal_contents);
-            console.log(act_script_contents);
-
-
-
             var options = {
                 schools: schools,
                 unitys: unitys,

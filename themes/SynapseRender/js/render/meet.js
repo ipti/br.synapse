@@ -97,12 +97,18 @@ this.Meet = function (options) {
             self.meetEvaluation = new MeetEvaluation(sessionStorage.getItem("evaluation_selected_level"));
             //Inicia o Render
             self.meetEvaluation.start();
-        } else if (Meet.render_mode == 'proficiency') {
+        }else{
+            alert("Indisponível...");
+        } 
+        
+        /* else if (Meet.render_mode == 'proficiency') {
             //Instancia o meetProficiency
             self.meetProficiency = new MeetProficiency();
             //Inicia o Render
             self.meetProficiency.start();
-        }
+        } else if (Meet.render_mode == 'training') {
+            
+        } */
 
 
     }

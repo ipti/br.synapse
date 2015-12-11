@@ -60,8 +60,6 @@ this.MeetProficiency = function () {
                     //Verificar quais scripts estão disponíveis(se Não existir
                     //um ponto de diagnóstico no script para o aluno corrente )
                     
-                    
-                    
                     //Para os scripts diponíveis, sortear, qual deverá ser inciado
                     
                 });
