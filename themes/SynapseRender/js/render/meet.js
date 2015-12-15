@@ -60,7 +60,8 @@ this.Meet = function (options) {
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
     Meet.studentClassroomName = options.studentClassroom[1];
-    this.studentCurrentYear = 0;
+    //Ano atual do Aluno
+    Meet.studentCurrentYear = 0;
     Meet.actor = options.actor[0];
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];
@@ -96,12 +97,18 @@ this.Meet = function (options) {
             self.meetEvaluation = new MeetEvaluation(sessionStorage.getItem("evaluation_selected_level"));
             //Inicia o Render
             self.meetEvaluation.start();
-        } else if (Meet.render_mode == 'proficiency') {
+        }else{
+            alert("Indisponível...");
+        } 
+        
+        /* else if (Meet.render_mode == 'proficiency') {
             //Instancia o meetProficiency
             self.meetProficiency = new MeetProficiency();
             //Inicia o Render
             self.meetProficiency.start();
-        }
+        } else if (Meet.render_mode == 'training') {
+            
+        } */
 
 
     }

@@ -1,17 +1,103 @@
 
-this.MeetProficiency = function (evaluation_selected_level) {
-    //Apontador para o próprio objeto MeetEvaluation
+this.MeetProficiency = function () {
+    //Apontador para o próprio objeto MeetProficiency
     var self = this;
 
     //======================================
-    //Bloco id atual
-    this.cobject_block_id = null;
-    //Array com as principais informações de cada Cobject do bloco selecionado
-    this.cobjectsInBlock = new Array();
-    //Nível Selecionado
-    this.evaluation_selected_level = evaluation_selected_level;
+    //Disciplina Atual
+    this.discipline_id = null;
+    //Roteiro Atual
+    this.script_id = null;
+    //Conteúdo atual
+    this.content_id = null;
+    //Objetivo atual
+    this.goal_id = null;
+    //Todos os scripts disponíveis(sem diagnósticos)
+    this.availableScripts = new Array();
+
+    //Array de Cobjects no objetivo corrente
+    this.cobjectsInCurrentGoal = new Array();
 
     this.start = function () {
+        //Verificar o UserState
+
+        var userStateProficiencyInfo = {
+            discipline_id: self.discipline_id,
+        };
+
+        Meet.DB_synapse.getUserState_ModeDiagnostic(Meet.actor, Meet.render_mode, userStateProficiencyInfo, function (info_state) {
+            var gotoState = self.isset(info_state);
+            var lastCobject_id = null;
+
+            //Ano atual no estudante
+            Meet.studentCurrentYear = parseInt(Meet.studentClassroomName.match(/\d/)[0]);
+
+            if (gotoState) {
+                //Encontrou O estado do usuário
+                Meet.isLoadState = true;
+                lastCobject_id = info_state.last_cobject_id;
+                Meet.firstPieceCurrentMeet = info_state.last_piece_id;
+                Meet.peformance_qtd_correct = info_state.qtd_correct;
+                Meet.peformance_qtd_wrong = info_state.qtd_wrong;
+                Meet.render_mode = info_state.render_mode;
+                //Calcula o Score
+                Meet.scoreCalculator(false);
+
+                //Construçao do DOM do 1° cobject de cada Meet
+                Meet.domCobjectBuild(lastCobject_id);
+                //Depois inicia os eventos globais 
+                Meet.init_eventsGlobals();
+            } else {
+                //Primeiro Acesso do usuário; Não possui nenhum estado registrado
+                //Indica que Não possui algum estado carregado 
+                Meet.isLoadState = false;
+                //Abre o Primeiro Cobject do Roteiro(aleatório)
+                //
+                //Obter todos roteiros para a disciplina selecionada
+                Meet.DB_synapse.getAllScripts(Meet.discipline_id, function(scripts){
+                    //Pequisar Todos contents e goals do script disponível e escolhido
+                    //
+                    //Verificar quais scripts estão disponíveis(se Não existir
+                    //um ponto de diagnóstico no script para o aluno corrente )
+                    
+                    //Para os scripts diponíveis, sortear, qual deverá ser inciado
+                    
+                });
+
+                
+
+                for (var idx in self.cobjectsInBlock) {
+                    //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
+                    var currentCobject = self.cobjectsInBlock[idx];
+                    if (currentCobject['year'] == startCobjectYear) {
+                        //Encontrou o Cobject do Level selecionado
+                        lastCobject_id = currentCobject['cobject_id'];
+                        //Finaliza a pesquisa, pois incia sempre do 1° 
+                        break;
+                    }
+                }
+
+                //Se encontrou algum Cobject no bloco para o Nível selecionado
+                if (self.isset(lastCobject_id)) {
+                    //Inicia com o cobject encontrado
+                    //Construçao do DOM do 1° cobject de cada Meet
+                    Meet.domCobjectBuild(lastCobject_id);
+                    //Depois inicia os eventos globais 
+                    Meet.init_eventsGlobals();
+                } else {
+                    //Volta para o select
+                    location.href = "select.html";
+                    alert("Nenhuma Atividade foi Encontrada nesse Nível");
+                }
+
+
+            }
+
+
+        });
+
+
+
         Meet.DB_synapse.getBlockByDiscipline(Meet.discipline_id, function (cobject_block_id) {
             // Seta o Bloco para a disciplina selecionada
             self.cobject_block_id = cobject_block_id;
@@ -40,16 +126,16 @@ this.MeetProficiency = function (evaluation_selected_level) {
                     self.setCobjectsFromBlock(objectsThisBlock);
 
                     //Agora Verifica o UserState
-                    var userStateEvaluationInfo = {
-                          cobject_block_id: self.cobject_block_id,
-                          evaluation_selected_level: self.evaluation_selected_level
+                    var userStateProficiencyInfo = {
+                        cobject_block_id: self.cobject_block_id,
+                        evaluation_selected_level: self.evaluation_selected_level
                     };
-                    Meet.DB_synapse.getUserState(Meet.actor, Meet.render_mode, userStateEvaluationInfo, function (info_state) {
+                    Meet.DB_synapse.getUserState(Meet.actor, Meet.render_mode, userStateProficiencyInfo, function (info_state) {
                         var gotoState = self.isset(info_state);
                         var lastCobject_id = null;
 
                         //Ano atual no estudante
-                        self.studentCurrentYear = parseInt(Meet.studentClassroomName.match(/\d/)[0]);
+                        Meet.studentCurrentYear = parseInt(Meet.studentClassroomName.match(/\d/)[0]);
 
                         if (gotoState) {
                             //Encontrou O estado do usuário
@@ -85,7 +171,7 @@ this.MeetProficiency = function (evaluation_selected_level) {
                                     break;
                                 }
                             }
-                            
+
                             //Se encontrou algum Cobject no bloco para o Nível selecionado
                             if (self.isset(lastCobject_id)) {
                                 //Inicia com o cobject encontrado
@@ -93,7 +179,7 @@ this.MeetProficiency = function (evaluation_selected_level) {
                                 Meet.domCobjectBuild(lastCobject_id);
                                 //Depois inicia os eventos globais 
                                 Meet.init_eventsGlobals();
-                            }else{
+                            } else {
                                 //Volta para o select
                                 location.href = "select.html";
                                 alert("Nenhuma Atividade foi Encontrada nesse Nível");
@@ -301,7 +387,7 @@ this.MeetProficiency = function (evaluation_selected_level) {
         return idxCurrentCobject > 0;
     };
 
-    
+
     this.saveBreakPoint = function (piece_id) {
         //Salva o estado do Usuário, assim que resolve a questão
         //cobject_block_id + actor_id = PK
