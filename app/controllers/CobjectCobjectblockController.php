@@ -67,7 +67,7 @@ class CobjectCobjectblockController extends Controller
 			$model->attributes=$_POST['CobjectCobjectblock'];
 			if($model->save()){
                                 Yii::app()->user->setFlash('success', Yii::t('default', 'CobjectCobjectblock Created Successful:'));
-				$this->redirect(array('index'));
+				$this->redirect(array('admin'));
                                }
 		}
 
