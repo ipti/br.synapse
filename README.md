@@ -1,4 +1,3 @@
-#Synapse
 ![Synapse](http://www.ipti.org.br/wp-content/uploads/2013/09/banner-synapse02.jpg)
 ***
 #### Pré-Requisitos
