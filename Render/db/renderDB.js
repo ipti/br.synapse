@@ -843,15 +843,6 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-        ;
-
-        ;
-
-        ;
-
-        ;
-
-        ;
 
         //Importar as act_goals
         this.importActGoals = function (db, act_goals) {

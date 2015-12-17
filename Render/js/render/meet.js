@@ -2,9 +2,9 @@
 
 /**
  * Classe do Meet
- * 
+ *
  * @class
- * 
+ *
  * @param {array} options
  * @returns {Meet}
  */
@@ -99,15 +99,15 @@ this.Meet = function (options) {
             self.meetEvaluation.start();
         }else{
             alert("Indisponível...");
-        } 
-        
+        }
+
         /* else if (Meet.render_mode == 'proficiency') {
             //Instancia o meetProficiency
             self.meetProficiency = new MeetProficiency();
             //Inicia o Render
             self.meetProficiency.start();
         } else if (Meet.render_mode == 'training') {
-            
+
         } */
 
 
@@ -120,7 +120,7 @@ this.Meet = function (options) {
 
     /**
      * Retorna todos os CObjects de Meet.domCobject em uma string
-     * 
+     *
      * @returns {String.domCobjectBuildAll}
      */
 //    this.domCobjectBuildAll = function() {
@@ -137,9 +137,9 @@ this.Meet = function (options) {
 //    }
 
     /**
-     * 
+     *
      * @param {DOMString} cobject_id
-     * 
+     *
      * @returns {void}
      */
     Meet.domCobjectBuild = function (cobject_id) {
@@ -175,7 +175,7 @@ this.Meet = function (options) {
 
             //Inicia os eventos somente após a inclusão do html na dom
             self.beginEvents();
-            // Render Ready! 
+            // Render Ready!
             if (!isClockStarted) {
                 isClockStarted = true;
                 self.countTime($('.info-time .info-text'));
@@ -186,7 +186,7 @@ this.Meet = function (options) {
 
     /**
      * Inicializa os eventos dos Cobjects
-     * 
+     *
      * @returns {void}
      */
     this.beginEvents = function () {
@@ -200,33 +200,14 @@ this.Meet = function (options) {
         self.init_Common();
     };
 
-    //    /**
-    //     * Retorna o cabeçalho do Meet
-    //     * 
-    //     * @returns {String}
-    //     */
-    //    this.headMeet = function() {
-    //        return '<b>' + MAME_ORGANIZATION + ':</b>' + this.org_name
-    //        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_CLASS + ':</b> ' + this.classe_name
-    //        + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>' + NAME_ACTOR + ':</b> ' + this.actor_name;
-    //    }
-
-    //    this.verifyMatch(group1, element1ID, group2, element2ID){
-    //        
-    //    }
-
     /**
      * Reseta os intervalos de tempo
-     * 
+     *
      * @returns {void}
      */
     this.restartTimes = function () {
         self.interval_group = self.interval_piece = new Date().getTime();
     };
-
-
-
-
 
     //Carregar Primeira Piece do atendimento corrente
     this.loadFirstPiece = function () {
@@ -240,11 +221,9 @@ this.Meet = function (options) {
 
     }
 
-
-
     /**
      * Inicializa eventos comuns a todos os templates.
-     * 
+     *
      * @returns {void}
      */
     this.init_Common = function () {
@@ -374,8 +353,6 @@ this.Meet = function (options) {
 
     };
 
-
-
     this.stopAllSounds = function () {
         $('.soundIconPause[playing="true"]').each(function (idx) {
             var li = $(this).parent();
@@ -389,7 +366,6 @@ this.Meet = function (options) {
             $(this).attr('playing', 'false');
         });
     };
-
 
     //Salvar os Pontos de parada do usuário
     this.saveBreakPoint = function (piece_id) {
@@ -508,7 +484,6 @@ this.Meet = function (options) {
 
     };
 
-
     Meet.messageFinishedLevel = function () {
         $('.cobject_block').hide();
         $('#finishLevel-message').show();
@@ -516,7 +491,6 @@ this.Meet = function (options) {
             $('#finishLevel-message').hide();
         });
     }
-
 
     this.prevPiece = function () {
         var currentPiece = $('.currentPiece');
@@ -625,7 +599,6 @@ this.Meet = function (options) {
 
     };
 
-
     var BtnPageTXT = function () {
         $('.game').hide();
         $('#nextPage').show();
@@ -646,7 +619,7 @@ this.Meet = function (options) {
 
     /**
      * Inicializa eventos do MTE
-     * 
+     *
      * @returns {void}
      */
     this.init_MTE = function () {
@@ -677,7 +650,7 @@ this.Meet = function (options) {
 
     /**
      * Inicializa eventos do AEL
-     * 
+     *
      * @returns {void}
      */
     this.init_AEL = function () {
@@ -742,7 +715,7 @@ this.Meet = function (options) {
 
     /**
      * Inicializa eventos do DDROP
-     * 
+     *
      * @returns {void}
      */
     this.init_DDROP = function () {
@@ -826,7 +799,7 @@ this.Meet = function (options) {
 
     /**
      * Inicializa eventos do ONEDDROP
-     * 
+     *
      * @returns {void}
      */
     this.init_ONEDDROP = function () {
@@ -905,10 +878,9 @@ this.Meet = function (options) {
 
     };
 
-
     /**
      * Inicializa eventos do PRE
-     * 
+     *
      * @returns {void}
      */
     this.init_PRE = function () {
@@ -925,7 +897,7 @@ this.Meet = function (options) {
 
     /**
      * Inicializa eventos do TXT
-     * 
+     *
      * @returns {void}
      */
     this.init_TXT = function () {
@@ -939,10 +911,10 @@ this.Meet = function (options) {
 
         });
     };
-    //======================
+
     /**
      * Inicializa eventos do PLC
-     * 
+     *
      * @returns {void}
      */
     this.init_DIG = function () {
@@ -985,7 +957,7 @@ this.Meet = function (options) {
             }
         });
 
-        //Se for disparo um evento touchMove 
+        //Se for disparo um evento touchMove
         $(".DIG-table td").on('vmousemove', function (event) {
             var currentPiece = $(this).closest('.piece');
             var currentCellStart = currentPiece.find('.DIG-table td.currentStart');
@@ -1137,7 +1109,7 @@ this.Meet = function (options) {
         $('.DIG-table td').on('mouseup', function () {
             var currentPiece = $(this).closest('.piece');
 
-            //Armazenar na div high Light a posição da matriz 
+            //Armazenar na div high Light a posição da matriz
             //que inicia e termina a palavra selecionada atual
             var currentStart = currentPiece.find('.DIG-table td.currentStart');
             var posStart = currentStart.attr('row') + "_" + currentStart.attr('col');
@@ -1192,9 +1164,10 @@ this.Meet = function (options) {
         });
 
     };
+
     /**
      * Inicializa eventos do PLC
-     * 
+     *
      * @returns {void}
      */
     this.init_PLC = function () {
@@ -1232,7 +1205,7 @@ this.Meet = function (options) {
 //                $(this).attr('value', "");
 //                var inputs = $(this).closest('.PLC-table').find(':input');
 //                inputs.eq(inputs.index(this) - 1).focus();
-//            } 
+//            }
 
             if (!self.isEmpty($(this).val())) {
                 var val = $(this).attr('value');
@@ -1343,14 +1316,14 @@ this.Meet = function (options) {
         });
 
 
-        //Se for disparo um evento touchMove 
+        //Se for disparo um evento touchMove
         $("div.draw-point").on('vmousemove', function (event) {
             var currentCellStart = $(this).closest('div.Table').find('div.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
 
             if ($(elementAtual).hasClass('draw-point') && currentCellStart.size() !== 0) {
                 //É uma célula div e há uma célula que iniciou a seleção corrente
-                //Somente 
+                //Somente
                 $(elementAtual).trigger('mouseover');
             }
         });
@@ -1402,7 +1375,7 @@ this.Meet = function (options) {
                     lastCurrentDrawPoint.trigger('mouseup');
                     //Depois Inicia um novo HighLight
                     lastCurrentDrawPoint.trigger('mousedown');
-                    //add a classe referente ao novo highLight 
+                    //add a classe referente ao novo highLight
                     var newIdDivCurrentHighLight = currentPiece.find('.desHighLight.currentSelected').attr('id');
                     lastCurrentDrawPoint.addClass(newIdDivCurrentHighLight);
 
@@ -1413,7 +1386,7 @@ this.Meet = function (options) {
                     var continueDash = false;
 
                     if (self.isset(angleDivCurrent)) {
-                        //Se existir um ângulo formado por essa div 
+                        //Se existir um ângulo formado por essa div
                         if (!currentPoint.hasClass('vertex')) {
                             $(this).closest('.Table').find('div.desHighLight').each(function () {
                                 if (currentPoint.hasClass($(this).attr('id'))) {
@@ -1507,7 +1480,7 @@ this.Meet = function (options) {
 
 
                         if (thisHLSameDashe !== null) {
-                            //Então o traço do currentHighLight 
+                            //Então o traço do currentHighLight
                             //será o mesmo traço que o thisHLSameDashe
                             continueDash = true;
                             currentPiece.find('div.desHighLight[dash=' + divCurrentHighLight.attr('dash')
@@ -1645,7 +1618,7 @@ this.Meet = function (options) {
                             divCurrentHighLight.css("transform", "rotate(" + angle + "deg)");
                             divCurrentHighLight.css("transform-origin", originTransform + "px " + originTransform + "px");
 
-                            //Precisa de Ajuste   
+                            //Precisa de Ajuste
                             var currentLeft = divCurrentHighLight.css('left');
                             var currentTop = divCurrentHighLight.css('top');
                             if (catetoRow > 0) {
@@ -1815,20 +1788,18 @@ this.Meet = function (options) {
         return isTXT;
     };
 
-
-
     //Salvar PermanceUser
     /**
      * Salva a performace do usuário no banco. Retorna falso caso haja algum erro.
-     * 
-     * @param {DOMString} currentPieceID 
+     *
+     * @param {DOMString} currentPieceID
      * @returns {boolean}
      */
     this.savePerformanceUsr = function (currentPieceID) {
         //Obtem o intervalo de resolução da Piece
         self.interval_piece = (new Date().getTime() - self.interval_piece);
-        //Se for uma piece do template AEL, então salva cada Match dos grupos realizados 
-        // e a armazena no objeto piece.isCorrect da piece corrente 
+        //Se for uma piece do template AEL, então salva cada Match dos grupos realizados
+        // e a armazena no objeto piece.isCorrect da piece corrente
         if (Meet.domCobject.cobject.template_code === 'AEL' ||
                 Meet.domCobject.cobject.template_code === 'DDROP' ||
                 Meet.domCobject.cobject.template_code === 'ONEDDROP') {
@@ -1841,7 +1812,7 @@ this.Meet = function (options) {
         var data_default = {
             'piece_id': currentPieceID,
             'actor_id': self.actor,
-            'final_time': self.interval_piece, //delta T 
+            'final_time': self.interval_piece, //delta T
             'iscorrect': pieceIsTrue
         };
         var data = data_default;
@@ -1891,7 +1862,7 @@ this.Meet = function (options) {
                             /**
                              * @todo Verificar this.time_answer, aparentemente eesta passando com valor nulo.
                              */
-                            'final_time': this.time_answer, //delta T 
+                            'final_time': this.time_answer, //delta T
                             'value': "GRP" + current_groupMatched,
                             /**
                              * @todo Verificar this.ismatch, aparentemente eesta passando com valor nulo.
@@ -1911,7 +1882,7 @@ this.Meet = function (options) {
 
     /**
      * Verifica se esta Correto PLC.
-     * 
+     *
      * @param {integer} pieceID
      * @param {string} groupClicked
      * @returns {Boolean}
@@ -1944,10 +1915,9 @@ this.Meet = function (options) {
         return isCorrect;
     };
 
-
     /**
      * Verifica se esta Correto DIG.
-     * 
+     *
      * @param {integer} pieceID
      * @param {string} groupClicked
      * @returns {Boolean}
@@ -1971,11 +1941,9 @@ this.Meet = function (options) {
         return isCorrect;
     };
 
-
-
     /**
      * Verifica se esta Correto MTE.
-     * 
+     *
      * @param {integer} pieceID
      * @param {string} groupClicked
      * @returns {Boolean}
@@ -1991,7 +1959,7 @@ this.Meet = function (options) {
 
     /**
      * Salva os Metadados no objeto e verifica se o AEL esta correto
-     * 
+     *
      * @param {integer} pieceID
      * @param {string} groupAskClicked
      * @param {string} groupAnswerClicked
@@ -2009,7 +1977,7 @@ this.Meet = function (options) {
             var groupRevertAsk = (groupAskClicked / pieceID) / 2;
             var groupRevertAnswer = ((groupAnswerClicked.split('_')[0]) / pieceID) / 3;
             var ismatch = (groupRevertAsk === groupRevertAnswer);
-            //Seta como ismatch o istrue dos dois grupos 
+            //Seta como ismatch o istrue dos dois grupos
             elements_groupAsk.ismatch = ismatch;
             elements_groupAsk.groupMatched = groupAnswerClicked;
             elements_groupAsk.time_answer = time_answer;
@@ -2025,7 +1993,7 @@ this.Meet = function (options) {
 
     /**
      * Verifica se o PRE esta correto
-     * 
+     *
      * @param {integer} pieceID
      * @returns {Boolean}
      */
@@ -2048,7 +2016,6 @@ this.Meet = function (options) {
         return isCorrect;
     };
 
-
     this.isCorrectDES = function (pieceID) {
         var currentMainPiece = Meet.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
@@ -2060,8 +2027,7 @@ this.Meet = function (options) {
         Meet.domCobject.mainPieces[pieceID].isCorrect = isCorrect;
 
         return isCorrect;
-    }
-
+    };
 
     this.getCurrentShapeDES = function () {
         var currentAskDraw = $('.currentPiece').find('.draw');
@@ -2499,14 +2465,8 @@ this.Meet = function (options) {
             // Não é uma forma válida
             return null;
         }
-    }
+    };
 
-
-
-    //======================
-    /**
-     *
-     */
     this.finalizeMeet = function () {
         sessionStorage.removeItem("authorization");
         sessionStorage.removeItem("id_actor");
@@ -2521,9 +2481,10 @@ this.Meet = function (options) {
         location.href = "index.html";
         return true;
     };
+
     /**
      * Verifica se a variavel esta setada.
-     * 
+     *
      * @param {mixed} variable
      * @returns {Boolean}
      */
@@ -2537,7 +2498,7 @@ this.Meet = function (options) {
 
     /**
      * Envia mensagem de Certo ou Errado par ao usuário
-     * 
+     *
      * @param {boolean} isTrue
      * @returns {void}
      */
@@ -2563,7 +2524,6 @@ this.Meet = function (options) {
     };
 
     //Contador de Tempo de cada Meet
-
     this.countTime = function (tag) {
         //A cada segundo realiza a recursividade
         //Dando a cada chamada recursiva da função, 1s de intervalo
@@ -2602,7 +2562,6 @@ this.Meet = function (options) {
         }, 1000);
     };
 
-
     Meet.scoreCalculator = function (withMSGnextLevel) {
         self.score = (Meet.peformance_qtd_correct * 10) - (Meet.peformance_qtd_wrong * 10);
         if (self.score < 0) {
@@ -2621,18 +2580,17 @@ this.Meet = function (options) {
             }
 
             if (self.isset(withMSGnextLevel) && withMSGnextLevel) {
-                $('#nextLevel-message').show();
+                if (Meet.domCobject.cobject.template_code !== 'TXT')
+                    $('#nextLevel-message').show();
             }
         }
 
     };
 
-
-
     this.buildToolBar = function () {
         var html = $('<div class="toolBar"></div>');
         html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
-        html.append("<img class='btn_lastPage' id='lastPage' src='img/icons/last.png' style='display:none' >");
+        html.append("<img class='btn_lastPage' id='lastPage' src=' img/icons/last.png' style='display:none' >");
         html.append("<img class='btn_nextPage' id='nextPage' src='img/icons/next.png' style='display:none' >");
 
         return html;

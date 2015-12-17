@@ -1,10 +1,10 @@
 Editor/assets/*
 Editor/library/*
 Editor/app/runtime/*
-Editor/SynapseRender/data/
+Editor/SynapseRender/data/*
 
-
-Render/data/
+/Render/data
+Render/data/*
 Render/TEXTOS/
 
 .idea/
