@@ -54,7 +54,7 @@ class ActScriptController extends Controller {
      */
     public function actionCreate() {
         $model = new ActScript;
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/resources/js/', array('file' => 'common.js')), CClientScript::POS_END);
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -97,7 +97,7 @@ class ActScriptController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/resources/js/', array('file' => 'common.js')), CClientScript::POS_END);
         $model = $this->loadModel($id);
         $contentsin = ActScriptContent::model()->findAllByAttributes(array('script_id' => $id, 'status' => 'in'));
         $contentsout = ActScriptContent::model()->findAllByAttributes(array('script_id' => $id, 'status' => 'out'));

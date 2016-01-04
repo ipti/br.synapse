@@ -54,7 +54,7 @@ class ActGoalController extends Controller {
      */
     public function actionCreate() {
         $model = new ActGoal;
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/resources/js/', array('file' => 'common.js')), CClientScript::POS_END);
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
@@ -103,7 +103,7 @@ class ActGoalController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/', array('file' => 'common.js')), CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/resources/js/', array('file' => 'common.js')), CClientScript::POS_END);
         $model = $this->loadModel($id);
         $modalities = ActGoalModality::model()->findAllByAttributes(array('goal_id' => $id));
         $skills = ActGoalSkill::model()->findAllByAttributes(array('goal_id' => $id));

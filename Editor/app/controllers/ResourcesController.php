@@ -1,10 +1,10 @@
 <?php
 
-class AssetsController extends Controller {
+class ResourcesController extends Controller {
 
-    
-     public $layout = 'none';
-     
+
+    public $layout = 'none';
+
     public function actionCss() {
         $this->render('css');
     }
@@ -13,7 +13,7 @@ class AssetsController extends Controller {
         $this->render('flash');
     }
     public function genfile(){
-        
+
         return $content;
     }
     function compress($buffer) {
@@ -41,7 +41,7 @@ class AssetsController extends Controller {
         //ob_start();
         //include $filename;
         //echo ob_get_clean();
-       // var_dump(Yii::app()->);
+        // var_dump(Yii::app()->);
         $path = $_SERVER["DOCUMENT_ROOT"].Yii::app()->theme->baseUrl.'/js/'.$file;
         if(file_exists($path)){
             $fcontent = file_get_contents($path);

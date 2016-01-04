@@ -58,7 +58,7 @@ class UserController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/',array('file'=>'common.js')),CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/resources/js/',array('file'=>'common.js')),CClientScript::POS_END);
         $model = new User;
         $mUserclass = new UserUserclass();
 
@@ -91,7 +91,7 @@ class UserController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/assets/js/',array('file'=>'common.js')),CClientScript::POS_END);
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createUrl('/resources/js/',array('file'=>'common.js')),CClientScript::POS_END);
         $model = $this->loadModel($id);
         $classes = UserUserclass::model()->findAllByAttributes(array('userID' => $id));
         // Uncomment the following line if AJAX validation is needed
