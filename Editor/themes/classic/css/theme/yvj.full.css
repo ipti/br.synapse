@@ -79,6 +79,9 @@ input[type="text"], input[type="password"], textarea, div.formField select {
     font-size: 1em;
     padding: 4px;
 }
+.select2-dropdown{
+    margin-top:60px;
+}
 .buttonWizardBar {
     border-top: 1px solid #F0F0F0;
     margin-top: 1em;
@@ -159,7 +162,6 @@ div.formField{
     width: 100%;
     margin-bottom: 1.25em;
 }
-
 .buttonLink {
     white-space: nowrap;
 }
