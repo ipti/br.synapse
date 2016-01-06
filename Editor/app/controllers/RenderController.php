@@ -205,7 +205,7 @@ class RenderController extends Controller {
                 if ($buildZipMultimedia && $libproperty->property->name == 'src') {
                     $dir_uploadType = $lib->type->name;
                     $src = Yii::app()->basePath . "/.." . $this->dir_library . $dir_uploadType . '/' . $libproperty->value;
-                    $this->tempArchiveZipMultiMedia->addFile($src, '/library/' . $dir_uploadType . '/' . $libproperty->value);
+                    $this->tempArchiveZipMultiMedia->addFile($src, 'library/' . $dir_uploadType . '/' . $libproperty->value);
                     //Array de tipos que este grupo possui
                     if (!$isPiecesetElement && !$isCobjectElement) {
                         if (isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['types_elements'])) {
@@ -280,7 +280,7 @@ class RenderController extends Controller {
     }
 
     /**
-     * 
+     *
      * @param
      */
     public function actionLoadtext() {
@@ -304,7 +304,6 @@ class RenderController extends Controller {
         $a1 = -1;
         foreach ($reader as $row) {
             if ($ocobject_id != $row['cobject_id']) {
-                
             }
             $ocobject_id = $row['cobject_id'];
         }
@@ -414,12 +413,12 @@ class RenderController extends Controller {
                 $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
                 $json_cobjects = array();
                 //Arquivo ZIP ALL
-                $zipname = 'importRender_' . date('d_m_Y H_i_s') . '.zip';
+                $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
                 $this->tempArchiveZipMultiMedia = new ZipArchive;
-                $this->tempArchiveZipMultiMedia->open($zipname, ZipArchive::CREATE);
-                $this->tempArchiveZipMultiMedia->addEmptyDir("/library/image/");
-                $this->tempArchiveZipMultiMedia->addEmptyDir("/library/sound/");
-                $this->tempArchiveZipMultiMedia->addEmptyDir("/json/");
+                $this->tempArchiveZipMultiMedia->open('exports/'.$zipname, ZipArchive::CREATE);
+                $this->tempArchiveZipMultiMedia->addEmptyDir("library/image/");
+                $this->tempArchiveZipMultiMedia->addEmptyDir("library/sound/");
+                $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
 
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
                     array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
@@ -438,17 +437,13 @@ class RenderController extends Controller {
                 $json_encode.=json_encode($json);
                 $json_encode.=";";
 
-                $this->tempArchiveZipMultiMedia->addFromString("/json/renderData$nameDisciplineSelected.js", $json_encode);
+                $this->tempArchiveZipMultiMedia->addFromString("json/renderData$nameDisciplineSelected.js", $json_encode);
 
                 //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
 
-                if (file_exists($zipname)) {
-                    header('Content-type: application/zip');
-                    header('Content-Disposition: attachment; filename="' . $zipname . '"');
-                    readfile($zipname);
-                    //Remover o arquivo zip do temp do servidor
-                    unlink($zipname);
+                if (file_exists('exports/'.$zipname)) {
+                    header('location: http://synapse/exports/'.$zipname);
                 }
             }
         } else {
@@ -470,13 +465,13 @@ class RenderController extends Controller {
             $imported = false;
             if (isset($peformances)) {
                 $strSqlPerformInserts = "INSERT INTO `peformance_actor`"
-                        . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
+                    . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
                 $totalPeformances = count($peformances);
                 foreach ($peformances as $idx => $peform):
                     $strSqlPerformInserts.='( "';
                     $strSqlPerformInserts.= $peform->actor_id . '", "' . $peform->piece_id
-                            . '", "' . $peform->group_id . '", "' . $peform->final_time
-                            . '", "' . $peform->iscorrect . '", "' . $peform->value;
+                        . '", "' . $peform->group_id . '", "' . $peform->final_time
+                        . '", "' . $peform->iscorrect . '", "' . $peform->value;
                     $strSqlPerformInserts.='" )';
                     if ($idx < $totalPeformances - 1) {
                         $strSqlPerformInserts.=", ";
@@ -674,7 +669,7 @@ class RenderController extends Controller {
     public function actionJson() {
         set_time_limit(0);
         if (isset($_POST['op']) &&
-                ( $_POST['op'] == 'select' || $_POST['op'] == 'classes')) {
+            ( $_POST['op'] == 'select' || $_POST['op'] == 'classes')) {
             $json = array();
 
             $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
@@ -989,8 +984,6 @@ class RenderController extends Controller {
                     //Personage
                     $personage = Personage::model()->findByPk($actor['personage_id']);
                     $json['actor']['personage_name'] = $personage['name'];
-                    
-                    
                 } else {
                     //Pessoa Sem Personagem
                     $json['actor'] = null;
