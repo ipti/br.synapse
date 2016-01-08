@@ -9,6 +9,8 @@
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
             <![endif]-->
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery/jquery-2.0.2.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="/themes/classic/plugins/select2/css/select2.min.css" />
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/select2/js/select2.min.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/jquery/jquery.ui.all.css" />
             <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/theme/yvj.full.css" />
             <title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -97,7 +99,7 @@
                 ),
             ));
             ?>
-            
+
         </div>
         <?php echo $content; ?>
         <!--<div class="footer">
