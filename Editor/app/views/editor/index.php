@@ -126,7 +126,8 @@ if ($load == 'false') {
     <span class="clear"></span>
 
     <div id="cobject_description">
-        <input type="text" class="actNameDescCobject" id ="COdescription" value="" />
+        <input type="text" class="actNameDescCobject" id ="COdescription"
+               placeholder="Descrição do Cabeçalho ..." value="" />
         <div class="clear"></div>  
     </div>
 
