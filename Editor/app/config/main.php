@@ -9,7 +9,6 @@ return array(
     'name' => 'Synapse',
     'theme' => 'classic',
     'language' => 'pt_br',
-    
     // preloading 'log' component
     'preload' => array('log'),
     // autoloading model and component classes

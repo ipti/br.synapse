@@ -1,4 +1,3 @@
-
 <?php
 
 class RenderController extends Controller {
@@ -323,7 +322,8 @@ class RenderController extends Controller {
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
                     'importPeformance', 'getSchool', 'getCobject_blocks', 'getDisciplines',
-                    'SynapseRender', 'login'),
+                    'SynapseRender', 'login',
+                    'preview'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -534,18 +534,12 @@ class RenderController extends Controller {
         echo json_encode($json);
     }
 
-    public function actionIndex() {
-        /*
-          if (Yii::app()->session['personage'] == "Tutor") {
-          $this->redirect("/render/SynapseRender/index.html");
-
-          } else {
-          $this->redirect("/render/meet");
-          }
-         */
-
-        //Redirecina para o render, passando a flag indicando que será Online   
+    public function actionIndex($isPreview = false) {
         $this->redirect(array('/themes/SynapseRender/index.html?isOnline=true'));
+    }
+
+    public function actionPreview($id = null){
+        $this->redirect("http://render.synapse/index.html?isPreview=$id");
     }
 
     public function actionTestepreview() {
