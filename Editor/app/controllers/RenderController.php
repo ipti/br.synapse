@@ -443,7 +443,7 @@ class RenderController extends Controller {
                 $this->tempArchiveZipMultiMedia->close();
 
                 if (file_exists('exports/'.$zipname)) {
-                    header('location: http://synapse/exports/'.$zipname);
+                    header('location: ../exports/'.$zipname);
                 }
             }
         } else {

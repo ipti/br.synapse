@@ -334,25 +334,6 @@ var DomCobject = function (cobject, idx) {
         return self.domPiece.append(domElementASK);
     }
 
-
-    //Embaralhar qualquer Array
-    //    this.shuffleArray = function (array) {
-    //        var counter = array.length;
-    //        var temp,index;
-    //        // Percorrer os elementos do Array do > para o <
-    //        while (counter > 0) {
-    //            //Obter um Random Index
-    //            index = Math.floor(Math.random() * counter);
-    //            counter--;
-    //            // E da um swap entre o index e o último count
-    //            temp = array[counter];
-    //            array[counter] = array[index];
-    //            array[index] = temp;
-    //        }
-    //
-    //        return array;
-    //    }
-
     this.buildEnum = function () {
         self.domEnum = $('<div class="enunciation"></div>');
         eval("self.buildEnum_" + self.cobject.template_code + "();");
