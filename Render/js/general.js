@@ -1,5 +1,9 @@
-
-
+/**
+ * Get the query value by the variable name.
+ *
+ * @param variable
+ * @returns {*} The value or -1 if not found.
+ */
 this.getQueryVariable = function(variable)
 {
     var query = window.location.search.substring(1);

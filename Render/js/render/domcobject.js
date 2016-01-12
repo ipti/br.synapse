@@ -506,8 +506,12 @@ var DomCobject = function (cobject, idx) {
                     build_type = "build_" + item['value'];
                 }
             });
-
-            var src = self.dirLibrary + '/image/' + properties['src'];
+            var src = "";
+            if(sessionGet('isPreview') != -1){
+                src = EDITOR+'/library/image/' + properties['src'];
+            }else {
+                src = self.dirLibrary + '/image/' + properties['src'];
+            }
             var library_id = properties['library_id'];
             var PEProperties = currentElement.pieceElement_Properties;
             properties["grouping"] = PEProperties.grouping;
@@ -572,7 +576,12 @@ var DomCobject = function (cobject, idx) {
                 }
             });
 
-            var src = self.dirLibrary + '/image/' + properties['src'];
+            var src = "";
+            if(sessionGet('isPreview') != -1){
+                src = EDITOR+'/library/image/' + properties['src'];
+            }else {
+                src = self.dirLibrary + '/image/' + properties['src'];
+            }
             var library_id = properties['library_id'];
             var PEProperties = currentElement.pieceElement_Properties;
             properties["grouping"] = PEProperties.grouping;
@@ -685,7 +694,12 @@ var DomCobject = function (cobject, idx) {
     this.build_image = function (properties) {
         //Properties : extension, src, width, height
         eval(properties);
-        var src = self.dirLibrary + '/image/' + properties['src'];
+        var src = "";
+        if(sessionGet('isPreview') != -1){
+            src = EDITOR+'/library/image/' + properties['src'];
+        }else {
+            src = self.dirLibrary + '/image/' + properties['src'];
+        }
         var extension = properties['extension'];
         var library_id = properties['library_id'];
         var width = properties['width'];
@@ -698,7 +712,12 @@ var DomCobject = function (cobject, idx) {
     this.build_sound = function (properties) {
         //Properties : extension, src
         eval(properties);
-        var src = self.dirLibrary + '/sound/' + properties['src'];
+        var src = "";
+        if(sessionGet('isPreview') != -1){
+            src = EDITOR+'/library/sound/' + properties['src'];
+        }else {
+            src = self.dirLibrary + '/sound/' + properties['src'];
+        }
         var extension = properties['extension'];
         var library_id = properties['library_id'];
         var html = '<img class="soundIconPause" src="img/icons/play.png"></img><span class="elementSound" library_id=' + library_id + '> \n\
@@ -710,7 +729,12 @@ var DomCobject = function (cobject, idx) {
     this.build_txt = function (properties) {
         //Properties : extension, src
         eval(properties);
-        var src = self.dirLibrary + '/sound/' + properties['src'];
+        var src = "";
+        if(sessionGet('isPreview') != -1){
+            src = EDITOR+'/library/sound/' + properties['src'];
+        }else {
+            src = self.dirLibrary + '/sound/' + properties['src'];
+        }
         var extension = properties['extension'];
         var library_id = properties['library_id'];
         var html = '<span class="elementSound" library_id=' + library_id + '> \n\

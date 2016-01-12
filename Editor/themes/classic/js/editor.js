@@ -3064,7 +3064,7 @@ function editor() {
                                             if ((parent.COTemplateTypeIn(parent.PLC) && self.crossInfomationSent) ||
                                                     !parent.COTemplateTypeIn(parent.PLC)) {
                                                 //chama o posEditor
-                                                $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
+                                                $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> ou <a target="_blank" href="/render/preview/' + self.CObjectID + '"> Previsualizar </a> </p>');
                                                 self.scroolSaveScreen();
                                                 parent.posEditor();
                                                 //=======================================================
