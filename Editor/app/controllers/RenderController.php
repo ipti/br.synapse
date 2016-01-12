@@ -273,8 +273,11 @@ class RenderController extends Controller {
 
     public function actionLoadcobject() {
         $cobject_id = $_REQUEST['ID'];
-        $json = $this->cobjectbyid($cobject_id);
-        echo json_encode($json);
+        $json = $this->cobjectbyid($cobject_id, false);
+        if(isset($_GET['callback']))
+            echo $_GET['callback'].'('.json_encode($json).')';
+        else
+            echo json_encode($json);
         exit;
     }
 
