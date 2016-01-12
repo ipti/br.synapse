@@ -112,6 +112,14 @@
                     }else{
                         //Render Online
                         //Precisa Realizar Login Online
+                        if(sessionStorage.getItem("isPreview") != -1){
+                            sessionStorage.setItem('authorization', true);
+                            sessionStorage.setItem('login_classroom_id_actor', -1);
+                            sessionStorage.setItem('login_id_actor', -1);
+                            sessionStorage.setItem('login_name_actor', 'Preview');
+                            sessionStorage.setItem('login_personage_name', 'admin');
+                        }
+
                         var dbOn = new DBOn();
                         dbOn.login($('#username').val(), $('#password').val(), callBackLogin);
                         
