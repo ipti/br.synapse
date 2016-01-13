@@ -3,7 +3,15 @@ $form = $this->beginWidget('CActiveForm', array(
     'id' => 'act-script-form',
     'enableAjaxValidation' => false,
         ));
+
+$baseUrl = Yii::app()->theme->baseUrl;
+$cs = Yii::app()->getClientScript();
+$cs->registerScriptFile($baseUrl . "/js/actScript/actScript.js");
+
 ?>
+<script type="text/javascript">
+   var phpMsgRemove = "<?php echo Yii::t("default", "Remove"); ?>";
+</script>
 <div class="panelGroup form">
     <?php echo $form->errorSummary($model); ?>
     <div class="panelGroupHeader"><div class=""> <?php echo $title; ?>
@@ -14,13 +22,13 @@ $form = $this->beginWidget('CActiveForm', array(
 
         <div class="formField">
             <?php echo $form->labelEx($model, 'discipline_id'); ?>
-            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name'),array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actscript/loadcontentparent'), 'update' => '#ActScript_father_content'))); ?>
+            <?php echo $form->dropDownList($model, 'discipline_id', CHtml::listData(ActDiscipline::model()->findAll(), 'id', 'name') , array('ajax' => array('type' => 'POST', 'url' => CController::createUrl('actScript/loadcontentparent'), 'update' => '#ActScript_father_content'), 'prompt'=> 'Selecione ...')); ?>
             <?php echo $form->error($model, 'discipline_id'); ?>
         </div>
 
         <div class="formField">
             <?php echo $form->labelEx($model, 'father_content'); ?>
-            <?php echo $form->dropDownList($model, 'father_content', CHtml::listData(ActContent::model()->findAll(), 'id', 'description'),array('empty'=>'NONE','ajax' => array('type' => 'POST', 'url' => CController::createUrl('actscript/loadcontents'), 'update' => '.contents'))); ?>
+            <?php echo $form->dropDownList($model, 'father_content', CHtml::listData(ActContent::model()->findAll(), 'id', 'description'),array('empty'=>'NONE','ajax' => array('type' => 'POST', 'url' => CController::createUrl('actScript/loadcontents'), 'update' => '.contents'))); ?>
             <?php echo $form->error($model, 'father_content'); ?>
         </div>
         
@@ -35,8 +43,9 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="panelGroupHeader"><div><?php echo Yii::t('default', 'Contents Include') ?></div></div>
     <div class="panelGroupBody">
         <div class="formField">
-            <?php echo CHtml::dropDownList('contentInID', '', array(),array('class'=>'contents')); ?>
+            <?php  echo CHtml::dropDownList('contentInID', '', array(),array('class'=>'contents')); ?>
             <?php echo CHtml::button(Yii::t('default', 'Add'), array('onclick' => 'addItem(\'ActScriptContentIn\')', 'id' => 'addGoalModality', 'class' => 'buttonLink button')); ?>
+            
         </div>
         <ul id="contentInItens" class="multItens">
             <?php
