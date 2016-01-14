@@ -1,4 +1,5 @@
 /* global self */
+var EDITOR = "http://local.editor.synapse.ipti.org.br";
 
 /**
  * Classe do Meet
@@ -42,6 +43,12 @@ this.Meet = function (options) {
         //Render Online
         self.isOnline = true;
     }
+    self.isPreview = false;
+    if (sessionStorage.getItem("isPreview") !== null &&
+        sessionStorage.getItem("isPreview") != -1) {
+        //Render Online
+        self.isPreview = sessionStorage.getItem("isPreview");
+    }
 
 
     var isClockStarted = false;
@@ -84,7 +91,7 @@ this.Meet = function (options) {
     this.tag_time;
     //======================================
     //Criar Objeto para Manipulação do Banco
-    Meet.DB_synapse = new DB();
+    Meet.DB_synapse = sessionGet("isOnline") ? new DBOn() : new DB();
     //======================================
 
 
@@ -97,6 +104,19 @@ this.Meet = function (options) {
             self.meetEvaluation = new MeetEvaluation(sessionStorage.getItem("evaluation_selected_level"));
             //Inicia o Render
             self.meetEvaluation.start();
+        }else if(Meet.render_mode == 'preview'){
+            var cobjectId = sessionGet('isPreview');
+            var cobject = {};
+            $.ajax({
+                url: EDITOR+"/render/loadcobject/",
+                type: "GET",
+                dataType: 'jsonp',
+                data: {ID: cobjectId},
+            }).done(function(data){
+                cobject = data;
+                self.meetPreview = new MeetPreview(cobject);
+                self.meetPreview.start();
+            });
         }else{
             alert("Indisponível...");
         }
@@ -142,9 +162,8 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    Meet.domCobjectBuild = function (cobject_id) {
-        //Construir a Dom do Cobject e append no html
-        Meet.DB_synapse.getCobject(cobject_id, function (json_cobject) {
+    Meet.domCobjectBuild = function (cobject_id, cobject) {
+        var building = function (json_cobject) {
             var dump = new DomCobject(json_cobject);
             //Adicionar o domCobjet no Encontro 'Meet'
             self.setDomCobject(dump);
@@ -181,7 +200,15 @@ this.Meet = function (options) {
                 self.countTime($('.info-time .info-text'));
             }
 
-        });
+        }
+
+
+        //Construir a Dom do Cobject e append no html
+        if(self.isPreview){
+            building(cobject);
+        }else {
+            Meet.DB_synapse.getCobject(cobject_id,building);
+        }
     };
 
     /**
@@ -213,6 +240,8 @@ this.Meet = function (options) {
     this.loadFirstPiece = function () {
         if (Meet.render_mode == 'evaluation') {
             self.meetEvaluation.loadFirstPiece_Evaluation();
+        } else if (Meet.render_mode == 'preview') {
+            self.meetPreview.loadFirstPiece_Evaluation();
         } else if (Meet.render_mode == 'proficiency') {
 
         } else if (Meet.render_mode == 'training') {
@@ -1822,7 +1851,9 @@ this.Meet = function (options) {
         }
 
         //Salvar na performance_User OffLine
-        Meet.DB_synapse.addPerformance_actor(data);
+        if(sessionGet('isPreview') == -1) {
+            Meet.DB_synapse.addPerformance_actor(data);
+        }
 
         if (pieceIsTrue) {
             Meet.peformance_qtd_correct++;
@@ -1870,7 +1901,9 @@ this.Meet = function (options) {
                             'iscorrect': this.ismatch
                         };
                         //Salvar na performance_User OffLine
-                        Meet.DB_synapse.addPerformance_actor(data);
+                        if(sessionGet('isPreview') == -1){
+                            Meet.DB_synapse.addPerformance_actor(data);
+                        }
                     }
                 }
             }

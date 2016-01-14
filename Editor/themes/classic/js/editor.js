@@ -183,22 +183,11 @@ function editor() {
                         '<button class="insertImage" id="pie_' + piecesetID + '"><i class="fa fa-file-image-o fa-2x"></i><br>' + LABEL_ADD_IMAGE + '</button>' +
                         '<button class="insertSound" id="pie_' + piecesetID + '"><i class="fa fa-file-audio-o fa-2x"></i><br>' + LABEL_ADD_SOUND + '</button>' +
                         '<button class="del delPieceSet pull-right"><i class="fa fa-times"></i></button>' +
-                        '<input type="text" class="actName" value="' + plusdesc + '"/>' +
+                        '<input type="text" class="actName"  placeholder="Descrição da Questão ..." value="' + plusdesc + '"/>' +
                         '<div id="' + piecesetID + '_forms"></div>' +
                         '<ul class="piecelist" id="' + piecesetID + '"></ul>' +
                         '<span class="clear"></span>' +
                         '</div>');
-
-                // .actName 
-                // Descrição Padrão do PieceSet
-                if ($('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val() === '') {
-                    //Deixa a mesma mensagem
-                    $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').val('Descrição da Questão ...');
-                    $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'true');
-
-                } else {
-                    $('#' + this.currentScreenId + ' .PieceSet[id="' + piecesetID + '_list"] .actName').attr('noString', 'false');
-                }
 
 
                 this.countPieceSet[this.currentScreenId] = this.countPieceSet[this.currentScreenId] + 1;
@@ -253,7 +242,7 @@ function editor() {
 
                 //Monta o id do Piece
                 var pieceID = this.currentPieceSet + '_p' + this.countPieces[this.currentPieceSet];
-                
+
                 //Adiciona na array de contadores
                 this.countElements[pieceID] = 0;
 
@@ -345,14 +334,14 @@ function editor() {
                 }
 
                 $('#' + PieceSetId).append(generateLi(pieceID, plus, tplClass, content));
-                
+
                 //Após o append no HTML, se for um template Desenho
                 if (parent.COTemplateTypeIn(parent.DES) && parent.isload && parent.isset(idbd)) {
-                    if(dataPiece["type_name"] == "shape"){
-                         var divShapes = $('#' + PieceSetId).find('li#'+pieceID).find('div.shapes');
-                         divShapes.find('img.'+dataPiece["shape"]).trigger('click');
-                          divShapes.attr('updated',0);
-                         
+                    if (dataPiece["type_name"] == "shape") {
+                        var divShapes = $('#' + PieceSetId).find('li#' + pieceID).find('div.shapes');
+                        divShapes.find('img.' + dataPiece["shape"]).trigger('click');
+                        divShapes.attr('updated', 0);
+
                     }
                 }
 
@@ -1714,7 +1703,7 @@ function editor() {
                             || parent.COTemplateTypeIn(parent.DDROP)
                             || parent.COTemplateTypeIn(parent.ONEDDROP)) {
                         //TagAdd para o load
-                        
+
                         tagAdd = $('#' + parent.currentPiece + ' div[group=' + group + ']');
                     } else if (parent.COTemplateTypeIn(parent.PRE) || parent.COTemplateTypeIn(parent.TXT)) {
                         tagAdd = $('li[id="' + parent.currentPiece + '"] div[group=' + group + ']');  // 
@@ -2398,11 +2387,11 @@ function editor() {
                             //var isElementPieceSet = $(this).closest('.elementPieceSet').size() > 0;
                             ElementID = $(this).attr('id');
                             ElementID_BD = $(this).attr('idBD');
-                            
-                            if(parent.COTemplateTypeIn(parent.TXT)){
+
+                            if (parent.COTemplateTypeIn(parent.TXT)) {
                                 //Atualiza todos elementos do TXT
                                 ElementFlag_Updated = "1";
-                            }else{
+                            } else {
                                 ElementFlag_Updated = $(this).attr('updated');
                             }
 
@@ -2483,7 +2472,7 @@ function editor() {
                                     ID_BD: ElementID_BD,
                                     updated: ElementFlag_Updated
                                 };
-                                
+
 
                                 if (isElementPieceSet) {
                                     data["pieceSetID"] = idBDLastPieceSet;
@@ -2895,13 +2884,7 @@ function editor() {
                                                 //Verificar o atributo nostring
                                                 PieceSetID = $(this).attr('id');
                                                 PieceSetID_BD = $(this).attr('idBD');
-                                                if ($('#' + PieceSetID + ' .actName').attr('nostring') === 'true') {
-                                                    //Não possui valor 
-                                                    pieceSetDescription = "";
-                                                } else {
-                                                    //Possui valor
-                                                    pieceSetDescription = $('#' + PieceSetID + ' .actName').val();
-                                                }
+                                                pieceSetDescription = $('#' + PieceSetID + ' .actName').val();
 
                                                 //Salva PieceSet
                                                 parent.saveData({
@@ -3076,12 +3059,12 @@ function editor() {
                                                         (parent.isload && parent.totalElementsChanged === parent.uploadedElements &&
                                                                 (!parent.COTemplateTypeIn(parent.MTE) ||
                                                                         ((parent.uploadedFlags + totalElementsPieceSet) === parent.totalElementsNOchanged))))
-                                                                        || (parent.COTemplateTypeIn(parent.DES) && parent.totalElements === 0) ) ) {
+                                                        || (parent.COTemplateTypeIn(parent.DES) && parent.totalElements === 0))) {
 
                                             if ((parent.COTemplateTypeIn(parent.PLC) && self.crossInfomationSent) ||
                                                     !parent.COTemplateTypeIn(parent.PLC)) {
                                                 //chama o posEditor
-                                                $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> </p>');
+                                                $('.savescreen').append('<br><p> FIM! <a href="/editor/index?cID=' + self.CObjectID + '"> Voltar </a> ou <a target="_blank" href="/render/preview/' + self.CObjectID + '"> Previsualizar </a> </p>');
                                                 self.scroolSaveScreen();
                                                 parent.posEditor();
                                                 //=======================================================
@@ -3157,12 +3140,6 @@ function editor() {
                                                             parent.COdescription = item;
                                                             $('#cobject_description > #COdescription').attr('valueDB', parent.COdescription);
                                                             $('#cobject_description > #COdescription').val(parent.COdescription);
-                                                            if ($('#COdescription').val() === 'Descrição do Cabeçalho ...') {
-                                                                //Deixa a mesma mensagem
-                                                                $('#COdescription').attr('noString', 'true');
-                                                            } else {
-                                                                $('#COdescription').attr('noString', 'false');
-                                                            }
 
                                                             break;
                                                             //se não
@@ -3189,14 +3166,6 @@ function editor() {
                                                                         //adiciona o pieceset
                                                                         parent.addPieceSet(piecesetID, desc, type);
 
-                                                                        //Aplica o texto Padrão no input da descrição do PieceSet
-                                                                        if ($('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').val() === 'Descrição da Questão ...') {
-                                                                            //Deixa a mesma mensagem
-                                                                            $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'true');
-                                                                        } else {
-                                                                            $('#' + self.currentScreenId + ' .PieceSet[idbd=' + piecesetID + ']').find('.actName').attr('noString', 'false');
-                                                                        }
-
                                                                         //para cada item do pieceset
                                                                         $.each(item, function (i, item) {
                                                                             //se for um piece
@@ -3204,12 +3173,12 @@ function editor() {
                                                                                 //pega o id do pieceset a partir do indice
                                                                                 var pieceID = i.slice(1);
                                                                                 var DOMpiecesetID = $('.piecelist').last().attr('id');
-                                                                                
+
                                                                                 //adiciona a piece
                                                                                 parent.addPiece(DOMpiecesetID, pieceID, dataPiece);
                                                                                 //seleciona o piece adicionado
                                                                                 parent.changePiece($('.piece').last());
-                                                                                
+
                                                                                 //para cada item da piece
                                                                                 var dataPiece = new Array();
                                                                                 $.each(item, function (i, item) {
@@ -3221,7 +3190,7 @@ function editor() {
                                                                                         data['position'] = item['position'];
                                                                                         data['flag'] = item['flag'];
                                                                                         data['match'] = item['match'];
-                                                                                        
+
                                                                                         //preenchimento do array de dados
                                                                                         $.each(item, function (i, item) {
                                                                                             if (i.slice(0, 1) === "L") {
@@ -3283,15 +3252,15 @@ function editor() {
                                                                                         }
 
                                                                                         parent.addElement(elementID, type, data);
-                                                                                    }else if (i == "type_name"){
-                                                                                         dataPiece[i] = item;
-                                                                                    }else if (i == "shape"){
+                                                                                    } else if (i == "type_name") {
+                                                                                        dataPiece[i] = item;
+                                                                                    } else if (i == "shape") {
                                                                                         dataPiece[i] = item;
                                                                                     }
-                                                                                    
+
                                                                                 });
-                                                                                
-                                                                                
+
+
                                                                             } else if (i.slice(0, 1) === "E") {
                                                                                 //se for um elemento
                                                                                 //declara a array de dados das propriedades do elemento

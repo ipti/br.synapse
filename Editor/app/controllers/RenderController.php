@@ -273,8 +273,11 @@ class RenderController extends Controller {
 
     public function actionLoadcobject() {
         $cobject_id = $_REQUEST['ID'];
-        $json = $this->cobjectbyid($cobject_id);
-        echo json_encode($json);
+        $json = $this->cobjectbyid($cobject_id, false);
+        if(isset($_GET['callback']))
+            echo $_GET['callback'].'('.json_encode($json).')';
+        else
+            echo json_encode($json);
         exit;
     }
 
@@ -534,12 +537,12 @@ class RenderController extends Controller {
         echo json_encode($json);
     }
 
-    public function actionIndex($isPreview = false) {
-        $this->redirect(array('/themes/SynapseRender/index.html?isOnline=true'));
+    public function actionIndex() {
+        $this->redirect(RENDER_ONLINE."?isOnline=true");
     }
 
     public function actionPreview($id = null){
-        $this->redirect("http://render.synapse/index.html?isPreview=$id");
+        $this->redirect(RENDER_ONLINE."?isPreview=$id");
     }
 
     public function actionTestepreview() {

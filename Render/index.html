@@ -12,14 +12,23 @@
         <!-- ============== -->
         <script type="text/javascript">
             //Controlar versão do Render Online ou Offline
-            var variable = "isOnline";
-            var value = getQueryVariable(variable);
+            var isPreview = getQueryVariable('isPreview');
+            var isOnline = getQueryVariable('isOnline') != -1 || isPreview != -1;
             
             //Se não existir a sessão de indicação do status On ou Off
             //Cria uma nova sessão
-            if(sessionStorage.getItem(variable) === null){
-                //Primeira execução do index
-                sessionStorage.setItem(variable, value);
+
+            if(sessionStorage.getItem('isOnline') === null){
+                sessionStorage.setItem('isOnline', isOnline);
+            }
+            if(isPreview != -1){
+                sessionStorage.setItem('isPreview', isPreview);
+                sessionStorage.setItem('authorization', true);
+                sessionStorage.setItem('login_classroom_id_actor', -1);
+                sessionStorage.setItem('login_id_actor', -2);
+                sessionStorage.setItem('login_name_actor', 'Preview');
+                sessionStorage.setItem('login_personage_name', 'admin');
+                sessionStorage.setItem('render_mode', 'preview');
             }
             
             location.href = "meet.html";
