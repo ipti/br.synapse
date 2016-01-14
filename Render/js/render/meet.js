@@ -259,7 +259,7 @@ this.Meet = function (options) {
         //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
         if (Meet.domCobject.cobject.template_code !== 'PLC' && Meet.domCobject.cobject.template_code !== 'DIG') {
-            $(selector_cobject + ' div[group]').closest('div.ask, div.answer').shuffle();
+            $(selector_cobject + ' div[group]').closest('div.answer').shuffle();
         }
 
 
