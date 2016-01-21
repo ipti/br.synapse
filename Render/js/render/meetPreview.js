@@ -79,8 +79,6 @@ this.MeetPreview = function (cobject) {
 
             }
 
-
-
             //Se NÃO for o final do bloco
             //Existe uma próxima peça neste CObject
             if (!self.isFinalBlock && !isNextCobject) {

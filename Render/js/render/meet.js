@@ -1,5 +1,5 @@
 /* global self */
-var EDITOR = "http://local.editor.synapse.ipti.org.br";
+var EDITOR = "http://local.synapse.ipti.org.br";
 
 /**
  * Classe do Meet
