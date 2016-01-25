@@ -22,6 +22,7 @@ defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 //define('RENDER_ONLINE', 'http://local.render.synapse.ipti.org.br/index.html');
 define('RENDER_ONLINE', 'http://render.synapse.ipti.org.br/index.html');
 
+
 require_once($yii);
 
 Yii::createWebApplication($config)->run();
