@@ -19,7 +19,8 @@ defined('YII_DEBUG') or define('YII_DEBUG',true);
 defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 //Url Definition
-define('RENDER_ONLINE', 'http://render.synapse/index.html');
+//define('RENDER_ONLINE', 'http://local.render.synapse.ipti.org.br/index.html');
+define('RENDER_ONLINE', 'http://render.synapse.ipti.org.br/index.html');
 
 require_once($yii);
 

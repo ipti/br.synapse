@@ -1,5 +1,3 @@
-
-
 this.MeetPreview = function (cobject) {
     //Apontador para o próprio objeto MeetEvaluation
     var self = this;
