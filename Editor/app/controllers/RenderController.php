@@ -538,6 +538,8 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
+        var_dump(RENDER_ONLINE);exit();
+
         $this->redirect(RENDER_ONLINE."?isOnline=true");
     }
 
@@ -548,6 +550,8 @@ class RenderController extends Controller {
     }
 
     public function actionTestepreview() {
+        var_dump(RENDER_ONLINE);exit();
+
         $this->render("testepreview");
     }
 
