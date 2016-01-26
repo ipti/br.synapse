@@ -542,6 +542,8 @@ class RenderController extends Controller {
     }
 
     public function actionPreview($id = null){
+        var_dump(RENDER_ONLINE);exit();
+
         $this->redirect(RENDER_ONLINE."?isPreview=$id");
     }
 
