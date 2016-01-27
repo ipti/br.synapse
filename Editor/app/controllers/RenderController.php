@@ -548,8 +548,8 @@ class RenderController extends Controller {
     }
 
     public function actionTestepreview() {
-        var_dump(RENDER_ONLINE);exit();
-        $this->render("testepreview");
+        //var_dump(RENDER_ONLINE);exit();
+        //$this->render("testepreview");
     }
 
 //    public function actionLogout() {
