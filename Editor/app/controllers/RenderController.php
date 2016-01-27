@@ -538,18 +538,15 @@ class RenderController extends Controller {
     }
 
     public function actionIndex() {
-       // var_dump(RENDER_ONLINE);exit();
-       // $this->redirect(RENDER_ONLINE."?isOnline=true");
+         $this->redirect(RENDER_ONLINE."?isOnline=true");
     }
 
     public function actionPreview($id = null){
-        //var_dump(RENDER_ONLINE);exit();
-        //$this->redirect(RENDER_ONLINE."?isPreview=$id");
+        $this->redirect(RENDER_ONLINE."?isPreview=$id");
     }
 
     public function actionTestepreview() {
-        //var_dump(RENDER_ONLINE);exit();
-        //$this->render("testepreview");
+         $this->render("testepreview");
     }
 
 //    public function actionLogout() {
