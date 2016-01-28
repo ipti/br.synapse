@@ -1,0 +1,1 @@
+Folder where all sounds are stocked.

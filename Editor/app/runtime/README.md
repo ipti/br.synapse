@@ -1,0 +1,1 @@
+Folder where all runtime logs are stocked.

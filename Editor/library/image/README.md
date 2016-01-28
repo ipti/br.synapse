@@ -1,0 +1,1 @@
+Folder where all images are stocked.
