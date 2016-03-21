@@ -135,6 +135,9 @@ function onEditor(newEditor) {
         newEditor.saveAll();
     });
 
+    $('#preview').click(function () {
+        window.open('/render/preview/' + newEditor.CObjectID);
+    });
 
     $(document).on("change", '.input_element', function () {
         newEditor.imageChanged($(this));

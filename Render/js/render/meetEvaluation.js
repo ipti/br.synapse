@@ -1,5 +1,4 @@
 
-
 this.MeetEvaluation = function (evaluation_selected_level) {
     //Apontador para o próprio objeto MeetEvaluation
     var self = this;
