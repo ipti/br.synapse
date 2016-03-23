@@ -25,7 +25,7 @@ class ActScriptController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('delete','index', 'view', 'create', 'update', 'loadcontentparent', 'loadcontents'),
+                'actions' => array('delete','index', 'view', 'create', 'update', 'loadcontentparent', 'loadcontents', 'importScriptsFromCSVFile'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -245,5 +245,62 @@ class ActScriptController extends Controller {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
     }
+
+    public function actionImportScriptsFromCSVFile(){
+        if (isset($_FILES['fileCsv'])) {
+            $tempName = $_FILES['fileCsv']['tmp_name'];
+            // move_uploaded_file($tempNamename, Yii::app()->theme->basePath . '/backups/backup_peformances/');
+            $fileCsv = fopen($tempName, "r") or die("Unable to open file!");
+            $stringCsv = fread($fileCsv, filesize($tempName));
+            //Fecha o Arquivo
+            fclose($fileCsv);
+            $imported = false;
+            if (isset($stringCsv)) {
+                $rows = explode("\n",$stringCsv);
+                $numRows = count($rows);
+                $count = 0;
+                while($count < $numRows){
+                    $count++;
+                    $currentRow = $rows[$count-1];
+                    //Regex para realizar a divisão de colunas por ',' com exeção de vírgulas dentro do conteúdo de um campo.
+                    $cols = preg_split('/(?:(?!(".*)),(?!(.*")))/', $currentRow);
+                    //$cols = preg_split('/,/', $currentRow);
+                    var_dump($cols);
+                    echo "<br><br>";
+
+                }
+
+                exit();
+
+                $strSqlPerformInserts = "INSERT INTO `peformance_actor`"
+                    . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
+                $totalPeformances = count($peformances);
+                foreach ($peformances as $idx => $peform):
+                    $strSqlPerformInserts.='( "';
+                    $strSqlPerformInserts.= $peform->actor_id . '", "' . $peform->piece_id
+                        . '", "' . $peform->group_id . '", "' . $peform->final_time
+                        . '", "' . $peform->iscorrect . '", "' . $peform->value;
+                    $strSqlPerformInserts.='" )';
+                    if ($idx < $totalPeformances - 1) {
+                        $strSqlPerformInserts.=", ";
+                    }
+
+                endforeach;
+
+                //Executa a Query
+                Yii::app()->db->createCommand($strSqlPerformInserts)->query();
+                $imported = true;
+            }
+
+            if ($imported) {
+                $this->render("importPeformance", array('msg' => 'success'));
+            } else {
+                $this->render("importPeformance", array('msg' => 'error'));
+            }
+        } else {
+            $this->render("importScriptsFromCSVFile");
+        }
+    }
+
 
 }
