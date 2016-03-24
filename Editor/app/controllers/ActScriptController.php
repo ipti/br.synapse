@@ -255,18 +255,32 @@ class ActScriptController extends Controller {
             //Fecha o Arquivo
             fclose($fileCsv);
             $imported = false;
+            $arrayScriptGoals = array();
             if (isset($stringCsv)) {
                 $rows = explode("\n",$stringCsv);
                 $numRows = count($rows);
                 $count = 0;
+                //Número de Colunas = 3 (se repetem)
                 while($count < $numRows){
                     $count++;
                     $currentRow = $rows[$count-1];
                     //Regex para realizar a divisão de colunas por ',' com exeção de vírgulas dentro do conteúdo de um campo.
-                    $cols = preg_split('/(?:(?!(".*)),(?!(.*")))/', $currentRow);
-                    //$cols = preg_split('/,/', $currentRow);
-                    var_dump($cols);
-                    echo "<br><br>";
+                    //$cols = preg_split('/(?:(?!(".*)),(?!(.*")))/', $currentRow);
+                    $cols = preg_split('/\|/', $currentRow);
+                    $numEmptyColInThisRow = 0;
+                    $arrayScriptGoals[$count-1] = array();
+                    foreach($cols AS $col):
+                        if($col == null){
+                            $numEmptyColInThisRow++;
+                        }else{
+                            //Cada Linha do array representa o nome roteiro
+                            // Dentro deste existe o ano, bimetre e objetivo
+                            // roteiro1{ {ano1, bimestre1, objetivo1}, {ano1, bimestre1, objetivo1}}
+                        }
+
+
+
+                    endforeach;
 
                 }
 
