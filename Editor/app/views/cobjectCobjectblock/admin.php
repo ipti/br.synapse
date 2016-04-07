@@ -28,6 +28,13 @@ $('.search-form form').submit(function(){
 ");
     ?>
 
+<?php
+
+    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="flash flash-' . $key . '">' . $message . "</div>\n";
+    }
+
+?>
 
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">

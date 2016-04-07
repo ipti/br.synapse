@@ -12,7 +12,13 @@ $cs->registerScriptFile($baseUrl . "/js/cobjectCobjectblock/cobjectCobjectblock.
 ?>
 
 <div class="panelGroup form">
-    <?php echo $form->errorSummary($model); ?>
+    <?php
+    echo $form->errorSummary($model);
+
+    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="flash-' . $key . '">' . $message . "</div>\n";
+    }
+    ?>
     <div class="panelGroupHeader">
         <div class="">
             <?php echo $title; ?>

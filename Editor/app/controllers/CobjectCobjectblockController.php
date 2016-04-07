@@ -51,6 +51,18 @@ class CobjectCobjectblockController extends Controller
 		));
 	}
 
+
+	/*
+	 * Verificar se a relação Bloco+Atividade já existe
+	 *
+	 */
+
+	 private function hasCobjectInBlock($cobject_block_id, $cobject_id){
+			$cobjectCobjectblock = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id, 'cobject_id' => $cobject_id));
+		    return count($cobjectCobjectblock) > 0;
+	 }
+
+
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -65,10 +77,18 @@ class CobjectCobjectblockController extends Controller
 		if(isset($_POST['CobjectCobjectblock']))
 		{
 			$model->attributes=$_POST['CobjectCobjectblock'];
-			if($model->save()){
-                                Yii::app()->user->setFlash('success', Yii::t('default', 'CobjectCobjectblock Created Successful:'));
+
+			//Somente salva se Não existir a relação bloco+atividade
+			if(!$this->hasCobjectInBlock($model->cobject_block_id, $model->cobject_id)) {
+				if ($model->save()) {
+					Yii::app()->user->setFlash('success', Yii::t('default', 'CobjectCobjectblock Created Successful!'));
+					$this->redirect(array('admin'));
+				}
+			}else{
+				//Emite uma mensagem, indicando que a relação já existe
+				Yii::app()->user->setFlash('notice', Yii::t('default', 'A Atividade ja esta relacionada ao Bloco!'));
 				$this->redirect(array('admin'));
-                               }
+			}
 		}
 
 		$this->render('create',array(

@@ -1,0 +1,15 @@
+.flash{
+    margin-left: 230px;
+}
+
+.flash-success{
+    color: green;
+    font-weight: bold;
+
+}
+
+.flash-notice{
+    color: darkorange;
+    font-weight: bold;
+
+}
