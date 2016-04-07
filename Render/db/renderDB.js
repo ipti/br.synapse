@@ -846,61 +846,71 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         //Importar as act_goals
         this.importActGoals = function (db, act_goals) {
-            var ActGoalObjectStore = db.transaction("act_goal", "readwrite").objectStore("act_goal");
-            for (var i in act_goals) {
-                ActGoalObjectStore.add(act_goals[i]);
-            }
-            ActGoalObjectStore.transaction.oncomplete = function (event) {
-                db.close();
-                console.log("ActGoals IMPORTED!");
+            if(act_goals.length > 0) {
+                var ActGoalObjectStore = db.transaction("act_goal", "readwrite").objectStore("act_goal");
+                for (var i in act_goals) {
+                    ActGoalObjectStore.add(act_goals[i]);
+                }
+                ActGoalObjectStore.transaction.oncomplete = function (event) {
+                    db.close();
+                    console.log("ActGoals IMPORTED!");
+                }
             }
         }
 
         //Importar as act_contents
         this.importActContents = function (db, act_contents) {
-            var ActContentObjectStore = db.transaction("act_content", "readwrite").objectStore("act_content");
-            for (var i in act_contents) {
-                ActContentObjectStore.add(act_contents[i]);
-            }
-            ActContentObjectStore.transaction.oncomplete = function (event) {
-                db.close();
-                console.log("ActContents IMPORTED!");
+            if(act_contents.length > 0) {
+                var ActContentObjectStore = db.transaction("act_content", "readwrite").objectStore("act_content");
+                for (var i in act_contents) {
+                    ActContentObjectStore.add(act_contents[i]);
+                }
+                ActContentObjectStore.transaction.oncomplete = function (event) {
+                    db.close();
+                    console.log("ActContents IMPORTED!");
+                }
             }
         }
 
         //Importar as act_scripts
         this.importActScripts = function (db, act_scripts) {
-            var ActScriptObjectStore = db.transaction("act_script", "readwrite").objectStore("act_script");
-            for (var i in act_scripts) {
-                ActScriptObjectStore.add(act_scripts[i]);
-            }
-            ActScriptObjectStore.transaction.oncomplete = function (event) {
-                db.close();
-                console.log("ActScript IMPORTED!");
+            if(act_scripts.length > 0) {
+                var ActScriptObjectStore = db.transaction("act_script", "readwrite").objectStore("act_script");
+                for (var i in act_scripts) {
+                    ActScriptObjectStore.add(act_scripts[i]);
+                }
+                ActScriptObjectStore.transaction.oncomplete = function (event) {
+                    db.close();
+                    console.log("ActScript IMPORTED!");
+                }
             }
         }
 
         //Importar as act_goal_contents
         this.importActGoalContent = function (db, act_goal_contents) {
-            var ActGoalContentObjectStore = db.transaction("act_goal_content", "readwrite").objectStore("act_goal_content");
-            for (var i in act_goal_contents) {
-                ActGoalContentObjectStore.add(act_goal_contents[i]);
-            }
-            ActGoalContentObjectStore.transaction.oncomplete = function (event) {
-                db.close();
-                console.log("ActGoalContent IMPORTED!");
+            if(act_goal_contents.length > 0) {
+                var ActGoalContentObjectStore = db.transaction("act_goal_content", "readwrite").objectStore("act_goal_content");
+                for (var i in act_goal_contents) {
+                    ActGoalContentObjectStore.add(act_goal_contents[i]);
+                }
+                ActGoalContentObjectStore.transaction.oncomplete = function (event) {
+                    db.close();
+                    console.log("ActGoalContent IMPORTED!");
+                }
             }
         }
 
         //Importar as act_script_contents
         this.importActScriptContent = function (db, act_script_contents) {
-            var ActScriptContentObjectStore = db.transaction("act_script_content", "readwrite").objectStore("act_script_content");
-            for (var i in act_script_contents) {
-                ActScriptContentObjectStore.add(act_script_contents[i]);
-            }
-            ActScriptContentObjectStore.transaction.oncomplete = function (event) {
-                db.close();
-                console.log("ActScriptContent IMPORTED!");
+            if(act_script_contents.length > 0) {
+                var ActScriptContentObjectStore = db.transaction("act_script_content", "readwrite").objectStore("act_script_content");
+                for (var i in act_script_contents) {
+                    ActScriptContentObjectStore.add(act_script_contents[i]);
+                }
+                ActScriptContentObjectStore.transaction.oncomplete = function (event) {
+                    db.close();
+                    console.log("ActScriptContent IMPORTED!");
+                }
             }
         }
 

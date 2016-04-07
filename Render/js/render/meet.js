@@ -96,7 +96,6 @@ this.Meet = function (options) {
     //======================================
 
 
-
     //Obter bloco a partir da disciplina selecionada
     this.start = function () {
 
