@@ -85,6 +85,7 @@ this.Meet = function (options) {
     var start_time = 0;
     var final_time = 0;
     var interval_group = 0;
+    var start_time_piece = 0;
     var interval_piece = 0;
     var meet_type = options.meet_type || DEFAULT_MEET_TYPE;
     //Time de cada encontro Em Segundos
@@ -233,7 +234,7 @@ this.Meet = function (options) {
      * @returns {void}
      */
     this.restartTimes = function () {
-        self.interval_group = self.interval_piece = new Date().getTime();
+        self.interval_group = self.start_time_piece = new Date().getTime();
     };
 
     //Carregar Primeira Piece do atendimento corrente
@@ -1826,7 +1827,7 @@ this.Meet = function (options) {
      */
     this.savePerformanceUsr = function (currentPieceID) {
         //Obtem o intervalo de resolução da Piece
-        self.interval_piece = (new Date().getTime() - self.interval_piece);
+        self.interval_piece = (new Date().getTime() - self.start_time_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados
         // e a armazena no objeto piece.isCorrect da piece corrente
         if (Meet.domCobject.cobject.template_code === 'AEL' ||
@@ -1841,7 +1842,8 @@ this.Meet = function (options) {
         var data_default = {
             'piece_id': currentPieceID,
             'actor_id': self.actor,
-            'final_time': self.interval_piece, //delta T
+            'final_time': self.start_time_piece + self.interval_piece, //TimeStamp quando firmou a resolução da questão
+            'interval_resolution': self.interval_piece, //delta T
             'iscorrect': pieceIsTrue
         };
         var data = data_default;
@@ -1851,7 +1853,7 @@ this.Meet = function (options) {
         }
 
         //Salvar na performance_User OffLine
-        if(sessionGet('isPreview') == -1) {
+        if(sessionGet('isPreview') == null || sessionGet('isPreview') == -1) {
             Meet.DB_synapse.addPerformance_actor(data);
         }
 

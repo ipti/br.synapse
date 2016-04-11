@@ -1187,6 +1187,7 @@ if (sessionStorage.getItem("isOnline") === null ||
             var piece_id = data.piece_id;
             var actor_id = data.actor_id;
             var final_time = data.final_time;
+            var interval_resolution = data.interval_resolution;
             var value = self.isset(data.value) ? data.value : null;
             var iscorrect = data.iscorrect;
             var group_id = self.isset(data.group_id) ? data.group_id : null;
@@ -1196,6 +1197,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 'group_id': group_id,
                 'actor_id': actor_id,
                 'final_time': final_time,
+                'interval_resolution': interval_resolution,
                 'value': value,
                 'iscorrect': iscorrect
             };
