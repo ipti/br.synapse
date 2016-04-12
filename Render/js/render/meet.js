@@ -263,6 +263,10 @@ this.Meet = function (options) {
             $(selector_cobject + ' div[group]').closest('div.answer').shuffle();
         }
 
+        if (Meet.domCobject.cobject.template_code !== 'AEL' && Meet.domCobject.cobject.template_code !== 'DDROP'
+            && Meet.domCobject.cobject.template_code !== 'ONEDDROP') {
+            $(selector_cobject + ' div[group]').closest('div.ask').shuffle();
+        }
 
         if (self.currentTemplateCode === 'DDROP') {
             //Existe DDROP
@@ -2613,7 +2617,8 @@ this.Meet = function (options) {
                 $('#level').text(self.currentGrade);
             }
 
-            if (self.isset(withMSGnextLevel) && withMSGnextLevel) {
+            if (self.isset(withMSGnextLevel) && withMSGnextLevel && false) {
+                //Temporariamente, não exibe a mensagem de avanço de nível.
                 if (Meet.domCobject.cobject.template_code !== 'TXT')
                     $('#nextLevel-message').show();
             }
