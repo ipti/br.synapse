@@ -93,7 +93,7 @@ this.Meet = function (options) {
     this.tag_time;
     //======================================
     //Criar Objeto para Manipulação do Banco
-    Meet.DB_synapse = sessionGet("isOnline") != "false" ? new DBOn() : new DB();
+    Meet.DB_synapse = sessionGet("isOnline") != null && sessionGet("isOnline") != "false" ? new DBOn() : new DB();
     //======================================
 
 
