@@ -511,7 +511,6 @@ this.Meet = function (options) {
         }
 
         //======================================================================
-
     };
 
     Meet.messageFinishedLevel = function () {
