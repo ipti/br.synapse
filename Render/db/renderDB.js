@@ -942,7 +942,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     var cursor = event.target.result;
                     if (cursor) {
                         var currentPerformance = '{"actor_id":"' + cursor.value.actor_id;
-                        currentPerformance += '", "final_time":"' + cursor.value.final_time;
+                        currentPerformance += '", "interval_resolution":"' + cursor.value.interval_resolution;
                         currentPerformance += '", "group_id":"' + cursor.value.group_id;
                         currentPerformance += '", "iscorrect":"' + cursor.value.iscorrect;
                         currentPerformance += '", "piece_id":"' + cursor.value.piece_id;

@@ -71,6 +71,7 @@ this.Meet = function (options) {
     //Ano atual do Aluno
     Meet.studentCurrentYear = 0;
     Meet.actor = options.actor[0];
+
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];
 
@@ -611,7 +612,7 @@ this.Meet = function (options) {
             //Fica resolvendo a mesma Atividade até acertar
             //                    var info_state = {
             //                        cobject_block_id: self.cobject_block_id,
-            //                        actor_id: self.actor,
+            //                        actor_id: Meet.actor,
             //                        last_piece_id: null,
             //                        qtd_correct: Meet.peformance_qtd_correct,
             //                        qtd_wrong: Meet.peformance_qtd_wrong,
@@ -1844,7 +1845,7 @@ this.Meet = function (options) {
         Meet.domCobject.mainPieces[currentPieceID].time_answer = self.interval_piece;
         var data_default = {
             'piece_id': currentPieceID,
-            'actor_id': self.actor,
+            'actor_id': Meet.actor,
             'final_time': self.start_time_piece + self.interval_piece, //TimeStamp quando firmou a resolução da questão
             'interval_resolution': self.interval_piece, //delta T
             'iscorrect': pieceIsTrue
@@ -1894,7 +1895,7 @@ this.Meet = function (options) {
                             'piece_id': currentPieceID,
                             // 'piece_elementID':current_pieceElementID,
                             'group_id': current_group,
-                            'actor_id': self.actor,
+                            'actor_id': Meet.actor,
                             /**
                              * @todo Verificar this.time_answer, aparentemente eesta passando com valor nulo.
                              */
