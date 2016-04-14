@@ -150,8 +150,12 @@
                 }
 
 
-                $('#export').bind('tap', function () {
+                $('#exportPerformances').bind('tap', function () {
                     db.exportPerformance_actor();
+                });
+
+                $('#exportToEEG').bind('tap', function () {
+                    db.exportToEEG();
                 });
 
                 $('#installAll').on('tap', function () {
@@ -204,7 +208,8 @@
     <body>
         <section id="export-form">
             <div id="export_data">
-                <button class="export-button buttons" type="button" id="export"> Exportar Performance</button>  
+                <button class="export-button buttons" type="button" id="exportPerformances"> Exportar Performance</button>
+                <button class="export-button buttons" type="button" id="exportToEEG"> Exportar para EEG</button>
             </div>
         </section>    
 

@@ -982,6 +982,87 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
+
+        // - - - - - - - - - -  //
+        // EXPORTE PARA O EEG - IBlue //
+        // - - - - - - - - - -  //
+
+        this.exportToEEG = function () {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function (event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function (event) {
+                var db = event.target.result;
+                db.onerror = function (event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.errorCode);
+                };
+
+                var performancesForActors = [];
+                var Performance_actorObjectStore = db.transaction("performance_actor", "readonly").objectStore("performance_actor");
+                Performance_actorObjectStore.openCursor().onsuccess = function (event) {
+                    var cursor = event.target.result;
+
+                    if (cursor) {
+                        //Criação de um array, onde armazenará todas as performances e agrupá-las por Atores
+                        if(performancesForActors[cursor.value.actor_id] === undefined
+                           || performancesForActors[cursor.value.actor_id] === null ){
+                              performancesForActors[cursor.value.actor_id] = [];
+                        }
+                        var sizePerformancesThisActor = performancesForActors[cursor.value.actor_id].length;
+                        performancesForActors[cursor.value.actor_id][sizePerformancesThisActor] = [];
+                        performancesForActors[cursor.value.actor_id][sizePerformancesThisActor]['actor_id'] = cursor.value.actor_id;
+                        performancesForActors[cursor.value.actor_id][sizePerformancesThisActor]['interval_resolution'] = cursor.value.interval_resolution;
+                        performancesForActors[cursor.value.actor_id][sizePerformancesThisActor]['final_time'] = cursor.value.final_time;
+                        performancesForActors[cursor.value.actor_id][sizePerformancesThisActor]['piece_id'] = cursor.value.piece_id;
+                        performancesForActors[cursor.value.actor_id][sizePerformancesThisActor]['iscorrect'] = cursor.value.iscorrect;
+
+
+                        cursor.continue();
+                    } else {
+                        //Não existe mais registros
+                        //
+                        //Transformar o Array de Atores e suas performances em uma String
+                        for(var actorID in performancesForActors){
+                            //Para cada Actor
+                            var textToExport = "actor_id|interval_resolution|final_time|piece_id|iscorrect";
+                            for(var idxPerformance in performancesForActors[actorID]){
+                                //Para cada performance do Actor corrente
+                                var performance = performancesForActors[actorID][idxPerformance];
+                                textToExport+="\n"+performance['actor_id'];
+                                textToExport+="|"+performance['interval_resolution'];
+                                textToExport+="|"+performance['final_time'];
+                                textToExport+="|"+performance['piece_id'];
+                                textToExport+="|"+performance['iscorrect'];
+                            }
+                            //Baixa um arquivo TXT do ExportToEEG desse Actor Corrente
+                            //Realizar download da String
+                            var pom = document.createElement('a');
+                            var current_date = new Date();
+                            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(textToExport));
+                            pom.setAttribute('download', 'textToExportEEG_ActorID_'+ actorID +'(' + current_date.getDate() + '-' + current_date.getMonth()
+                                + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
+                            pom.click();
+                        }
+
+
+
+                    }
+                };
+
+            }
+            DBsynapse.onblocked = function (event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+
+        }
+
+
         //Pesquisas No Banco        
         this.login = function (login, password, callBack) {
             if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
