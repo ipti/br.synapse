@@ -99,6 +99,12 @@
                             array('label' => Yii::t('menu', 'Import/Export'), 'url' => array('/matrix/index')),
                         ),
                     )
+                , array(
+                        'label' => Yii::t('menu', 'Admin'),
+                        'url' => array('/render/importFromEduCenso'),
+                        'linkOptions' => array('id' => 'menuAdv'),
+
+                    )
                 ),
             ));
             ?>

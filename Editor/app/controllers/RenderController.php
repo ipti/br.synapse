@@ -324,7 +324,7 @@ class RenderController extends Controller {
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
-                    'importPeformance', 'getSchool', 'getCobject_blocks', 'getDisciplines',
+                    'importPeformance', 'importFromEduCenso', 'getSchool', 'getCobject_blocks', 'getDisciplines',
                     'SynapseRender', 'login',
                     'preview'),
                 'users' => array('*'),
@@ -452,6 +452,51 @@ class RenderController extends Controller {
         } else {
             //Carrega a página para exportar para o render Offline
             $this->render("exportToOffline");
+        }
+    }
+
+    public function actionImportFromEduCenso() {
+         if (isset($_FILES['fileTxt'])) {
+            $tempName = $_FILES['fileTxt']['tmp_name'];
+            // move_uploaded_file($tempNamename, Yii::app()->theme->basePath . '/backups/backup_peformances/');
+            $fileTxt = fopen($tempName, "r") or die("Unable to open file!");
+            $dataEdu = fread($fileTxt, filesize($tempName));
+            //Fecha o Arquivo
+            fclose($fileTxt);
+            $imported = false;
+            if (isset($dataEdu)) {
+               // $strSqlPerformInserts = "INSERT INTO `peformance_actor`"
+               //     . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
+
+                $matches = "";
+                preg_match_all('/^00\|.*\\n/', $dataEdu, $matches);
+                preg_match_all('/\\n20\|.*\\n/', $dataEdu, $matches);
+                preg_match_all('/\\n60\|.*\\n/', $dataEdu, $matches);
+                preg_match_all('/\\n80\|.*\\n/', $dataEdu, $matches);
+                var_dump($matches);exit();
+
+                $str_school_00  = array();
+                $str_classroom_20  = array();
+                $str_student_60  = array();
+                $str_student_enrollment = array();
+
+
+
+
+
+
+                //Executa a Query
+                Yii::app()->db->createCommand($strSqlDataEduCensoInserts)->query();
+                $imported = true;
+            }
+
+            if ($imported) {
+                $this->render("importFromEduCenso", array('msg' => 'success'));
+            } else {
+                $this->render("importFromEduCenso", array('msg' => 'error'));
+            }
+        } else {
+            $this->render("importFromEduCenso");
         }
     }
 
