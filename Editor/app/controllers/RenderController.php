@@ -2,7 +2,7 @@
 
 class RenderController extends Controller {
 
-    public $layout = 'render';
+    public $layout = 'fullmenu';
     //MSG for Translate
     public $INVALID_ATTRIBUTES = "Atributes Inválidos";
     //
@@ -468,25 +468,153 @@ class RenderController extends Controller {
                // $strSqlPerformInserts = "INSERT INTO `peformance_actor`"
                //     . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
 
-                $matches = "";
-                preg_match_all('/^00\|.*\\n/', $dataEdu, $matches);
-                preg_match_all('/\\n20\|.*\\n/', $dataEdu, $matches);
-                preg_match_all('/\\n60\|.*\\n/', $dataEdu, $matches);
-                preg_match_all('/\\n80\|.*\\n/', $dataEdu, $matches);
-                var_dump($matches);exit();
+                $matchesSchools = "";
+                $matchesClassroom = "";
+                $matchesStudents = "";
+                $matchesEnrollment = "";
+                preg_match_all('/^00\|.*\\n/', $dataEdu, $matchesSchools);
+                $matchesSchools = $matchesSchools[0];
+                preg_match_all('/\\n20\|.*\\n/', $dataEdu, $matchesClassroom);
+                $matchesClassroom = $matchesClassroom[0];
+                preg_match_all('/\\n60\|.*\\n/', $dataEdu, $matchesStudents);
+                $matchesStudents = $matchesStudents[0];
+                preg_match_all('/\\n80\|.*\\n/', $dataEdu, $matchesEnrollment);
+                $matchesEnrollment = $matchesEnrollment[0];
 
-                $str_school_00  = array();
-                $str_classroom_20  = array();
-                $str_student_60  = array();
-                $str_student_enrollment = array();
+                //School Data
+                $explSchool = explode("|", $matchesSchools[0]);
+                $schoolInepID = $explSchool[1];
+                $schoolName = $explSchool[9];
+
+                //Carrega os atributos da Unity referente à escola
+                $school = new Unity();
+                $school->name = $schoolName;
+                $school->inep_id = $schoolInepID;
+                $school->organization_id = 2;
+                $school->father_id = 1;
+                $school->location_id = 2;
+
+                if($school->insert()){
+                    //Após salvar a escola cria um novo relacionamento no unity_tree
+                    $unity_tree = new UnityTree();
+                    $unity_tree->primary_organization_id = 1;
+                    $unity_tree->primary_unity_id = 1;
+                    $unity_tree->secondary_organization_id = 2;
+                    $unity_tree->secondary_unity_id = $school->id;
+                    //$unity_tree->insert();
+
+                    //Criar a Unity Fundamental Menor para essa escola
+                    $minorFund = new Unity();
+                    $minorFund->name = "Fundamental Menor";
+                    $minorFund->organization_id = 3;
+                    $minorFund->father_id = $school->id;
+                    $minorFund->location_id = 2;
+                    if($minorFund->insert()){
+                        //Precisa salvar a UnityTree
+                        $unity_tree = new UnityTree();
+                        $unity_tree->primary_organization_id = 2;
+                        $unity_tree->primary_unity_id =  $school->id;
+                        $unity_tree->secondary_organization_id = 3;
+                        $unity_tree->secondary_unity_id = $minorFund->id;
+                    }
+
+
+                    //Criar a Unity Fundamental Maior para essa escola
+                    $majorFund = new Unity();
+                    $majorFund->name = "Fundamental Maior";
+                    $majorFund->organization_id = 6;
+                    $majorFund->father_id = $school->id;
+                    $majorFund->location_id = 2;
+                    if($majorFund->insert()){
+                        //Precisa salvar a UnityTree
+                        $unity_tree = new UnityTree();
+                        $unity_tree->primary_organization_id = 2;
+                        $unity_tree->primary_unity_id =  $school->id;
+                        $unity_tree->secondary_organization_id = 6;
+                        $unity_tree->secondary_unity_id = $majorFund->id;
+                    }
+
+                    //Classroom Data
+                    //Deverá tratar turmas multiseriadas !!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    foreach($matchesClassroom AS $eachClassroom):
+                        $explClassroom = explode("|", $eachClassroom);
+                        $classroomInepID = $explClassroom[2];
+                        $classroomName = $explClassroom[4];
+                        $classroomStage = $explClassroom[37];
+                        if($classroomStage == 2 || $classroomStage == 3) {
+                            $firstChar = substr($classroomName, 0, 1);
+                            preg_match("/\d/", $firstChar, $level);
+
+                            if (count($level) > 0){
+                                //Então o primeiro char é um dígito
+                                $level = $level[0];
+                                //Carrega os atributos da Unity referente a Turma
+                                $classroom = new Unity();
+                                $classroom->name = $classroomName;
+                                $classroom->inep_id = $classroomInepID;
+                                if ($classroomStage == 2) {
+                                    //Stage = 2
+                                    $classroom->organization_id = 3;
+                                    $classroom->father_id = $minorFund->id;
+                                } else if($classroomStage == 3){
+                                    //Stage = 3
+                                    $classroom->organization_id = 6;
+                                    $classroom->father_id = $majorFund->id;
+                                }
+
+                                $classroom->location_id = 2;
+                                //Inseri no DB a Turma corrente
+                                if ($classroom->insert()) {
+                                    //Precisa salvar a UnityTree
+                                    $unity_tree = new UnityTree();
+                                    //1°- unity Pai
+                                    if ($classroomStage == 2) {
+                                        //Stage = 2
+                                        $unity_tree->primary_organization_id = 3;
+                                        $unity_tree->primary_unity_id =  $minorFund->id;
+                                    } else if($classroomStage == 3){
+                                        //Stage = 3
+                                        $unity_tree->primary_organization_id = 6;
+                                        $unity_tree->primary_unity_id =  $majorFund->id;
+                                    }
+
+                                    //2°- Unit Filha
+                                    $unity_tree->secondary_organization_id = 6;
+                                    //Verificar qual a organization_id, neste caso a organization de nível mais baixo (ex 1°A, 2°B)
+                                    $unity_tree->secondary_unity_id = $classroom->id;
+                                }
+                           }
+                        }
+
+                    endforeach;
+                    //=============================
+                }
+
+                //======================================
 
 
 
+                exit();
 
+                //Student Data
+                foreach($matchesStudents AS $eachStudent):
+                    $explStudent = explode("|", $eachStudent);
+                    $studentSchoolInepID = $explStudent[1];
+                    $studentInepID = $explStudent[2];
+                    $studentName = $explStudent[4];
+                endforeach;
+                //=============================
 
+                //Enrollment Data
+                foreach($matchesEnrollment AS $eachEnrollment):
+                    $explEnrollment = explode("|", $eachEnrollment);
+                    $enrollmentStudentInepID = $explEnrollment[2];
+                    $enrollmentClassroomInepID = $explEnrollment[4];
+                endforeach;
+                //=============================
 
                 //Executa a Query
-                Yii::app()->db->createCommand($strSqlDataEduCensoInserts)->query();
+               // Yii::app()->db->createCommand($strSqlDataEduCensoInserts)->query();
                 $imported = true;
             }
 
