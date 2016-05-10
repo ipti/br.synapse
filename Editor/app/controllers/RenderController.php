@@ -486,103 +486,54 @@ class RenderController extends Controller {
                 $schoolInepID = $explSchool[1];
                 $schoolName = $explSchool[9];
 
-                //Carrega os atributos da Unity referente à escola
-                $school = new Unity();
+                //Antes de salvar uma nova escola, verifica se ela já não existe.
+                $school = School::model()->findByAttributes(array('inep_id'=>$schoolInepID));
+                if(!isset($school)){
+                    //É a primeira inserção dessa escola no DB
+                    $school = new School();
+                }
+                //Carrega os atributos da escola
                 $school->name = $schoolName;
                 $school->inep_id = $schoolInepID;
-                $school->organization_id = 2;
-                $school->father_id = 1;
-                $school->location_id = 2;
+                $school->school_department_fk = 1;
+                $school->location_fk = 2;
 
-                if($school->insert()){
-                    //Após salvar a escola cria um novo relacionamento no unity_tree
-                    $unity_tree = new UnityTree();
-                    $unity_tree->primary_organization_id = 1;
-                    $unity_tree->primary_unity_id = 1;
-                    $unity_tree->secondary_organization_id = 2;
-                    $unity_tree->secondary_unity_id = $school->id;
-                    //$unity_tree->insert();
-
-                    //Criar a Unity Fundamental Menor para essa escola
-                    $minorFund = new Unity();
-                    $minorFund->name = "Fundamental Menor";
-                    $minorFund->organization_id = 3;
-                    $minorFund->father_id = $school->id;
-                    $minorFund->location_id = 2;
-                    if($minorFund->insert()){
-                        //Precisa salvar a UnityTree
-                        $unity_tree = new UnityTree();
-                        $unity_tree->primary_organization_id = 2;
-                        $unity_tree->primary_unity_id =  $school->id;
-                        $unity_tree->secondary_organization_id = 3;
-                        $unity_tree->secondary_unity_id = $minorFund->id;
-                    }
-
-
-                    //Criar a Unity Fundamental Maior para essa escola
-                    $majorFund = new Unity();
-                    $majorFund->name = "Fundamental Maior";
-                    $majorFund->organization_id = 6;
-                    $majorFund->father_id = $school->id;
-                    $majorFund->location_id = 2;
-                    if($majorFund->insert()){
-                        //Precisa salvar a UnityTree
-                        $unity_tree = new UnityTree();
-                        $unity_tree->primary_organization_id = 2;
-                        $unity_tree->primary_unity_id =  $school->id;
-                        $unity_tree->secondary_organization_id = 6;
-                        $unity_tree->secondary_unity_id = $majorFund->id;
-                    }
-
+                if($school->save()){
                     //Classroom Data
                     //Deverá tratar turmas multiseriadas !!!!!!!!!!!!!!!!!!!!!!!!!!!
                     foreach($matchesClassroom AS $eachClassroom):
                         $explClassroom = explode("|", $eachClassroom);
                         $classroomInepID = $explClassroom[2];
                         $classroomName = $explClassroom[4];
-                        $classroomStage = $explClassroom[37];
-                        if($classroomStage == 2 || $classroomStage == 3) {
-                            $firstChar = substr($classroomName, 0, 1);
-                            preg_match("/\d/", $firstChar, $level);
+                        $classroomStage_id = $explClassroom[37];
 
-                            if (count($level) > 0){
+                        //Verificar no banco de dados se o stage_id possui o campo stage = 2 ou 3
+                        $edCensoStage = EdcensoStageVsModality::model()->findByPk($classroomStage_id);
+                        if($edCensoStage->id >= 4 && $edCensoStage->id <= 24) {
+                            $classroomStage = $edCensoStage->id;
+                            //Selecionar o nome do Stage no Banco do Synapse
+                            $stage_vs_modality = EdcensoStageVsModality::model()->findByPk($classroomStage);
+                            preg_match_all("/\d/", $stage_vs_modality->name, $grade);
+
+                            if (count($grade) > 0){
                                 //Então o primeiro char é um dígito
-                                $level = $level[0];
-                                //Carrega os atributos da Unity referente a Turma
-                                $classroom = new Unity();
+                                //É certo que é um vetor dentro de outro, quando o id do edCensoStage está entre os
+                                //valores especificados acima
+                                $grade = $grade[0][1];
+                                //Antes de salvar uma nova Turma, verifica se ela já não existe.
+                                $classroom = Classroom::model()->findByAttributes(array('inep_id'=>$classroomInepID));
+                                if(!isset($classroom)){
+                                    //É a primeira inserção dessa Turma no DB
+                                    $classroom = new Classroom();
+                                }
+                                //Carrega os atributos da Turma
                                 $classroom->name = $classroomName;
                                 $classroom->inep_id = $classroomInepID;
-                                if ($classroomStage == 2) {
-                                    //Stage = 2
-                                    $classroom->organization_id = 3;
-                                    $classroom->father_id = $minorFund->id;
-                                } else if($classroomStage == 3){
-                                    //Stage = 3
-                                    $classroom->organization_id = 6;
-                                    $classroom->father_id = $majorFund->id;
-                                }
-
-                                $classroom->location_id = 2;
+                                $classroom->school_fk = $school->id;
+                                $classroom->stage_fk = $stage_vs_modality->id;
+                               // var_dump($classroom);exit();
                                 //Inseri no DB a Turma corrente
-                                if ($classroom->insert()) {
-                                    //Precisa salvar a UnityTree
-                                    $unity_tree = new UnityTree();
-                                    //1°- unity Pai
-                                    if ($classroomStage == 2) {
-                                        //Stage = 2
-                                        $unity_tree->primary_organization_id = 3;
-                                        $unity_tree->primary_unity_id =  $minorFund->id;
-                                    } else if($classroomStage == 3){
-                                        //Stage = 3
-                                        $unity_tree->primary_organization_id = 6;
-                                        $unity_tree->primary_unity_id =  $majorFund->id;
-                                    }
-
-                                    //2°- Unit Filha
-                                    $unity_tree->secondary_organization_id = 6;
-                                    //Verificar qual a organization_id, neste caso a organization de nível mais baixo (ex 1°A, 2°B)
-                                    $unity_tree->secondary_unity_id = $classroom->id;
-                                }
+                                $classroom->save();
                            }
                         }
 
@@ -592,7 +543,7 @@ class RenderController extends Controller {
 
                 //======================================
 
-
+                //STOP HERE. Continue DOWN HERE. And test All Up Here
 
                 exit();
 
