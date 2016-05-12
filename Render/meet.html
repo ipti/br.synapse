@@ -161,14 +161,6 @@
                         $('.info.info-erros .info-text').html(Meet.peformance_qtd_wrong);
                     }
 
-                    //Carregar as Escolas
-                    if(sessionGet('isPreview') != -1){
-                        //Sem Escola
-                        $('#regSchool').html("<option value='-1'>Sem Escola</option>");
-                        //Sem classe
-                        $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
-                        $('.info.info-discipline').html('<p></p>');
-                    }else {
                         Meet.DB_synapse.findAllSchools(function (listSchools) {
                             var foundAnySchool = false;
                             for (var idx in listSchools) {
@@ -188,7 +180,7 @@
                             }
 
                         });
-                    }
+
                     //======================================
                     
                      //Carregar Turmas da escola Selecionada 
