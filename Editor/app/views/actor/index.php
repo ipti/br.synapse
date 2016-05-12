@@ -26,11 +26,13 @@ array('label'=> Yii::t('default', 'Create a new Actor'), 'url'=>array('create'),
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
                     		'id',
-		'unity_id',
 		'person_id',
 		'personage_id',
+		'fk_code',
 		'active_date',
 		'desactive_date',
+		'classroom_fk',
+		'inep_id',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   
