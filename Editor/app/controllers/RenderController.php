@@ -570,7 +570,7 @@ class RenderController extends Controller {
                                     $person->name = $studentName;
                                     $array_name = explode(" ", $studentName);
                                     //login é o primeiro nome + as três primeiras letras do segundo nome
-                                    $person->login = strtolower(trim($array_name[0] . substr($array_name[1], 0, 3)));
+                                    $person->login = strtolower(trim($array_name[0] . substr($studentInepID, 0, 3)));
                                     $person->email = $person->login . "@email.com";
                                     $person->password = $person->login;
 
