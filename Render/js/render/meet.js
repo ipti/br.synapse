@@ -371,17 +371,25 @@ this.Meet = function (options) {
                 audio.currentTime = 0;
                 img.attr('src', "img/icons/play.png");
                 selfIconPause.attr('playing', 'false');
-            } else {
+             } else {
                 //Antes do Play, dá um STOP em todos os audios em execução
                 self.stopAllSounds();
                 audio.play();
                 img.attr('src', "img/icons/stop.png");
                 selfIconPause.attr('playing', 'true');
-            }
+             }
+
+            //seta playing para false após o audio acabar
+            audio.onended = function() {
+                audio.pause();
+                audio.currentTime = 0;
+                img.attr('src', "img/icons/play.png");
+                selfIconPause.attr('playing', 'false');
+            };
 
             audio.addEventListener("ended", function () {
                 img.attr('src', "img/icons/play.png");
-                // playing = true;
+                //playing = true;
             });
 
         });
@@ -661,6 +669,7 @@ this.Meet = function (options) {
         $('.cobject.MTE div[group]').bind('tap', function () {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
+                alert("Sim");
                 $('.nextPiece').hide();
                 $(this).css('border', '3px solid transparent');
                 $(this).removeClass('last_clicked');
