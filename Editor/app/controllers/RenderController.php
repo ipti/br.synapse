@@ -554,7 +554,7 @@ class RenderController extends Controller {
                             //Foi cadastrada no banco do Synapse, não não houver registro, então o aluno não deve ser inserido
                             if (isset($studentClassroom)){
                                 if ($enrollmentStudentInepID == $studentInepID) {
-                                    //Encontrou a matrícula do Estudante corrente3
+                                    //Encontrou a matrícula do Estudante corrente
                                     //Antes de salvar um novo usuário, verifica se ele já não existe.
                                     $actor = Actor::model()->findByAttributes(array('inep_id' => $studentInepID));
                                     if (!isset($actor)) {
@@ -608,7 +608,6 @@ class RenderController extends Controller {
     }
 
     public function actionImportPeformance() {
-
         if (isset($_FILES['fileTxt'])) {
             $tempName = $_FILES['fileTxt']['tmp_name'];
             // move_uploaded_file($tempNamename, Yii::app()->theme->basePath . '/backups/backup_peformances/');
