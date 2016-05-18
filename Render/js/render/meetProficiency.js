@@ -405,23 +405,6 @@ this.MeetProficiency = function () {
 
     }
 
-    //Criar uma função para salvar o ponto de diagnóstico.
-    this.saveDiagnosticPoint = function (piece_id){
-        //Salvar o estado que é a ultima questao do cobject resolvida pelo Usuario
-
-        var diag_state = {
-            render_mode: Meet.render_mode,
-            actor_id: Meet.actor,
-
-
-        };
-
-        //fazer esse metodo em renderDb.js
-        Meet.DB_synapse.NewDiagnosticUserState(diag_state);
-
-    }
-
-
     /**
      * Verifica se a variavel esta setada.
      * 

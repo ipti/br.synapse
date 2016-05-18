@@ -669,7 +669,6 @@ this.Meet = function (options) {
         $('.cobject.MTE div[group]').bind('tap', function () {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
-                alert("Sim");
                 $('.nextPiece').hide();
                 $(this).css('border', '3px solid transparent');
                 $(this).removeClass('last_clicked');
