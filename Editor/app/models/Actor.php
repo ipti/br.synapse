@@ -5,17 +5,18 @@
  *
  * The followings are the available columns in table 'actor':
  * @property integer $id
- * @property integer $unity_id
  * @property integer $person_id
  * @property integer $personage_id
  * @property string $fk_code
  * @property integer $active_date
  * @property integer $desactive_date
+ * @property integer $classroom_fk
+ * @property integer $inep_id
  *
  * The followings are the available model relations:
- * @property Unity $unity
- * @property Personage $personage
+ * @property Classroom $classroomFk
  * @property Person $person
+ * @property Personage $personage
  * @property ActorInteraction[] $actorInteractions
  * @property PeformanceActor[] $peformanceActors
  */
@@ -47,12 +48,12 @@ class Actor extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('unity_id, person_id, personage_id', 'required'),
-			array('unity_id, person_id, personage_id, active_date, desactive_date', 'numerical', 'integerOnly'=>true),
+			array('person_id, personage_id', 'required'),
+			array('person_id, personage_id, active_date, desactive_date, classroom_fk, inep_id', 'numerical', 'integerOnly'=>true),
 			array('fk_code', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, unity_id, person_id, personage_id, fk_code, active_date, desactive_date', 'safe', 'on'=>'search'),
+			array('id, person_id, personage_id, fk_code, active_date, desactive_date, classroom_fk, inep_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,9 +65,9 @@ class Actor extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'unity' => array(self::BELONGS_TO, 'Unity', 'unity_id'),
-			'personage' => array(self::BELONGS_TO, 'Personage', 'personage_id'),
+			'classroomFk' => array(self::BELONGS_TO, 'Classroom', 'classroom_fk'),
 			'person' => array(self::BELONGS_TO, 'Person', 'person_id'),
+			'personage' => array(self::BELONGS_TO, 'Personage', 'personage_id'),
 			'actorInteractions' => array(self::HAS_MANY, 'ActorInteraction', 'actor_id'),
 			'peformanceActors' => array(self::HAS_MANY, 'PeformanceActor', 'actor_id'),
 		);
@@ -79,12 +80,13 @@ class Actor extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('default', 'ID'),
-			'unity_id' => Yii::t('default', 'Unity'),
 			'person_id' => Yii::t('default', 'Person'),
 			'personage_id' => Yii::t('default', 'Personage'),
 			'fk_code' => Yii::t('default', 'Fk Code'),
 			'active_date' => Yii::t('default', 'Active Date'),
 			'desactive_date' => Yii::t('default', 'Desactive Date'),
+			'classroom_fk' => Yii::t('default', 'Classroom Fk'),
+			'inep_id' => Yii::t('default', 'Inep'),
 		);
 	}
 
@@ -100,12 +102,13 @@ class Actor extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('unity_id',$this->unity_id);
 		$criteria->compare('person_id',$this->person_id);
 		$criteria->compare('personage_id',$this->personage_id);
 		$criteria->compare('fk_code',$this->fk_code,true);
 		$criteria->compare('active_date',$this->active_date);
 		$criteria->compare('desactive_date',$this->desactive_date);
+		$criteria->compare('classroom_fk',$this->classroom_fk);
+		$criteria->compare('inep_id',$this->inep_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

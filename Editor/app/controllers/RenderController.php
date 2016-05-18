@@ -458,29 +458,37 @@ class RenderController extends Controller {
     public function actionImportFromEduCenso() {
          if (isset($_FILES['fileTxt'])) {
             $tempName = $_FILES['fileTxt']['tmp_name'];
-            // move_uploaded_file($tempNamename, Yii::app()->theme->basePath . '/backups/backup_peformances/');
-            $fileTxt = fopen($tempName, "r") or die("Unable to open file!");
-            $dataEdu = fread($fileTxt, filesize($tempName));
+             $fileTxt = fopen($tempName, "r") or die("Unable to open file!");
+             $matchesSchools = array(); //00
+             $matchesClassroom = array(); //20
+             $matchesStudents = array(); //60
+             $matchesEnrollment = array(); //80
+
+             while(!feof($fileTxt)){
+                  $line = fgets($fileTxt);
+                  $typeReg = substr($line, 0, 2);
+                 if($typeReg == '00'){
+                     //Escola
+                     array_push($matchesSchools, $line);
+                 }
+                 if($typeReg == '20'){
+                     //Turma
+                     array_push($matchesClassroom, $line);
+                 }
+                 if($typeReg == '60'){
+                     //Estudante
+                     array_push($matchesStudents, $line);
+                 }
+                 if($typeReg == '80'){
+                     //Matrícula
+                     array_push($matchesEnrollment, $line);
+                 }
+
+             }
             //Fecha o Arquivo
             fclose($fileTxt);
             $imported = false;
-            if (isset($dataEdu)) {
-               // $strSqlPerformInserts = "INSERT INTO `peformance_actor`"
-               //     . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
-
-                $matchesSchools = "";
-                $matchesClassroom = "";
-                $matchesStudents = "";
-                $matchesEnrollment = "";
-                preg_match_all('/^00\|.*\\n/', $dataEdu, $matchesSchools);
-                $matchesSchools = $matchesSchools[0];
-                preg_match_all('/\\n20\|.*\\n/', $dataEdu, $matchesClassroom);
-                $matchesClassroom = $matchesClassroom[0];
-                preg_match_all('/\\n60\|.*\\n/', $dataEdu, $matchesStudents);
-                $matchesStudents = $matchesStudents[0];
-                preg_match_all('/\\n80\|.*\\n/', $dataEdu, $matchesEnrollment);
-                $matchesEnrollment = $matchesEnrollment[0];
-
+            if (count($matchesSchools) > 0) {
                 //School Data
                 $explSchool = explode("|", $matchesSchools[0]);
                 $schoolInepID = $explSchool[1];
@@ -497,75 +505,95 @@ class RenderController extends Controller {
                 $school->inep_id = $schoolInepID;
                 $school->school_department_fk = 1;
                 $school->location_fk = 2;
-
-                if($school->save()){
+                if($school->save()) {
                     //Classroom Data
                     //Deverá tratar turmas multiseriadas !!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    foreach($matchesClassroom AS $eachClassroom):
+                    foreach ($matchesClassroom AS $eachClassroom):
                         $explClassroom = explode("|", $eachClassroom);
                         $classroomInepID = $explClassroom[2];
                         $classroomName = $explClassroom[4];
                         $classroomStage_id = $explClassroom[37];
-
                         //Verificar no banco de dados se o stage_id possui o campo stage = 2 ou 3
                         $edCensoStage = EdcensoStageVsModality::model()->findByPk($classroomStage_id);
-                        if($edCensoStage->id >= 4 && $edCensoStage->id <= 24) {
+                        if ($edCensoStage->id >= 4 && $edCensoStage->id <= 24) {
                             $classroomStage = $edCensoStage->id;
                             //Selecionar o nome do Stage no Banco do Synapse
                             $stage_vs_modality = EdcensoStageVsModality::model()->findByPk($classroomStage);
-                            preg_match_all("/\d/", $stage_vs_modality->name, $grade);
-
-                            if (count($grade) > 0){
-                                //Então o primeiro char é um dígito
-                                //É certo que é um vetor dentro de outro, quando o id do edCensoStage está entre os
-                                //valores especificados acima
-                                $grade = $grade[0][1];
-                                //Antes de salvar uma nova Turma, verifica se ela já não existe.
-                                $classroom = Classroom::model()->findByAttributes(array('inep_id'=>$classroomInepID));
-                                if(!isset($classroom)){
-                                    //É a primeira inserção dessa Turma no DB
-                                    $classroom = new Classroom();
-                                }
-                                //Carrega os atributos da Turma
-                                $classroom->name = $classroomName;
-                                $classroom->inep_id = $classroomInepID;
-                                $classroom->school_fk = $school->id;
-                                $classroom->stage_fk = $stage_vs_modality->id;
-                               // var_dump($classroom);exit();
-                                //Inseri no DB a Turma corrente
-                                $classroom->save();
-                           }
+                            //Antes de salvar uma nova Turma, verifica se ela já não existe.
+                            $classroom = Classroom::model()->findByAttributes(array('inep_id' => $classroomInepID));
+                            if (!isset($classroom)) {
+                                //É a primeira inserção dessa Turma no DB
+                                $classroom = new Classroom();
+                            }
+                            //Carrega os atributos da Turma
+                            $classroom->name = $classroomName;
+                            $classroom->inep_id = $classroomInepID;
+                            $classroom->school_fk = $school->id;
+                            $classroom->stage_fk = $stage_vs_modality->id;
+                            // var_dump($classroom);exit();
+                            //Inseri no DB a Turma corrente
+                            $classroom->save();
                         }
-
                     endforeach;
                     //=============================
+                    //Student Data
+                    foreach ($matchesStudents AS $eachStudent):
+                        $explStudent = explode("|", $eachStudent);
+                        $studentSchoolInepID = $explStudent[1];
+
+                        $studentInepID = $explStudent[2];
+                        $studentName = $explStudent[4];
+                        //Verificar Qual turma o Aluno Corrente está matriculado
+                        foreach ($matchesEnrollment AS $eachEnrollment):
+                            $explEnrollment = explode("|", $eachEnrollment);
+                            $enrollmentStudentInepID = $explEnrollment[2];
+                            $enrollmentClassroomInepID = $explEnrollment[4];
+                            //Busca a classe do Aluno por meio do inep_id da classe que foi matriculado
+                            $studentClassroom = Classroom::model()->findByAttributes(array('inep_id' => $enrollmentClassroomInepID));
+                            //Ante do cadastro ou atualização referente ao estudante, verifica se a classe
+                            //Foi cadastrada no banco do Synapse, não não houver registro, então o aluno não deve ser inserido
+                            if (isset($studentClassroom)){
+                                if ($enrollmentStudentInepID == $studentInepID) {
+                                    //Encontrou a matrícula do Estudante corrente3
+                                    //Antes de salvar um novo usuário, verifica se ele já não existe.
+                                    $actor = Actor::model()->findByAttributes(array('inep_id' => $studentInepID));
+                                    if (!isset($actor)) {
+                                        //É a primeira inserção desse estudante no DB
+                                        //Inicia um novo Person e Actor
+                                        $person = new Person();
+                                        $actor = new Actor();
+                                    } else {
+                                        //Busca o Person associado ao Actor encontrado
+                                        $person = Person::model()->findByAttributes(array('id' => $actor->person_id));
+                                    }
+                                    //Set nos atributos do Person
+                                    $person->name = $studentName;
+                                    $array_name = explode(" ", $studentName);
+                                    //login é o primeiro nome + as três primeiras letras do segundo nome
+                                    $person->login = strtolower(trim($array_name[0] . substr($studentInepID, strlen($studentInepID)-3, 3)));
+                                    $person->email = $person->login . "@email.com";
+                                    $person->password = $person->login;
+
+                                    if ($person->save()) {
+                                        //Set dos atributos do Actor
+                                        $actor->person_id = $person->id;
+                                        //Personage é Aluno =
+                                        $actor->personage_id = 2;
+                                        $actor->classroom_fk = $studentClassroom->id;
+                                        $actor->inep_id = $studentInepID;
+                                        $actor->save();
+                                }
+                                    //Ecnontrou a turma que o aluno está matriculado
+                                    break;
+                                }
+                            }
+
+                        endforeach;
+                    endforeach;
+                    //=============================
+
                 }
-
                 //======================================
-
-                //STOP HERE. Continue DOWN HERE. And test All Up Here
-
-                exit();
-
-                //Student Data
-                foreach($matchesStudents AS $eachStudent):
-                    $explStudent = explode("|", $eachStudent);
-                    $studentSchoolInepID = $explStudent[1];
-                    $studentInepID = $explStudent[2];
-                    $studentName = $explStudent[4];
-                endforeach;
-                //=============================
-
-                //Enrollment Data
-                foreach($matchesEnrollment AS $eachEnrollment):
-                    $explEnrollment = explode("|", $eachEnrollment);
-                    $enrollmentStudentInepID = $explEnrollment[2];
-                    $enrollmentClassroomInepID = $explEnrollment[4];
-                endforeach;
-                //=============================
-
-                //Executa a Query
-               // Yii::app()->db->createCommand($strSqlDataEduCensoInserts)->query();
                 $imported = true;
             }
 

@@ -19,11 +19,13 @@ array('label'=> Yii::t('default', 'List Actor'), 'url'=>array('index'),'descript
                     'data'=>$model,
                     'attributes'=>array(
                     		'id',
-		'unity_id',
 		'person_id',
 		'personage_id',
+		'fk_code',
 		'active_date',
 		'desactive_date',
+		'classroom_fk',
+		'inep_id',
                     ),
                     )); ?>
                 </div>   
