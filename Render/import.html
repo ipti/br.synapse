@@ -165,8 +165,9 @@
 
                 });
 
-                $('#btnConfirmPassword').on('tap', function () {
-                    //Somente realiza a instalação, após a confirmação 
+                //Função para realizar a INSTALAÇÃO COMPLETA
+                function importAll() {
+                    //Somente realiza a instalação, após a confirmação
                     //da senha do admin
                     var passWord = $("#password").val();
                     db.confirmPassWordAdmin(passWord, function (passWordOk) {
@@ -185,7 +186,16 @@
                             $(".message-form").html("Senha Incorreta!");
                         }
                     });
+                }
 
+                $('input#password').on('keypress', function(e){
+                    if (e.keyCode == 13) {
+                        importAll();
+                    }
+                });
+
+                $('#btnConfirmPassword').on('tap', function () {
+                    importAll();
                 });
 
                 $('#btnClose').on('tap', function () {
