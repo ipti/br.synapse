@@ -1300,12 +1300,13 @@ class EditorController extends Controller {
         $delScreen = EditorScreen::model()->findByPk($id);
         $delPS = EditorScreenPieceset::model()->findAllByAttributes(
                 array('screen_id' => $delScreen->id));
+        //1° Deleta todas os PiecesSets relacionadas a esta Screen
         foreach ($delPS as $dps):
             $pieceset_id = $dps->pieceset_id;
             //Deletar cada PieceSet
             $this->delPieceset($pieceset_id);
         endforeach;
-        //Depois, Exclui a Screen                       
+        //2° Deleta a Screen
         $delScreen->delete();
         //============================ 
     }
@@ -1317,6 +1318,7 @@ class EditorController extends Controller {
         $delPS->delete();
         $delP = EditorPiecesetPiece::model()->findAllByAttributes(
                 array('pieceset_id' => $id));
+        //2° deleta cada
         foreach ($delP as $dp):
             $piece_id = $dp->piece_id;
             //Deletar cada Piece
@@ -1325,7 +1327,7 @@ class EditorController extends Controller {
         //Depois, Exclui o PieceSet
         $delete_pieceSet = EditorPieceset::model()->findByPk($id);
         $delete_pieceSet->delete();
-        //============================
+        //=============== STOP HERE 25-05-2016 =============
     }
 
     private function delPiece($id) {
