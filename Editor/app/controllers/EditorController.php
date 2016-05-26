@@ -1316,15 +1316,23 @@ class EditorController extends Controller {
                 array('pieceset_id' => $id));
         //Deleta 1° a relação ScreenPieceset
         $delPS->delete();
+        //2°̣Desvincula cada elemento da PieceSet
+        $delPSE = EditorPieceSetElement::model()->findAllByAttributes(
+            array('pieceset_id' => $id));
+        foreach ($delPSE as $pse):
+            //Desvincular cada Elemento da PieceSet
+            $this->delElement($pse->element_id, $id, true, false);
+        endforeach;
+
         $delP = EditorPiecesetPiece::model()->findAllByAttributes(
                 array('pieceset_id' => $id));
-        //2° deleta cada
+        //3° deleta cada Piece
         foreach ($delP as $dp):
             $piece_id = $dp->piece_id;
             //Deletar cada Piece
             $this->delPiece($piece_id);
         endforeach;
-        //Depois, Exclui o PieceSet
+        //4° Exclui o PieceSet
         $delete_pieceSet = EditorPieceset::model()->findByPk($id);
         $delete_pieceSet->delete();
         //=============== STOP HERE 25-05-2016 =============
