@@ -543,13 +543,20 @@ class RenderController extends Controller {
 
                         $studentInepID = $explStudent[2];
                         $studentName = $explStudent[4];
+                        $studentBirthday = $explStudent[5];
+                        $studentMotherName = $explStudent[9];
+                        $studentFatherName = $explStudent[10];
                         //Verificar Qual turma o Aluno Corrente está matriculado
                         foreach ($matchesEnrollment AS $eachEnrollment):
                             $explEnrollment = explode("|", $eachEnrollment);
                             $enrollmentStudentInepID = $explEnrollment[2];
                             $enrollmentClassroomInepID = $explEnrollment[4];
+                            $enrollmentID = $explEnrollment[6];
                             //Busca a classe do Aluno por meio do inep_id da classe que foi matriculado
                             $studentClassroom = Classroom::model()->findByAttributes(array('inep_id' => $enrollmentClassroomInepID));
+                            if ($studentName == 'LUYARA SANTOS DE JESUS') {
+                                var_dump($studentClassroom);exit;
+                            }
                             //Ante do cadastro ou atualização referente ao estudante, verifica se a classe
                             //Foi cadastrada no banco do Synapse, não não houver registro, então o aluno não deve ser inserido
                             if (isset($studentClassroom)){
@@ -573,6 +580,11 @@ class RenderController extends Controller {
                                     $person->login = strtolower(trim($array_name[0] . substr($studentInepID, strlen($studentInepID)-3, 3)));
                                     $person->email = $person->login . "@email.com";
                                     $person->password = $person->login;
+
+                                    $person->student_enrollment = $enrollmentID;
+                                    $person->mother_name = $studentMotherName;
+                                    $person->father_name = $studentFatherName;
+                                    $person->birthday = $studentBirthday;
 
                                     if ($person->save()) {
                                         //Set dos atributos do Actor
