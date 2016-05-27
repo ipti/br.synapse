@@ -10,6 +10,10 @@
  * @property string $email
  * @property string $password
  * @property string $fk_code
+ * @property integer $student_enrollment
+ * @property string $mother_name
+ * @property string $father_name
+ * @property string $birthday
  *
  * The followings are the available model relations:
  * @property Actor[] $actors
@@ -43,12 +47,14 @@ class Person extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, login', 'required'),
-			array('name', 'length', 'max'=>60),
+			array('student_enrollment', 'numerical', 'integerOnly'=>true),
+			array('name, mother_name, father_name', 'length', 'max'=>60),
 			array('email, password', 'length', 'max'=>255),
+			array('birthday', 'length', 'max'=>10),
 			array('fk_code', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, login, email, password, fk_code', 'safe', 'on'=>'search'),
+			array('id, name, login, email, password, fk_code, student_enrollment, mother_name, father_name, birthday', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +82,10 @@ class Person extends CActiveRecord
 			'email' => Yii::t('default', 'Email'),
 			'password' => Yii::t('default', 'Password'),
 			'fk_code' => Yii::t('default', 'Fk Code'),
+			'student_enrollment' => Yii::t('default', 'Student Enrollment'),
+			'mother_name' => Yii::t('default', 'Mother Name'),
+			'father_name' => Yii::t('default', 'Father Name'),
+			'birthday' => Yii::t('default', 'Birthday'),
 		);
 	}
 
@@ -96,6 +106,10 @@ class Person extends CActiveRecord
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('password',$this->password,true);
 		$criteria->compare('fk_code',$this->fk_code,true);
+		$criteria->compare('student_enrollment',$this->student_enrollment);
+		$criteria->compare('mother_name',$this->mother_name,true);
+		$criteria->compare('father_name',$this->father_name,true);
+		$criteria->compare('birthday',$this->birthday,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
