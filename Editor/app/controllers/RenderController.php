@@ -350,7 +350,6 @@ class RenderController extends Controller {
     public function actionExportToOffline() {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             $array_actorsOwnUnity = [];
-
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
                 $school = Unity::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
@@ -367,7 +366,6 @@ class RenderController extends Controller {
                     AND ut.primary_unity_id = " . $school->id . ") 
                     OR (ut.secondary_organization_id = " . $school->organization_id . "
                     AND ut.secondary_unity_id = " . $school->id . "); ";
-
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
             } else {
