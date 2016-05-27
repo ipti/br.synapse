@@ -7,7 +7,7 @@
             //Carregar Escolas
             $.ajax({
                 type: "POST",
-                url: "/Render/GetSchool",
+                url: "/Render/getAllSchools",
                 dataType: 'json',
                 error: function( jqXHR, textStatus, errorThrown ){
                     window.alert(jqXHR.responseText);

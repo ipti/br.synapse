@@ -324,7 +324,7 @@ class RenderController extends Controller {
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
-                    'importPeformance', 'importFromEduCenso', 'getSchool', 'getCobject_blocks', 'getDisciplines',
+                    'importPeformance', 'importFromEduCenso', 'getSchool', 'getAllSchools', 'getCobject_blocks', 'getDisciplines',
                     'SynapseRender', 'login',
                     'preview'),
                 'users' => array('*'),
@@ -658,8 +658,22 @@ class RenderController extends Controller {
         }
     }
 
-    public function actionGetSchool() {
+   /*
+    *  public function actionGetSchool() {
         $allSchool = Unity::model()->findAllByAttributes(array('organization_id' => '2'));
+        $json = array();
+        foreach ($allSchool as $school):
+            $json[$school->id] = $school->name;
+        endforeach;
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($json);
+    }
+   */
+
+    public function actionGetAllSchools() {
+        $allSchool = School::model()->findAll();
         $json = array();
         foreach ($allSchool as $school):
             $json[$school->id] = $school->name;
