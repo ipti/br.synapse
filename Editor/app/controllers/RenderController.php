@@ -351,21 +351,15 @@ class RenderController extends Controller {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             $array_actorsOwnUnity = [];
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
-                $school = Unity::model()->findByPk($_REQUEST['school']);
+                $school = School::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
-                $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, u.id AS unity_id, u.name AS unity_name, 
-                    u.organization_id AS unity_organization_id, u.father_id AS unity_father,
+                $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, class.id AS classroom_id, class.name AS classroom_name,
                     act.id, person.name, personage.name AS personage, person.login, person.password 
-                    FROM unity_tree AS ut
-                    INNER JOIN unity AS u ON(ut.secondary_unity_id = u.id)
-                    INNER JOIN organization AS o ON(ut.secondary_organization_id = o.id)
-                    INNER JOIN actor AS act ON(act.unity_id = ut.secondary_unity_id)
+                    FROM classroom AS class
+                    INNER JOIN actor AS act ON(act.classroom_fk = class.id)
                     INNER JOIN person ON(act.person_id = person.id)
                     INNER JOIN personage ON(act.personage_id = personage.id)
-                    WHERE (ut.primary_organization_id = " . $school->organization_id . "
-                    AND ut.primary_unity_id = " . $school->id . ") 
-                    OR (ut.secondary_organization_id = " . $school->organization_id . "
-                    AND ut.secondary_unity_id = " . $school->id . "); ";
+                    WHERE class.school_fk = " . $school->id . "); ";
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
             } else {
