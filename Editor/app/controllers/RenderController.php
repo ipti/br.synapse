@@ -57,84 +57,83 @@ class RenderController extends Controller {
     }
 
     public function cobjectbyid($cobject_id, $buildZipMultimedia) {
-
-        /**
-         * RECONSTRUIR TUDO PARA DO PONTO DE VISTA DE SEMATICA FICA EXATAMENTE IDENTICO A ESTRUTURA QUE O RENDER PRECISARÁ, REMOVENDO DO EDITOR
-         * COMPLEXIDADES NO TRATAMENTO DOS ELEMENTOS E AGRUPAMENTO. OU SEJA TRAZER AS REGRAS DE NEGÓCIO DO RENDER PARA AQUI.
-         *
-         */
         $buildZipMultimedia = isset($buildZipMultimedia) && $buildZipMultimedia;
 
-        $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
+        $sql = "SELECT * FROM render_cobjects WHERE cobject_id = $cobject_id;";
         $command = Yii::app()->db->createCommand($sql);
         $command->execute();
         $row = $command->queryRow();
-        $json = $row;
-        $cobject = Cobject::model()->findByPk($row['cobject_id']);
-        if (isset($cobject->father)) {
-            $json['father'] = $cobject->father->id;
-        }
 
-        //Obter os elementos desse Cobject
-        $CobjectElements = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobject->id));
-        $contElement = -1;
-        foreach ($CobjectElements as $CobjectElement):
-            $contElement++;
-            $this->buildJsonElement(true, false, $CobjectElement, $json, ['a5' => $contElement], $buildZipMultimedia);
-        endforeach;
+        //Verifica se existe algum resultado da pesquisa feito no 'render_view'
+        if(ISSET($row['cobject_id'])) {
+            $json = $row;
+            $cobject = Cobject::model()->findByPk($row['cobject_id']);
+            if (isset($cobject->father)) {
+                $json['father'] = $cobject->father->id;
+            }
 
+            //Obter os elementos desse Cobject
+            $CobjectElements = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobject->id));
+            $contElement = -1;
+            foreach ($CobjectElements as $CobjectElement):
+                $contElement++;
+                $this->buildJsonElement(true, false, $CobjectElement, $json, ['a5' => $contElement], $buildZipMultimedia);
+            endforeach;
 
-        $a5 = $a2 = $a3 = -1;
+            $a5 = $a2 = $a3 = -1;
 
-        if (isset($cobject->editorScreens)) {
-            foreach ($cobject->editorScreens as $screen) {
-                $a2++;
-                $json['screens'][$a2] = $screen->attributes;
-                $a3 = -1;
-                foreach ($screen->editorScreenPiecesets as $screen_pieceset) {
-                    $a3++;
-                    $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
-                    $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
-                    $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
-                    //=======================================
-                    //For each elements in this pieceset
-                    $a5 = -1;
-                    foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
-                        //build elements of the PieceSet
-                        $a5++;
-                        $this->buildJsonElement(false, true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
-                    }
-
-                    $a4 = -1;
-                    foreach ($screen_pieceset->pieceset->editorPiecesetPieces as $pieceset_piece) {
-                        $a4++;
-                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
-                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
-                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
-
-                        if (isset($pieceset_piece->piece->type_id)) {
-                            $typeName = CommonType::getTypeNameByID($pieceset_piece->piece->type_id);
-                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['type_name'] = $typeName;
-
-                            if ($typeName === "shape") {
-                                //O template é Desenho. Possue então a propriedade type_shape
-                                $pieceProperty = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $pieceset_piece->piece->id));
-                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['shape'] = $pieceProperty->value;
-                            }
+            if (isset($cobject->editorScreens)) {
+                foreach ($cobject->editorScreens as $screen) {
+                    $a2++;
+                    $json['screens'][$a2] = $screen->attributes;
+                    $a3 = -1;
+                    foreach ($screen->editorScreenPiecesets as $screen_pieceset) {
+                        $a3++;
+                        $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
+                        $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
+                        $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
+                        //=======================================
+                        //For each elements in this pieceset
+                        $a5 = -1;
+                        foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
+                            //build elements of the PieceSet
+                            $a5++;
+                            $this->buildJsonElement(false, true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
                         }
 
-                        $a5 = (int) -1;
-                        foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
-                            $a5++;
-                            $this->buildJsonElement(false, false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5], $buildZipMultimedia);
+                        $a4 = -1;
+                        foreach ($screen_pieceset->pieceset->editorPiecesetPieces as $pieceset_piece) {
+                            $a4++;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
+
+                            if (isset($pieceset_piece->piece->type_id)) {
+                                $typeName = CommonType::getTypeNameByID($pieceset_piece->piece->type_id);
+                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['type_name'] = $typeName;
+
+                                if ($typeName === "shape") {
+                                    //O template é Desenho. Possue então a propriedade type_shape
+                                    $pieceProperty = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $pieceset_piece->piece->id));
+                                    $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['shape'] = $pieceProperty->value;
+                                }
+                            }
+
+                            $a5 = (int)-1;
+                            foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
+                                $a5++;
+                                $this->buildJsonElement(false, false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5], $buildZipMultimedia);
+                            }
                         }
                     }
                 }
+                return $json;
+            } else {
+                $json['cobject'] = $cobject_id;
+                return $json;
             }
-            return $json;
-        } else {
-            $json['cobject'] = $cobject_id;
-            return $json;
+        }else{
+            return null;
         }
     }
 
@@ -359,7 +358,8 @@ class RenderController extends Controller {
                     INNER JOIN actor AS act ON(act.classroom_fk = class.id)
                     INNER JOIN person ON(act.person_id = person.id)
                     INNER JOIN personage ON(act.personage_id = personage.id)
-                    WHERE class.school_fk = " . $school->id . "); ";
+                    WHERE class.school_fk = " . $school->id;
+
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
             } else {
@@ -416,7 +416,11 @@ class RenderController extends Controller {
                 $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
 
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
-                    array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
+                        $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
+                        if(ISSET($jsonRenderView)){
+                            //Só dá o push no array, sse o jsonRenderView for diferente de NULL
+                            array_push($json_cobjects, $jsonRenderView);
+                        }
                 endforeach;
 
                 // Fazer Download no Final
