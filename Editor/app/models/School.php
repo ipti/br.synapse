@@ -6,27 +6,15 @@
  * The followings are the available columns in table 'school':
  * @property integer $id
  * @property string $name
- * @property integer $inep_id
- * @property integer $school_department_fk
- * @property integer $location_fk
+ * @property string $inep_id
+ * @property integer $fk_id
+ * @property string $source
  *
  * The followings are the available model relations:
  * @property Classroom[] $classrooms
- * @property Location $locationFk
- * @property SchoolDepartment $schoolDepartmentFk
  */
 class School extends CActiveRecord
 {
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return School the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
 	/**
 	 * @return string the associated database table name
 	 */
@@ -43,12 +31,14 @@ class School extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, school_department_fk, location_fk', 'required'),
-			array('inep_id, school_department_fk, location_fk', 'numerical', 'integerOnly'=>true),
+			array('name', 'required'),
+			array('fk_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>60),
+			array('inep_id', 'length', 'max'=>14),
+			array('source', 'length', 'max'=>10),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, name, inep_id, school_department_fk, location_fk', 'safe', 'on'=>'search'),
+			// @todo Please remove those attributes that should not be searched.
+			array('id, name, inep_id, fk_id, source', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,8 +51,6 @@ class School extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'classrooms' => array(self::HAS_MANY, 'Classroom', 'school_fk'),
-			'locationFk' => array(self::BELONGS_TO, 'Location', 'location_fk'),
-			'schoolDepartmentFk' => array(self::BELONGS_TO, 'SchoolDepartment', 'school_department_fk'),
 		);
 	}
 
@@ -72,33 +60,51 @@ class School extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => Yii::t('default', 'ID'),
+			'id' => 'ID',
 			'name' => Yii::t('default', 'Name'),
-			'inep_id' => Yii::t('default', 'Inep'),
-			'school_department_fk' => Yii::t('default', 'School Department Fk'),
-			'location_fk' => Yii::t('default', 'Location Fk'),
+			'inep_id' => 'Inep',
+			'fk_id' => 'Fk',
+			'source' => Yii::t('default', 'Source'),
 		);
 	}
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('inep_id',$this->inep_id);
-		$criteria->compare('school_department_fk',$this->school_department_fk);
-		$criteria->compare('location_fk',$this->location_fk);
+		$criteria->compare('inep_id',$this->inep_id,true);
+		$criteria->compare('fk_id',$this->fk_id);
+		$criteria->compare('source',$this->source,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return School the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
 	}
 }
