@@ -7,7 +7,7 @@
             //Carregar Escolas
             $.ajax({
                 type: "POST",
-                url: "/Render/GetSchool",
+                url: "/Render/getAllSchools",
                 dataType: 'json',
                 error: function( jqXHR, textStatus, errorThrown ){
                     window.alert(jqXHR.responseText);
@@ -67,9 +67,19 @@
         
         
     </script>
+    <style type="text/css">
+        #exportToOffline{
+            margin-top : 70px;
+        }
+        #btn-download{
+            width:80px;
+            height:80px;
+        }
+    </style>
 </head>
 
 <body id="synapse">
+<div id="exportToOffline">
     <form action="exportToOffline" method="POST" id="getIDatas" name="getIDatas">
         <select id="school" name="school">
         </select>
@@ -77,7 +87,8 @@
         </select>
         <select id="cobject_block" name="cobject_block">
         </select>
-        <input type="submit" value="Baixar" >
+        <input type="submit" value="Baixar" id="btn-download">
     </form>
+</div>
 </body>
 </html>
