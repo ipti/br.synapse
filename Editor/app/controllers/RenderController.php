@@ -80,44 +80,44 @@ class RenderController extends Controller {
                 $this->buildJsonElement(true, false, $CobjectElement, $json, ['a5' => $contElement], $buildZipMultimedia);
             endforeach;
 
-            $a5 = $a2 = $a3 = -1;
+        $a5 = $a2 = $a3 = -1;
 
-            if (isset($cobject->editorScreens)) {
-                foreach ($cobject->editorScreens as $screen) {
-                    $a2++;
-                    $json['screens'][$a2] = $screen->attributes;
-                    $a3 = -1;
-                    foreach ($screen->editorScreenPiecesets as $screen_pieceset) {
-                        $a3++;
-                        $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
-                        $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
-                        $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
-                        //=======================================
-                        //For each elements in this pieceset
-                        $a5 = -1;
-                        foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
-                            //build elements of the PieceSet
-                            $a5++;
-                            $this->buildJsonElement(false, true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
-                        }
+        if (isset($cobject->editorScreens)) {
+            foreach ($cobject->editorScreens as $screen) {
+                $a2++;
+                $json['screens'][$a2] = $screen->attributes;
+                $a3 = -1;
+                foreach ($screen->editorScreenPiecesets as $screen_pieceset) {
+                    $a3++;
+                    $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
+                    $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
+                    $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
+                    //=======================================
+                    //For each elements in this pieceset
+                    $a5 = -1;
+                    foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
+                        //build elements of the PieceSet
+                        $a5++;
+                        $this->buildJsonElement(false, true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
+                    }
 
-                        $a4 = -1;
-                        foreach ($screen_pieceset->pieceset->editorPiecesetPieces as $pieceset_piece) {
-                            $a4++;
-                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
-                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
-                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
+                    $a4 = -1;
+                    foreach ($screen_pieceset->pieceset->editorPiecesetPieces as $pieceset_piece) {
+                        $a4++;
+                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
+                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
+                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
 
-                            if (isset($pieceset_piece->piece->type_id)) {
-                                $typeName = CommonType::getTypeNameByID($pieceset_piece->piece->type_id);
-                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['type_name'] = $typeName;
+                        if (isset($pieceset_piece->piece->type_id)) {
+                            $typeName = CommonType::getTypeNameByID($pieceset_piece->piece->type_id);
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['type_name'] = $typeName;
 
-                                if ($typeName === "shape") {
-                                    //O template é Desenho. Possue então a propriedade type_shape
-                                    $pieceProperty = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $pieceset_piece->piece->id));
-                                    $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['shape'] = $pieceProperty->value;
-                                }
+                            if ($typeName === "shape") {
+                                //O template é Desenho. Possue então a propriedade type_shape
+                                $pieceProperty = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $pieceset_piece->piece->id));
+                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['shape'] = $pieceProperty->value;
                             }
+                        }
 
                             $a5 = (int)-1;
                             foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
