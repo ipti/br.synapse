@@ -451,36 +451,88 @@ class RenderController extends Controller {
         }
     }
 
-    public function actionImportFromEduCenso() {
-         if (isset($_FILES['fileTxt'])) {
+    public function actionImportFromSiga()
+    {
+        if (isset($_POST['option']) && $_POST['option'] != "") {
+            $imported = false;
+            switch ($_POST['option']) {
+                case 'school':
+
+                    //----------------------
+                    $schools = array(
+                        array('inep_id' => 23456789, 'id' => 50, 'name' => "Ta na hora de molhar o biscoito"),
+                        array('inep_id' => 23456788, 'id' => 51, 'name' => "GGWP")
+                    );
+                    $schools = json_encode($schools);
+                    //----------------------
+
+                    $schools = json_decode($schools);
+                    foreach ($schools as $sch) {
+                        /*
+                         * @var $school School;
+                         */
+                        $school = School::model()->findByAttributes(array('inep_id' => $sch->inep_id));
+                        if (!isset($school)) {
+                            $school = new School();
+                        }
+                        $school->inep_id = $sch->inep_id;
+                        $school->name = $sch->name;
+                        $school->save();
+                    }
+
+                    $imported = true;
+                    break;
+                case 'classroom':
+                    $imported = true;
+                    break;
+                case 'student':
+                    $imported = true;
+                    break;
+                case 'enrollment':
+                    $imported = true;
+                    break;
+            }
+            if ($imported) {
+                $this->render("importFromSiga", array('msg' => 'success'));
+            } else {
+                $this->render("importFromSiga", array('msg' => 'error'));
+            }
+        } else {
+            $this->render("importFromSiga");
+        }
+    }
+
+    public function actionImportFromEduCenso()
+    {
+        if (isset($_FILES['fileTxt'])) {
             $tempName = $_FILES['fileTxt']['tmp_name'];
-             $fileTxt = fopen($tempName, "r") or die("Unable to open file!");
-             $matchesSchools = array(); //00
-             $matchesClassroom = array(); //20
-             $matchesStudents = array(); //60
-             $matchesEnrollment = array(); //80
+            $fileTxt = fopen($tempName, "r") or die("Unable to open file!");
+            $matchesSchools = array(); //00
+            $matchesClassroom = array(); //20
+            $matchesStudents = array(); //60
+            $matchesEnrollment = array(); //80
 
-             while(!feof($fileTxt)){
-                  $line = fgets($fileTxt);
-                  $typeReg = substr($line, 0, 2);
-                 if($typeReg == '00'){
-                     //Escola
-                     array_push($matchesSchools, $line);
-                 }
-                 if($typeReg == '20'){
-                     //Turma
-                     array_push($matchesClassroom, $line);
-                 }
-                 if($typeReg == '60'){
-                     //Estudante
-                     array_push($matchesStudents, $line);
-                 }
-                 if($typeReg == '80'){
-                     //Matrícula
-                     array_push($matchesEnrollment, $line);
-                 }
+            while (!feof($fileTxt)) {
+                $line = fgets($fileTxt);
+                $typeReg = substr($line, 0, 2);
+                if ($typeReg == '00') {
+                    //Escola
+                    array_push($matchesSchools, $line);
+                }
+                if ($typeReg == '20') {
+                    //Turma
+                    array_push($matchesClassroom, $line);
+                }
+                if ($typeReg == '60') {
+                    //Estudante
+                    array_push($matchesStudents, $line);
+                }
+                if ($typeReg == '80') {
+                    //Matrícula
+                    array_push($matchesEnrollment, $line);
+                }
 
-             }
+            }
             //Fecha o Arquivo
             fclose($fileTxt);
             $imported = false;
@@ -491,17 +543,17 @@ class RenderController extends Controller {
                 $schoolName = $explSchool[9];
 
                 //Antes de salvar uma nova escola, verifica se ela já não existe.
-                $school = School::model()->findByAttributes(array('inep_id'=>$schoolInepID));
-                if(!isset($school)){
+                $school = School::model()->findByAttributes(array('inep_id' => $schoolInepID));
+                if (!isset($school)) {
                     //É a primeira inserção dessa escola no DB
                     $school = new School();
                 }
                 //Carrega os atributos da escola
                 $school->name = $schoolName;
                 $school->inep_id = $schoolInepID;
-                $school->school_department_fk = 1;
-                $school->location_fk = 2;
-                if($school->save()) {
+                $school->source = "EDUCACENSO";
+                $school->fk_id = $schoolInepID;
+                if ($school->save()) {
                     //Classroom Data
                     //Deverá tratar turmas multiseriadas !!!!!!!!!!!!!!!!!!!!!!!!!!!
                     foreach ($matchesClassroom AS $eachClassroom):
@@ -526,6 +578,9 @@ class RenderController extends Controller {
                             $classroom->inep_id = $classroomInepID;
                             $classroom->school_fk = $school->id;
                             $classroom->stage_fk = $stage_vs_modality->id;
+                            $classroom->year = date("Y");
+                            $classroom->source = "EDUCACENSO";
+                            $classroom->fk_id = $classroomInepID;
                             // var_dump($classroom);exit();
                             //Inseri no DB a Turma corrente
                             $classroom->save();
@@ -550,12 +605,9 @@ class RenderController extends Controller {
                             $enrollmentID = $explEnrollment[6];
                             //Busca a classe do Aluno por meio do inep_id da classe que foi matriculado
                             $studentClassroom = Classroom::model()->findByAttributes(array('inep_id' => $enrollmentClassroomInepID));
-                            if ($studentName == 'LUYARA SANTOS DE JESUS') {
-                                var_dump($studentClassroom);exit;
-                            }
                             //Ante do cadastro ou atualização referente ao estudante, verifica se a classe
                             //Foi cadastrada no banco do Synapse, não não houver registro, então o aluno não deve ser inserido
-                            if (isset($studentClassroom)){
+                            if (isset($studentClassroom)) {
                                 if ($enrollmentStudentInepID == $studentInepID) {
                                     //Encontrou a matrícula do Estudante corrente
                                     //Antes de salvar um novo usuário, verifica se ele já não existe.
@@ -573,11 +625,10 @@ class RenderController extends Controller {
                                     $person->name = $studentName;
                                     $array_name = explode(" ", $studentName);
                                     //login é o primeiro nome + as três primeiras letras do segundo nome
-                                    $person->login = strtolower(trim($array_name[0] . substr($studentInepID, strlen($studentInepID)-3, 3)));
+                                    $person->login = strtolower(trim($array_name[0] . substr($studentInepID, strlen($studentInepID) - 3, 3)));
                                     $person->email = $person->login . "@email.com";
                                     $person->password = $person->login;
 
-                                    $person->student_enrollment = $enrollmentID;
                                     $person->mother_name = $studentMotherName;
                                     $person->father_name = $studentFatherName;
                                     $person->birthday = $studentBirthday;
@@ -589,8 +640,11 @@ class RenderController extends Controller {
                                         $actor->personage_id = 2;
                                         $actor->classroom_fk = $studentClassroom->id;
                                         $actor->inep_id = $studentInepID;
+                                        $actor->student_enrollment = $enrollmentID;
+                                        $actor->source = "EDUCACENSO";
+                                        $actor->fk_id = $studentInepID;
                                         $actor->save();
-                                }
+                                    }
                                     //Ecnontrou a turma que o aluno está matriculado
                                     break;
                                 }
