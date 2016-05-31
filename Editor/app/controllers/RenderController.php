@@ -476,30 +476,55 @@ class RenderController extends Controller
 
                     //----------------------
                     $schools = array(
-                        array('inep_id' => 23456789, 'id' => 50, 'name' => "Ta na hora de molhar o biscoito"),
-                        array('inep_id' => 23456788, 'id' => 51, 'name' => "GGWP")
+                        array('inep_id' => 23456789, 'siga_id' => 1, 'name' => "Escola 1"),
+                        array('inep_id' => 23456788, 'siga_id' => 2, 'name' => "Escola 2")
                     );
                     $schools = json_encode($schools);
                     //----------------------
 
                     $schools = json_decode($schools);
                     foreach ($schools as $sch) {
-                        /*
-                         * @var $school School;
-                         */
                         $school = School::model()->findByAttributes(array('inep_id' => $sch->inep_id));
                         if (!isset($school)) {
                             $school = new School();
                         }
                         $school->inep_id = $sch->inep_id;
                         $school->name = $sch->name;
-                        $school->save();
+                        $school->fk_id = $sch->siga_id;
+                        $school->source = 'SIGA';
+                        if ($school->save()) {
+                            $imported = true;
+                        }
                     }
-
-                    $imported = true;
                     break;
                 case 'classroom':
-                    $imported = true;
+
+                    //----------------------
+                    $classrooms = array(
+                        array('inep_id' => 11111111, 'siga_id' => 10, 'name' => "Turma 1A", 'school_siga_id' => 1, 'siga_stage_fk' => 1),
+                        array('inep_id' => 22222222, 'siga_id' => 11, 'name' => "Turma 2A", 'school_siga_id' => 1, 'siga_stage_fk' => 2),
+                        array('inep_id' => 33333333, 'siga_id' => 20, 'name' => "Turma 2A", 'school_siga_id' => 2, 'siga_stage_fk' => 3),
+                        array('inep_id' => 44444444, 'siga_id' => 21, 'name' => "Turma 2B", 'school_siga_id' => 2, 'siga_stage_fk' => 4)
+                    );
+                    $classrooms = json_encode($classrooms);
+                    //----------------------
+
+                    $classrooms = json_decode($classrooms);
+                    foreach ($classrooms as $cl) {
+                        $classroom = Classroom::model()->findByAttributes(array('inep_id' => $cl->inep_id));
+                        if (!isset($classroom)) {
+                            $classroom = new Classroom();
+                        }
+                        $classroom->inep_id = $cl->inep_id;
+                        $classroom->name = $cl->name;
+                        $classroom->schoolFk = School::model()->findByAttributes(array('id' => $cl->school_siga_id));
+                        $classroom->stageFk = EdcensoStageVsModality::model()->findByAttributes(array('id' => $cl->siga_stage_fk));
+                        $classroom->fk_id = $cl->siga_id;
+                        $classroom->source = 'SIGA';
+                        if ($classroom->save()) {
+                            $imported = true;
+                        }
+                    }
                     break;
                 case 'student':
                     $imported = true;
@@ -578,11 +603,9 @@ class RenderController extends Controller
                         $classroomName = $explClassroom[4];
                         $classroomStage_id = $explClassroom[37];
                         //Verificar no banco de dados se o stage_id possui o campo stage = 2 ou 3
-                        $edCensoStage = EdcensoStageVsModality::model()->findByPk($classroomStage_id);
-                        if ($edCensoStage->id >= 4 && $edCensoStage->id <= 24) {
-                            $classroomStage = $edCensoStage->id;
+                        $edCensoStage = EdcensoStageVsModality::model()->findByAttributes(array('stage_code' => $classroomStage_id));
+                        if ($edCensoStage->stage_code >= 4 && $edCensoStage->stage_code <= 24) {
                             //Selecionar o nome do Stage no Banco do Synapse
-                            $stage_vs_modality = EdcensoStageVsModality::model()->findByPk($classroomStage);
                             //Antes de salvar uma nova Turma, verifica se ela já não existe.
                             $classroom = Classroom::model()->findByAttributes(array('inep_id' => $classroomInepID));
                             if (!isset($classroom)) {
@@ -593,7 +616,7 @@ class RenderController extends Controller
                             $classroom->name = $classroomName;
                             $classroom->inep_id = $classroomInepID;
                             $classroom->school_fk = $school->id;
-                            $classroom->stage_fk = $stage_vs_modality->id;
+                            $classroom->stage_fk = $edCensoStage->id;
                             $classroom->year = date("Y");
                             $classroom->source = "EDUCACENSO";
                             $classroom->fk_id = $classroomInepID;
