@@ -37,13 +37,7 @@
 <body id="synapse">
 <div id="import">
     <form action="/render/importFromSiga" method="POST">
-        <select class="import-option" name="option">
-            <option value="" label="-"/>
-            <option value="school" label="Escola"/>
-            <option value="classroom" label="Turma"/>
-            <option value="student" label="Aluno"/>
-            <option value="enrollment" label="Matrícula"/>
-        </select>
+        <input type="hidden" name="import"
         <div>
             <button class="import-button" type="submit">Importar</button>
         </div>
