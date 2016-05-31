@@ -1,7 +1,6 @@
 <?php
 
-class RenderController extends Controller
-{
+class RenderController extends Controller {
 
     public $layout = 'fullmenu';
     //MSG for Translate
@@ -13,23 +12,20 @@ class RenderController extends Controller
     /**
      * @return array action filters
      */
-    public function filters()
-    {
+    public function filters() {
         return array(
             'accessControl', // perform access control for CRUD operations
         );
     }
 
-    public function elog($text)
-    {
+    public function elog($text) {
         $this->http_response_code(200);
         echo json_encode($text);
         flush();
         ob_flush();
     }
 
-    public function actionListcobjects()
-    {
+    public function actionListcobjects() {
         $content_parent = 19;
         $contentsIn = "282,281";
         $contentOut = "277,275";
@@ -60,34 +56,29 @@ class RenderController extends Controller
         exit;
     }
 
-    public function cobjectbyid($cobject_id, $buildZipMultimedia)
-    {
-
-        /**
-         * RECONSTRUIR TUDO PARA DO PONTO DE VISTA DE SEMATICA FICA EXATAMENTE IDENTICO A ESTRUTURA QUE O RENDER PRECISARÁ, REMOVENDO DO EDITOR
-         * COMPLEXIDADES NO TRATAMENTO DOS ELEMENTOS E AGRUPAMENTO. OU SEJA TRAZER AS REGRAS DE NEGÓCIO DO RENDER PARA AQUI.
-         *
-         */
+    public function cobjectbyid($cobject_id, $buildZipMultimedia) {
         $buildZipMultimedia = isset($buildZipMultimedia) && $buildZipMultimedia;
 
-        $sql = "SELECT * from render_cobjects where cobject_id = $cobject_id;";
+        $sql = "SELECT * FROM render_cobjects WHERE cobject_id = $cobject_id;";
         $command = Yii::app()->db->createCommand($sql);
         $command->execute();
         $row = $command->queryRow();
-        $json = $row;
-        $cobject = Cobject::model()->findByPk($row['cobject_id']);
-        if (isset($cobject->father)) {
-            $json['father'] = $cobject->father->id;
-        }
 
-        //Obter os elementos desse Cobject
-        $CobjectElements = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobject->id));
-        $contElement = -1;
-        foreach ($CobjectElements as $CobjectElement):
-            $contElement++;
-            $this->buildJsonElement(true, false, $CobjectElement, $json, ['a5' => $contElement], $buildZipMultimedia);
-        endforeach;
+        //Verifica se existe algum resultado da pesquisa feito no 'render_view'
+        if(ISSET($row['cobject_id'])) {
+            $json = $row;
+            $cobject = Cobject::model()->findByPk($row['cobject_id']);
+            if (isset($cobject->father)) {
+                $json['father'] = $cobject->father->id;
+            }
 
+            //Obter os elementos desse Cobject
+            $CobjectElements = CobjectElement::model()->findAllByAttributes(array('cobject_id' => $cobject->id));
+            $contElement = -1;
+            foreach ($CobjectElements as $CobjectElement):
+                $contElement++;
+                $this->buildJsonElement(true, false, $CobjectElement, $json, ['a5' => $contElement], $buildZipMultimedia);
+            endforeach;
 
         $a5 = $a2 = $a3 = -1;
 
@@ -128,23 +119,25 @@ class RenderController extends Controller
                             }
                         }
 
-                        $a5 = (int)-1;
-                        foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
-                            $a5++;
-                            $this->buildJsonElement(false, false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5], $buildZipMultimedia);
+                            $a5 = (int)-1;
+                            foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
+                                $a5++;
+                                $this->buildJsonElement(false, false, $piece_element, $json, ['a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5], $buildZipMultimedia);
+                            }
                         }
                     }
                 }
+                return $json;
+            } else {
+                $json['cobject'] = $cobject_id;
+                return $json;
             }
-            return $json;
-        } else {
-            $json['cobject'] = $cobject_id;
-            return $json;
+        }else{
+            return null;
         }
     }
 
-    private function buildJsonElement($isCobjectElement, $isPiecesetElement, $father, &$json, $as, $buildZipMultimedia)
-    {
+    private function buildJsonElement($isCobjectElement, $isPiecesetElement, $father, &$json, $as, $buildZipMultimedia) {
         //Begin Function Element =======================================
         // $gproperties = ELEMENT_PROPERTY + LIBRARY_PROPERTY
 
@@ -168,7 +161,7 @@ class RenderController extends Controller
                 }
             }
 
-            //===== Agrupar os elementos no Json
+            //===== Agrupar os elementos no Json 
             //if($json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'MTE' ||
             //    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'AEL'){
             //Grouping
@@ -249,7 +242,7 @@ class RenderController extends Controller
             $aTemp['pieceElement_Properties'] = $pe_properties;
             $aTemp['events'] = $events;
             $aTemp['generalProperties'] = $gproperties;
-            $aTemp['type'] = (string)$father->element->type->name;
+            $aTemp['type'] = (string) $father->element->type->name;
             if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'])) {
                 $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
             }
@@ -277,12 +270,11 @@ class RenderController extends Controller
         // End Function Element=========================================
     }
 
-    public function actionLoadcobject()
-    {
+    public function actionLoadcobject() {
         $cobject_id = $_REQUEST['ID'];
         $json = $this->cobjectbyid($cobject_id, false);
-        if (isset($_GET['callback']))
-            echo $_GET['callback'] . '(' . json_encode($json) . ')';
+        if(isset($_GET['callback']))
+            echo $_GET['callback'].'('.json_encode($json).')';
         else
             echo json_encode($json);
         exit;
@@ -292,16 +284,14 @@ class RenderController extends Controller
      *
      * @param
      */
-    public function actionLoadtext()
-    {
+    public function actionLoadtext() {
         $cobject_id = $_REQUEST['ID'];
         $json = $this->cobjectbyid($cobject_id);
         $json = json_encode($json);
         $this->render('text', array('json' => $json));
     }
 
-    public function actionLoadcobjects()
-    {
+    public function actionLoadcobjects() {
         set_time_limit(0);
         //header('Content-type: application/json');
         //header('Content-type: text/html; charset=utf-8');
@@ -327,14 +317,13 @@ class RenderController extends Controller
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
      */
-    public function accessRules()
-    {
+    public function accessRules() {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
-                    'importPeformance', 'importFromEduCenso', 'importFromSiga', 'getSchool', 'getCobject_blocks', 'getDisciplines',
+                    'importPeformance', 'importFromEduCenso', 'getSchool', 'getAllSchools', 'getCobject_blocks', 'getDisciplines',
                     'SynapseRender', 'login',
                     'preview'),
                 'users' => array('*'),
@@ -349,8 +338,7 @@ class RenderController extends Controller
         );
     }
 
-    public function actionMeet()
-    {
+    public function actionMeet() {
         if (isset($_POST["actor"])) {
             $this->render("meet");
         } else {
@@ -358,27 +346,19 @@ class RenderController extends Controller
         }
     }
 
-    public function actionExportToOffline()
-    {
+    public function actionExportToOffline() {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             $array_actorsOwnUnity = [];
-
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
-                $school = Unity::model()->findByPk($_REQUEST['school']);
+                $school = School::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
-                $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, u.id AS unity_id, u.name AS unity_name,
-                    u.organization_id AS unity_organization_id, u.father_id AS unity_father,
-                    act.id, person.name, personage.name AS personage, person.login, person.password
-                    FROM unity_tree AS ut
-                    INNER JOIN unity AS u ON(ut.secondary_unity_id = u.id)
-                    INNER JOIN organization AS o ON(ut.secondary_organization_id = o.id)
-                    INNER JOIN actor AS act ON(act.unity_id = ut.secondary_unity_id)
+                $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, class.id AS classroom_id, class.name AS classroom_name,
+                    act.id, person.name, personage.name AS personage, person.login, person.password 
+                    FROM classroom AS class
+                    INNER JOIN actor AS act ON(act.classroom_fk = class.id)
                     INNER JOIN person ON(act.person_id = person.id)
                     INNER JOIN personage ON(act.personage_id = personage.id)
-                    WHERE (ut.primary_organization_id = " . $school->organization_id . "
-                    AND ut.primary_unity_id = " . $school->id . ")
-                    OR (ut.secondary_organization_id = " . $school->organization_id . "
-                    AND ut.secondary_unity_id = " . $school->id . "); ";
+                    WHERE class.school_fk = " . $school->id;
 
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
@@ -411,7 +391,7 @@ class RenderController extends Controller
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
             //Somente obterá Cobjects(atividades) únicos em cada bloco, ou seja não haverá repetição de atividades num mesmo bloco.
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
-                array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
+                    array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
 
             $array_cobject_cobjectBlocks = array();
 
@@ -430,13 +410,17 @@ class RenderController extends Controller
                 //Arquivo ZIP ALL
                 $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
                 $this->tempArchiveZipMultiMedia = new ZipArchive;
-                $this->tempArchiveZipMultiMedia->open('exports/' . $zipname, ZipArchive::CREATE);
+                $this->tempArchiveZipMultiMedia->open('exports/'.$zipname, ZipArchive::CREATE);
                 $this->tempArchiveZipMultiMedia->addEmptyDir("library/image/");
                 $this->tempArchiveZipMultiMedia->addEmptyDir("library/sound/");
                 $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
 
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
-                    array_push($json_cobjects, $this->cobjectbyid($cobjectCobjectblock->cobject_id, true));
+                        $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
+                        if(ISSET($jsonRenderView)){
+                            //Só dá o push no array, sse o jsonRenderView for diferente de NULL
+                            array_push($json_cobjects, $jsonRenderView);
+                        }
                 endforeach;
 
                 // Fazer Download no Final
@@ -449,16 +433,16 @@ class RenderController extends Controller
                 $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
                 $json['Cobjects'] = $json_cobjects;
                 $json_encode = "var dataJson$nameDisciplineSelected = ";
-                $json_encode .= json_encode($json);
-                $json_encode .= ";";
+                $json_encode.=json_encode($json);
+                $json_encode.=";";
 
                 $this->tempArchiveZipMultiMedia->addFromString("json/renderData$nameDisciplineSelected.js", $json_encode);
 
                 //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
 
-                if (file_exists('exports/' . $zipname)) {
-                    header('location: ../exports/' . $zipname);
+                if (file_exists('exports/'.$zipname)) {
+                    header('location: ../exports/'.$zipname);
                 }
             }
         } else {
@@ -708,8 +692,7 @@ class RenderController extends Controller
         }
     }
 
-    public function actionImportPeformance()
-    {
+    public function actionImportPeformance() {
         if (isset($_FILES['fileTxt'])) {
             $tempName = $_FILES['fileTxt']['tmp_name'];
             // move_uploaded_file($tempNamename, Yii::app()->theme->basePath . '/backups/backup_peformances/');
@@ -724,13 +707,13 @@ class RenderController extends Controller
                     . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
                 $totalPeformances = count($peformances);
                 foreach ($peformances as $idx => $peform):
-                    $strSqlPerformInserts .= '( "';
-                    $strSqlPerformInserts .= $peform->actor_id . '", "' . $peform->piece_id
+                    $strSqlPerformInserts.='( "';
+                    $strSqlPerformInserts.= $peform->actor_id . '", "' . $peform->piece_id
                         . '", "' . $peform->group_id . '", "' . $peform->final_time
                         . '", "' . $peform->iscorrect . '", "' . $peform->value;
-                    $strSqlPerformInserts .= '" )';
+                    $strSqlPerformInserts.='" )';
                     if ($idx < $totalPeformances - 1) {
-                        $strSqlPerformInserts .= ", ";
+                        $strSqlPerformInserts.=", ";
                     }
 
                 endforeach;
@@ -750,8 +733,8 @@ class RenderController extends Controller
         }
     }
 
-    public function actionGetAllSchools()
-    {
+   /*
+    *  public function actionGetSchool() {
         $allSchool = Unity::model()->findAllByAttributes(array('organization_id' => '2'));
         $json = array();
         foreach ($allSchool as $school):
@@ -762,9 +745,21 @@ class RenderController extends Controller
         header('Content-type: application/json');
         echo json_encode($json);
     }
+   */
 
-    public function actionGetDisciplines()
-    {
+    public function actionGetAllSchools() {
+        $allSchool = School::model()->findAll();
+        $json = array();
+        foreach ($allSchool as $school):
+            $json[$school->id] = $school->name;
+        endforeach;
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($json);
+    }
+
+    public function actionGetDisciplines() {
         $allDisciplines = ActDiscipline::model()->findAll();
         $json = array();
         foreach ($allDisciplines as $discipline):
@@ -776,8 +771,7 @@ class RenderController extends Controller
         echo json_encode($json);
     }
 
-    public function actionGetCobject_blocks()
-    {
+    public function actionGetCobject_blocks() {
         if (isset($_POST['discipline_id'])) {
             $blocks = Cobjectblock::model()->findAllByAttributes(array('discipline_id' => $_POST['discipline_id']));
         } else {
@@ -793,19 +787,16 @@ class RenderController extends Controller
         echo json_encode($json);
     }
 
-    public function actionIndex()
-    {
-        $this->redirect(RENDER_ONLINE . "?isOnline=true");
+    public function actionIndex() {
+         $this->redirect(RENDER_ONLINE."?isOnline=true");
     }
 
-    public function actionPreview($id = null)
-    {
-        $this->redirect(RENDER_ONLINE . "?isPreview=$id");
+    public function actionPreview($id = null){
+        $this->redirect(RENDER_ONLINE."?isPreview=$id");
     }
 
-    public function actionTestepreview()
-    {
-        $this->render("testepreview");
+    public function actionTestepreview() {
+         $this->render("testepreview");
     }
 
 //    public function actionLogout() {
@@ -823,18 +814,15 @@ class RenderController extends Controller
 //    }
 
 
-    public function actionFilter()
-    {
+    public function actionFilter() {
         $this->render('filter');
     }
 
-    public function actionCanvas()
-    {
+    public function actionCanvas() {
         $this->render('canvas');
     }
 
-    public function actionCompute()
-    {
+    public function actionCompute() {
         $perf = new PeformanceActor();
         $data['piece_id'] = $_REQUEST['pieceID'];
         $data['group_id'] = (isset($_REQUEST['groupID'])) ? $_REQUEST['groupID'] : NULL;
@@ -851,8 +839,7 @@ class RenderController extends Controller
         }
     }
 
-    public function actionStage()
-    {
+    public function actionStage() {
 
         $cobject_id = @$_REQUEST['id'];
         $disciplineID = @$_REQUEST['disciplineID'];
@@ -892,26 +879,26 @@ class RenderController extends Controller
         //$where = " where a1.id not in('335','356','571','15','431','68','430','641','642','428','647','643','645','71','335','654','76') and a1.status='on' and a7.stage = '2' and (year = '1') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
         $where = " where ro.status = 'on'";
         if (isset($contentsIn) && isset($contentOut)) {
-            $where .= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
+            $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
         } else if (isset($contentsIn) && !isset($contentOut)) {
-            $where .= " and (a6.id in($contentsIn))";
+            $where.= " and (a6.id in($contentsIn))";
         } else if (isset($contentOut) && !isset($contentsIn)) {
-            $where .= " and (a6.id not in($contentOut))";
+            $where.= " and (a6.id not in($contentOut))";
         }
         if (isset($blockID) && !empty($blockID)) {
             $join .= " left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.cobject_id)";
-            $where .= " and ccobj.cobject_block_id=$blockID";
+            $where .=" and ccobj.cobject_block_id=$blockID";
         }
         if (isset($modality)) {
-            $join .= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
-            $where .= "";
+            $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
+            $where.="";
         }
         if (isset($degree)) {
             $join .= " left join act_degree a14 on(a14.id=a3.degree_id)";
-            $where .= "";
+            $where .="";
         }
         if (isset($content)) {
-            $where .= "";
+            $where .="";
         }
         $fsql = $sql . $join . $where . " order by ro.year,ro.grade,ro.id";
         //var_dump($fsql);exit();
@@ -926,18 +913,16 @@ class RenderController extends Controller
         $this->render('stage', array('json' => $json, 'actor' => $actor));
     }
 
-    public function actionJson()
-    {
+    public function actionJson() {
         set_time_limit(0);
         if (isset($_POST['op']) &&
-            ($_POST['op'] == 'select' || $_POST['op'] == 'classes')
-        ) {
+            ( $_POST['op'] == 'select' || $_POST['op'] == 'classes')) {
             $json = array();
 
-            $id = isset($_POST["id"]) ? (int)$_POST["id"] : die('ERRO: id não recebido');
+            $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
 
-            $sql = "SELECT ut.primary_unity_id, ut.secondary_unity_id, u.name, ut.primary_organization_id,
-        ut.secondary_organization_id, ou.orglevel
+            $sql = "SELECT ut.primary_unity_id, ut.secondary_unity_id, u.name, ut.primary_organization_id, 
+        ut.secondary_organization_id, ou.orglevel 
         from unity_tree ut
         inner join organization ou
         on ou.id = ut.secondary_organization_id
@@ -957,9 +942,9 @@ class RenderController extends Controller
             exit;
         } elseif (isset($_POST['op']) and $_POST['op'] == 'actors') {
             $json = array();
-            $id = isset($_POST["id"]) ? (int)$_POST["id"] : die('ERRO: id não recebido');
+            $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
 
-            $sql = "SELECT a.id actor_id, p.name
+            $sql = "SELECT a.id actor_id, p.name 
         FROM synapse.actor a
         inner join person p
         on p.id = a.person_id
@@ -1055,7 +1040,7 @@ class RenderController extends Controller
             $script = ActScript::model()->findByAttributes(array('ID' => $_POST['script']));
             $contents = ActContent::model()->findAllByAttributes(array('contentParent' => $script->contentParentID));
             //$contents = ActContent::model()->findAll();
-//@todo lembra de excluir os conteudos exclude e include
+//@todo lembra de excluir os conteudos exclude e include    
             $x = -1;
             foreach ($contents as $content) {
                 $x++;
@@ -1222,8 +1207,7 @@ class RenderController extends Controller
     }
 
     //Funções para Render DB Online
-    public function actionLogin()
-    {
+    public function actionLogin() {
         $json = array();
         $login = isset($_POST['login']) ? $_POST['login'] : null;
         $password = isset($_POST['password']) ? $_POST['password'] : null;
