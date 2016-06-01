@@ -1317,7 +1317,7 @@ class EditorController extends Controller {
         //Deleta 1° a relação ScreenPieceset
         $delPS->delete();
         //2°̣Desvincula cada elemento da PieceSet
-        $delPSE = EditorPieceSetElement::model()->findAllByAttributes(
+        $delPSE = EditorPiecesetElement::model()->findAllByAttributes(
             array('pieceset_id' => $id));
         foreach ($delPSE as $pse):
             //Desvincular cada Elemento da PieceSet

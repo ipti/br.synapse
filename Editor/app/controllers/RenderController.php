@@ -380,7 +380,6 @@ class RenderController extends Controller {
                 }
             endforeach;
 
-
             //Obter o CobjectBloco Selecionado
             $cobjectBlock = Cobjectblock::model()->findByPk($_REQUEST['cobject_block']);
             $array_cobjectBlock = array();
