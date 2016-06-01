@@ -470,42 +470,42 @@ class RenderController extends Controller
 
             //----------------------
             $schools = array(
-                array('inep_id' => 23456789, 'siga_id' => 1, 'name' => "Escola 1"),
-                array('inep_id' => 23456788, 'siga_id' => 2, 'name' => "Escola 2")
+                array('inep_id' => 23456789, 'id' => 1, 'name' => "Escola 1"),
+                array('inep_id' => 23456788, 'id' => 2, 'name' => "Escola 2")
             );
             $schools = json_encode($schools);
             //----------------------
 
             //----------------------
             $classrooms = array(
-                array('inep_id' => 11111111, 'siga_id' => 10, 'name' => "Turma 1A", 'school_siga_id' => 1, 'siga_stage_fk' => 1),
-                array('inep_id' => 22222222, 'siga_id' => 11, 'name' => "Turma 1B", 'school_siga_id' => 1, 'siga_stage_fk' => 2),
-                array('inep_id' => 33333333, 'siga_id' => 20, 'name' => "Turma 2A", 'school_siga_id' => 2, 'siga_stage_fk' => 3),
-                array('inep_id' => 44444444, 'siga_id' => 21, 'name' => "Turma 2B", 'school_siga_id' => 2, 'siga_stage_fk' => 4)
+                array('inep_id' => 11111111, 'id' => 10, 'name' => "Turma 1A", 'school_fk' => 1, 'stage_fk' => 1),
+                array('inep_id' => 22222222, 'id' => 11, 'name' => "Turma 1B", 'school_fk' => 1, 'stage_fk' => 2),
+                array('inep_id' => 33333333, 'id' => 20, 'name' => "Turma 2A", 'school_fk' => 2, 'stage_fk' => 3),
+                array('inep_id' => 44444444, 'id' => 21, 'name' => "Turma 2B", 'school_fk' => 2, 'stage_fk' => 4)
             );
             $classrooms = json_encode($classrooms);
             //----------------------
 
             //----------------------
             $students = array(
-                array('inep_id' => 55555555, 'siga_id' => 100, 'name' => "Aluno11A", 'classroom_siga_id' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 66666666, 'siga_id' => 101, 'name' => "Aluno21A", 'classroom_siga_id' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 77777777, 'siga_id' => 110, 'name' => "Aluno11B", 'classroom_siga_id' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 88888888, 'siga_id' => 111, 'name' => "Aluno21B", 'classroom_siga_id' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 99999999, 'siga_id' => 200, 'name' => "Aluno12A", 'classroom_siga_id' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 10000000, 'siga_id' => 201, 'name' => "Aluno22A", 'classroom_siga_id' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 10000001, 'siga_id' => 210, 'name' => "Aluno12B", 'classroom_siga_id' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 10000002, 'siga_id' => 211, 'name' => "Aluno22B", 'classroom_siga_id' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => '')
+                array('inep_id' => 55555555, 'id' => 100, 'name' => "Aluno11A", 'classroom_fk' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 66666666, 'id' => 101, 'name' => "Aluno21A", 'classroom_fk' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 77777777, 'id' => 110, 'name' => "Aluno11B", 'classroom_fk' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 88888888, 'id' => 111, 'name' => "Aluno21B", 'classroom_fk' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 99999999, 'id' => 200, 'name' => "Aluno12A", 'classroom_fk' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 10000000, 'id' => 201, 'name' => "Aluno22A", 'classroom_fk' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 10000001, 'id' => 210, 'name' => "Aluno12B", 'classroom_fk' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 10000002, 'id' => 211, 'name' => "Aluno22B", 'classroom_fk' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => '')
             );
             $students = json_encode($students);
             //----------------------
 
             //----------------------
             $enrollments = array(
-                array('classroom_siga_id' => 10, 'student_siga_id' => 100, 'enrollment' => 1234),
-                array('classroom_siga_id' => 10, 'student_siga_id' => 101, 'enrollment' => 1235),
-                array('classroom_siga_id' => 11, 'student_siga_id' => 110, 'enrollment' => 1238),
-                array('classroom_siga_id' => 11, 'student_siga_id' => 111, 'enrollment' => 1239),
+                array('classroom_fk' => 10, 'student_fk' => 100, 'enrollment' => 1234),
+                array('classroom_fk' => 10, 'student_fk' => 101, 'enrollment' => 1235),
+                array('classroom_fk' => 11, 'student_fk' => 110, 'enrollment' => 1238),
+                array('classroom_fk' => 11, 'student_fk' => 111, 'enrollment' => 1239),
             );
             $enrollments = json_encode($enrollments);
             //----------------------
@@ -518,7 +518,7 @@ class RenderController extends Controller
                 }
                 $school->inep_id = $sch->inep_id;
                 $school->name = $sch->name;
-                $school->fk_id = $sch->siga_id;
+                $school->fk_id = $sch->id;
                 $school->source = 'SIGA';
                 if (!$school->save()) {
                     $imported = false;
@@ -536,10 +536,10 @@ class RenderController extends Controller
                 }
                 $classroom->inep_id = $cl->inep_id;
                 $classroom->name = $cl->name;
-                $classroom->school_fk = School::model()->findByAttributes(array('fk_id' => $cl->school_siga_id, 'source' => "SIGA"))->id;
-                $classroom->stage_fk = EdcensoStageVsModality::model()->findByAttributes(array('stage_code' => $cl->siga_stage_fk))->id;
+                $classroom->school_fk = School::model()->findByAttributes(array('fk_id' => $cl->school_fk, 'source' => "SIGA"))->id;
+                $classroom->stage_fk = EdcensoStageVsModality::model()->findByAttributes(array('stage_code' => $cl->stage_fk))->id;
                 $classroom->year = date("Y");
-                $classroom->fk_id = $cl->siga_id;
+                $classroom->fk_id = $cl->id;
                 $classroom->source = 'SIGA';
                 if (!$classroom->save()) {
                     $imported = false;
@@ -575,9 +575,9 @@ class RenderController extends Controller
                     }
                     $actor->person_id = $person->id;
                     $actor->personage_id = 2;
-                    $actor->classroom_fk = Classroom::model()->findByAttributes(array('fk_id' => $stu->classroom_siga_id, 'source' => "SIGA"))->id;
+                    $actor->classroom_fk = Classroom::model()->findByAttributes(array('fk_id' => $stu->classroom_fk, 'source' => "SIGA"))->id;
                     $actor->inep_id = $stu->inep_id;
-                    $actor->fk_id = $stu->siga_id;
+                    $actor->fk_id = $stu->id;
                     $actor->source = 'SIGA';
                     if (!$actor->save()) {
                         $imported = false;
@@ -590,8 +590,8 @@ class RenderController extends Controller
 
             $enrollments = json_decode($enrollments);
             foreach ($enrollments as $enr) {
-                $classroom = Classroom::model()->findByAttributes(array("fk_id" => $enr->classroom_siga_id));
-                $actor = Actor::model()->findByAttributes(array("fk_id" => $enr->student_siga_id, "classroom_fk" => $classroom->id));
+                $classroom = Classroom::model()->findByAttributes(array("fk_id" => $enr->classroom_fk));
+                $actor = Actor::model()->findByAttributes(array("fk_id" => $enr->student_fk, "classroom_fk" => $classroom->id));
                 if (isset($actor)) {
                     $actor->student_enrollment = $enr->enrollment;
                     if (!$actor->save()) {
