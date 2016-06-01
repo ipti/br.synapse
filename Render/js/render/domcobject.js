@@ -27,7 +27,7 @@ var DomCobject = function (cobject, idx) {
     this.dirLibrary = 'data/library';
     var self = this;
     //Armazenar Árvore de Peças
-    //var pieces, 
+    //var pieces,
     this.mainPieces = new Array();
     //==========================
 
@@ -72,7 +72,7 @@ var DomCobject = function (cobject, idx) {
 
     /**
      * Executa tratamentos após a construção do dom
-     * 
+     *
      * @returns {void}
      */
     this.posBuildAll = function () {
@@ -82,7 +82,7 @@ var DomCobject = function (cobject, idx) {
                 var col = $(this).attr('col');
                 $(".PLC-table td[row=" + row + "][col=" + col + "]").append($(this));
             });
-            
+
             var side = 'left';
             $(".PLC.group.build_image").each(function (i, v) {
                 $("." + side + "-images").append($(this));
@@ -179,9 +179,9 @@ var DomCobject = function (cobject, idx) {
                 var domElementASK = $('<div class="ask" style="width:100%"></div>');
                 var leftDiv = "<div class='left-images'></div>";
                 var middleDiv = "<div class='middle-words'>";
-                
+
                 middleDiv +="<div><i class='fa fa-undo refreshQuestion'></i></div>";
-                
+
                 middleDiv += '<table class="' + template + '-table">';
                 for (var i = -1; i < 6; i++) {
                     middleDiv += "<tr>";
@@ -299,7 +299,7 @@ var DomCobject = function (cobject, idx) {
             return self.domPiece;
         }
 
-        //NÃO HÁ GRUPO 
+        //NÃO HÁ GRUPO
         return "";
     };
 
@@ -488,7 +488,7 @@ var DomCobject = function (cobject, idx) {
                 }
             });
             var src = "";
-            if(sessionGet('isPreview') != -1){
+            if(sessionGet('isPreview') !== null && sessionGet('isPreview') != -1){
                 src = EDITOR+'/library/image/' + properties['src'];
             }else {
                 src = self.dirLibrary + '/image/' + properties['src'];
@@ -558,7 +558,7 @@ var DomCobject = function (cobject, idx) {
             });
 
             var src = "";
-            if(sessionGet('isPreview') != -1){
+            if(sessionGet('isPreview') !== null && sessionGet('isPreview') != -1){
                 src = EDITOR+'/library/image/' + properties['src'];
             }else {
                 src = self.dirLibrary + '/image/' + properties['src'];
@@ -654,7 +654,7 @@ var DomCobject = function (cobject, idx) {
             }
 
         }
-        
+
         self.currentElementType = build_type;
         self.domElement = $(html);
         return self.domElement;
@@ -676,7 +676,7 @@ var DomCobject = function (cobject, idx) {
         //Properties : extension, src, width, height
         eval(properties);
         var src = "";
-        if(sessionGet('isPreview') != -1){
+        if(sessionGet('isPreview') !== null && sessionGet('isPreview') != -1){
             src = EDITOR+'/library/image/' + properties['src'];
         }else {
             src = self.dirLibrary + '/image/' + properties['src'];
@@ -694,7 +694,7 @@ var DomCobject = function (cobject, idx) {
         //Properties : extension, src
         eval(properties);
         var src = "";
-        if(sessionGet('isPreview') != -1){
+        if(sessionGet('isPreview') !== null &&  sessionGet('isPreview') != -1){
             src = EDITOR+'/library/sound/' + properties['src'];
         }else {
             src = self.dirLibrary + '/sound/' + properties['src'];
@@ -711,7 +711,7 @@ var DomCobject = function (cobject, idx) {
         //Properties : extension, src
         eval(properties);
         var src = "";
-        if(sessionGet('isPreview') != -1){
+        if(sessionGet('isPreview') !== null && sessionGet('isPreview') != -1){
             src = EDITOR+'/library/sound/' + properties['src'];
         }else {
             src = self.dirLibrary + '/sound/' + properties['src'];
@@ -797,4 +797,3 @@ var DomCobject = function (cobject, idx) {
     };
 
 };
-
