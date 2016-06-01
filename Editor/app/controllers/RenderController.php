@@ -1,6 +1,7 @@
 <?php
 
-class RenderController extends Controller {
+class RenderController extends Controller
+{
 
     public $layout = 'fullmenu';
     //MSG for Translate
@@ -12,20 +13,23 @@ class RenderController extends Controller {
     /**
      * @return array action filters
      */
-    public function filters() {
+    public function filters()
+    {
         return array(
             'accessControl', // perform access control for CRUD operations
         );
     }
 
-    public function elog($text) {
+    public function elog($text)
+    {
         $this->http_response_code(200);
         echo json_encode($text);
         flush();
         ob_flush();
     }
 
-    public function actionListcobjects() {
+    public function actionListcobjects()
+    {
         $content_parent = 19;
         $contentsIn = "282,281";
         $contentOut = "277,275";
@@ -56,7 +60,8 @@ class RenderController extends Controller {
         exit;
     }
 
-    public function cobjectbyid($cobject_id, $buildZipMultimedia) {
+    public function cobjectbyid($cobject_id, $buildZipMultimedia)
+    {
         $buildZipMultimedia = isset($buildZipMultimedia) && $buildZipMultimedia;
 
         $sql = "SELECT * FROM render_cobjects WHERE cobject_id = $cobject_id;";
@@ -65,7 +70,7 @@ class RenderController extends Controller {
         $row = $command->queryRow();
 
         //Verifica se existe algum resultado da pesquisa feito no 'render_view'
-        if(ISSET($row['cobject_id'])) {
+        if (ISSET($row['cobject_id'])) {
             $json = $row;
             $cobject = Cobject::model()->findByPk($row['cobject_id']);
             if (isset($cobject->father)) {
@@ -80,44 +85,44 @@ class RenderController extends Controller {
                 $this->buildJsonElement(true, false, $CobjectElement, $json, ['a5' => $contElement], $buildZipMultimedia);
             endforeach;
 
-        $a5 = $a2 = $a3 = -1;
+            $a5 = $a2 = $a3 = -1;
 
-        if (isset($cobject->editorScreens)) {
-            foreach ($cobject->editorScreens as $screen) {
-                $a2++;
-                $json['screens'][$a2] = $screen->attributes;
-                $a3 = -1;
-                foreach ($screen->editorScreenPiecesets as $screen_pieceset) {
-                    $a3++;
-                    $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
-                    $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
-                    $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
-                    //=======================================
-                    //For each elements in this pieceset
-                    $a5 = -1;
-                    foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
-                        //build elements of the PieceSet
-                        $a5++;
-                        $this->buildJsonElement(false, true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
-                    }
-
-                    $a4 = -1;
-                    foreach ($screen_pieceset->pieceset->editorPiecesetPieces as $pieceset_piece) {
-                        $a4++;
-                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
-                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
-                        $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
-
-                        if (isset($pieceset_piece->piece->type_id)) {
-                            $typeName = CommonType::getTypeNameByID($pieceset_piece->piece->type_id);
-                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['type_name'] = $typeName;
-
-                            if ($typeName === "shape") {
-                                //O template é Desenho. Possue então a propriedade type_shape
-                                $pieceProperty = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $pieceset_piece->piece->id));
-                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['shape'] = $pieceProperty->value;
-                            }
+            if (isset($cobject->editorScreens)) {
+                foreach ($cobject->editorScreens as $screen) {
+                    $a2++;
+                    $json['screens'][$a2] = $screen->attributes;
+                    $a3 = -1;
+                    foreach ($screen->editorScreenPiecesets as $screen_pieceset) {
+                        $a3++;
+                        $json['screens'][$a2]['piecesets'][$a3]['id'] = $screen_pieceset->pieceset->id;
+                        $json['screens'][$a2]['piecesets'][$a3]['template_code'] = $screen_pieceset->pieceset->template->code;
+                        $json['screens'][$a2]['piecesets'][$a3]['description'] = $screen_pieceset->pieceset->description;
+                        //=======================================
+                        //For each elements in this pieceset
+                        $a5 = -1;
+                        foreach ($screen_pieceset->pieceset->editorPiecesetElements as $pieceset_element) {
+                            //build elements of the PieceSet
+                            $a5++;
+                            $this->buildJsonElement(false, true, $pieceset_element, $json, ['a2' => $a2, 'a3' => $a3, 'a5' => $a5], $buildZipMultimedia);
                         }
+
+                        $a4 = -1;
+                        foreach ($screen_pieceset->pieceset->editorPiecesetPieces as $pieceset_piece) {
+                            $a4++;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['id'] = $pieceset_piece->piece->id;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['name'] = $pieceset_piece->piece->name;
+                            $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['description'] = $pieceset_piece->piece->description;
+
+                            if (isset($pieceset_piece->piece->type_id)) {
+                                $typeName = CommonType::getTypeNameByID($pieceset_piece->piece->type_id);
+                                $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['type_name'] = $typeName;
+
+                                if ($typeName === "shape") {
+                                    //O template é Desenho. Possue então a propriedade type_shape
+                                    $pieceProperty = EditorPieceProperty::model()->findByAttributes(array('piece_id' => $pieceset_piece->piece->id));
+                                    $json['screens'][$a2]['piecesets'][$a3]['pieces'][$a4]['shape'] = $pieceProperty->value;
+                                }
+                            }
 
                             $a5 = (int)-1;
                             foreach ($pieceset_piece->piece->editorPieceElements as $piece_element) {
@@ -132,12 +137,13 @@ class RenderController extends Controller {
                 $json['cobject'] = $cobject_id;
                 return $json;
             }
-        }else{
+        } else {
             return null;
         }
     }
 
-    private function buildJsonElement($isCobjectElement, $isPiecesetElement, $father, &$json, $as, $buildZipMultimedia) {
+    private function buildJsonElement($isCobjectElement, $isPiecesetElement, $father, &$json, $as, $buildZipMultimedia)
+    {
         //Begin Function Element =======================================
         // $gproperties = ELEMENT_PROPERTY + LIBRARY_PROPERTY
 
@@ -242,7 +248,7 @@ class RenderController extends Controller {
             $aTemp['pieceElement_Properties'] = $pe_properties;
             $aTemp['events'] = $events;
             $aTemp['generalProperties'] = $gproperties;
-            $aTemp['type'] = (string) $father->element->type->name;
+            $aTemp['type'] = (string)$father->element->type->name;
             if (!isset($json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'])) {
                 $json['screens'][$as['a2']]['piecesets'][$as['a3']]['pieces'][$as['a4']]['groups'][$type_group]['elements'] = array();
             }
@@ -270,11 +276,12 @@ class RenderController extends Controller {
         // End Function Element=========================================
     }
 
-    public function actionLoadcobject() {
+    public function actionLoadcobject()
+    {
         $cobject_id = $_REQUEST['ID'];
         $json = $this->cobjectbyid($cobject_id, false);
-        if(isset($_GET['callback']))
-            echo $_GET['callback'].'('.json_encode($json).')';
+        if (isset($_GET['callback']))
+            echo $_GET['callback'] . '(' . json_encode($json) . ')';
         else
             echo json_encode($json);
         exit;
@@ -284,14 +291,16 @@ class RenderController extends Controller {
      *
      * @param
      */
-    public function actionLoadtext() {
+    public function actionLoadtext()
+    {
         $cobject_id = $_REQUEST['ID'];
         $json = $this->cobjectbyid($cobject_id);
         $json = json_encode($json);
         $this->render('text', array('json' => $json));
     }
 
-    public function actionLoadcobjects() {
+    public function actionLoadcobjects()
+    {
         set_time_limit(0);
         //header('Content-type: application/json');
         //header('Content-type: text/html; charset=utf-8');
@@ -317,13 +326,14 @@ class RenderController extends Controller {
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
      */
-    public function accessRules() {
+    public function accessRules()
+    {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('listcobjects', 'loadtext', 'compute', 'loadcobject', 'stage',
                     'index', 'view', 'create', 'update', 'json', 'mount', 'login', 'logout',
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
-                    'importPeformance', 'importFromEduCenso', 'getSchool', 'getAllSchools', 'getCobject_blocks', 'getDisciplines',
+                    'importPeformance', 'importFromEduCenso', 'importFromSiga', 'getSchool', 'getAllSchools', 'getCobject_blocks', 'getDisciplines',
                     'SynapseRender', 'login',
                     'preview'),
                 'users' => array('*'),
@@ -338,7 +348,8 @@ class RenderController extends Controller {
         );
     }
 
-    public function actionMeet() {
+    public function actionMeet()
+    {
         if (isset($_POST["actor"])) {
             $this->render("meet");
         } else {
@@ -346,7 +357,8 @@ class RenderController extends Controller {
         }
     }
 
-    public function actionExportToOffline() {
+    public function actionExportToOffline()
+    {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             $array_actorsOwnUnity = [];
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
@@ -390,7 +402,7 @@ class RenderController extends Controller {
             //Obter os Cobject_cobjectBlock do CobjectBlock acima
             //Somente obterá Cobjects(atividades) únicos em cada bloco, ou seja não haverá repetição de atividades num mesmo bloco.
             $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
-                    array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
+                array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
 
             $array_cobject_cobjectBlocks = array();
 
@@ -409,17 +421,17 @@ class RenderController extends Controller {
                 //Arquivo ZIP ALL
                 $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
                 $this->tempArchiveZipMultiMedia = new ZipArchive;
-                $this->tempArchiveZipMultiMedia->open('exports/'.$zipname, ZipArchive::CREATE);
+                $this->tempArchiveZipMultiMedia->open('exports/' . $zipname, ZipArchive::CREATE);
                 $this->tempArchiveZipMultiMedia->addEmptyDir("library/image/");
                 $this->tempArchiveZipMultiMedia->addEmptyDir("library/sound/");
                 $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
 
                 foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
-                        $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
-                        if(ISSET($jsonRenderView)){
-                            //Só dá o push no array, sse o jsonRenderView for diferente de NULL
-                            array_push($json_cobjects, $jsonRenderView);
-                        }
+                    $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
+                    if (ISSET($jsonRenderView)) {
+                        //Só dá o push no array, sse o jsonRenderView for diferente de NULL
+                        array_push($json_cobjects, $jsonRenderView);
+                    }
                 endforeach;
 
                 // Fazer Download no Final
@@ -432,16 +444,16 @@ class RenderController extends Controller {
                 $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
                 $json['Cobjects'] = $json_cobjects;
                 $json_encode = "var dataJson$nameDisciplineSelected = ";
-                $json_encode.=json_encode($json);
-                $json_encode.=";";
+                $json_encode .= json_encode($json);
+                $json_encode .= ";";
 
                 $this->tempArchiveZipMultiMedia->addFromString("json/renderData$nameDisciplineSelected.js", $json_encode);
 
                 //Salva as alterações no zip
                 $this->tempArchiveZipMultiMedia->close();
 
-                if (file_exists('exports/'.$zipname)) {
-                    header('location: ../exports/'.$zipname);
+                if (file_exists('exports/' . $zipname)) {
+                    header('location: ../exports/' . $zipname);
                 }
             }
         } else {
@@ -452,49 +464,149 @@ class RenderController extends Controller {
 
     public function actionImportFromSiga()
     {
-        if (isset($_POST['option']) && $_POST['option'] != "") {
+        if (isset($_POST['import'])) {
             $imported = false;
-            switch ($_POST['option']) {
-                case 'school':
 
-                    //----------------------
-                    $schools = array(
-                        array('inep_id' => 23456789, 'id' => 50, 'name' => "Ta na hora de molhar o biscoito"),
-                        array('inep_id' => 23456788, 'id' => 51, 'name' => "GGWP")
-                    );
-                    $schools = json_encode($schools);
-                    //----------------------
+            //----------------------
+            $schools = array(
+                array('inep_id' => 23456789, 'id' => 1, 'name' => "Escola 1"),
+                array('inep_id' => 23456788, 'id' => 2, 'name' => "Escola 2")
+            );
+            $schools = json_encode($schools);
+            //----------------------
 
-                    $schools = json_decode($schools);
-                    foreach ($schools as $sch) {
-                        /*
-                         * @var $school School;
-                         */
-                        $school = School::model()->findByAttributes(array('inep_id' => $sch->inep_id));
-                        if (!isset($school)) {
-                            $school = new School();
-                        }
-                        $school->inep_id = $sch->inep_id;
-                        $school->name = $sch->name;
-                        $school->save();
+            //----------------------
+            $classrooms = array(
+                array('inep_id' => 11111111, 'id' => 10, 'name' => "Turma 1A", 'school_fk' => 1, 'stage_fk' => 1),
+                array('inep_id' => 22222222, 'id' => 11, 'name' => "Turma 1B", 'school_fk' => 1, 'stage_fk' => 2),
+                array('inep_id' => 33333333, 'id' => 20, 'name' => "Turma 2A", 'school_fk' => 2, 'stage_fk' => 3),
+                array('inep_id' => 44444444, 'id' => 21, 'name' => "Turma 2B", 'school_fk' => 2, 'stage_fk' => 4)
+            );
+            $classrooms = json_encode($classrooms);
+            //----------------------
+
+            //----------------------
+            $students = array(
+                array('inep_id' => 55555555, 'id' => 100, 'name' => "Aluno11A", 'classroom_fk' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 66666666, 'id' => 101, 'name' => "Aluno21A", 'classroom_fk' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 77777777, 'id' => 110, 'name' => "Aluno11B", 'classroom_fk' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 88888888, 'id' => 111, 'name' => "Aluno21B", 'classroom_fk' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 99999999, 'id' => 200, 'name' => "Aluno12A", 'classroom_fk' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 10000000, 'id' => 201, 'name' => "Aluno22A", 'classroom_fk' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 10000001, 'id' => 210, 'name' => "Aluno12B", 'classroom_fk' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
+                array('inep_id' => 10000002, 'id' => 211, 'name' => "Aluno22B", 'classroom_fk' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => '')
+            );
+            $students = json_encode($students);
+            //----------------------
+
+            //----------------------
+            $enrollments = array(
+                array('classroom_fk' => 10, 'student_fk' => 100, 'enrollment' => 1234),
+                array('classroom_fk' => 10, 'student_fk' => 101, 'enrollment' => 1235),
+                array('classroom_fk' => 11, 'student_fk' => 110, 'enrollment' => 1238),
+                array('classroom_fk' => 11, 'student_fk' => 111, 'enrollment' => 1239),
+            );
+            $enrollments = json_encode($enrollments);
+            //----------------------
+
+            $schools = json_decode($schools);
+            foreach ($schools as $sch) {
+                $school = School::model()->findByAttributes(array('inep_id' => $sch->inep_id));
+                if (!isset($school)) {
+                    $school = new School();
+                }
+                $school->inep_id = $sch->inep_id;
+                $school->name = $sch->name;
+                $school->fk_id = $sch->id;
+                $school->source = 'SIGA';
+                if (!$school->save()) {
+                    $imported = false;
+                    $msg = $school->getErrors();
+                }
+            }
+
+            /*---*/
+
+            $classrooms = json_decode($classrooms);
+            foreach ($classrooms as $cl) {
+                $classroom = Classroom::model()->findByAttributes(array('inep_id' => $cl->inep_id));
+                if (!isset($classroom)) {
+                    $classroom = new Classroom();
+                }
+                $classroom->inep_id = $cl->inep_id;
+                $classroom->name = $cl->name;
+                $classroom->school_fk = School::model()->findByAttributes(array('fk_id' => $cl->school_fk, 'source' => "SIGA"))->id;
+                $classroom->stage_fk = EdcensoStageVsModality::model()->findByAttributes(array('stage_code' => $cl->stage_fk))->id;
+                $classroom->year = date("Y");
+                $classroom->fk_id = $cl->id;
+                $classroom->source = 'SIGA';
+                if (!$classroom->save()) {
+                    $imported = false;
+                    $msg .= $classroom->getErrors();
+                }
+            }
+
+            /*---*/
+
+            $students = json_decode($students);
+            foreach ($students as $stu) {
+                $array_name = explode(" ", $stu->name);
+                $login = strtolower(trim($array_name[0] . substr($stu->inep_id, strlen($stu->inep_id) - 3, 3)));
+
+                $person = Person::model()->findByAttributes(array("login" => $login));
+                if (!isset($person)) {
+                    $person = new Person();
+                }
+
+                $person->name = $stu->name;
+                $person->login = $login;
+                $person->email = $person->login . "@email.com";
+                $person->password = $person->login;
+
+                $person->mother_name = $stu->mother_name;
+                $person->father_name = $stu->father_name;
+                $person->birthday = $stu->birthday;
+
+                if ($person->save()) {
+                    $actor = Actor::model()->findByAttributes(array('inep_id' => $stu->inep_id));
+                    if (!isset($actor)) {
+                        $actor = new Actor();
+                    }
+                    $actor->person_id = $person->id;
+                    $actor->personage_id = 2;
+                    $actor->classroom_fk = Classroom::model()->findByAttributes(array('fk_id' => $stu->classroom_fk, 'source' => "SIGA"))->id;
+                    $actor->inep_id = $stu->inep_id;
+                    $actor->fk_id = $stu->id;
+                    $actor->source = 'SIGA';
+                    if (!$actor->save()) {
+                        $imported = false;
+                        $msg .= $classroom->getErrors();
+                    }
+                }
+            }
+
+            /*---*/
+
+            $enrollments = json_decode($enrollments);
+            foreach ($enrollments as $enr) {
+                $classroom = Classroom::model()->findByAttributes(array("fk_id" => $enr->classroom_fk));
+                $actor = Actor::model()->findByAttributes(array("fk_id" => $enr->student_fk, "classroom_fk" => $classroom->id));
+                if (isset($actor)) {
+                    $actor->student_enrollment = $enr->enrollment;
+                    if (!$actor->save()) {
+                        $imported = false;
+                        $msg .= $classroom->getErrors();
+                    } else {
+                        $imported = true;
                     }
 
-                    $imported = true;
-                    break;
-                case 'classroom':
-                    $imported = true;
-                    break;
-                case 'student':
-                    $imported = true;
-                    break;
-                case 'enrollment':
-                    $imported = true;
-                    break;
+                }
             }
+
             if ($imported) {
                 $this->render("importFromSiga", array('msg' => 'success'));
             } else {
-                $this->render("importFromSiga", array('msg' => 'error'));
+                $this->render("importFromSiga", array('msg' => $msg));
             }
         } else {
             $this->render("importFromSiga");
@@ -561,11 +673,9 @@ class RenderController extends Controller {
                         $classroomName = $explClassroom[4];
                         $classroomStage_id = $explClassroom[37];
                         //Verificar no banco de dados se o stage_id possui o campo stage = 2 ou 3
-                        $edCensoStage = EdcensoStageVsModality::model()->findByPk($classroomStage_id);
-                        if ($edCensoStage->id >= 4 && $edCensoStage->id <= 24) {
-                            $classroomStage = $edCensoStage->id;
+                        $edCensoStage = EdcensoStageVsModality::model()->findByAttributes(array('stage_code' => $classroomStage_id));
+                        if ($edCensoStage->stage_code >= 4 && $edCensoStage->stage_code <= 24) {
                             //Selecionar o nome do Stage no Banco do Synapse
-                            $stage_vs_modality = EdcensoStageVsModality::model()->findByPk($classroomStage);
                             //Antes de salvar uma nova Turma, verifica se ela já não existe.
                             $classroom = Classroom::model()->findByAttributes(array('inep_id' => $classroomInepID));
                             if (!isset($classroom)) {
@@ -576,7 +686,7 @@ class RenderController extends Controller {
                             $classroom->name = $classroomName;
                             $classroom->inep_id = $classroomInepID;
                             $classroom->school_fk = $school->id;
-                            $classroom->stage_fk = $stage_vs_modality->id;
+                            $classroom->stage_fk = $edCensoStage->id;
                             $classroom->year = date("Y");
                             $classroom->source = "EDUCACENSO";
                             $classroom->fk_id = $classroomInepID;
@@ -668,7 +778,8 @@ class RenderController extends Controller {
         }
     }
 
-    public function actionImportPeformance() {
+    public function actionImportPeformance()
+    {
         if (isset($_FILES['fileTxt'])) {
             $tempName = $_FILES['fileTxt']['tmp_name'];
             // move_uploaded_file($tempNamename, Yii::app()->theme->basePath . '/backups/backup_peformances/');
@@ -683,13 +794,13 @@ class RenderController extends Controller {
                     . "(`actor_id`, `piece_id`, `group_id`, `final_time`, `iscorrect`, `value` ) VALUES";
                 $totalPeformances = count($peformances);
                 foreach ($peformances as $idx => $peform):
-                    $strSqlPerformInserts.='( "';
-                    $strSqlPerformInserts.= $peform->actor_id . '", "' . $peform->piece_id
+                    $strSqlPerformInserts .= '( "';
+                    $strSqlPerformInserts .= $peform->actor_id . '", "' . $peform->piece_id
                         . '", "' . $peform->group_id . '", "' . $peform->final_time
                         . '", "' . $peform->iscorrect . '", "' . $peform->value;
-                    $strSqlPerformInserts.='" )';
+                    $strSqlPerformInserts .= '" )';
                     if ($idx < $totalPeformances - 1) {
-                        $strSqlPerformInserts.=", ";
+                        $strSqlPerformInserts .= ", ";
                     }
 
                 endforeach;
@@ -709,21 +820,22 @@ class RenderController extends Controller {
         }
     }
 
-   /*
-    *  public function actionGetSchool() {
-        $allSchool = Unity::model()->findAllByAttributes(array('organization_id' => '2'));
-        $json = array();
-        foreach ($allSchool as $school):
-            $json[$school->id] = $school->name;
-        endforeach;
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-        header('Content-type: application/json');
-        echo json_encode($json);
-    }
-   */
+    /*
+     *  public function actionGetSchool() {
+         $allSchool = Unity::model()->findAllByAttributes(array('organization_id' => '2'));
+         $json = array();
+         foreach ($allSchool as $school):
+             $json[$school->id] = $school->name;
+         endforeach;
+         header('Cache-Control: no-cache, must-revalidate');
+         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+         header('Content-type: application/json');
+         echo json_encode($json);
+     }
+    */
 
-    public function actionGetAllSchools() {
+    public function actionGetAllSchools()
+    {
         $allSchool = School::model()->findAll();
         $json = array();
         foreach ($allSchool as $school):
@@ -735,7 +847,8 @@ class RenderController extends Controller {
         echo json_encode($json);
     }
 
-    public function actionGetDisciplines() {
+    public function actionGetDisciplines()
+    {
         $allDisciplines = ActDiscipline::model()->findAll();
         $json = array();
         foreach ($allDisciplines as $discipline):
@@ -747,7 +860,8 @@ class RenderController extends Controller {
         echo json_encode($json);
     }
 
-    public function actionGetCobject_blocks() {
+    public function actionGetCobject_blocks()
+    {
         if (isset($_POST['discipline_id'])) {
             $blocks = Cobjectblock::model()->findAllByAttributes(array('discipline_id' => $_POST['discipline_id']));
         } else {
@@ -763,16 +877,19 @@ class RenderController extends Controller {
         echo json_encode($json);
     }
 
-    public function actionIndex() {
-         $this->redirect(RENDER_ONLINE."?isOnline=true");
+    public function actionIndex()
+    {
+        $this->redirect(RENDER_ONLINE . "?isOnline=true");
     }
 
-    public function actionPreview($id = null){
-        $this->redirect(RENDER_ONLINE."?isPreview=$id");
+    public function actionPreview($id = null)
+    {
+        $this->redirect(RENDER_ONLINE . "?isPreview=$id");
     }
 
-    public function actionTestepreview() {
-         $this->render("testepreview");
+    public function actionTestepreview()
+    {
+        $this->render("testepreview");
     }
 
 //    public function actionLogout() {
@@ -790,15 +907,18 @@ class RenderController extends Controller {
 //    }
 
 
-    public function actionFilter() {
+    public function actionFilter()
+    {
         $this->render('filter');
     }
 
-    public function actionCanvas() {
+    public function actionCanvas()
+    {
         $this->render('canvas');
     }
 
-    public function actionCompute() {
+    public function actionCompute()
+    {
         $perf = new PeformanceActor();
         $data['piece_id'] = $_REQUEST['pieceID'];
         $data['group_id'] = (isset($_REQUEST['groupID'])) ? $_REQUEST['groupID'] : NULL;
@@ -815,7 +935,8 @@ class RenderController extends Controller {
         }
     }
 
-    public function actionStage() {
+    public function actionStage()
+    {
 
         $cobject_id = @$_REQUEST['id'];
         $disciplineID = @$_REQUEST['disciplineID'];
@@ -855,26 +976,26 @@ class RenderController extends Controller {
         //$where = " where a1.id not in('335','356','571','15','431','68','430','641','642','428','647','643','645','71','335','654','76') and a1.status='on' and a7.stage = '2' and (year = '1') and a1.theme_id = 30 and a3.discipline_id = $disciplineID";
         $where = " where ro.status = 'on'";
         if (isset($contentsIn) && isset($contentOut)) {
-            $where.= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
+            $where .= " and (a6.id in($contentsIn) or a6.id not in($contentOut))";
         } else if (isset($contentsIn) && !isset($contentOut)) {
-            $where.= " and (a6.id in($contentsIn))";
+            $where .= " and (a6.id in($contentsIn))";
         } else if (isset($contentOut) && !isset($contentsIn)) {
-            $where.= " and (a6.id not in($contentOut))";
+            $where .= " and (a6.id not in($contentOut))";
         }
         if (isset($blockID) && !empty($blockID)) {
             $join .= " left join cobject_cobjectblock ccobj on(ccobj.cobject_id=ro.cobject_id)";
-            $where .=" and ccobj.cobject_block_id=$blockID";
+            $where .= " and ccobj.cobject_block_id=$blockID";
         }
         if (isset($modality)) {
-            $join.= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
-            $where.="";
+            $join .= " left join act_goal_modality a5 on(a3.id=a5.goal_id)";
+            $where .= "";
         }
         if (isset($degree)) {
             $join .= " left join act_degree a14 on(a14.id=a3.degree_id)";
-            $where .="";
+            $where .= "";
         }
         if (isset($content)) {
-            $where .="";
+            $where .= "";
         }
         $fsql = $sql . $join . $where . " order by ro.year,ro.grade,ro.id";
         //var_dump($fsql);exit();
@@ -889,13 +1010,15 @@ class RenderController extends Controller {
         $this->render('stage', array('json' => $json, 'actor' => $actor));
     }
 
-    public function actionJson() {
+    public function actionJson()
+    {
         set_time_limit(0);
         if (isset($_POST['op']) &&
-            ( $_POST['op'] == 'select' || $_POST['op'] == 'classes')) {
+            ($_POST['op'] == 'select' || $_POST['op'] == 'classes')
+        ) {
             $json = array();
 
-            $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
+            $id = isset($_POST["id"]) ? (int)$_POST["id"] : die('ERRO: id não recebido');
 
             $sql = "SELECT ut.primary_unity_id, ut.secondary_unity_id, u.name, ut.primary_organization_id, 
         ut.secondary_organization_id, ou.orglevel 
@@ -918,7 +1041,7 @@ class RenderController extends Controller {
             exit;
         } elseif (isset($_POST['op']) and $_POST['op'] == 'actors') {
             $json = array();
-            $id = isset($_POST["id"]) ? (int) $_POST["id"] : die('ERRO: id não recebido');
+            $id = isset($_POST["id"]) ? (int)$_POST["id"] : die('ERRO: id não recebido');
 
             $sql = "SELECT a.id actor_id, p.name 
         FROM synapse.actor a
@@ -1183,7 +1306,8 @@ class RenderController extends Controller {
     }
 
     //Funções para Render DB Online
-    public function actionLogin() {
+    public function actionLogin()
+    {
         $json = array();
         $login = isset($_POST['login']) ? $_POST['login'] : null;
         $password = isset($_POST['password']) ? $_POST['password'] : null;
