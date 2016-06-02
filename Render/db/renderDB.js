@@ -968,7 +968,10 @@ if (sessionStorage.getItem("isOnline") === null ||
                         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
                         pom.setAttribute('download', 'perfomances(' + current_date.getDate() + '-' + current_date.getMonth()
                                 + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
-                        pom.click();
+                        $(pom).html("<br>Exporte-me");
+                        //pom.click();
+                        $('#import-form').append(pom);
+                        console.log(pom);
 
                     }
                 };

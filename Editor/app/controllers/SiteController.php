@@ -177,7 +177,7 @@ class SiteController extends Controller {
             $identity = $loginmodel->get_identity(); //$itentity = variável local
             if ($autenticar) {
                 $idPerson = $identity->getId();
-//Somente atores Ativos
+                //Somente atores Ativos
                 $actor = Actor::model()->findAllByAttributes(array('person_id' => $idPerson), 
                         "desactive_date >" . time() . " OR " . "desactive_date is NULL OR desactive_date = 0 ");
 
@@ -185,7 +185,7 @@ class SiteController extends Controller {
                 Yii::app()->user->login($identity);
                 
                 if (count($actor) > 1) {
-//Método login() do CWebUser
+                //Método login() do CWebUser
                     $html = "
                    <html>
                       <head>
@@ -196,7 +196,7 @@ class SiteController extends Controller {
                    <form method=\"post\" action=\"/site/login\">
                    <select id=\"act\" name=\"act\">";
                     echo "Bem Vindo : " . $identity->getState('name');
-//Seleciona um dos personagem de um Person
+                    //Seleciona um dos personagem de um Person
                     for ($i = 0; count($actor) > $i; $i++) {
                         $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[$i]->personage_id));
                         $html .= "<option value='".$actor[$i]->id."'>$tempPersonage->name</option>";
