@@ -360,7 +360,7 @@ class RenderController extends Controller
     public function actionExportToOffline()
     {
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
-            $array_actorsOwnUnity = [];
+            $array_actorsInClassroom = [];
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
                 $school = School::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
@@ -373,10 +373,10 @@ class RenderController extends Controller
                     WHERE class.school_fk = " . $school->id;
 
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
-                $array_actorsOwnUnity = Yii::app()->db->createCommand($query)->queryAll();
+                $array_actorsInClassroom = Yii::app()->db->createCommand($query)->queryAll();
             } else {
                 //Escola Não selecionada
-                $array_actorsOwnUnity = [];
+                $array_actorsInClassroom = [];
             }
 
             $nameDisciplineSelected = "";
@@ -438,7 +438,7 @@ class RenderController extends Controller
                 //Arquivo Json para adcionar no ZIP
                 $json = array();
                 //Tratar Separação no JS
-                $json['ActorsOwnUnity'] = $array_actorsOwnUnity;
+                $json['ActorsInClassroom'] = $array_actorsInClassroom;
                 $json['Disciplines'] = $array_disciplines;
                 $json['CobjectBlock'] = $array_cobjectBlock;
                 $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
