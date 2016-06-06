@@ -152,7 +152,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
-                // Falta organization_id & father_id 
+                // Falta organization_id & father_id
                 //===========================================
 
                 // cria um objectStore de ACTOR
@@ -212,7 +212,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 //================================================
 
                 //Criar Schema para os scripts(roteiros), contents e goals. E outro schema para relacionar
-                //os goals em seu content e os contents no seu respectivo script(Roteiro). 
+                //os goals em seu content e os contents no seu respectivo script(Roteiro).
 
                 /*  act_goal {
                  `id`,
@@ -363,7 +363,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 state_actorStore.createIndex("evaluation_selected_level", "evaluation_selected_level", {
                     unique: false
                 });
-                
+
                  state_actorStore.createIndex("discipline_id", "discipline_id", {
                     unique: false
                 });
@@ -385,7 +385,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
 
-                // Usando transação oncomplete para afirmar que a criação do objectStore 
+                // Usando transação oncomplete para afirmar que a criação do objectStore
                 // é terminada antes de adicionar algum dado nele.
                 schoolStore.transaction.oncomplete = function (event) {
                     //Se for o último dos 9 então contruiu todos os schemas
@@ -708,7 +708,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     self.importCobject(db, data_cobject);
 
                     //Importar os performance_actors
-                    // self.importPerformance_actor(db,data_performance_actor); 
+                    // self.importPerformance_actor(db,data_performance_actor);
 
                     //Fecha o DB
                     db.close();
@@ -731,7 +731,7 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //////////////////////
-        //Métodos de Import 
+        //Métodos de Import
         /////////////////////
 
         //Importar as schools
@@ -920,7 +920,7 @@ if (sessionStorage.getItem("isOnline") === null ||
         // - - - - - - - - - -  //
 
         //Export os performances_actors
-        this.exportPerformance_actor = function () {
+        this.exportPerformance_actor = function (callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
@@ -962,16 +962,8 @@ if (sessionStorage.getItem("isOnline") === null ||
                         }
                         jsonExport += "]";
 
-                        //Realizar download da String
-                        var pom = document.createElement('a');
-                        var current_date = new Date();
-                        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
-                        pom.setAttribute('download', 'perfomances(' + current_date.getDate() + '-' + current_date.getMonth()
-                                + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
-                        $(pom).html("<br>Exporte-me");
-                        //pom.click();
-                        $('#import-form').append(pom);
-                        console.log(pom);
+                        //Chama a função de callBack
+                        callBack(jsonExport);
 
                     }
                 };
@@ -1066,7 +1058,7 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-        //Pesquisas No Banco        
+        //Pesquisas No Banco
         this.login = function (login, password, callBack) {
             if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
 
@@ -1077,7 +1069,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                         var id = "-1";
                         var personage_name = "admin";
                         var classroom_id = "-1";
-                        //Armazenar nome do usuário e id_Actor na sessão 
+                        //Armazenar nome do usuário e id_Actor na sessão
                         sessionStorage.setItem("authorization", true);
                         sessionStorage.setItem("login_id_actor", id);
                         sessionStorage.setItem("login_name_actor", name);
@@ -1123,7 +1115,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                                     var id = requestGet.result.id;
                                     var personage_name = requestGet.result.personage_name;
                                     var classroom_id = requestGet.result.unity_id;
-                                    //Armazenar nome do usuário e id_Actor na sessão 
+                                    //Armazenar nome do usuário e id_Actor na sessão
                                     sessionStorage.setItem("authorization", true);
                                     sessionStorage.setItem("login_id_actor", id);
                                     sessionStorage.setItem("login_name_actor", name);
@@ -1435,7 +1427,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                         var cursor = event.target.result;
                         if (cursor) {
                             if (render_mode == 'evaluation') {
-                                // Para cada id do Actor encontrado, verificar se possui o 
+                                // Para cada id do Actor encontrado, verificar se possui o
                                 // modo do reder, cobject_block_id  e o nível selecionado
                                 if (cursor.value.render_mode == render_mode &&
                                         cursor.value.cobject_block_id == cobject_block_id &&
@@ -1480,7 +1472,7 @@ if (sessionStorage.getItem("isOnline") === null ||
             if (render_mode == 'proficiency') {
                 var discipline_id = userStateFilterInfo['discipline_id'];
             }
-            
+
             if (self.isset(actor_id) && self.isset(discipline_id)) {
                 var info_state = null;
                 window.indexedDB = self.verifyIDBrownser();
@@ -1504,8 +1496,8 @@ if (sessionStorage.getItem("isOnline") === null ||
                         var cursor = event.target.result;
                         if (cursor) {
                             if (render_mode == 'proficiency') {
-                                // Para cada id do Actor encontrado, verificar se possui o 
-                                // modo do render e discipline_id 
+                                // Para cada id do Actor encontrado, verificar se possui o
+                                // modo do render e discipline_id
                                 if (cursor.value.render_mode == render_mode &&
                                         cursor.value.discipline_id == discipline_id ) {
                                     //Encontrou o estado deste Actor + discipline + modo proficiency
@@ -1559,7 +1551,7 @@ if (sessionStorage.getItem("isOnline") === null ||
          var unityStore = db.transaction("unity").objectStore("unity");
          var unitys = new Array();
          unityStore.openCursor().onsuccess = function (event) {
-         
+
          var cursor = event.target.result;
          if (cursor) {
          // Percorre cada registro da unity
@@ -1575,7 +1567,7 @@ if (sessionStorage.getItem("isOnline") === null ||
          //Finalizou a Pesquisa das Unitys
          callBack(unitys, callBackEvent);
          }
-         
+
          };
          unityStore.onerror = function (event) {
          // Tratar erro!
@@ -1585,7 +1577,7 @@ if (sessionStorage.getItem("isOnline") === null ||
          // Se existe outra aba com a versão antiga
          window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
          }
-         
+
          }
          this.getAllStudentFromClasses = function (unitys, callBackEvent) {
          self.totalUnitys = unitys.length;
@@ -1593,7 +1585,7 @@ if (sessionStorage.getItem("isOnline") === null ||
          self.getAllStudentFromClass(unitys[idx], callBackEvent);
          }
          }
-         
+
          this.getAllStudentFromClass = function (unity, callBackEvent) {
          window.indexedDB = self.verifyIDBrownser();
          DBsynapse = window.indexedDB.open(nameBD);
@@ -1628,9 +1620,9 @@ if (sessionStorage.getItem("isOnline") === null ||
          };
          contStudent++;
          }
-         
+
          cursorActor.continue();
-         
+
          } else {
          //Finalisou para os Actors desta Class
          var currentUnity = {
@@ -1645,7 +1637,7 @@ if (sessionStorage.getItem("isOnline") === null ||
          callBackEvent(self.actorOwnUnity);
          }
          }
-         
+
          };
          requestGet.onerror = function (event) {
          // Tratar erro!
@@ -1655,9 +1647,9 @@ if (sessionStorage.getItem("isOnline") === null ||
          // Se existe outra aba com a versão antiga
          window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
          }
-         
+
          }
-         
+
          */
 
 
