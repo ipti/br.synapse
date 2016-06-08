@@ -108,7 +108,7 @@
                     var actors = new Array();
 
                     //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJson.ActorsOwnUnity, function (idx, object) {
+                    $.each(dataJson.ActorsInClassroom, function (idx, object) {
                         var tempSchool = {};
                         tempSchool.id = object.school_id;
                         tempSchool.name = object.school_name;
@@ -117,12 +117,10 @@
                         }
 
                         var tempUnity = {};
-                        tempUnity.id = object.unity_id;
+                        tempUnity.id = object.classroom_id;
                         //FK para a school
                         tempUnity.school_id = object.school_id;
-                        tempUnity.father_id = object.unity_father;
-                        tempUnity.name = object.unity_name;
-                        tempUnity.organization_id = object.unity_organization_id;
+                        tempUnity.name = object.classroom_name;
                         if (!existInArray(unitys, tempUnity.id)) {
                             unitys.push(tempUnity);
                         }
@@ -133,7 +131,7 @@
                         tempActor.password = object.password;
                         tempActor.personage_name = object.personage;
                         //Chave Estrageira para a sua unidade
-                        tempActor.unity_id = object.unity_id;
+                        tempActor.unity_id = object.classroom_id;
                         if (!existInArray(actors, tempActor.id)) {
                             actors.push(tempActor);
                         }
