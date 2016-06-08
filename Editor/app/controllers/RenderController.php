@@ -467,47 +467,14 @@ class RenderController extends Controller
         if (isset($_POST['import'])) {
             $imported = false;
 
-            //----------------------
-            $schools = array(
-                array('inep_id' => 23456789, 'id' => 1, 'name' => "Escola 1"),
-                array('inep_id' => 23456788, 'id' => 2, 'name' => "Escola 2")
-            );
-            $schools = json_encode($schools);
-            //----------------------
+            $ch = curl_init();
+            $schools = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getEscolas');
+            $classrooms = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getTurmas');
+            $students = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getAlunos');
+            $enrollments = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getMatriculas');
+            curl_close($ch);
 
-            //----------------------
-            $classrooms = array(
-                array('inep_id' => 11111111, 'id' => 10, 'name' => "Turma 1A", 'school_fk' => 1, 'stage_fk' => 1),
-                array('inep_id' => 22222222, 'id' => 11, 'name' => "Turma 1B", 'school_fk' => 1, 'stage_fk' => 2),
-                array('inep_id' => 33333333, 'id' => 20, 'name' => "Turma 2A", 'school_fk' => 2, 'stage_fk' => 3),
-                array('inep_id' => 44444444, 'id' => 21, 'name' => "Turma 2B", 'school_fk' => 2, 'stage_fk' => 4)
-            );
-            $classrooms = json_encode($classrooms);
-            //----------------------
 
-            //----------------------
-            $students = array(
-                array('inep_id' => 55555555, 'id' => 100, 'name' => "Aluno11A", 'classroom_fk' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 66666666, 'id' => 101, 'name' => "Aluno21A", 'classroom_fk' => 10, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 77777777, 'id' => 110, 'name' => "Aluno11B", 'classroom_fk' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 88888888, 'id' => 111, 'name' => "Aluno21B", 'classroom_fk' => 11, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 99999999, 'id' => 200, 'name' => "Aluno12A", 'classroom_fk' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 10000000, 'id' => 201, 'name' => "Aluno22A", 'classroom_fk' => 20, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 10000001, 'id' => 210, 'name' => "Aluno12B", 'classroom_fk' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => ''),
-                array('inep_id' => 10000002, 'id' => 211, 'name' => "Aluno22B", 'classroom_fk' => 21, 'mother_name' => '', 'father_name' => '', 'birthday' => '')
-            );
-            $students = json_encode($students);
-            //----------------------
-
-            //----------------------
-            $enrollments = array(
-                array('classroom_fk' => 10, 'student_fk' => 100, 'enrollment' => 1234),
-                array('classroom_fk' => 10, 'student_fk' => 101, 'enrollment' => 1235),
-                array('classroom_fk' => 11, 'student_fk' => 110, 'enrollment' => 1238),
-                array('classroom_fk' => 11, 'student_fk' => 111, 'enrollment' => 1239),
-            );
-            $enrollments = json_encode($enrollments);
-            //----------------------
 
             $schools = json_decode($schools);
             foreach ($schools as $sch) {
@@ -592,7 +559,7 @@ class RenderController extends Controller
                 $classroom = Classroom::model()->findByAttributes(array("fk_id" => $enr->classroom_fk));
                 $actor = Actor::model()->findByAttributes(array("fk_id" => $enr->student_fk, "classroom_fk" => $classroom->id));
                 if (isset($actor)) {
-                    $actor->student_enrollment = $enr->enrollment;
+                    $actor->student_enrollment = $enr->student_enrollment;
                     if (!$actor->save()) {
                         $imported = false;
                         $msg .= $classroom->getErrors();
@@ -611,6 +578,12 @@ class RenderController extends Controller
         } else {
             $this->render("importFromSiga");
         }
+    }
+
+    public function connectToSiga($ch, $url) {
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        return curl_exec($ch);
     }
 
     public function actionImportFromEduCenso()
