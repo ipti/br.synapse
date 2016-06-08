@@ -152,23 +152,24 @@
                   var callBack = function(jsonExport){
 
                     //Realizar download da String
-                /*    var pom = document.createElement('a');
+
+                      //Se for um browser com o Chrome
+                      var pom = document.createElement('a');
                     var current_date = new Date();
-/*
+
                     pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
                     pom.setAttribute('download', 'perfomances(' + current_date.getDate() + '-' + current_date.getMonth()
                             + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
                     pom.click();
-                    */
-
+                    //========================================
+                    //Se for um WEBKIT no Android, então o código a cima não funcionará.
+                    // Então deixa que o APK Salve o arquivo de Export da performance
                     var current_date = new Date();
                     location.href= 'import.html?txtName=perfomances(' + current_date.getDate() + '-' + current_date.getMonth()
                             + '-' + current_date.getFullYear() + '_' + current_date.getTime() +')'
                           +'&txtData=' + encodeURIComponent(jsonExport);
-
-                    console.log(jsonExport);
                   };
-
+                 //===========================================
 
                     db.exportPerformance_actor(callBack);
                 });
