@@ -982,7 +982,7 @@ if (sessionStorage.getItem("isOnline") === null ||
         // EXPORTE PARA O EEG - IBlue //
         // - - - - - - - - - -  //
 
-        this.exportToEEG = function () {
+        this.exportToEEG = function (callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
@@ -1036,15 +1036,8 @@ if (sessionStorage.getItem("isOnline") === null ||
                             }
                             //Baixa um arquivo TXT do ExportToEEG desse Actor Corrente
                             //Realizar download da String
-                            var pom = document.createElement('a');
-                            var current_date = new Date();
-                            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(textToExport));
-                            pom.setAttribute('download', 'textToExportEEG_ActorID_'+ actorID +'(' + current_date.getDate() + '-' + current_date.getMonth()
-                                + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
-                            pom.click();
+                           callBack(textToExport, actorID);
                         }
-
-
 
                     }
                 };

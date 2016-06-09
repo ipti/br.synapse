@@ -150,9 +150,7 @@
 
                 $('#exportPerformances').bind('tap', function () {
                   var callBack = function(jsonExport){
-
                     //Realizar download da String
-
                       //Se for um browser com o Chrome
                       var pom = document.createElement('a');
                     var current_date = new Date();
@@ -175,7 +173,28 @@
                 });
 
                 $('#exportToEEG').bind('tap', function () {
-                    db.exportToEEG();
+                    var callBack = function(jsonExport, actorID){
+                        //Baixa um arquivo TXT do ExportToEEG desse Actor Corrente
+                        //Realizar download da String
+
+                        // Se for um brownser com o Chrome
+                        var pom = document.createElement('a');
+                        var current_date = new Date();
+                        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
+                        pom.setAttribute('download', 'textToExportEEG_ActorID_'+ actorID +'(' + current_date.getDate() + '-' + current_date.getMonth()
+                                + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
+                        pom.click();
+                        //======================================
+                        //Se for um WEBKIT no Android, então o código a cima não funcionará.
+                        // Então deixa que o APK Salve o arquivo de Export da performance para EEG
+                        //Baixará um arquivo por Aluno por vez
+                        var current_date = new Date();
+                        location.href= 'import.html?txtName=textToExportEEG_ActorID_'+ actorID +'(' + current_date.getDate() + '-' + current_date.getMonth()
+                                + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')'
+                                +'&txtData=' + encodeURIComponent(jsonExport);
+                    }
+
+                    db.exportToEEG(callBack);
                 });
 
                 $('#installAll').on('tap', function () {
