@@ -220,9 +220,11 @@
                     $(".info-exit").bind('tap', function () {
                         $("#finalize-message").show();
                     });
+
                     $("#finalize-icon").bind('tap', function () {
                         newMeet.finalizeMeet();
                     });
+
                     $("#close-icon").bind('tap', function () {
                         $("#finalize-message").hide();
                     });
@@ -287,7 +289,7 @@
             </div>
             <div class="drawer-footer">
                 <a class="info-exit" href="#">
-                    <img class="info-icon" src="img/icons/exit.png" alt="Sair">
+                    <img class="info-icon" src="img/icons/undo.png" alt="Sair">
                     <p class="info-text">Encerrar Atendimento</p>
                     <div class="clear"></div>
                 </a>

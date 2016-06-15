@@ -2514,18 +2514,19 @@ this.Meet = function (options) {
         }
     };
 
+    //Finaliza o Atendimento do Aluno Corrente
     this.finalizeMeet = function () {
-        sessionStorage.removeItem("authorization");
         sessionStorage.removeItem("id_actor");
         sessionStorage.removeItem("id_classroom");
         sessionStorage.removeItem("id_discipline");
-        sessionStorage.removeItem("login_classroom_id_actor");
-        sessionStorage.removeItem("login_id_actor");
-        sessionStorage.removeItem("login_personage_name");
         sessionStorage.removeItem("name_actor");
-        sessionStorage.removeItem("login_name_actor");
         sessionStorage.removeItem("name_classroom");
-        location.href = "index.html";
+        if(sessionStorage.getItem("render_mode") == "evaluation"){
+            //Então remove também o nível selecionado
+            sessionStorage.removeItem("evaluation_selected_level");
+        }
+        sessionStorage.removeItem("render_mode");
+        location.href = "select.html";
         return true;
     };
 
