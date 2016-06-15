@@ -161,14 +161,6 @@
                         $('.info.info-erros .info-text').html(Meet.peformance_qtd_wrong);
                     }
 
-                    //Carregar as Escolas
-                    if(sessionGet('isPreview') != -1){
-                        //Sem Escola
-                        $('#regSchool').html("<option value='-1'>Sem Escola</option>");
-                        //Sem classe
-                        $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
-                        $('.info.info-discipline').html('<p></p>');
-                    }else {
                         Meet.DB_synapse.findAllSchools(function (listSchools) {
                             var foundAnySchool = false;
                             for (var idx in listSchools) {
@@ -188,7 +180,7 @@
                             }
 
                         });
-                    }
+
                     //======================================
                     
                      //Carregar Turmas da escola Selecionada 
@@ -228,9 +220,11 @@
                     $(".info-exit").bind('tap', function () {
                         $("#finalize-message").show();
                     });
+
                     $("#finalize-icon").bind('tap', function () {
                         newMeet.finalizeMeet();
                     });
+
                     $("#close-icon").bind('tap', function () {
                         $("#finalize-message").hide();
                     });
@@ -295,7 +289,7 @@
             </div>
             <div class="drawer-footer">
                 <a class="info-exit" href="#">
-                    <img class="info-icon" src="img/icons/exit.png" alt="Sair">
+                    <img class="info-icon" src="img/icons/undo.png" alt="Sair">
                     <p class="info-text">Encerrar Atendimento</p>
                     <div class="clear"></div>
                 </a>

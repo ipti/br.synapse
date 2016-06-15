@@ -1,5 +1,6 @@
 /* global self */
-var EDITOR = "http://local.editor.synapse.ipti.org.br";
+// var EDITOR = "http://local.synapse.ipti.org.br";
+var EDITOR = "http://synapse.seed.ipti.org.br";
 
 /**
  * Classe do Meet
@@ -70,6 +71,7 @@ this.Meet = function (options) {
     //Ano atual do Aluno
     Meet.studentCurrentYear = 0;
     Meet.actor = options.actor[0];
+
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];
 
@@ -84,6 +86,7 @@ this.Meet = function (options) {
     var start_time = 0;
     var final_time = 0;
     var interval_group = 0;
+    var start_time_piece = 0;
     var interval_piece = 0;
     var meet_type = options.meet_type || DEFAULT_MEET_TYPE;
     //Time de cada encontro Em Segundos
@@ -91,9 +94,8 @@ this.Meet = function (options) {
     this.tag_time;
     //======================================
     //Criar Objeto para Manipulação do Banco
-    Meet.DB_synapse = sessionGet("isOnline") ? new DBOn() : new DB();
+    Meet.DB_synapse = sessionGet("isOnline") != null && sessionGet("isOnline") != "false" ? new DBOn() : new DB();
     //======================================
-
 
 
     //Obter bloco a partir da disciplina selecionada
@@ -233,7 +235,7 @@ this.Meet = function (options) {
      * @returns {void}
      */
     this.restartTimes = function () {
-        self.interval_group = self.interval_piece = new Date().getTime();
+        self.interval_group = self.start_time_piece = new Date().getTime();
     };
 
     //Carregar Primeira Piece do atendimento corrente
@@ -262,6 +264,10 @@ this.Meet = function (options) {
             $(selector_cobject + ' div[group]').closest('div.answer').shuffle();
         }
 
+        if (Meet.domCobject.cobject.template_code !== 'AEL' && Meet.domCobject.cobject.template_code !== 'DDROP'
+            && Meet.domCobject.cobject.template_code !== 'ONEDDROP') {
+            $(selector_cobject + ' div[group]').closest('div.ask').shuffle();
+        }
 
         if (self.currentTemplateCode === 'DDROP') {
             //Existe DDROP
@@ -365,17 +371,25 @@ this.Meet = function (options) {
                 audio.currentTime = 0;
                 img.attr('src', "img/icons/play.png");
                 selfIconPause.attr('playing', 'false');
-            } else {
+             } else {
                 //Antes do Play, dá um STOP em todos os audios em execução
                 self.stopAllSounds();
                 audio.play();
                 img.attr('src', "img/icons/stop.png");
                 selfIconPause.attr('playing', 'true');
-            }
+             }
+
+            //seta playing para false após o audio acabar
+            audio.onended = function() {
+                audio.pause();
+                audio.currentTime = 0;
+                img.attr('src', "img/icons/play.png");
+                selfIconPause.attr('playing', 'false');
+            };
 
             audio.addEventListener("ended", function () {
                 img.attr('src', "img/icons/play.png");
-                // playing = true;
+                //playing = true;
             });
 
         });
@@ -510,7 +524,6 @@ this.Meet = function (options) {
         }
 
         //======================================================================
-
     };
 
     Meet.messageFinishedLevel = function () {
@@ -607,7 +620,7 @@ this.Meet = function (options) {
             //Fica resolvendo a mesma Atividade até acertar
             //                    var info_state = {
             //                        cobject_block_id: self.cobject_block_id,
-            //                        actor_id: self.actor,
+            //                        actor_id: Meet.actor,
             //                        last_piece_id: null,
             //                        qtd_correct: Meet.peformance_qtd_correct,
             //                        qtd_wrong: Meet.peformance_qtd_wrong,
@@ -1826,7 +1839,7 @@ this.Meet = function (options) {
      */
     this.savePerformanceUsr = function (currentPieceID) {
         //Obtem o intervalo de resolução da Piece
-        self.interval_piece = (new Date().getTime() - self.interval_piece);
+        self.interval_piece = (new Date().getTime() - self.start_time_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados
         // e a armazena no objeto piece.isCorrect da piece corrente
         if (Meet.domCobject.cobject.template_code === 'AEL' ||
@@ -1840,8 +1853,9 @@ this.Meet = function (options) {
         Meet.domCobject.mainPieces[currentPieceID].time_answer = self.interval_piece;
         var data_default = {
             'piece_id': currentPieceID,
-            'actor_id': self.actor,
-            'final_time': self.interval_piece, //delta T
+            'actor_id': Meet.actor,
+            'final_time': self.start_time_piece + self.interval_piece, //TimeStamp quando firmou a resolução da questão
+            'interval_resolution': self.interval_piece, //delta T
             'iscorrect': pieceIsTrue
         };
         var data = data_default;
@@ -1851,7 +1865,7 @@ this.Meet = function (options) {
         }
 
         //Salvar na performance_User OffLine
-        if(sessionGet('isPreview') == -1) {
+        if(sessionGet('isPreview') == null || sessionGet('isPreview') == -1) {
             Meet.DB_synapse.addPerformance_actor(data);
         }
 
@@ -1889,7 +1903,7 @@ this.Meet = function (options) {
                             'piece_id': currentPieceID,
                             // 'piece_elementID':current_pieceElementID,
                             'group_id': current_group,
-                            'actor_id': self.actor,
+                            'actor_id': Meet.actor,
                             /**
                              * @todo Verificar this.time_answer, aparentemente eesta passando com valor nulo.
                              */
@@ -2500,18 +2514,19 @@ this.Meet = function (options) {
         }
     };
 
+    //Finaliza o Atendimento do Aluno Corrente
     this.finalizeMeet = function () {
-        sessionStorage.removeItem("authorization");
         sessionStorage.removeItem("id_actor");
         sessionStorage.removeItem("id_classroom");
         sessionStorage.removeItem("id_discipline");
-        sessionStorage.removeItem("login_classroom_id_actor");
-        sessionStorage.removeItem("login_id_actor");
-        sessionStorage.removeItem("login_personage_name");
         sessionStorage.removeItem("name_actor");
-        sessionStorage.removeItem("login_name_actor");
         sessionStorage.removeItem("name_classroom");
-        location.href = "index.html";
+        if(sessionStorage.getItem("render_mode") == "evaluation"){
+            //Então remove também o nível selecionado
+            sessionStorage.removeItem("evaluation_selected_level");
+        }
+        sessionStorage.removeItem("render_mode");
+        location.href = "select.html";
         return true;
     };
 
@@ -2612,7 +2627,8 @@ this.Meet = function (options) {
                 $('#level').text(self.currentGrade);
             }
 
-            if (self.isset(withMSGnextLevel) && withMSGnextLevel) {
+            if (self.isset(withMSGnextLevel) && withMSGnextLevel && false) {
+                //Temporariamente, não exibe a mensagem de avanço de nível.
                 if (Meet.domCobject.cobject.template_code !== 'TXT')
                     $('#nextLevel-message').show();
             }
