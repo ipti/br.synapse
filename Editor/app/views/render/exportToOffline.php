@@ -4,6 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript">
         $(document).ready(function(){
+
+
+
+
             //Carregar Escolas
             $.ajax({
                 type: "POST",
@@ -59,7 +63,29 @@
                         $('#cobject_block').html(htmlSelect);
                     }
                 });
+
+                //Carregar os anos existentes para a escola selecionada
+                $.ajax({
+                    type: "POST",
+                    url: "/Render/getLevels",
+                    data :{school_id:$('#school').val()},
+                    dataType: 'json',
+                    error: function( jqXHR, textStatus, errorThrown ){
+                        window.alert(jqXHR.responseText);
+                    },
+                    success: function(response, textStatus, jqXHR){
+                        var cobjectBlocks = response;
+                        var htmlSelect = "";
+                        $.each(cobjectBlocks,function(index, value){
+                            htmlSelect+='<option value="'+index+'">'+value+'</option>\n';
+                        });
+                        $('#cobject_block').html(htmlSelect);
+                    }
+                });
+
             });
+
+
             
         
         });
@@ -86,6 +112,8 @@
         <select id="discipline" name="discipline">
         </select>
         <select id="cobject_block" name="cobject_block">
+        </select>
+        <select id="level" name="level">
         </select>
         <input type="submit" value="Baixar" id="btn-download">
     </form>

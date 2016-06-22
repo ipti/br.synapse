@@ -335,7 +335,7 @@ class RenderController extends Controller
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
                     'importPeformance', 'importFromEduCenso', 'importFromSiga', 'getSchool', 'getAllSchools', 'getCobject_blocks', 'getDisciplines',
                     'SynapseRender', 'login',
-                    'preview'),
+                    'preview','getLevels'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -831,6 +831,28 @@ class RenderController extends Controller
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
         header('Content-type: application/json');
         echo json_encode($json);
+    }
+
+    public function actionGetLevels()
+    {
+        if(ISSET($_POST['school_id']) && $_POST['school_id'] != 'null') {
+            $school_id = $_POST['school_id'];
+            //Buscar todas os levels(anos) dessa escola
+            //Para isso precisa encontrar todas as turmas e agrupá-las de acordo com o nível
+            $levels = Classroom::model()->findAllByAttributes(array('school_fk'=>$school_id), array('group'=>'stage_fk'));
+
+            var_dump($levels);exit(); //STOP HERE - Must show all Stage name
+
+            $allLevels = ActDiscipline::model()->findAll();
+            $json = array();
+            foreach ($allLevels as $discipline):
+                $json[$discipline->id] = $discipline->name;
+            endforeach;
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($json);
+        }
     }
 
     public function actionGetCobject_blocks()
