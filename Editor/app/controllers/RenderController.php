@@ -335,7 +335,7 @@ class RenderController extends Controller
                     'filter', 'loadcobjects', 'canvas', 'testepreview', 'meet', 'exportToOffline',
                     'importPeformance', 'importFromEduCenso', 'importFromSiga', 'getSchool', 'getAllSchools', 'getCobject_blocks', 'getDisciplines',
                     'SynapseRender', 'login',
-                    'preview','getLevels'),
+                    'preview','getLevels', 'getAllBlockDisciplines'),
                 'users' => array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -359,8 +359,12 @@ class RenderController extends Controller
 
     public function actionExportToOffline()
     {
+
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             $array_actorsInClassroom = [];
+
+            //var_dump($_REQUEST['cobject_block']);exit();
+
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
                 $school = School::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
@@ -379,7 +383,7 @@ class RenderController extends Controller
                 $array_actorsInClassroom = [];
             }
 
-            $nameDisciplineSelected = "";
+            $namesDisciplinesSelected = array();
             //Obter as disciplinas
             $disciplines = ActDiscipline::model()->findAll();
             $array_disciplines = array();
@@ -387,75 +391,88 @@ class RenderController extends Controller
                 $array_disciplines[$idx]['id'] = $discipline->id;
                 $array_disciplines[$idx]['name'] = $discipline->name;
 
-                if ($_POST['discipline'] == $discipline->id) {
-                    $nameDisciplineSelected = substr($discipline->name, 0, 3);
-                }
-            endforeach;
-
-            //Obter o CobjectBloco Selecionado
-            $cobjectBlock = Cobjectblock::model()->findByPk($_REQUEST['cobject_block']);
-            $array_cobjectBlock = array();
-            $array_cobjectBlock[0]['id'] = $cobjectBlock->id;
-            $array_cobjectBlock[0]['name'] = $cobjectBlock->name;
-            $array_cobjectBlock[0]['discipline_id'] = $cobjectBlock->discipline_id;
-
-            //Obter os Cobject_cobjectBlock do CobjectBlock acima
-            //Somente obterá Cobjects(atividades) únicos em cada bloco, ou seja não haverá repetição de atividades num mesmo bloco.
-            $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
-                array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
-
-            $array_cobject_cobjectBlocks = array();
-
-            foreach ($cobject_cobjectBlocks as $idx => $cobject_cobjectBlock):
-                $array_cobject_cobjectBlocks[$idx]['id'] = $cobject_cobjectBlock->id;
-                $array_cobject_cobjectBlocks[$idx]['cobject_id'] = $cobject_cobjectBlock->cobject_id;
-                $array_cobject_cobjectBlocks[$idx]['cobject_block_id'] = $cobject_cobjectBlock->cobject_block_id;
-            endforeach;
-
-            //Obter o Cobject id e json
-            if (isset($_REQUEST['cobject_block'])) {
-                //Para cada Cobject do bloco armazenar sua "view"
-                $cobject_block_id = $_REQUEST['cobject_block'];
-                $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
-                $json_cobjects = array();
-                //Arquivo ZIP ALL
-                $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
-                $this->tempArchiveZipMultiMedia = new ZipArchive;
-                $this->tempArchiveZipMultiMedia->open('exports/' . $zipname, ZipArchive::CREATE);
-                $this->tempArchiveZipMultiMedia->addEmptyDir("library/image/");
-                $this->tempArchiveZipMultiMedia->addEmptyDir("library/sound/");
-                $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
-
-                foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
-                    $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
-                    if (ISSET($jsonRenderView)) {
-                        //Só dá o push no array, sse o jsonRenderView for diferente de NULL
-                        array_push($json_cobjects, $jsonRenderView);
-                    }
+                //Varrer as disciplinas
+                foreach($_POST['disciplines'] AS $current_discipline):
+                     if ($current_discipline == $discipline->id) {
+                         //Encontrou
+                         array_push($namesDisciplinesSelected, substr($discipline->name, 0, 3));
+                         break;
+                     }
                 endforeach;
 
-                // Fazer Download no Final
-                //Arquivo Json para adcionar no ZIP
-                $json = array();
-                //Tratar Separação no JS
-                $json['ActorsInClassroom'] = $array_actorsInClassroom;
-                $json['Disciplines'] = $array_disciplines;
-                $json['CobjectBlock'] = $array_cobjectBlock;
-                $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
-                $json['Cobjects'] = $json_cobjects;
-                $json_encode = "var dataJson$nameDisciplineSelected = ";
-                $json_encode .= json_encode($json);
-                $json_encode .= ";";
+            endforeach;
 
-                $this->tempArchiveZipMultiMedia->addFromString("json/renderData$nameDisciplineSelected.js", $json_encode);
+            //Arquivos Modo Avaliação  $_REQUEST['disciplines']
+            //Realizar o Download do arquivo de exportação para cada bloco
+            //STOP HERE - Garantir a relação BLOCK E DISCIPLINE !!!
+            $countBlocks = 0;
+            foreach ($_REQUEST['cobject_block'] AS $current_cobject_block):
+                //Obter o CobjectBloco Selecionado
+                $cobjectBlock = Cobjectblock::model()->findByPk($current_cobject_block);
+                $array_cobjectBlock = array();
+                $array_cobjectBlock[0]['id'] = $cobjectBlock->id;
+                $array_cobjectBlock[0]['name'] = $cobjectBlock->name;
+                $array_cobjectBlock[0]['discipline_id'] = $cobjectBlock->discipline_id;
 
-                //Salva as alterações no zip
-                $this->tempArchiveZipMultiMedia->close();
+                //Obter os Cobject_cobjectBlock do CobjectBlock acima
+                //Somente obterá Cobjects(atividades) únicos em cada bloco, ou seja não haverá repetição de atividades num mesmo bloco.
+                $cobject_cobjectBlocks = CobjectCobjectblock::model()->findAllByAttributes(
+                    array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
 
-                if (file_exists('exports/' . $zipname)) {
-                    header('location: ../exports/' . $zipname);
+                $array_cobject_cobjectBlocks = array();
+
+                foreach ($cobject_cobjectBlocks as $idx => $cobject_cobjectBlock):
+                    $array_cobject_cobjectBlocks[$idx]['id'] = $cobject_cobjectBlock->id;
+                    $array_cobject_cobjectBlocks[$idx]['cobject_id'] = $cobject_cobjectBlock->cobject_id;
+                    $array_cobject_cobjectBlocks[$idx]['cobject_block_id'] = $cobject_cobjectBlock->cobject_block_id;
+                endforeach;
+
+                //Obter o Cobject id e json
+                if (isset($_REQUEST['cobject_block'])) {
+                    //Para cada Cobject do bloco armazenar sua "view"
+                    $cobject_block_id = $current_cobject_block;
+                    $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
+                    $json_cobjects = array();
+                    //Arquivo ZIP ALL
+                    $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
+                    $this->tempArchiveZipMultiMedia = new ZipArchive;
+                    $this->tempArchiveZipMultiMedia->open('exports/' . $zipname, ZipArchive::CREATE);
+                    $this->tempArchiveZipMultiMedia->addEmptyDir("library/image/");
+                    $this->tempArchiveZipMultiMedia->addEmptyDir("library/sound/");
+                    $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
+
+                    foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
+                        $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
+                        if (ISSET($jsonRenderView)) {
+                            //Só dá o push no array, sse o jsonRenderView for diferente de NULL
+                            array_push($json_cobjects, $jsonRenderView);
+                        }
+                    endforeach;
+
+                    // Fazer Download no Final
+                    //Arquivo Json para adcionar no ZIP
+                    $json = array();
+                    //Tratar Separação no JS
+                    $json['ActorsInClassroom'] = $array_actorsInClassroom;
+                    $json['Disciplines'] = $array_disciplines;
+                    $json['CobjectBlock'] = $array_cobjectBlock;
+                    $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
+                    $json['Cobjects'] = $json_cobjects;
+                    $json_encode = "var dataJson$namesDisciplinesSelected[$countBlocks] = ";
+                    $json_encode .= json_encode($json);
+                    $json_encode .= ";";
+
+                    $this->tempArchiveZipMultiMedia->addFromString("json/renderData$namesDisciplinesSelected[$countBlocks].js", $json_encode);
+
+                    //Salva as alterações no zip
+                    $this->tempArchiveZipMultiMedia->close();
+
+                    if (file_exists('exports/' . $zipname)) {
+                        header('location: ../exports/' . $zipname);
+                    }
                 }
-            }
+                $countBlocks++;
+            endforeach;
         } else {
             //Carrega a página para exportar para o render Offline
             $this->render("exportToOffline");
@@ -833,25 +850,39 @@ class RenderController extends Controller
         echo json_encode($json);
     }
 
+    //Responsável por retornar todas as disciplinas que possui algum bloco associado
+    public function actionGetAllBlockDisciplines()
+    {
+        $allBlockDisciplineID = Cobjectblock::model()->findAll(array('group'=>'discipline_id'));
+        $allBlockDiscipline = array();
+        foreach($allBlockDisciplineID AS $blocoDisciplineID):
+            //Pesquisar o nome de cada disciplina encontrada e armazenar num array
+            $discipline =  ActDiscipline::model()->findByPk($blocoDisciplineID->discipline_id);
+            $allBlockDiscipline[$discipline->id] = $discipline->name;
+        endforeach;
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($allBlockDiscipline);
+    }
+
     public function actionGetLevels()
     {
         if(ISSET($_POST['school_id']) && $_POST['school_id'] != 'null') {
             $school_id = $_POST['school_id'];
             //Buscar todas os levels(anos) dessa escola
             //Para isso precisa encontrar todas as turmas e agrupá-las de acordo com o nível
-            $levels = Classroom::model()->findAllByAttributes(array('school_fk'=>$school_id), array('group'=>'stage_fk'));
-
-            var_dump($levels);exit(); //STOP HERE - Must show all Stage name
-
-            $allLevels = ActDiscipline::model()->findAll();
-            $json = array();
-            foreach ($allLevels as $discipline):
-                $json[$discipline->id] = $discipline->name;
+            $classrooms = Classroom::model()->findAllByAttributes(array('school_fk'=>$school_id), array('group'=>'stage_fk'));
+            //Para cada stage_fk existeste na escola
+            //Armazena num array de stage
+            $stagesInSchool = array();
+            foreach($classrooms AS $classroom):
+            $stagesInSchool[$classroom->stageFk->id] = $classroom->stageFk->name;
             endforeach;
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');
-            echo json_encode($json);
+            echo json_encode($stagesInSchool);
         }
     }
 

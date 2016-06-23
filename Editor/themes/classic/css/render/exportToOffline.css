@@ -1,0 +1,38 @@
+#exportToOffline{
+    margin-top: 70px;
+    margin-left: 20px;
+}
+#btn-download{
+    width: 80px;
+    height: 80px;
+}
+fieldset{
+    border: 1px solid !important;
+    text-align: center;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+#fds-main {
+    border: 2px solid !important;
+    width: 700px;
+    height: 400px;
+}
+
+#fds-diag {
+    width: 700px;
+
+}
+
+.Table{
+    display: table;
+}
+.Row{
+    display: table-row;
+}
+
+.Col{
+    display: table-cell;
+    padding: 4px 4px 4px 4px;
+}
+
