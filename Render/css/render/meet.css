@@ -178,7 +178,7 @@ body {
 .addNewUser input, .addNewUser select{
     height:30px;
     font-size: 27px;
-} 
+}
 
 .exit {
     background: #666666;
@@ -213,6 +213,39 @@ body {
     border: none;
     border-radius: 3px;
     color: #fff;
+    font-family: tellural, helvetica, arial, sans-serif;
+    font-size: 36px;
+    padding: 20px 40px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+#pincode{
+  text-align: center;
+}
+.message-button-pincode {
+    border: none;
+    border-radius: 3px;
+    color: blue;
+    font-family: tellural, helvetica, arial, sans-serif;
+    font-size: 36px;
+    padding: 20px 40px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.message-button-confirm {
+    border: none;
+    border-radius: 3px;
+    color: green;
+    font-family: tellural, helvetica, arial, sans-serif;
+    font-size: 36px;
+    padding: 20px 40px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.message-button-cancel {
+    border: none;
+    border-radius: 3px;
+    color: red;
     font-family: tellural, helvetica, arial, sans-serif;
     font-size: 36px;
     padding: 20px 40px;
@@ -369,7 +402,7 @@ td.marked{
 }
 
 div.piece.DES{
-    
+
 }
 
 div.draw-point {
@@ -395,5 +428,5 @@ div.draw-point {
 
 .selectedItem {
     border: 3px dashed rgb(251, 176, 59);
-    
+
 }
