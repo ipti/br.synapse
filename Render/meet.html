@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html> 
+<html>
     <head>
         <script type="text/javascript">
             if (sessionStorage.getItem("authorization") == null || sessionStorage.getItem("authorization") == 'false') {
@@ -45,12 +45,12 @@
         <script type="text/javascript" src="js/render/domcobject.js"></script>
         <script type="text/javascript" src="js/jquery.shuffle.js"></script>
 
-        <!-- Abrir Script do renderDB --> 
+        <!-- Abrir Script do renderDB -->
         <script type="text/javascript" src="db/renderDB.js"></script>
         <script type="text/javascript" src="db/onlineRenderDB.js"></script>
-        <!-- Abrir Script do meetEvaluation --> 
+        <!-- Abrir Script do meetEvaluation -->
         <script type="text/javascript" src="js/render/meetEvaluation.js"></script>
-          <!-- Abrir Script do meetProficiency --> 
+          <!-- Abrir Script do meetProficiency -->
         <script type="text/javascript" src="js/render/meetProficiency.js"></script>
         <script type="text/javascript" src="js/render/meetPreview.js"></script>
 
@@ -61,7 +61,7 @@
 
             /**
              * @param {mixed} variable The variable to check.
-             * 
+             *
              * @returns {boolean} A Boolean containing TRUE if the variable is seted and FALSE if it's not seted.
              */
             function isset(variable) {
@@ -70,7 +70,7 @@
             /**
              * @param {DOMString} IF A DOMString containing the name of the key you want to retrieve the value of.
              * @param {DOMString} ELSE A DOMString containing the name of the key you want to retrieve the value of in case that IF is not seted.
-             * 
+             *
              * @returns {DOMString} A DOMString containing the value of the key. If the key does not exist, null is returned.
              */
             function sessionGet(IF, ELSE) {
@@ -101,13 +101,13 @@
                     console.log("Suporta BD-HTML5");
 
                     var org = '';
-                    
+
                     var classroomID = sessionGet('id_classroom');
                     var classroomName = sessionGet('name_classroom');
-                    
-                    //var unityfather_name = ''; 
+
+                    //var unityfather_name = '';
                     var organizationName = '';
-                    
+
                     //Obter o modo do render na sessão
                     var render_mode = sessionGet('render_mode');
                     var selected_level_evaluation = sessionGet('selected_level_evaluation');
@@ -129,7 +129,7 @@
                      break; //Linguagem
                      case '2':
                      block_id = '';
-                     break; //Matemática   
+                     break; //Matemática
                      } */
 
                     var options = {
@@ -182,8 +182,8 @@
                         });
 
                     //======================================
-                    
-                     //Carregar Turmas da escola Selecionada 
+
+                     //Carregar Turmas da escola Selecionada
                     $('#regSchool').on('change', function () {
                         var school_id = $(this).val();
                         Meet.DB_synapse.findClassroomBySchool(school_id, function (listClassrooms) {
@@ -229,6 +229,11 @@
                         $("#finalize-message").hide();
                     });
 
+                    $(".message-button-pincode").click(function() {
+                       console.log($(this).attr("value"));
+                       $("#pincode").val($("#pincode").attr("value") + $(this).attr("value"));
+                     });
+
                     $('#btnAddNewUser').on('tap', function () {
                         var usrName = $('#regNome_aluno').val();
                         if (usrName.replace(/\s/g, '') === '') {
@@ -242,7 +247,7 @@
                             }else{
                                 alert('Sem Turma!');
                             }
-                            
+
 
                         }
                     });
@@ -252,7 +257,7 @@
 
         </script>
         <title>Render</title>
-        <link rel="icon" type="image/png" href="icons/icon-48.png" /> 
+        <link rel="icon" type="image/png" href="icons/icon-48.png" />
     </head>
     <body id="synapse" ondragstart='return true'>
 
@@ -300,7 +305,7 @@
             <a href="#"><i class="fa fa-bars"></i></a>
         </div>
 
-        <div id="message"> 
+        <div id="message">
         </div>
 
         <div id="render_canvas">
@@ -328,11 +333,11 @@
                 <select name="regSchool" id="regSchool">
                 </select>
                 <label for="regClassroom">Turma</label>
-                <select name="regClassroom" id="regClassroom"> 
+                <select name="regClassroom" id="regClassroom">
                 </select>
 
                 <label for="regNome_aluno">Nome do Aluno*</label>
-                <input type="text" size="20" maxlength="40" name="regNome_aluno" id="regNome_aluno"/> 
+                <input type="text" size="20" maxlength="40" name="regNome_aluno" id="regNome_aluno"/>
                 <button class="message-button-addNewUser" id="btnAddNewUser">Registrar</button>
             </div>
         </div>
@@ -358,9 +363,20 @@
         <!-- Encerrar atividade -->
         <div id="finalize-message" class="overlay">
             <div class="message-container exit">
-                <p class="message">Deseja encerrar<br>o atendimento desse aluno?</p>
-                <img id="finalize-icon" class="message-icon" src="img/icons/hit.png">
-                <img id="close-icon" class="message-icon" src="img/icons/error.png">
+                <p class="message">Deseja encerrar o atendimento desse aluno?</p>
+                <input type="password"size="20" maxlength="40" name="pincode" id="pincode" placeholder="Digite o PIN"/>
+                <button id="pincoden7" class="message-button-pincode" value="7">7</button>
+                <button id="pincoden8" class="message-button-pincode" value="8">8</button>
+                <button id="pincoden9" class="message-button-pincode" value="9">9</button></br>
+                <button id="pincoden4" class="message-button-pincode" value="4">4</button>
+                <button id="pincoden5" class="message-button-pincode" value="5">5</button>
+                <button id="pincoden6" class="message-button-pincode" value="6">6</button></br>
+                <button id="pincoden1" class="message-button-pincode" value="1">1</button>
+                <button id="pincoden2" class="message-button-pincode" value="2">2</button>
+                <button id="pincoden3" class="message-button-pincode" value="3">3</button></br>
+                <button id="pincoden0" class="message-button-pincode" value="0">0</button>
+                <button id="close-icon" class="message-button-cancel">Cancelar</button>
+                <button id="finalize-icon" class="message-button-confirm">Confirmar</button>
             </div>
         </div>
 
@@ -384,4 +400,3 @@
 
     </body>
 </html>
-
