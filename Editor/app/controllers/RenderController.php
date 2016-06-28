@@ -359,12 +359,8 @@ class RenderController extends Controller
 
     public function actionExportToOffline()
     {
-
         if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
             $array_actorsInClassroom = [];
-
-            //var_dump($_REQUEST['cobject_block']);exit();
-
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
                 $school = School::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
@@ -390,22 +386,17 @@ class RenderController extends Controller
             foreach ($disciplines as $idx => $discipline):
                 $array_disciplines[$idx]['id'] = $discipline->id;
                 $array_disciplines[$idx]['name'] = $discipline->name;
-
                 //Varrer as disciplinas
                 foreach($_POST['disciplines'] AS $current_discipline):
                      if ($current_discipline == $discipline->id) {
                          //Encontrou
-                         array_push($namesDisciplinesSelected, substr($discipline->name, 0, 3));
+                         $namesDisciplinesSelected[$discipline->id] = substr($discipline->name, 0, 3);
                          break;
                      }
                 endforeach;
-
             endforeach;
-
-            //Arquivos Modo Avaliação  $_REQUEST['disciplines']
-            //Realizar o Download do arquivo de exportação para cada bloco
-            //STOP HERE - Garantir a relação BLOCK E DISCIPLINE !!!
-            $countBlocks = 0;
+            //Arquivos do MODO AVALIAÇÃO
+            //Realizar o Download doS arquivoS de exportação para CADA bloco
             foreach ($_REQUEST['cobject_block'] AS $current_cobject_block):
                 //Obter o CobjectBloco Selecionado
                 $cobjectBlock = Cobjectblock::model()->findByPk($current_cobject_block);
@@ -420,7 +411,6 @@ class RenderController extends Controller
                     array('cobject_block_id' => $array_cobjectBlock[0]['id']), array('group' => "cobject_id"));
 
                 $array_cobject_cobjectBlocks = array();
-
                 foreach ($cobject_cobjectBlocks as $idx => $cobject_cobjectBlock):
                     $array_cobject_cobjectBlocks[$idx]['id'] = $cobject_cobjectBlock->id;
                     $array_cobject_cobjectBlocks[$idx]['cobject_id'] = $cobject_cobjectBlock->cobject_id;
@@ -453,25 +443,23 @@ class RenderController extends Controller
                     //Arquivo Json para adcionar no ZIP
                     $json = array();
                     //Tratar Separação no JS
+                    $current_block_discipline_id = $cobjectBlock->discipline_id;
                     $json['ActorsInClassroom'] = $array_actorsInClassroom;
                     $json['Disciplines'] = $array_disciplines;
                     $json['CobjectBlock'] = $array_cobjectBlock;
                     $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
                     $json['Cobjects'] = $json_cobjects;
-                    $json_encode = "var dataJson$namesDisciplinesSelected[$countBlocks] = ";
+                    $json_encode = "var dataJson$namesDisciplinesSelected[$current_block_discipline_id] = ";
                     $json_encode .= json_encode($json);
                     $json_encode .= ";";
-
-                    $this->tempArchiveZipMultiMedia->addFromString("json/renderData$namesDisciplinesSelected[$countBlocks].js", $json_encode);
-
+                    $this->tempArchiveZipMultiMedia->addFromString("json/renderData$namesDisciplinesSelected[$current_block_discipline_id].js", $json_encode);
                     //Salva as alterações no zip
                     $this->tempArchiveZipMultiMedia->close();
-
                     if (file_exists('exports/' . $zipname)) {
                         header('location: ../exports/' . $zipname);
                     }
                 }
-                $countBlocks++;
+
             endforeach;
         } else {
             //Carrega a página para exportar para o render Offline
