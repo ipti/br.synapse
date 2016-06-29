@@ -1,99 +1,101 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <title>Entrar no Synapse</title>
-        <link rel="icon" type="image/png" href="icons/icon-48.png" /> 
-        <link rel="stylesheet" type="text/css" href="css/reset.css">
-        <link rel="stylesheet" type="text/css" href="css/render/global.css">
-        <link rel="stylesheet" type="text/css" href="css/render/selectStudentRender.css">
-        <link rel="stylesheet" type="text/css" href="css/render/login.css">
-        <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
-        <script src="js/jquery/jquery-1.7.2.js"></script>
-        <script src="js/jquery/jquery.ui.core.js"></script>
-        <script src="js/jquery/jquery.ui.widget.js"></script>
-        <script src="js/jquery/jquery.ui.mouse.js"></script>
-        <script src="js/jquery/jquery.ui.draggable.js"></script>
-        <script src="js/jquery/jquery.ui.droppable.js"></script>
-        <script type="text/javascript" src="db/renderDB.js"></script>
-        <script type="text/javascript" src="js/render/select.js"></script>
-        <script type="text/javascript" src="js/render/meet.js"></script>
-    </head>
 
-    <body>
-        <script type="text/javascript">
-            if (sessionStorage.getItem("authorization") === null || sessionStorage.getItem("authorization") === 'false') {
-                location.href = 'login.html';
-            }
-        </script>
-        <div class="bg-select bg-left"></div>
-        <div class="bg-select bg-right"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>Entrar no Synapse</title>
+    <link rel="icon" type="image/png" href="icons/icon-48.png" />
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/render/global.css">
+    <link rel="stylesheet" type="text/css" href="css/render/selectStudentRender.css">
+    <link rel="stylesheet" type="text/css" href="css/render/login.css">
+    <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
+    <script src="js/jquery/jquery-1.7.2.js"></script>
+    <script src="js/jquery/jquery.ui.core.js"></script>
+    <script src="js/jquery/jquery.ui.widget.js"></script>
+    <script src="js/jquery/jquery.ui.mouse.js"></script>
+    <script src="js/jquery/jquery.ui.draggable.js"></script>
+    <script src="js/jquery/jquery.ui.droppable.js"></script>
+    <script type="text/javascript" src="db/renderDB.js"></script>
+    <script type="text/javascript" src="js/render/select.js"></script>
+    <script type="text/javascript" src="js/render/meet.js"></script>
+</head>
 
-        <section id="select-student">
-            <div class="block pull-left">
-                <label class="login-label" for="classroom">Escolher Turma</label>
-                <br>
-                <select id="classroom">
-                    <option value="-1">Carregando...</option>
-                </select>
-            </div>
-            <div class="block pull-right">
-                <label class="login-label" for="actor">Escolher Aluno</label>
-                <br>
-                <select id="actor" >
-                    <option value="-1">Carregando...</option>
-                </select>
-            </div>
+<body>
+    <script type="text/javascript">
+        if (sessionStorage.getItem("authorization") === null || sessionStorage.getItem("authorization") === 'false') {
+            location.href = 'login.html';
+        }
+    </script>
+    <div class="bg-select bg-left"></div>
+    <div class="bg-select bg-right"></div>
+
+    <section id="select-student">
+        <div class="block pull-left">
+            <label class="login-label" for="classroom">Escolher Turma</label>
             <br>
-        </section>
-
-        <section id="select-discipline">
-            <div class="discipline" id="discipline_language"  discipline="1">
-                <img src="img/icons/discipline-language.png" alt="Linguagem" />
-                <button class="discipline-button">Linguagem</button>
-            </div>
-            <div class="discipline" id="discipline_math" discipline="2">
-                <img src="img/icons/discipline-math.png" alt="Matemática">
-                <button class="discipline-button">Matemática</button>
-            </div>
-        </section>
-
-
-        <!-- Selecionar Modo do Render -->
-        <div id="select-mode" class="modal_message overlay">
-            <div class="message-container">
-                <div class="modal-title">
-                    Selecionar Módulo
-                </div>
-                <div class="message-form">
-                </div>
-                <select name="mode" id="mode">
-                    <option value="-1">Selecione</option>
-                    <option value="evaluation">Avaliação</option>
-                    <option value="proficiency">Proficiência</option>
-                    <option value="training">Treino</option>
-                </select>
-            </div>
+            <select id="classroom">
+                <option value="-1">Carregando...</option>
+            </select>
         </div>
-
-
-        <!-- Selecionar Nível da Atividade -->
-        <div id="select-level" class="modal_message overlay">
-            <div class="message-container">
-                <div class="modal-title">
-                    Selecionar Nível da Atividade
-                </div>
-                <div class="message-form">
-                </div>
-                <select name="level" id="level">
-                    <option value="-1">Selecione o Nível</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
+        <div class="block pull-right">
+            <label class="login-label" for="actor">Escolher Aluno</label>
+            <br>
+            <select id="actor">
+                <option value="-1">Carregando...</option>
+            </select>
         </div>
+        <br>
+    </section>
 
-    </body>
+    <section id="select-discipline">
+        <div class="discipline" id="discipline_language" discipline="1">
+            <img src="img/icons/discipline-language.png" alt="Linguagem" />
+            <button class="discipline-button">Linguagem</button>
+        </div>
+        <div class="discipline" id="discipline_math" discipline="2">
+            <img src="img/icons/discipline-math.png" alt="Matemática">
+            <button class="discipline-button">Matemática</button>
+        </div>
+    </section>
+
+
+    <!-- Selecionar Modo do Render -->
+    <div id="select-mode" class="modal_message overlay">
+        <div class="message-container">
+            <div class="modal-title">
+                Selecionar Módulo
+            </div>
+            <div class="message-form">
+            </div>
+            <select name="mode" id="mode">
+                <option value="-1">Selecione</option>
+                <option value="evaluation">Avaliação</option>
+                <option value="proficiency">Proficiência</option>
+                <option value="training">Treino</option>
+            </select>
+        </div>
+    </div>
+
+
+    <!-- Selecionar Nível da Atividade -->
+    <div id="select-level" class="modal_message overlay">
+        <div class="message-container">
+            <div class="modal-title">
+                Selecionar Nível da Atividade
+            </div>
+            <div class="message-form">
+            </div>
+            <select name="level" id="level">
+                <option value="-1">Selecione o Nível</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+    </div>
+
+</body>
+
 </html>

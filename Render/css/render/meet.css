@@ -5,7 +5,6 @@ body {
     background-color: #D1E0CD;
     background-repeat: repeat;
     font-family: asap, helvetica, arial, sans-serif;
-
     //Não deixar selecionar elementos no html
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -13,10 +12,10 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-
 }
 
 /** Barra de informações **/
+
 #head_meet {
     width: 240px;
     position: fixed;
@@ -31,54 +30,45 @@ body {
     z-index: 10000;
     background-image: url("../../img/background-left.png");
 }
-
 .close-bar {
     padding: 5px 10px;
     float: left;
     font-size: 28px;
 }
-
 .close-bar a {
     color: #000;
     opacity: .8;
 }
-
 .logo-bar img {
     width: 90px;
     opacity: .8;
     float: right;
 }
-
-
 .drawer-header, .drawer-body-top, .drawer-body-middle, .drawer-footer {
     color: #000;
     font-size: 20px;
     font-family: asap, arial, sans-serif;
 }
-
-.drawer-header, .drawer-body-top, .drawer-body-middle{
+.drawer-header, .drawer-body-top, .drawer-body-middle {
     border-bottom: 1px solid black;
 }
-.drawer-header{
+.drawer-header {
     height: 50px;
 }
-.drawer-body-top{
+.drawer-body-top {
     text-align: center;
 }
-.drawer-body-top, .drawer-body-middle{
+.drawer-body-top, .drawer-body-middle {
     height: 130px;
     padding: 10px 0;
 }
-
-.info-name{
+.info-name {
     height: 110px;
 }
-
 .info-icon {
     float: left;
     width: 40px;
 }
-
 .info-back {
     text-align: center;
     border-bottom: none;
@@ -87,7 +77,6 @@ body {
     color: #000;
     margin-right: 5px;
 }
-
 .info-exit {
     text-align: center;
     padding: 5px;
@@ -98,16 +87,13 @@ body {
     color: #000;
     margin-right: 5px;
 }
-
 .info-exit .info-icon {
     float: none;
 }
-
 .info-text {
     float: left;
     padding: 10px;
 }
-
 #info-button {
     position: absolute;
     top: 5px;
@@ -120,18 +106,15 @@ body {
     z-index: 1;
     font-size: 28px;
 }
-
 #info-button a {
     color: #fff;
 }
-
 .question-image-container {
     width: 50%;
     float: left;
     margin-right: 20px;
     list-style: none;
 }
-
 .question-title {
     font-size: 35px;
     line-height: 35px;
@@ -143,7 +126,6 @@ body {
 .answer-ok {
     vertical-align: middle;
 }
-
 .send-button {
     background: #ACDD31;
     border: none;
@@ -155,60 +137,48 @@ body {
 }
 
 /** Resposta tipo texto **/
+
 .answer input {
     margin: 0 0 50px 0;
     border: 9px solid #51b899;
     width: 672px;
     padding: 15px;
 }
-
-
 #hit-message, #error-message, #add-new-user {
     z-index: 100001;
 }
-
 .error {
     background: #FBB03B;
 }
-
 .success {
     background: #51b899;
 }
-
-.addNewUser input, .addNewUser select{
-    height:30px;
+.addNewUser input, .addNewUser select {
+    height: 30px;
     font-size: 27px;
 }
-
 .exit {
     background: #666666;
 }
-
 .message-container.addNewUser {
     background: rgba(78, 184, 152, 0.75);
     font-size: 25px;
 }
-
-.title-add-new-user{
-     font-size: 36px;
-     margin-bottom: 10px;
+.title-add-new-user {
+    font-size: 36px;
+    margin-bottom: 10px;
 }
-
-
 .message-container.exit {
     width: 500px;
     padding: 50px 30px;
 }
-
 .message-icon {
     width: 60px;
 }
-
 .message-container.exit .message-icon {
     margin: 50px 50px 0 50px;
     cursor: pointer;
 }
-
 .message-button {
     border: none;
     border-radius: 3px;
@@ -219,8 +189,8 @@ body {
     margin-top: 10px;
     cursor: pointer;
 }
-#pincode{
-  text-align: center;
+#pincode {
+    text-align: center;
 }
 .message-button-pincode {
     border: none;
@@ -252,7 +222,6 @@ body {
     margin-top: 10px;
     cursor: pointer;
 }
-
 .message-button-addNewUser {
     border: none;
     border-radius: 3px;
@@ -261,17 +230,14 @@ body {
     font-size: 20px;
     padding: 7px 14px;
     margin-top: 10px;
-    cursor:pointer;
+    cursor: pointer;
 }
-
 .error .message-button {
     background: #F18318;
 }
-
 .success .message-button {
     background: #ACDD31;
 }
-
 .btn_lastPage {
     width: 60px;
     heigth: 150px;
@@ -280,7 +246,6 @@ body {
     top: 40%;
     cursor: pointer
 }
-
 .btn_nextPage {
     width: 60px;
     heigth: 150px;
@@ -289,35 +254,31 @@ body {
     top: 40%;
     cursor: pointer;
 }
-
-.PLC-input{
+.PLC-input {
     width: 35px;
     height: 35px;
     margin: 1px;
     font-size: 30px;
     text-align: center;
 }
-input.PLC-input{
+input.PLC-input {
     border: 2px solid gray;
     border-radius: 2px;
 }
-
-input.PLC-input:read-only{
+input.PLC-input:read-only {
     background-color: lightgray;
     color: gray;
 }
-
-.PLC-table td{
+.PLC-table td {
     border: none;
     vertical-align: middle;
 }
-
-.DIG-table tbody{
+.DIG-table tbody {
     border: 1px solid gray;
     background-color: rgb(232, 232, 232);
     color: rgb(42, 42, 42);
 }
-.DIG-table td{
+.DIG-table td {
     border: none;
     vertical-align: middle;
     width: 35px;
@@ -325,43 +286,39 @@ input.PLC-input:read-only{
     margin: 1px;
     font-size: 30px;
     text-align: center;
-    cursor:pointer;
+    cursor: pointer;
 }
-
-.digHighlight{
+.digHighlight {
     pointer-events: none;
     z-index: 99999;
     position: absolute;
     width: 35px;
     height: 33px;
-    border: 2px solid rgb(226, 123, 23);;
+    border: 2px solid rgb(226, 123, 23);
+    ;
     border-radius: 15px;
     display: none;
 }
-
-.group.build_image{
+.group.build_image {
     width: 150px;
     height: 150px;
     margin-bottom: 15px;
 }
-
-.middle-words{
-    width:60%;
-    float:left;
+.middle-words {
+    width: 60%;
+    float: left;
     position: relative;
 }
-
-.middle-words table, .left-images div, .right-images div{
+.middle-words table, .left-images div, .right-images div {
     margin: 0 auto;
     position: relative;
 }
-
-.left-images  span, .right-images span {
+.left-images span, .right-images span {
     position: absolute;
     top: -4px;
     left: -20px;
 }
-.left-images  span, .right-images span, span.PLC-input {
+.left-images span, .right-images span, span.PLC-input {
     color: #F27E0C;
     /*text-shadow: 1px 1px 1px #000;*/
     font-size: 30px;
@@ -369,52 +326,42 @@ input.PLC-input:read-only{
     font-family: tellural;
     display: block;
 }
-.left-images{
-    width:20%;
+.left-images {
+    width: 20%;
     float: left;
 }
-.right-images{
-    width:20%;
-    float:left;
+.right-images {
+    width: 20%;
+    float: left;
 }
 .ask {
-    padding-top:10px;
+    padding-top: 10px;
 }
-
-body{
+body {
     overflow-y: hidden;
 }
-
-td.marked{
-    background-color:green;
+td.marked {
+    background-color: green;
 }
-
-.Table{
+.Table {
     display: table;
 }
-.Row{
+.Row {
     display: table-row;
 }
-
-.Col{
+.Col {
     display: table-cell;
     padding: 4px 4px 4px 4px;
 }
-
-div.piece.DES{
-
-}
-
+div.piece.DES {}
 div.draw-point {
-   border-radius: 100% 100% 100% 100%;
-   background-color: #4EB898;
-   width: 30px;
-   height: 30px;
-   margin:20px;
+    border-radius: 100% 100% 100% 100%;
+    background-color: #4EB898;
+    width: 30px;
+    height: 30px;
+    margin: 20px;
 }
-
-
-.desHighLight{
+.desHighLight {
     pointer-events: none;
     z-index: 99999;
     position: absolute;
@@ -425,8 +372,6 @@ div.draw-point {
     border-radius: 30px;
     display: none;
 }
-
 .selectedItem {
     border: 3px dashed rgb(251, 176, 59);
-
 }

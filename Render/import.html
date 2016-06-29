@@ -1,291 +1,289 @@
 <html>
-    <head>
-        <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen, projection" />
-        <link rel="stylesheet" type="text/css" href="css/render/global.css">
-        <link rel="stylesheet" type="text/css" href="css/render/admin.css">
-        <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
-        <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-        <!---[if lt IE 8]>
+
+<head>
+    <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen, projection" />
+    <link rel="stylesheet" type="text/css" href="css/render/global.css">
+    <link rel="stylesheet" type="text/css" href="css/render/admin.css">
+    <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
+    <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+    <!---[if lt IE 8]>
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
         <![endif]-->
-        <script src="js/jquery/jquery-1.7.2.js"></script>
-        <script src="js/jquery/jquery.ui.core.js"></script>
-        <script src="js/jquery/jquery.ui.widget.js"></script>
-        <script src="js/jquery/jquery.ui.mouse.js"></script>
-        <script src="js/jquery/jquery.ui.draggable.js"></script>
-        <script src="js/jquery/jquery.ui.droppable.js"></script>
+    <script src="js/jquery/jquery-1.7.2.js"></script>
+    <script src="js/jquery/jquery.ui.core.js"></script>
+    <script src="js/jquery/jquery.ui.widget.js"></script>
+    <script src="js/jquery/jquery.ui.mouse.js"></script>
+    <script src="js/jquery/jquery.ui.draggable.js"></script>
+    <script src="js/jquery/jquery.ui.droppable.js"></script>
 
 
-        <!-- JQUERY FOR MOBILE-->
-        <script>
+    <!-- JQUERY FOR MOBILE-->
+    <script>
+        //Condições de Redirecionamentos
 
-            //Condições de Redirecionamentos
+        if (sessionStorage.getItem("isOnline") !== null &&
+            sessionStorage.getItem("isOnline") == 'true') {
+            //Render Online, não precisa do Import
+            location.href = "select.html";
+        }
 
-            if (sessionStorage.getItem("isOnline") !== null &&
-                    sessionStorage.getItem("isOnline") == 'true') {
-                //Render Online, não precisa do Import
-                location.href = "select.html";
+        var authorization = sessionStorage.getItem("authorization");
+        var login_personage_name = sessionStorage.getItem("login_personage_name");
+        if (authorization == 'true') {
+            //Usuário Logado
+            if (login_personage_name != "admin") {
+                // Não é admin
+                location.href = "meet.html";
             }
+        } else {
+            //Volta pra a tela de login
+            location.href = "login.html";
+        }
 
-            var authorization = sessionStorage.getItem("authorization");
-            var login_personage_name = sessionStorage.getItem("login_personage_name");
-            if (authorization == 'true') {
-                //Usuário Logado
-                if (login_personage_name != "admin") {
-                    // Não é admin
-                    location.href = "meet.html";
+
+        //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
+        $(document).bind('mobileinit', function() {
+            $.mobile.changePage.defaults.changeHash = false;
+            $.mobile.hashListeningEnabled = false;
+            $.mobile.pushStateEnabled = false;
+        });
+    </script>
+
+    <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
+    <!-- ======= -->
+
+    <script type="text/javascript" src="js/render/meet.js"></script>
+    <script type="text/javascript" src="js/render/domcobject.js"></script>
+    <script type="text/javascript" src="js/jquery.shuffle.js"></script>
+    <!-- Abrir Script do renderDB -->
+    <script type="text/javascript" src="db/renderDB.js"></script>
+    <script type="text/javascript" src="data/json/renderDataLin.js"></script>
+    <script type="text/javascript" src="data/json/renderDataMat.js"></script>
+    <script>
+        function existInArray(array, id) {
+            for (var i in array) {
+                if (array[i].id == id) {
+                    return true;
                 }
-            } else {
-                //Volta pra a tela de login
-                location.href = "login.html";
+            }
+            return false;
+        }
+
+
+        $(document).ready(function() {
+            //Somente para retirar o 'loading' que o jquery cria automaticamente
+            $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
+
+            //Criar Objeto para Manipulação do Banco
+            var db = new DB();
+
+            function deleteDatabase() {
+                indexedDB.deleteDatabase("synapseDB");
             }
 
+            function buildAllSchemas() {
+                //1° Criar
+                var dataJsonLin = window["dataJsonLin"] !== undefined ? window["dataJsonLin"] : null;
+                var dataJsonMat = window["dataJsonMat"] !== undefined ? window["dataJsonMat"] : null;
 
-            //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
-            $(document).bind('mobileinit', function () {
-                $.mobile.changePage.defaults.changeHash = false;
-                $.mobile.hashListeningEnabled = false;
-                $.mobile.pushStateEnabled = false;
-            });
-        </script>
-
-        <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
-        <!-- ======= -->
-
-        <script type="text/javascript" src="js/render/meet.js"></script>
-        <script type="text/javascript" src="js/render/domcobject.js"></script>
-        <script type="text/javascript" src="js/jquery.shuffle.js"></script>
-        <!-- Abrir Script do renderDB -->
-        <script type="text/javascript" src="db/renderDB.js"></script>
-        <script type="text/javascript" src="data/json/renderDataLin.js"></script>
-        <script type="text/javascript" src="data/json/renderDataMat.js"></script>
-        <script>
-
-            function existInArray(array, id) {
-                for (var i in array) {
-                    if (array[i].id == id) {
-                        return true;
+                db.openDBuild(true, function(dataJsonLin, dataJsonMat) {
+                    if (dataJsonLin !== undefined && dataJsonLin !== null) {
+                        //Importar Linguagem
+                        importGeneral(dataJsonLin);
                     }
-                }
-                return false;
+                    if (dataJsonMat !== undefined && dataJsonMat !== null) {
+                        //Importar Matemática
+                        importGeneral(dataJsonMat);
+                    }
+                }, dataJsonLin, dataJsonMat);
+            }
+
+            function importGeneral(dataJson) {
+                var schools = new Array();
+                var unitys = new Array();
+                var actors = new Array();
+
+                //Percorrer todos objetos existentes no ActorsOwnUnity
+                $.each(dataJson.ActorsInClassroom, function(idx, object) {
+                    var tempSchool = {};
+                    tempSchool.id = object.school_id;
+                    tempSchool.name = object.school_name;
+                    if (!existInArray(schools, tempSchool.id)) {
+                        schools.push(tempSchool);
+                    }
+
+                    var tempUnity = {};
+                    tempUnity.id = object.classroom_id;
+                    //FK para a school
+                    tempUnity.school_id = object.school_id;
+                    tempUnity.name = object.classroom_name;
+                    if (!existInArray(unitys, tempUnity.id)) {
+                        unitys.push(tempUnity);
+                    }
+                    var tempActor = {};
+                    tempActor.id = object.id;
+                    tempActor.login = object.login;
+                    tempActor.name = object.name;
+                    tempActor.password = object.password;
+                    tempActor.personage_name = object.personage;
+                    //Chave Estrageira para a sua unidade
+                    tempActor.unity_id = object.classroom_id;
+                    if (!existInArray(actors, tempActor.id)) {
+                        actors.push(tempActor);
+                    }
+                });
+                var disciplines = dataJson.Disciplines;
+                var cobjectblock = dataJson.CobjectBlock;
+                var cobject_cobjectblocks = dataJson.Cobject_cobjectBlocks;
+                var cobjects = dataJson.Cobjects;
+
+                //2° Importar
+                db.importAllDataRender(schools, unitys, actors, disciplines, cobjectblock, cobject_cobjectblocks, cobjects);
+
             }
 
 
-            $(document).ready(function () {
-                //Somente para retirar o 'loading' que o jquery cria automaticamente
-                $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
-
-                //Criar Objeto para Manipulação do Banco
-                var db = new DB();
-
-                function deleteDatabase() {
-                    indexedDB.deleteDatabase("synapseDB");
-                }
-
-                function buildAllSchemas() {
-                    //1° Criar
-                    var dataJsonLin = window["dataJsonLin"] !== undefined ? window["dataJsonLin"] : null;
-                    var dataJsonMat = window["dataJsonMat"] !== undefined ? window["dataJsonMat"] : null;
-
-                    db.openDBuild(true, function (dataJsonLin, dataJsonMat) {
-                        if (dataJsonLin !== undefined && dataJsonLin !== null) {
-                            //Importar Linguagem
-                            importGeneral(dataJsonLin);
-                        }
-                        if (dataJsonMat !== undefined && dataJsonMat !== null) {
-                            //Importar Matemática
-                            importGeneral(dataJsonMat);
-                        }
-                    }, dataJsonLin, dataJsonMat);
-                }
-
-                function importGeneral(dataJson) {
-                    var schools = new Array();
-                    var unitys = new Array();
-                    var actors = new Array();
-
-                    //Percorrer todos objetos existentes no ActorsOwnUnity
-                    $.each(dataJson.ActorsInClassroom, function (idx, object) {
-                        var tempSchool = {};
-                        tempSchool.id = object.school_id;
-                        tempSchool.name = object.school_name;
-                        if (!existInArray(schools, tempSchool.id)) {
-                            schools.push(tempSchool);
-                        }
-
-                        var tempUnity = {};
-                        tempUnity.id = object.classroom_id;
-                        //FK para a school
-                        tempUnity.school_id = object.school_id;
-                        tempUnity.name = object.classroom_name;
-                        if (!existInArray(unitys, tempUnity.id)) {
-                            unitys.push(tempUnity);
-                        }
-                        var tempActor = {};
-                        tempActor.id = object.id;
-                        tempActor.login = object.login;
-                        tempActor.name = object.name;
-                        tempActor.password = object.password;
-                        tempActor.personage_name = object.personage;
-                        //Chave Estrageira para a sua unidade
-                        tempActor.unity_id = object.classroom_id;
-                        if (!existInArray(actors, tempActor.id)) {
-                            actors.push(tempActor);
-                        }
-                    });
-                    var disciplines = dataJson.Disciplines;
-                    var cobjectblock = dataJson.CobjectBlock;
-                    var cobject_cobjectblocks = dataJson.Cobject_cobjectBlocks;
-                    var cobjects = dataJson.Cobjects;
-
-                    //2° Importar
-                    db.importAllDataRender(schools, unitys, actors, disciplines, cobjectblock
-                            , cobject_cobjectblocks, cobjects);
-
-                }
-
-
-                $('#exportPerformances').bind('tap', function () {
-                  var callBack = function(jsonExport){
+            $('#exportPerformances').bind('tap', function() {
+                var callBack = function(jsonExport) {
                     //Realizar download da String
-                      //Se for um browser com o Chrome
-                      var pom = document.createElement('a');
+                    //Se for um browser com o Chrome
+                    var pom = document.createElement('a');
                     var current_date = new Date();
 
                     pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
-                    pom.setAttribute('download', 'perfomances(' + current_date.getDate() + '-' + current_date.getMonth()
-                            + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
+                    pom.setAttribute('download', 'perfomances(' + current_date.getDate() + '-' + current_date.getMonth() +
+                        '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
                     pom.click();
                     //========================================
                     //Se for um WEBKIT no Android, então o código a cima não funcionará.
                     // Então deixa que o APK Salve o arquivo de Export da performance
                     var current_date = new Date();
-                    location.href= 'import.html?txtName=perfomances(' + current_date.getDate() + '-' + current_date.getMonth()
-                            + '-' + current_date.getFullYear() + '_' + current_date.getTime() +')'
-                          +'&txtData=' + encodeURIComponent(jsonExport);
-                  };
-                 //===========================================
+                    location.href = 'import.html?txtName=perfomances(' + current_date.getDate() + '-' + current_date.getMonth() +
+                        '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')' +
+                        '&txtData=' + encodeURIComponent(jsonExport);
+                };
+                //===========================================
 
-                    db.exportPerformance_actor(callBack);
-                });
-
-                $('#exportToEEG').bind('tap', function () {
-                    var callBack = function(jsonExport, actorID){
-                        //Baixa um arquivo TXT do ExportToEEG desse Actor Corrente
-                        //Realizar download da String
-
-                        // Se for um brownser com o Chrome
-                        var pom = document.createElement('a');
-                        var current_date = new Date();
-                        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
-                        pom.setAttribute('download', 'textToExportEEG_ActorID_'+ actorID +'(' + current_date.getDate() + '-' + current_date.getMonth()
-                                + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
-                        pom.click();
-                        //======================================
-                        //Se for um WEBKIT no Android, então o código a cima não funcionará.
-                        // Então deixa que o APK Salve o arquivo de Export da performance para EEG
-                        //Baixará um arquivo por Aluno por vez
-                        var current_date = new Date();
-                        location.href= 'import.html?txtName=textToExportEEG_ActorID_'+ actorID +'(' + current_date.getDate() + '-' + current_date.getMonth()
-                                + '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')'
-                                +'&txtData=' + encodeURIComponent(jsonExport);
-                    }
-
-                    db.exportToEEG(callBack);
-                });
-
-                $('#installAll').on('tap', function () {
-                    //Somente realiza a instalação, após a confirmação
-                    //da senha do admin
-                    $("#import-confirm-admin-password").show();
-
-                });
-
-                //Função para realizar a INSTALAÇÃO COMPLETA
-                function importAll() {
-                    //Somente realiza a instalação, após a confirmação
-                    //da senha do admin
-                    var passWord = $("#password").val();
-                    db.confirmPassWordAdmin(passWord, function (passWordOk) {
-                        if (passWordOk) {
-                            //Confirmado!
-                            deleteDatabase();
-                            buildAllSchemas();
-
-                            //Limpar mensagens e inputs do form
-                            $(".message-form").html("");
-                            $("#password").val("");
-                            //Sair do Modal
-                            $("#import-confirm-admin-password").hide();
-                        } else {
-                            //Senha incorreta
-                            $(".message-form").html("Senha Incorreta!");
-                        }
-                    });
-                }
-
-                $('input#password').on('keypress', function(e){
-                    if (e.keyCode == 13) {
-                        importAll();
-                    }
-                });
-
-                $('#btnConfirmPassword').on('tap', function () {
-                    importAll();
-                });
-
-                $('#btnClose').on('tap', function () {
-                    //Sair do Modal
-                    $("#import-confirm-admin-password").hide();
-                });
-
-
-                $('#back').bind('tap', function () {
-                    location.href = "select.html";
-                });
+                db.exportPerformance_actor(callBack);
             });
 
-        </script>
-        <title>Import</title>
-        <link rel="icon" type="image/png" href="icons/icon-48.png" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
+            $('#exportToEEG').bind('tap', function() {
+                var callBack = function(jsonExport, actorID) {
+                    //Baixa um arquivo TXT do ExportToEEG desse Actor Corrente
+                    //Realizar download da String
 
-    <body>
-        <section id="export-form">
-            <div id="export_data">
-                <button class="export-button buttons" type="button" id="exportPerformances"> Exportar Performance</button>
-                <button class="export-button buttons" type="button" id="exportToEEG"> Exportar para EEG</button>
-            </div>
-        </section>
+                    // Se for um brownser com o Chrome
+                    var pom = document.createElement('a');
+                    var current_date = new Date();
+                    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));
+                    pom.setAttribute('download', 'textToExportEEG_ActorID_' + actorID + '(' + current_date.getDate() + '-' + current_date.getMonth() +
+                        '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')');
+                    pom.click();
+                    //======================================
+                    //Se for um WEBKIT no Android, então o código a cima não funcionará.
+                    // Então deixa que o APK Salve o arquivo de Export da performance para EEG
+                    //Baixará um arquivo por Aluno por vez
+                    var current_date = new Date();
+                    location.href = 'import.html?txtName=textToExportEEG_ActorID_' + actorID + '(' + current_date.getDate() + '-' + current_date.getMonth() +
+                        '-' + current_date.getFullYear() + '_' + current_date.getTime() + ')' +
+                        '&txtData=' + encodeURIComponent(jsonExport);
+                }
 
-        <section id="import-form">
-            <div id="import_data">
-                <button class="import-button buttons" type="button" id="installAll" name="installAll" >Instalar</button>
-                <button class="back-button buttons" type="button" id="back" name="back" >Voltar</button>
-            </div>
-        </section>
+                db.exportToEEG(callBack);
+            });
+
+            $('#installAll').on('tap', function() {
+                //Somente realiza a instalação, após a confirmação
+                //da senha do admin
+                $("#import-confirm-admin-password").show();
+
+            });
+
+            //Função para realizar a INSTALAÇÃO COMPLETA
+            function importAll() {
+                //Somente realiza a instalação, após a confirmação
+                //da senha do admin
+                var passWord = $("#password").val();
+                db.confirmPassWordAdmin(passWord, function(passWordOk) {
+                    if (passWordOk) {
+                        //Confirmado!
+                        deleteDatabase();
+                        buildAllSchemas();
+
+                        //Limpar mensagens e inputs do form
+                        $(".message-form").html("");
+                        $("#password").val("");
+                        //Sair do Modal
+                        $("#import-confirm-admin-password").hide();
+                    } else {
+                        //Senha incorreta
+                        $(".message-form").html("Senha Incorreta!");
+                    }
+                });
+            }
+
+            $('input#password').on('keypress', function(e) {
+                if (e.keyCode == 13) {
+                    importAll();
+                }
+            });
+
+            $('#btnConfirmPassword').on('tap', function() {
+                importAll();
+            });
+
+            $('#btnClose').on('tap', function() {
+                //Sair do Modal
+                $("#import-confirm-admin-password").hide();
+            });
 
 
-        <!-- Modals -->
+            $('#back').bind('tap', function() {
+                location.href = "select.html";
+            });
+        });
+    </script>
+    <title>Import</title>
+    <link rel="icon" type="image/png" href="icons/icon-48.png" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
 
-        <!-- Confirmação da Senha do Admin -->
-        <div id="import-confirm-admin-password" class="modal_message overlay">
-            <div class="message-container confirmAdminPassword">
-                <div class="title-confirm-admin-password">
-                    Confirmar Senha do Administrador
-                </div>
-                <div class="message-form">
-                </div>
-                <input type="password" size="20" maxlength="40" name="password" id="password"/>
-                <button class="message-button-confirm-admin-password" id="btnConfirmPassword">Confirmar</button>
-                <button class="message-button-confirm-admin-password" id="btnClose">Sair</button>
-            </div>
+<body>
+    <section id="export-form">
+        <div id="export_data">
+            <button class="export-button buttons" type="button" id="exportPerformances"> Exportar Performance</button>
+            <button class="export-button buttons" type="button" id="exportToEEG"> Exportar para EEG</button>
         </div>
+    </section>
+
+    <section id="import-form">
+        <div id="import_data">
+            <button class="import-button buttons" type="button" id="installAll" name="installAll">Instalar</button>
+            <button class="back-button buttons" type="button" id="back" name="back">Voltar</button>
+        </div>
+    </section>
 
 
-    </body>
+    <!-- Modals -->
+
+    <!-- Confirmação da Senha do Admin -->
+    <div id="import-confirm-admin-password" class="modal_message overlay">
+        <div class="message-container confirmAdminPassword">
+            <div class="title-confirm-admin-password">
+                Confirmar Senha do Administrador
+            </div>
+            <div class="message-form">
+            </div>
+            <input type="password" size="20" maxlength="40" name="password" id="password" />
+            <button class="message-button-confirm-admin-password" id="btnConfirmPassword">Confirmar</button>
+            <button class="message-button-confirm-admin-password" id="btnClose">Sair</button>
+        </div>
+    </div>
+
+
+</body>
+
 </html>
