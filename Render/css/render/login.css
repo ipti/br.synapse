@@ -1,196 +1,200 @@
 body {
-	background: #FEDFA3;
-	background-image: -webkit-gradient(radial,center center,0,center center,460,from(#F5DBAF),to(#FEDFA3));
-	font-family: asap, helvetica, arial, sans-serif;
-	overflow: hidden;
+    background: #FEDFA3;
+    background-image: -webkit-gradient(radial, center center, 0, center center, 460, from(#F5DBAF), to(#FEDFA3));
+    font-family: asap, helvetica, arial, sans-serif;
+    overflow: hidden;
 }
-
- .bg-login {
- 	position: absolute;
- 	top: -15%;
-	-webkit-animation: showLogin 4.3s ease;
-	-moz-animation: showLogin 4.3s ease;
-	overflow: hidden;
-	height: 115%;
- }
-
- .bg-left {
- 	background: url(../../img/background-left.png) no-repeat;
- 	width: 309px;
- }
-
- .bg-right {
- 	background: url(../../img/background-right.png) no-repeat;
- 	width: 301px;
- 	right: 0;
- }
-
+.bg-login {
+    position: absolute;
+    top: -15%;
+    -webkit-animation: showLogin 4.3s ease;
+    -moz-animation: showLogin 4.3s ease;
+    overflow: hidden;
+    height: 115%;
+}
+.bg-left {
+    background: url(../../img/background-left.png) no-repeat;
+    width: 309px;
+}
+.bg-right {
+    background: url(../../img/background-right.png) no-repeat;
+    width: 301px;
+    right: 0;
+}
 #synapse-logo {
-	margin: 5% auto;
-	width: 60%;
-	opacity: 0;
-	-webkit-animation: hiddenLogo 4s ease;
-	-moz-animation: hiddenLogo 4s ease;
+    margin: 5% auto;
+    width: 60%;
+    opacity: 0;
+    -webkit-animation: hiddenLogo 4s ease;
+    -moz-animation: hiddenLogo 4s ease;
 }
 
 /** Formulário de Login **/
 
 #login-form {
-	position: absolute;
-	top: 20%;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	width: 305px;
-	margin: 5% auto;
-	text-align: center;
-	-webkit-animation: showLogin 4.3s ease;
-	-moz-animation: showLogin 4.3s ease;
+    position: absolute;
+    top: 20%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 305px;
+    margin: 5% auto;
+    text-align: center;
+    -webkit-animation: showLogin 4.3s ease;
+    -moz-animation: showLogin 4.3s ease;
 }
-
-
 .login-label {
-	display: inline-block;
-	width: 14%;
-	text-align: right;
-	vertical-align: middle;
-	padding-right: 6px;
+    display: inline-block;
+    width: 14%;
+    text-align: right;
+    vertical-align: middle;
+    padding-right: 6px;
 }
-
 .login-input {
-	border: none;
-	box-shadow: 2px 2px 6px #2C2C2C;
-	height: 30px;
-	border-radius: 3px;
-	width: 230px;
-	margin-bottom: 20px;
+    border: none;
+    box-shadow: 2px 2px 6px #2C2C2C;
+    height: 30px;
+    border-radius: 3px;
+    width: 230px;
+    margin-bottom: 20px;
 }
-
-
-.login-button, .back-button{
-	background: #FBB03B;
-	border: none;
-	padding: 15px 27px;
-	font-family: tellural;
-	font-size: 20px;
-	color: #fff;
-	border-radius: 6px;
-	box-shadow: 2px 2px 6px #2C2C2C;
-	margin: 10px 0 0 15px;
+.login-button, .back-button {
+    background: #FBB03B;
+    border: none;
+    padding: 15px 27px;
+    font-family: tellural;
+    font-size: 20px;
+    color: #fff;
+    border-radius: 6px;
+    box-shadow: 2px 2px 6px #2C2C2C;
+    margin: 10px 0 0 15px;
 }
 .buttons {
     width: 240px;
 }
-
-.back-button{
+.back-button {
     background: none repeat scroll 0 0 #D3D3D3;
     border-color: #808080;
     color: #808080;
 }
-
-.back-button:hover{
+.back-button:hover {
     background: #c3c2c3;
 }
-
 .login-button:hover {
-	cursor: pointer;
-	background: #E9A232;
+    cursor: pointer;
+    background: #E9A232;
 }
 
 /** Erros/Mensagens **/
 
 .message {
-	opacity: 0;
-	position: absolute;
-	top: 20%;
-	left: 0;
-	right: 0;
-	width: 390px;
-	margin: auto;
-	text-align: center;
-	background: #51B899;
-	padding: 10px;
-	border-radius: 5px;
-	color: #fff;
+    opacity: 0;
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    width: 390px;
+    margin: auto;
+    text-align: center;
+    background: #51B899;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 /** Selecionar aluno **/
+
 .bg-select {
- 	position: absolute;
- 	top: -15%;
-	overflow: hidden;
-	height: 115%;
- }
-
+    position: absolute;
+    top: -15%;
+    overflow: hidden;
+    height: 115%;
+}
 #login-select {
-	margin: 5% auto;
-	width: 600px;
+    margin: 5% auto;
+    width: 600px;
 }
-
 #login-select select {
-	background: #E9A232;
-	padding: 8px 30px;
-	border: none;
-	border-radius: 5px;
-	box-shadow: 2px 2px 6px #2C2C2C;
-	color: #fff;
-	margin-right: 30px;
+    background: #E9A232;
+    padding: 8px 30px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 2px 6px #2C2C2C;
+    color: #fff;
+    margin-right: 30px;
 }
-
 #login-select .login-label {
-	width: 120px;
+    width: 120px;
 }
-
 .discipline {
-	width: 350px;
-	float: left;
-	text-align: center;
-	cursor: pointer;
-        position: relative;
+    width: 350px;
+    float: left;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
 }
-
 #select-discipline {
-	display: table;
-	margin: auto;
+    display: table;
+    margin: auto;
 }
-
 .discipline-button {
-	background: #51B899;
-	border: none;
-	font-family: asap;
-	color: #fff;
-	padding: 5px 20px;
-	border-radius: 5px;
-	box-shadow: 1px 1px 2px #2C2C2C;
-	font-weight: 600;
-	font-size: 20px;
-	width: 200px;
-	cursor: pointer;
-	margin-top: 20px;
+    background: #51B899;
+    border: none;
+    font-family: asap;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #2C2C2C;
+    font-weight: 600;
+    font-size: 20px;
+    width: 200px;
+    cursor: pointer;
+    margin-top: 20px;
 }
 
 /** Animação **/
 
 @-webkit-keyframes hiddenLogo {
-   0% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
-
 @-moz-keyframes hiddenLogo {
-   0% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
-
 @-webkit-keyframes showLogin {
-   0% { opacity: 0; }
-  90% { opacity: 0; }
-  100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    90% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
-
 @-moz-keyframes showLogin {
-   0% { opacity: 0; }
-  90% { opacity: 0; }
-  100% { opacity: 1; }
-} 
+    0% {
+        opacity: 0;
+    }
+    90% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

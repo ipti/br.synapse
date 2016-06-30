@@ -1,99 +1,168 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <title>Entrar no Synapse</title>
-        <link rel="icon" type="image/png" href="icons/icon-48.png" /> 
-        <link rel="stylesheet" type="text/css" href="css/reset.css">
-        <link rel="stylesheet" type="text/css" href="css/render/global.css">
-        <link rel="stylesheet" type="text/css" href="css/render/selectStudentRender.css">
-        <link rel="stylesheet" type="text/css" href="css/render/login.css">
-        <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
-        <script src="js/jquery/jquery-1.7.2.js"></script>
-        <script src="js/jquery/jquery.ui.core.js"></script>
-        <script src="js/jquery/jquery.ui.widget.js"></script>
-        <script src="js/jquery/jquery.ui.mouse.js"></script>
-        <script src="js/jquery/jquery.ui.draggable.js"></script>
-        <script src="js/jquery/jquery.ui.droppable.js"></script>
-        <script type="text/javascript" src="db/renderDB.js"></script>
-        <script type="text/javascript" src="js/render/select.js"></script>
-        <script type="text/javascript" src="js/render/meet.js"></script>
-    </head>
 
-    <body>
-        <script type="text/javascript">
-            if (sessionStorage.getItem("authorization") === null || sessionStorage.getItem("authorization") === 'false') {
-                location.href = 'login.html';
-            }
-        </script>
-        <div class="bg-select bg-left"></div>
-        <div class="bg-select bg-right"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>Entrar no Synapse</title>
+    <link rel="icon" type="image/png" href="icons/icon-48.png" />
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/render/global.css">
+    <link rel="stylesheet" type="text/css" href="css/render/selectStudentRender.css">
+    <link rel="stylesheet" type="text/css" href="css/render/login.css">
+    <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
+    <script src="js/jquery/jquery-1.7.2.js"></script>
+    <script src="js/jquery/jquery.ui.core.js"></script>
+    <script src="js/jquery/jquery.ui.widget.js"></script>
+    <script src="js/jquery/jquery.ui.mouse.js"></script>
+    <script src="js/jquery/jquery.ui.draggable.js"></script>
+    <script src="js/jquery/jquery.ui.droppable.js"></script>
+    <script type="text/javascript" src="db/renderDB.js"></script>
+    <script type="text/javascript" src="js/render/select.js"></script>
+    <script type="text/javascript" src="js/render/meet.js"></script>
+</head>
 
-        <section id="select-student">
-            <div class="block pull-left">
-                <label class="login-label" for="classroom">Escolher Turma</label>
-                <br>
-                <select id="classroom">
-                    <option value="-1">Carregando...</option>
-                </select>
-            </div>
-            <div class="block pull-right">
-                <label class="login-label" for="actor">Escolher Aluno</label>
-                <br>
-                <select id="actor" >
-                    <option value="-1">Carregando...</option>
-                </select>
-            </div>
+<body>
+    <script type="text/javascript">
+        if (sessionStorage.getItem("authorization") === null || sessionStorage.getItem("authorization") === 'false') {
+            location.href = 'login.html';
+        }
+    </script>
+    <div class="bg-select bg-left"></div>
+    <div class="bg-select bg-right"></div>
+
+    <section id="select-student">
+        <div class="block pull-left">
+            <label class="login-label" for="classroom">Escolher Turma</label>
             <br>
-        </section>
-
-        <section id="select-discipline">
-            <div class="discipline" id="discipline_language"  discipline="1">
-                <img src="img/icons/discipline-language.png" alt="Linguagem" />
-                <button class="discipline-button">Linguagem</button>
-            </div>
-            <div class="discipline" id="discipline_math" discipline="2">
-                <img src="img/icons/discipline-math.png" alt="Matemática">
-                <button class="discipline-button">Matemática</button>
-            </div>
-        </section>
-
-
-        <!-- Selecionar Modo do Render -->
-        <div id="select-mode" class="modal_message overlay">
-            <div class="message-container">
-                <div class="modal-title">
-                    Selecionar Módulo
-                </div>
-                <div class="message-form">
-                </div>
-                <select name="mode" id="mode">
-                    <option value="-1">Selecione</option>
-                    <option value="evaluation">Avaliação</option>
-                    <option value="proficiency">Proficiência</option>
-                    <option value="training">Treino</option>
-                </select>
-            </div>
+            <select id="classroom">
+                <option value="-1">Carregando...</option>
+            </select>
         </div>
-
-
-        <!-- Selecionar Nível da Atividade -->
-        <div id="select-level" class="modal_message overlay">
-            <div class="message-container">
-                <div class="modal-title">
-                    Selecionar Nível da Atividade
-                </div>
-                <div class="message-form">
-                </div>
-                <select name="level" id="level">
-                    <option value="-1">Selecione o Nível</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
+        <div class="block pull-right">
+            <label class="login-label" for="actor">Escolher Aluno</label>
+            <br>
+            <select id="actor">
+                <option value="-1">Carregando...</option>
+            </select>
         </div>
+        <br>
+    </section>
 
-    </body>
+    <section id="select-discipline">
+        <div class="discipline" id="discipline_language" discipline="1">
+            <img src="img/icons/discipline-language.png" alt="Linguagem" />
+            <button class="discipline-button">Linguagem</button>
+        </div>
+        <div class="discipline" id="discipline_math" discipline="2">
+            <img src="img/icons/discipline-math.png" alt="Matemática">
+            <button class="discipline-button">Matemática</button>
+        </div>
+    </section>
+
+
+    <!-- Selecionar Modo do Render -->
+    <div id="select-mode" class="modal_message overlay">
+        <div class="message-container">
+            <div class="modal-title">
+                Selecionar Módulo
+            </div>
+            <div class="message-form">
+            </div>
+            <select name="mode" id="mode">
+                <option value="-1">Selecione</option>
+                <option value="evaluation">Avaliação</option>
+                <option value="proficiency">Proficiência</option>
+                <option value="training">Treino</option>
+            </select>
+        </div>
+    </div>
+
+
+    <!-- Selecionar Nível da Atividade -->
+    <div id="select-level" class="modal_message overlay">
+        <div class="message-container">
+            <div class="modal-title">
+                Selecionar Nível da Atividade
+            </div>
+            <div class="message-form">
+            </div>
+            <select name="level" id="level">
+                <option value="-1">Selecione o Nível</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Definir PIN -->
+    <div id="pincode-message" class="overlay">
+        <div class="message-container exit">
+            <p class="message">Deseja encerrar o atendimento desse aluno?</p>
+            <input type="password" size="20" maxlength="40" name="pincode" id="pincode" readonly="true" placeholder="Digite o PIN" />
+            <button id="pincoden7" class="message-button-pincode" value="7">7</button>
+            <button id="pincoden8" class="message-button-pincode" value="8">8</button>
+            <button id="pincoden9" class="message-button-pincode" value="9">9</button>
+            </br>
+            <button id="pincoden4" class="message-button-pincode" value="4">4</button>
+            <button id="pincoden5" class="message-button-pincode" value="5">5</button>
+            <button id="pincoden6" class="message-button-pincode" value="6">6</button>
+            </br>
+            <button id="pincoden1" class="message-button-pincode" value="1">1</button>
+            <button id="pincoden2" class="message-button-pincode" value="2">2</button>
+            <button id="pincoden3" class="message-button-pincode" value="3">3</button>
+            </br>
+            <button id="pincoden0" class="message-button-pincode" value="0">0</button>
+            <button id="finalize-icon" class="message-button-confirm">Confirmar</button>
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      console.log("DOC OK");
+        var db;
+        var request = indexedDB.open("synapseDB", 3);
+
+        request.onerror = function(event) {
+            console.log("error: ");
+        };
+
+        request.onsuccess = function(event) {
+            db = request.result;
+            console.log("success: " + db);
+
+            function read(tutor = sessionStorage.getItem('login_id_actor')) {
+                var transaction = db.transaction(["actor"]);
+                var objectStore = transaction.objectStore("actor");
+                var request = objectStore.get("" + tutor);
+
+                request.onerror = function(event) {
+                    alert("Unable to retrieve daa from database!");
+                };
+                request.onsuccess = function(event) {
+                    $("#pincode-message").show();
+                    // Do something with the request.result!
+                    if (request.result) {
+                        console.log("Login: " + request.result.login);
+                        if ($("#pincode").val() == request.result.password) {
+                        } else {
+                            $("#pincode-message").hide();
+                            $("#pincode").val("");
+                        }
+                    } else {
+                        console.log("Erro");
+                        $("#pincode-message").hide();
+                        $("#pincode").val("");
+                    }
+                };
+            };
+            console.log("READ");
+            read();
+        };
+    });
+</script>
+
 </html>

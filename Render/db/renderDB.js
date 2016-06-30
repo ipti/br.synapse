@@ -4,10 +4,10 @@
 
 //Verificar se NÃO é o RenderOnline
 if (sessionStorage.getItem("isOnline") === null ||
-        sessionStorage.getItem("isOnline") == 'false' ||
-        sessionStorage.getItem("isOnline") == '-1') {
+    sessionStorage.getItem("isOnline") == 'false' ||
+    sessionStorage.getItem("isOnline") == '-1') {
 
-    this.DB = function () {
+    this.DB = function() {
         self = this;
         nameBD = "synapseDB";
         DBversion = 1;
@@ -18,7 +18,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         dataImportFunction = null;
 
-        this.verifyIDBrownser = function () {
+        this.verifyIDBrownser = function() {
             // Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
             window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
             // Não use "var indexedDB = ..." se você não está numa function.
@@ -29,7 +29,7 @@ if (sessionStorage.getItem("isOnline") === null ||
             return window.indexedDB;
         }
 
-        this.openDBuild = function (alterSchema, dataImportFunction, dataJsonLin, dataJsonMat) {
+        this.openDBuild = function(alterSchema, dataImportFunction, dataJsonLin, dataJsonMat) {
 
             self.dataImportFunction = dataImportFunction;
             self.dataJsonLin = dataJsonLin;
@@ -46,24 +46,24 @@ if (sessionStorage.getItem("isOnline") === null ||
             var synapseBD;
             synapseBD = window.indexedDB.open(nameBD, 2);
 
-            synapseBD.onerror = function (event) {
+            synapseBD.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
 
-            synapseBD.onsuccess = function (event) {
+            synapseBD.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     alert("Database error: " + event.target.errorCode);
                 };
 
-                db.onclose = function (event) {
+                db.onclose = function(event) {
                     console.log(event);
                 };
 
-                db.onversionchange = function (event) {
+                db.onversionchange = function(event) {
                     console.log(event);
                 };
 
@@ -77,11 +77,11 @@ if (sessionStorage.getItem("isOnline") === null ||
                 openBuild();
             }
 
-            synapseBD.onversionchange = function (event) {
+            synapseBD.onversionchange = function(event) {
                 console.log(event);
             };
 
-            synapseBD.onblocked = function (event) {
+            synapseBD.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             };
@@ -90,29 +90,29 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
 
-        var openBuild = function () {
+        var openBuild = function() {
 
             DBsynapse = window.indexedDB.open(nameBD, DBversion);
 
-            DBsynapse.onversionchange = function (event) {
+            DBsynapse.onversionchange = function(event) {
                 //STOP HERE
                 console.log(event);
             };
 
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 // alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     alert("Database error: " + event.target.errorCode);
                 };
             }
 
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 console.log("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             };
@@ -123,10 +123,10 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-        this.buildAllSchema = function () {
+        this.buildAllSchema = function() {
             //Criar Schemas das tabelas
 
-            DBsynapse.onupgradeneeded = function (event) {
+            DBsynapse.onupgradeneeded = function(event) {
                 var db = event.target.result;
 
                 //============  School  ===========================
@@ -364,7 +364,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
-                 state_actorStore.createIndex("discipline_id", "discipline_id", {
+                state_actorStore.createIndex("discipline_id", "discipline_id", {
                     unique: false
                 });
 
@@ -387,100 +387,100 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                 // Usando transação oncomplete para afirmar que a criação do objectStore
                 // é terminada antes de adicionar algum dado nele.
-                schoolStore.transaction.oncomplete = function (event) {
+                schoolStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
 
-                unityStore.transaction.oncomplete = function (event) {
+                unityStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
 
-                actorStore.transaction.oncomplete = function (event) {
+                actorStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                disciplineStore.transaction.oncomplete = function (event) {
+                disciplineStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                cobjectblockStore.transaction.oncomplete = function (event) {
+                cobjectblockStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                cobject_cobjectblockStore.transaction.oncomplete = function (event) {
+                cobject_cobjectblockStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                cobjectStore.transaction.oncomplete = function (event) {
+                cobjectStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                performance_actorStore.transaction.oncomplete = function (event) {
+                performance_actorStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
-                state_actorStore.transaction.oncomplete = function (event) {
-                    //Se for o último dos 9 então contruiu todos os schemas
-                    db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
-                    console.log('Criou os Schemas');
-                }
-
-
-                act_goalStore.transaction.oncomplete = function (event) {
+                state_actorStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
 
-                act_contentStore.transaction.oncomplete = function (event) {
+
+                act_goalStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
 
-                act_goal_contentStore.transaction.oncomplete = function (event) {
+                act_contentStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
 
-                act_scriptStore.transaction.oncomplete = function (event) {
+                act_goal_contentStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
 
-                act_script_contentStore.transaction.oncomplete = function (event) {
+                act_scriptStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
                 }
 
-                stop_point_diagnosticStore.transaction.oncomplete = function (event) {
+                act_script_contentStore.transaction.oncomplete = function(event) {
+                    //Se for o último dos 9 então contruiu todos os schemas
+                    db.close();
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    console.log('Criou os Schemas');
+                }
+
+                stop_point_diagnosticStore.transaction.oncomplete = function(event) {
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
                     console.log('Criou os Schemas');
@@ -500,8 +500,7 @@ if (sessionStorage.getItem("isOnline") === null ||
         // IMPORT PARA BANCO DE DADOS //
         // - - - - - - - - - -  //
 
-        this.importAllDataRender = function (schools, unitys, actors, disciplines, cobjectblock
-                , cobject_cobjectblocks, cobjects) {
+        this.importAllDataRender = function(schools, unitys, actors, disciplines, cobjectblock, cobject_cobjectblocks, cobjects) {
             //Add campo 'createdOffline' nos actors
             for (var idx in actors) {
                 var actor = actors[idx];
@@ -608,7 +607,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
 
-            self.verifyExistBlock(options, function (options, schoolsClassrooms, existBlock) {
+            self.verifyExistBlock(options, function(options, schoolsClassrooms, existBlock) {
                 //Call Back
 
                 var schools = options.schools;
@@ -647,14 +646,14 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     //alert("Você não habilitou minha web app para usar IndexedDB?!");
                 };
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
-                    db.onerror = function (event) {
+                    db.onerror = function(event) {
                         // Função genérica para tratar os erros de todos os requests desse banco!
                         console.log("Database error: " + event.target.error.message);
                     };
@@ -714,7 +713,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     db.close();
 
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -735,74 +734,74 @@ if (sessionStorage.getItem("isOnline") === null ||
         /////////////////////
 
         //Importar as schools
-        this.importSchool = function (db, data_school) {
+        this.importSchool = function(db, data_school) {
             var SchoolObjectStore = db.transaction("school", "readwrite").objectStore("school");
             for (var i in data_school) {
                 SchoolObjectStore.add(data_school[i]);
             }
-            SchoolObjectStore.transaction.oncomplete = function (event) {
+            SchoolObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Schools IMPORTED!");
             };
         };
 
         //Importar as unitys
-        this.importUnity = function (db, data_unity) {
+        this.importUnity = function(db, data_unity) {
             var UnityObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
             for (var i in data_unity) {
                 UnityObjectStore.add(data_unity[i]);
             }
-            UnityObjectStore.transaction.oncomplete = function (event) {
+            UnityObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Unitys IMPORTED!");
             }
         }
 
         //Importar os atores
-        this.importActor = function (db, data_actor) {
+        this.importActor = function(db, data_actor) {
             var ActorObjectStore = db.transaction("actor", "readwrite").objectStore("actor");
             for (var i in data_actor) {
                 ActorObjectStore.add(data_actor[i]);
             }
-            ActorObjectStore.transaction.oncomplete = function (event) {
+            ActorObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Actors IMPORTED!");
             }
         }
 
         //Importar as disciplines
-        this.importDiscipline = function (db, data_discipline) {
+        this.importDiscipline = function(db, data_discipline) {
             var DisciplineObjectStore = db.transaction("discipline", "readwrite").objectStore("discipline");
             for (var i in data_discipline) {
                 DisciplineObjectStore.add(data_discipline[i]);
             }
-            DisciplineObjectStore.transaction.oncomplete = function (event) {
+            DisciplineObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Disciplines IMPORTED!");
             }
         }
 
         //Importar os cobjectblocks
-        this.importCobjectblock = function (db, data_cobjectBlock) {
+        this.importCobjectblock = function(db, data_cobjectBlock) {
             var CobjectblockObjectStore = db.transaction("cobjectblock", "readwrite").objectStore("cobjectblock");
             for (var i in data_cobjectBlock) {
                 CobjectblockObjectStore.add(data_cobjectBlock[i]);
             }
-            CobjectblockObjectStore.transaction.oncomplete = function (event) {
+            CobjectblockObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Cobjectblocks IMPORTED!");
             }
         }
 
         //Importar os cobject_cobjectblocks
-        this.importCobject_cobjectblock = function (db, data_cobject_cobjectBlock) {
+        this.importCobject_cobjectblock = function(db, data_cobject_cobjectBlock) {
             var Cobject_cobjectBlockObjectStore = db.transaction("cobject_cobjectblock", "readwrite").objectStore("cobject_cobjectblock");
 
             for (var i in data_cobject_cobjectBlock) {
                 data_cobject_cobjectBlock[i].id = eval(data_cobject_cobjectBlock[i].id);
                 Cobject_cobjectBlockObjectStore.add(data_cobject_cobjectBlock[i]);
             }
-            Cobject_cobjectBlockObjectStore.transaction.oncomplete = function (event) {
+            Cobject_cobjectBlockObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Cobject_cobjectblocks IMPORTED!");
             }
@@ -810,32 +809,32 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
         //Importar os cobjects
-        this.importCobject = function (db, data_cobject) {
+        this.importCobject = function(db, data_cobject) {
             var CobjectObjectStore = db.transaction("cobject", "readwrite").objectStore("cobject");
             for (var i in data_cobject) {
                 var currentCobject = data_cobject[i];
                 CobjectObjectStore.add(currentCobject);
             }
-            CobjectObjectStore.transaction.oncomplete = function (event) {
+            CobjectObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 window.alert("Cobjects IMPORTED!");
             }
         }
 
         //Importar os performance_actors
-        this.importPerformance_actor = function (db, data_performance_actor) {
+        this.importPerformance_actor = function(db, data_performance_actor) {
             var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
             for (var i in data_performance_actor) {
                 Performance_actorObjectStore.add(data_performance_actor[i]);
             }
-            Performance_actorObjectStore.transaction.oncomplete = function (event) {
+            Performance_actorObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Performance_actors IMPORTED!");
             }
         }
 
         //Importar os Escolas OffLine, se houver
-        this.importSchoolsClassroomsOff = function (db, schoolClassrooms) {
+        this.importSchoolsClassroomsOff = function(db, schoolClassrooms) {
             //schoolsClassrooms['schools'][0]['classrooms']
             var listSchools = schoolClassrooms['schools'];
             var idxSchool = 0;
@@ -845,13 +844,13 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Importar as act_goals
-        this.importActGoals = function (db, act_goals) {
-            if(act_goals.length > 0) {
+        this.importActGoals = function(db, act_goals) {
+            if (act_goals.length > 0) {
                 var ActGoalObjectStore = db.transaction("act_goal", "readwrite").objectStore("act_goal");
                 for (var i in act_goals) {
                     ActGoalObjectStore.add(act_goals[i]);
                 }
-                ActGoalObjectStore.transaction.oncomplete = function (event) {
+                ActGoalObjectStore.transaction.oncomplete = function(event) {
                     db.close();
                     console.log("ActGoals IMPORTED!");
                 }
@@ -859,13 +858,13 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Importar as act_contents
-        this.importActContents = function (db, act_contents) {
-            if(act_contents.length > 0) {
+        this.importActContents = function(db, act_contents) {
+            if (act_contents.length > 0) {
                 var ActContentObjectStore = db.transaction("act_content", "readwrite").objectStore("act_content");
                 for (var i in act_contents) {
                     ActContentObjectStore.add(act_contents[i]);
                 }
-                ActContentObjectStore.transaction.oncomplete = function (event) {
+                ActContentObjectStore.transaction.oncomplete = function(event) {
                     db.close();
                     console.log("ActContents IMPORTED!");
                 }
@@ -873,13 +872,13 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Importar as act_scripts
-        this.importActScripts = function (db, act_scripts) {
-            if(act_scripts.length > 0) {
+        this.importActScripts = function(db, act_scripts) {
+            if (act_scripts.length > 0) {
                 var ActScriptObjectStore = db.transaction("act_script", "readwrite").objectStore("act_script");
                 for (var i in act_scripts) {
                     ActScriptObjectStore.add(act_scripts[i]);
                 }
-                ActScriptObjectStore.transaction.oncomplete = function (event) {
+                ActScriptObjectStore.transaction.oncomplete = function(event) {
                     db.close();
                     console.log("ActScript IMPORTED!");
                 }
@@ -887,13 +886,13 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Importar as act_goal_contents
-        this.importActGoalContent = function (db, act_goal_contents) {
-            if(act_goal_contents.length > 0) {
+        this.importActGoalContent = function(db, act_goal_contents) {
+            if (act_goal_contents.length > 0) {
                 var ActGoalContentObjectStore = db.transaction("act_goal_content", "readwrite").objectStore("act_goal_content");
                 for (var i in act_goal_contents) {
                     ActGoalContentObjectStore.add(act_goal_contents[i]);
                 }
-                ActGoalContentObjectStore.transaction.oncomplete = function (event) {
+                ActGoalContentObjectStore.transaction.oncomplete = function(event) {
                     db.close();
                     console.log("ActGoalContent IMPORTED!");
                 }
@@ -901,13 +900,13 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Importar as act_script_contents
-        this.importActScriptContent = function (db, act_script_contents) {
-            if(act_script_contents.length > 0) {
+        this.importActScriptContent = function(db, act_script_contents) {
+            if (act_script_contents.length > 0) {
                 var ActScriptContentObjectStore = db.transaction("act_script_content", "readwrite").objectStore("act_script_content");
                 for (var i in act_script_contents) {
                     ActScriptContentObjectStore.add(act_script_contents[i]);
                 }
-                ActScriptContentObjectStore.transaction.oncomplete = function (event) {
+                ActScriptContentObjectStore.transaction.oncomplete = function(event) {
                     db.close();
                     console.log("ActScriptContent IMPORTED!");
                 }
@@ -920,17 +919,17 @@ if (sessionStorage.getItem("isOnline") === null ||
         // - - - - - - - - - -  //
 
         //Export os performances_actors
-        this.exportPerformance_actor = function (callBack) {
+        this.exportPerformance_actor = function(callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -938,7 +937,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var performances = new Array();
 
                 var Performance_actorObjectStore = db.transaction("performance_actor", "readonly").objectStore("performance_actor");
-                Performance_actorObjectStore.openCursor().onsuccess = function (event) {
+                Performance_actorObjectStore.openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         var currentPerformance = '{"actor_id":"' + cursor.value.actor_id;
@@ -969,7 +968,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -982,31 +981,31 @@ if (sessionStorage.getItem("isOnline") === null ||
         // EXPORTE PARA O EEG - IBlue //
         // - - - - - - - - - -  //
 
-        this.exportToEEG = function (callBack) {
+        this.exportToEEG = function(callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
 
                 var performancesForActors = [];
                 var Performance_actorObjectStore = db.transaction("performance_actor", "readonly").objectStore("performance_actor");
-                Performance_actorObjectStore.openCursor().onsuccess = function (event) {
+                Performance_actorObjectStore.openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
 
                     if (cursor) {
                         //Criação de um array, onde armazenará todas as performances e agrupá-las por Atores
-                        if(performancesForActors[cursor.value.actor_id] === undefined
-                           || performancesForActors[cursor.value.actor_id] === null ){
-                              performancesForActors[cursor.value.actor_id] = [];
+                        if (performancesForActors[cursor.value.actor_id] === undefined ||
+                            performancesForActors[cursor.value.actor_id] === null) {
+                            performancesForActors[cursor.value.actor_id] = [];
                         }
                         var sizePerformancesThisActor = performancesForActors[cursor.value.actor_id].length;
                         performancesForActors[cursor.value.actor_id][sizePerformancesThisActor] = [];
@@ -1022,28 +1021,28 @@ if (sessionStorage.getItem("isOnline") === null ||
                         //Não existe mais registros
                         //
                         //Transformar o Array de Atores e suas performances em uma String
-                        for(var actorID in performancesForActors){
+                        for (var actorID in performancesForActors) {
                             //Para cada Actor
                             var textToExport = "actor_id|interval_resolution|final_time|piece_id|iscorrect";
-                            for(var idxPerformance in performancesForActors[actorID]){
+                            for (var idxPerformance in performancesForActors[actorID]) {
                                 //Para cada performance do Actor corrente
                                 var performance = performancesForActors[actorID][idxPerformance];
-                                textToExport+="\n"+performance['actor_id'];
-                                textToExport+="|"+performance['interval_resolution'];
-                                textToExport+="|"+performance['final_time'];
-                                textToExport+="|"+performance['piece_id'];
-                                textToExport+="|"+performance['iscorrect'];
+                                textToExport += "\n" + performance['actor_id'];
+                                textToExport += "|" + performance['interval_resolution'];
+                                textToExport += "|" + performance['final_time'];
+                                textToExport += "|" + performance['piece_id'];
+                                textToExport += "|" + performance['iscorrect'];
                             }
                             //Baixa um arquivo TXT do ExportToEEG desse Actor Corrente
                             //Realizar download da String
-                           callBack(textToExport, actorID);
+                            callBack(textToExport, actorID);
                         }
 
                     }
                 };
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -1052,7 +1051,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Pesquisas No Banco
-        this.login = function (login, password, callBack) {
+        this.login = function(login, password, callBack) {
             if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
 
                 if (login == 'admin') {
@@ -1081,24 +1080,24 @@ if (sessionStorage.getItem("isOnline") === null ||
                     //Não é um admin
                     window.indexedDB = self.verifyIDBrownser();
                     DBsynapse = window.indexedDB.open(nameBD);
-                    DBsynapse.onerror = function (event) {
+                    DBsynapse.onerror = function(event) {
                         console.log("Error: ");
                         console.log(event);
                         // alert("Você não habilitou minha web app para usar IndexedDB?!");
                     }
-                    DBsynapse.onsuccess = function (event) {
+                    DBsynapse.onsuccess = function(event) {
                         var db = event.target.result;
-                        db.onerror = function (event) {
-                            // Função genérica para tratar os erros de todos os requests desse banco!
-                            console.log("Database error: " + event.target.errorCode);
-                        }
-                        //Tudo ok Então Busca O Actor
+                        db.onerror = function(event) {
+                                // Função genérica para tratar os erros de todos os requests desse banco!
+                                console.log("Database error: " + event.target.errorCode);
+                            }
+                            //Tudo ok Então Busca O Actor
                         var ActorObjectStore = db.transaction("actor").objectStore("actor");
                         var requestGet = ActorObjectStore.index("login").get(login);
-                        requestGet.onerror = function (event) {
+                        requestGet.onerror = function(event) {
                             // Tratar erro!
                         }
-                        requestGet.onsuccess = function (event) {
+                        requestGet.onsuccess = function(event) {
                             // Fazer algo com request.result!
                             if (self.isset(requestGet.result)) {
                                 //Encontrou o Usuário
@@ -1128,7 +1127,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                         }
 
                     }
-                    DBsynapse.onblocked = function (event) {
+                    DBsynapse.onblocked = function(event) {
                         // Se existe outra aba com a versão antiga
                         window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                     }
@@ -1146,7 +1145,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Confirmar a snha do administrador
-        this.confirmPassWordAdmin = function (password, callBack) {
+        this.confirmPassWordAdmin = function(password, callBack) {
             var login = "admin";
             var passWordOk = false;
             if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
@@ -1165,34 +1164,34 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //===================
-        this.getCobject = function (cobject_id, callBack) {
+        this.getCobject = function(cobject_id, callBack) {
             if (self.isset(cobject_id)) {
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     //alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
-                    db.onerror = function (event) {
-                        // Função genérica para tratar os erros de todos os requests desse banco!
-                        window.alert("Database error: " + event.target.errorCode);
-                    }
-                    //Tudo ok Então Busca O Cobject
+                    db.onerror = function(event) {
+                            // Função genérica para tratar os erros de todos os requests desse banco!
+                            window.alert("Database error: " + event.target.errorCode);
+                        }
+                        //Tudo ok Então Busca O Cobject
                     var cobjectStore = db.transaction("cobject").objectStore("cobject");
                     var requestGet = cobjectStore.get(cobject_id);
-                    requestGet.onerror = function (event) {
+                    requestGet.onerror = function(event) {
                         // Tratar erro!
                     }
-                    requestGet.onsuccess = function (event) {
+                    requestGet.onsuccess = function(event) {
                         var json_cobject = requestGet.result;
                         callBack(json_cobject);
                     }
 
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1200,28 +1199,28 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //===================
-        this.getCobjectsFromBlock = function (block_id, callBack) {
+        this.getCobjectsFromBlock = function(block_id, callBack) {
             if (self.isset(block_id)) {
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
-                    db.onerror = function (event) {
-                        // Função genérica para tratar os erros de todos os requests desse banco!
-                        window.alert("Database error: " + event.target.errorCode);
-                    }
-                    //Tudo ok Então Busca O Cobject
+                    db.onerror = function(event) {
+                            // Função genérica para tratar os erros de todos os requests desse banco!
+                            window.alert("Database error: " + event.target.errorCode);
+                        }
+                        //Tudo ok Então Busca O Cobject
                     var cobjectStore = db.transaction("cobject_cobjectblock").objectStore("cobject_cobjectblock");
                     var requestGet = cobjectStore.index('cobject_block_id');
                     var objectsThisBlock = new Array();
                     var singleKeyRange = IDBKeyRange.only(block_id);
                     var existBlock = false;
-                    requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                    requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                         var cursor = event.target.result;
                         if (cursor) {
                             // Faz algo com o que encontrar
@@ -1239,12 +1238,12 @@ if (sessionStorage.getItem("isOnline") === null ||
                         }
 
                     };
-                    requestGet.onerror = function (event) {
+                    requestGet.onerror = function(event) {
                         // Tratar erro!
                         console.log("Não encontrou Cobjects para estes Bloco!");
                     }
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1252,7 +1251,7 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Armazenar a  performance
-        this.addPerformance_actor = function (data) {
+        this.addPerformance_actor = function(data) {
             var piece_id = data.piece_id;
             var actor_id = data.actor_id;
             var final_time = data.final_time;
@@ -1273,25 +1272,25 @@ if (sessionStorage.getItem("isOnline") === null ||
 
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 }
                 var Performance_actorObjectStore = db.transaction("performance_actor", "readwrite").objectStore("performance_actor");
                 Performance_actorObjectStore.add(data_performance_actor);
-                Performance_actorObjectStore.transaction.oncomplete = function (event) {
+                Performance_actorObjectStore.transaction.oncomplete = function(event) {
                     // console.log('Performance Salva !!!! ');
                 }
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -1299,7 +1298,7 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Adicionar ou Realiza UPDATE dos registros do estado atual deste actor no block
-        this.NewORUpdateUserState = function (data_state_actor) {
+        this.NewORUpdateUserState = function(data_state_actor) {
             var render_mode = data_state_actor.render_mode;
             var actor_id = data_state_actor.actor_id;
 
@@ -1307,23 +1306,23 @@ if (sessionStorage.getItem("isOnline") === null ||
             if (self.isset(actor_id)) {
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
-                    db.onerror = function (event) {
-                        // Função genérica para tratar os erros de todos os requests desse banco!
-                        console.log("Database error: " + event.target.errorCode);
-                    }
-                    //Tudo ok Então Busca O UserState
+                    db.onerror = function(event) {
+                            // Função genérica para tratar os erros de todos os requests desse banco!
+                            console.log("Database error: " + event.target.errorCode);
+                        }
+                        //Tudo ok Então Busca O UserState
                     var stateActorStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
                     var requestGet = stateActorStore.index('actor_id');
                     var user_state_id = null;
                     var singleKeyRange = IDBKeyRange.only(actor_id);
-                    requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                    requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                         var cursor = event.target.result;
                         if (cursor) {
                             // Faz algo com o que encontrar
@@ -1333,8 +1332,8 @@ if (sessionStorage.getItem("isOnline") === null ||
                                 var cobject_block_id = data_state_actor.cobject_block_id;
                                 var evaluation_selected_level = data_state_actor.evaluation_selected_level;
                                 //Verificar se possui o mesmo bloco e nível
-                                if (cursor.value.cobject_block_id == cobject_block_id
-                                        && cursor.value.evaluation_selected_level == evaluation_selected_level) {
+                                if (cursor.value.cobject_block_id == cobject_block_id &&
+                                    cursor.value.evaluation_selected_level == evaluation_selected_level) {
                                     //Realiza Update
                                     mayUpdate = true;
                                 }
@@ -1355,10 +1354,10 @@ if (sessionStorage.getItem("isOnline") === null ||
                                 }
 
                                 var request_update = cursor.update(cursor.value);
-                                request_update.onsuccess = function (event) {
+                                request_update.onsuccess = function(event) {
                                     console.log(' State Actor Atualizado !!!! ');
                                 };
-                                request_update.onerror = function (event) {
+                                request_update.onerror = function(event) {
                                     console.log(' ERRO ao Atualizar State Actor !!!! ');
                                 };
                             }
@@ -1371,18 +1370,18 @@ if (sessionStorage.getItem("isOnline") === null ||
                             if (!update) {
                                 var state_actorObjectStore = db.transaction("state_actor", "readwrite").objectStore("state_actor");
                                 state_actorObjectStore.add(data_state_actor);
-                                state_actorObjectStore.transaction.oncomplete = function (event) {
+                                state_actorObjectStore.transaction.oncomplete = function(event) {
                                     console.log(' NEW State Actor Salvo !!!! ');
                                 }
                             }
                         }
 
                     };
-                    requestGet.onerror = function (event) {
+                    requestGet.onerror = function(event) {
                         // Tratar erro!
                     }
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1390,41 +1389,41 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Recuperar o estado do usuário
-        this.getUserState = function (actor_id, render_mode, userStateFilterInfo, callBack) {
+        this.getUserState = function(actor_id, render_mode, userStateFilterInfo, callBack) {
             if (render_mode == 'evaluation') {
                 var cobject_block_id = userStateFilterInfo['cobject_block_id'];
                 var evaluation_selected_level = userStateFilterInfo['evaluation_selected_level'];
             }
 
-            if (self.isset(actor_id) && self.isset(cobject_block_id)
-                    && self.isset(evaluation_selected_level)) {
+            if (self.isset(actor_id) && self.isset(cobject_block_id) &&
+                self.isset(evaluation_selected_level)) {
                 var info_state = null;
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
-                    db.onerror = function (event) {
-                        // Função genérica para tratar os erros de todos os requests desse banco!
-                        console.log("Database error: " + event.target.errorCode);
-                    }
-                    //Tudo ok Então Busca O Cobject
+                    db.onerror = function(event) {
+                            // Função genérica para tratar os erros de todos os requests desse banco!
+                            console.log("Database error: " + event.target.errorCode);
+                        }
+                        //Tudo ok Então Busca O Cobject
                     var state_actorStore = db.transaction("state_actor").objectStore("state_actor");
                     var requestGet = state_actorStore.index('actor_id');
                     var singleKeyRange = IDBKeyRange.only(actor_id);
-                    requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                    requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                         var cursor = event.target.result;
                         if (cursor) {
                             if (render_mode == 'evaluation') {
                                 // Para cada id do Actor encontrado, verificar se possui o
                                 // modo do reder, cobject_block_id  e o nível selecionado
                                 if (cursor.value.render_mode == render_mode &&
-                                        cursor.value.cobject_block_id == cobject_block_id &&
-                                        cursor.value.evaluation_selected_level == evaluation_selected_level) {
+                                    cursor.value.cobject_block_id == cobject_block_id &&
+                                    cursor.value.evaluation_selected_level == evaluation_selected_level) {
                                     //Encontrou o estado deste Actor para este Bloco
                                     info_state = {
                                         actor_id: cursor.value.actor_id,
@@ -1448,11 +1447,11 @@ if (sessionStorage.getItem("isOnline") === null ||
                         }
 
                     };
-                    requestGet.onerror = function (event) {
+                    requestGet.onerror = function(event) {
                         // Tratar erro!
                     }
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1461,7 +1460,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Recuperar o estado do usuário
-        this.getUserState_ModeDiagnostic = function (actor_id, render_mode, userStateFilterInfo, callBack) {
+        this.getUserState_ModeDiagnostic = function(actor_id, render_mode, userStateFilterInfo, callBack) {
             if (render_mode == 'proficiency') {
                 var discipline_id = userStateFilterInfo['discipline_id'];
             }
@@ -1470,29 +1469,29 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var info_state = null;
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
-                    db.onerror = function (event) {
-                        // Função genérica para tratar os erros de todos os requests desse banco!
-                        console.log("Database error: " + event.target.errorCode);
-                    }
-                    //Tudo ok Então Busca O Cobject
+                    db.onerror = function(event) {
+                            // Função genérica para tratar os erros de todos os requests desse banco!
+                            console.log("Database error: " + event.target.errorCode);
+                        }
+                        //Tudo ok Então Busca O Cobject
                     var state_actorStore = db.transaction("state_actor").objectStore("state_actor");
                     var requestGet = state_actorStore.index('actor_id');
                     var singleKeyRange = IDBKeyRange.only(actor_id);
-                    requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                    requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                         var cursor = event.target.result;
                         if (cursor) {
                             if (render_mode == 'proficiency') {
                                 // Para cada id do Actor encontrado, verificar se possui o
                                 // modo do render e discipline_id
                                 if (cursor.value.render_mode == render_mode &&
-                                        cursor.value.discipline_id == discipline_id ) {
+                                    cursor.value.discipline_id == discipline_id) {
                                     //Encontrou o estado deste Actor + discipline + modo proficiency
                                     info_state = {
                                         actor_id: cursor.value.actor_id,
@@ -1514,11 +1513,11 @@ if (sessionStorage.getItem("isOnline") === null ||
                         }
 
                     };
-                    requestGet.onerror = function (event) {
+                    requestGet.onerror = function(event) {
                         // Tratar erro!
                     }
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1649,26 +1648,26 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Verificar se já possui um bloco
-        this.verifyExistBlock = function (options, callBack) {
+        this.verifyExistBlock = function(options, callBack) {
             var existBlock = false;
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             }
 
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 }
 
                 var blockStore = db.transaction("cobjectblock").objectStore("cobjectblock");
                 var cobjectblock = new Array();
-                blockStore.openCursor().onsuccess = function (event) {
+                blockStore.openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor && !existBlock) {
                         // Percorre cada registro do cobjectblock
@@ -1702,12 +1701,12 @@ if (sessionStorage.getItem("isOnline") === null ||
                     callBack(options, schoolsClassrooms, existBlock);
 
                 };
-                blockStore.onerror = function (event) {
+                blockStore.onerror = function(event) {
                     // Tratar erro!
                 }
             }
 
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -1717,33 +1716,33 @@ if (sessionStorage.getItem("isOnline") === null ||
         function useDatabase(db) {
             // Esteja certo de que adicionou um evento para notificar se a página muda a versão
             // Devemos fechar o banco. Isso permite à outra página ser atualizada
-            db.onversionchange = function (event) {
+            db.onversionchange = function(event) {
                 db.close();
                 alert("Uma nova versão desta web app está pronta. Atualiza, por favor!");
             }
         }
 
-        this.getBlockByDiscipline = function (discipline_id, callBack) {
+        this.getBlockByDiscipline = function(discipline_id, callBack) {
             if (self.isset(discipline_id)) {
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var cobject_block_id = null;
                     var db = event.target.result;
-                    db.onerror = function (event) {
-                        // Função genérica para tratar os erros de todos os requests desse banco!
-                        console.log("Database error: " + event.target.errorCode);
-                    }
-                    //Tudo ok Então Busca O CobjectBlock
+                    db.onerror = function(event) {
+                            // Função genérica para tratar os erros de todos os requests desse banco!
+                            console.log("Database error: " + event.target.errorCode);
+                        }
+                        //Tudo ok Então Busca O CobjectBlock
                     var cobjectBlockStore = db.transaction("cobjectblock").objectStore("cobjectblock");
                     var requestGet = cobjectBlockStore.index('discipline_id');
                     var singleKeyRange = IDBKeyRange.only(discipline_id);
-                    requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                    requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                         var cursor = event.target.result;
                         if (cursor) {
                             //Encontrou o Bloco que possui a disciplina escolhida
@@ -1755,11 +1754,11 @@ if (sessionStorage.getItem("isOnline") === null ||
                         }
 
                     };
-                    requestGet.onerror = function (event) {
+                    requestGet.onerror = function(event) {
                         // Tratar erro!
                     }
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1768,8 +1767,8 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
 
-//Registrar Turma
-        this.addSchoolClassroomsOff = function (listSchools, idxSchool) {
+        //Registrar Turma
+        this.addSchoolClassroomsOff = function(listSchools, idxSchool) {
             var school = listSchools[idxSchool];
             if (self.isset(school)) {
                 var school_name = school['name'];
@@ -1778,21 +1777,21 @@ if (sessionStorage.getItem("isOnline") === null ||
                 //=========================
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
 
-                    db.onerror = function (event) {
+                    db.onerror = function(event) {
                         // Função genérica para tratar os erros de todos os requests desse banco!
                         console.log("Database error: " + event.target.error.message);
                     }
                     var maxID = 0;
                     var findSchoolsObjectStore = db.transaction("school", "readonly").objectStore("school");
-                    findSchoolsObjectStore.openCursor().onsuccess = function (event) {
+                    findSchoolsObjectStore.openCursor().onsuccess = function(event) {
                         var cursor = event.target.result;
                         //Encontrar Maior ID
                         if (cursor) {
@@ -1814,7 +1813,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                             //Tudo ok Então Registra a Nova Escola
                             var schoolObjectStore = db.transaction("school", "readwrite").objectStore("school");
                             schoolObjectStore.add(dataSchool);
-                            schoolObjectStore.transaction.oncomplete = function (event) {
+                            schoolObjectStore.transaction.oncomplete = function(event) {
                                 console.log(' NEW School Salvo !!!! ');
                                 //Após ter salvo uma nova Escola (Offline)
                                 //Salvar cada ClassRoom para esta school_id
@@ -1830,7 +1829,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     }
 
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1840,7 +1839,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Registrar Turma
-        this.addClassroomsOff = function (school_id, listClassrooms_name, idxClassroom, infoSchools) {
+        this.addClassroomsOff = function(school_id, listClassrooms_name, idxClassroom, infoSchools) {
             var classroom_name = listClassrooms_name[idxClassroom];
 
             if (self.isset(classroom_name)) {
@@ -1848,21 +1847,21 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
 
-                    db.onerror = function (event) {
+                    db.onerror = function(event) {
                         // Função genérica para tratar os erros de todos os requests desse banco!
                         console.log("Database error: " + event.target.error.message);
                     }
                     var maxID = 0;
                     var findClassroomsObjectStore = db.transaction("unity", "readonly").objectStore("unity");
-                    findClassroomsObjectStore.openCursor().onsuccess = function (event) {
+                    findClassroomsObjectStore.openCursor().onsuccess = function(event) {
                         var cursor = event.target.result;
                         //Encontrar Maior ID
                         if (cursor) {
@@ -1887,7 +1886,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                             //Tudo ok Então Registra a Nova Turma
                             var classroomObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
                             classroomObjectStore.add(dataClassroom);
-                            classroomObjectStore.transaction.oncomplete = function (event) {
+                            classroomObjectStore.transaction.oncomplete = function(event) {
                                 console.log(' NEW Classroom Salvo !!!! ');
                                 self.addClassroomsOff(school_id, listClassrooms_name, idxClassroom, infoSchools);
                             };
@@ -1895,7 +1894,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     }
 
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1908,25 +1907,25 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Registrar Aluno
-        this.addStudentOff = function (classroom_id, user_name) {
+        this.addStudentOff = function(classroom_id, user_name) {
             if (self.isset(user_name)) {
                 window.indexedDB = self.verifyIDBrownser();
                 DBsynapse = window.indexedDB.open(nameBD);
-                DBsynapse.onerror = function (event) {
+                DBsynapse.onerror = function(event) {
                     console.log("Error: ");
                     console.log(event);
                     // alert("Você não habilitou minha web app para usar IndexedDB?!");
                 }
-                DBsynapse.onsuccess = function (event) {
+                DBsynapse.onsuccess = function(event) {
                     var db = event.target.result;
 
-                    db.onerror = function (event) {
+                    db.onerror = function(event) {
                         // Função genérica para tratar os erros de todos os requests desse banco!
                         console.log("Database error: " + event.target.error.message);
                     }
                     var maxID = 0;
                     var findStudentsObjectStore = db.transaction("actor", "readonly").objectStore("actor");
-                    findStudentsObjectStore.openCursor().onsuccess = function (event) {
+                    findStudentsObjectStore.openCursor().onsuccess = function(event) {
                         var cursor = event.target.result;
                         //Encontrar Maior ID
                         if (cursor) {
@@ -1952,7 +1951,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                             //Tudo ok Então Registra o Novo Aluno
                             var studentObjectStore = db.transaction("actor", "readwrite").objectStore("actor");
                             studentObjectStore.add(dataStudent);
-                            studentObjectStore.transaction.oncomplete = function (event) {
+                            studentObjectStore.transaction.oncomplete = function(event) {
                                 console.log(' NEW Actor Salvo !!!! ');
                                 location.href = "select.html";
                             };
@@ -1960,7 +1959,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     }
 
                 }
-                DBsynapse.onblocked = function (event) {
+                DBsynapse.onblocked = function(event) {
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
@@ -1968,17 +1967,17 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Pesquisar Todas as escolas
-        this.findAllSchools = function (callBack) {
+        this.findAllSchools = function(callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -1986,7 +1985,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var schools = new Array();
 
                 var schoolObjectStore = db.transaction("school", "readonly").objectStore("school");
-                schoolObjectStore.openCursor().onsuccess = function (event) {
+                schoolObjectStore.openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         schools.push({
@@ -2003,7 +2002,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -2011,17 +2010,17 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Pesquisar Todas as Turmas
-        this.findAllClassrooms = function (callBack) {
+        this.findAllClassrooms = function(callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -2029,7 +2028,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var classrooms = new Array();
 
                 var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
-                classroomObjectStore.openCursor().onsuccess = function (event) {
+                classroomObjectStore.openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         classrooms.push({
@@ -2047,7 +2046,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -2056,17 +2055,17 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Pesquisar Todos os Cobjects, porém retorna somente informações importantes
-        this.findAllMinCobjects = function (callBack) {
+        this.findAllMinCobjects = function(callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -2074,7 +2073,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var cobjects = new Array();
 
                 var cobjectObjectStore = db.transaction("cobject", "readonly").objectStore("cobject");
-                cobjectObjectStore.openCursor().onsuccess = function (event) {
+                cobjectObjectStore.openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         cobjects.push({
@@ -2092,7 +2091,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -2101,18 +2100,18 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Pesquisar Cobject específico
-        this.findCobjectById = function (cobject_id, callBack) {
+        this.findCobjectById = function(cobject_id, callBack) {
 
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -2121,7 +2120,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var cobjectObjectStore = db.transaction("cobject", "readonly").objectStore("cobject");
 
                 //Selecionar somente o cobject que possui o cobject_id especificado
-                cobjectObjectStore.get(cobject_id).onsuccess = function (event) {
+                cobjectObjectStore.get(cobject_id).onsuccess = function(event) {
                     var result = event.target.result;
                     if (result) {
                         //Encontrou o cobject
@@ -2135,7 +2134,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 }
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -2143,18 +2142,18 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Pesquisar Turma específica
-        this.findClassroomById = function (classroom_id, callBack) {
+        this.findClassroomById = function(classroom_id, callBack) {
 
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -2163,7 +2162,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
 
                 //Selecionar somente a turma que possui o classroom_id especificado
-                classroomObjectStore.get(classroom_id).onsuccess = function (event) {
+                classroomObjectStore.get(classroom_id).onsuccess = function(event) {
                     var result = event.target.result;
                     if (result) {
                         //Encontrou a classroom
@@ -2177,7 +2176,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 }
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -2186,18 +2185,18 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Pesquisar todas as classes de uma determinada escola
-        this.findClassroomBySchool = function (school_id, callBack) {
+        this.findClassroomBySchool = function(school_id, callBack) {
 
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -2209,7 +2208,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var requestGet = classroomObjectStore.index('school_id');
                 var singleKeyRange = IDBKeyRange.only(school_id);
 
-                requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         classrooms.push({
@@ -2226,7 +2225,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -2236,18 +2235,18 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         //Pesquisar todas as classes de uma determinada escola
-        this.findStudentByClassroom = function (classroom_id, callBack) {
+        this.findStudentByClassroom = function(classroom_id, callBack) {
 
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
-            DBsynapse.onerror = function (event) {
+            DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
                 //alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
-            DBsynapse.onsuccess = function (event) {
+            DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
-                db.onerror = function (event) {
+                db.onerror = function(event) {
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
@@ -2259,7 +2258,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var requestGet = studentObjectStore.index('unity_id');
                 var singleKeyRange = IDBKeyRange.only(classroom_id);
 
-                requestGet.openCursor(singleKeyRange).onsuccess = function (event) {
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         students.push({
@@ -2276,7 +2275,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
             }
-            DBsynapse.onblocked = function (event) {
+            DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
@@ -2285,7 +2284,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
 
-        this.isset = function (variable) {
+        this.isset = function(variable) {
             return (typeof variable !== 'undefined' && variable !== null);
         }
 

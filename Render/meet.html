@@ -1,402 +1,452 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <script type="text/javascript">
-            if (sessionStorage.getItem("authorization") == null || sessionStorage.getItem("authorization") == 'false') {
-                location.href = 'login.html';
-            }
-        </script>
-        <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <link rel="stylesheet" type="text/css" href="css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-        <link rel="stylesheet" type="text/css" href="css/render/render.css">
-        <link rel="stylesheet" type="text/css" href="css/reset.css">
-        <link rel="stylesheet" type="text/css" href="css/render/global.css">
-        <link rel="stylesheet" type="text/css" href="css/render/meet.css">
-        <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
-        <!---[if lt IE 8]>
+
+<head>
+    <script type="text/javascript">
+        if (sessionStorage.getItem("authorization") == null || sessionStorage.getItem("authorization") == 'false') {
+            location.href = 'login.html';
+        }
+    </script>
+    <!-- SEMPRE MANTER ATUALIZADO COM O LAYOUT DO RENDER !!!  -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="css/render/render.css">
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/render/global.css">
+    <link rel="stylesheet" type="text/css" href="css/render/meet.css">
+    <link rel="stylesheet" type="text/css" href="css/render/fonts.css">
+    <!---[if lt IE 8]>
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
         <![endif]-->
-        <script src="js/jquery/jquery-1.7.2.js"></script>
+    <script src="js/jquery/jquery-1.7.2.js"></script>
 
-        <script src="js/jquery/jquery.ui.core.js"></script>
-        <script src="js/jquery/jquery.ui.widget.js"></script>
-        <script src="js/jquery/jquery.ui.mouse.js"></script>
-        <script src="js/jquery/jquery.ui.touch-punch.min.js"></script>
-        <script src="js/jquery/jquery.ui.draggable.js"></script>
-        <script src="js/jquery/jquery.ui.droppable.js"></script>
+    <script src="js/jquery/jquery.ui.core.js"></script>
+    <script src="js/jquery/jquery.ui.widget.js"></script>
+    <script src="js/jquery/jquery.ui.mouse.js"></script>
+    <script src="js/jquery/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/jquery/jquery.ui.draggable.js"></script>
+    <script src="js/jquery/jquery.ui.droppable.js"></script>
 
-        <!-- JQUERY FOR MOBILE-->
-        <script>
-            //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
-            $(document).bind('mobileinit', function () {
-                $.mobile.changePage.defaults.changeHash = false;
-                $.mobile.hashListeningEnabled = false;
-                $.mobile.pushStateEnabled = false;
-            });
-        </script>
-        <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
-        <!-- ================= -->
+    <!-- JQUERY FOR MOBILE-->
+    <script>
+        //Para evitar error de segurança no Chrome, quando abre o jquery-mobile
+        $(document).bind('mobileinit', function() {
+            $.mobile.changePage.defaults.changeHash = false;
+            $.mobile.hashListeningEnabled = false;
+            $.mobile.pushStateEnabled = false;
+        });
+    </script>
+    <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
+    <!-- ================= -->
 
-        <script type="text/javascript" src="js/render/meet.js"></script>
-        <script type="text/javascript" src="js/render/domcobject.js"></script>
-        <script type="text/javascript" src="js/jquery.shuffle.js"></script>
+    <script type="text/javascript" src="js/render/meet.js"></script>
+    <script type="text/javascript" src="js/render/domcobject.js"></script>
+    <script type="text/javascript" src="js/jquery.shuffle.js"></script>
 
-        <!-- Abrir Script do renderDB -->
-        <script type="text/javascript" src="db/renderDB.js"></script>
-        <script type="text/javascript" src="db/onlineRenderDB.js"></script>
-        <!-- Abrir Script do meetEvaluation -->
-        <script type="text/javascript" src="js/render/meetEvaluation.js"></script>
-          <!-- Abrir Script do meetProficiency -->
-        <script type="text/javascript" src="js/render/meetProficiency.js"></script>
-        <script type="text/javascript" src="js/render/meetPreview.js"></script>
+    <!-- Abrir Script do renderDB -->
+    <script type="text/javascript" src="db/renderDB.js"></script>
+    <script type="text/javascript" src="db/onlineRenderDB.js"></script>
+    <!-- Abrir Script do meetEvaluation -->
+    <script type="text/javascript" src="js/render/meetEvaluation.js"></script>
+    <!-- Abrir Script do meetProficiency -->
+    <script type="text/javascript" src="js/render/meetProficiency.js"></script>
+    <script type="text/javascript" src="js/render/meetPreview.js"></script>
 
-        <script>
-            var DISCIPLINES = [];
-            DISCIPLINES[1] = "LINGUAGEM";
-            DISCIPLINES[2] = "MATEMÁTICA";
+    <script>
+        var DISCIPLINES = [];
+        DISCIPLINES[1] = "LINGUAGEM";
+        DISCIPLINES[2] = "MATEMÁTICA";
 
-            /**
-             * @param {mixed} variable The variable to check.
-             *
-             * @returns {boolean} A Boolean containing TRUE if the variable is seted and FALSE if it's not seted.
-             */
-            function isset(variable) {
-                return (variable !== undefined && variable !== null);
+        /**
+         * @param {mixed} variable The variable to check.
+         *
+         * @returns {boolean} A Boolean containing TRUE if the variable is seted and FALSE if it's not seted.
+         */
+        function isset(variable) {
+            return (variable !== undefined && variable !== null);
+        }
+        /**
+         * @param {DOMString} IF A DOMString containing the name of the key you want to retrieve the value of.
+         * @param {DOMString} ELSE A DOMString containing the name of the key you want to retrieve the value of in case that IF is not seted.
+         *
+         * @returns {DOMString} A DOMString containing the value of the key. If the key does not exist, null is returned.
+         */
+        function sessionGet(IF, ELSE) {
+            if (isset(ELSE)) {
+                return isset(sessionStorage.getItem(IF)) ?
+                    sessionStorage.getItem(IF) :
+                    sessionStorage.getItem(ELSE);
+            } else {
+                return sessionStorage.getItem(IF);
             }
-            /**
-             * @param {DOMString} IF A DOMString containing the name of the key you want to retrieve the value of.
-             * @param {DOMString} ELSE A DOMString containing the name of the key you want to retrieve the value of in case that IF is not seted.
-             *
-             * @returns {DOMString} A DOMString containing the value of the key. If the key does not exist, null is returned.
-             */
-            function sessionGet(IF, ELSE) {
-                if (isset(ELSE)) {
-                    return isset(sessionStorage.getItem(IF))
-                            ? sessionStorage.getItem(IF)
-                            : sessionStorage.getItem(ELSE);
+        }
+
+
+        $(document).ready(function() {
+
+            //Somente para retirar o 'loading' que o jquery cria automaticamente
+            $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
+
+            //Retira os eventos padrões para elementos select
+            $('#regSchool').unbind();
+            $('#regClassroom').unbind();
+            $('#regSchool').siblings('span').remove();
+            $('#regClassroom').siblings('span').remove();
+
+
+
+            if (window.openDatabase) {
+                console.log("Suporta BD-HTML5");
+
+                var org = '';
+
+                var classroomID = sessionGet('id_classroom');
+                var classroomName = sessionGet('name_classroom');
+
+                //var unityfather_name = '';
+                var organizationName = '';
+
+                //Obter o modo do render na sessão
+                var render_mode = sessionGet('render_mode');
+                var selected_level_evaluation = sessionGet('selected_level_evaluation');
+
+                //Verificar se existe um aluno selecionado pelo tutor
+                //Ou se foi o próprio aluno que realizou login
+                var actorID = sessionGet('id_actor', 'login_id_actor');
+                var actorName = sessionGet('name_actor', 'login_name_actor');
+                //Personagem de quem fez o login
+                var login_personage_name = sessionGet('login_personage_name');
+
+                //Selecionar o Bloco de Atividades
+                var disciplineID = sessionGet('id_discipline');
+                var disciplineName = DISCIPLINES[disciplineID];
+                /* var block_id;
+                 switch (disciplineID) {
+                 case '1':
+                 block_id = '8';
+                 break; //Linguagem
+                 case '2':
+                 block_id = '';
+                 break; //Matemática
+                 } */
+
+                var options = {
+                    org: [org, organizationName],
+                    studentClassroom: [classroomID, classroomName],
+                    actor: [actorID, actorName, login_personage_name],
+                    id_discipline: disciplineID,
+                    render_mode: render_mode,
+                    selected_level_evaluation: selected_level_evaluation,
+                    //cobject_block_id: block_id
+                };
+
+                //Passar parâmetro do tipo do Encontro
+                var newMeet = new Meet(options);
+
+                //Verificar se foi selecionado algum Aluno
+                if (actorID === 'null' || actorID === '-1') {
+                    $('#add-new-user').show();
                 } else {
-                    return sessionStorage.getItem(IF);
+                    //Iniciar o Meet e Atualiza O painel do render
+                    newMeet.start();
+                    loadInfos();
                 }
-            }
 
+                function loadInfos() {
+                    $('.info.info-name').html('<p>' + Meet.actor_name + '</p>');
+                    $('.info.info-discipline').html('<p>' + disciplineName + '</p>');
+                    $('.info.info-hits .info-text').html(Meet.peformance_qtd_correct);
+                    $('.info.info-erros .info-text').html(Meet.peformance_qtd_wrong);
+                }
 
-            $(document).ready(function () {
+                Meet.DB_synapse.findAllSchools(function(listSchools) {
+                    var foundAnySchool = false;
+                    for (var idx in listSchools) {
+                        foundAnySchool = true;
+                        var school = listSchools[idx];
+                        $('#regSchool').append("<option value='" + school['id'] + "'>" + school['name'] + "</option>");
+                    }
 
-                //Somente para retirar o 'loading' que o jquery cria automaticamente
-                $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
+                    if (!foundAnySchool) {
+                        //Sem Escola
+                        $('#regSchool').html("<option value='-1'>Sem Escola</option>");
+                        //Sem classe
+                        $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
+                    } else {
+                        //Econtrou pelo menos uma escola
+                        $('#regSchool').trigger('change');
+                    }
 
-                //Retira os eventos padrões para elementos select
-                $('#regSchool').unbind();
-                $('#regClassroom').unbind();
-                $('#regSchool').siblings('span').remove();
-                $('#regClassroom').siblings('span').remove();
+                });
 
+                //======================================
 
+                //Carregar Turmas da escola Selecionada
+                $('#regSchool').on('change', function() {
+                    var school_id = $(this).val();
+                    Meet.DB_synapse.findClassroomBySchool(school_id, function(listClassrooms) {
+                        var foundAnyClassroom = false;
+                        var htmlOptions = "";
+                        for (var idx in listClassrooms) {
+                            foundAnyClassroom = true;
+                            var classroom = listClassrooms[idx];
+                            htmlOptions += "<option value='" + classroom['id'] + "'>" + classroom['name'] + "</option>";
+                        }
 
-                if (window.openDatabase) {
-                    console.log("Suporta BD-HTML5");
+                        if (!foundAnyClassroom) {
+                            //Sem classe
+                            $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
+                        } else {
+                            //Encontrou alguma Classe
+                            $('#regClassroom').html(htmlOptions);
+                        }
 
-                    var org = '';
+                    });
 
-                    var classroomID = sessionGet('id_classroom');
-                    var classroomName = sessionGet('name_classroom');
+                });
 
-                    //var unityfather_name = '';
-                    var organizationName = '';
+                //Mostrar/Ocultar barra de informações
+                $('#info-button').bind('tap', function() {
+                    $('#head_meet').animate({
+                        left: '0'
+                    });
+                });
 
-                    //Obter o modo do render na sessão
-                    var render_mode = sessionGet('render_mode');
-                    var selected_level_evaluation = sessionGet('selected_level_evaluation');
+                $('.close-bar').bind('tap', function() {
+                    $('#head_meet').animate({
+                        left: '-255px'
+                    });
+                });
 
-                    //Verificar se existe um aluno selecionado pelo tutor
-                    //Ou se foi o próprio aluno que realizou login
-                    var actorID = sessionGet('id_actor', 'login_id_actor');
-                    var actorName = sessionGet('name_actor', 'login_name_actor');
-                    //Personagem de quem fez o login
-                    var login_personage_name = sessionGet('login_personage_name');
+                // Encerrar atendimento
+                $(".info-exit").bind('tap', function() {
+                    $("#finalize-message").show();
+                });
 
-                    //Selecionar o Bloco de Atividades
-                    var disciplineID = sessionGet('id_discipline');
-                    var disciplineName = DISCIPLINES[disciplineID];
-                    /* var block_id;
-                     switch (disciplineID) {
-                     case '1':
-                     block_id = '8';
-                     break; //Linguagem
-                     case '2':
-                     block_id = '';
-                     break; //Matemática
-                     } */
+                $("#finalize-icon").bind('tap', function() {
+                    var db;
+                    var request = indexedDB.open("synapseDB", 3);
 
-                    var options = {
-                        org: [org, organizationName],
-                        studentClassroom: [classroomID, classroomName],
-                        actor: [actorID, actorName, login_personage_name],
-                        id_discipline: disciplineID,
-                        render_mode : render_mode,
-                        selected_level_evaluation: selected_level_evaluation,
-                        //cobject_block_id: block_id
+                    request.onerror = function(event) {
+                        console.log("error: ");
                     };
 
-                    //Passar parâmetro do tipo do Encontro
-                    var newMeet = new Meet(options);
+                    request.onsuccess = function(event) {
+                        db = request.result;
+                        console.log("success: " + db);
 
-                    //Verificar se foi selecionado algum Aluno
-                    if (actorID === 'null' || actorID === '-1' ) {
-                        $('#add-new-user').show();
+                        function read(tutor = sessionStorage.getItem('login_id_actor')) {
+                            var transaction = db.transaction(["actor"]);
+                            var objectStore = transaction.objectStore("actor");
+                            var request = objectStore.get("" + tutor);
+
+                            request.onerror = function(event) {
+                                alert("Unable to retrieve daa from database!");
+                            };
+                            request.onsuccess = function(event) {
+                                // Do something with the request.result!
+                                if (request.result) {
+                                    console.log("Login: " + request.result.login);
+                                    if ($("#pincode").val() == request.result.password) {
+                                        newMeet.finalizeMeet();
+                                    } else {
+                                        $("#finalize-message").hide();
+                                        $("#pincode").val("");
+                                    }
+                                } else {
+                                    console.log("Erro");
+                                    $("#finalize-message").hide();
+                                    $("#pincode").val("");
+                                }
+                            };
+                        };
+                        read();
+                    };
+                });
+
+                $("#close-icon").bind('tap', function() {
+                    $("#finalize-message").hide();
+                    $("#pincode").val("");
+                });
+
+                $(".message-button-pincode").click(function() {
+                    console.log($(this).attr("value"));
+                    $("#pincode").val($("#pincode").attr("value") + $(this).attr("value"));
+                });
+
+                $('#btnAddNewUser').on('tap', function() {
+                    var usrName = $('#regNome_aluno').val();
+                    if (usrName.replace(/\s/g, '') === '') {
+                        //Mensagem erro
+                        $('.message-form').html("Nome do Aluno é Obrigatório!");
                     } else {
-                        //Iniciar o Meet e Atualiza O painel do render
-                        newMeet.start();
-                        loadInfos();
-                    }
-
-                    function loadInfos() {
-                        $('.info.info-name').html('<p>' + Meet.actor_name + '</p>');
-                        $('.info.info-discipline').html('<p>' + disciplineName + '</p>');
-                        $('.info.info-hits .info-text').html(Meet.peformance_qtd_correct);
-                        $('.info.info-erros .info-text').html(Meet.peformance_qtd_wrong);
-                    }
-
-                        Meet.DB_synapse.findAllSchools(function (listSchools) {
-                            var foundAnySchool = false;
-                            for (var idx in listSchools) {
-                                foundAnySchool = true;
-                                var school = listSchools[idx];
-                                $('#regSchool').append("<option value='" + school['id'] + "'>" + school['name'] + "</option>");
-                            }
-
-                            if (!foundAnySchool) {
-                                //Sem Escola
-                                $('#regSchool').html("<option value='-1'>Sem Escola</option>");
-                                //Sem classe
-                                $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
-                            } else {
-                                //Econtrou pelo menos uma escola
-                                $('#regSchool').trigger('change');
-                            }
-
-                        });
-
-                    //======================================
-
-                     //Carregar Turmas da escola Selecionada
-                    $('#regSchool').on('change', function () {
-                        var school_id = $(this).val();
-                        Meet.DB_synapse.findClassroomBySchool(school_id, function (listClassrooms) {
-                            var foundAnyClassroom = false;
-                            var htmlOptions = "";
-                            for (var idx in listClassrooms) {
-                                foundAnyClassroom = true;
-                                var classroom = listClassrooms[idx];
-                                htmlOptions += "<option value='" + classroom['id'] + "'>" + classroom['name'] + "</option>";
-                            }
-
-                            if (!foundAnyClassroom) {
-                                //Sem classe
-                                $('#regClassroom').html("<option value='-1'>Sem Turma</option>");
-                            } else {
-                                //Encontrou alguma Classe
-                                $('#regClassroom').html(htmlOptions);
-                            }
-
-                        });
-
-                    });
-
-                    //Mostrar/Ocultar barra de informações
-                    $('#info-button').bind('tap', function () {
-                        $('#head_meet').animate({left: '0'});
-                    });
-
-                    $('.close-bar').bind('tap', function () {
-                        $('#head_meet').animate({left: '-255px'});
-                    });
-
-                    // Encerrar atendimento
-                    $(".info-exit").bind('tap', function () {
-                        $("#finalize-message").show();
-                    });
-
-                    $("#finalize-icon").bind('tap', function () {
-                        newMeet.finalizeMeet();
-                    });
-
-                    $("#close-icon").bind('tap', function () {
-                        $("#finalize-message").hide();
-                    });
-
-                    $(".message-button-pincode").click(function() {
-                       console.log($(this).attr("value"));
-                       $("#pincode").val($("#pincode").attr("value") + $(this).attr("value"));
-                     });
-
-                    $('#btnAddNewUser').on('tap', function () {
-                        var usrName = $('#regNome_aluno').val();
-                        if (usrName.replace(/\s/g, '') === '') {
-                            //Mensagem erro
-                            $('.message-form').html("Nome do Aluno é Obrigatório!");
+                        //Cadastrar Usuário Offline no IndexDB
+                        if ($('#regClassroom').val() != "-1") {
+                            Meet.DB_synapse.addStudentOff($('#regClassroom').val(), $('#regNome_aluno').val());
+                            alert('Novo aluno salvo com sucesso!');
                         } else {
-                            //Cadastrar Usuário Offline no IndexDB
-                            if($('#regClassroom').val() != "-1"){
-                                Meet.DB_synapse.addStudentOff($('#regClassroom').val(), $('#regNome_aluno').val());
-                                alert('Novo aluno salvo com sucesso!');
-                            }else{
-                                alert('Sem Turma!');
-                            }
-
-
+                            alert('Sem Turma!');
                         }
-                    });
 
-                }
-            });
 
-        </script>
-        <title>Render</title>
-        <link rel="icon" type="image/png" href="icons/icon-48.png" />
-    </head>
-    <body id="synapse" ondragstart='return true'>
+                    }
+                });
 
-        <!-- Barra de informações -->
-        <div id="head_meet">
-            <div class="drawer-header">
-                <div class="close-bar">
-                    <a href="#"><i class="fa fa-bars"></i></a>
-                </div>
-                <div class="logo-bar">
-                    <img src="img/synapse-logo.png">
-                </div>
+            }
+        });
+    </script>
+    <title>Render</title>
+    <link rel="icon" type="image/png" href="icons/icon-48.png" />
+</head>
+
+<body id="synapse" ondragstart='return true'>
+
+    <!-- Barra de informações -->
+    <div id="head_meet">
+        <div class="drawer-header">
+            <div class="close-bar">
+                <a href="#"><i class="fa fa-bars"></i></a>
             </div>
-            <div class="drawer-body-top">
-                <div class="info info-name"></div>
-                <div class="info info-discipline"></div>
-            </div>
-            <div class="drawer-body-middle">
-                <div class="info info-time">
-                    <img class="info-icon" src="img/icons/clock.png" alt="Relógio">
-                    <p class="info-text"></p>
-                    <div class="clear"></div>
-                </div>
-                <div class="info info-hits">
-                    <img class="info-icon" src="img/icons/hit.png" alt="Acerto">
-                    <p class="info-text"></p>
-                    <div class="clear"></div>
-                </div>
-                <div class="info info-erros">
-                    <img class="info-icon" src="img/icons/error.png" alt="Erro">
-                    <p class="info-text"></p>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            <div class="drawer-footer">
-                <a class="info-exit" href="#">
-                    <img class="info-icon" src="img/icons/undo.png" alt="Sair">
-                    <p class="info-text">Encerrar Atendimento</p>
-                    <div class="clear"></div>
-                </a>
+            <div class="logo-bar">
+                <img src="img/synapse-logo.png">
             </div>
         </div>
-
-        <div id="info-button">
-            <a href="#"><i class="fa fa-bars"></i></a>
+        <div class="drawer-body-top">
+            <div class="info info-name"></div>
+            <div class="info info-discipline"></div>
         </div>
-
-        <div id="message">
-        </div>
-
-        <div id="render_canvas">
-        </div>
-
-        <div class="game">
-            <div class="level">
-                <p class="score-number"><i class="fa fa-flash"></i> <span id="level">0</span></p>
+        <div class="drawer-body-middle">
+            <div class="info info-time">
+                <img class="info-icon" src="img/icons/clock.png" alt="Relógio">
+                <p class="info-text"></p>
+                <div class="clear"></div>
             </div>
-            <div class="points">
-                <p class="score-number"><i class="fa fa-star"></i> <span id="points">0</span></p>
+            <div class="info info-hits">
+                <img class="info-icon" src="img/icons/hit.png" alt="Acerto">
+                <p class="info-text"></p>
+                <div class="clear"></div>
             </div>
-        </div>
-
-        <!-- Adicionar Novo Usuário -->
-        <div id="add-new-user" class="modal_message overlay">
-            <div class="message-container addNewUser">
-                <div class="title-add-new-user">
-                    Registrar Aluno
-                </div>
-                <div class="message-form">
-                </div>
-
-                <label for="regSchool">Escola</label>
-                <select name="regSchool" id="regSchool">
-                </select>
-                <label for="regClassroom">Turma</label>
-                <select name="regClassroom" id="regClassroom">
-                </select>
-
-                <label for="regNome_aluno">Nome do Aluno*</label>
-                <input type="text" size="20" maxlength="40" name="regNome_aluno" id="regNome_aluno"/>
-                <button class="message-button-addNewUser" id="btnAddNewUser">Registrar</button>
+            <div class="info info-erros">
+                <img class="info-icon" src="img/icons/error.png" alt="Erro">
+                <p class="info-text"></p>
+                <div class="clear"></div>
             </div>
         </div>
-
-        <!-- Acerto -->
-        <div id="hit-message" class="modal_message overlay">
-            <div class="message-container success">
-                <img class="ok message-icon" src="img/icons/hit.png">
-                <p class="message">Parabéns!<br>Você acertou!! \o/</p>
-                <button class="message-button">OK</button>
-            </div>
+        <div class="drawer-footer">
+            <a class="info-exit" href="#">
+                <img class="info-icon" src="img/icons/undo.png" alt="Sair">
+                <p class="info-text">Encerrar Atendimento</p>
+                <div class="clear"></div>
+            </a>
         </div>
+    </div>
 
-        <!-- Erro -->
-        <div id="error-message" class="modal_message overlay">
-            <div class="message-container error">
-                <img class="ok message-icon" src="img/icons/error.png">
-                <p class="message">Que peninha<br/>você errou :/</p>
-                <button class="message-button">OK</button>
-            </div>
+    <div id="info-button">
+        <a href="#"><i class="fa fa-bars"></i></a>
+    </div>
+
+    <div id="message">
+    </div>
+
+    <div id="render_canvas">
+    </div>
+
+    <div class="game">
+        <div class="level">
+            <p class="score-number"><i class="fa fa-flash"></i> <span id="level">0</span></p>
         </div>
-
-        <!-- Encerrar atividade -->
-        <div id="finalize-message" class="overlay">
-            <div class="message-container exit">
-                <p class="message">Deseja encerrar o atendimento desse aluno?</p>
-                <input type="password"size="20" maxlength="40" name="pincode" id="pincode" placeholder="Digite o PIN"/>
-                <button id="pincoden7" class="message-button-pincode" value="7">7</button>
-                <button id="pincoden8" class="message-button-pincode" value="8">8</button>
-                <button id="pincoden9" class="message-button-pincode" value="9">9</button></br>
-                <button id="pincoden4" class="message-button-pincode" value="4">4</button>
-                <button id="pincoden5" class="message-button-pincode" value="5">5</button>
-                <button id="pincoden6" class="message-button-pincode" value="6">6</button></br>
-                <button id="pincoden1" class="message-button-pincode" value="1">1</button>
-                <button id="pincoden2" class="message-button-pincode" value="2">2</button>
-                <button id="pincoden3" class="message-button-pincode" value="3">3</button></br>
-                <button id="pincoden0" class="message-button-pincode" value="0">0</button>
-                <button id="close-icon" class="message-button-cancel">Cancelar</button>
-                <button id="finalize-icon" class="message-button-confirm">Confirmar</button>
-            </div>
+        <div class="points">
+            <p class="score-number"><i class="fa fa-star"></i> <span id="points">0</span></p>
         </div>
+    </div>
 
-        <!-- Avanço de Nível -->
-        <div id="nextLevel-message" class="nextLevel-message modal_message overlay">
-            <div class="message-container success">
-                <img class="ok message-icon" src="img/icons/raio_telapassagem.png">
-                <p class="message">Parabéns!<br>Você passou de nível!</p>
-                <button class="message-button">OK</button>
+    <!-- Adicionar Novo Usuário -->
+    <div id="add-new-user" class="modal_message overlay">
+        <div class="message-container addNewUser">
+            <div class="title-add-new-user">
+                Registrar Aluno
             </div>
-        </div>
-
-        <!-- Avanço do Último Nível -->
-        <div id="finishLevel-message" class="nextLevel-message modal_message overlay">
-            <div class="message-container success">
-                <img class="ok message-icon" src="img/icons/raio_telapassagem.png">
-                <p class="message">Parabéns, Por Finalizar essa Etapa!</p>
-                <button class="message-button">OK</button>
+            <div class="message-form">
             </div>
-        </div>
 
-    </body>
+            <label for="regSchool">Escola</label>
+            <select name="regSchool" id="regSchool">
+            </select>
+            <label for="regClassroom">Turma</label>
+            <select name="regClassroom" id="regClassroom">
+            </select>
+
+            <label for="regNome_aluno">Nome do Aluno*</label>
+            <input type="text" size="20" maxlength="40" name="regNome_aluno" id="regNome_aluno" />
+            <button class="message-button-addNewUser" id="btnAddNewUser">Registrar</button>
+        </div>
+    </div>
+
+    <!-- Acerto -->
+    <div id="hit-message" class="modal_message overlay">
+        <div class="message-container success">
+            <img class="ok message-icon" src="img/icons/hit.png">
+            <p class="message">Parabéns!
+                <br>Você acertou!! \o/</p>
+            <button class="message-button">OK</button>
+        </div>
+    </div>
+
+    <!-- Erro -->
+    <div id="error-message" class="modal_message overlay">
+        <div class="message-container error">
+            <img class="ok message-icon" src="img/icons/error.png">
+            <p class="message">Que peninha
+                <br/>você errou :/</p>
+            <button class="message-button">OK</button>
+        </div>
+    </div>
+
+    <!-- Encerrar atividade -->
+    <div id="finalize-message" class="overlay">
+        <div class="message-container exit">
+            <p class="message">Deseja encerrar o atendimento desse aluno?</p>
+            <input type="password" size="20" maxlength="40" name="pincode" id="pincode" readonly="true" placeholder="Digite o PIN" />
+            <button id="pincoden7" class="message-button-pincode" value="7">7</button>
+            <button id="pincoden8" class="message-button-pincode" value="8">8</button>
+            <button id="pincoden9" class="message-button-pincode" value="9">9</button>
+            </br>
+            <button id="pincoden4" class="message-button-pincode" value="4">4</button>
+            <button id="pincoden5" class="message-button-pincode" value="5">5</button>
+            <button id="pincoden6" class="message-button-pincode" value="6">6</button>
+            </br>
+            <button id="pincoden1" class="message-button-pincode" value="1">1</button>
+            <button id="pincoden2" class="message-button-pincode" value="2">2</button>
+            <button id="pincoden3" class="message-button-pincode" value="3">3</button>
+            </br>
+            <button id="pincoden0" class="message-button-pincode" value="0">0</button>
+            <button id="close-icon" class="message-button-cancel">Cancelar</button>
+            <button id="finalize-icon" class="message-button-confirm">Confirmar</button>
+        </div>
+    </div>
+
+    <!-- Avanço de Nível -->
+    <div id="nextLevel-message" class="nextLevel-message modal_message overlay">
+        <div class="message-container success">
+            <img class="ok message-icon" src="img/icons/raio_telapassagem.png">
+            <p class="message">Parabéns!
+                <br>Você passou de nível!</p>
+            <button class="message-button">OK</button>
+        </div>
+    </div>
+
+    <!-- Avanço do Último Nível -->
+    <div id="finishLevel-message" class="nextLevel-message modal_message overlay">
+        <div class="message-container success">
+            <img class="ok message-icon" src="img/icons/raio_telapassagem.png">
+            <p class="message">Parabéns, Por Finalizar essa Etapa!</p>
+            <button class="message-button">OK</button>
+        </div>
+    </div>
+
+</body>
+
 </html>

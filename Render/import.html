@@ -151,8 +151,8 @@
                 $('#exportPerformances').bind('tap', function () {
                   var callBack = function(jsonExport){
                     //Realizar download da String
-                    //Se for um browser com o Chrome
-                    var pom = document.createElement('a');
+                      //Se for um browser com o Chrome
+                      var pom = document.createElement('a');
                     var current_date = new Date();
 
                     pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonExport));

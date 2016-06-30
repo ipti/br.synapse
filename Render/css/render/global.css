@@ -1,36 +1,32 @@
 /**
  * Global CSS
  */
- 
+
 :focus {
-  outline: none;
+    outline: none;
+}
+img {
+    width: 100%;
+}
+.clear {
+    clear: both;
+}
+.pull-right {
+    float: right !important;
+}
+.pull-left {
+    float: left !important;
+}
+body {
+    height: 100% !important;
+    min-height: 100% !important;
+}
+body> div[ data-role="page"] {
+    height: 100% !important;
+    min-height: 100% !important;
 }
 
- img {
- 	width: 100%;
- }
-
- .clear {
- 	clear: both;
- }
- 
- .pull-right{
-     float:right !important;
- }
- .pull-left{
-     float:left !important;
- }
- 
- body{
-    height: 100% !important;
-    min-height: 100% !important;
- }
- body > div[ data-role="page"]{
-    height: 100% !important;
-    min-height: 100% !important;
- }
- 
- /** Overlay **/
+/** Overlay **/
 
 .overlay {
     background: rgba(255, 255, 255, 0.7);
@@ -41,7 +37,6 @@
     display: none;
     z-index: 100000;
 }
-
 .message-container {
     width: 350px;
     margin: 150px auto;
@@ -54,26 +49,21 @@
     line-height: 44px;
     box-shadow: 1px 1px 8px #2C2C2C;
 }
-
- #import-confirm-admin-password {
+#import-confirm-admin-password {
     z-index: 100001;
 }
-
-.title-confirm-admin-password{
-     font-size: 36px;
-     margin-bottom: 10px;
+.title-confirm-admin-password {
+    font-size: 36px;
+    margin-bottom: 10px;
 }
-
 .message-container.confirmAdminPassword {
     background: rgba(78, 184, 152, 0.75);
     font-size: 25px;
 }
-
-.message-form{
+.message-form {
     font-size: 18px;
-    color:#F18318;
+    color: #F18318;
 }
-
 .message-button-confirm-admin-password {
     border: none;
     border-radius: 3px;
@@ -82,10 +72,9 @@
     font-size: 20px;
     padding: 7px 14px;
     margin-top: 10px;
-    cursor:pointer;
+    cursor: pointer;
 }
-
 .confirmAdminPassword input {
-    height:30px;
+    height: 30px;
     font-size: 27px;
 }
