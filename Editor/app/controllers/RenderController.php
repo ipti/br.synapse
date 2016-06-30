@@ -359,19 +359,29 @@ class RenderController extends Controller
 
     public function actionExportToOffline()
     {
-        if (isset($_REQUEST['school']) || isset($_REQUEST['cobject_block'])) {
+        //Precisa ter selecionado uma Escola
+        if (isset($_REQUEST['school'])) {
+            $downloaded = false;
+            //Arquivo ZIP ALL
+            $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
+            $this->tempArchiveZipMultiMedia = new ZipArchive;
+            $this->tempArchiveZipMultiMedia->open('exports/' . $zipname, ZipArchive::CREATE);
+            $this->tempArchiveZipMultiMedia->addEmptyDir("library/image/");
+            $this->tempArchiveZipMultiMedia->addEmptyDir("library/sound/");
+            $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
+
+            //Buscar as Turmas e os Alunos da Escola Selecionada
             $array_actorsInClassroom = [];
             if (isset($_REQUEST['school']) && $_REQUEST['school'] != "null") {
                 $school = School::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
                 $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, class.id AS classroom_id, class.name AS classroom_name,
-                    act.id, person.name, personage.name AS personage, person.login, person.password 
+                    act.id, person.name, personage.name AS personage, person.login, person.password
                     FROM classroom AS class
                     INNER JOIN actor AS act ON(act.classroom_fk = class.id)
                     INNER JOIN person ON(act.person_id = person.id)
                     INNER JOIN personage ON(act.personage_id = personage.id)
                     WHERE class.school_fk = " . $school->id;
-
                 //Criar Objeto user => actor_id, name, name_personage, login, senha
                 $array_actorsInClassroom = Yii::app()->db->createCommand($query)->queryAll();
             } else {
@@ -379,24 +389,44 @@ class RenderController extends Controller
                 $array_actorsInClassroom = [];
             }
 
-            $namesDisciplinesSelected = array();
+            //Armazenar todas as disciplinas existentes num array
+            //Atribuir às disciplinas SELECIONADAS, tanto na seleção das disciplinas para o
+            //Modo Avaliação como também para o Modo Proficiência/Treino
+
+            $namesDisciplinesBlockSelected = array();
+            $namesDisciplinesDiagSelected = array();
             //Obter as disciplinas
             $disciplines = ActDiscipline::model()->findAll();
             $array_disciplines = array();
             foreach ($disciplines as $idx => $discipline):
                 $array_disciplines[$idx]['id'] = $discipline->id;
                 $array_disciplines[$idx]['name'] = $discipline->name;
-                //Varrer as disciplinas
-                foreach($_POST['disciplines'] AS $current_discipline):
-                     if ($current_discipline == $discipline->id) {
-                         //Encontrou
-                         $namesDisciplinesSelected[$discipline->id] = substr($discipline->name, 0, 3);
-                         break;
-                     }
-                endforeach;
+                //Varrer as disciplinas relacionadas aos Modo Avaliação e/ou Proficiência/Treinos
+                if(isset($_POST['disciplines_block'])){
+                    foreach ($_POST['disciplines_block'] AS $current_discipline):
+                        if ($current_discipline == $discipline->id) {
+                            //Encontrou
+                            $namesDisciplinesBlockSelected[$discipline->id] = substr($discipline->name, 0, 3);
+                            break;
+                        }
+                    endforeach;
+                }
+                if(isset($_POST['disciplines_diag'])){
+                    foreach ($_POST['disciplines_diag'] AS $current_discipline):
+                        if ($current_discipline == $discipline->id) {
+                            //Encontrou
+                            $namesDisciplinesDiagSelected[$discipline->id] = substr($discipline->name, 0, 3);
+                            break;
+                        }
+                    endforeach;
+                }
+
             endforeach;
+
+            //Quando os filtros para o Modo Avalição são preenchidos.
+          if(isset($_REQUEST['cobject_block'])){
             //Arquivos do MODO AVALIAÇÃO
-            //Realizar o Download doS arquivoS de exportação para CADA bloco
+            //Realizar o Download dos arquivos de exportação para CADA bloco
             foreach ($_REQUEST['cobject_block'] AS $current_cobject_block):
                 //Obter o CobjectBloco Selecionado
                 $cobjectBlock = Cobjectblock::model()->findByPk($current_cobject_block);
@@ -423,13 +453,6 @@ class RenderController extends Controller
                     $cobject_block_id = $current_cobject_block;
                     $cobjectCobjectblocks = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id));
                     $json_cobjects = array();
-                    //Arquivo ZIP ALL
-                    $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
-                    $this->tempArchiveZipMultiMedia = new ZipArchive;
-                    $this->tempArchiveZipMultiMedia->open('exports/' . $zipname, ZipArchive::CREATE);
-                    $this->tempArchiveZipMultiMedia->addEmptyDir("library/image/");
-                    $this->tempArchiveZipMultiMedia->addEmptyDir("library/sound/");
-                    $this->tempArchiveZipMultiMedia->addEmptyDir("json/");
 
                     foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
                         $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
@@ -438,8 +461,6 @@ class RenderController extends Controller
                             array_push($json_cobjects, $jsonRenderView);
                         }
                     endforeach;
-
-                    // Fazer Download no Final
                     //Arquivo Json para adcionar no ZIP
                     $json = array();
                     //Tratar Separação no JS
@@ -449,19 +470,37 @@ class RenderController extends Controller
                     $json['CobjectBlock'] = $array_cobjectBlock;
                     $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
                     $json['Cobjects'] = $json_cobjects;
-                    $json_encode = "var dataJson$namesDisciplinesSelected[$current_block_discipline_id] = ";
+                    $json_encode = "var dataJson$namesDisciplinesBlockSelected[$current_block_discipline_id] = ";
                     $json_encode .= json_encode($json);
                     $json_encode .= ";";
-                    $this->tempArchiveZipMultiMedia->addFromString("json/renderData$namesDisciplinesSelected[$current_block_discipline_id].js", $json_encode);
-                    //Salva as alterações no zip
-                    $this->tempArchiveZipMultiMedia->close();
-                    if (file_exists('exports/' . $zipname)) {
-                        header('location: ../exports/' . $zipname);
-                    }
+                    $this->tempArchiveZipMultiMedia->addFromString("json/renderData$namesDisciplinesBlockSelected[$current_block_discipline_id].js", $json_encode);
+                    $downloaded = true;
                 }
 
             endforeach;
-        } else {
+          }
+
+            //Quando os filtros para o Modo Proficiência/Treino são preenchidos.
+            if(isset($_REQUEST['level'])){
+                //Verificar se foi selecionado alguma disciplina para
+                //Aplicar o modo Proficiência/Treino
+                if(isset($_POST['disciplines_diag'])){
+                    //Então baixa todos os roteiros+conteúdos+objetivos+cobjects e todos conteúdos
+                    //Multimídias relacionados
+                    var_dump("OK");exit();
+                }
+            }
+
+            // Fazer Download no Final, se foi criado algum aquivo
+            if($downloaded){
+                //Salva as alterações no zip
+                $this->tempArchiveZipMultiMedia->close();
+                if (file_exists('exports/' . $zipname)) {
+                    header('location: ../exports/' . $zipname);
+                }
+            }
+
+        }else {
             //Carrega a página para exportar para o render Offline
             $this->render("exportToOffline");
         }

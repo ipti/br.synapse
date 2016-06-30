@@ -23,7 +23,7 @@
                 }
             });
         
-            //Carregar Disciplinas
+            //Carregar Disciplinas dos blocos
             $.ajax({
                 type: "POST",
                 url: "/Render/GetAllBlockDisciplines",
@@ -32,15 +32,15 @@
                     window.alert(jqXHR.responseText);
                 },
                 success: function(response, textStatus, jqXHR){
-                    var disciplines = response;
+                    var disciplines_block = response;
                     var htmlCheckBox = "";
                     var htmlSelectBlocks = "";
-                    $.each(disciplines,function(index, value){
+                    $.each(disciplines_block,function(index, value){
                         //Adiciona uma nova Linha à Tabela. Com o checkbox da disciplina e o select dos blocos para esta disciplina
                         //Na mesma linha, porém em colunas diferentes
-                        htmlCheckBox ='<input disabled type="checkbox" name="disciplines[]" value="'+index+'">'+value+'</option>\n';
+                        htmlCheckBox ='<input disabled type="checkbox" name="disciplines_block[]" value="'+index+'">'+value+'</option>\n';
                         htmlSelectBlocks = '<select disabled discipline_id="'+index+'" name="cobject_block[]">' +
-                            ' <option>&nbsp;&nbsp;Selecione a Disciplina&nbsp;&nbsp;</option>' +
+                            ' <option value="-1">&nbsp;&nbsp;Seleciona o Bloco&nbsp;&nbsp;</option>' +
                             ' </select>';
                         var newRow = $('<div class="Row"> <div class="Col disciplineCol"> </div> <div class="Col blockCol"> </div></div>');
                         newRow.find('div.disciplineCol').html(htmlCheckBox);
@@ -51,11 +51,42 @@
                 }
             });
 
+            //Carregar Todas as Disciplinas
+            $.ajax({
+                type: "POST",
+                url: "/Render/GetDisciplines",
+                dataType: 'json',
+                error: function( jqXHR, textStatus, errorThrown ){
+                    window.alert(jqXHR.responseText);
+                },
+                success: function(response, textStatus, jqXHR){
+                    var disciplines = response;
+                    var htmlCheckBox = "";
+                    var htmlSelectBlocks = "";
+                    $.each(disciplines,function(index, value){
+                        //Adiciona uma nova Linha à Tabela. Com o checkbox da disciplina
+                        htmlCheckBox ='<input disabled type="checkbox" name="disciplines_diag[]" value="'+index+'">'+value+'</option>\n';
+                        //Adiciona uma nova linha se o número de colunas na última linha for 4
+                        var lastRow = $('#info-diag div.Table div.Row:last');
+                        if($('#info-diag div.Table div.Row').size() > 1 && lastRow.find('.Col').size() < 4) {
+                            //Add uma nova coluna nessa Linha
+                            lastRow.append(' <div class="Col disciplineCol">'+htmlCheckBox+'</div>');
+                        }else{
+                            //Add uma nova Linha e Coluna
+                            var newRow = $('<div class="Row"> <div class="Col disciplineCol"> </div></div>');
+                            newRow.find('div.disciplineCol').html(htmlCheckBox);
+                            $('#info-diag div.Table').append(newRow);
+                        }
+
+                    });
+
+                }
+            });
 
         
             $(document).on('change', '#info-block input[type="checkbox"]',function(){
                 //Carregar os Blocos
-                var disciplineSelected = $(this).val();
+                var disciplineBlockSelected = $(this).val();
                 if($(this).is(':checked')) {
                     //Está com checked
                     $.ajax({
@@ -72,11 +103,16 @@
                             $.each(cobjectBlocks, function (index, value) {
                                 htmlSelect += '<option value="' + index + '">' + value + '</option>\n';
                             });
-                            $('select[discipline_id="'+disciplineSelected+'"]').html(htmlSelect);
+                            $('select[discipline_id="'+disciplineBlockSelected+'"]').html(htmlSelect);
                         }
                     });
+                    //Habilita a seleção dos blocos, referente ao checkbox da disciplina clicado
+                    $('#info-block').find('select[disabled][discipline_id="'+$(this).val()+'"]').removeAttr('disabled');
                 }else{
-                    $('select[discipline_id="'+disciplineSelected+'"]').html("<option>&nbsp;&nbsp;Selecione a Disciplina&nbsp;&nbsp;</option>");
+                    //Desabilita a seleção dos blocos, referente ao checkbox da disciplina clicado
+                    var selectBlockFromDisciplineSelected = $('select[discipline_id="'+disciplineBlockSelected+'"]');
+                    selectBlockFromDisciplineSelected.html("<option value='-1'>&nbsp;&nbsp;Seleciona o Bloco&nbsp;&nbsp;</option>");
+                    selectBlockFromDisciplineSelected.attr('disabled', 'disabled');
                 }
 
             });
@@ -101,19 +137,37 @@
                         $('#level').html(htmlSelect);
                     }
                 });
-
-                //Habilitar os campos para o Modo Avaliação
+                //Habilitar os campos CheckBoxs para o Modo Avaliação
                 $('#info-block').find('input[disabled]').removeAttr('disabled');
-                $('#info-block').find('select[disabled]').removeAttr('disabled');
+
+                //Habilitar o campo de seleção dos Anos para o Modo Proficiência/Treino
+                $('#info-diag').find('select[disabled]').removeAttr('disabled');
             }else{
                 $('#level').html("<option>&nbsp;&nbsp;Selecione a Escola&nbsp;&nbsp;</option>");
-                //E dá um 'change' em todos os ckeckbox do Modo Avaliação
+                //Dá um 'change' em todos os ckeckbox do Modo Avaliação
                 $('#info-block input[type="checkbox"]:checked').trigger('click');
                 //Desabilitar os campos para o Modo Avaliação
                 $('#info-block').find('input').attr('disabled','disabled');
                 $('#info-block').find('select').attr('disabled','disabled');
+
+                //Dá um 'change' em todos os ckeckbox do Modo Proficiência/Treino
+                $('#info-diag input[type="checkbox"]:checked').trigger('click');
+                //Desabilitar os campos para o Modo Proficiência/Treino
+                $('#info-diag').find('input').attr('disabled','disabled');
+                $('#info-diag').find('select').attr('disabled','disabled');
             }
 
+            });
+
+            $(document).on('change','#level',function(){
+                if($(this).val().length > 0){
+                    //Se algum Ano foi selecionado
+                    //Habilita os campos das disciplinas para o Modo Proficiência/Treino
+                    $('#info-diag').find('input[disabled]').removeAttr('disabled');
+                }else{
+                    //Desabilita os campos das disciplinas para o Modo Proficiência/Treino
+                    $('#info-diag').find('input').attr('disabled');
+                }
             });
 
         });
@@ -131,14 +185,19 @@
             <fieldset  id="fds-block">
                 <legend> Exportacao para modo Avaliacao </legend>
                 <div id="info-block">
-                    <div class="Table"> </div>
+                    <div class="Table"></div>
                 </div>
             </fieldset>
             <fieldset  id="fds-diag">
                 <legend> Exportacao para modo Proficiencia/Treino </legend>
-                <select id="level" name="level" multiple>
-                    <option>&nbsp;&nbsp;Selecione a Escola&nbsp;&nbsp;</option>
-                </select>
+                <div id="info-diag">
+                    <div class="Table"> <div class="Row"><div class="Col">
+                        <select id="level" disabled name="level[]" multiple>
+                            <option>&nbsp;&nbsp;Selecione o Ano de Ensino&nbsp;&nbsp;</option>
+                        </select>
+                    </div></div></div>
+                </div>
+
             </fieldset>
             <input type="submit" value="Baixar" id="btn-download">
         </fieldset>
