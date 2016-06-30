@@ -96,6 +96,73 @@
         </div>
     </div>
 
+    <!-- Definir PIN -->
+    <div id="pincode-message" class="overlay">
+        <div class="message-container exit">
+            <p class="message">Deseja encerrar o atendimento desse aluno?</p>
+            <input type="password" size="20" maxlength="40" name="pincode" id="pincode" readonly="true" placeholder="Digite o PIN" />
+            <button id="pincoden7" class="message-button-pincode" value="7">7</button>
+            <button id="pincoden8" class="message-button-pincode" value="8">8</button>
+            <button id="pincoden9" class="message-button-pincode" value="9">9</button>
+            </br>
+            <button id="pincoden4" class="message-button-pincode" value="4">4</button>
+            <button id="pincoden5" class="message-button-pincode" value="5">5</button>
+            <button id="pincoden6" class="message-button-pincode" value="6">6</button>
+            </br>
+            <button id="pincoden1" class="message-button-pincode" value="1">1</button>
+            <button id="pincoden2" class="message-button-pincode" value="2">2</button>
+            <button id="pincoden3" class="message-button-pincode" value="3">3</button>
+            </br>
+            <button id="pincoden0" class="message-button-pincode" value="0">0</button>
+            <button id="finalize-icon" class="message-button-confirm">Confirmar</button>
+        </div>
+    </div>
+
 </body>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      console.log("DOC OK");
+        var db;
+        var request = indexedDB.open("synapseDB", 3);
+
+        request.onerror = function(event) {
+            console.log("error: ");
+        };
+
+        request.onsuccess = function(event) {
+            db = request.result;
+            console.log("success: " + db);
+
+            function read(tutor = sessionStorage.getItem('login_id_actor')) {
+                var transaction = db.transaction(["actor"]);
+                var objectStore = transaction.objectStore("actor");
+                var request = objectStore.get("" + tutor);
+
+                request.onerror = function(event) {
+                    alert("Unable to retrieve daa from database!");
+                };
+                request.onsuccess = function(event) {
+                    $("#pincode-message").show();
+                    // Do something with the request.result!
+                    if (request.result) {
+                        console.log("Login: " + request.result.login);
+                        if ($("#pincode").val() == request.result.password) {
+                        } else {
+                            $("#pincode-message").hide();
+                            $("#pincode").val("");
+                        }
+                    } else {
+                        console.log("Erro");
+                        $("#pincode-message").hide();
+                        $("#pincode").val("");
+                    }
+                };
+            };
+            console.log("READ");
+            read();
+        };
+    });
+</script>
 
 </html>

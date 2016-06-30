@@ -227,14 +227,44 @@
                 });
 
                 $("#finalize-icon").bind('tap', function() {
-                    sessionStorage.setItem('pincode', '123');
-                    if (sessionStorage.getItem('pincode') == $("#pincode").val()) {
-                        newMeet.finalizeMeet();
-                    } else {
-                        $("#finalize-message").hide();
-                        $("#pincode").val("");
-                    }
+                    var db;
+                    var request = indexedDB.open("synapseDB", 3);
 
+                    request.onerror = function(event) {
+                        console.log("error: ");
+                    };
+
+                    request.onsuccess = function(event) {
+                        db = request.result;
+                        console.log("success: " + db);
+
+                        function read(tutor = sessionStorage.getItem('login_id_actor')) {
+                            var transaction = db.transaction(["actor"]);
+                            var objectStore = transaction.objectStore("actor");
+                            var request = objectStore.get("" + tutor);
+
+                            request.onerror = function(event) {
+                                alert("Unable to retrieve daa from database!");
+                            };
+                            request.onsuccess = function(event) {
+                                // Do something with the request.result!
+                                if (request.result) {
+                                    console.log("Login: " + request.result.login);
+                                    if ($("#pincode").val() == request.result.password) {
+                                        newMeet.finalizeMeet();
+                                    } else {
+                                        $("#finalize-message").hide();
+                                        $("#pincode").val("");
+                                    }
+                                } else {
+                                    console.log("Erro");
+                                    $("#finalize-message").hide();
+                                    $("#pincode").val("");
+                                }
+                            };
+                        };
+                        read();
+                    };
                 });
 
                 $("#close-icon").bind('tap', function() {
