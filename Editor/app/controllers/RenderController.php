@@ -60,8 +60,9 @@ class RenderController extends Controller
         exit;
     }
 
-    public function cobjectbyid($cobject_id, $buildZipMultimedia)
-    {
+    //Função responsável por retornar o Json, bem como adicionar os arquivos
+    //multimídia no zip corrente da Atividade com id dado como parâmetro
+    public function cobjectbyid($cobject_id, $buildZipMultimedia){
         $buildZipMultimedia = isset($buildZipMultimedia) && $buildZipMultimedia;
 
         $sql = "SELECT * FROM render_cobjects WHERE cobject_id = $cobject_id;";
@@ -455,6 +456,8 @@ class RenderController extends Controller
                     $json_cobjects = array();
 
                     foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
+                        //Função responsável por retornar o Json, bem como adicionar os arquivos
+                        //multimídia no zip corrente da Atividade com id dado como parâmetro
                         $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
                         if (ISSET($jsonRenderView)) {
                             //Só dá o push no array, sse o jsonRenderView for diferente de NULL
@@ -487,7 +490,49 @@ class RenderController extends Controller
                 if(isset($_POST['disciplines_diag'])){
                     //Então baixa todos os roteiros+conteúdos+objetivos+cobjects e todos conteúdos
                     //Multimídias relacionados
-                    var_dump("OK");exit();
+
+                    //Pesquisa todas as Atividades para o Nível e Disciplina Selecionados
+                    //Bem como todas as Atividades relacionadas a cada Objetivo encontrado
+                    $disciplinesDiag = $_POST['disciplines_diag'];
+                    $levels = $_POST['level'];
+                    $allCobjectJsonInfo = array();
+                    $allGoals = array();
+                    //Level são os Stages
+                    foreach($levels as $current_level):
+                        foreach($disciplinesDiag as $current_discipline):
+                        //Buscar Todos os Objetivos que possuem o stage e disciplina corrente
+                        $goals = Yii::app()->db->createCommand("SELECT ag.id, ag.name, ag.degree_id
+                                  FROM act_goal AS ag
+                                  INNER JOIN act_degree AS ad ON (ag.degree_id = ad.id)
+                                  WHERE ag.discipline_id = $current_discipline AND ad.stage = $current_level")->queryAll();
+                            $currentGoals = array();
+                            $currentCobjectJsonInfo = array();
+                            $currentGoals['discipline'] = $current_discipline;
+                            $currentGoals['stage'] = $current_level;
+                            $currentGoals['goals'] = $goals;
+                            //Armazena as infomações desses objetivos num Array
+                            array_push($allGoals, $currentGoals);
+                            //Pesquisar cada roteiro+conteúdo+Cobject que estão relacionados com cada objetivo encontrado
+
+
+                            //array_push($allCobjectJsonInfo, $currentGoals);
+                        endforeach;
+                    endforeach;
+
+                  //$allGoals
+                  //
+
+
+
+                    foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
+                        //Função responsável por retornar o Json, bem como adicionar os arquivos
+                        //multimídia no zip corrente da Atividade com id dado como parâmetro
+                        $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
+                        if (ISSET($jsonRenderView)) {
+                            //Só dá o push no array, sse o jsonRenderView for diferente de NULL
+                            array_push($json_cobjects, $jsonRenderView);
+                        }
+                    endforeach;
                 }
             }
 
@@ -517,8 +562,6 @@ class RenderController extends Controller
             $students = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getAlunos');
             $enrollments = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getMatriculas');
             curl_close($ch);
-
-
 
             $schools = json_decode($schools);
             foreach ($schools as $sch) {
