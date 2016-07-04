@@ -244,7 +244,7 @@
                             var request = objectStore.get("" + tutor);
 
                             request.onerror = function(event) {
-                                alert("Unable to retrieve daa from database!");
+                                alert("Erro no Banco de Dados");
                             };
                             request.onsuccess = function(event) {
                                 // Do something with the request.result!
@@ -255,11 +255,13 @@
                                     } else {
                                         $("#finalize-message").hide();
                                         $("#pincode").val("");
+                                        alert("PIN INCORRETO!!!");
                                     }
                                 } else {
                                     console.log("Erro");
                                     $("#finalize-message").hide();
                                     $("#pincode").val("");
+                                    alert("PIN INCORRETO!!!");
                                 }
                             };
                         };
@@ -409,7 +411,7 @@
     <div id="finalize-message" class="overlay">
         <div class="message-container exit">
             <p class="message">Deseja encerrar o atendimento desse aluno?</p>
-            <input type="password" size="20" maxlength="40" name="pincode" id="pincode" readonly="true" placeholder="Digite o PIN" />
+            <input type="password" size="20" maxlength="40" name="pincode" id="pincode" placeholder="Digite o PIN ou Senha" />
             <button id="pincoden7" class="message-button-pincode" value="7">7</button>
             <button id="pincoden8" class="message-button-pincode" value="8">8</button>
             <button id="pincoden9" class="message-button-pincode" value="9">9</button>
