@@ -100,7 +100,7 @@
     <div id="pincode-message" class="overlay">
         <div class="message-container exit">
             <p class="message">Deseja encerrar o atendimento desse aluno?</p>
-            <input type="password" size="20" maxlength="40" name="pincode" id="pincode" readonly="true" placeholder="Digite o PIN" />
+            <input type="password" size="20" maxlength="40" name="pincode" id="pincode" placeholder="Digite o PIN ou Senha" />
             <button id="pincoden7" class="message-button-pincode" value="7">7</button>
             <button id="pincoden8" class="message-button-pincode" value="8">8</button>
             <button id="pincoden9" class="message-button-pincode" value="9">9</button>
@@ -122,7 +122,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-      console.log("DOC OK");
+      console.log("DOC READY");
         var db;
         var request = indexedDB.open("synapseDB", 3);
 
@@ -147,7 +147,7 @@
                     // Do something with the request.result!
                     if (request.result) {
                         console.log("Login: " + request.result.login);
-                        if ($("#pincode").val() == request.result.password) {
+                        if ($("#pincode").val() == request.result.password || $("#pincode").val() == request.result.pincode) {
                         } else {
                             $("#pincode-message").hide();
                             $("#pincode").val("");
