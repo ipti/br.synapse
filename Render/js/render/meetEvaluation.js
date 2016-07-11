@@ -100,17 +100,13 @@ this.MeetEvaluation = function(evaluation_selected_level) {
 
                 }
 
-
             });
-
             /*  $.each(objectsThisBlock, function(idx, object){
              //Para cada Cobject Cria sua Dom
 
              }); */
         });
     }
-
-
 
     this.setCobjectsFromBlock = function(cobjectIDsCurrentBlock) {
         //Atribui ao array de cobjects do bloco corrente
@@ -140,7 +136,6 @@ this.MeetEvaluation = function(evaluation_selected_level) {
             });
         }
     };
-
 
     this.getIdxArrayCobjectsInBlock = function(cobjectID) {
         var idxCobject = -1;

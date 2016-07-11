@@ -62,7 +62,7 @@ class RenderController extends Controller
 
     //Função responsável por retornar o Json, bem como adicionar os arquivos
     //multimídia no zip corrente da Atividade com id dado como parâmetro
-    public function cobjectbyid($cobject_id, $buildZipMultimedia){
+    public function cobjectById($cobject_id, $buildZipMultimedia){
         $buildZipMultimedia = isset($buildZipMultimedia) && $buildZipMultimedia;
 
         $sql = "SELECT * FROM render_cobjects WHERE cobject_id = $cobject_id;";
@@ -168,7 +168,7 @@ class RenderController extends Controller
                 }
             }
 
-            //===== Agrupar os elementos no Json 
+            //===== Agrupar os elementos no Json
             //if($json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'MTE' ||
             //    $json['screens'][$as['a2']]['piecesets'][$as['a3']]['template_code'] == 'AEL'){
             //Grouping
@@ -280,7 +280,7 @@ class RenderController extends Controller
     public function actionLoadcobject()
     {
         $cobject_id = $_REQUEST['ID'];
-        $json = $this->cobjectbyid($cobject_id, false);
+        $json = $this->cobjectById($cobject_id, false);
         if (isset($_GET['callback']))
             echo $_GET['callback'] . '(' . json_encode($json) . ')';
         else
@@ -295,7 +295,7 @@ class RenderController extends Controller
     public function actionLoadtext()
     {
         $cobject_id = $_REQUEST['ID'];
-        $json = $this->cobjectbyid($cobject_id);
+        $json = $this->cobjectById($cobject_id);
         $json = json_encode($json);
         $this->render('text', array('json' => $json));
     }
@@ -362,6 +362,8 @@ class RenderController extends Controller
     {
         //Precisa ter selecionado uma Escola
         if (isset($_REQUEST['school'])) {
+          //Arquivo Json Comum a qualquer MODO do Render para adcionar no ZIP
+            $commonJson = array();
             $downloaded = false;
             //Arquivo ZIP ALL
             $zipname = 'importRender_' . date('d_m_Y_H_i_s') . '.zip';
@@ -424,6 +426,14 @@ class RenderController extends Controller
 
             endforeach;
 
+            //Info comum a qualquer Modo
+            $commonJson['ActorsInClassroom'] = $array_actorsInClassroom;
+            $commonJson['Disciplines'] = $array_disciplines;
+            $commonJson_encode = "var dataJsonCommonInfo = ";
+            $commonJson_encode .= json_encode($commonJson);
+            $commonJson_encode .= ";";
+            $this->tempArchiveZipMultiMedia->addFromString("json/renderDataCommonInfo.js", $commonJson_encode);
+
             //Quando os filtros para o Modo Avalição são preenchidos.
           if(isset($_REQUEST['cobject_block'])){
             //Arquivos do MODO AVALIAÇÃO
@@ -458,23 +468,21 @@ class RenderController extends Controller
                     foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
                         //Função responsável por retornar o Json, bem como adicionar os arquivos
                         //multimídia no zip corrente da Atividade com id dado como parâmetro
-                        $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
+                        $jsonRenderView = $this->cobjectById($cobjectCobjectblock->cobject_id, true);
                         if (ISSET($jsonRenderView)) {
                             //Só dá o push no array, sse o jsonRenderView for diferente de NULL
                             array_push($json_cobjects, $jsonRenderView);
                         }
                     endforeach;
-                    //Arquivo Json para adcionar no ZIP
-                    $json = array();
+
                     //Tratar Separação no JS
+                    $jsonModEvaluation = array();
                     $current_block_discipline_id = $cobjectBlock->discipline_id;
-                    $json['ActorsInClassroom'] = $array_actorsInClassroom;
-                    $json['Disciplines'] = $array_disciplines;
-                    $json['CobjectBlock'] = $array_cobjectBlock;
-                    $json['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
-                    $json['Cobjects'] = $json_cobjects;
+                    $jsonModEvaluation['CobjectBlock'] = $array_cobjectBlock;
+                    $jsonModEvaluation['Cobject_cobjectBlocks'] = $array_cobject_cobjectBlocks;
+                    $jsonModEvaluation['Cobjects'] = $json_cobjects;
                     $json_encode = "var dataJson$namesDisciplinesBlockSelected[$current_block_discipline_id] = ";
-                    $json_encode .= json_encode($json);
+                    $json_encode .= json_encode($jsonModEvaluation);
                     $json_encode .= ";";
                     $this->tempArchiveZipMultiMedia->addFromString("json/renderData$namesDisciplinesBlockSelected[$current_block_discipline_id].js", $json_encode);
                     $downloaded = true;
@@ -490,49 +498,94 @@ class RenderController extends Controller
                 if(isset($_POST['disciplines_diag'])){
                     //Então baixa todos os roteiros+conteúdos+objetivos+cobjects e todos conteúdos
                     //Multimídias relacionados
-
                     //Pesquisa todas as Atividades para o Nível e Disciplina Selecionados
                     //Bem como todas as Atividades relacionadas a cada Objetivo encontrado
                     $disciplinesDiag = $_POST['disciplines_diag'];
                     $levels = $_POST['level'];
-                    $allCobjectJsonInfo = array();
-                    $allGoals = array();
+
+                    $allJsonGoals = array();
+                    $allJsonScripts = array();
+                    $allJsonScriptsGoals = array();
+                    $allJsonCobjects = array();
                     //Level são os Stages
                     foreach($levels as $current_level):
                         foreach($disciplinesDiag as $current_discipline):
                         //Buscar Todos os Objetivos que possuem o stage e disciplina corrente
-                        $goals = Yii::app()->db->createCommand("SELECT ag.id, ag.name, ag.degree_id
+                        //Deve também está dentro de um Roteiro
+                        $goalScriptInfo = Yii::app()->db->createCommand("SELECT ag.id AS goal_id,
+                                  ag.name AS goal_name, ag.degree_id AS goal_degree_id, acs.id AS script_id, acs.name AS script_name
                                   FROM act_goal AS ag
                                   INNER JOIN act_degree AS ad ON (ag.degree_id = ad.id)
+                                  INNER JOIN act_goal_script AS ags ON (ags.goal_id = ag.id)
+                                  INNER JOIN act_script AS acs ON (acs.id = ags.script_id)
                                   WHERE ag.discipline_id = $current_discipline AND ad.stage = $current_level")->queryAll();
                             $currentGoals = array();
                             $currentCobjectJsonInfo = array();
-                            $currentGoals['discipline'] = $current_discipline;
+                            $currentGoals['discipline_id'] = $current_discipline;
                             $currentGoals['stage'] = $current_level;
-                            $currentGoals['goals'] = $goals;
+                            $jsonGoals = array();
+                            foreach($goalScriptInfo AS $currentGoalScriptInfo):
+                                  $goal_id = $currentGoalScriptInfo['goal_id'];
+                                  $goal_name = $currentGoalScriptInfo['goal_name'];
+                                  $goal_degree_id = $currentGoalScriptInfo['goal_degree_id'];
+                                  $script_id = $currentGoalScriptInfo['script_id'];
+                                  $script_name = $currentGoalScriptInfo['script_name'];
+                                  //Goals
+                                  array_push($jsonGoals, array(
+                                    'goal_id'=> $goal_id,
+                                    'goal_name'=> $goal_name,
+                                    'goal_degree_id'=> $goal_degree_id
+                                  ));
+
+                                  //Scripts
+                                  //index com id do script evita duplicação
+                                  $allJsonScripts[$script_id] = array(
+                                    'script_id'=> $script_id,
+                                    'script_name'=> $script_name
+                                  );
+                                  //Scripts+Goals
+                                  array_push($allJsonScriptsGoals, array(
+                                    'goal_id'=> $goal_id,
+                                    'script_id'=> $script_id
+                                  ));
+
+                            endforeach;
+
+                            $currentGoals['goals'] = $jsonGoals;
                             //Armazena as infomações desses objetivos num Array
-                            array_push($allGoals, $currentGoals);
+                            array_push($allJsonGoals, $currentGoals);
                             //Pesquisar cada roteiro+conteúdo+Cobject que estão relacionados com cada objetivo encontrado
-
-
-                            //array_push($allCobjectJsonInfo, $currentGoals);
+                           foreach($currentGoals['goals'] AS $goal):
+                               //Listar o Roteiro desse Objetivo
+                                $actScriptGoal = ActGoalScript::model()->findByAttributes(array('goal_id'=>$goal['goal_id']));
+                                $actScript = ActScript::model()->findByPk($actScriptGoal->script_id);
+                                //Listar todos os Cobjects para este Objetivo. Para assim encontrar a view de cada um
+                                $commonTypeGoalID = CommonType::model()->findByAttributes(array('context'=>'CobjectData', 'name'=>'goal_id'));
+                                $cobjectsMetadata = cobjectMetadata::model()->findAllByAttributes(array('type_id'=>$commonTypeGoalID->id, 'value'=>$goal['goal_id']));
+                                //Listar todos os Cobjects para o objetivo corrente
+                                foreach ($cobjectsMetadata AS $currentCobjectMetadata):
+                                        //Função responsável por retornar o Json, bem como adicionar os arquivos
+                                        //multimídia no zip corrente da Atividade com id dado como parâmetro
+                                        $jsonRenderView = $this->cobjectById($currentCobjectMetadata->cobject_id, true);
+                                        if (ISSET($jsonRenderView)) {
+                                            //Só dá o push no array, sse o jsonRenderView for diferente de NULL
+                                            array_push($allJsonCobjects, $jsonRenderView);
+                                        }
+                                endforeach;
+                           endforeach;
                         endforeach;
                     endforeach;
-
-                  //$allGoals
-                  //
-
-
-
-                    foreach ($cobjectCobjectblocks as $cobjectCobjectblock):
-                        //Função responsável por retornar o Json, bem como adicionar os arquivos
-                        //multimídia no zip corrente da Atividade com id dado como parâmetro
-                        $jsonRenderView = $this->cobjectbyid($cobjectCobjectblock->cobject_id, true);
-                        if (ISSET($jsonRenderView)) {
-                            //Só dá o push no array, sse o jsonRenderView for diferente de NULL
-                            array_push($json_cobjects, $jsonRenderView);
-                        }
-                    endforeach;
+              
+                  $jsonModByScripts = array();
+                  $jsonModByScripts['Scripts'] = $allJsonScripts;
+                  $jsonModByScripts['ScriptsGoals'] = $allJsonScriptsGoals;
+                  $jsonModByScripts['Goals'] = $allJsonGoals;
+                  $jsonModByScripts['Cobjects'] = $allJsonCobjects;
+                  $json_encode = "var dataJsonByScripts = ";
+                  $json_encode .= json_encode($jsonModByScripts);
+                  $json_encode .= ";";
+                  $this->tempArchiveZipMultiMedia->addFromString("json/renderDataByScripts.js", $json_encode);
+                  $downloaded = true;
                 }
             }
 
@@ -1116,8 +1169,8 @@ class RenderController extends Controller
 
             $id = isset($_POST["id"]) ? (int)$_POST["id"] : die('ERRO: id não recebido');
 
-            $sql = "SELECT ut.primary_unity_id, ut.secondary_unity_id, u.name, ut.primary_organization_id, 
-        ut.secondary_organization_id, ou.orglevel 
+            $sql = "SELECT ut.primary_unity_id, ut.secondary_unity_id, u.name, ut.primary_organization_id,
+        ut.secondary_organization_id, ou.orglevel
         from unity_tree ut
         inner join organization ou
         on ou.id = ut.secondary_organization_id
@@ -1139,7 +1192,7 @@ class RenderController extends Controller
             $json = array();
             $id = isset($_POST["id"]) ? (int)$_POST["id"] : die('ERRO: id não recebido');
 
-            $sql = "SELECT a.id actor_id, p.name 
+            $sql = "SELECT a.id actor_id, p.name
         FROM synapse.actor a
         inner join person p
         on p.id = a.person_id
@@ -1235,7 +1288,7 @@ class RenderController extends Controller
             $script = ActScript::model()->findByAttributes(array('ID' => $_POST['script']));
             $contents = ActContent::model()->findAllByAttributes(array('contentParent' => $script->contentParentID));
             //$contents = ActContent::model()->findAll();
-//@todo lembra de excluir os conteudos exclude e include    
+//@todo lembra de excluir os conteudos exclude e include
             $x = -1;
             foreach ($contents as $content) {
                 $x++;

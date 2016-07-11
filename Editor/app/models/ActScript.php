@@ -8,10 +8,12 @@
  * @property integer $discipline_id
  * @property integer $performance_index
  * @property integer $father_content
+ * @property string $name
  *
  * The followings are the available model relations:
- * @property ActDiscipline $discipline
+ * @property ActGoalScript[] $actGoalScripts
  * @property ActContent $fatherContent
+ * @property ActDiscipline $discipline
  * @property ActScriptContent[] $actScriptContents
  */
 class ActScript extends CActiveRecord
@@ -42,11 +44,12 @@ class ActScript extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('discipline_id, performance_index, father_content', 'required'),
+			array('discipline_id, performance_index, name', 'required'),
 			array('discipline_id, performance_index, father_content', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, discipline_id, performance_index, father_content', 'safe', 'on'=>'search'),
+			array('id, discipline_id, performance_index, father_content, name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,8 +61,9 @@ class ActScript extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'discipline_id'),
+			'actGoalScripts' => array(self::HAS_MANY, 'ActGoalScript', 'script_id'),
 			'fatherContent' => array(self::BELONGS_TO, 'ActContent', 'father_content'),
+			'discipline' => array(self::BELONGS_TO, 'ActDiscipline', 'discipline_id'),
 			'actScriptContents' => array(self::HAS_MANY, 'ActScriptContent', 'script_id'),
 		);
 	}
@@ -74,6 +78,7 @@ class ActScript extends CActiveRecord
 			'discipline_id' => Yii::t('default', 'Discipline'),
 			'performance_index' => Yii::t('default', 'Performance Index'),
 			'father_content' => Yii::t('default', 'Father Content'),
+			'name' => Yii::t('default', 'Name'),
 		);
 	}
 
@@ -92,6 +97,7 @@ class ActScript extends CActiveRecord
 		$criteria->compare('discipline_id',$this->discipline_id);
 		$criteria->compare('performance_index',$this->performance_index);
 		$criteria->compare('father_content',$this->father_content);
+		$criteria->compare('name',$this->name,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
