@@ -29,11 +29,12 @@ if (sessionStorage.getItem("isOnline") === null ||
             return window.indexedDB;
         }
 
-        this.openDBuild = function(alterSchema, dataImportFunction, dataJsonLin, dataJsonMat) {
-
+        this.openDBuild = function(alterSchema, dataImportFunction, dataJsonLin, dataJsonMat, dataJsonCommonInfo, dataJsonByScripts) {
             self.dataImportFunction = dataImportFunction;
             self.dataJsonLin = dataJsonLin;
             self.dataJsonMat = dataJsonMat;
+            self.dataJsonCommonInfo = dataJsonCommonInfo;
+            self.dataJsonByScripts = dataJsonByScripts;
 
             window.indexedDB = self.verifyIDBrownser();
             if (!window.indexedDB) {
@@ -49,7 +50,7 @@ if (sessionStorage.getItem("isOnline") === null ||
             synapseBD.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
-                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+
             }
 
             synapseBD.onsuccess = function(event) {
@@ -91,18 +92,14 @@ if (sessionStorage.getItem("isOnline") === null ||
 
 
         var openBuild = function() {
-
             DBsynapse = window.indexedDB.open(nameBD, DBversion);
-
             DBsynapse.onversionchange = function(event) {
-                //STOP HERE
                 console.log(event);
             };
 
             DBsynapse.onerror = function(event) {
                 console.log("Error: ");
                 console.log(event);
-                // alert("Você não habilitou minha web app para usar IndexedDB?!");
             };
             DBsynapse.onsuccess = function(event) {
                 var db = event.target.result;
@@ -110,6 +107,11 @@ if (sessionStorage.getItem("isOnline") === null ||
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     alert("Database error: " + event.target.errorCode);
                 };
+
+                db.onclose = function(event) {
+                    console.log(event);
+                };
+
             }
 
             DBsynapse.onblocked = function(event) {
@@ -120,15 +122,20 @@ if (sessionStorage.getItem("isOnline") === null ||
             //Se for uma nova versão é criado o novo schemma do banco
             self.buildAllSchema();
 
+
         }
 
 
         this.buildAllSchema = function() {
             //Criar Schemas das tabelas
-
             DBsynapse.onupgradeneeded = function(event) {
                 var db = event.target.result;
 
+                db.onclose = function(event) {
+                    console.log(event);
+                };
+
+                console.log(db);
                 //============  School  ===========================
                 var schoolStore = db.createObjectStore("school", {
                     keyPath: "id"
@@ -181,6 +188,24 @@ if (sessionStorage.getItem("isOnline") === null ||
                 });
                 //================================================
 
+                // cria um objectStore da degree
+                var degreeStore = db.createObjectStore("degree", {
+                    keyPath: "id"
+                });
+                degreeStore.createIndex("name", "name", {
+                    unique: true
+                });
+                //================================================
+
+                // cria um objectStore da StageVsModality
+                var stageVsModalityStore = db.createObjectStore("stage_vs_modality", {
+                    keyPath: "id"
+                });
+                stageVsModalityStore.createIndex("stage_code", "stage_code", {
+                    unique: true
+                });
+                //================================================
+
                 // cria um objectStore do cobjectblock
                 var cobjectblockStore = db.createObjectStore("cobjectblock", {
                     keyPath: "id"
@@ -208,18 +233,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 });
 
                 // Faltam cobject_id
-
                 //================================================
-
-                //Criar Schema para os scripts(roteiros), contents e goals. E outro schema para relacionar
-                //os goals em seu content e os contents no seu respectivo script(Roteiro).
-
-                /*  act_goal {
-                 `id`,
-                 `name`,
-                 `degree_id`,
-                 `discipline_id`
-                 }*/
 
                 // cria um objectStore do act_goal
                 var act_goalStore = db.createObjectStore("act_goal", {
@@ -230,64 +244,11 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
                 //Criar Index para stage
-                act_goalStore.createIndex("stage", "stage", {
-                    unique: false
-                });
-                //Criar Index para year
-                act_goalStore.createIndex("year", "year", {
-                    unique: false
-                });
-                //Criar Index para grade
-                act_goalStore.createIndex("grade", "grade", {
+                act_goalStore.createIndex("degree_id", "degree_id", {
                     unique: false
                 });
 
-                /* act_content {
-                 `id`,
-                 `content_parent`,
-                 `discipline_id`,
-                 `description`
-                 } */
-
-                // cria um objectStore do act_content
-                var act_contentStore = db.createObjectStore("act_content", {
-                    keyPath: "id"
-                });
-                //Criar Index para discipline_id
-                act_contentStore.createIndex("discipline_id", "discipline_id", {
-                    unique: false
-                });
-
-
-                /* act_goal_content{
-                 `id`,
-                 `goal_id`,
-                 `content_id`
-                 }  */
-
-                // cria um objectStore do act_goal_content
-                var act_goal_contentStore = db.createObjectStore("act_goal_content", {
-                    keyPath: "id"
-                });
-                //Criar Index para goal_id
-                act_goal_contentStore.createIndex("goal_id", "goal_id", {
-                    unique: false
-                });
-                //Criar Index para content_id
-                act_goal_contentStore.createIndex("content_id", "content_id", {
-                    unique: false
-                });
-
-
-                /* act_script {
-                 `id`,
-                 `discipline_id`,
-                 `performance_index`,
-                 `father_content`
-                 }
-                 */
-
-                // cria um objectStore do act_script
+                // Cria um objectStore do act_script
                 var act_scriptStore = db.createObjectStore("act_script", {
                     keyPath: "id"
                 });
@@ -296,55 +257,35 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
-
-                /* act_script_content {
-                 `id`,
-                 `content_id`,
-                 `script_id`,
-                 `status`
-                 } */
-
-                // cria um objectStore do act_script_content
-                var act_script_contentStore = db.createObjectStore("act_script_content", {
+                // Cria um objectStore do act_script_goal
+                var act_script_goalStore = db.createObjectStore("act_script_goal", {
                     keyPath: "id"
                 });
-                //Criar Index para content_id
-                act_script_contentStore.createIndex("content_id", "content_id", {
+                //Criar Index para goal_id
+                act_script_goalStore.createIndex("goal_id", "goal_id", {
                     unique: false
                 });
                 //Criar Index para script_id
-                act_script_contentStore.createIndex("script_id", "script_id", {
+                act_script_goalStore.createIndex("script_id", "script_id", {
                     unique: false
                 });
-
                 //==============================================================
 
-
-                // cria um objectStore do cobject
+                //Cria um objectStore do Cobject
                 var cobjectStore = db.createObjectStore("cobject", {
                     keyPath: "cobject_id"
                 });
                 // E Falta  o Json de toda a view deste cobject_id
                 //================================================
-
-
                 // cria um objectStore do performance_actor
                 var performance_actorStore = db.createObjectStore("performance_actor", {
                     keyPath: "id",
                     autoIncrement: true
                 });
-                //Faltam
-                /* piece_id
-                 piece_element_id
-                 actor_id
-                 start_time
-                 final_time
-                 value
-                 iscorrect
-                 group_id  */
+
                 //===============================================
 
-                //Criar o ObjectStore específico do RENDER
+                //Criar o OBJECTSTORE ESPECÍFICO do RENDER
                 // state_actor
                 var state_actorStore = db.createObjectStore("state_actor", {
                     keyPath: "id",
@@ -381,8 +322,6 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
-                // falta o {mode => [activity, proficiency, train] }
-
 
 
                 // Usando transação oncomplete para afirmar que a criação do objectStore
@@ -390,57 +329,69 @@ if (sessionStorage.getItem("isOnline") === null ||
                 schoolStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
 
                 unityStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
 
                 actorStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
                 disciplineStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
+                    console.log('Criou os Schemas');
+                }
+                degreeStore.transaction.oncomplete = function(event) {
+                    //Se for o último dos 9 então contruiu todos os schemas
+                    db.close();
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
+                    console.log('Criou os Schemas');
+                }
+                stageVsModalityStore.transaction.oncomplete = function(event) {
+                    //Se for o último dos 9 então contruiu todos os schemas
+                    db.close();
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
                 cobjectblockStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
                 cobject_cobjectblockStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
                 cobjectStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
                 performance_actorStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
                 state_actorStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
 
@@ -448,45 +399,29 @@ if (sessionStorage.getItem("isOnline") === null ||
                 act_goalStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
-                    console.log('Criou os Schemas');
-                }
-
-                act_contentStore.transaction.oncomplete = function(event) {
-                    //Se for o último dos 9 então contruiu todos os schemas
-                    db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
-                    console.log('Criou os Schemas');
-                }
-
-                act_goal_contentStore.transaction.oncomplete = function(event) {
-                    //Se for o último dos 9 então contruiu todos os schemas
-                    db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
 
                 act_scriptStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
 
-                act_script_contentStore.transaction.oncomplete = function(event) {
+                act_script_goalStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
 
                 stop_point_diagnosticStore.transaction.oncomplete = function(event) {
                     db.close();
-                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat);
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
                 }
-
-
 
                 useDatabase(db);
 
@@ -495,12 +430,54 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-
         // - - - - - - - - - -  //
         // IMPORT PARA BANCO DE DADOS //
         // - - - - - - - - - -  //
 
-        this.importAllDataRender = function(schools, unitys, actors, disciplines, cobjectblock, cobject_cobjectblocks, cobjects) {
+
+        //Importar Dados Comuns a todo Arquivo de Importação
+        this.importCommonInfo = function (dataJsonCommonInfo) {
+            console.log(dataJsonCommonInfo);
+            var schools = new Array();
+            var unitys = new Array();
+            var actors = new Array();
+            var disciplines = new Array();
+            var degrees = new Array();
+            var stageVsModality = new Array();
+
+            //Percorrer todos objetos existentes no ActorsOwnUnity
+            $.each(dataJsonCommonInfo.ActorsInClassroom, function (idx, object) {
+                var tempSchool = {};
+                tempSchool.id = object.school_id;
+                tempSchool.name = object.school_name;
+                if (!existInArray(schools, tempSchool.id)) {
+                    schools.push(tempSchool);
+                }
+
+                var tempUnity = {};
+                tempUnity.id = object.classroom_id;
+                //FK para a school
+                tempUnity.school_id = object.school_id;
+                tempUnity.name = object.classroom_name;
+                if (!existInArray(unitys, tempUnity.id)) {
+                    unitys.push(tempUnity);
+                }
+                var tempActor = {};
+                tempActor.id = object.id;
+                tempActor.login = object.login;
+                tempActor.name = object.name;
+                tempActor.password = object.password;
+                tempActor.personage_name = object.personage;
+                //Chave Estrageira para a sua unidade
+                tempActor.unity_id = object.classroom_id;
+                if (!existInArray(actors, tempActor.id)) {
+                    actors.push(tempActor);
+                }
+            });
+            disciplines = dataJsonCommonInfo.Disciplines;
+            degrees = dataJsonCommonInfo.Degrees;
+            stageVsModality = dataJsonCommonInfo.StageVsModality;
+
             //Add campo 'createdOffline' nos actors
             for (var idx in actors) {
                 var actor = actors[idx];
@@ -517,6 +494,141 @@ if (sessionStorage.getItem("isOnline") === null ||
                 unity.createdOffline = false;
             }
 
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.error.message);
+                };
+
+                    //==================================================
+                    //Importar as schools
+                    self.importSchool(db, schools);
+
+                    //Importar as unitys
+                    self.importUnity(db, unitys);
+
+                    //Importar os atores
+                    self.importActor(db, actors);
+
+                    //Importar as disciplines
+                    self.importDiscipline(db, disciplines);
+
+                    //Importar os degrees
+                    self.importDegree(db, degrees);
+
+                    //Importar os stageVsModality
+                    self.importStageVsModality(db, stageVsModality);
+
+                    //Importar Escolas e Turmas Offline VERIFICAR
+                   // self.importSchoolsClassroomsOff(db, data_schoolsClassrooms);
+
+                //Fecha o DB
+                db.close();
+
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+
+        }
+
+        //Importar Dados das Atividades agrupada em Blocos
+        this.importByBlock = function (dataJsonCobjectByBlock) {
+            var dataCobjectBlock = dataJsonCobjectByBlock.CobjectBlock;
+            var dataCobjectCobjectBlock =  dataJsonCobjectByBlock.Cobject_cobjectBlocks;
+            var dataCobjects =  dataJsonCobjectByBlock.Cobjects;
+
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.error.message);
+                };
+
+                //==================================================
+                //Importar os cobjectblocks
+                self.importCobjectblock(db, dataCobjectBlock);
+
+                //Importar os cobject_cobjectblocks
+                self.importCobject_cobjectblock(db, dataCobjectCobjectBlock);
+
+                // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
+                //Importar os cobjects
+                self.importCobject(db, dataCobjects);
+
+                //Fecha o DB
+                db.close();
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+
+        }
+
+        //Importar Dados das Atividades agrupada em Blocos
+        this.importByScript = function (dataJsonCobjectByBlock) {
+            var dataCobjectBlock = dataJsonCobjectByBlock.CobjectBlock;
+            var dataCobjectCobjectBlock =  dataJsonCobjectByBlock.Cobject_cobjectBlocks;
+            var dataCobjects =  dataJsonCobjectByBlock.Cobjects;
+
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.error.message);
+                };
+
+                //==================================================
+                //Importar as act_goals
+                self.importActGoals(db, act_goals);
+
+                //Importar as act_contents
+                self.importActContents(db, act_contents);
+
+                //Importar as act_scripts
+                self.importActScripts(db, act_scripts);
+
+                //Importar as act_goal_contents
+                self.importActGoalContent(db, act_goal_contents);
+
+                //Importar as act_script_contents
+                self.importActScriptContent(db, act_script_contents);
+
+                //Fecha o DB
+                db.close();
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+
+        }
+
+        this.importAllDataRender = function(schools, unitys, actors, disciplines, cobjectblock, cobject_cobjectblocks, cobjects) {
             //Obter o goal, content e script do cobjects
             var act_goals = new Array();
             var act_contents = new Array();
@@ -609,7 +721,6 @@ if (sessionStorage.getItem("isOnline") === null ||
 
             self.verifyExistBlock(options, function(options, schoolsClassrooms, existBlock) {
                 //Call Back
-
                 var schools = options.schools;
                 var unitys = options.unitys;
                 var actors = options.actors;
@@ -778,6 +889,31 @@ if (sessionStorage.getItem("isOnline") === null ||
             DisciplineObjectStore.transaction.oncomplete = function(event) {
                 db.close();
                 console.log("Disciplines IMPORTED!");
+            }
+        }
+
+        //Importar os Degrees
+        this.importDegree = function(db, data_degree) {
+            var DegreeObjectStore = db.transaction("degree", "readwrite").objectStore("degree");
+            for (var i in data_degree) {
+                DegreeObjectStore.add(data_degree[i]);
+            }
+            DegreeObjectStore.transaction.oncomplete = function(event) {
+                db.close();
+                console.log("Degree IMPORTED!");
+            }
+        }
+
+
+        //Importar os StageVsModality
+        this.importStageVsModality = function(db, data_StageVsModality) {
+            var StageVsModalityObjectStore = db.transaction("stage_vs_modality", "readwrite").objectStore("stage_vs_modality");
+            for (var i in data_StageVsModality) {
+                StageVsModalityObjectStore.add(data_StageVsModality[i]);
+            }
+            StageVsModalityObjectStore.transaction.oncomplete = function(event) {
+                db.close();
+                console.log("StageVsModality IMPORTED!");
             }
         }
 
@@ -1695,7 +1831,6 @@ if (sessionStorage.getItem("isOnline") === null ||
                     schoolsClassrooms['schools'][1]['classrooms'].push("2° Ano");
                     schoolsClassrooms['schools'][1]['classrooms'].push("3° Ano");
                     schoolsClassrooms['schools'][1]['classrooms'].push("4° Ano");
-
                     //====================================
 
                     callBack(options, schoolsClassrooms, existBlock);

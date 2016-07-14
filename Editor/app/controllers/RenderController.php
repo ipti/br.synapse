@@ -426,9 +426,24 @@ class RenderController extends Controller
 
             endforeach;
 
+            //Obter todos os Degrees e Stage_vs_Modality
+            $allObjectDegree = ActDegree::model()->findAll();
+            $allObjectStageVsModality = EdcensoStageVsModality::model()->findAll();
+            $allDataDegree = array();
+            $allDataStageVsModality = array();
+            //Alimentar um array com os atributos encontrados na pesquisa
+            foreach($allObjectDegree AS $degree):
+                array_push($allDataDegree, $degree->attributes);
+            endforeach;
+            foreach($allObjectStageVsModality AS $stageVsModality):
+                array_push($allDataStageVsModality, $stageVsModality->attributes);
+            endforeach;
+
             //Info comum a qualquer Modo
             $commonJson['ActorsInClassroom'] = $array_actorsInClassroom;
             $commonJson['Disciplines'] = $array_disciplines;
+            $commonJson['Degrees'] = $allDataDegree;
+            $commonJson['StageVsModality'] = $allDataStageVsModality;
             $commonJson_encode = "var dataJsonCommonInfo = ";
             $commonJson_encode .= json_encode($commonJson);
             $commonJson_encode .= ";";
@@ -513,7 +528,8 @@ class RenderController extends Controller
                         //Buscar Todos os Objetivos que possuem o stage e disciplina corrente
                         //Deve também está dentro de um Roteiro
                         $goalScriptInfo = Yii::app()->db->createCommand("SELECT ag.id AS goal_id,
-                                  ag.name AS goal_name, ag.degree_id AS goal_degree_id, acs.id AS script_id, acs.name AS script_name
+                                  ag.name AS goal_name, ag.degree_id AS goal_degree_id, acs.id AS script_id, acs.name AS script_name,
+                                  ags.id AS goal_script_id
                                   FROM act_goal AS ag
                                   INNER JOIN act_degree AS ad ON (ag.degree_id = ad.id)
                                   INNER JOIN act_goal_script AS ags ON (ags.goal_id = ag.id)
@@ -530,9 +546,10 @@ class RenderController extends Controller
                                   $goal_degree_id = $currentGoalScriptInfo['goal_degree_id'];
                                   $script_id = $currentGoalScriptInfo['script_id'];
                                   $script_name = $currentGoalScriptInfo['script_name'];
+                                  $goal_script_id = $currentGoalScriptInfo['goal_script_id'];
                                   //Goals
                                   array_push($jsonGoals, array(
-                                    'goal_id'=> $goal_id,
+                                    'id'=> $goal_id,
                                     'goal_name'=> $goal_name,
                                     'goal_degree_id'=> $goal_degree_id
                                   ));
@@ -540,11 +557,12 @@ class RenderController extends Controller
                                   //Scripts
                                   //index com id do script evita duplicação
                                   $allJsonScripts[$script_id] = array(
-                                    'script_id'=> $script_id,
+                                    'id'=> $script_id,
                                     'script_name'=> $script_name
                                   );
                                   //Scripts+Goals
                                   array_push($allJsonScriptsGoals, array(
+                                    'id'=>$goal_script_id,
                                     'goal_id'=> $goal_id,
                                     'script_id'=> $script_id
                                   ));
@@ -557,11 +575,11 @@ class RenderController extends Controller
                             //Pesquisar cada roteiro+conteúdo+Cobject que estão relacionados com cada objetivo encontrado
                            foreach($currentGoals['goals'] AS $goal):
                                //Listar o Roteiro desse Objetivo
-                                $actScriptGoal = ActGoalScript::model()->findByAttributes(array('goal_id'=>$goal['goal_id']));
+                                $actScriptGoal = ActGoalScript::model()->findByAttributes(array('goal_id'=>$goal['id']));
                                 $actScript = ActScript::model()->findByPk($actScriptGoal->script_id);
                                 //Listar todos os Cobjects para este Objetivo. Para assim encontrar a view de cada um
                                 $commonTypeGoalID = CommonType::model()->findByAttributes(array('context'=>'CobjectData', 'name'=>'goal_id'));
-                                $cobjectsMetadata = cobjectMetadata::model()->findAllByAttributes(array('type_id'=>$commonTypeGoalID->id, 'value'=>$goal['goal_id']));
+                                $cobjectsMetadata = cobjectMetadata::model()->findAllByAttributes(array('type_id'=>$commonTypeGoalID->id, 'value'=>$goal['id']));
                                 //Listar todos os Cobjects para o objetivo corrente
                                 foreach ($cobjectsMetadata AS $currentCobjectMetadata):
                                         //Função responsável por retornar o Json, bem como adicionar os arquivos
