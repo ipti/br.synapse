@@ -15,8 +15,10 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         db = null;
 
-
         dataImportFunction = null;
+
+        //Quantidade de Conjuntos de Cobjects a serem Importados
+        DB.numSetCobjectToImport = 0;
 
         this.verifyIDBrownser = function() {
             // Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
@@ -570,6 +572,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                 // Salvar o Objeto JSON. NÃO PRECISA CRIAR VARIAS TABELA E GERAR UM JSON. Custa processamento.
                 //Importar os cobjects
+
                 self.importCobject(db, dataCobjects);
 
                 //Fecha o DB
@@ -583,10 +586,11 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Importar Dados das Atividades agrupada em Blocos
-        this.importByScript = function (dataJsonCobjectByBlock) {
-            var dataCobjectBlock = dataJsonCobjectByBlock.CobjectBlock;
-            var dataCobjectCobjectBlock =  dataJsonCobjectByBlock.Cobject_cobjectBlocks;
-            var dataCobjects =  dataJsonCobjectByBlock.Cobjects;
+        this.importByScript = function (dataJsonCobjectByScript) {
+            var act_goals = dataJsonCobjectByScript.Goals;
+            var act_scripts = dataJsonCobjectByScript.Scripts;
+            var act_script_goals= dataJsonCobjectByScript.ScriptsGoals;
+            var data_cobjects = dataJsonCobjectByScript.Cobjects;
 
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
@@ -606,17 +610,14 @@ if (sessionStorage.getItem("isOnline") === null ||
                 //Importar as act_goals
                 self.importActGoals(db, act_goals);
 
-                //Importar as act_contents
-                self.importActContents(db, act_contents);
-
                 //Importar as act_scripts
                 self.importActScripts(db, act_scripts);
 
-                //Importar as act_goal_contents
-                self.importActGoalContent(db, act_goal_contents);
+                //Importar as act_script_goals
+                self.importActScriptGoal(db, act_script_goals);
 
-                //Importar as act_script_contents
-                self.importActScriptContent(db, act_script_contents);
+                //Importar os cobjects
+                self.importCobject(db, data_cobjects);
 
                 //Fecha o DB
                 db.close();
@@ -717,8 +718,6 @@ if (sessionStorage.getItem("isOnline") === null ||
 
             };
 
-
-
             self.verifyExistBlock(options, function(options, schoolsClassrooms, existBlock) {
                 //Call Back
                 var schools = options.schools;
@@ -786,8 +785,6 @@ if (sessionStorage.getItem("isOnline") === null ||
                         //Importar Escolas e Turmas Offline
                         self.importSchoolsClassroomsOff(db, data_schoolsClassrooms);
 
-
-
                         //Importar as act_goals
                         self.importActGoals(db, act_goals);
 
@@ -806,7 +803,6 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                         //==================================================
                     }
-
                     //Importar os cobjectblocks
                     self.importCobjectblock(db, data_cobjectBlock);
 
@@ -828,16 +824,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     // Se existe outra aba com a versão antiga
                     window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
                 }
-
-
-
-
             });
-
-
-
-
-
         }
 
         //////////////////////
@@ -953,7 +940,13 @@ if (sessionStorage.getItem("isOnline") === null ||
             }
             CobjectObjectStore.transaction.oncomplete = function(event) {
                 db.close();
-                window.alert("Cobjects IMPORTED!");
+                //Somente deve aparecer a mensagem que Salvou todos os Cobjects
+                //Quando todos os arquivos que possui conjuntos de Cobjects forem importados
+                DB.numSetCobjectToImport--;
+                if(DB.numSetCobjectToImport == 0){
+                    window.alert("Atividades Importadas!");
+                }
+
             }
         }
 
@@ -984,7 +977,18 @@ if (sessionStorage.getItem("isOnline") === null ||
             if (act_goals.length > 0) {
                 var ActGoalObjectStore = db.transaction("act_goal", "readwrite").objectStore("act_goal");
                 for (var i in act_goals) {
-                    ActGoalObjectStore.add(act_goals[i]);
+                    var currentGroupGoals = act_goals[i]['goals'];
+                    var currentGroupDiscipline = act_goals[i]['discipline_id'];
+                    for (var j in currentGroupGoals) {
+                        //Para cada Goals nesse Grupo(goals que possuem mesma discipline e stage)
+                        var currentDataStoreGoal = {
+                            id: currentGroupGoals[j]['id'],
+                            name: currentGroupGoals[j]['goal_name'],
+                            degree_id : currentGroupGoals[j]['goal_degree_id'],
+                            discipline_id : currentGroupDiscipline
+                        };
+                        ActGoalObjectStore.add(currentDataStoreGoal);
+                    }
                 }
                 ActGoalObjectStore.transaction.oncomplete = function(event) {
                     db.close();
@@ -1009,7 +1013,6 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         //Importar as act_scripts
         this.importActScripts = function(db, act_scripts) {
-            if (act_scripts.length > 0) {
                 var ActScriptObjectStore = db.transaction("act_script", "readwrite").objectStore("act_script");
                 for (var i in act_scripts) {
                     ActScriptObjectStore.add(act_scripts[i]);
@@ -1017,6 +1020,19 @@ if (sessionStorage.getItem("isOnline") === null ||
                 ActScriptObjectStore.transaction.oncomplete = function(event) {
                     db.close();
                     console.log("ActScript IMPORTED!");
+                }
+        }
+
+        //Importar as act_script_goal
+        this.importActScriptGoal = function(db, act_script_goals) {
+            if (act_script_goals.length > 0) {
+                var ActScriptGoalObjectStore = db.transaction("act_script_goal", "readwrite").objectStore("act_script_goal");
+                for (var i in act_script_goals) {
+                    ActScriptGoalObjectStore.add(act_script_goals[i]);
+                }
+                ActScriptGoalObjectStore.transaction.oncomplete = function(event) {
+                    db.close();
+                    console.log("ActScriptGoal IMPORTED!");
                 }
             }
         }

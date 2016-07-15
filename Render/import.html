@@ -75,7 +75,6 @@
                 return false;
             }
 
-
             $(document).ready(function () {
                 //Somente para retirar o 'loading' que o jquery cria automaticamente
                 $(".ui-loader.ui-corner-all.ui-body-a.ui-loader-default").css('display', 'none');
@@ -95,6 +94,18 @@
                     var dataJsonByScripts = window["dataJsonByScripts"] !== undefined ? window["dataJsonByScripts"] : null;
 
                     db.openDBuild(true, function (dataJsonLin, dataJsonMat, dataJsonCommonInfo, dataJsonByScripts) {
+                        //Conta a quantidade de Arquivo que possuem Cobjects devem ser Importado
+                        if (dataJsonLin !== undefined && dataJsonLin !== null) {
+                           DB.numSetCobjectToImport++;
+                        }
+                        if (dataJsonMat !== undefined && dataJsonMat !== null) {
+                            DB.numSetCobjectToImport++;
+                        }
+                        if (dataJsonByScripts !== undefined && dataJsonByScripts !== null) {
+                            DB.numSetCobjectToImport++;
+                        }
+
+                        //Agora Chama os métodos para importação
                         if (dataJsonCommonInfo !== undefined && dataJsonCommonInfo !== null) {
                             //Importar Dados Gerais
                             db.importCommonInfo(dataJsonCommonInfo);
@@ -107,9 +118,10 @@
                             //Importar Matemática
                             db.importByBlock(dataJsonMat);
                         }
+                       // alert(dataJsonByScripts);
                         if (dataJsonByScripts !== undefined && dataJsonByScripts !== null) {
                             //Importar Dados a cerca do Modo Proficiência e Treino
-                            //importGeneral(dataJsonByScripts);
+                            db.importByScript(dataJsonByScripts);
                         }
                     }, dataJsonLin, dataJsonMat, dataJsonCommonInfo, dataJsonByScripts);
                 }
