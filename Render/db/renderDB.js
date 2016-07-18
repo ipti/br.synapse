@@ -320,7 +320,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 stop_point_diagnosticStore.createIndex("actor_id", "actor_id", {
                     unique: false
                 });
-                stop_point_diagnosticStore.createIndex("act_goal_content_id", "act_goal_content_id", {
+                stop_point_diagnosticStore.createIndex("act_script_goal_id", "act_script_goal_id", {
                     unique: false
                 });
 

@@ -555,11 +555,20 @@ class RenderController extends Controller
                                   ));
 
                                   //Scripts
-                                  //index com id do script evita duplicação
-                                  $allJsonScripts[$script_id] = array(
-                                    'id'=> $script_id,
-                                    'script_name'=> $script_name
-                                  );
+                                  //Armazena a quantidade de repetições no Array
+                                  // igual ao número de goals neste Script
+                                  if(ISSET($allJsonScripts[$script_id])){
+                                      //Somente altera o total_goals
+                                      $allJsonScripts[$script_id]['total_goals']+=1;
+                                  }else{
+                                      //Index com id do script evita repetição
+                                      $allJsonScripts[$script_id] = array(
+                                          'id'=> $script_id,
+                                          'script_name'=> $script_name,
+                                          'total_goals'=> 1
+                                      );
+                                  }
+
                                   //Scripts+Goals
                                   array_push($allJsonScriptsGoals, array(
                                     'id'=>$goal_script_id,
@@ -570,10 +579,9 @@ class RenderController extends Controller
                             endforeach;
 
                             $currentGoals['goals'] = $jsonGoals;
-                            //Armazena as infomações desses objetivos num Array
-                            array_push($allJsonGoals, $currentGoals);
+
                             //Pesquisar cada roteiro+conteúdo+Cobject que estão relacionados com cada objetivo encontrado
-                           foreach($currentGoals['goals'] AS $goal):
+                           foreach($currentGoals['goals'] AS &$goal):
                                //Listar o Roteiro desse Objetivo
                                 $actScriptGoal = ActGoalScript::model()->findByAttributes(array('goal_id'=>$goal['id']));
                                 $actScript = ActScript::model()->findByPk($actScriptGoal->script_id);
@@ -588,9 +596,17 @@ class RenderController extends Controller
                                         if (ISSET($jsonRenderView)) {
                                             //Só dá o push no array, sse o jsonRenderView for diferente de NULL
                                             array_push($allJsonCobjects, $jsonRenderView);
+                                            //Incrementa o atributo total_cobjects para o goal corrente
+                                            if(ISSET($goal['total_cobjects'])){
+                                                $goal['total_cobjects'] += 1;
+                                            }else{
+                                                $goal['total_cobjects'] = 1;
+                                            }
                                         }
                                 endforeach;
                            endforeach;
+                            //Armazena as infomações desses objetivos num Array
+                            array_push($allJsonGoals, $currentGoals);
                         endforeach;
                     endforeach;
               
