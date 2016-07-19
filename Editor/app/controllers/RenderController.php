@@ -609,7 +609,7 @@ class RenderController extends Controller
                             array_push($allJsonGoals, $currentGoals);
                         endforeach;
                     endforeach;
-              
+
                   $jsonModByScripts = array();
                   $jsonModByScripts['Scripts'] = $allJsonScripts;
                   $jsonModByScripts['ScriptsGoals'] = $allJsonScriptsGoals;

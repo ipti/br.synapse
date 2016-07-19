@@ -284,9 +284,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     keyPath: "id",
                     autoIncrement: true
                 });
-
                 //===============================================
-
                 //Criar o OBJECTSTORE ESPECÍFICO do RENDER
                 // state_actor
                 var state_actorStore = db.createObjectStore("state_actor", {
@@ -311,7 +309,9 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
-                // stop_point_diagnostic
+                // Acerca do MODO DIAGNÓSTICO
+
+                //stop_point_diagnostic
                 var stop_point_diagnosticStore = db.createObjectStore("stop_point_diagnostic", {
                     keyPath: "id",
                     autoIncrement: true
@@ -320,11 +320,52 @@ if (sessionStorage.getItem("isOnline") === null ||
                 stop_point_diagnosticStore.createIndex("actor_id", "actor_id", {
                     unique: false
                 });
-                stop_point_diagnosticStore.createIndex("act_script_goal_id", "act_script_goal_id", {
+                stop_point_diagnosticStore.createIndex("act_goal_content_id", "act_goal_content_id", {
                     unique: false
                 });
 
+                // falta o {mode => [activity, proficiency, train] }
 
+                var traceDiagnosticCobjectStore = db.createObjectStore("trace_diagnostic_cobject", {
+                    keyPath: "id",
+                    autoIncrement: true
+                });
+
+                //Diagnostic_Cobject
+                traceDiagnosticCobjectStore.createIndex("trace_diagnostic_goal_fk", "trace_diagnostic_goal_fk", {
+                    unique: false
+                });
+                traceDiagnosticCobjectStore.createIndex("cobject_fk", "cobject_fk", {
+                    unique: false
+                });
+
+                //Diagnostic_Goal
+                var traceDiagnosticGoalStore = db.createObjectStore("trace_diagnostic_goal", {
+                    keyPath: "id",
+                    autoIncrement: true
+                });
+
+                traceDiagnosticGoalStore.createIndex("trace_diagnostic_script_fk", "trace_diagnostic_script_fk", {
+                    unique: false
+                });
+                traceDiagnosticGoalStore.createIndex("act_script_goal_fk", "act_script_goal_fk", {
+                    unique: false
+                });
+
+                //Diagnostic_Script
+                var traceDiagnosticScriptStore = db.createObjectStore("trace_diagnostic_script", {
+                    keyPath: "id",
+                    autoIncrement: true
+                });
+
+                traceDiagnosticScriptStore.createIndex("actor_fk", "actor_fk", {
+                    unique: false
+                });
+                traceDiagnosticScriptStore.createIndex("script_fk", "script_fk", {
+                    unique: false
+                });
+
+                //===========================================================================
 
                 // Usando transação oncomplete para afirmar que a criação do objectStore
                 // é terminada antes de adicionar algum dado nele.
@@ -420,6 +461,21 @@ if (sessionStorage.getItem("isOnline") === null ||
                 }
 
                 stop_point_diagnosticStore.transaction.oncomplete = function(event) {
+                    db.close();
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
+                    console.log('Criou os Schemas');
+                }
+                traceDiagnosticCobjectStore.transaction.oncomplete = function(event) {
+                    db.close();
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
+                    console.log('Criou os Schemas');
+                }
+                traceDiagnosticGoalStore.transaction.oncomplete = function(event) {
+                    db.close();
+                    self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
+                    console.log('Criou os Schemas');
+                }
+                traceDiagnosticScriptStore.transaction.oncomplete = function(event) {
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
                     console.log('Criou os Schemas');
@@ -878,7 +934,8 @@ if (sessionStorage.getItem("isOnline") === null ||
                             id: currentGroupGoals[j]['id'],
                             name: currentGroupGoals[j]['goal_name'],
                             degree_id : currentGroupGoals[j]['goal_degree_id'],
-                            discipline_id : currentGroupDiscipline
+                            discipline_id : currentGroupDiscipline,
+                            total_cobjects : currentGroupGoals[j]['total_cobjects']
                         };
                         ActGoalObjectStore.add(currentDataStoreGoal);
                     }
