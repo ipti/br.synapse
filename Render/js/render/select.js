@@ -65,7 +65,7 @@ $(document).ready(function() {
                         var school_classrooms = schools_classrooms[idxSchool];
                         for (var idxClassroom in school_classrooms['classrooms']) {
                             var classroom = school_classrooms['classrooms'][idxClassroom];
-                            strOptionsSchoolsClassrooms += "<option value=" + classroom['id'] + ">" +
+                            strOptionsSchoolsClassrooms += "<option data-stage-fk="+classroom['stage_code']+ " value=" + classroom['id'] + ">" +
                                 school_classrooms['name'] + " [" + classroom['name'] + "]" + "</option>"
                         }
                     }
@@ -121,6 +121,7 @@ $(document).ready(function() {
             //Turma
             sessionStorage.setItem('id_classroom', $('#classroom').val());
             sessionStorage.setItem('name_classroom', $('#classroom').find(":selected").text());
+            sessionStorage.setItem('classroom_stage_fk', $('#classroom').find(":selected").attr("data-stage-fk"));
 
             window.location = "./meet.html";
         } else {

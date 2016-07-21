@@ -7,17 +7,39 @@ this.MeetProficiency = function() {
     this.discipline_id = null;
     //Roteiro Atual
     this.script_id = null;
-    //Conteúdo atual
-    this.content_id = null;
     //Objetivo atual
     this.goal_id = null;
     //Todos os scripts disponíveis(sem diagnósticos)
-    this.availableScripts = new Array();
-
+    Meet.availableScripts = new Array();
     //Array de Cobjects no objetivo corrente
     this.cobjectsInCurrentGoal = new Array();
+    //Pontos de diagnósticos para o usuário na disciplina corrente
+    Meet.stopPointDiagnostics = new Array();
 
     this.start = function() {
+
+        //Buscar Todos os Pontos de Diagnósticos do usuário Corrente
+        this.findAllDiagnosticPointByUser(Meet.actor, function(diagnosticPoints){
+            if(diagnosticPoints.length > 0){
+                //Existe algum ponto de diagnóstico para o usuário corrente
+
+            }else{
+                //Todos os Roteiros estão disponíveis
+
+            }
+        });
+
+
+
+
+
+
+        //Buscar Todos os Roteiros Disponíveis para o usuário Corrente
+        // this.findAllAvailableScripts(function(availableScripts){
+        // });
+
+
+        /*
         //Verificar o UserState
 
         var userStateProficiencyInfo = {
@@ -107,7 +129,14 @@ this.MeetProficiency = function() {
                 //Não inicia
                 console.log("Nenhum Bloco foi encontrado para a Disciplina selecionada !!!");
             }
-        });
+        }); /*
+    }
+
+
+    this.findAllAvailableScripts = function(callBack){
+        //Varrer todos os Scripts e para cada um verificar se Não possui
+        // um trace_diagnostic_script para o usuário corrente
+        this.
     }
 
     //Obter todos os Cobject deste Bloco
@@ -193,9 +222,12 @@ this.MeetProficiency = function() {
              //Para cada Cobject Cria sua Dom
 
              }); */
-        });
+        //});
     }
 
+    this.findAllDiagnosticPointByUser = function(actor_id, callBack){
+        Meet.DB_synapse.getAllDiagnosticPointByUser(actor_id, callBack);
+    }
 
 
     this.setCobjectsFromBlock = function(cobjectIDsCurrentBlock) {

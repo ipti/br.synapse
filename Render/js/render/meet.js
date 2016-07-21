@@ -68,15 +68,13 @@ this.Meet = function(options) {
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
     Meet.studentClassroomName = options.studentClassroom[1];
+    Meet.studentClassroomStageFk = options.studentClassroom[2];
     //Ano atual do Aluno
     Meet.studentCurrentYear = 0;
     Meet.actor = options.actor[0];
-
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];
-
     Meet.discipline_id = options.id_discipline;
-
 
     //==== Armazenar a performance do usuário
     Meet.peformance_qtd_correct = 0;
@@ -121,8 +119,11 @@ this.Meet = function(options) {
                     self.meetPreview = new MeetPreview(cobject);
                     self.meetPreview.start();
                 });
-            } else {
-                alert("Indisponível...");
+            } else if(Meet.render_mode == 'proficiency'){
+                //Instancia o meetProficiency
+                self.meetProficiency = new MeetProficiency();
+                //Inicia o Render
+                self.meetProficiency.start();
             }
 
             /* else if (Meet.render_mode == 'proficiency') {

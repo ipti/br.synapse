@@ -104,6 +104,7 @@
 
                 var classroomID = sessionGet('id_classroom');
                 var classroomName = sessionGet('name_classroom');
+                var classroomStageFk = sessionGet('classroom_stage_fk');
 
                 //var unityfather_name = '';
                 var organizationName = '';
@@ -134,11 +135,11 @@
 
                 var options = {
                     org: [org, organizationName],
-                    studentClassroom: [classroomID, classroomName],
+                    studentClassroom: [classroomID, classroomName, classroomStageFk],
                     actor: [actorID, actorName, login_personage_name],
                     id_discipline: disciplineID,
                     render_mode: render_mode,
-                    selected_level_evaluation: selected_level_evaluation,
+                    selected_level_evaluation: selected_level_evaluation
                     //cobject_block_id: block_id
                 };
 

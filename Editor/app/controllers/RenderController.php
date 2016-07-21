@@ -379,7 +379,7 @@ class RenderController extends Controller
                 $school = School::model()->findByPk($_REQUEST['school']);
                 //Obtendo a escola agora pesquisa seus filhos, as suas turmas e seleciona todos os actores dessa turma
                 $query = "SELECT $school->id AS school_id, '$school->name' AS school_name, class.id AS classroom_id, class.name AS classroom_name,
-                    act.id, person.name, personage.name AS personage, person.login, person.password
+                    act.id, person.name, personage.name AS personage, person.login, person.password, class.stage_fk
                     FROM classroom AS class
                     INNER JOIN actor AS act ON(act.classroom_fk = class.id)
                     INNER JOIN person ON(act.person_id = person.id)

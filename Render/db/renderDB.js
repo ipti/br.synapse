@@ -149,15 +149,15 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                 //=============================================
 
-                var unityStore = db.createObjectStore("unity", {
+                var classroomStore = db.createObjectStore("classroom", {
                     keyPath: "id"
                 });
                 // Podemos ter nomes duplicados, então não podemos usar como índice único.
-                unityStore.createIndex("name", "name", {
+                classroomStore.createIndex("name", "name", {
                     unique: false
                 });
                 // Podemos ter school_id duplicados, então não podemos usar como índice único.
-                unityStore.createIndex("school_id", "school_id", {
+                classroomStore.createIndex("school_id", "school_id", {
                     unique: false
                 });
 
@@ -175,7 +175,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 actorStore.createIndex("login", "login", {
                     unique: true
                 });
-                actorStore.createIndex("unity_id", "unity_id", {
+                actorStore.createIndex("classroom_id", "classroom_id", {
                     unique: false
                 });
                 // Falta personage_name & password
@@ -317,10 +317,10 @@ if (sessionStorage.getItem("isOnline") === null ||
                     autoIncrement: true
                 });
 
-                stop_point_diagnosticStore.createIndex("actor_id", "actor_id", {
+                stop_point_diagnosticStore.createIndex("actor_fk", "actor_fk", {
                     unique: false
                 });
-                stop_point_diagnosticStore.createIndex("act_goal_content_id", "act_goal_content_id", {
+                stop_point_diagnosticStore.createIndex("act_script_goal_fk", "act_script_goal_fk", {
                     unique: false
                 });
 
@@ -376,7 +376,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     console.log('Criou os Schemas');
                 }
 
-                unityStore.transaction.oncomplete = function(event) {
+                classroomStore.transaction.oncomplete = function(event) {
                     //Se for o último dos 9 então contruiu todos os schemas
                     db.close();
                     self.dataImportFunction(self.dataJsonLin, self.dataJsonMat, self.dataJsonCommonInfo, self.dataJsonByScripts);
@@ -497,13 +497,13 @@ if (sessionStorage.getItem("isOnline") === null ||
         this.importCommonInfo = function (dataJsonCommonInfo) {
             console.log(dataJsonCommonInfo);
             var schools = new Array();
-            var unitys = new Array();
+            var classrooms = new Array();
             var actors = new Array();
             var disciplines = new Array();
             var degrees = new Array();
             var stageVsModality = new Array();
 
-            //Percorrer todos objetos existentes no ActorsOwnUnity
+            //Percorrer todos objetos existentes no ActorsOwnClassroom
             $.each(dataJsonCommonInfo.ActorsInClassroom, function (idx, object) {
                 var tempSchool = {};
                 tempSchool.id = object.school_id;
@@ -512,13 +512,14 @@ if (sessionStorage.getItem("isOnline") === null ||
                     schools.push(tempSchool);
                 }
 
-                var tempUnity = {};
-                tempUnity.id = object.classroom_id;
+                var tempClassroom = {};
+                tempClassroom.id = object.classroom_id;
                 //FK para a school
-                tempUnity.school_id = object.school_id;
-                tempUnity.name = object.classroom_name;
-                if (!existInArray(unitys, tempUnity.id)) {
-                    unitys.push(tempUnity);
+                tempClassroom.school_id = object.school_id;
+                tempClassroom.name = object.classroom_name;
+                tempClassroom.stage_code = object.stage_fk;
+                if (!existInArray(classrooms, tempClassroom.id)) {
+                    classrooms.push(tempClassroom);
                 }
                 var tempActor = {};
                 tempActor.id = object.id;
@@ -527,7 +528,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 tempActor.password = object.password;
                 tempActor.personage_name = object.personage;
                 //Chave Estrageira para a sua unidade
-                tempActor.unity_id = object.classroom_id;
+                tempActor.classroom_id = object.classroom_id;
                 if (!existInArray(actors, tempActor.id)) {
                     actors.push(tempActor);
                 }
@@ -546,10 +547,10 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var school = schools[idx];
                 school.createdOffline = false;
             }
-            //Add campo 'createdOffline' nas 'unitys'
-            for (var idx in unitys) {
-                var unity = unitys[idx];
-                unity.createdOffline = false;
+            //Add campo 'createdOffline' nas 'classrooms'
+            for (var idx in classrooms) {
+                var classroom = classrooms[idx];
+                classroom.createdOffline = false;
             }
 
             window.indexedDB = self.verifyIDBrownser();
@@ -570,8 +571,8 @@ if (sessionStorage.getItem("isOnline") === null ||
                     //Importar as schools
                     self.importSchool(db, schools);
 
-                    //Importar as unitys
-                    self.importUnity(db, unitys);
+                    //Importar as classrooms
+                    self.importClassroom(db, classrooms);
 
                     //Importar os atores
                     self.importActor(db, actors);
@@ -685,7 +686,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         }
 
-        this.importAllDataRender = function(schools, unitys, actors, disciplines, cobjectblock, cobject_cobjectblocks, cobjects) {
+        this.importAllDataRender = function(schools, classrooms, actors, disciplines, cobjectblock, cobject_cobjectblocks, cobjects) {
             //Obter o goal, content e script do cobjects
             var act_goals = new Array();
             var act_contents = new Array();
@@ -760,7 +761,7 @@ if (sessionStorage.getItem("isOnline") === null ||
 
             var options = {
                 schools: schools,
-                unitys: unitys,
+                classrooms: classrooms,
                 actors: actors,
                 disciplines: disciplines,
                 cobjectblock: cobjectblock,
@@ -792,15 +793,15 @@ if (sessionStorage.getItem("isOnline") === null ||
             };
         };
 
-        //Importar as unitys
-        this.importUnity = function(db, data_unity) {
-            var UnityObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
-            for (var i in data_unity) {
-                UnityObjectStore.add(data_unity[i]);
+        //Importar as classrooms
+        this.importClassroom = function(db, data_classroom) {
+            var ClassroomObjectStore = db.transaction("classroom", "readwrite").objectStore("classroom");
+            for (var i in data_classroom) {
+                ClassroomObjectStore.add(data_classroom[i]);
             }
-            UnityObjectStore.transaction.oncomplete = function(event) {
+            ClassroomObjectStore.transaction.oncomplete = function(event) {
                 db.close();
-                console.log("Unitys IMPORTED!");
+                console.log("Classrooms IMPORTED!");
             }
         }
 
@@ -1208,7 +1209,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                                     var name = requestGet.result.name;
                                     var id = requestGet.result.id;
                                     var personage_name = requestGet.result.personage_name;
-                                    var classroom_id = requestGet.result.unity_id;
+                                    var classroom_id = requestGet.result.classroom_id;
                                     //Armazenar nome do usuário e id_Actor na sessão
                                     sessionStorage.setItem("authorization", true);
                                     sessionStorage.setItem("login_id_actor", id);
@@ -1775,7 +1776,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                         console.log("Database error: " + event.target.error.message);
                     }
                     var maxID = 0;
-                    var findClassroomsObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+                    var findClassroomsObjectStore = db.transaction("classroom", "readonly").objectStore("classroom");
                     findClassroomsObjectStore.openCursor().onsuccess = function(event) {
                         var cursor = event.target.result;
                         //Encontrar Maior ID
@@ -1799,7 +1800,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                             };
 
                             //Tudo ok Então Registra a Nova Turma
-                            var classroomObjectStore = db.transaction("unity", "readwrite").objectStore("unity");
+                            var classroomObjectStore = db.transaction("classroom", "readwrite").objectStore("classroom");
                             classroomObjectStore.add(dataClassroom);
                             classroomObjectStore.transaction.oncomplete = function(event) {
                                 console.log(' NEW Classroom Salvo !!!! ');
@@ -1860,7 +1861,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                                 name: user_name,
                                 password: "123456",
                                 personage_name: "Aluno",
-                                unity_id: classroom_id,
+                                classroom_id: classroom_id,
                             };
 
                             //Tudo ok Então Registra o Novo Aluno
@@ -1942,14 +1943,15 @@ if (sessionStorage.getItem("isOnline") === null ||
 
                 var classrooms = new Array();
 
-                var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+                var classroomObjectStore = db.transaction("classroom", "readonly").objectStore("classroom");
                 classroomObjectStore.openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         classrooms.push({
                             id: cursor.value.id,
                             name: cursor.value.name,
-                            school_id: cursor.value.school_id
+                            school_id: cursor.value.school_id,
+                            stage_code: cursor.value.stage_code
                         });
 
                         cursor.continue();
@@ -2058,7 +2060,6 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         //Pesquisar Turma específica
         this.findClassroomById = function(classroom_id, callBack) {
-
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -2074,7 +2075,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
                 var classroom = null;
-                var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+                var classroomObjectStore = db.transaction("classroom", "readonly").objectStore("classroom");
 
                 //Selecionar somente a turma que possui o classroom_id especificado
                 classroomObjectStore.get(classroom_id).onsuccess = function(event) {
@@ -2098,10 +2099,8 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-
         //Pesquisar todas as classes de uma determinada escola
         this.findClassroomBySchool = function(school_id, callBack) {
-
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -2117,7 +2116,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
                 var classrooms = new Array();
-                var classroomObjectStore = db.transaction("unity", "readonly").objectStore("unity");
+                var classroomObjectStore = db.transaction("classroom", "readonly").objectStore("classroom");
 
                 //Selecionar somente as turmas pra a escola específica
                 var requestGet = classroomObjectStore.index('school_id');
@@ -2151,7 +2150,6 @@ if (sessionStorage.getItem("isOnline") === null ||
 
         //Pesquisar todas as classes de uma determinada escola
         this.findStudentByClassroom = function(classroom_id, callBack) {
-
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -2170,7 +2168,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var studentObjectStore = db.transaction("actor", "readonly").objectStore("actor");
 
                 //Selecionar somente os alunos pra a turma específica
-                var requestGet = studentObjectStore.index('unity_id');
+                var requestGet = studentObjectStore.index('classroom_id');
                 var singleKeyRange = IDBKeyRange.only(classroom_id);
 
                 requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
@@ -2195,6 +2193,100 @@ if (sessionStorage.getItem("isOnline") === null ||
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
         }
+
+
+        this.getAllDiagnosticPointByUser = function(actor_id, callBack){
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.errorCode);
+                };
+                var stopPointDiagnosticObjectStore = db.transaction("stop_point_diagnostic", "readonly").objectStore("stop_point_diagnostic");
+
+                //Selecionar somente os diagnósticos pra o actor específico
+                var requestGet = stopPointDiagnosticObjectStore.index('actor_fk');
+                var singleKeyRange = IDBKeyRange.only(actor_id);
+
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                    var disciplineIdSelected = Meet.discipline_id;
+                    var studentClassroomStageCode = Meet.studentClassroomStageFk;
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        //Deve somente retornar os Pontos de Diagnóstico de Roteiros
+                        //Para a disciplina selecionada
+                        self.getDiagnosticPoint(function(){
+                            //STOP HERE
+                            cursor.value.id
+                            ,cursor.value.act_script_goal_fk
+                        });
+                        cursor.continue();
+                    } else {
+                        //Não existe mais registros!
+                        callBack(diagnosticPoints);
+                    }
+                };
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+
+
+        Meet.stopPointDiagnostics
+
+        this.getDiagnosticPoint = function(pointDiagnosticId, actScriptGoalFk){
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.errorCode);
+                };
+                var stopPointDiagnosticObjectStore = db.transaction("stop_point_diagnostic", "readonly").objectStore("stop_point_diagnostic");
+
+                //Selecionar somente os diagnósticos pra o actor específico
+                var requestGet = stopPointDiagnosticObjectStore.index('actor_fk');
+                var singleKeyRange = IDBKeyRange.only(actor_id);
+
+                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
+                    var disciplineIdSelected = Meet.discipline_id;
+                    var studentClassroomStageCode = Meet.studentClassroomStageFk;
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        //Deve somente retornar os Pontos de Diagnóstico de Roteiros
+                        //Para a disciplina selecionada
+                        self.getDiagnosticPoint(cursor.value.id, cursor.value.act_script_goal_fk);
+                        cursor.continue();
+                    } else {
+                        //Não existe mais registros!
+                        callBack(diagnosticPoints);
+                    }
+                };
+            }
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+
+
+
+
 
 
 
