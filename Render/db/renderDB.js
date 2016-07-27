@@ -255,7 +255,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     keyPath: "id"
                 });
                 //Criar Index para discipline_id
-                act_scriptStore.createIndex("discipline_id", "discipline_id", {
+                act_scriptStore.createIndex("discipline_fk", "discipline_fk", {
                     unique: false
                 });
 
@@ -324,14 +324,23 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
-                // falta o {mode => [activity, proficiency, train] }
+                //Diagnostic_Piece
+                var traceDiagnosticPieceStore = db.createObjectStore("trace_diagnostic_piece", {
+                    keyPath: "id",
+                    autoIncrement: true
+                });
+                traceDiagnosticPieceStore.createIndex("trace_diagnostic_cobject_fk", "trace_diagnostic_cobject_fk", {
+                    unique: false
+                });
+                traceDiagnosticPieceStore.createIndex("piece_fk", "piece_fk", {
+                    unique: false
+                });
 
+                //Diagnostic_Cobject
                 var traceDiagnosticCobjectStore = db.createObjectStore("trace_diagnostic_cobject", {
                     keyPath: "id",
                     autoIncrement: true
                 });
-
-                //Diagnostic_Cobject
                 traceDiagnosticCobjectStore.createIndex("trace_diagnostic_goal_fk", "trace_diagnostic_goal_fk", {
                     unique: false
                 });
@@ -2146,8 +2155,6 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-
-
         //Pesquisar todas as classes de uma determinada escola
         this.findStudentByClassroom = function(classroom_id, callBack) {
             window.indexedDB = self.verifyIDBrownser();
@@ -2195,7 +2202,8 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-        this.getAllDiagnosticPointByUser = function(actor_id, callBack){
+        //Busca todos os Pontos de Diagnóstico do aluno na disciplina corrente.
+        this.getAllDiagnosticPoint = function(callBack){
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -2209,31 +2217,371 @@ if (sessionStorage.getItem("isOnline") === null ||
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
-                var stopPointDiagnosticObjectStore = db.transaction("stop_point_diagnostic", "readonly").objectStore("stop_point_diagnostic");
+                //Resultados finais
+                var allPointDiagnostic = Array();
+                var allAvailableScripts = Array();
 
-                //Selecionar somente os diagnósticos pra o actor específico
-                var requestGet = stopPointDiagnosticObjectStore.index('actor_fk');
-                var singleKeyRange = IDBKeyRange.only(actor_id);
+                //Inicia uma nova transação
+                var transaction = db.transaction(["stop_point_diagnostic", "act_script_goal", "act_script"], "readonly");
+                //Atua em no ObjetcStore stop_point_diagnostic
+                var pointDiagStore = transaction.objectStore("stop_point_diagnostic");
+                //Atua em no ObjetcStore act_script_goal
+                var actScriptGoalStore = transaction.objectStore("act_script_goal");
+                //Atua em no ObjetcStore act_script
+                var actScriptStore = transaction.objectStore("act_script");
 
-                requestGet.openCursor(singleKeyRange).onsuccess = function(event) {
-                    var disciplineIdSelected = Meet.discipline_id;
-                    var studentClassroomStageCode = Meet.studentClassroomStageFk;
-                    var cursor = event.target.result;
-                    if (cursor) {
-                        //Deve somente retornar os Pontos de Diagnóstico de Roteiros
-                        //Para a disciplina selecionada
-                        self.getDiagnosticPoint(function(){
-                            //STOP HERE
-                            cursor.value.id
-                            ,cursor.value.act_script_goal_fk
-                        });
-                        cursor.continue();
-                    } else {
-                        //Não existe mais registros!
-                        callBack(diagnosticPoints);
+                //Controle dos cursores para poder Realizar o "JOIN" entre os ObjectStore
+                var pointDiagCursor;
+                var scriptGoalCursor;
+                var scriptCursor;
+                var pointDiagLoaded = false;
+                var scriptGoalLoaded = false;
+                var scriptLoaded = false;
+                //Selecionar somente os pontos diagnósticos pra o actor específico
+                var pointDiagRequest = pointDiagStore.index('actor_fk');
+                var pointDiagSingleKeyRange = IDBKeyRange.only(Meet.actor);
+
+                pointDiagRequest.openCursor(pointDiagSingleKeyRange).onsuccess = function(event) {
+                    pointDiagCursor = event.target.result;
+                    pointDiagLoaded = true;
+                    //Verifica se Encontrou um ponto de diagnostico para o usuário corrente
+                    if(pointDiagCursor){
+                        //Selecionar  o act_goal_script correspondente ao StopPoint
+                        var scriptGoalRequest = actScriptGoalStore.index('id');
+                        var scriptGoalSingleKeyRange = IDBKeyRange.only(pointDiagCursor.value.act_script_goal_fk);
+                        scriptGoalRequest.openCursor(scriptGoalSingleKeyRange).onsuccess = function(event) {
+                            scriptGoalCursor = event.target.result;
+                            scriptGoalLoaded = true;
+                            //Verifica foi encontrado um relacionamento script+goal
+                            if(scriptGoalCursor){
+                                var scriptSingleKeyRange = IDBKeyRange.only(scriptGoalCursor.value.script_id);
+                                scriptRequest.openCursor(scriptSingleKeyRange).onsuccess = function(event) {
+                                    scriptCursor = event.target.result;
+                                    scriptLoaded = true;
+                                    //Verifica foi encontrado o respectivo script
+                                    if(scriptCursor){
+                                        var disciplineIdSelected = Meet.discipline_id;
+                                        if(scriptCursor.value.discipline_fk == disciplineIdSelected){
+                                            allPointDiagnostic.push({script_id: scriptGoalCursor.value.script_id,
+                                                goal_id: scriptGoalCursor.value.goal_id});
+                                            //Vai para o próximo ponto de diagnóstico
+                                            pointDiagCursor.continue;
+                                        }
+                                    }
+                                };
+                            }
+                        };
+                    }else{
+                        //Não encontrou algum ponto de diagnóstico ou finalizou a busca
+                        callBack(allPointDiagnostic, callBack);
+
                     }
                 };
             }
+
+
+            DBsynapse.onblocked = function(event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+
+        //Buscar quais roteiros o aluno começou a resolver mas ainda não foi diagnosticado nele
+        //Bem como o seu último ponto de parada
+        this.getAllTraceDiagByAvailableScript = function(allPointDiagnostic, callBack) {
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function (event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function (event) {
+                var db = event.target.result;
+                db.onerror = function (event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.errorCode);
+                };
+                //Resultados finais
+                var allTraceScripts = Array();
+                //Inicia uma nova transação
+                var transaction = db.transaction(["trace_diagnostic_script", "act_script", "trace_diagnostic_goal","trace_diagnostic_cobject", "trace_diagnostic_piece"], "readonly");
+                //Atua no ObjetcStore trace_diagnostic_script
+                var traceScriptStore = transaction.objectStore("trace_diagnostic_script");
+                //Atua no ObjetcStore script
+                var scriptStore = transaction.objectStore("act_script");
+                //Atua no ObjetcStore trace_diagnostic_goal
+                var traceGoalStore = transaction.objectStore("trace_diagnostic_goal");
+                //Atua no ObjetcStore trace_diagnostic_cobject
+                var traceCobjectStore = transaction.objectStore("trace_diagnostic_cobject");
+                //Atua no ObjetcStore trace_diagnostic_piece
+                var tracePieceStore = transaction.objectStore("trace_diagnostic_piece");
+                //Controle dos cursores para poder Realizar o "JOIN" entre os ObjectsStore
+                //Cursores
+                var traceScriptCursor;
+                var scriptCursor;
+                var traceGoalCursor;
+                var traceCobjectCursor;
+                var tracePieceCursor;
+                //verificador se já foi carregado
+                var traceScriptLoaded = false;
+                var scriptLoaded = false;
+                var traceGoalLoaded = false;
+                var traceCobjectLoaded = false;
+                var tracePieceLoaded = false;
+
+                var traceScriptFinish= false;
+                var scriptFinish = false;
+                var traceGoalFinish = false;
+                var traceCobjectFinish = false;
+                var tracePieceFinish = false;
+
+                //Selecionar somente os trace_diagnostic_script pra o actor específico
+                var traceScriptRequest = traceScriptStore.index('actor_fk');
+                var traceScriptSingleKeyRange = IDBKeyRange.only(Meet.actor);
+                //Função que controla o avanço dos cursores
+                function join(request){
+                    if(traceScriptLoaded && scriptLoaded && traceGoalLoaded
+                        && traceCobjectLoaded && tracePieceLoaded){
+                        //Todos os cursores foram carregados
+                        switch(request){
+                            case 'traceScript':
+                                if(traceScriptFinish){
+                                    //Finalizou toda a pesquisa
+                                    console.log(allTraceScripts);
+                                }
+                                ;break;
+                            case 'script':
+                                //Avança para O próximo trace script
+                                if(scriptFinish){
+                                    //Então avança para o próximo trace script
+                                    traceScriptCursor.continue;
+                                    scriptFinish = false;
+                                }
+                                ;break;
+                            case 'traceGoal':
+                                //Avança para O próximo script
+                                if(traceGoalFinish){
+                                    //Então avança para o próximo
+                                    scriptCursor.continue;
+                                    traceGoalFinish = false;
+                                }
+                                ;break;
+                            case 'traceCobject':
+                                //Avança para O próximo traceGoal
+                                if(traceCobjectFinish){
+                                    //Então avança para o próximo traceGoal
+                                    traceGoalCursor.continue;
+                                    traceCobjectFinish = false;
+                                }
+                                ;break;
+                            case 'tracePiece':
+                                //Avança para O próximo traceCobject
+                                if(tracePieceFinish){
+                                    //Então avança para o próximo traceCobject
+                                    traceCobjectCursor.continue;
+                                    tracePieceFinish = false;
+                                }
+                                ;break;
+                        }
+                    }
+
+                }
+                traceScriptRequest.openCursor(traceScriptSingleKeyRange).onsuccess = function (event) {
+                    traceScriptCursor = event.target.result;
+                    traceScriptLoaded = true;
+                    var currentTraceScript = null;
+                    //Verifica se Encontrou um trace_diagnostic_script para o usuário corrente
+                    if (traceScriptCursor) {
+                           currentTraceScript = {
+                           id: traceScriptCursor.value.id,
+                           actor_id: traceScriptCursor.value.actor_id,
+                           script_id: traceScriptCursor.value.script_id,
+                           script_percent_resolved: traceScriptCursor.value.script_percent_resolved,
+                           script_percent_achieved: traceScriptCursor.value.script_percent_achieved
+                       };
+                        currentTraceScript['traces_diagnostic_goal'] = Array();
+                        //Selecionar  o script correspondente ao traceScript corrente
+                        var scriptRequest = scriptStore.index('id');
+                        var scriptSingleKeyRange = IDBKeyRange.only(traceScriptCursor.value.script_fk);
+                        scriptRequest.openCursor(scriptSingleKeyRange).onsuccess = function (event) {
+                            scriptCursor = event.target.result;
+                            scriptLoaded = true;
+                            //Verifica se foi encontrado um relacionamento script+trace_diagnostic_script
+                            if (scriptCursor) {
+                                var disciplineIdSelected = Meet.discipline_id;
+                                if (scriptCursor.value.discipline_fk == disciplineIdSelected) {
+                                    //O roteiro corrente é referente a disciplina selecionada
+                                    //Selecionar Todos os trace_diagnostic_goal para o trace_script corrrente
+                                    var traceGoalRequest = traceGoalStore.index('trace_diagnostic_script_fk');
+                                    var traceGoalSingleKeyRange = IDBKeyRange.only(traceScriptCursor.value.id);
+                                    traceGoalRequest.openCursor(traceGoalSingleKeyRange).onsuccess = function (event) {
+                                        traceGoalCursor = event.target.result;
+                                        traceGoalLoaded = true;
+                                        //Verifica se Encontrou um trace_diagnostic_goal para o usuário corrente
+                                        if (traceGoalCursor) {
+                                            //Add no Array de Traces
+                                          var currentTraceGoal = currentTraceScript['traces_diagnostic_goal'].push({
+                                                id: traceGoalCursor.value.id,
+                                                trace_diagnostic_script_fk: traceGoalCursor.value.trace_diagnostic_script_fk,
+                                                act_script_goal_fk: traceGoalCursor.value.act_script_goal_fk,
+                                                goal_percent_resolved: traceGoalCursor.value.goal_percent_resolved,
+                                                goal_percent_achieved: traceGoalCursor.value.goal_percent_achieved
+                                            })[currentTraceScript['traces_diagnostic_goal'].length-1];
+                                            currentTraceGoal['traces_diagnostic_cobject'] = Array();
+
+                                            //Selecionar Todos os trace_diagnostic_cobject para o trace goal corrrente
+                                            var traceCobjectRequest = traceCobjectStore.index('trace_diagnostic_goal_fk');
+                                            var traceCobjectSingleKeyRange = IDBKeyRange.only(traceGoalCursor.value.id);
+                                            traceCobjectRequest.openCursor(traceCobjectSingleKeyRange).onsuccess = function (event) {
+                                                traceCobjectCursor = event.target.result;
+                                                traceCobjectLoaded = true;
+                                                //Verifica se Encontrou um trace_diagnostic_cobject para o usuário corrente
+                                                if (traceCobjectCursor) {
+                                                    //Add no Array de Traces
+                                                    var currentTraceCobject = currentTraceGoal['traces_diagnostic_cobject'].push({
+                                                        id: traceCobjectCursor.value.id,
+                                                        trace_diagnostic_goal_fk: traceCobjectCursor.value.trace_diagnostic_goal_fk,
+                                                        cobject_fk: traceCobjectCursor.value.cobject_fk,
+                                                        cobject_percent_resolved: traceCobjectCursor.value.cobject_percent_resolved,
+                                                        cobject_percent_achieved: traceCobjectCursor.value.cobject_percent_achieved
+                                                    })[currentTraceGoal['traces_diagnostic_cobject'].length-1];
+                                                    currentTraceCobject['traces_diagnostic_piece'] = Array();
+
+                                                    //Selecionar Todos os trace_diagnostic_piece para o trace cobject corrrente
+                                                    var tracePieceRequest = tracePieceStore.index('trace_diagnostic_cobject_fk');
+                                                    var tracePieceSingleKeyRange = IDBKeyRange.only(traceCobjectCursor.value.id);
+                                                    tracePieceRequest.openCursor(tracePieceSingleKeyRange).onsuccess = function (event) {
+                                                        tracePieceCursor = event.target.result;
+                                                        tracePieceLoaded = true;
+                                                        //Verifica se Encontrou um trace_diagnostic_piece para o usuário corrente
+                                                        if (tracePieceCursor) {
+                                                            //Add no Array de Traces
+                                                           currentTraceCobject['traces_diagnostic_piece'].push({
+                                                                id: tracePieceCursor.value.id,
+                                                                trace_diagnostic_cobject_fk: tracePieceCursor.value.trace_diagnostic_cobject_fk,
+                                                                piece_fk: tracePieceCursor.value.piece_fk,
+                                                                is_correct: tracePieceCursor.value.is_correct
+                                                            });
+                                                            tracePieceCursor.continue;
+                                                        }else{
+                                                            //Não possui próxima tracePiece
+                                                             tracePieceFinish = true;
+                                                             join('tracePiece');
+                                                        }
+                                                    }
+
+                                                }else{
+                                                    //Não possui próximo traceCobject
+                                                    traceCobjectFinish = true;
+                                                    join('traceCobject');
+                                                }
+                                            }
+                                        }else{
+                                            //Não possui próxima traceGoal
+                                            traceGoalFinish = true;
+                                            join('traceGoal');
+                                        }
+                                    }
+                                }
+
+                            } else {
+                                //Não possui próximo scripts
+                                scriptFinish = true;
+                                //Continua no próximo traceScript se existir
+                                join('script');
+                                allTraceScripts.push(currentTraceScript);
+                            }
+                        };
+                    }else{
+                        //Não possui próximo traceScript
+                        traceScriptFinish = true;
+                        join('traceScript');
+                    }
+                }
+            }
+            DBsynapse.onblocked = function (event) {
+                // Se existe outra aba com a versão antiga
+                window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
+            }
+        }
+
+        this.getAllAvailableScripts = function(callBack){
+            window.indexedDB = self.verifyIDBrownser();
+            DBsynapse = window.indexedDB.open(nameBD);
+            DBsynapse.onerror = function(event) {
+                console.log("Error: ");
+                console.log(event);
+                //alert("Você não habilitou minha web app para usar IndexedDB?!");
+            };
+            DBsynapse.onsuccess = function(event) {
+                var db = event.target.result;
+                db.onerror = function(event) {
+                    // Função genérica para tratar os erros de todos os requests desse banco!
+                    console.log("Database error: " + event.target.errorCode);
+                };
+                //Resultados finais
+                var allPointDiagnostic = Array();
+                var allAvailableScripts = Array();
+
+                //Inicia uma nova transação
+                var transaction = db.transaction(["stop_point_diagnostic", "act_script_goal", "act_script"], "readonly");
+                //Atua em no ObjetcStore stop_point_diagnostic
+                var pointDiagStore = transaction.objectStore("stop_point_diagnostic");
+                //Atua em no ObjetcStore act_script_goal
+                var actScriptGoalStore = transaction.objectStore("act_script_goal");
+                //Atua em no ObjetcStore act_script
+                var actScriptStore = transaction.objectStore("act_script");
+
+                //Controle dos cursores para poder Realizar o "JOIN" entre os ObjectStore
+                var pointDiagCursor;
+                var scriptGoalCursor;
+                var scriptCursor;
+                var pointDiagLoaded = false;
+                var scriptGoalLoaded = false;
+                var scriptLoaded = false;
+                //Selecionar somente os pontos diagnósticos pra o actor específico
+                var pointDiagRequest = pointDiagStore.index('actor_fk');
+                var pointDiagSingleKeyRange = IDBKeyRange.only(Meet.actor);
+
+                pointDiagRequest.openCursor(pointDiagSingleKeyRange).onsuccess = function(event) {
+                    pointDiagCursor = event.target.result;
+                    pointDiagLoaded = true;
+                    //Verifica se Encontrou um ponto de diagnostico para o usuário corrente
+                    if(pointDiagCursor){
+                        //Selecionar  o act_goal_script correspondente ao StopPoint
+                        var scriptGoalRequest = actScriptGoalStore.index('id');
+                        var scriptGoalSingleKeyRange = IDBKeyRange.only(pointDiagCursor.value.act_script_goal_fk);
+                        scriptGoalRequest.openCursor(scriptGoalSingleKeyRange).onsuccess = function(event) {
+                            scriptGoalCursor = event.target.result;
+                            scriptGoalLoaded = true;
+                            //Verifica foi encontrado um relacionamento script+goal
+                            if(scriptGoalCursor){
+                                var scriptSingleKeyRange = IDBKeyRange.only(scriptGoalCursor.value.script_id);
+                                scriptRequest.openCursor(scriptSingleKeyRange).onsuccess = function(event) {
+                                    scriptCursor = event.target.result;
+                                    scriptLoaded = true;
+                                    //Verifica foi encontrado o respectivo script
+                                    if(scriptCursor){
+                                        var disciplineIdSelected = Meet.discipline_id;
+                                        if(scriptCursor.value.discipline_fk == disciplineIdSelected){
+                                            allPointDiagnostic.push({script_id: scriptGoalCursor.value.script_id,
+                                                goal_id: scriptGoalCursor.value.goal_id});
+                                            //Vai para o próximo ponto de diagnóstico
+                                            pointDiagCursor.continue;
+                                        }
+                                    }
+                                };
+                            }
+                        };
+                    }else{
+                        //Não encontrou algum ponto de diagnóstico ou finalizou a busca
+                        callBack(allPointDiagnostic);
+                    }
+                };
+            }
+
+
             DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
@@ -2241,7 +2589,6 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
 
-        Meet.stopPointDiagnostics
 
         this.getDiagnosticPoint = function(pointDiagnosticId, actScriptGoalFk){
             window.indexedDB = self.verifyIDBrownser();

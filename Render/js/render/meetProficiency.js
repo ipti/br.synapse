@@ -10,34 +10,30 @@ this.MeetProficiency = function() {
     //Objetivo atual
     this.goal_id = null;
     //Todos os scripts disponíveis(sem diagnósticos)
-    Meet.availableScripts = new Array();
+    MeetProficiency.availableScripts = new Array();
     //Array de Cobjects no objetivo corrente
     this.cobjectsInCurrentGoal = new Array();
     //Pontos de diagnósticos para o usuário na disciplina corrente
-    Meet.stopPointDiagnostics = new Array();
+    MeetProficiency.stopPointDiagnostics = new Array();
 
     this.start = function() {
 
-        //Buscar Todos os Pontos de Diagnósticos do usuário Corrente
-        this.findAllDiagnosticPointByUser(Meet.actor, function(diagnosticPoints){
-            if(diagnosticPoints.length > 0){
-                //Existe algum ponto de diagnóstico para o usuário corrente
-
-            }else{
-                //Todos os Roteiros estão disponíveis
-
+        //Buscar Todos os Roteiros disponíveis para a disciplina selecionada
+        this.findAllAvailableScripts(function(stopPointDiagnostics ,availableScripts){
+            if(stopPointDiagnostics.length > 0){
+                //Existe Ponto(s) de diagnóstico em roteiro(s)
+                MeetProficiency.stopPointDiagnostics = stopPointDiagnostics;
+            }
+            if(availableScripts.length > 0){
+                //Existe Script disponível para o usuário corrente
+                MeetProficiency.availableScripts = availableScripts;
             }
         });
-
-
-
-
 
 
         //Buscar Todos os Roteiros Disponíveis para o usuário Corrente
         // this.findAllAvailableScripts(function(availableScripts){
         // });
-
 
         /*
         //Verificar o UserState
@@ -225,8 +221,8 @@ this.MeetProficiency = function() {
         //});
     }
 
-    this.findAllDiagnosticPointByUser = function(actor_id, callBack){
-        Meet.DB_synapse.getAllDiagnosticPointByUser(actor_id, callBack);
+    this.findAllAvailableScripts = function(callBack){
+        Meet.DB_synapse.getAllAvailableScripts(callBack);
     }
 
 

@@ -565,6 +565,7 @@ class RenderController extends Controller
                                       $allJsonScripts[$script_id] = array(
                                           'id'=> $script_id,
                                           'script_name'=> $script_name,
+                                          'discipline_fk' => $current_discipline,
                                           'total_goals'=> 1
                                       );
                                   }
