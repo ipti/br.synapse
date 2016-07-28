@@ -53,9 +53,13 @@ class CobjectCobjectblockController extends Controller
 
 
 	/*
-	 * Verificar se a relação Bloco+Atividade já existe
+	 * Verificar se a relaï¿½ï¿½o Bloco+Atividade jï¿½ existe
 	 *
 	 */
+
+	private function hasCobjectInDB($cobject_id){
+		return Cobject::model()->findAllByPk($cobject_id) != null;
+	}
 
 	 private function hasCobjectInBlock($cobject_block_id, $cobject_id){
 			$cobjectCobjectblock = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id, 'cobject_id' => $cobject_id));
@@ -69,31 +73,53 @@ class CobjectCobjectblockController extends Controller
 	 */
 	public function actionCreate()
 	{
+		//remover isso
 		$model=new CobjectCobjectblock;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+		if($_POST) {
+			$cobjectIDs = $_POST['cobjects_id'];
+			$blockID = $_POST['block_id'];
+			$msgsArray = array();
+			$cobject_id_array = explode(';',$cobjectIDs);
+			$i = 0;
+			foreach ($cobject_id_array AS $co) {
+				$msgsArray[$i]['cobjectID'] = $co;
+				$model = new CobjectCobjectblock;
+				$cobject = array('cobject_id' => $co, 'cobject_block_id' => $blockID);
+				$model->attributes = $cobject;
+				//Somente salva se Nï¿½o existir a relaï¿½ï¿½o bloco+atividade
+				if(!$this->hasCobjectInBlock($model->cobject_block_id, $model->cobject_id)) {
+					if($this->hasCobjectInDB($model->cobject_id)){
+						//salvar
+						if ($model->save()) {
+							$msgsArray[$i]['msg'] = "Salvo com Sucesso!";
+						}
 
-		if(isset($_POST['CobjectCobjectblock']))
-		{
-			$model->attributes=$_POST['CobjectCobjectblock'];
+					}else{
+						$msgsArray[$i]['msg'] = "Nao Encontrado!";
+					}
+				}else{
+					//estÃ¡ no bloco. Existe Cobject!
+					//Emite uma mensagem, indicando que a relaï¿½ï¿½o jï¿½ existe
+					$msgsArray[$i]['msg'] = "A Atividade ja esta relacionada ao Bloco!";
 
-			//Somente salva se Não existir a relação bloco+atividade
-			if(!$this->hasCobjectInBlock($model->cobject_block_id, $model->cobject_id)) {
-				if ($model->save()) {
-					Yii::app()->user->setFlash('success', Yii::t('default', 'CobjectCobjectblock Created Successful!'));
-					$this->redirect(array('admin'));
 				}
-			}else{
-				//Emite uma mensagem, indicando que a relação já existe
-				Yii::app()->user->setFlash('notice', Yii::t('default', 'A Atividade ja esta relacionada ao Bloco!'));
-				$this->redirect(array('admin'));
+
+				$i++;
 			}
+			header('Cache-Control: no-cache, must-revalidate');
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+			header('Content-type: application/json');
+			echo json_encode($msgsArray);
+		}else{
+			$this->render('create',array(
+				'model'=>$model,
+			));
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
+
 	}
 
 	/**
