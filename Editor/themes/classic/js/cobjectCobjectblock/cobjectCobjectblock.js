@@ -3,6 +3,7 @@ $(document).ready(function(){
     $('#CobjectCobjectblock_cobject_id').css('height', '150px');
     $('#CobjectCobjectblock_cobject_block_id').select2();
 
+    /*
     $('.button').on('click' , function(){
         $.ajax({
             type: "POST",
@@ -18,6 +19,10 @@ $(document).ready(function(){
             }
         });
 
+
+
     } );
+     */
+    
 });
 

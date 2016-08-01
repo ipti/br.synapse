@@ -50,7 +50,7 @@ $cs->registerScriptFile($baseUrl . "/js/cobjectCobjectblock/cobjectCobjectblock.
         </div>
 
         <div class="formField buttonWizardBar">
-            <?php echo CHtml::button($model->isNewRecord ? Yii::t('default', 'Create') : Yii::t('default', 'Save'),array('class' => 'buttonLink button')); ?>
+            <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('default', 'Create') : Yii::t('default', 'Save'),array('class' => 'buttonLink button')); ?>
         </div>
 
         <div id="modal-cobjects-messages" class="nextLevel-message modal_message overlay">

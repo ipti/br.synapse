@@ -78,10 +78,12 @@ class CobjectCobjectblockController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		if($_POST){
-			$cobjectIDs = $_POST['cobjects_id'];
-			$blockID = $_POST['block_id'];
+			$cobjectIDs = $_POST['CobjectCobjectblock']['cobject_id'];
+			$pattern = '/\d+/';
+			preg_match_all ($pattern, $cobjectIDs, $matches);
+			$cobject_id_array = $matches[0];
+			$blockID = $_POST['CobjectCobjectblock']['cobject_block_id'];
 			$msgsArray = array();
-			$cobject_id_array = explode(';',$cobjectIDs);
 			$i = 0;
 			$msgsArray[$i]['cobjectID'] = "Cobject ID";
 			$msgsArray[$i]['msg'] = "Mensagem";
@@ -109,20 +111,31 @@ class CobjectCobjectblockController extends Controller
 				}
 				$i++;
 			}
-
-			$fp = fopen('CobjectBlocks_import_Messages.csv', 'w');
-
+			$time = time();
+			$nameFile = "CobjectBlocks_import_Messages_$time.csv";
+			$fp = fopen("exports/$nameFile", 'w');
+			ignore_user_abort(true);
 			foreach ($msgsArray as $message) {
 				fputcsv($fp, $message);
 			}
-
 			fclose($fp);
 
-//			header('Cache-Control: no-cache, must-revalidate');
-//			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-//			header('Content-type: application/json');
-//
-//            return json_decode($msgsArray);
+			//unlink($fp);
+
+			if (file_exists("exports/$nameFile")) {
+				header("Pragma: public");
+				header("Expires: 0");
+				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+				header("Content-Type: application/force-download");
+				header("Content-Type: application/octet-stream");
+				header("Content-Type: application/download");
+				header("Content-Disposition: attachment;filename=$nameFile");
+				header("Content-Transfer-Encoding: binary ");
+				//header("location:../exports/CobjectBlocks_import_Messages.csv");
+				readfile("exports/$nameFile");
+			}
+
+
 
 		}else{
 			$this->render('create',array(
