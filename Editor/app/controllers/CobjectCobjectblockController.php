@@ -73,17 +73,20 @@ class CobjectCobjectblockController extends Controller
 	 */
 	public function actionCreate()
 	{
-		//remover isso
 		$model=new CobjectCobjectblock;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		if($_POST) {
+		if($_POST){
 			$cobjectIDs = $_POST['cobjects_id'];
 			$blockID = $_POST['block_id'];
 			$msgsArray = array();
 			$cobject_id_array = explode(';',$cobjectIDs);
 			$i = 0;
+			$msgsArray[$i]['cobjectID'] = "Cobject ID";
+			$msgsArray[$i]['msg'] = "Mensagem";
+			$i = 1;
+
 			foreach ($cobject_id_array AS $co) {
 				$msgsArray[$i]['cobjectID'] = $co;
 				$model = new CobjectCobjectblock;
@@ -96,7 +99,6 @@ class CobjectCobjectblockController extends Controller
 						if ($model->save()) {
 							$msgsArray[$i]['msg'] = "Salvo com Sucesso!";
 						}
-
 					}else{
 						$msgsArray[$i]['msg'] = "Nao Encontrado!";
 					}
@@ -104,22 +106,29 @@ class CobjectCobjectblockController extends Controller
 					//está no bloco. Existe Cobject!
 					//Emite uma mensagem, indicando que a rela��o j� existe
 					$msgsArray[$i]['msg'] = "A Atividade ja esta relacionada ao Bloco!";
-
 				}
-
 				$i++;
 			}
+
+			$fp = fopen('CobjectBlocks_import_Messages.csv', 'w');
+
+			foreach ($msgsArray as $message) {
+				fputcsv($fp, $message);
+			}
+
+			fclose($fp);
+
 			header('Cache-Control: no-cache, must-revalidate');
 			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 			header('Content-type: application/json');
-			echo json_encode($msgsArray);
+
+            return json_decode($msgsArray);
+
 		}else{
 			$this->render('create',array(
 				'model'=>$model,
 			));
 		}
-
-
 	}
 
 	/**

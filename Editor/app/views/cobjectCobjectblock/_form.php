@@ -1,10 +1,11 @@
+
+
 <?php
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'cobject-cobjectblock-form',
     'enableAjaxValidation'=>false,
 ));
 
-$nome = array();
 ?>
 
 <?php
@@ -29,7 +30,6 @@ $cs->registerScriptFile($baseUrl . "/js/cobjectCobjectblock/cobjectCobjectblock.
     <div class="panelGroupBody">
         <div class="panelGroupAbout">
             <?php echo Yii::t('default', 'Fields with * are required.')?>
-
         </div>
 
         <div class="panelGroupAbout">
@@ -38,13 +38,9 @@ $cs->registerScriptFile($baseUrl . "/js/cobjectCobjectblock/cobjectCobjectblock.
 
 
         <div class="formField">
-
             <?php echo $form->labelEx($model,'cobject_id'); ?>
-
             <?php echo $form->textArea($model, 'cobject_id', array('maxlength' => 1000)); ?>
-
             <?php echo $form->error($model,'cobject_id'); ?>
-
         </div>
 
         <div class="formField">
@@ -57,14 +53,18 @@ $cs->registerScriptFile($baseUrl . "/js/cobjectCobjectblock/cobjectCobjectblock.
             <?php echo CHtml::button($model->isNewRecord ? Yii::t('default', 'Create') : Yii::t('default', 'Save'),array('class' => 'buttonLink button')); ?>
         </div>
 
-        <div id="finishLevel-message" class="nextLevel-message modal_message overlay">
+        <div id="modal-cobjects-messages" class="nextLevel-message modal_message overlay">
             <div class="message-container success">
-               <!-- <img class="ok message-icon" src="img/icons/raio_telapassagem.png"> -->
-                <p class="message">Parabéns, Por Finalizar essa Etapa!</p>
-                <button class="message-button">OK</button>
+
+                <?php
+
+
+                ?>
+<!--                <img class="ok message-icon" src="img/icons/raio_telapassagem.png">-->
+<!--                <p class="message">Parabéns, Por Finalizar essa Etapa!</p>-->
+<!--                <button class="message-button">OK</button>-->
             </div>
         </div
-
         <?php $this->endWidget(); ?>
     </div>
 </div>
