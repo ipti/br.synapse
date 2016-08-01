@@ -71,8 +71,8 @@ class CobjectCobjectblockController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
-	{
+	public function actionCreate(){
+
 		$model=new CobjectCobjectblock;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -118,11 +118,11 @@ class CobjectCobjectblockController extends Controller
 
 			fclose($fp);
 
-			header('Cache-Control: no-cache, must-revalidate');
-			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-			header('Content-type: application/json');
-
-            return json_decode($msgsArray);
+//			header('Cache-Control: no-cache, must-revalidate');
+//			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+//			header('Content-type: application/json');
+//
+//            return json_decode($msgsArray);
 
 		}else{
 			$this->render('create',array(
