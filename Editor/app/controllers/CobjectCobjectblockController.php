@@ -120,7 +120,7 @@ class CobjectCobjectblockController extends Controller
 			}
 			fclose($fp);
 
-			//unlink($fp);
+
 
 			if (file_exists("exports/$nameFile")) {
 				header("Pragma: public");
@@ -134,6 +134,8 @@ class CobjectCobjectblockController extends Controller
 				//header("location:../exports/CobjectBlocks_import_Messages.csv");
 				readfile("exports/$nameFile");
 			}
+
+			unlink("exports/$nameFile");
 
 
 
