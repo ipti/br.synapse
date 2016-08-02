@@ -39,7 +39,7 @@ $cs->registerScriptFile($baseUrl . "/js/cobjectCobjectblock/cobjectCobjectblock.
 
         <div class="formField">
             <?php echo $form->labelEx($model,'cobject_id'); ?>
-            <?php echo $form->textArea($model, 'cobject_id', array('maxlength' => 1000)); ?>
+            <?php echo $form->textArea($model, 'cobject_id', array('maxlength' => 100000)); ?>
             <?php echo $form->error($model,'cobject_id'); ?>
         </div>
 
