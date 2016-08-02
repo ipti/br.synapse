@@ -53,47 +53,97 @@ class CobjectCobjectblockController extends Controller
 
 
 	/*
-	 * Verificar se a relação Bloco+Atividade já existe
+	 * Verificar se a relaï¿½ï¿½o Bloco+Atividade jï¿½ existe
 	 *
 	 */
 
-	 private function hasCobjectInBlock($cobject_block_id, $cobject_id){
-			$cobjectCobjectblock = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id, 'cobject_id' => $cobject_id));
-		    return count($cobjectCobjectblock) > 0;
-	 }
+	private function hasCobjectInDB($cobject_id){
+		return Cobject::model()->findAllByPk($cobject_id) != null;
+	}
+
+	private function hasCobjectInBlock($cobject_block_id, $cobject_id){
+		$cobjectCobjectblock = CobjectCobjectblock::model()->findAllByAttributes(array('cobject_block_id' => $cobject_block_id, 'cobject_id' => $cobject_id));
+		return count($cobjectCobjectblock) > 0;
+	}
 
 
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
-	{
+	public function actionCreate(){
+
 		$model=new CobjectCobjectblock;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+		if($_POST){
+			$cobjectIDs = $_POST['CobjectCobjectblock']['cobject_id'];
+			$pattern = '/\d+/';
+			preg_match_all ($pattern, $cobjectIDs, $matches);
+			$cobject_id_array = $matches[0];
+			$blockID = $_POST['CobjectCobjectblock']['cobject_block_id'];
+			$msgsArray = array();
+			$i = 0;
+			$msgsArray[$i]['cobjectID'] = "Cobject ID";
+			$msgsArray[$i]['msg'] = "Mensagem";
+			$i = 1;
 
-		if(isset($_POST['CobjectCobjectblock']))
-		{
-			$model->attributes=$_POST['CobjectCobjectblock'];
-
-			//Somente salva se Não existir a relação bloco+atividade
-			if(!$this->hasCobjectInBlock($model->cobject_block_id, $model->cobject_id)) {
-				if ($model->save()) {
-					Yii::app()->user->setFlash('success', Yii::t('default', 'CobjectCobjectblock Created Successful!'));
-					$this->redirect(array('admin'));
+			foreach ($cobject_id_array AS $co) {
+				$msgsArray[$i]['cobjectID'] = $co;
+				$model = new CobjectCobjectblock;
+				$cobject = array('cobject_id' => $co, 'cobject_block_id' => $blockID);
+				$model->attributes = $cobject;
+				//Somente salva se Nï¿½o existir a relaï¿½ï¿½o bloco+atividade
+				if(!$this->hasCobjectInBlock($model->cobject_block_id, $model->cobject_id)) {
+					if($this->hasCobjectInDB($model->cobject_id)){
+						//salvar
+						if ($model->save()) {
+							$msgsArray[$i]['msg'] = "Salvo com Sucesso!";
+						}
+					}else{
+						$msgsArray[$i]['msg'] = "Nao Encontrado!";
+					}
+				}else{
+					//estÃ¡ no bloco. Existe Cobject!
+					//Emite uma mensagem, indicando que a relaï¿½ï¿½o jï¿½ existe
+					$msgsArray[$i]['msg'] = "A Atividade ja esta relacionada ao Bloco!";
 				}
-			}else{
-				//Emite uma mensagem, indicando que a relação já existe
-				Yii::app()->user->setFlash('notice', Yii::t('default', 'A Atividade ja esta relacionada ao Bloco!'));
-				$this->redirect(array('admin'));
+				$i++;
 			}
-		}
+			$time = time();
+			$nameFile = "CobjectBlocks_import_Messages_$time.csv";
+			$fp = fopen("exports/$nameFile", 'w');
+			ignore_user_abort(true);
+			foreach ($msgsArray as $message) {
+				fputcsv($fp, $message);
+			}
+			fclose($fp);
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
+
+
+			if (file_exists("exports/$nameFile")) {
+				header("Pragma: public");
+				header("Expires: 0");
+				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+				header("Content-Type: application/force-download");
+				header("Content-Type: application/octet-stream");
+				header("Content-Type: application/download");
+				header("Content-Disposition: attachment;filename=$nameFile");
+				header("Content-Transfer-Encoding: binary ");
+				//header("location:../exports/CobjectBlocks_import_Messages.csv");
+				readfile("exports/$nameFile");
+			}
+
+			unlink("exports/$nameFile");
+
+
+
+		}else{
+			$this->render('create',array(
+				'model'=>$model,
+			));
+		}
 	}
 
 	/**
@@ -127,15 +177,15 @@ class CobjectCobjectblockController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-            
+
 //		if(Yii::app()->request->isPostRequest)
 //		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
+		// we only allow deletion via POST request
+		$this->loadModel($id)->delete();
 
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 //		}
 //		else
 //			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
@@ -147,9 +197,9 @@ class CobjectCobjectblockController extends Controller
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('CobjectCobjectblock',
-                array('pagination' => array(
-                        'pageSize' => 12,
-                        )));
+			array('pagination' => array(
+				'pageSize' => 12,
+			)));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
