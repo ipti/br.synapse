@@ -433,7 +433,14 @@ class RenderController extends Controller
             $allDataStageVsModality = array();
             //Alimentar um array com os atributos encontrados na pesquisa
             foreach($allObjectDegree AS $degree):
-                array_push($allDataDegree, $degree->attributes);
+                $currentDegree = array();
+                $currentDegree['id'] = $degree->id;
+                $currentDegree['stage_code'] = $degree->stage;
+                $currentDegree['year'] = $degree->year;
+                $currentDegree['cyclo2'] = $degree->grade;
+                $currentDegree['name'] = $degree->name;
+                $currentDegree['degree_parent'] = $degree->degree_parent;
+                array_push($allDataDegree, $currentDegree);
             endforeach;
             foreach($allObjectStageVsModality AS $stageVsModality):
                 array_push($allDataStageVsModality, $stageVsModality->attributes);

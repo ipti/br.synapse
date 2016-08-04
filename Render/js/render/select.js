@@ -65,7 +65,8 @@ $(document).ready(function() {
                         var school_classrooms = schools_classrooms[idxSchool];
                         for (var idxClassroom in school_classrooms['classrooms']) {
                             var classroom = school_classrooms['classrooms'][idxClassroom];
-                            strOptionsSchoolsClassrooms += "<option data-stage-fk="+classroom['stage_code']+ " value=" + classroom['id'] + ">" +
+                            strOptionsSchoolsClassrooms += "<option data-stage-fk="+classroom['stage_code'] +
+                                " data-year=" + classroom['degree_year'] + " value=" + classroom['id'] + ">" +
                                 school_classrooms['name'] + " [" + classroom['name'] + "]" + "</option>"
                         }
                     }
@@ -122,6 +123,7 @@ $(document).ready(function() {
             sessionStorage.setItem('id_classroom', $('#classroom').val());
             sessionStorage.setItem('name_classroom', $('#classroom').find(":selected").text());
             sessionStorage.setItem('classroom_stage_fk', $('#classroom').find(":selected").attr("data-stage-fk"));
+            sessionStorage.setItem('classroom_year', $('#classroom').find(":selected").attr("data-year"));
 
             window.location = "./meet.html";
         } else {

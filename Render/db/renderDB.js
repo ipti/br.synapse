@@ -197,6 +197,15 @@ if (sessionStorage.getItem("isOnline") === null ||
                 degreeStore.createIndex("name", "name", {
                     unique: true
                 });
+                degreeStore.createIndex("stage_code", "stage_code", {
+                    unique: false
+                });
+                degreeStore.createIndex("year", "year", {
+                    unique: false
+                });
+                degreeStore.createIndex("cyclo2", "cyclo2", {
+                    unique: false
+                });
                 //================================================
 
                 // cria um objectStore da StageVsModality
@@ -222,9 +231,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                     unique: false
                 });
 
-                //================================================
-
-
+                //===============================================
                 // cria um objectStore do cobject_cobjectblock
                 var cobject_cobjectblockStore = db.createObjectStore("cobject_cobjectblock", {
                     keyPath: "id"
@@ -1951,25 +1958,53 @@ if (sessionStorage.getItem("isOnline") === null ||
                 };
 
                 var classrooms = new Array();
-
-                var classroomObjectStore = db.transaction("classroom", "readonly").objectStore("classroom");
+                var transaction = db.transaction(["classroom", "degree"], "readonly");
+                var classroomObjectStore = transaction.objectStore("classroom");
+                var degreeObjectStore = transaction.objectStore("degree");
+                //Controle dos cursores
+                var classroomCursor = null;
+                var degreeCursor = null;
                 classroomObjectStore.openCursor().onsuccess = function(event) {
-                    var cursor = event.target.result;
-                    if (cursor) {
-                        classrooms.push({
-                            id: cursor.value.id,
-                            name: cursor.value.name,
-                            school_id: cursor.value.school_id,
-                            stage_code: cursor.value.stage_code
-                        });
+                    classroomCursor = event.target.result;
+                    if (classroomCursor) {
+                        //Pesquisar os degrees que possuem o mesmo stage_vs_modality
+                        var degreeSingleKeyRange = IDBKeyRange.only(classroomCursor.value.stage_code);
+                        var degreeRequest = degreeObjectStore.index('stage_code');
+                        degreeRequest.openCursor(degreeSingleKeyRange).onsuccess = function(event) {
+                            //Só precisa do primeiro registro
+                            degreeCursor = event.target.result;
+                            if (degreeCursor) {
+                                //Tem dados da Classe e Degree(s) relacionados
+                                classrooms.push({
+                                    id: classroomCursor.value.id,
+                                    name: classroomCursor.value.name,
+                                    school_id: classroomCursor.value.school_id,
+                                    stage_code: classroomCursor.value.stage_code,
+                                    degree_year: degreeCursor.value.year,
+                                });
+                                join("degreeCursor");
+                            }
+                        };
 
-                        cursor.continue();
+                        join("classroomCursor");
                     } else {
                         //Não existe mais registros!
                         //Passa as classrooms pra a função de callBack
                         callBack(classrooms);
                     }
                 };
+
+
+                function join(cursor){
+                    if(self.isset(classroomCursor) && self.isset(degreeCursor)) {
+                        if (cursor == "classroomCursor") {
+
+                        } else if (cursor == "degreeCursor") {
+                            degreeCursor = null;
+                            classroomCursor.continue();
+                        }
+                    }
+                }
 
             }
             DBsynapse.onblocked = function(event) {
@@ -2287,8 +2322,8 @@ if (sessionStorage.getItem("isOnline") === null ||
         }
 
         //Buscar quais roteiros o aluno começou a resolver mas ainda não foi diagnosticado nele
-        //Bem como o seu último ponto de parada
-        this.getAllTraceDiagByAvailableScript = function(allPointDiagnostic, callBack) {
+        //Bem como o seu último ponto de parada em cada roteiro
+        this.getAllTraceDiagScript = function(callBack) {
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function (event) {
@@ -2348,7 +2383,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                             case 'traceScript':
                                 if(traceScriptFinish){
                                     //Finalizou toda a pesquisa
-                                    console.log(allTraceScripts);
+                                    callBack(allTraceScripts);
                                 }
                                 ;break;
                             case 'script':
@@ -2385,7 +2420,6 @@ if (sessionStorage.getItem("isOnline") === null ||
                                 ;break;
                         }
                     }
-
                 }
                 traceScriptRequest.openCursor(traceScriptSingleKeyRange).onsuccess = function (event) {
                     traceScriptCursor = event.target.result;
@@ -2506,7 +2540,7 @@ if (sessionStorage.getItem("isOnline") === null ||
             }
         }
 
-        this.getAllAvailableScripts = function(callBack){
+        this.getAllScriptsByYear = function(scriptYear ,callBack){
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
             DBsynapse.onerror = function(event) {
@@ -2520,75 +2554,123 @@ if (sessionStorage.getItem("isOnline") === null ||
                     // Função genérica para tratar os erros de todos os requests desse banco!
                     console.log("Database error: " + event.target.errorCode);
                 };
-                //Resultados finais
-                var allPointDiagnostic = Array();
-                var allAvailableScripts = Array();
-
+                // stage_vs_modality do Aluno
+                Meet.studentClassroomStageFk;
+                Meet.studentCurrentYear;
                 //Inicia uma nova transação
-                var transaction = db.transaction(["stop_point_diagnostic", "act_script_goal", "act_script"], "readonly");
-                //Atua em no ObjetcStore stop_point_diagnostic
-                var pointDiagStore = transaction.objectStore("stop_point_diagnostic");
-                //Atua em no ObjetcStore act_script_goal
+                var transaction = db.transaction(["degree", "act_goal", "act_script_goal", "act_script"], "readonly");
+                //Atua  no ObjetcStore degree
+                var degreeStore = transaction.objectStore("degree");
+                //Atua no ObjetcStore act_goal
+                var actGoalStore = transaction.objectStore("act_goal");
+                //Atua no ObjetcStore act_script_goal
                 var actScriptGoalStore = transaction.objectStore("act_script_goal");
-                //Atua em no ObjetcStore act_script
+                //Atua no ObjectStore act_script
                 var actScriptStore = transaction.objectStore("act_script");
 
                 //Controle dos cursores para poder Realizar o "JOIN" entre os ObjectStore
-                var pointDiagCursor;
+                var degreeCursor;
+                var goalCursor;
                 var scriptGoalCursor;
                 var scriptCursor;
-                var pointDiagLoaded = false;
-                var scriptGoalLoaded = false;
-                var scriptLoaded = false;
-                //Selecionar somente os pontos diagnósticos pra o actor específico
-                var pointDiagRequest = pointDiagStore.index('actor_fk');
-                var pointDiagSingleKeyRange = IDBKeyRange.only(Meet.actor);
 
-                pointDiagRequest.openCursor(pointDiagSingleKeyRange).onsuccess = function(event) {
-                    pointDiagCursor = event.target.result;
-                    pointDiagLoaded = true;
-                    //Verifica se Encontrou um ponto de diagnostico para o usuário corrente
-                    if(pointDiagCursor){
-                        //Selecionar  o act_goal_script correspondente ao StopPoint
-                        var scriptGoalRequest = actScriptGoalStore.index('id');
-                        var scriptGoalSingleKeyRange = IDBKeyRange.only(pointDiagCursor.value.act_script_goal_fk);
+                var degreeFinish = false;
+                var goalFinish =  false;
+                var scriptGoalFinish = false;
+                var scriptFinish = false;
+
+                //Todos os roteiros do ano indicado
+                var allScriptByYear = new Array();
+
+                //Seleciona Somente os Scripts para a disciplina corrente
+                var scriptRequest = actScriptStore.index('discipline_fk');
+                var scriptSingleKeyRange = IDBKeyRange.only(Meet.discipline_id);
+                scriptRequest.openCursor(scriptSingleKeyRange).onsuccess = function(event) {
+                    scriptCursor = event.target.result;
+                    //Verifica se Encontrou algum script para a disciplina selecionada
+                    if(scriptCursor){
+                        //Buscar todos os act_goal_script correspondente ao script atual
+                        var scriptGoalRequest = actScriptGoalStore.index('script_id');
+                        var scriptGoalSingleKeyRange = IDBKeyRange.only(scriptCursor.value.id);
                         scriptGoalRequest.openCursor(scriptGoalSingleKeyRange).onsuccess = function(event) {
                             scriptGoalCursor = event.target.result;
-                            scriptGoalLoaded = true;
                             //Verifica foi encontrado um relacionamento script+goal
                             if(scriptGoalCursor){
-                                var scriptSingleKeyRange = IDBKeyRange.only(scriptGoalCursor.value.script_id);
-                                scriptRequest.openCursor(scriptSingleKeyRange).onsuccess = function(event) {
-                                    scriptCursor = event.target.result;
-                                    scriptLoaded = true;
-                                    //Verifica foi encontrado o respectivo script
-                                    if(scriptCursor){
-                                        var disciplineIdSelected = Meet.discipline_id;
-                                        if(scriptCursor.value.discipline_fk == disciplineIdSelected){
-                                            allPointDiagnostic.push({script_id: scriptGoalCursor.value.script_id,
-                                                goal_id: scriptGoalCursor.value.goal_id});
-                                            //Vai para o próximo ponto de diagnóstico
-                                            pointDiagCursor.continue;
-                                        }
+                                //Buscar o Objetivo para o script+goal corrente
+                                var goalRequest = actGoalStore.get(scriptGoalCursor.value.goal_id);
+                                goalRequest.onsuccess = function(event) {
+                                    goalCursor = event.target.result;
+                                    //Verifica se foi encontrado o respectivo goal
+                                    if(goalCursor){
+                                        //Buscar o Degree para o Goal corrente
+                                        var degreeRequest = degreeStore.get(goalCursor.degree_id);
+                                        degreeRequest.onsuccess = function(event) {
+                                            degreeCursor = event.target.result;
+                                            //Verifica se foi encontrado o respectivo degree
+                                            if(degreeCursor){
+                                                //Verificar se o Objetivo corrente é
+                                                //do mesmo ano passado como parâmetro
+                                               if(scriptYear == degreeCursor.year){
+                                                   //Somente cria um novo Array sse já não o existir
+                                                   if(!isset(allScriptByYear[scriptCursor.value.id])){
+                                                       allScriptByYear[scriptCursor.value.id] = new Array();
+                                                   }
+                                                   allScriptByYear[scriptCursor.value.id]['attributes'] = scriptCursor.value;
+                                                   if(!isset(allScriptByYear[scriptCursor.value.id]['goals'])){
+                                                       allScriptByYear[scriptCursor.value.id]['goals'] = new Array();
+                                                   }
+                                                   if(!isset(allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id])){
+                                                       allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id] = new Array();
+                                                   }
+                                                   allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id]['attributes'] = goalCursor;
+                                                   allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id]['actScriptGoalID'] = scriptGoalCursor.value.id;
+                                                   allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id]['degreeAttributes'] = degreeCursor;
+                                               }
+                                                //Procura o próximo Goal do Script
+                                                scriptGoalCursor.continue();
+                                            }
+                                        };
                                     }
                                 };
+                            }else{
+                                scriptGoalFinish = true;
+                                join("scriptGoalCursor");
                             }
                         };
+
                     }else{
-                        //Não encontrou algum ponto de diagnóstico ou finalizou a busca
-                        callBack(allPointDiagnostic);
+                        scriptFinish = true;
+                        join("scriptCursor");
                     }
                 };
-            }
 
+                function join(cursor){
+                    switch(cursor) {
+                        case "scriptGoalCursor":
+                            if(scriptGoalFinish){
+                                //vai para o próximo script
+                                scriptGoalFinish = false;
+                                scriptCursor.continue();
+                            }
+                            ;break;
+                        case "scriptCursor":
+                            if(scriptFinish){
+                                //Finalizou a pesquisa
+                                scriptFinish = false;
+                                callBack(allScriptByYear);
+                            }
+                            ;break;
+                    }
+                }
+
+
+            }
 
             DBsynapse.onblocked = function(event) {
                 // Se existe outra aba com a versão antiga
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
         }
-
-
 
         this.getDiagnosticPoint = function(pointDiagnosticId, actScriptGoalFk){
             window.indexedDB = self.verifyIDBrownser();
@@ -2630,12 +2712,6 @@ if (sessionStorage.getItem("isOnline") === null ||
                 window.alert("Existe uma versão antiga da web app aberta em outra aba, feche-a por favor!");
             }
         }
-
-
-
-
-
-
 
 
         this.isset = function(variable) {

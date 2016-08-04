@@ -41,7 +41,7 @@
     </script>
     <script type="text/javascript" src="js/jquery/mobile/jquery.mobile-1.4.3/jquery.mobile-1.4.3.js"></script>
     <!-- ================= -->
-
+    <script type="text/javascript" src="js/render/util.js"></script>
     <script type="text/javascript" src="js/render/meet.js"></script>
     <script type="text/javascript" src="js/render/domcobject.js"></script>
     <script type="text/javascript" src="js/jquery.shuffle.js"></script>
@@ -105,7 +105,7 @@
                 var classroomID = sessionGet('id_classroom');
                 var classroomName = sessionGet('name_classroom');
                 var classroomStageFk = sessionGet('classroom_stage_fk');
-
+                var classroomYear = sessionGet('classroom_year');
                 //var unityfather_name = '';
                 var organizationName = '';
 
@@ -135,7 +135,7 @@
 
                 var options = {
                     org: [org, organizationName],
-                    studentClassroom: [classroomID, classroomName, classroomStageFk],
+                    studentClassroom: [classroomID, classroomName, classroomStageFk, classroomYear],
                     actor: [actorID, actorName, login_personage_name],
                     id_discipline: disciplineID,
                     render_mode: render_mode,

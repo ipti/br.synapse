@@ -63,14 +63,14 @@ this.Meet = function(options) {
     this.currentTemplateCode = null;
     //======== Variáveis Recuperadas do Filtro Inicial ===========
 
-
     this.org = options.org[0];
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
     Meet.studentClassroomName = options.studentClassroom[1];
     Meet.studentClassroomStageFk = options.studentClassroom[2];
     //Ano atual do Aluno
-    Meet.studentCurrentYear = 0;
+    Meet.studentCurrentYear =  options.studentClassroom[3];
+    Meet.studentCurrentCyclo2 = null;
     Meet.actor = options.actor[0];
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];

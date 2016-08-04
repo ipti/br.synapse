@@ -9,222 +9,59 @@ this.MeetProficiency = function() {
     this.script_id = null;
     //Objetivo atual
     this.goal_id = null;
-    //Todos os scripts disponíveis(sem diagnósticos)
-    MeetProficiency.availableScripts = new Array();
+
     //Array de Cobjects no objetivo corrente
     this.cobjectsInCurrentGoal = new Array();
     //Pontos de diagnósticos para o usuário na disciplina corrente
     MeetProficiency.stopPointDiagnostics = new Array();
+    //Todos os scripts disponíveis(sem diagnósticos)
+    MeetProficiency.availableScripts = new Array();
+    //Todos os trace scripts do usuário e disciplina corrente
+    MeetProficiency.allTraceScripts = new Array();
+    //Lista de Scripts de um ano específico
+    MeetProficiency.currentScriptList = new Array();
 
     this.start = function() {
 
-        //Buscar Todos os Roteiros disponíveis para a disciplina selecionada
-        this.findAllAvailableScripts(function(stopPointDiagnostics ,availableScripts){
+        // 1 - Buscar Todos os Roteiros disponíveis para a disciplina selecionada
+        this.findAllDiagnosticPoint(function(stopPointDiagnostics){
             if(stopPointDiagnostics.length > 0){
                 //Existe Ponto(s) de diagnóstico em roteiro(s)
                 MeetProficiency.stopPointDiagnostics = stopPointDiagnostics;
             }
-            if(availableScripts.length > 0){
-                //Existe Script disponível para o usuário corrente
-                MeetProficiency.availableScripts = availableScripts;
+        });
+
+        // 2 - Obter todos os traceScripts para o usuário e disciplina corrente
+        this.findAllTraceDiagScript(function(allTraceScripts){
+            if(allTraceScripts.length > 0){
+                //Existe pelo menos 1 trace script
+                MeetProficiency.allTraceScripts = allTraceScripts;
             }
         });
 
-
-        //Buscar Todos os Roteiros Disponíveis para o usuário Corrente
-        // this.findAllAvailableScripts(function(availableScripts){
-        // });
-
-        /*
-        //Verificar o UserState
-
-        var userStateProficiencyInfo = {
-            discipline_id: self.discipline_id,
-        };
-
-        Meet.DB_synapse.getUserState_ModeDiagnostic(Meet.actor, Meet.render_mode, userStateProficiencyInfo, function(info_state) {
-            var gotoState = self.isset(info_state);
-            var lastCobject_id = null;
-
-            //Ano atual no estudante
-            Meet.studentCurrentYear = parseInt(Meet.studentClassroomName.match(/\d/)[0]);
-
-            if (gotoState) {
-                //Encontrou O estado do usuário
-                Meet.isLoadState = true;
-                lastCobject_id = info_state.last_cobject_id;
-                Meet.firstPieceCurrentMeet = info_state.last_piece_id;
-                Meet.peformance_qtd_correct = info_state.qtd_correct;
-                Meet.peformance_qtd_wrong = info_state.qtd_wrong;
-                Meet.render_mode = info_state.render_mode;
-                //Calcula o Score
-                Meet.scoreCalculator(false);
-
-                //Construçao do DOM do 1° cobject de cada Meet
-                Meet.domCobjectBuild(lastCobject_id);
-                //Depois inicia os eventos globais
-                Meet.init_eventsGlobals();
-            } else {
-                //Primeiro Acesso do usuário; Não possui nenhum estado registrado
-                //Indica que Não possui algum estado carregado
-                Meet.isLoadState = false;
-                //Abre o Primeiro Cobject do Roteiro(aleatório)
-                //
-                //Obter todos roteiros para a disciplina selecionada
-                Meet.DB_synapse.getAllScripts(Meet.discipline_id, function(scripts) {
-                    //Pequisar Todos contents e goals do script disponível e escolhido
-                    //
-                    //Verificar quais scripts estão disponíveis(se Não existir
-                    //um ponto de diagnóstico no script para o aluno corrente )
-
-                    //Para os scripts diponíveis, sortear, qual deverá ser inciado
-
-                });
-
-
-
-                for (var idx in self.cobjectsInBlock) {
-                    //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
-                    var currentCobject = self.cobjectsInBlock[idx];
-                    if (currentCobject['year'] == startCobjectYear) {
-                        //Encontrou o Cobject do Level selecionado
-                        lastCobject_id = currentCobject['cobject_id'];
-                        //Finaliza a pesquisa, pois incia sempre do 1°
-                        break;
-                    }
-                }
-
-                //Se encontrou algum Cobject no bloco para o Nível selecionado
-                if (self.isset(lastCobject_id)) {
-                    //Inicia com o cobject encontrado
-                    //Construçao do DOM do 1° cobject de cada Meet
-                    Meet.domCobjectBuild(lastCobject_id);
-                    //Depois inicia os eventos globais
-                    Meet.init_eventsGlobals();
-                } else {
-                    //Volta para o select
-                    location.href = "select.html";
-                    alert("Nenhuma Atividade foi Encontrada nesse Nível");
-                }
-
-
+        // 3 - Obter todos os Scripts para o usuário e disciplina corrente
+        // Onde possui objetivos do ano passado como parâmetro
+        this.findAllScriptsByYear(1, function(allScriptByYear){
+            if(allScriptByYear.length > 0){
+                //Existe pelo menos 1 Script
+                MeetProficiency.currentScriptList = allScriptByYear;
             }
-
-
         });
 
+    }
 
-
-        Meet.DB_synapse.getBlockByDiscipline(Meet.discipline_id, function(cobject_block_id) {
-            // Seta o Bloco para a disciplina selecionada
-            self.cobject_block_id = cobject_block_id;
-            if (self.isset(self.cobject_block_id)) {
-                //Inicia o encontro. Agora que já sabe qual Bloco carregar.
-                self.getCobjectsFromBlock();
-            } else {
-                //Não inicia
-                console.log("Nenhum Bloco foi encontrado para a Disciplina selecionada !!!");
-            }
-        }); /*
+    this.findAllDiagnosticPoint = function(callBack){
+        Meet.DB_synapse.getAllDiagnosticPoint(callBack);
     }
 
 
-    this.findAllAvailableScripts = function(callBack){
-        //Varrer todos os Scripts e para cada um verificar se Não possui
-        // um trace_diagnostic_script para o usuário corrente
-        this.
+    this.findAllTraceDiagScript = function(callBack){
+        Meet.DB_synapse.getAllTraceDiagScript(callBack);
     }
 
-    //Obter todos os Cobject deste Bloco
-    this.getCobjectsFromBlock = function() {
-
-        Meet.DB_synapse.getCobjectsFromBlock(self.cobject_block_id, function(objectsThisBlock) {
-            //count do número de objetos
-            var num_objects = 0;
-            $.each(objectsThisBlock, function() {
-                num_objects++;
-            });
-
-            //Setar todos os Cobjects
-            self.setCobjectsFromBlock(objectsThisBlock);
-
-            //Agora Verifica o UserState
-            var userStateProficiencyInfo = {
-                cobject_block_id: self.cobject_block_id,
-                evaluation_selected_level: self.evaluation_selected_level
-            };
-            Meet.DB_synapse.getUserState(Meet.actor, Meet.render_mode, userStateProficiencyInfo, function(info_state) {
-                var gotoState = self.isset(info_state);
-                var lastCobject_id = null;
-
-                //Ano atual no estudante
-                Meet.studentCurrentYear = parseInt(Meet.studentClassroomName.match(/\d/)[0]);
-
-                if (gotoState) {
-                    //Encontrou O estado do usuário
-                    Meet.isLoadState = true;
-                    lastCobject_id = info_state.last_cobject_id;
-                    Meet.firstPieceCurrentMeet = info_state.last_piece_id;
-                    Meet.peformance_qtd_correct = info_state.qtd_correct;
-                    Meet.peformance_qtd_wrong = info_state.qtd_wrong;
-                    Meet.render_mode = info_state.render_mode;
-                    self.evaluation_selected_level = info_state.evaluation_selected_level;
-                    //Calcula o Score
-                    Meet.scoreCalculator(false);
-
-                    //Construçao do DOM do 1° cobject de cada Meet
-                    Meet.domCobjectBuild(lastCobject_id);
-                    //Depois inicia os eventos globais
-                    Meet.init_eventsGlobals();
-                } else {
-                    //Primeiro Acesso do usuário; Não possui nenhum estado registrado
-                    //Indica que Não possui algum estado carregado
-                    Meet.isLoadState = false;
-
-                    //Abre o Primeiro Cobject, referente ao Nível Selecionado
-                    var startCobjectYear = self.evaluation_selected_level;
-
-                    for (var idx in self.cobjectsInBlock) {
-                        //Encontrar o Primeiro Cobject referente ao Ano anterior da série Aluno
-                        var currentCobject = self.cobjectsInBlock[idx];
-                        if (currentCobject['year'] == startCobjectYear) {
-                            //Encontrou o Cobject do Level selecionado
-                            lastCobject_id = currentCobject['cobject_id'];
-                            //Finaliza a pesquisa, pois incia sempre do 1°
-                            break;
-                        }
-                    }
-
-                    //Se encontrou algum Cobject no bloco para o Nível selecionado
-                    if (self.isset(lastCobject_id)) {
-                        //Inicia com o cobject encontrado
-                        //Construçao do DOM do 1° cobject de cada Meet
-                        Meet.domCobjectBuild(lastCobject_id);
-                        //Depois inicia os eventos globais
-                        Meet.init_eventsGlobals();
-                    } else {
-                        //Volta para o select
-                        location.href = "select.html";
-                        alert("Nenhuma Atividade foi Encontrada nesse Nível");
-                    }
-
-
-                }
-
-
-            });
-
-            /*  $.each(objectsThisBlock, function(idx, object){
-             //Para cada Cobject Cria sua Dom
-
-             }); */
-        //});
+    this.findAllScriptsByYear = function(scriptYear, callBack){
+        Meet.DB_synapse.getAllScriptsByYear(scriptYear, callBack);
     }
-
-    this.findAllAvailableScripts = function(callBack){
-        Meet.DB_synapse.getAllAvailableScripts(callBack);
-    }
-
 
     this.setCobjectsFromBlock = function(cobjectIDsCurrentBlock) {
         //Atribui ao array de cobjects do bloco corrente
