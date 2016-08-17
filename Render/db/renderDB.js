@@ -2540,6 +2540,7 @@ if (sessionStorage.getItem("isOnline") === null ||
             }
         }
 
+        //Retorna os Scripts e seus Objetivos relacionados
         this.getAllScriptsByYear = function(scriptYear ,callBack){
             window.indexedDB = self.verifyIDBrownser();
             DBsynapse = window.indexedDB.open(nameBD);
@@ -2580,7 +2581,8 @@ if (sessionStorage.getItem("isOnline") === null ||
                 var scriptFinish = false;
 
                 //Todos os roteiros do ano indicado
-                var allScriptByYear = new Array();
+                var allScriptByYear = new Object();
+                var totalScriptsByYear = 0;
 
                 //Seleciona Somente os Scripts para a disciplina corrente
                 var scriptRequest = actScriptStore.index('discipline_fk');
@@ -2613,14 +2615,16 @@ if (sessionStorage.getItem("isOnline") === null ||
                                                if(scriptYear == degreeCursor.year){
                                                    //Somente cria um novo Array sse já não o existir
                                                    if(!isset(allScriptByYear[scriptCursor.value.id])){
-                                                       allScriptByYear[scriptCursor.value.id] = new Array();
+                                                       allScriptByYear[scriptCursor.value.id] = new Object();
+                                                       //Incremento do número de Scripts
+                                                       totalScriptsByYear++;
                                                    }
                                                    allScriptByYear[scriptCursor.value.id]['attributes'] = scriptCursor.value;
                                                    if(!isset(allScriptByYear[scriptCursor.value.id]['goals'])){
-                                                       allScriptByYear[scriptCursor.value.id]['goals'] = new Array();
+                                                       allScriptByYear[scriptCursor.value.id]['goals'] = new Object();
                                                    }
                                                    if(!isset(allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id])){
-                                                       allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id] = new Array();
+                                                       allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id] = new Object();
                                                    }
                                                    allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id]['attributes'] = goalCursor;
                                                    allScriptByYear[scriptCursor.value.id]['goals'][goalCursor.id]['actScriptGoalID'] = scriptGoalCursor.value.id;
@@ -2657,7 +2661,7 @@ if (sessionStorage.getItem("isOnline") === null ||
                             if(scriptFinish){
                                 //Finalizou a pesquisa
                                 scriptFinish = false;
-                                callBack(allScriptByYear);
+                                callBack(allScriptByYear, totalScriptsByYear);
                             }
                             ;break;
                     }

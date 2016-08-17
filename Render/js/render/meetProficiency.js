@@ -20,6 +20,19 @@ this.MeetProficiency = function() {
     MeetProficiency.allTraceScripts = new Array();
     //Lista de Scripts de um ano específico
     MeetProficiency.currentScriptList = new Array();
+    //Número de Scripts de um ano específico
+    MeetProficiency.numCurrentScripts = 0;
+    //Ordem de execução dos Scripts
+    MeetProficiency.currentOrderScriptsByID = new Array();
+    //Index do Script corrente
+    MeetProficiency.idxOrderScriptsByID = -1;
+    //ScriptID Escolhido
+    MeetProficiency.currentScriptID = -1;
+    //Id do Objetivo e cobject corrente
+    MeetProficiency.currentGoalID = -1;
+    MeetProficiency.currentCobjectID = -1;
+
+
 
     this.start = function() {
 
@@ -41,19 +54,49 @@ this.MeetProficiency = function() {
 
         // 3 - Obter todos os Scripts para o usuário e disciplina corrente
         // Onde possui objetivos do ano passado como parâmetro
-        this.findAllScriptsByYear(1, function(allScriptByYear){
-            if(allScriptByYear.length > 0){
+        this.findAllScriptsByYear(1, function(allScriptByYear, numCurrentScriptList){
+            if(isset(allScriptByYear)){
                 //Existe pelo menos 1 Script
                 MeetProficiency.currentScriptList = allScriptByYear;
+                MeetProficiency.numCurrentScripts = numCurrentScriptList;
+                //Escolhe a ordem de execução dos Scripts
+                self.chooseScriptsOrder();
+                //Inicia as atividades para o script escolhido
+                console.log(MeetProficiency.currentScriptList[MeetProficiency.currentScriptID]);
+
             }
         });
+
+    }
+
+    //Escolhe o Roteiro que deve ser resolvido da lista de roteiros
+    this.chooseScriptsOrder = function(){
+        $.each(MeetProficiency.currentScriptList, function(index){
+            MeetProficiency.currentOrderScriptsByID.push(index);
+        });
+        //Embaralhar a ordem dos Scripts
+        $.shuffle(MeetProficiency.currentOrderScriptsByID);
+        //Escolher o script da primeira posição
+        MeetProficiency.idxOrderScriptsByID = 0;
+        MeetProficiency.currentScriptID = MeetProficiency.currentOrderScriptsByID[MeetProficiency.idxOrderScriptsByID];
+        
+    }
+
+    //Ir para o próximo Script
+    this.nextScript = function(){
+        if(isset(MeetProficiency.currentOrderScriptsByID[MeetProficiency.idxOrderScriptsByID+1])){
+            //Existe, então incrementa
+            MeetProficiency.currentScriptID = MeetProficiency.currentOrderScriptsByID[++MeetProficiency.idxOrderScriptsByID];
+            return MeetProficiency.currentScriptList[MeetProficiency.currentScriptID];
+        }else{
+            return null;
+        }
 
     }
 
     this.findAllDiagnosticPoint = function(callBack){
         Meet.DB_synapse.getAllDiagnosticPoint(callBack);
     }
-
 
     this.findAllTraceDiagScript = function(callBack){
         Meet.DB_synapse.getAllTraceDiagScript(callBack);
@@ -84,7 +127,6 @@ this.MeetProficiency = function() {
                 currentCobject['template_name'] = json_cobject.template_name;
                 currentCobject['theme'] = json_cobject.theme;
                 currentCobject['year'] = json_cobject.year;
-
                 //Adiciona atributos do cobject corrente
                 self.cobjectsInBlock.push(currentCobject);
 

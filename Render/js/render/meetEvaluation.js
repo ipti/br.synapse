@@ -160,7 +160,6 @@ this.MeetEvaluation = function(evaluation_selected_level) {
 
     this.loadNextCobjectInBlock = function(needScoredCalculator) {
         //Carregar a próxima atividade, se for permitido!
-
         var idxNextCobject = self.getIdxArrayCobjectsInBlock(Meet.domCobject.cobject.cobject_id) + 1;
         var nextCobjectID = self.cobjectsInBlock[idxNextCobject]['cobject_id'];
 
@@ -185,14 +184,11 @@ this.MeetEvaluation = function(evaluation_selected_level) {
                     ' .currentScreen, ' + selector_cobject + ' .currentPieceSet, ' + selector_cobject +
                     ' .currentPiece').show();
 
-
             } else {
                 //Finalizou as Atividades do Nível Selecionado, do bloco selecionado.
                 Meet.messageFinishedLevel();
             }
-
         });
-
     }
 
     //Carregar Primeira Piece do atendimento corrente

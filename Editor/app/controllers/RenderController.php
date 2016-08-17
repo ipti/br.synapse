@@ -646,18 +646,61 @@ class RenderController extends Controller
         }
     }
 
+
     public function actionImportFromSiga()
     {
-        if (isset($_POST['import'])) {
+       if (isset($_POST['import'])) {
+        //Array contento todos os inepIDs das escolas que deseja-se importar os alunos
+        //do ensino FUNDAMENTAL
+       $schoolsInepID = [28018397];
+       $importData = array();
+       foreach($schoolsInepID AS $schoolInepID):
+         $responseSchool = $this->connectToSiga("/Escola/GetEscolaINEP?Usuario=Externo_SEED&CodigoINEP=$schoolInepID");
+         $responseSchool = json_decode($responseSchool);
+            if(ISSET($responseSchool->Codigo) && $responseSchool->Codigo == "200"){
+               //Encontrou a escola
+                $currentSchoolInfo = array();
+                $currentSchoolInfo["School"] = $responseSchool->Dados;
+                $currentSchoolInfo["Classrooms"] = array();
+                $currentSchoolID = $responseSchool->Dados[0]->id;
+                //Buscar Todas as Turmas do  Ano passado como parâmetro
+                $responseClassrooms = $this->connectToSiga("/Turma/GetTurmasEscola?Usuario=Externo_SEED&CodigoEscola=$currentSchoolID&AnoLetivo=2016");
+                $responseClassrooms = json_decode($responseClassrooms);
+                      if(ISSET($responseClassrooms->Codigo) && $responseClassrooms->Codigo == "200") {
+                          //Encontrou aluma turma
+                           foreach($responseClassrooms->Dados AS $currentClassroomData):
+                               //Buscar Todas as Matriculas nessa Turma corrente
+                               $currentClassroomInfo = array();
+                               $currentClassroomInfo["Data"] = $currentClassroomData;
+                               $currentClassroomInfo["Students"] = array();
+                               $responseEnrollments = $this->connectToSiga("/Aluno/GetMatriculasTurma?Usuario=Externo_SEED&CodigoTurma=$currentClassroomData->id");
+                               $responseEnrollments = json_decode($responseEnrollments);
+                               if(ISSET($responseEnrollments->Codigo) && $responseEnrollments->Codigo == "200") {
+                                   //Encontrou alum aluno matriculado
+                                  foreach($responseEnrollments->Dados AS $currentEnrollmentData):
+                                       //Buscar os dados de cada aluno
+                                        $responseStudent = $this->connectToSiga("/Aluno/GetAluno?Usuario=Externo_SEED&Codigo=$currentEnrollmentData->student_fk");
+                                        $responseStudent = json_decode($responseStudent);
+                                        if(ISSET($responseStudent->Codigo) && $responseStudent->Codigo == "200") {
+                                            //Encontrou os dados do aluno corrente
+                                            //Add o enrollmentID do SIGA
+                                            //Verificar se precisa acessar a posição '0' diretamente
+                                            $responseStudent->Dados[0]->enrollment_fk = $currentEnrollmentData->student_enrollment;
+                                            array_push($currentClassroomInfo["Students"], $responseStudent->Dados[0]);
+                                        }
+                                  endforeach;
+                               }
+                           //Armazena o array da turma corrente no array da escola
+                            array_push($currentSchoolInfo["Classrooms"], $currentClassroomInfo);
+                           endforeach;
+                      }
+                //Armazena o array da escola corrente no array de retorno
+                array_push($importData, $currentSchoolInfo);
+            }
+        endforeach;
+
+/*
             $imported = false;
-
-            $ch = curl_init();
-            $schools = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getEscolas');
-            $classrooms = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getTurmas');
-            $students = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getAlunos');
-            $enrollments = $this->connectToSiga($ch, 'http://192.168.0.116:8080/API-Restful-Emulador/api/EmuladorService/getMatriculas');
-            curl_close($ch);
-
             $schools = json_decode($schools);
             foreach ($schools as $sch) {
                 $school = School::model()->findByAttributes(array('inep_id' => $sch->inep_id));
@@ -674,7 +717,7 @@ class RenderController extends Controller
                 }
             }
 
-            /*---*/
+
 
             $classrooms = json_decode($classrooms);
             foreach ($classrooms as $cl) {
@@ -695,7 +738,7 @@ class RenderController extends Controller
                 }
             }
 
-            /*---*/
+
 
             $students = json_decode($students);
             foreach ($students as $stu) {
@@ -734,7 +777,7 @@ class RenderController extends Controller
                 }
             }
 
-            /*---*/
+
 
             $enrollments = json_decode($enrollments);
             foreach ($enrollments as $enr) {
@@ -757,15 +800,23 @@ class RenderController extends Controller
             } else {
                 $this->render("importFromSiga", array('msg' => $msg));
             }
+*/
+
         } else {
             $this->render("importFromSiga");
         }
+
+
     }
 
-    public function connectToSiga($ch, $url) {
-        curl_setopt($ch, CURLOPT_URL, $url);
+    public function connectToSiga($urlGets) {
+        $ch = curl_init();
+        $urlBase = "http://intranet.seed.se.gov.br/wsSIGA/";
+        curl_setopt($ch, CURLOPT_URL, $urlBase.$urlGets);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        return curl_exec($ch);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
     }
 
     public function actionImportFromEduCenso()
