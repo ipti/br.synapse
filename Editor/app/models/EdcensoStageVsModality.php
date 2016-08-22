@@ -8,6 +8,7 @@
  * @property string $name
  * @property integer $stage
  * @property integer $stage_code
+ * @property string $siga_name
  *
  * The followings are the available model relations:
  * @property Classroom[] $classrooms
@@ -32,10 +33,10 @@ class EdcensoStageVsModality extends CActiveRecord
 		return array(
 			array('name, stage', 'required'),
 			array('stage, stage_code', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>100),
+			array('name, siga_name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, stage, stage_code', 'safe', 'on'=>'search'),
+			array('id, name, stage, stage_code, siga_name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,6 +62,7 @@ class EdcensoStageVsModality extends CActiveRecord
 			'name' => 'Name',
 			'stage' => 'Stage',
 			'stage_code' => 'Stage Code',
+			'siga_name' => 'Siga Name',
 		);
 	}
 

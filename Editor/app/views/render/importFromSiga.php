@@ -45,10 +45,9 @@
     <?php
     if (isset($msg)) {
         ?>
-        <div class="msg" id="msg_<?php echo $msg; ?>">
-            <?php
-            echo $msg;
-            ?>
+        <?= $t; ?>
+        <div id="msg_">
+            <?= var_dump($msg); ?>
         </div>
         <?php
     }
