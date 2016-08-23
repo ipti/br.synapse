@@ -746,6 +746,7 @@ class RenderController extends Controller
                         if (!empty($cl['stage_fk'])) {
                             $stage = EdcensoStageVsModality::model()->findByAttributes(["siga_name" => $cl['stage_fk']]);
                             if ($stage != null) {
+                                $classroom->name = explode(" - ",  $stage->name)[1].'-'.$classroom->name;
                                 $classroom->stage_fk = $stage->id;
                                 $classroom->year = date("Y");
                                 $classroom->fk_id = $cl['id'];
