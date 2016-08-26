@@ -45,9 +45,12 @@
     <?php
     if (isset($msg)) {
         ?>
-        <?= $t; ?>
+        <php $t; ?>
         <div id="msg_">
-            <?= var_dump($msg); ?>
+            <?php var_dump($msg); ?>
+        </div>
+        <div id="SigaTotalTimeOut">
+            <?php  var_dump($sigaTotalTimeOut); ?>
         </div>
         <?php
     }
