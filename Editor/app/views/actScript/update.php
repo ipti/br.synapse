@@ -2,7 +2,7 @@
     <?php
 $this->breadcrumbs=array(
 	'Act Scripts'=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
+	$model->name=>array('view','id'=>$model->id),
 	'Update',
 );
 
@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
 
     <div class="twoColumn">
         <div class="columnone" style="padding-right: 1em">
-            <?php echo $this->renderPartial('_form', array('model'=>$model,'title'=>$title,'contentsin'=>$contentsin,'contentsout'=>$contentsout)); ?>        </div>
+            <?php echo $this->renderPartial('_form', array('model'=>$model,'title'=>$title)); ?>        </div>
         <div class="columntwo">
             <?php echo $this->renderPartial('////common/defaultcontext', array('contextDesc'=>$contextDesc)); ?>        </div>
     </div>

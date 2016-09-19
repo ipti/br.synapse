@@ -3,13 +3,13 @@
 
 //Verificar se É o RenderOnline
 if (sessionStorage.getItem("isOnline") !== null &&
-        sessionStorage.getItem("isOnline") == 'true') {
-    
-    this.DBOn = function () {
+    sessionStorage.getItem("isOnline") == 'true') {
+
+    this.DBOn = function() {
 
         var self = this;
 
-        this.login = function (login, password, CBposLogin) {
+        this.login = function(login, password, CBposLogin) {
             if (login !== '' && password !== '' && self.isset(login) && self.isset(password)) {
 
                 if (login == 'admin') {
@@ -19,7 +19,7 @@ if (sessionStorage.getItem("isOnline") !== null &&
                         var id = "-1";
                         var personage_name = "admin";
                         var classroom_id = "-1";
-                        //Armazenar nome do usuário e id_Actor na sessão 
+                        //Armazenar nome do usuário e id_Actor na sessão
                         sessionStorage.setItem("authorization", true);
                         sessionStorage.setItem("login_id_actor", id);
                         sessionStorage.setItem("login_name_actor", name);
@@ -36,7 +36,7 @@ if (sessionStorage.getItem("isOnline") !== null &&
 
                 } else {
                     //Não é um admin
-                    //Buscar o usuário 
+                    //Buscar o usuário
                     var data = {
                         login: login,
                         password: password
@@ -46,13 +46,13 @@ if (sessionStorage.getItem("isOnline") !== null &&
                         url: "/Render/login",
                         dataType: 'json',
                         data: data,
-                        beforeSend: function (jqXHR, settings) {
+                        beforeSend: function(jqXHR, settings) {
                             //executing query
                         },
-                        error: function (jqXHR, textStatus, errorThrown) {
+                        error: function(jqXHR, textStatus, errorThrown) {
                             //Error
                         },
-                        success: function (response, textStatus, jqXHR) {
+                        success: function(response, textStatus, jqXHR) {
                             var authorization = response['authorization'];
                             var actor = response['actor'];
 
@@ -62,7 +62,7 @@ if (sessionStorage.getItem("isOnline") !== null &&
                                 var id = actor['id'];
                                 var personage_name = actor['personage_name'];
                                 var classroom_id = actor['unity_id'];
-                                //Armazenar nome do usuário e id_Actor na sessão 
+                                //Armazenar nome do usuário e id_Actor na sessão
                                 sessionStorage.setItem("authorization", true);
                                 sessionStorage.setItem("login_id_actor", id);
                                 sessionStorage.setItem("login_name_actor", name);
@@ -91,7 +91,7 @@ if (sessionStorage.getItem("isOnline") !== null &&
         }
 
 
-        this.isset = function (variable) {
+        this.isset = function(variable) {
             return (typeof variable !== 'undefined' && variable !== null);
         }
 

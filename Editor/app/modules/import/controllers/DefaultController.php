@@ -1,5 +1,5 @@
 <?php
-
+//NÃO ESTÁ SENDO USADO !!!!
 class DefaultController extends Controller {
 
     public function search($sql) {

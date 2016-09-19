@@ -16,10 +16,6 @@
 	<?php echo CHtml::encode($data->father_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('location_id')); ?>:</b>
-	<?php echo CHtml::encode($data->location_id); ?>
-	<br />
-
 	<b><?php echo CHtml::encode($data->getAttributeLabel('fk_code')); ?>:</b>
 	<?php echo CHtml::encode($data->fk_code); ?>
 	<br />

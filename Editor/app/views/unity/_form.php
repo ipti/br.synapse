@@ -105,15 +105,6 @@
                       <!--  <?php //  echo $form->error($model,'fatherID'); ?> -->
                         </div>  
 
-                                        <div class="formField">
-                        <?php echo $form->labelEx($model,'location_id'); ?>
-                        <?php // echo $form->textField($model,'locationID'); ?>
-                          <?php
-                             echo $form->dropDownList($model, 'location_id', 
-                                     CHtml::listData(Location::model()->findAll(), 'id', 'name')); 
-                           ?>                     
-                        <?php echo $form->error($model,'location_id'); ?>
-                    </div>
 
                                      <!--  <div class="formField">
                         <?php //echo $form->labelEx($model,'fk_code'); ?>

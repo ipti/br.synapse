@@ -22,7 +22,6 @@ array('label'=> Yii::t('default', 'List Unity'), 'url'=>array('index'),'descript
 		'name',
 		'organization_id',
 		'father_id',
-		'location_id',
 		'fk_code',
 		//'autochild',
 		'active_date',

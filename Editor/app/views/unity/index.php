@@ -30,10 +30,6 @@ array('label'=> Yii::t('default', 'Create a new Unity'), 'url'=>array('create'),
                                 'name'=>'organization_id',
                                 'value'=>'$data->organization->name',
                             ),
-                            array(
-                                'name'=>'location_id',
-                                'value'=>'$data->location->name',
-                            ),
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   

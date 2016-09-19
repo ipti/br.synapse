@@ -26,11 +26,6 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'location_id'); ?>
-		<?php echo $form->textField($model,'location_id'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->label($model,'fk_code'); ?>
 		<?php echo $form->textField($model,'fk_code',array('size'=>45,'maxlength'=>45)); ?>
 	</div>

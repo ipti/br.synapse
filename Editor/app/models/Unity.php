@@ -8,15 +8,15 @@
  * @property string $name
  * @property integer $organization_id
  * @property integer $father_id
- * @property integer $location_id
  * @property string $fk_code
  * @property integer $active_date
  * @property integer $desactive_date
+ * @property integer $inep_id
  *
  * The followings are the available model relations:
- * @property Actor[] $actors
- * @property Location $location
  * @property Organization $organization
+ * @property UnityTree[] $unityTrees
+ * @property UnityTree[] $unityTrees1
  */
 class Unity extends CActiveRecord
 {
@@ -46,12 +46,12 @@ class Unity extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('organization_id, father_id, location_id, active_date, desactive_date', 'numerical', 'integerOnly'=>true),
+			array('organization_id, father_id, active_date, desactive_date, inep_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>45),
 			array('fk_code', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, organization_id, father_id, location_id, fk_code, active_date, desactive_date', 'safe', 'on'=>'search'),
+			array('id, name, organization_id, father_id, fk_code, active_date, desactive_date, inep_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,9 +63,9 @@ class Unity extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actors' => array(self::HAS_MANY, 'Actor', 'unity_id'),
-			'location' => array(self::BELONGS_TO, 'Location', 'location_id'),
 			'organization' => array(self::BELONGS_TO, 'Organization', 'organization_id'),
+			'unityTrees' => array(self::HAS_MANY, 'UnityTree', 'primary_unity_id'),
+			'unityTrees1' => array(self::HAS_MANY, 'UnityTree', 'secondary_unity_id'),
 		);
 	}
 
@@ -79,10 +79,10 @@ class Unity extends CActiveRecord
 			'name' => Yii::t('default', 'Name'),
 			'organization_id' => Yii::t('default', 'Organization'),
 			'father_id' => Yii::t('default', 'Father'),
-			'location_id' => Yii::t('default', 'Location'),
 			'fk_code' => Yii::t('default', 'Fk Code'),
 			'active_date' => Yii::t('default', 'Active Date'),
 			'desactive_date' => Yii::t('default', 'Desactive Date'),
+			'inep_id' => 'Inep',
 		);
 	}
 
@@ -101,10 +101,11 @@ class Unity extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('organization_id',$this->organization_id);
 		$criteria->compare('father_id',$this->father_id);
-		$criteria->compare('location_id',$this->location_id);
 		$criteria->compare('fk_code',$this->fk_code,true);
 		$criteria->compare('active_date',$this->active_date);
 		$criteria->compare('desactive_date',$this->desactive_date);
+		$criteria->compare('inep_id',$this->inep_id);
+
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

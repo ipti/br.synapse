@@ -98,7 +98,9 @@ if ($load == 'false') {
             <li id="addsound" class="btn-tools"><i class="fa fa-file-audio-o fa-2x"></i> <?php echo Yii::t('default', 'Add Sound'); ?></li>
             <li id="btn-addScreen" class="btn-addScreen btn-tools" ><i class="fa fa-plus-circle fa-2x"></i> <?php echo Yii::t('default', 'Add Page'); ?></li>
             <li id="btn-delScreen" class="btn-delScreen btn-tools" ><i class="fa fa-minus-circle fa-2x"></i> <?php echo Yii::t('default', 'Remove Page'); ?></li>
-            <li id="save" class="btn-tools pull-right"><i class="fa fa-floppy-o fa-2x"></i> <?php echo Yii::t('default', 'Save'); ?></li>
+            <li id="preview" class="btn-tools pull-right"><i class="fa fa-android fa-2x"></i> <?php echo Yii::t('default', 'Preview'); ?></li>
+            <li id="save" class="btn-tools pull-right"><i class="fa  fa-floppy-o fa-2x"></i> <?php echo Yii::t('default', 'Save'); ?></li>
+
         </ul>   
         <table id="informations">
             <tr>

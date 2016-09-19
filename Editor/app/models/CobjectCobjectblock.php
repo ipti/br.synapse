@@ -9,8 +9,8 @@
  * @property integer $cobject_block_id
  *
  * The followings are the available model relations:
- * @property Cobject $cobject
  * @property Cobjectblock $cobjectBlock
+ * @property Cobject $cobject
  */
 class CobjectCobjectblock extends CActiveRecord
 {
@@ -56,8 +56,8 @@ class CobjectCobjectblock extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobject_id'),
 			'cobjectBlock' => array(self::BELONGS_TO, 'Cobjectblock', 'cobject_block_id'),
+			'cobject' => array(self::BELONGS_TO, 'Cobject', 'cobject_id'),
 		);
 	}
 

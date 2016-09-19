@@ -25,15 +25,11 @@ array('label'=> Yii::t('default', 'Create a new ActScript'), 'url'=>array('creat
                         'enablePagination' => true,
                         'baseScriptUrl' => Yii::app()->theme->baseUrl . '/plugins/gridview/',
                         'columns' => array(
-		array(
-                                'name' => 'discipline',
-                                'value' => '$data->discipline->name',
-                            ),
+                    		'id',
+		'discipline_id',
 		'performance_index',
-		array(
-                                'name' => 'father_content',
-                                'value' => '(isset($data->father_content) ? $data->fatherContent->description: "N/A")',
-                            ),
+		'father_content',
+		'name',
                      array('class' => 'CButtonColumn',),),
                     )); ?>
                 </div>   

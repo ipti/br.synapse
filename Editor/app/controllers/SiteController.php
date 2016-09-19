@@ -123,10 +123,10 @@ class SiteController extends Controller {
 //    }
     
     
-    private function redirPersonage($nome_personage,$idActor,$unityIdActor){
+    private function redirPersonage($nome_personage,$idActor,$classroomIdActor){
         Yii::app()->session['personage'] = $nome_personage;
         Yii::app()->session['idActor'] = $idActor;
-        Yii::app()->session['unityIdActor'] = $unityIdActor;
+        Yii::app()->session['classroomIdActor'] = $classroomIdActor;
         //Redirecionamento Após Login e Seleção do Personagem
         switch($nome_personage){
             case "Tutor":
@@ -149,7 +149,7 @@ class SiteController extends Controller {
      
         // if it is ajax validation request
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-            echo CActiveForm::validate($model);
+            echo CActiveForm::validate($loginmodel);
             Yii::app()->end();
         }
         
@@ -159,16 +159,16 @@ class SiteController extends Controller {
             $idActor = $actor->id;
             $nome_personage = $actor->personage->name;
 //$personageIdActor = $actor->personageID;
-            $unityIdActor = $actor->unity_id;
+            $classroomIdActor = $actor->classroom_fk;
 //$activatedDateActor = $actor->activatedDate;
 //$desactivatedDateActor = $actor->desactivatedDate;                  
 // $personage = Personage::model()->findByAttributes(array('id'=>$personageIdActor));
 //$namePersonage = $personage->name;     
 
             //se os valores estiverem setados
-            if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {
+            if(isset($nome_personage) && isset($idActor) && isset($classroomIdActor)) {
                 //redireciona para a página correta
-                $this->redirPersonage($nome_personage,$idActor,$unityIdActor);
+                $this->redirPersonage($nome_personage,$idActor,$classroomIdActor);
             }
  
         } else if (isset($_POST['LoginForm'])) {
@@ -177,7 +177,7 @@ class SiteController extends Controller {
             $identity = $loginmodel->get_identity(); //$itentity = variável local
             if ($autenticar) {
                 $idPerson = $identity->getId();
-//Somente atores Ativos
+                //Somente atores Ativos
                 $actor = Actor::model()->findAllByAttributes(array('person_id' => $idPerson), 
                         "desactive_date >" . time() . " OR " . "desactive_date is NULL OR desactive_date = 0 ");
 
@@ -185,7 +185,7 @@ class SiteController extends Controller {
                 Yii::app()->user->login($identity);
                 
                 if (count($actor) > 1) {
-//Método login() do CWebUser
+                //Método login() do CWebUser
                     $html = "
                    <html>
                       <head>
@@ -196,7 +196,7 @@ class SiteController extends Controller {
                    <form method=\"post\" action=\"/site/login\">
                    <select id=\"act\" name=\"act\">";
                     echo "Bem Vindo : " . $identity->getState('name');
-//Seleciona um dos personagem de um Person
+                    //Seleciona um dos personagem de um Person
                     for ($i = 0; count($actor) > $i; $i++) {
                         $tempPersonage = Personage::model()->findByAttributes(array('id' => $actor[$i]->personage_id));
                         $html .= "<option value='".$actor[$i]->id."'>$tempPersonage->name</option>";
@@ -216,13 +216,13 @@ class SiteController extends Controller {
                     $nome_personage = $tempPersonage->name;
                     //id do ator
                     $idActor = $actor[0]->id;
-                    //id da unidade
-                    $unityIdActor = $actor[0]->unity_id;
+                    //id da turma
+                    $classroomIdActor = $actor[0]->classroom_fk;
                     
                     //se os valores estiverem setados
-                    if(isset($nome_personage) && isset($idActor) && isset($unityIdActor)) {
+                    if(isset($nome_personage) && isset($idActor) && isset($classroomIdActor)) {
                         //redireciona para a página correta
-                        $this->redirPersonage($nome_personage,$idActor,$unityIdActor);
+                        $this->redirPersonage($nome_personage,$idActor,$classroomIdActor);
                     }
                 } else {
                     echo "Não há Atores Ativos para este Usuário!";

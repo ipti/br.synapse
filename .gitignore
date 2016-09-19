@@ -1,13 +1,22 @@
 Editor/assets/*
-Editor/library/*
+!Editor/assets/README.md
+Editor/library/image/*
+Editor/library/sound/*
+Editor/library/movie/*
+!Editor/library/image/README.md
+!Editor/library/sound/README.md
+!Editor/library/movie/README.md
 Editor/app/runtime/*
+!Editor/app/runtime/README.md
 Editor/SynapseRender/data/*
 
-/Render/data
-Render/data/*
+/Render/data/*
+!/Render/data/lower-bitrate.sh
+!/Render/data/resize-image.sh
 Render/TEXTOS/
 
 .idea/
 nbproject/
 /Editor/app/config/
-Editor/exports/
+/Editor/exports/*
+!/Editor/exports/README.md

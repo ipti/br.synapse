@@ -1,12 +1,10 @@
-
-
-this.MeetPreview = function (cobject) {
+this.MeetPreview = function(cobject) {
     //Apontador para o próprio objeto MeetEvaluation
     var self = this;
 
     this.cobject = cobject;
 
-    this.start = function () {
+    this.start = function() {
 
         Meet.domCobjectBuild(this.cobject.cobject_id, this.cobject);
 
@@ -14,7 +12,7 @@ this.MeetPreview = function (cobject) {
     }
 
 
-    this.loadFirstPiece_Evaluation = function () {
+    this.loadFirstPiece_Evaluation = function() {
         var selector_cobject = '.cobject';
         if (!Meet.isLoadState) {
             //Carrega a primeira Piece
@@ -79,8 +77,6 @@ this.MeetPreview = function (cobject) {
 
             }
 
-
-
             //Se NÃO for o final do bloco
             //Existe uma próxima peça neste CObject
             if (!self.isFinalBlock && !isNextCobject) {
@@ -99,11 +95,11 @@ this.MeetPreview = function (cobject) {
 
     /**
      * Verifica se a variavel esta setada.
-     * 
+     *
      * @param {mixed} variable
      * @returns {Boolean}
      */
-    this.isset = function (variable) {
+    this.isset = function(variable) {
         return (variable !== undefined && variable !== null);
     };
 

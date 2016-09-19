@@ -10,7 +10,7 @@ var EDITOR = "http://synapse.seed.ipti.org.br";
  * @param {array} options
  * @returns {Meet}
  */
-this.Meet = function (options) {
+this.Meet = function(options) {
     //Apontador para o próprio objeto Meet
     var self = this;
     //Modo do Render selecionado
@@ -40,7 +40,7 @@ this.Meet = function (options) {
     //Verificar se é o RenderOnline
     self.isOnline = false;
     if (sessionStorage.getItem("isOnline") !== null &&
-            sessionStorage.getItem("isOnline") == 'true') {
+        sessionStorage.getItem("isOnline") == 'true') {
         //Render Online
         self.isOnline = true;
     }
@@ -63,20 +63,18 @@ this.Meet = function (options) {
     this.currentTemplateCode = null;
     //======== Variáveis Recuperadas do Filtro Inicial ===========
 
-
     this.org = options.org[0];
     this.org_name = options.org[1];
     this.studentClassroomID = options.studentClassroom[0];
     Meet.studentClassroomName = options.studentClassroom[1];
+    Meet.studentClassroomStageFk = options.studentClassroom[2];
     //Ano atual do Aluno
-    Meet.studentCurrentYear = 0;
+    Meet.studentCurrentYear =  options.studentClassroom[3];
+    Meet.studentCurrentCyclo2 = null;
     Meet.actor = options.actor[0];
-
     Meet.actor_name = options.actor[1];
     Meet.login_personage_name = options.actor[2];
-
     Meet.discipline_id = options.id_discipline;
-
 
     //==== Armazenar a performance do usuário
     Meet.peformance_qtd_correct = 0;
@@ -99,44 +97,49 @@ this.Meet = function (options) {
 
 
     //Obter bloco a partir da disciplina selecionada
-    this.start = function () {
+    this.start = function() {
 
-        if (Meet.render_mode == 'evaluation') {
-            //Instancia o meetEvaluation
-            self.meetEvaluation = new MeetEvaluation(sessionStorage.getItem("evaluation_selected_level"));
-            //Inicia o Render
-            self.meetEvaluation.start();
-        }else if(Meet.render_mode == 'preview'){
-            var cobjectId = sessionGet('isPreview');
-            var cobject = {};
-            $.ajax({
-                url: EDITOR+"/render/loadcobject/",
-                type: "GET",
-                dataType: 'jsonp',
-                data: {ID: cobjectId},
-            }).done(function(data){
-                cobject = data;
-                self.meetPreview = new MeetPreview(cobject);
-                self.meetPreview.start();
-            });
-        }else{
-            alert("Indisponível...");
+            if (Meet.render_mode == 'evaluation') {
+                //Instancia o meetEvaluation
+                self.meetEvaluation = new MeetEvaluation(sessionStorage.getItem("evaluation_selected_level"));
+                //Inicia o Render
+                self.meetEvaluation.start();
+            } else if (Meet.render_mode == 'preview') {
+                var cobjectId = sessionGet('isPreview');
+                var cobject = {};
+                $.ajax({
+                    url: EDITOR + "/render/loadcobject/",
+                    type: "GET",
+                    dataType: 'jsonp',
+                    data: {
+                        ID: cobjectId
+                    },
+                }).done(function(data) {
+                    cobject = data;
+                    self.meetPreview = new MeetPreview(cobject);
+                    self.meetPreview.start();
+                });
+            } else if(Meet.render_mode == 'proficiency'){
+                //Instancia o meetProficiency
+                self.meetProficiency = new MeetProficiency();
+                //Inicia o Render
+                self.meetProficiency.start();
+            }
+
+            /* else if (Meet.render_mode == 'proficiency') {
+                //Instancia o meetProficiency
+                self.meetProficiency = new MeetProficiency();
+                //Inicia o Render
+                self.meetProficiency.start();
+            } else if (Meet.render_mode == 'training') {
+
+            } */
+
+
         }
+        //============================
 
-        /* else if (Meet.render_mode == 'proficiency') {
-            //Instancia o meetProficiency
-            self.meetProficiency = new MeetProficiency();
-            //Inicia o Render
-            self.meetProficiency.start();
-        } else if (Meet.render_mode == 'training') {
-
-        } */
-
-
-    }
-    //============================
-
-    this.setDomCobject = function (domCobject) {
+    this.setDomCobject = function(domCobject) {
         Meet.domCobject = domCobject;
     };
 
@@ -145,18 +148,18 @@ this.Meet = function (options) {
      *
      * @returns {String.domCobjectBuildAll}
      */
-//    this.domCobjectBuildAll = function() {
-//        var domCobjectBuildAll = $('<div class="cobject_block"></div>');
-//        for (var idx in Meet.domCobject) {
-//            domCobjectBuildAll.append(Meet.domCobject[idx].buildAll());
-//            self.num_cobjects++;
-//        }
-//        //Por último a div de ferramentas
-//        domCobjectBuildAll.append(self.buildToolBar);
-//        //Retorno do 1° Cobject
-//        self.currentCobject_idx = 0;
-//        return domCobjectBuildAll;
-//    }
+    //    this.domCobjectBuildAll = function() {
+    //        var domCobjectBuildAll = $('<div class="cobject_block"></div>');
+    //        for (var idx in Meet.domCobject) {
+    //            domCobjectBuildAll.append(Meet.domCobject[idx].buildAll());
+    //            self.num_cobjects++;
+    //        }
+    //        //Por último a div de ferramentas
+    //        domCobjectBuildAll.append(self.buildToolBar);
+    //        //Retorno do 1° Cobject
+    //        self.currentCobject_idx = 0;
+    //        return domCobjectBuildAll;
+    //    }
 
     /**
      *
@@ -164,8 +167,8 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    Meet.domCobjectBuild = function (cobject_id, cobject) {
-        var building = function (json_cobject) {
+    Meet.domCobjectBuild = function(cobject_id, cobject) {
+        var building = function(json_cobject) {
             var dump = new DomCobject(json_cobject);
             //Adicionar o domCobjet no Encontro 'Meet'
             self.setDomCobject(dump);
@@ -206,10 +209,10 @@ this.Meet = function (options) {
 
 
         //Construir a Dom do Cobject e append no html
-        if(self.isPreview){
+        if (self.isPreview) {
             building(cobject);
-        }else {
-            Meet.DB_synapse.getCobject(cobject_id,building);
+        } else {
+            Meet.DB_synapse.getCobject(cobject_id, building);
         }
     };
 
@@ -218,11 +221,11 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.beginEvents = function () {
+    this.beginEvents = function() {
         //iniciar code_Event dos template
         //Evoca o evento para este template
-        if (Meet.domCobject.cobject.template_code !== 'DDROP'
-                && Meet.domCobject.cobject.template_code !== 'ONEDDROP') {
+        if (Meet.domCobject.cobject.template_code !== 'DDROP' &&
+            Meet.domCobject.cobject.template_code !== 'ONEDDROP') {
             eval("self.init_" + Meet.domCobject.cobject.template_code + "();");
         }
         //Por Fim chama o evento Comum a todos
@@ -234,12 +237,12 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.restartTimes = function () {
+    this.restartTimes = function() {
         self.interval_group = self.start_time_piece = new Date().getTime();
     };
 
     //Carregar Primeira Piece do atendimento corrente
-    this.loadFirstPiece = function () {
+    this.loadFirstPiece = function() {
         if (Meet.render_mode == 'evaluation') {
             self.meetEvaluation.loadFirstPiece_Evaluation();
         } else if (Meet.render_mode == 'preview') {
@@ -257,15 +260,15 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_Common = function () {
+    this.init_Common = function() {
         //Embaralha os grupos de Elementos
         var selector_cobject = '.cobject';
         if (Meet.domCobject.cobject.template_code !== 'PLC' && Meet.domCobject.cobject.template_code !== 'DIG') {
             $(selector_cobject + ' div[group]').closest('div.answer').shuffle();
         }
 
-        if (Meet.domCobject.cobject.template_code !== 'AEL' && Meet.domCobject.cobject.template_code !== 'DDROP'
-            && Meet.domCobject.cobject.template_code !== 'ONEDDROP') {
+        if (Meet.domCobject.cobject.template_code !== 'AEL' && Meet.domCobject.cobject.template_code !== 'DDROP' &&
+            Meet.domCobject.cobject.template_code !== 'ONEDDROP') {
             $(selector_cobject + ' div[group]').closest('div.ask').shuffle();
         }
 
@@ -289,20 +292,20 @@ this.Meet = function (options) {
             //Inicio do temporizador
             self.restartTimes();
 
-            $('.nextPiece').bind('tap', function () {
+            $('.nextPiece').bind('tap', function() {
                 self.nextPiece();
             });
 
             //mouseup ao invés de tap , por que os elementos por traś do elemento clicado
             //Estavam sendo clicados
-            $(".message-button").bind('mouseup', function () {
+            $(".message-button").bind('mouseup', function() {
                 $(this).closest('.modal_message').hide();
                 // Após salvar, Reinicia o time da Piece e Group
                 self.restartTimes();
             });
 
 
-            $('#finalize_activity').bind('tap', function () {
+            $('#finalize_activity').bind('tap', function() {
                 self.finalizeMeet();
             });
 
@@ -319,10 +322,10 @@ this.Meet = function (options) {
             Meet.messageFinishedLevel();
         }
 
-        if (Meet.domCobject.cobject.template_code == 'PLC'
-                || Meet.domCobject.cobject.template_code == 'DIG'
-                || Meet.domCobject.cobject.template_code == 'DES') {
-            $('.refreshQuestion').on('tap', function () {
+        if (Meet.domCobject.cobject.template_code == 'PLC' ||
+            Meet.domCobject.cobject.template_code == 'DIG' ||
+            Meet.domCobject.cobject.template_code == 'DES') {
+            $('.refreshQuestion').on('tap', function() {
                 var currentPiece = $('div.currentPiece');
                 if (Meet.domCobject.cobject.template_code == 'PLC') {
                     var inputsPlc = currentPiece.find('input.PLC-input:not([readonly])');
@@ -354,13 +357,13 @@ this.Meet = function (options) {
 
     };
 
-    Meet.init_eventsGlobals = function () {
+    Meet.init_eventsGlobals = function() {
 
         //Botão do SOM
-        $(document).on('tap', '.soundIconPause', function () {
+        $(document).on('tap', '.soundIconPause', function() {
             var selfIconPause = $(this);
             var playing = selfIconPause.attr('playing') !== undefined &&
-                    selfIconPause.attr('playing') !== null && selfIconPause.attr('playing') === 'true';
+                selfIconPause.attr('playing') !== null && selfIconPause.attr('playing') === 'true';
 
             var li = $(this).parent();
             var span = li.children('span');
@@ -371,13 +374,13 @@ this.Meet = function (options) {
                 audio.currentTime = 0;
                 img.attr('src', "img/icons/play.png");
                 selfIconPause.attr('playing', 'false');
-             } else {
+            } else {
                 //Antes do Play, dá um STOP em todos os audios em execução
                 self.stopAllSounds();
                 audio.play();
                 img.attr('src', "img/icons/stop.png");
                 selfIconPause.attr('playing', 'true');
-             }
+            }
 
             //seta playing para false após o audio acabar
             audio.onended = function() {
@@ -387,7 +390,7 @@ this.Meet = function (options) {
                 selfIconPause.attr('playing', 'false');
             };
 
-            audio.addEventListener("ended", function () {
+            audio.addEventListener("ended", function() {
                 img.attr('src', "img/icons/play.png");
                 //playing = true;
             });
@@ -396,8 +399,8 @@ this.Meet = function (options) {
 
     };
 
-    this.stopAllSounds = function () {
-        $('.soundIconPause[playing="true"]').each(function (idx) {
+    this.stopAllSounds = function() {
+        $('.soundIconPause[playing="true"]').each(function(idx) {
             var li = $(this).parent();
             var span = li.children('span');
             var img = $(this);
@@ -411,7 +414,7 @@ this.Meet = function (options) {
     };
 
     //Salvar os Pontos de parada do usuário
-    this.saveBreakPoint = function (piece_id) {
+    this.saveBreakPoint = function(piece_id) {
         if (Meet.render_mode == 'evaluation') {
             self.meetEvaluation.saveBreakPoint(piece_id);
         } else if (Meet.render_mode == 'proficiency') {
@@ -422,7 +425,7 @@ this.Meet = function (options) {
 
     }
 
-    this.nextPiece = function () {
+    this.nextPiece = function() {
         //Pausa Todos os Sons
         self.stopAllSounds();
         $('.nextPiece').hide();
@@ -526,15 +529,15 @@ this.Meet = function (options) {
         //======================================================================
     };
 
-    Meet.messageFinishedLevel = function () {
+    Meet.messageFinishedLevel = function() {
         $('.cobject_block').hide();
         $('#finishLevel-message').show();
-        $('#finishLevel-message button').bind('tap', function () {
+        $('#finishLevel-message button').bind('tap', function() {
             $('#finishLevel-message').hide();
         });
     }
 
-    this.prevPiece = function () {
+    this.prevPiece = function() {
         var currentPiece = $('.currentPiece');
         //Se for PRE então Verificar ser está correto
         if (Meet.domCobject.cobject.template_code === 'PRE') {
@@ -641,7 +644,7 @@ this.Meet = function (options) {
 
     };
 
-    var BtnPageTXT = function () {
+    var BtnPageTXT = function() {
         $('.game').hide();
         $('#nextPage').show();
         //Verificar se mostrará o botão pra voltar o TXT
@@ -653,7 +656,7 @@ this.Meet = function (options) {
         $('.nextPiece').hide();
     };
 
-    var NoBtnPageTXT = function () {
+    var NoBtnPageTXT = function() {
         $('.game').show();
         $('#nextPage').hide();
         $('#lastPage').hide();
@@ -664,9 +667,9 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_MTE = function () {
+    this.init_MTE = function() {
         // self.init_Common();
-        $('.cobject.MTE div[group]').bind('tap', function () {
+        $('.cobject.MTE div[group]').bind('tap', function() {
             //Se já foi clicado
             if ($(this).hasClass('last_clicked')) {
                 $('.nextPiece').hide();
@@ -695,11 +698,11 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_AEL = function () {
+    this.init_AEL = function() {
         // variável de encontro definida no meet.php
         //$('.cobject.AEL div.answer > div[group]').hide();
         $('.cobject.AEL div.answer > div[group]').css('opacity', '0.6');
-        $('.cobject.AEL div[group]').bind('tap', function () {
+        $('.cobject.AEL div[group]').bind('tap', function() {
             var ask_answer = $(this).parents('div');
             if (ask_answer.hasClass('ask')) {
                 if (!$(this).hasClass('ael_clicked')) {
@@ -760,14 +763,14 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_DDROP = function () {
+    this.init_DDROP = function() {
         //Definir Animação Drag and Drop
         $('.drop').css('opacity', '0.6');
 
         $('.drag').draggable({
             containment: "body",
             revert: true,
-            start: function () {
+            start: function() {
                 //armazernar posição  Original
                 var position = $(this).position();
                 if (!self.isset($(this).attr('OriginalLeft'))) {
@@ -782,7 +785,7 @@ this.Meet = function (options) {
                 $(this).siblings('.drag').removeClass('last_clicked');
                 $(this).addClass('last_clicked');
             },
-            stop: function () {
+            stop: function() {
                 $(this).css('border', '3px solid transparent');
                 $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
@@ -795,14 +798,13 @@ this.Meet = function (options) {
                 }
 
             },
-            drag: function () {
-            }
+            drag: function() {}
 
 
         });
 
         $('.drop').droppable({
-            drop: function (event, ui) {
+            drop: function(event, ui) {
 
                 //Time de resposta
                 var time_answer = (new Date().getTime() - self.interval_group);
@@ -844,14 +846,14 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_ONEDDROP = function () {
+    this.init_ONEDDROP = function() {
         //Definir Animação Drag and Drop
         $('.oneDrop').css('opacity', '0.6');
 
         $('.oneDrag').draggable({
             containment: "body",
             revert: true,
-            start: function () {
+            start: function() {
                 //armazernar posição  Original
                 var position = $(this).position();
                 if (!self.isset($(this).attr('OriginalLeft'))) {
@@ -866,7 +868,7 @@ this.Meet = function (options) {
                 $(this).siblings('.drag').removeClass('last_clicked');
                 $(this).addClass('last_clicked');
             },
-            stop: function () {
+            stop: function() {
                 $(this).css('border', '3px solid transparent');
                 $(this).siblings(':not(.ael_clicked)').css('opacity', '1');
                 $(this).closest('div.ask').siblings('div.answer').children('div[group]:not(.ael_clicked)').css('opacity', '0.6');
@@ -879,14 +881,13 @@ this.Meet = function (options) {
                 }
 
             },
-            drag: function () {
-            }
+            drag: function() {}
 
 
         });
 
         $('.oneDrop').droppable({
-            drop: function (event, ui) {
+            drop: function(event, ui) {
 
                 //Time de resposta
                 var time_answer = (new Date().getTime() - self.interval_group);
@@ -925,9 +926,9 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_PRE = function () {
+    this.init_PRE = function() {
         //  self.init_Common();
-        $('input.text').on('keyup', function () {
+        $('input.text').on('keyup', function() {
             if (!self.isEmpty($(this).val())) {
                 //contém algum caractere
                 $('.nextPiece').show();
@@ -942,11 +943,11 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_TXT = function () {
-        $('#nextPage').bind('tap', function () {
+    this.init_TXT = function() {
+        $('#nextPage').bind('tap', function() {
             self.nextPiece();
         });
-        $('#lastPage').bind('tap', function () {
+        $('#lastPage').bind('tap', function() {
             if (self.hasPrevPieceTXT()) {
                 self.prevPiece();
             }
@@ -959,11 +960,11 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_DIG = function () {
+    this.init_DIG = function() {
         // $.event.special.tap.tapholdThreshold = 250;
 
         //HighLight
-        $('.DIG-table td').on('mousedown touchstart', function () {
+        $('.DIG-table td').on('mousedown touchstart', function() {
             var currentPiece = $(this).closest('.piece');
             var posBegin = $(this).position();
             var posBeginLeft = posBegin.left;
@@ -972,7 +973,7 @@ this.Meet = function (options) {
             var firstDivHighLight;
             var finishedSearchWord = true;
 
-            currentPiece.find('.digHighlight').each(function () {
+            currentPiece.find('.digHighlight').each(function() {
                 if (!$(this).is(':visible')) {
                     //Hide
                     //Remove  a classe currentSelected de todos as divs HL
@@ -1000,7 +1001,7 @@ this.Meet = function (options) {
         });
 
         //Se for disparo um evento touchMove
-        $(".DIG-table td").on('vmousemove', function (event) {
+        $(".DIG-table td").on('vmousemove', function(event) {
             var currentPiece = $(this).closest('.piece');
             var currentCellStart = currentPiece.find('.DIG-table td.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
@@ -1013,7 +1014,7 @@ this.Meet = function (options) {
 
 
 
-        $('.DIG-table td').on('mouseover', function () {
+        $('.DIG-table td').on('mouseover', function() {
             var currentPiece = $(this).closest('.piece');
             //última Div High Light Selecionada
             var currentDivHighLight = currentPiece.find('.digHighlight.currentSelected');
@@ -1028,8 +1029,8 @@ this.Meet = function (options) {
             if (self.isset(posCurrentDivHighLight)) {
                 var indexCurrent = $(this).index();
                 if ($(this).attr('row') === rowFirst || $(this).attr('col') === colFirst) {
-                    if ($(this).attr('row') === rowFirst && $(this).attr('col') !== colFirst
-                            && currentDivHighLight.height() < (2 * currentCellStart.height())) {
+                    if ($(this).attr('row') === rowFirst && $(this).attr('col') !== colFirst &&
+                        currentDivHighLight.height() < (2 * currentCellStart.height())) {
                         //Estar na mesma Linha da Primeira Célula clicada
                         // E Se a Altura  da div HighLIght < 2*(currentCellStart)
                         if (indexCurrent > indexColStartCurrent) {
@@ -1038,9 +1039,9 @@ this.Meet = function (options) {
                             var distance = (sizeSelected * sizeCell);
                             currentDivHighLight.css('width', distance);
                             //Add .selected em toda célula da primeira até posição corrente
-//                            for (var idx = indexColStartCurrent; idx <= indexCurrent; idx++) {
-//                                currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
-//                            }
+                            //                            for (var idx = indexColStartCurrent; idx <= indexCurrent; idx++) {
+                            //                                currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
+                            //                            }
                         } else if (indexCurrent < indexColStartCurrent) {
                             //Indo para a Esquerda
                             //Posição de ínicio se Desloca
@@ -1052,9 +1053,9 @@ this.Meet = function (options) {
                                 var increase = Math.abs(distance - oldWidthDivHighLight);
                                 currentDivHighLight.css('width', distance);
                                 //Add .selected em toda célula da primeira até posição corrente
-//                                for (var idx = indexColStartCurrent; idx >= indexCurrent; idx--) {
-//                                    currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
-//                                }
+                                //                                for (var idx = indexColStartCurrent; idx >= indexCurrent; idx--) {
+                                //                                    currentPiece.find('.DIG-table tr').eq(indexRowCurrent).find('td').eq(idx).addClass('selected');
+                                //                                }
 
                                 if (oldWidthDivHighLight < distance) {
                                     //Aumentou
@@ -1067,8 +1068,8 @@ this.Meet = function (options) {
                             }
                         }
 
-                    } else if ($(this).attr('col') === colFirst && $(this).attr('row') !== rowFirst
-                            && currentDivHighLight.width() < (2 * currentCellStart.width())) {
+                    } else if ($(this).attr('col') === colFirst && $(this).attr('row') !== rowFirst &&
+                        currentDivHighLight.width() < (2 * currentCellStart.width())) {
                         //Estar na Mesma Coluna da Primeira Célula clicada
                         // E Se a Largura  da div HighLight < 2*(Largura da currentCellStart)
                         if (indexRowCurrent > indexRowStartCurrent) {
@@ -1077,9 +1078,9 @@ this.Meet = function (options) {
                             var distance = (sizeSelected * sizeCell);
                             currentDivHighLight.css('height', distance);
                             //Add .selected em toda célula da primeira até posição corrente
-//                            for (var idx = indexRowStartCurrent; idx <= indexRowCurrent; idx++) {
-//                                currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
-//                            }
+                            //                            for (var idx = indexRowStartCurrent; idx <= indexRowCurrent; idx++) {
+                            //                                currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
+                            //                            }
                         } else if (indexRowCurrent < indexRowStartCurrent) {
                             //Indo para Cima
                             //Posição de ínicio se Desloca
@@ -1091,9 +1092,9 @@ this.Meet = function (options) {
                                 var increase = Math.abs(distance - oldHeightDivHighLight);
                                 currentDivHighLight.css('height', distance);
                                 //Add .selected em toda célula da primeira até posição corrente
-//                                for (var idx = indexRowStartCurrent; idx >= indexRowCurrent; idx--) {
-//                                    currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
-//                                }
+                                //                                for (var idx = indexRowStartCurrent; idx >= indexRowCurrent; idx--) {
+                                //                                    currentPiece.find('.DIG-table tr').eq(idx).find('td').eq(indexColStartCurrent).addClass('selected');
+                                //                                }
 
                                 if (oldHeightDivHighLight < distance) {
                                     //Aumentou
@@ -1130,7 +1131,7 @@ this.Meet = function (options) {
 
 
         //Se for disparo um evento touchEnd
-        $(".DIG-table td").on('vmouseup', function (event) {
+        $(".DIG-table td").on('vmouseup', function(event) {
             var currentPiece = $(this).closest('.piece');
             var currentCellStart = currentPiece.find('.DIG-table td.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
@@ -1148,7 +1149,7 @@ this.Meet = function (options) {
 
 
 
-        $('.DIG-table td').on('mouseup', function () {
+        $('.DIG-table td').on('mouseup', function() {
             var currentPiece = $(this).closest('.piece');
 
             //Armazenar na div high Light a posição da matriz
@@ -1169,7 +1170,7 @@ this.Meet = function (options) {
                 var allDivHighLight = currentPiece.find('.DIG-table .digHighlight');
                 //Armazenar as palavras selecionadas num Array
                 var listWords = new Array();
-                allDivHighLight.each(function () {
+                allDivHighLight.each(function() {
                     var posStart = $(this).attr('posStart');
                     var posFinish = $(this).attr('posFinish');
                     var rowStart = posStart.split('_')[0];
@@ -1212,13 +1213,13 @@ this.Meet = function (options) {
      *
      * @returns {void}
      */
-    this.init_PLC = function () {
+    this.init_PLC = function() {
         $('input.PLC-input').attr('disabled', 'disabled');
 
         var elementsImagePiece = $('div.PLC.group').find('div.elementImage');
         elementsImagePiece.css('cursor', 'pointer');
 
-        elementsImagePiece.on('tap', function () {
+        elementsImagePiece.on('tap', function() {
             var currentPiece = $('.currentPiece');
             var elementsImagePiece = currentPiece.find('div.PLC.group').find('div.elementImage');
             elementsImagePiece.removeClass('selectedItem');
@@ -1229,7 +1230,7 @@ this.Meet = function (options) {
             var wordClicked = $(this).attr('word');
 
             //Habilitar todos os inputs que referente à apalavra da imagem clicada
-            currentPiece.find('.PLC-input[word=' + wordClicked + ']').each(function (idx) {
+            currentPiece.find('.PLC-input[word=' + wordClicked + ']').each(function(idx) {
                 if (idx == 0) {
                     $(this).focus();
                 }
@@ -1241,13 +1242,13 @@ this.Meet = function (options) {
 
 
 
-        $('input.PLC-input').on('keyup', function (e) {
-//            if (e.keyCode === 8) {
-//                console.log('8');
-//                $(this).attr('value', "");
-//                var inputs = $(this).closest('.PLC-table').find(':input');
-//                inputs.eq(inputs.index(this) - 1).focus();
-//            }
+        $('input.PLC-input').on('keyup', function(e) {
+            //            if (e.keyCode === 8) {
+            //                console.log('8');
+            //                $(this).attr('value', "");
+            //                var inputs = $(this).closest('.PLC-table').find(':input');
+            //                inputs.eq(inputs.index(this) - 1).focus();
+            //            }
 
             if (!self.isEmpty($(this).val())) {
                 var val = $(this).attr('value');
@@ -1256,7 +1257,7 @@ this.Meet = function (options) {
                 } else {
                     $(this).attr('value', val.toUpperCase());
                     var inputs = $(this).closest('.PLC-table').
-                            find('input:not(:disabled):not([readonly])');
+                    find('input:not(:disabled):not([readonly])');
                     inputs.eq(inputs.index(this) + 1).focus();
                 }
             }
@@ -1272,14 +1273,14 @@ this.Meet = function (options) {
             }
         });
 
-        $('input.PLC-input').on('focus', function () {
+        $('input.PLC-input').on('focus', function() {
             if (!$(this).is('[readonly]')) {
                 $(this).data('value', $(this).val());
                 $(this).attr('value', '');
             }
         });
 
-        $('input.PLC-input').on('focusout', function () {
+        $('input.PLC-input').on('focusout', function() {
             if (!$(this).is('[readonly]')) {
                 if ($(this).val() == '') {
                     $(this).attr('value', $(this).data('value'));
@@ -1290,9 +1291,9 @@ this.Meet = function (options) {
     };
 
     //Inicializa os eventos do template Desenho
-    this.init_DES = function () {
+    this.init_DES = function() {
         //Iniciar Seleção
-        $('div.draw-point').on('mousedown touchstart', function () {
+        $('div.draw-point').on('mousedown touchstart', function() {
             //Armazena antes de tudo o conjunto de classes antigas.
             //Para no futuro poder ser retornada, caso o traço seja cancelado(quanto o mesmo ponto de sto = start)
             $(this).data('oldClass', $(this).attr('class'));
@@ -1359,7 +1360,7 @@ this.Meet = function (options) {
 
 
         //Se for disparo um evento touchMove
-        $("div.draw-point").on('vmousemove', function (event) {
+        $("div.draw-point").on('vmousemove', function(event) {
             var currentCellStart = $(this).closest('div.Table').find('div.currentStart');
             var elementAtual = document.elementFromPoint(event.pageX, event.pageY);
 
@@ -1370,7 +1371,7 @@ this.Meet = function (options) {
             }
         });
 
-        self.hasEquivalentAngle = function (angle1, angle2) {
+        self.hasEquivalentAngle = function(angle1, angle2) {
             if (angle1 <= 0) {
                 angle1 = parseInt(angle1) + 180;
             }
@@ -1382,7 +1383,7 @@ this.Meet = function (options) {
             return angle1 == angle2;
         }
 
-        $('div.draw-point').on('mouseover', function () {
+        $('div.draw-point').on('mouseover', function() {
 
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
@@ -1430,7 +1431,7 @@ this.Meet = function (options) {
                     if (self.isset(angleDivCurrent)) {
                         //Se existir um ângulo formado por essa div
                         if (!currentPoint.hasClass('vertex')) {
-                            $(this).closest('.Table').find('div.desHighLight').each(function () {
+                            $(this).closest('.Table').find('div.desHighLight').each(function() {
                                 if (currentPoint.hasClass($(this).attr('id'))) {
                                     //O Point foi 'riscado' com o highLight corrente
                                     //Verifica, se o ângulo do hl atual é diferente desse hl
@@ -1449,9 +1450,9 @@ this.Meet = function (options) {
 
                         // 1.2- Verificar se Iniciou o traço atual onde outra div de diferente ângulo já passou sobre ele.
                         if (!currentStartPoint.hasClass('vertex')) {
-                            $(this).closest('.Table').find('div.desHighLight').each(function () {
+                            $(this).closest('.Table').find('div.desHighLight').each(function() {
                                 if ($(this).attr('id') != divCurrentHighLight.attr('id') &&
-                                        currentStartPoint.hasClass($(this).attr('id'))) {
+                                    currentStartPoint.hasClass($(this).attr('id'))) {
                                     // O StartPoint possui uma outra HighLight
                                     //Verifica, se o ângulo do hl atual é diferente desse hl
                                     var angleThisHl = $(this).attr('angle');
@@ -1477,8 +1478,8 @@ this.Meet = function (options) {
                             for (var idx in startHls) {
                                 var hl = currentPiece.find('div.desHighLight#' + startHls[idx]);
                                 //Procurar um outro hl(com mesmo ângulo) que passa por esse ponto
-                                if (hl.attr('id') !== divCurrentHighLight.attr('id')
-                                        && self.hasEquivalentAngle(hl.attr('angle'), angleDivCurrent)) {
+                                if (hl.attr('id') !== divCurrentHighLight.attr('id') &&
+                                    self.hasEquivalentAngle(hl.attr('angle'), angleDivCurrent)) {
                                     startHLSameDashe = hl;
                                     //Encontrou um traço equivalente
                                     break;
@@ -1512,8 +1513,8 @@ this.Meet = function (options) {
                         for (var idx in thisHls) {
                             var hl = currentPiece.find('div.desHighLight#' + thisHls[idx]);
                             //Procurar um outro hl(com mesmo ângulo) que passa por esse ponto
-                            if (hl.attr('id') !== divCurrentHighLight.attr('id')
-                                    && self.hasEquivalentAngle(hl.attr('angle'), angleDivCurrent)) {
+                            if (hl.attr('id') !== divCurrentHighLight.attr('id') &&
+                                self.hasEquivalentAngle(hl.attr('angle'), angleDivCurrent)) {
                                 thisHLSameDashe = hl;
                                 //Encontrou um traço equivalente
                                 break;
@@ -1525,11 +1526,11 @@ this.Meet = function (options) {
                             //Então o traço do currentHighLight
                             //será o mesmo traço que o thisHLSameDashe
                             continueDash = true;
-                            currentPiece.find('div.desHighLight[dash=' + divCurrentHighLight.attr('dash')
-                                    + ']').each(
-                                    function () {
-                                        $(this).attr('dash', thisHLSameDashe.attr('dash'));
-                                    });
+                            currentPiece.find('div.desHighLight[dash=' + divCurrentHighLight.attr('dash') +
+                                ']').each(
+                                function() {
+                                    $(this).attr('dash', thisHLSameDashe.attr('dash'));
+                                });
                         }
 
 
@@ -1541,7 +1542,7 @@ this.Meet = function (options) {
 
                         //Elimina a classe end do último point do traço atual
                         var currentLastStop =
-                                currentPiece.find('.draw-point.' + divCurrentHighLight.attr('id') + '.stop:not(.endCorrectDES)');
+                            currentPiece.find('.draw-point.' + divCurrentHighLight.attr('id') + '.stop:not(.endCorrectDES)');
                         //Retira, se existitr a classe .stop. E não for final
                         //de um desenho válido
                         currentLastStop.removeClass('stop');
@@ -1578,10 +1579,10 @@ this.Meet = function (options) {
                         var incrLeft = +1;
                         var incrTop = -9;
 
-                        if (angle === 0
-                                || angle === 90
-                                || angle === 180
-                                || angle === -90) {
+                        if (angle === 0 ||
+                            angle === 90 ||
+                            angle === 180 ||
+                            angle === -90) {
                             //Forma um Reta entre os pontos p1 e p2
                             //Calcular distância entre esses dois pontos
                             //Sentido HORÁRIO => -90, 0, 90, 180
@@ -1620,8 +1621,8 @@ this.Meet = function (options) {
                                 distance = (sizeCurrentSelectedPoint * diameter_point);
                             } else {
                                 //Incrementa o 2*diameter_point, pra que ocupe cada ponto
-                                distance = (sizeSideCell * sizeCurrentSelectedPoint)
-                                        - (sizeSideCell - diameter_point);
+                                distance = (sizeSideCell * sizeCurrentSelectedPoint) -
+                                    (sizeSideCell - diameter_point);
 
                             }
 
@@ -1693,7 +1694,7 @@ this.Meet = function (options) {
 
         //Se for disparo um evento touchEnd
         //o vmouseup é disparado quando o ponteiro é solto em QUALQUER elemento
-        $(document).on('vmouseup', function (event) {
+        $(document).on('vmouseup', function(event) {
             var currentPiece = $('div.currentPiece');
             var divTable = currentPiece.find('div.Table');
             var currentCellStart = divTable.find('div.currentStart');
@@ -1714,13 +1715,13 @@ this.Meet = function (options) {
         });
 
 
-        $('div.draw-point').on('mouseup', function (event) {
+        $('div.draw-point').on('mouseup', function(event) {
             var currentPiece = $(this).closest('.piece');
             var divCurrentHighLight = currentPiece.find('.desHighLight.currentSelected');
             var currentStartPoint = currentPiece.find('div.draw-point.currentStart');
             //Verificar se foi solto no mesmo ponto que iniciou
-            if (currentStartPoint.attr('row') == $(this).attr('row')
-                    && currentStartPoint.attr('col') == $(this).attr('col')) {
+            if (currentStartPoint.attr('row') == $(this).attr('row') &&
+                currentStartPoint.attr('col') == $(this).attr('col')) {
                 //Retorna a classe antiga e remove a currentDivHighLight
                 $(this).attr('class', $(this).data('oldClass'));
                 divCurrentHighLight.remove();
@@ -1743,7 +1744,7 @@ this.Meet = function (options) {
 
             //Retira todas as classes .extremity dessa currentHl, se o ponto pertencer a mais de um Hl
             var extremityCurrentHl = currentPiece.find('div.draw-point.' + divCurrentHighLight.attr('id') + '.extremity');
-            extremityCurrentHl.each(function () {
+            extremityCurrentHl.each(function() {
                 //Verificar se há um HighLight diferente do HL corrente
                 var thisClass = $(this).attr('class');
                 var thisHls = thisClass.match(/hl\d/g);
@@ -1779,7 +1780,7 @@ this.Meet = function (options) {
         });
 
         //Cálculo de angulo entre dois Pontos
-        this.calcAngleBetween2Points = function (x1, y1, x2, y2) {
+        this.calcAngleBetween2Points = function(x1, y1, x2, y2) {
             var dy = y2 - y1;
             var dx = x2 - x1;
             var theta = Math.atan2(dy, dx); // range (-PI, PI]
@@ -1790,7 +1791,7 @@ this.Meet = function (options) {
 
     }
 
-    this.hasPrevPieceTXT = function () {
+    this.hasPrevPieceTXT = function() {
         var isTXT = false;
         var currentPiece = $('.currentPiece');
         if (currentPiece.prev().size() === 0) {
@@ -1837,14 +1838,14 @@ this.Meet = function (options) {
      * @param {DOMString} currentPieceID
      * @returns {boolean}
      */
-    this.savePerformanceUsr = function (currentPieceID) {
+    this.savePerformanceUsr = function(currentPieceID) {
         //Obtem o intervalo de resolução da Piece
         self.interval_piece = (new Date().getTime() - self.start_time_piece);
         //Se for uma piece do template AEL, então salva cada Match dos grupos realizados
         // e a armazena no objeto piece.isCorrect da piece corrente
         if (Meet.domCobject.cobject.template_code === 'AEL' ||
-                Meet.domCobject.cobject.template_code === 'DDROP' ||
-                Meet.domCobject.cobject.template_code === 'ONEDDROP') {
+            Meet.domCobject.cobject.template_code === 'DDROP' ||
+            Meet.domCobject.cobject.template_code === 'ONEDDROP') {
             self.saveMatchGroup(currentPieceID);
         }
         //Neste ponto o isTrue da Piece está setado
@@ -1865,7 +1866,7 @@ this.Meet = function (options) {
         }
 
         //Salvar na performance_User OffLine
-        if(sessionGet('isPreview') == null || sessionGet('isPreview') == -1) {
+        if (sessionGet('isPreview') == null || sessionGet('isPreview') == -1) {
             Meet.DB_synapse.addPerformance_actor(data);
         }
 
@@ -1879,11 +1880,11 @@ this.Meet = function (options) {
         return true;
     };
 
-    this.saveMatchGroup = function (currentPieceID) {
+    this.saveMatchGroup = function(currentPieceID) {
         //Para Cada GRUPO da Piece
         var pieceIsTrue = true;
         var answer = false;
-        $.each(Meet.domCobject.mainPieces[currentPieceID], function (nome_attr, group) {
+        $.each(Meet.domCobject.mainPieces[currentPieceID], function(nome_attr, group) {
             //Salva a perfomande do groupo somente se foi dado um Match
             if (self.isset(this.groupMatched)) {
                 if (nome_attr !== 'istrue' && nome_attr !== 'time_answer') {
@@ -1915,7 +1916,7 @@ this.Meet = function (options) {
                             'iscorrect': this.ismatch
                         };
                         //Salvar na performance_User OffLine
-                        if(sessionGet('isPreview') == -1){
+                        if (sessionGet('isPreview') == -1) {
                             Meet.DB_synapse.addPerformance_actor(data);
                         }
                     }
@@ -1934,10 +1935,10 @@ this.Meet = function (options) {
      * @param {string} groupClicked
      * @returns {Boolean}
      */
-    this.isCorrectPLC = function (pieceID) {
+    this.isCorrectPLC = function(pieceID) {
         var piece = Meet.domCobject.mainPieces[pieceID];
         var isCorrect = true;
-        $.each(piece, function (i, group) {
+        $.each(piece, function(i, group) {
             if (i[0] === '_') {
                 var word = group.elements[0].generalProperties[0].value;
                 var row = group.elements[0].pieceElement_Properties.posy;
@@ -1969,11 +1970,11 @@ this.Meet = function (options) {
      * @param {string} groupClicked
      * @returns {Boolean}
      */
-    this.isCorrectDIG = function (pieceID, listWords) {
+    this.isCorrectDIG = function(pieceID, listWords) {
         var piece = Meet.domCobject.mainPieces[pieceID];
         var isCorrect = true;
 
-        $.each(piece, function (i, group) {
+        $.each(piece, function(i, group) {
             if (i[0] === '_') {
                 var word = group.elements[0].generalProperties[0].value;
                 if ($.inArray(word, listWords) === -1) {
@@ -1995,7 +1996,7 @@ this.Meet = function (options) {
      * @param {string} groupClicked
      * @returns {Boolean}
      */
-    this.isCorrectMTE = function (pieceID, groupClicked) {
+    this.isCorrectMTE = function(pieceID, groupClicked) {
         var elements_group = eval("Meet.domCobject.mainPieces[pieceID]._" + groupClicked);
         //Alterar para comparar com o layertype de todo o grupo
         var isCorrect = (elements_group.elements[0].pieceElement_Properties.layertype === 'Acerto');
@@ -2013,7 +2014,7 @@ this.Meet = function (options) {
      * @param {integer} time_answer
      * @returns {Boolean} null caso não seja salvo
      */
-    this.isCorrectAEL = function (pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
+    this.isCorrectAEL = function(pieceID, groupAskClicked, groupAnswerClicked, time_answer) {
 
         if (self.isset(groupAskClicked) && self.isset(groupAnswerClicked)) {
             //Salvar no Objeto o Metadados do acerto e erro de um element
@@ -2044,7 +2045,7 @@ this.Meet = function (options) {
      * @param {integer} pieceID
      * @returns {Boolean}
      */
-    this.isCorrectPRE = function (pieceID) {
+    this.isCorrectPRE = function(pieceID) {
         //PRE somente possuí um grupo em cada piece
         var elements_group = eval("Meet.domCobject.mainPieces[pieceID]._" + (pieceID * 2));
         var digitated_value = $('.currentPiece').find('div[group] input.text').val();
@@ -2063,7 +2064,7 @@ this.Meet = function (options) {
         return isCorrect;
     };
 
-    this.isCorrectDES = function (pieceID) {
+    this.isCorrectDES = function(pieceID) {
         var currentMainPiece = Meet.domCobject.mainPieces[pieceID];
         var shapeDrawed = self.getCurrentShapeDES();
         var isCorrect = currentMainPiece['type_name'] === "shape" && shapeDrawed === currentMainPiece['shape'];
@@ -2076,7 +2077,7 @@ this.Meet = function (options) {
         return isCorrect;
     };
 
-    this.getCurrentShapeDES = function () {
+    this.getCurrentShapeDES = function() {
         var currentAskDraw = $('.currentPiece').find('.draw');
         var numVertex = currentAskDraw.find('div.vertex').size();
         //Verificar se o número de vértices esta entro o aceitável
@@ -2085,7 +2086,7 @@ this.Meet = function (options) {
         if (numVertex == 3) {
             //Pode ser um Triângulo
             var vertexs = {};
-            currentAskDraw.find('div.vertex').each(function (idx) {
+            currentAskDraw.find('div.vertex').each(function(idx) {
                 vertexs[idx] = {};
                 vertexs[idx]['row'] = $(this).attr('row');
                 vertexs[idx]['col'] = $(this).attr('col');
@@ -2098,7 +2099,7 @@ this.Meet = function (options) {
             //Verificar se possui algum 'buraco' entre os 3 vértices
             var distinctDash = [];
             var numDistinctDash = 0;
-            currentAskDraw.find('div.desHighLight').each(function () {
+            currentAskDraw.find('div.desHighLight').each(function() {
                 if (distinctDash.indexOf($(this).attr('dash')) === -1) {
                     //Add o novo Dash
                     distinctDash.push($(this).attr('dash'));
@@ -2116,7 +2117,7 @@ this.Meet = function (options) {
                 //Pra Não estar aberto, ele deverá possuir a classe que representa Mais de 1 HighLight
                 var pointFirstSelected = currentAskDraw.find('div.draw-point.firstSelected');
                 var countHlFirstSelected = 0;
-                currentAskDraw.find('div.desHighLight').each(function () {
+                currentAskDraw.find('div.desHighLight').each(function() {
                     if (pointFirstSelected.hasClass($(this).attr('id'))) {
                         countHlFirstSelected++;
                         if (countHlFirstSelected > 1) {
@@ -2162,7 +2163,7 @@ this.Meet = function (options) {
 
             var isNotMin = false;
             var isNotMax = false;
-            currentAskDraw.find('div.vertex').each(function (idx) {
+            currentAskDraw.find('div.vertex').each(function(idx) {
                 vertexs[idx] = {};
                 vertexs[idx]['row'] = $(this).attr('row');
                 vertexs[idx]['col'] = $(this).attr('col');
@@ -2374,7 +2375,7 @@ this.Meet = function (options) {
 
 
                     //Percorrer Points da Primeira Linha
-                    currentAskDraw.find('div.draw-point[row=' + row1 + ']').each(function (idx) {
+                    currentAskDraw.find('div.draw-point[row=' + row1 + ']').each(function(idx) {
                         if ($(this).attr('col') >= pointLimitColMin && $(this).attr('col') <= pointLimitColMax) {
                             //Verificar se todos os points nesse intervalo possuem a classe .selected
                             if (!$(this).hasClass('selected')) {
@@ -2390,7 +2391,7 @@ this.Meet = function (options) {
                     }
 
                     //Percorrer Points da Segunda Linha
-                    currentAskDraw.find('div.draw-point[row=' + row2 + ']').each(function (idx) {
+                    currentAskDraw.find('div.draw-point[row=' + row2 + ']').each(function(idx) {
                         if ($(this).attr('col') >= pointLimitColMin && $(this).attr('col') <= pointLimitColMax) {
                             //Verificar se todos os points nesse intervalo possuem a classe .selected
                             if (!$(this).hasClass('selected')) {
@@ -2407,7 +2408,7 @@ this.Meet = function (options) {
 
 
                     //Percorrer Points da Primeira Coluna
-                    currentAskDraw.find('div.draw-point[col=' + col1 + ']').each(function (idx) {
+                    currentAskDraw.find('div.draw-point[col=' + col1 + ']').each(function(idx) {
                         if ($(this).attr('row') >= pointLimitRowMin && $(this).attr('row') <= pointLimitRowMax) {
                             //Verificar se todos os points nesse intervalo possuem a classe .selected
                             if (!$(this).hasClass('selected')) {
@@ -2423,7 +2424,7 @@ this.Meet = function (options) {
                     }
 
                     //Percorrer Points da Segunda Coluna
-                    currentAskDraw.find('div.draw-point[col=' + col2 + ']').each(function (idx) {
+                    currentAskDraw.find('div.draw-point[col=' + col2 + ']').each(function(idx) {
                         if ($(this).attr('row') >= pointLimitRowMin && $(this).attr('row') <= pointLimitRowMax) {
                             //Verificar se todos os points nesse intervalo possuem a classe .selected
                             if (!$(this).hasClass('selected')) {
@@ -2464,7 +2465,7 @@ this.Meet = function (options) {
 
                     var therePointOutSideSquare = false;
 
-                    currentAskDraw.find('div.draw-point.selected').each(function (idx) {
+                    currentAskDraw.find('div.draw-point.selected').each(function(idx) {
                         //Verificar se esse ponto de seleção Não está dentro do retângulo
                         var row = $(this).attr('row');
                         var col = $(this).attr('col');
@@ -2515,13 +2516,13 @@ this.Meet = function (options) {
     };
 
     //Finaliza o Atendimento do Aluno Corrente
-    this.finalizeMeet = function () {
+    this.finalizeMeet = function() {
         sessionStorage.removeItem("id_actor");
         sessionStorage.removeItem("id_classroom");
         sessionStorage.removeItem("id_discipline");
         sessionStorage.removeItem("name_actor");
         sessionStorage.removeItem("name_classroom");
-        if(sessionStorage.getItem("render_mode") == "evaluation"){
+        if (sessionStorage.getItem("render_mode") == "evaluation") {
             //Então remove também o nível selecionado
             sessionStorage.removeItem("evaluation_selected_level");
         }
@@ -2536,11 +2537,11 @@ this.Meet = function (options) {
      * @param {mixed} variable
      * @returns {Boolean}
      */
-    this.isset = function (variable) {
+    this.isset = function(variable) {
         return (variable !== undefined && variable !== null);
     };
 
-    this.isEmpty = function (variable) {
+    this.isEmpty = function(variable) {
         return !self.isset(variable) || variable === '';
     };
 
@@ -2550,7 +2551,7 @@ this.Meet = function (options) {
      * @param {boolean} isTrue
      * @returns {void}
      */
-    this.showMessageAnswer = function (isTrue) {
+    this.showMessageAnswer = function(isTrue) {
         if (isTrue) {
             $('#hit-message').show();
             //            $('#message').show();
@@ -2572,13 +2573,13 @@ this.Meet = function (options) {
     };
 
     //Contador de Tempo de cada Meet
-    this.countTime = function (tag) {
+    this.countTime = function(tag) {
         //A cada segundo realiza a recursividade
         //Dando a cada chamada recursiva da função, 1s de intervalo
         if (self.isset(tag)) {
             self.tag_time = tag;
         }
-        setInterval(function () {
+        setInterval(function() {
             self.time++;
             var current_time = self.time;
 
@@ -2610,7 +2611,7 @@ this.Meet = function (options) {
         }, 1000);
     };
 
-    Meet.scoreCalculator = function (withMSGnextLevel) {
+    Meet.scoreCalculator = function(withMSGnextLevel) {
         self.score = (Meet.peformance_qtd_correct * 10) - (Meet.peformance_qtd_wrong * 10);
         if (self.score < 0) {
             self.score = 0;
@@ -2636,7 +2637,7 @@ this.Meet = function (options) {
 
     };
 
-    this.buildToolBar = function () {
+    this.buildToolBar = function() {
         var html = $('<div class="toolBar"></div>');
         html.append('<button class="nextPiece">' + NEXT_PIECE + '</button>');
         html.append("<img class='btn_lastPage' id='lastPage' src=' img/icons/last.png' style='display:none' >");

@@ -1,24 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "location".
+ * This is the model class for table "act_goal_script".
  *
- * The followings are the available columns in table 'location':
+ * The followings are the available columns in table 'act_goal_script':
  * @property integer $id
- * @property integer $location_type
- * @property integer $father_id
- * @property string $name
- * @property string $acronym
+ * @property integer $goal_id
+ * @property integer $script_id
  *
  * The followings are the available model relations:
- * @property Unity[] $unities
+ * @property ActGoal $goal
+ * @property ActScript $script
  */
-class Location extends CActiveRecord
+class ActGoalScript extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Location the static model class
+	 * @return ActGoalScript the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -30,7 +29,7 @@ class Location extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'location';
+		return 'act_goal_script';
 	}
 
 	/**
@@ -41,11 +40,11 @@ class Location extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('location_type, father_id', 'numerical', 'integerOnly'=>true),
-			array('name, acronym', 'length', 'max'=>45),
+			array('goal_id, script_id', 'required'),
+			array('goal_id, script_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, location_type, father_id, name, acronym', 'safe', 'on'=>'search'),
+			array('id, goal_id, script_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,7 +56,8 @@ class Location extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'unities' => array(self::HAS_MANY, 'Unity', 'location_id'),
+			'goal' => array(self::BELONGS_TO, 'ActGoal', 'goal_id'),
+			'script' => array(self::BELONGS_TO, 'ActScript', 'script_id'),
 		);
 	}
 
@@ -68,10 +68,8 @@ class Location extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('default', 'ID'),
-			'location_type' => Yii::t('default', 'Location Type'),
-			'father_id' => Yii::t('default', 'Father'),
-			'name' => Yii::t('default', 'Name'),
-			'acronym' => Yii::t('default', 'Acronym'),
+			'goal_id' => Yii::t('default', 'Goal'),
+			'script_id' => Yii::t('default', 'Script'),
 		);
 	}
 
@@ -87,10 +85,8 @@ class Location extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('location_type',$this->location_type);
-		$criteria->compare('father_id',$this->father_id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('acronym',$this->acronym,true);
+		$criteria->compare('goal_id',$this->goal_id);
+		$criteria->compare('script_id',$this->script_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

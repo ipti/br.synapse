@@ -7,7 +7,7 @@ COBJECT_CONTENT = "Content";
 NEXT_SCREEN = "Próxima Tela >>>>>";
 BEGIN_ACTIVITY = "Iniciar Atividade";
 
-var DomCobject = function (cobject, idx) {
+var DomCobject = function(cobject, idx) {
     this.cobject = cobject;
     this.idx = idx;
     this.currentScreen = '';
@@ -27,7 +27,7 @@ var DomCobject = function (cobject, idx) {
     this.dirLibrary = 'data/library';
     var self = this;
     //Armazenar Árvore de Peças
-    //var pieces, 
+    //var pieces,
     this.mainPieces = new Array();
     //==========================
 
@@ -49,13 +49,13 @@ var DomCobject = function (cobject, idx) {
         element: 0
     };
 
-    this.buildAll = function () {
+    this.buildAll = function() {
         self.dom.append(self.buildInfo_Cobject);
         self.dom.append(self.domContent);
         //Construir o dump dos elementos do CObject
         var cobjectInfo = self.dom.children(".cobjectInfo");
         cobjectInfo.prepend('<span id="description" class="elementCOText">' +
-                self.isset(this.cobject.description) ? this.cobject.description : "" + '</span>');
+            self.isset(this.cobject.description) ? this.cobject.description : "" + '</span>');
         if (this.isset(this.cobject.elements)) {
             for (this.pos.elementCO = 0; this.pos.elementCO < this.cobject.elements.length; this.pos.elementCO++) {
                 cobjectInfo.prepend(self.buildElement_CO());
@@ -72,44 +72,44 @@ var DomCobject = function (cobject, idx) {
 
     /**
      * Executa tratamentos após a construção do dom
-     * 
+     *
      * @returns {void}
      */
-    this.posBuildAll = function () {
+    this.posBuildAll = function() {
         if (self.cobject.template_code === "PLC") {
-            $(".PLC-input").each(function (i, v) {
+            $(".PLC-input").each(function(i, v) {
                 var row = $(this).attr('row');
                 var col = $(this).attr('col');
                 $(".PLC-table td[row=" + row + "][col=" + col + "]").append($(this));
             });
-            
+
             var side = 'left';
-            $(".PLC.group.build_image").each(function (i, v) {
+            $(".PLC.group.build_image").each(function(i, v) {
                 $("." + side + "-images").append($(this));
                 side = side === 'left' ? 'right' : 'left';
             });
         } else if (self.cobject.template_code === "DIG") {
-            $("span.dig").each(function (i, v) {
+            $("span.dig").each(function(i, v) {
                 var row = $(this).attr('row');
                 var col = $(this).attr('col');
                 $(".DIG-table td[row=" + row + "][col=" + col + "]").html($(this));
             });
 
             var side = 'left';
-            $(".DIG.group.build_image").each(function (i, v) {
+            $(".DIG.group.build_image").each(function(i, v) {
                 $("." + side + "-images").append($(this));
                 side = side === 'left' ? 'right' : 'left';
             });
 
             //Div - HighLight
-            $(".DIG-table").closest('.ask').find('.elementImage').each(function (index) {
+            $(".DIG-table").closest('.ask').find('.elementImage').each(function(index) {
                 $(".DIG-table").append("<div id='digHighlight" + (index + 1) + "' class='digHighlight'></div>");
             });
 
         }
     };
 
-    this.buildScreen = function () {
+    this.buildScreen = function() {
         self.domScreen = $('<div class="T_screen" style="display:none" id="S' + self.id.screen + '"></div>');
 
         var piecesets_length = this.cobject.screens[this.pos.screen].piecesets.length;
@@ -121,12 +121,11 @@ var DomCobject = function (cobject, idx) {
             } else {
                 self.domScreen.append(this.buildPieceSet());
             }
-        }
-        ;
+        };
         return self.domScreen;
     };
 
-    this.buildRightBook = function () {
+    this.buildRightBook = function() {
         self.pos.group = 1;
         self.domPieceSet = $('<div class="pieceset book" style="display:none" id="' + self.id.pieceset + '"></div>');
         self.domPiece = $('<div class="piece" style="display:none" id="' + self.id.piece + '"></div>');
@@ -145,7 +144,7 @@ var DomCobject = function (cobject, idx) {
         return self.domPieceSet;
     };
 
-    this.buildPieceSet = function () {
+    this.buildPieceSet = function() {
         self.domPieceSet = $('<div class="pieceset" style="display:none" id="' + self.id.pieceset + '"></div>');
         self.domPieceSet.append(self.buildInfo_PieceSet());
         var fd = $('<fieldset class="answer-container"></fieldset>');
@@ -160,13 +159,12 @@ var DomCobject = function (cobject, idx) {
                 fd.append(this.buildPiece_DES());
             }
 
-        }
-        ;
+        };
         self.domPieceSet.append(fd);
         return self.domPieceSet;
     };
 
-    this.buildPiece = function () {
+    this.buildPiece = function() {
         globalVariables();
         var groups = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups;
         //Somente Monta a Piece, se existir algum Group dentro dela
@@ -179,9 +177,9 @@ var DomCobject = function (cobject, idx) {
                 var domElementASK = $('<div class="ask" style="width:100%"></div>');
                 var leftDiv = "<div class='left-images'></div>";
                 var middleDiv = "<div class='middle-words'>";
-                
-                middleDiv +="<div><i class='fa fa-undo refreshQuestion'></i></div>";
-                
+
+                middleDiv += "<div><i class='fa fa-undo refreshQuestion'></i></div>";
+
                 middleDiv += '<table class="' + template + '-table">';
                 for (var i = -1; i < 6; i++) {
                     middleDiv += "<tr>";
@@ -206,13 +204,13 @@ var DomCobject = function (cobject, idx) {
             }
 
             //Verificar se é uma peça do template AEL
-            if (self.cobject.template_code === 'AEL'
-                    || self.cobject.template_code === 'DDROP'
-                    || self.cobject.template_code === 'ONEDDROP') {
+            if (self.cobject.template_code === 'AEL' ||
+                self.cobject.template_code === 'DDROP' ||
+                self.cobject.template_code === 'ONEDDROP') {
                 var domElementANSWER = $('<div class="answer"></div>');
             }
             var objGroups_currentPiece = {};
-            $.each(groups, function (current_group, elements_group) {
+            $.each(groups, function(current_group, elements_group) {
                 self.pos.group = current_group; // O grupo Corrent dessa Piece!
 
                 //array que armazena todos os objetos grupos da piece atual
@@ -263,19 +261,19 @@ var DomCobject = function (cobject, idx) {
                 //Agora apenda os elementos do grupo acima em ordem: imagem - som - texto
                 if (self.isset(order_type_elements['build_image'])) {
                     //Apenda As Imagens
-                    $.each(order_type_elements['build_image'], function (idx, element) {
+                    $.each(order_type_elements['build_image'], function(idx, element) {
                         domGroup.append(element);
                     });
                 }
                 if (self.isset(order_type_elements['build_sound'])) {
                     //Apenda Os Sons
-                    $.each(order_type_elements['build_sound'], function (idx, element) {
+                    $.each(order_type_elements['build_sound'], function(idx, element) {
                         domGroup.append(element);
                     });
                 }
                 if (self.isset(order_type_elements['build_text'])) {
                     //Apenda os Textos
-                    $.each(order_type_elements['build_text'], function (idx, element) {
+                    $.each(order_type_elements['build_text'], function(idx, element) {
                         domGroup.append(element);
                     });
                 }
@@ -291,20 +289,20 @@ var DomCobject = function (cobject, idx) {
 
             self.domPiece.append(domElementASK);
             if (self.cobject.template_code === 'AEL' ||
-                    self.cobject.template_code === 'DDROP' ||
-                    self.cobject.template_code === 'ONEDDROP') {
+                self.cobject.template_code === 'DDROP' ||
+                self.cobject.template_code === 'ONEDDROP') {
                 self.domPiece.append(domElementANSWER);
             }
 
             return self.domPiece;
         }
 
-        //NÃO HÁ GRUPO 
+        //NÃO HÁ GRUPO
         return "";
     };
 
 
-    this.buildPiece_DES = function () {
+    this.buildPiece_DES = function() {
         self.domPiece = $('<div class="piece ' + self.cobject.template_code + '" style="display:none" id="' + self.id.piece + '"></div>');
         var current_piece = self.cobject.screens[this.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece];
 
@@ -334,12 +332,12 @@ var DomCobject = function (cobject, idx) {
         return self.domPiece.append(domElementASK);
     }
 
-    this.buildEnum = function () {
+    this.buildEnum = function() {
         self.domEnum = $('<div class="enunciation"></div>');
         eval("self.buildEnum_" + self.cobject.template_code + "();");
     };
 
-    this.buildElement = function () {
+    this.buildElement = function() {
         switch (self.cobject.template_code) {
             case "MTE":
             case "DDROP":
@@ -366,12 +364,12 @@ var DomCobject = function (cobject, idx) {
 
     };
 
-    this.buildElementPS = function () {
+    this.buildElementPS = function() {
         var isElement_PieceSet = true;
         return self.buildElement_P_PS(isElement_PieceSet);
     };
 
-    this.buildElement_P_PS = function (isElement_PieceSet) {
+    this.buildElement_P_PS = function(isElement_PieceSet) {
         var html = "";
         var elementID = 0;
         if (self.isset(isElement_PieceSet) && isElement_PieceSet) {
@@ -385,9 +383,9 @@ var DomCobject = function (cobject, idx) {
         var strBuild_library_type = "";
         if (currentElement.type === 'multimidia') {
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 //Realiza o scape de aspas
-                var value = item['value'].replace("'","");
+                var value = item['value'].replace("'", "");
                 value = value.replace('"', '');
                 if (item['name'] === 'library_type') {
                     strBuild_library_type = "build_" + value;
@@ -402,7 +400,7 @@ var DomCobject = function (cobject, idx) {
         } else if (currentElement.type === 'text') {
             strBuild_library_type = 'build_text';
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 properties += "'" + item['name'] + "':'" + item['value'] + "',";
             });
             properties += "};";
@@ -414,7 +412,7 @@ var DomCobject = function (cobject, idx) {
         return self.domElement;
     };
 
-    this.buildElement_CO = function () {
+    this.buildElement_CO = function() {
         var html = "";
         var elementID = 0;
         elementID = self.id.elementCO;
@@ -422,7 +420,7 @@ var DomCobject = function (cobject, idx) {
         var strBuild_library_type = "";
         if (currentElement.type === 'multimidia') {
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 if (item['name'] === 'library_type') {
                     strBuild_library_type = "build_" + item['value'];
                 } else {
@@ -436,7 +434,7 @@ var DomCobject = function (cobject, idx) {
         } else if (currentElement.type === 'text') {
             strBuild_library_type = 'build_text';
             var properties = "var properties = {";
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 properties += "'" + item['name'] + "':'" + item['value'] + "',";
             });
             properties += "};";
@@ -447,13 +445,13 @@ var DomCobject = function (cobject, idx) {
         return self.domElement;
     };
 
-    this.buildElement_PRE = function () {
+    this.buildElement_PRE = function() {
         var html_Answer = "<input type='text' class='text' autocomplete='off'/>";
         self.currentElementType = "build_text";
         return html_Answer;
     };
 
-    this.buildElement_TXT = function () {
+    this.buildElement_TXT = function() {
         var TXT = $("<p class='element TXT'></p>");
         var elements_group = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group];
         //BUSCAR PROPRIEDADE  = TEXT
@@ -468,7 +466,7 @@ var DomCobject = function (cobject, idx) {
         return TXT;
     };
 
-    this.buildElement_DIG = function () {
+    this.buildElement_DIG = function() {
 
         var elementID = self.id.element;
         var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
@@ -481,16 +479,16 @@ var DomCobject = function (cobject, idx) {
         var properties = [];
 
         if (currentElement.type === 'multimidia') {
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 properties[item['name']] = item['value'];
                 if (item['name'] === 'library_type') {
                     build_type = "build_" + item['value'];
                 }
             });
             var src = "";
-            if(sessionGet('isPreview') != -1){
-                src = EDITOR+'/library/image/' + properties['src'];
-            }else {
+            if (sessionGet('isPreview') !== null && sessionGet('isPreview') != -1) {
+                src = EDITOR + '/library/image/' + properties['src'];
+            } else {
                 src = self.dirLibrary + '/image/' + properties['src'];
             }
             var library_id = properties['library_id'];
@@ -505,7 +503,7 @@ var DomCobject = function (cobject, idx) {
 
         } else if (type === 'text') {
             build_type = 'build_text';
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 properties[item['name']] = item['value'];
             });
             var PEProperties = currentElement.pieceElement_Properties;
@@ -537,7 +535,7 @@ var DomCobject = function (cobject, idx) {
         return self.domElement;
     };
 
-    this.buildElement_PLC = function () {
+    this.buildElement_PLC = function() {
 
         var elementID = self.id.element;
         var currentElement = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].pieces[self.pos.piece].groups[self.pos.group].elements[self.pos.element];
@@ -550,7 +548,7 @@ var DomCobject = function (cobject, idx) {
         var properties = [];
 
         if (currentElement.type === 'multimidia') {
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 properties[item['name']] = item['value'];
                 if (item['name'] === 'library_type') {
                     build_type = "build_" + item['value'];
@@ -558,9 +556,9 @@ var DomCobject = function (cobject, idx) {
             });
 
             var src = "";
-            if(sessionGet('isPreview') != -1){
-                src = EDITOR+'/library/image/' + properties['src'];
-            }else {
+            if (sessionGet('isPreview') !== null && sessionGet('isPreview') != -1) {
+                src = EDITOR + '/library/image/' + properties['src'];
+            } else {
                 src = self.dirLibrary + '/image/' + properties['src'];
             }
             var library_id = properties['library_id'];
@@ -575,7 +573,7 @@ var DomCobject = function (cobject, idx) {
 
         } else if (type === 'text') {
             build_type = 'build_text';
-            $.each(currentElement.generalProperties, function (i, item) {
+            $.each(currentElement.generalProperties, function(i, item) {
                 properties[item['name']] = item['value'];
             });
             var PEProperties = currentElement.pieceElement_Properties;
@@ -597,7 +595,7 @@ var DomCobject = function (cobject, idx) {
                     point_crossword = properties["point_crossword"];
                 }
 
-                $.each(point_crossword, function (i, v) {
+                $.each(point_crossword, function(i, v) {
                     var tmp = v.split('w')[1];
                     tmp = tmp.split('peID');
                     var tmp2 = tmp[1].split("|");
@@ -632,7 +630,7 @@ var DomCobject = function (cobject, idx) {
                 var value = "";
                 if (self.isset(properties["show"])) {
                     var exists = false;
-                    $.each(properties["show"], function (j, v) {
+                    $.each(properties["show"], function(j, v) {
                         if (!exists)
                             exists = v == i;
                     });
@@ -642,8 +640,8 @@ var DomCobject = function (cobject, idx) {
                     }
                 }
 
-                if ((self.isset(self.wordsCrossed[peid]) && parseInt(self.wordsCrossed[peid].posC) !== i)
-                        || (!self.isset(self.wordsCrossed[peid]))) {
+                if ((self.isset(self.wordsCrossed[peid]) && parseInt(self.wordsCrossed[peid].posC) !== i) ||
+                    (!self.isset(self.wordsCrossed[peid]))) {
                     html += "<input id='" + peid + "' class='PLC-input' i='" + i + "' row='" + row + "' col='" + col + "' type='text' word='" + properties["grouping"] + "' " + value + " maxlength='1'></input>";
                 }
 
@@ -654,14 +652,14 @@ var DomCobject = function (cobject, idx) {
             }
 
         }
-        
+
         self.currentElementType = build_type;
         self.domElement = $(html);
         return self.domElement;
     };
 
     // Type Text
-    this.build_text = function (properties) {
+    this.build_text = function(properties) {
         //Properties : extension, src, width, height
         eval(properties);
         var text = properties['text'];
@@ -672,13 +670,13 @@ var DomCobject = function (cobject, idx) {
     };
 
     // Type of Elements
-    this.build_image = function (properties) {
+    this.build_image = function(properties) {
         //Properties : extension, src, width, height
         eval(properties);
         var src = "";
-        if(sessionGet('isPreview') != -1){
-            src = EDITOR+'/library/image/' + properties['src'];
-        }else {
+        if (sessionGet('isPreview') !== null && sessionGet('isPreview') != -1) {
+            src = EDITOR + '/library/image/' + properties['src'];
+        } else {
             src = self.dirLibrary + '/image/' + properties['src'];
         }
         var extension = properties['extension'];
@@ -690,13 +688,13 @@ var DomCobject = function (cobject, idx) {
         return html;
     };
 
-    this.build_sound = function (properties) {
+    this.build_sound = function(properties) {
         //Properties : extension, src
         eval(properties);
         var src = "";
-        if(sessionGet('isPreview') != -1){
-            src = EDITOR+'/library/sound/' + properties['src'];
-        }else {
+        if (sessionGet('isPreview') !== null && sessionGet('isPreview') != -1) {
+            src = EDITOR + '/library/sound/' + properties['src'];
+        } else {
             src = self.dirLibrary + '/sound/' + properties['src'];
         }
         var extension = properties['extension'];
@@ -707,13 +705,13 @@ var DomCobject = function (cobject, idx) {
         return html;
     };
 
-    this.build_txt = function (properties) {
+    this.build_txt = function(properties) {
         //Properties : extension, src
         eval(properties);
         var src = "";
-        if(sessionGet('isPreview') != -1){
-            src = EDITOR+'/library/sound/' + properties['src'];
-        }else {
+        if (sessionGet('isPreview') !== null && sessionGet('isPreview') != -1) {
+            src = EDITOR + '/library/sound/' + properties['src'];
+        } else {
             src = self.dirLibrary + '/sound/' + properties['src'];
         }
         var extension = properties['extension'];
@@ -725,24 +723,24 @@ var DomCobject = function (cobject, idx) {
         return html;
     };
 
-    this.buildEnum_MTE = function () {
+    this.buildEnum_MTE = function() {
 
     };
-    this.buildEnum_AEL = function () {
+    this.buildEnum_AEL = function() {
 
     };
-    this.buildEnum_TXT = function () {
+    this.buildEnum_TXT = function() {
 
     };
-    this.buildEnum_PRE = function () {
-
-    };
-
-    this.buildInfo_MEET = function () {
+    this.buildEnum_PRE = function() {
 
     };
 
-    this.buildInfo_Cobject = function () {
+    this.buildInfo_MEET = function() {
+
+    };
+
+    this.buildInfo_Cobject = function() {
         var goal = self.cobject.goal;
         var type = self.cobject.cobject_type;
         var degree_name = self.cobject.degree_name;
@@ -754,7 +752,7 @@ var DomCobject = function (cobject, idx) {
         return html;
     };
 
-    this.buildInfo_PieceSet = function () {
+    this.buildInfo_PieceSet = function() {
         var description = self.cobject.screens[self.pos.screen].piecesets[self.pos.pieceset].description;
         if (self.cobject.template_code === 'TXT') {
             var html = $('<div class="book-left"></div>');
@@ -788,13 +786,12 @@ var DomCobject = function (cobject, idx) {
         return html;
     };
 
-    this.isset = function (variable) {
+    this.isset = function(variable) {
         return (variable !== undefined && variable !== null);
     };
 
-    var globalVariables = function () {
+    var globalVariables = function() {
         self.wordsCrossed = [];
     };
 
 };
-

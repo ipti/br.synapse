@@ -1,0 +1,1 @@
+Folder where all assets are stocked.

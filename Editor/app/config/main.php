@@ -36,11 +36,11 @@ return array(
             'allowAutoLogin' => true,
         ),
         // uncomment the following to enable URLs in path-format
-
         'urlManager' => array(
             'urlFormat' => 'path',
             'showScriptName' => false,
             'rules' => array(
+                'resources/js/<file:\S+>' => 'resources/js',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
@@ -49,13 +49,14 @@ return array(
         /* 'db'=>array(
           'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
           ),
+
           // uncomment the following to use a MySQL database
          */
         'db' => array(
-            'connectionString' => 'mysql:host=db.ipti.org.br;dbname=br.org.ipti.synapse',
+            'connectionString' => 'mysql:host=localhost:3306;dbname=br.org.ipti.synapse',
             'emulatePrepare' => true,
-            'username' => 'user.synapse',
-            'password' => '123456',
+            'username' => 'root',
+            'password' => '',
             'charset' => 'utf8',
         ),
         'db2' => array(

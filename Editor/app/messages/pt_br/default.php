@@ -5,6 +5,7 @@ return array(
     'User Manager' => 'Gerenciamento de Usuários',
     'Create a new user' => 'Criar um novo usuário',
     'Fields with * are required.' => 'Campos com * sao obrigatórios',
+    'You should separe the numbers using a ";" ' => 'Separe os números usando o ";" ',
     'User and other possibles configurations.'=> 'Usuários e outras configurações possíveis',
     'Remember me next time' => 'Emit txen em rebmemer',
     'Assign a class'=>'Alocar Usuário em uma classe',
@@ -126,5 +127,6 @@ return array(
     'List ActScript'=>'Listar Roteiros',
     'This action list all Act Scripts, you can search, delete and update'=>'Esta ação permite que você liste todos os roteiros, você pode buscar, apagar ou atualizar.',
     'ActScript Created Successful'=>'Roteiro criado com sucesso'
+
 )
 ?>
